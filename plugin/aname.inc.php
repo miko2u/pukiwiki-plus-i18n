@@ -1,9 +1,8 @@
 <?php
-/////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
+// $Id: aname.inc.php,v 1.17.1 2005/01/23 07:00:16 miko Exp $
 //
-// $Id: aname.inc.php,v 1.16.1 2004/08/09 14:03:42 miko Exp $
-//
+// aname plugin - Set an anchor <a name="key"> to link
 
 function plugin_aname_inline()
 {
@@ -20,23 +19,21 @@ function plugin_aname_convert()
 
 	$args = func_get_args();
 	$id = array_shift($args);
+	if (! preg_match('/^[A-Za-z][\w\-]*$/', $id)) return FALSE;
 
-	if (! preg_match('/^[A-Za-z][\w\-]*$/', $id))
-		return FALSE;
-
-	$body = count($args) ? preg_replace('/<\/?a[^>]*>/', '', array_pop($args)) : '';
+	$body = ! empty($args) ? preg_replace('/<\/?a[^>]*>/', '', array_pop($args)) : '';
 
 	$class   = in_array('super', $args) ? 'anchor_super' : 'anchor';
-	$url     = in_array('full',  $args) ? "$script?" . rawurlencode($vars['page']) : '';
-//	$attr_id = in_array('noid',  $args) ? '' : " id=\"$id\"";
+	$url     = in_array('full',  $args) ? $script . '?' . rawurlencode($vars['page']) : '';
+	$attr_id = in_array('noid',  $args) ? '' : ' id="' . $id . '"';
 
 	// 携帯はxhtml対応してないものが多いため現実解
 	if ($html_transitional) {
-		$attr_id = in_array('noid',$args)  ? '' : " id=\"$id\" name=\"$id\"";
+		$attr_id = in_array('noid', $args) ? '' : ' id="' . $id . '" name="' . $id . '"';
 	} elseif (!defined('UA_PROFILE') || UA_PROFILE == 'default') {
-		$attr_id = in_array('noid',$args)  ? '' : " id=\"$id\"";
+		$attr_id = in_array('noid', $args) ? '' : ' id="' . $id . '"';
 	} else {
-		$attr_id = in_array('noid',$args)  ? '' : " id=\"$id\" name=\"$id\"";
+		$attr_id = in_array('noid', $args) ? '' : ' id="' . $id . '" name="' . $id . '"';
 	}
 
 //	return "<a class=\"$class\"$attr_id href=\"$url#$id\" title=\"$id\">$body</a>";

@@ -1,21 +1,29 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: keitai.skin.php,v 1.5.11 2005/01/08 04:07:11 miko Exp $
+// $Id: keitai.skin.php,v 1.8.11 2005/02/13 03:12:47 miko Exp $
 //
 // Skin for Embedded devices
 
+// ----
 // Prohibit direct access
 if (! defined('UI_LANG')) die('UI_LANG is not set');
 
 global $script, $vars, $page_title;
 global $max_size, $accesskey, $menubar;
 $link = $_LINK;
+$rw = ! PKWK_READONLY;
 
-// Force Shift JIS encode for Japanese embedded browsers and devices
+// Output HTTP headers
 pkwk_headers_sent();
-header('Content-Type: text/html; charset=Shift_JIS');
-$title = mb_convert_encoding($title, 'SJIS', SOURCE_ENCODING);
-$body  = mb_convert_encoding($body,  'SJIS', SOURCE_ENCODING);
+
+if(TRUE) {
+	// Force Shift JIS encode for Japanese embedded browsers and devices
+	header('Content-Type: text/html; charset=Shift_JIS');
+	$title = mb_convert_encoding($title, 'SJIS', SOURCE_ENCODING);
+	$body  = mb_convert_encoding($body,  'SJIS', SOURCE_ENCODING);
+} else {
+	header('Content-Type: text/html; charset=' . CONTENT_CHARSET); 
+} 
 
 // Make 1KByte spare (for header, etc)
 $max_size = --$max_size * 1024;
@@ -51,27 +59,29 @@ $lastpage = $pagecount - 1;
 // ナビゲーション
 $headnavi = array();
 $footnavi = array();
-$footnavi[] = '<a href="' . $_LINK['new'] . '"' . $accesskey . '="1">1.New</a>';
-$footnavi[] = '<a href="' . $_LINK['edit'] . '"' . $accesskey . '="2">2.Edit</a>';
-if ($is_read and $function_freeze) {
-	if (! $is_freeze) {
-		$footnavi[] = '<a href="' . $_LINK['freeze']   . '" ' . $accesskey . '="3">3.Freeze</a>';
-	} else {
-		$footnavi[] = '<a href="' . $_LINK['unfreeze'] . '" ' . $accesskey . '="3">3.Unfreeze</a>';
+if ($rw) {
+	$footnavi[] = '<a href="' . $_LINK['new'] . '"' . $accesskey . '="1">1.New</a>';
+	$footnavi[] = '<a href="' . $_LINK['edit'] . '"' . $accesskey . '="2">2.Edit</a>';
+	if ($is_read and $function_freeze) {
+		if (! $is_freeze) {
+			$footnavi[] = '<a href="' . $_LINK['freeze']   . '" ' . $accesskey . '="3">3.Freeze</a>';
+		} else {
+			$footnavi[] = '<a href="' . $_LINK['unfreeze'] . '" ' . $accesskey . '="3">3.Unfreeze</a>';
+		}
 	}
 }
 $footnavi[] = '<a href="' . $_LINK['top'] . '"' . $accesskey . '="0">0.Top</a>';
-
-// 前/次のブロック
 $headnavi[] = '<a href="' . $_LINK['menu'] . '" ' . $accesskey . '="4">4.Menu</a>';
 $headnavi[] = '<a href="' . $_LINK['recent'] . '" ' . $accesskey . '="5">5.Recent</a>';
+
+// Previous / Next block
 if ($pagecount > 1) {
 	$prev = $pageno - 1;
 	$next = $pageno + 1;
 	if ($pageno > 0) {
 		$headnavi[] = '<a href="' . $_LINK['read'] . '&amp;p=' . $prev . '"' . $accesskey . '="7">7.Prev</a>';
 	}
-	$headnavi[] = "$next/$pagecount ";
+	$headnavi[] = $next . '/' . $pagecount . ' ';
 	if ($pageno < $lastpage) {
 		$headnavi[] = '<a href="' . $_LINK['read'] . '&amp;p=' . $next . '"' . $accesskey . '="8">8.Next</a>';
 	}

@@ -1,13 +1,10 @@
 <?php
-/////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
+// $Id: attach.inc.php,v 1.71.4 2005/01/30 12:02:37 miko Exp $
 //
-//  $Id: attach.inc.php,v 1.69.4 2005/01/09 08:12:21 miko Exp $
-//
+// File attach plugin
 
 /*
- プラグイン attach
-
  changed by Y.MASUI <masui@hisec.co.jp> http://masui.net/pukiwiki/
  modified by PANDA <panda@arino.jp> http://home.arino.jp/
 */
@@ -105,6 +102,12 @@ function plugin_attach_action()
 		return attach_upload($_FILES['attach_file'], $refer, $pass);
 	}
 	switch ($pcmd) {
+	case 'delete':  /*FALLTHROUGH*/ 
+	case 'freeze': 
+	case 'unfreeze': 
+		if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing'); 
+	} 
+	switch ($pcmd) { 
 		case 'info'     : return attach_info();
 		case 'delete'   : return attach_delete();
 		case 'open'     : return attach_open();
@@ -145,7 +148,17 @@ function attach_upload($file, $page, $pass = NULL)
 {
 	global $_attach_messages;
 
-	if (! is_page($page)) {
+	if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
+
+	// Check query-string 
+	$query = 'plugin=attach&amp;pcmd=info&amp;refer=' . rawurlencode($page) . 
+		'&amp;file=' . rawurlencode($file['name']); 
+
+	if (PKWK_QUERY_STRING_MAX && strlen($query) > PKWK_QUERY_STRING_MAX) { 
+		pkwk_common_headers(); 
+		echo('Query string (page name and/or file name) too long'); 
+		exit; 
+	} else if (! is_page($page)) { 
 		die_message("No such page");
 	} else if ($file['tmp_name'] == '' || ! is_uploaded_file($file['tmp_name'])) {
 		return array('result'=>FALSE);
@@ -165,18 +178,15 @@ function attach_upload($file, $page, $pass = NULL)
 	}
 
 	$obj = & new AttachFile($page, $file['name']);
-	if ($obj->exist) {
+	if ($obj->exist)
 		return array('result'=>FALSE,
 			'msg'=>$_attach_messages['err_exists']);
-	}
 
-	if (move_uploaded_file($file['tmp_name'], $obj->filename)) {
+	if (move_uploaded_file($file['tmp_name'], $obj->filename))
 		chmod($obj->filename, PLUGIN_ATTACH_FILE_MODE);
-	}
 
-	if (is_page($page)) {
+	if (is_page($page))
 		touch(get_filename($page));
-	}
 
 	$obj->getstatus();
 	$obj->status['pass'] = ($pass !== TRUE && $pass !== NULL) ? md5($pass) : '';
@@ -192,9 +202,8 @@ function attach_info($err = '')
 {
 	global $vars, $_attach_messages;
 
-	foreach (array('refer', 'file', 'age') as $var) {
+	foreach (array('refer', 'file', 'age') as $var)
 		${$var} = isset($vars[$var]) ? $vars[$var] : '';
-	}
 
 	$obj = & new AttachFile($refer, $file, $age);
 	return $obj->getstatus() ?
@@ -207,9 +216,8 @@ function attach_delete()
 {
 	global $vars, $_attach_messages;
 
-	foreach (array('refer', 'file', 'age', 'pass') as $var) {
+	foreach (array('refer', 'file', 'age', 'pass') as $var)
 		${$var} = isset($vars[$var]) ? $vars[$var] : '';
-	}
 
 	if (is_freeze($refer) || ! is_editable($refer)) {
 		return array('msg'=>$_attach_messages['err_noparm']);
@@ -502,9 +510,8 @@ class AttachFile
 				$msg_freezed = '';
 				$msg_delete = '<input type="radio" name="pcmd" value="delete" />' .
 					$_attach_messages['msg_delete'];
-				if (PLUGIN_ATTACH_DELETE_ADMIN_ONLY || $this->age) {
+				if (PLUGIN_ATTACH_DELETE_ADMIN_ONLY || $this->age)
 					$msg_delete .= $_attach_messages['msg_require'];
-				}
 				$msg_delete .= '<br />';
 				$msg_freeze  = '<input type="radio" name="pcmd" value="freeze" />' .
 					$_attach_messages['msg_freeze'] .
@@ -596,9 +603,8 @@ EOD;
 			$this->putstatus();
 		}
 
-		if (is_page($this->page)) {
+		if (is_page($this->page))
 			touch(get_filename($this->page));
-		}
 
 		return array('msg'=>$_attach_messages['msg_deleted']);
 	}

@@ -1,1 +1,1 @@
-<?php require('keitai.skin.php' ?>
+<?php require('keitai.skin.php'); ?>

@@ -1,6 +1,6 @@
 <?php
-// PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: auth.php,v 1.6.1 2004/12/31 10:51:47 miko Exp $
+// PukiWiki - Yet another WikiWikiWeb clone
+// $Id: auth.php,v 1.7.1 2005/01/31 14:32:38 miko Exp $
 //
 // Basic authentication related functions
 
@@ -86,7 +86,8 @@ function basic_auth($page, $auth_flag, $exit_flag, $auth_pages, $title_cannot)
 	}
 
 	// ユーザリストに含まれるいずれかのユーザと認証されればOK
-	if (! isset($_SERVER['PHP_AUTH_USER'])
+	if (PKWK_READONLY
+		|| ! isset($_SERVER['PHP_AUTH_USER'])
 		|| ! in_array($_SERVER['PHP_AUTH_USER'], $user_list)
 		|| ! isset($_SERVER['PHP_AUTH_USER'], $auth_users)
 		|| $auth_users[$_SERVER['PHP_AUTH_USER']] != md5($_SERVER['PHP_AUTH_PW']))

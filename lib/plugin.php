@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: plugin.php,v 1.6.2 2004/12/30 13:50:54 miko Exp $
+// $Id: plugin.php,v 1.7.2 2005/02/05 06:47:10 miko Exp $
 //
 // Plugin related functions
 
@@ -122,6 +122,8 @@ function do_plugin_convert($name, $args = '')
 		return preg_replace('/(<form[^>]*>)(?!\n<div><input type="hidden" name="encode_hint")/', '$1' . "\n" .
 			'<div><input type="hidden" name="encode_hint" value="' .
 			PKWK_ENCODING_HINT . '" /></div>', $retvar);
+	} else {
+		return $retvar;
 	}
 }
 
