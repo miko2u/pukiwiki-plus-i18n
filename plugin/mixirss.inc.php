@@ -1,9 +1,9 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: mixirss.inc.php,v 1.12 2004/12/04 05:20:02 miko Exp $
+// $Id: mixirss.inc.php,v 1.12.1 2004/12/21 01:20:02 miko Exp $
 //
 // Publishing RSS feed of RecentChanges
-// Usage: mixirss.inc.php?ver=[0.91(default)|1.0|2.0]
+// Usage: mixirss.inc.php?ver=[0.91|1.0(default)|2.0]
 
 // View Description Letters
 define('MIXIRSS_DESCRIPTION_LENGTH', 512);
