@@ -15,7 +15,7 @@ function plugin_bugtrack_init()
 {
 	$messages = array(
 		'_bugtrack_plugin_priority_list' => array(_('Emergency'), _('Importance'), _('Normal'), _('Low')),
-		'_bugtrack_plugin_state_list'    => array(_('Proposal'(, _('Start'), _('CVS Waiting'), _('Completion'), _('Reservation'), _('Rejection')),
+		'_bugtrack_plugin_state_list'    => array(_('Proposal'), _('Start'), _('CVS Waiting'), _('Completion'), _('Reservation'), _('Rejection')),
 		'_bugtrack_plugin_state_sort'    => array(_('Start'), _('CVS Waiting'), _('Reservation'), _('Completion'), _('Proposal'), _('Rejection')),
 		'_bugtrack_plugin_state_bgcolor' => array('#ccccff', '#ffcc99', '#ccddcc', '#ccffcc', '#ffccff', '#cccccc', '#ff3333'),
 
