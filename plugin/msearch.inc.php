@@ -21,15 +21,15 @@ function plugin_msearch_init()
 {
 	$messages = array(
 		'_msearch_messages' => array(
-			'msg_access_error'  => 'どのサイトにもアクセスできませんでした',
+			'msg_access_error'  => _('It was not able to access any site. '),
 			'body_access_error' => '',
 			'order' => array(
-				'past' => '経過時間順',
-				'-past' => '経過時間逆順',
-				'site' => 'サイト順',
-				'-site' => 'サイト逆順',
-				'page' => 'ページ名順',
-				'-page' => 'ページ名逆順',
+				'past' => _('Elapsed Time Order'),
+				'-past' => _('Elapsed Time Reverse Order'),
+				'site' => _('Site Order'),
+				'-site' => _('Site Reverse Order'),
+				'page' => _('Page Name Order'),
+				'-page' => _('Page Name Reverse Order'),
 			),
 		),
 	);
