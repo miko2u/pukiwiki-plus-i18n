@@ -1,9 +1,9 @@
 <?php
 /**
- * 言語判定
+ * Language judgment (言語判定)
  *
  * @copyright   Copyright &copy; 2005, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: lang.php,v 0.2 2005/03/07 01:15:00 upk Exp $
+ * @version     $Id: lang.php,v 0.3 2005/03/07 00:05:00 upk Exp $
  *
  */
 
@@ -47,6 +47,7 @@ function set_ui_language()
 			// 言語_国の定義時に次フェーズ用処理
 			$_x1 = split("-", $tmp_lang);
 			if ( count($_x1) == 1) continue;
+			// 言語名のみ格納
 			$_x2[] = $_x1[0];
 		}
 		// 言語_国を分離し、言語が定義されているかを検査
@@ -73,15 +74,27 @@ class accept_language
 		"sjis"		=> "ja_JP",
 		"ujis"		=> "ja_JP",
 		"euc_jp"	=> "ja_JP",
+		"x-euc"		=> "ja_JP,
+		"x-sjis"	=> "ja_JP",
 		"ms_kanji"	=> "ja_JP",
 		"euc-kr"	=> "ko_KR", // 410
-		"big5-hkscs"	=> "zh_HK", // 344 Hong Kong, Special Administrative Region of China
+		"johab"		=> "ko_KR",
+		"uhc"		=> "ko_KR",
 		"gbk"		=> "zh_CN", // 156 China, People's Republic of
 		"cp936"		=> "zh_CN",
 		"ms936"		=> "zh_CN",
 		"gb18030"	=> "zh_CN",
 		"gb2312"	=> "zh_CN",
-		"big5"		=> "zh-TW", // 158 Taiwan, Province of China
+		"hz"		=> "zh_CN",
+		"big5-hkscs"	=> "zh_HK", // 344 Hong Kong, Special Administrative Region of China
+		"big5"		=> "zh_TW", // 158 Taiwan, Province of China
+		"euc-tw"	=> "zh_TW",
+		"tis-620"	=> "th_TH",
+		"windows-874"	=> "th_TH",
+		"iso-8859-11"	=> "th_TH",
+		"tcvn"		=> "vi_VN",
+		"vps"		=> "vi_VN",
+		"koi8-u"	=> "uk_UA",
 	);
 
 	var $flag = array(
