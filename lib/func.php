@@ -176,9 +176,7 @@ function do_search($word, $type = 'AND', $non_format = FALSE)
 	global $script, $whatsnew, $non_list, $search_non_list;
  	global $search_auth;
 //	global $_msg_andresult, $_msg_orresult, $_msg_notfoundresult;
-	$_msg_andresult   = _('In the page <strong> $2</strong>, <strong> $3</strong> pages that contain all the terms $1 were found.');
-	$_msg_orresult    = _('In the page <strong> $2</strong>, <strong> $3</strong> pages that contain at least one of the terms $1 were found.');
-	$_msg_notfoundresult = _('No page which contains $1 has been found.');
+	global $_string;
 
 	$retval = array();
 
@@ -216,7 +214,7 @@ function do_search($word, $type = 'AND', $non_format = FALSE)
 	$r_word = rawurlencode($word);
 	$s_word = htmlspecialchars($word);
 	if (empty($pages))
-		return str_replace('$1', $s_word, $_msg_notfoundresult);
+		return str_replace('$1', $s_word, $_string['notfoundresult']);
 
 	ksort($pages);
 	$retval = '<ul>' . "\n";
@@ -231,7 +229,7 @@ function do_search($word, $type = 'AND', $non_format = FALSE)
 	$retval .= '</ul>' . "\n";
 
 	$retval .= str_replace('$1', $s_word, str_replace('$2', count($pages),
-		str_replace('$3', count($_pages), $b_type ? $_msg_andresult : $_msg_orresult)));
+		str_replace('$3', count($_pages), $b_type ? $_string['andresult'] : $_string['orresult'])));
 
 	return $retval;
 }
@@ -273,11 +271,8 @@ function strip_bracket($str)
 function page_list($pages, $cmd = 'read', $withfilename = FALSE)
 {
 	global $script, $list_index;
-//	global $_msg_symbol, $_msg_other;
 	global $pagereading_enable;
-
-	$_msg_symbol = _('Symbols');
-	$_msg_other  = _('Others');
+	global $_string;
 
 	// ソートキーを決定する。 ' ' < '[a-zA-Z]' < 'zz'という前提。
 	$symbol = ' ';
@@ -332,9 +327,9 @@ function page_list($pages, $cmd = 'read', $withfilename = FALSE)
 	$retval .= '<ul>' . "\n";
 	foreach ($list as $head=>$pages) {
 		if ($head === $symbol) {
-			$head = $_msg_symbol;
+			$head = $_string['symbol'];
 		} else if ($head === $other) {
-			$head = $_msg_other;
+			$head = $_string['other'];
 		}
 
 		if ($list_index) {

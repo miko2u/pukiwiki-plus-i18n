@@ -91,12 +91,13 @@ function file_write($dir, $page, $str, $notimestamp = FALSE)
 	global $notify_exclude;
 	global $smtp_server, $smtp_auth;
 	global $whatsdeleted, $maxshow_deleted;
+	global $_string;
 
 	if (PKWK_READONLY) return; // Do nothing
 
 	if (! is_pagename($page))
 		die_message(str_replace('$1', htmlspecialchars($page),
-		            str_replace('$2', 'WikiName', _('$1 is not a valid $2.'))));
+		            str_replace('$2', 'WikiName', $_string['invalidiwn'])));
 
 	$page      = strip_bracket($page);
 	$timestamp = FALSE;

@@ -8,7 +8,7 @@
 function catbody($title, $page, $body)
 {
 	global $script, $vars, $arg, $defaultpage, $whatsnew, $help_page, $hr;
-	global $related_link, $cantedit, $function_freeze, $search_word_color; //, $_msg_word;
+	global $related_link, $cantedit, $function_freeze, $search_word_color;
 	global $foot_explain, $note_hr, $head_tags;
 	global $trackback, $trackback_javascript, $referer, $javascript;
 	global $_LANG, $_LINK, $_IMAGE;
@@ -20,8 +20,7 @@ function catbody($title, $page, $body)
 	global $modifierlink; // Site administrator's name
 
 	global $skin_file, $menubar, $sidebar;
-
-	$_msg_word = _('These search terms have been highlighted:');
+	global $_string;
 
 	if (!defined('SKIN_FILE') || ! file_exists(SKIN_FILE) || ! is_readable(SKIN_FILE)) {
 		if (! file_exists($skin_file) || ! is_readable($skin_file)) {
@@ -132,7 +131,7 @@ function catbody($title, $page, $body)
 
 	// Search words
 	if ($search_word_color && isset($vars['word'])) {
-		$body = '<div class="small">' . $_msg_word . htmlspecialchars($vars['word']) .
+		$body = '<div class="small">' . $_string['word'] . htmlspecialchars($vars['word']) .
 			'</div>' . $hr . "\n" . $body;
 		$words = array_flip(array_splice(
 			preg_split('/\s+/', $vars['word'], -1, PREG_SPLIT_NO_EMPTY),
@@ -166,19 +165,7 @@ function edit_form($page, $postdata, $digest = 0, $b_template = TRUE)
 {
 	global $script, $vars, $rows, $cols, $hr, $function_freeze;
 	global $whatsnew, $non_list, $load_template_func;
-//	global $_btn_addtop, $_btn_preview, $_btn_repreview, $_btn_update, $_btn_cancel,
-//		$_msg_help, $_btn_notchangetimestamp;
-//	global $whatsnew, $_btn_template, $_btn_load, $non_list, $load_template_func;
-
-$_btn_preview   = _('Preview');
-$_btn_repreview = _('Preview again');
-$_btn_update    = _('Update');
-$_btn_cancel    = _('Cancel');
-$_btn_notchangetimestamp = _('Do not change timestamp');
-$_btn_addtop    = _('Add to top of page');
-$_btn_template  = _('Use page as template');
-$_btn_load      = _('Load');
-$_msg_help        = _('View Text Formatting Rules');
+	global $_button, $_string;
 
 	$refer = $template = $addtag = $add_top = '';
 
@@ -191,7 +178,7 @@ $_msg_help        = _('View Text Formatting Rules');
 		$addtag  = '<input type="hidden" name="add" value="true" />';
 		$add_top = '<input type="checkbox" name="add_top" value="true"' .
 			$checked_top . ' /><span class="small">' .
-			$_btn_addtop . '</span>';
+			$_button['addtop'] . '</span>';
 	}
 
 	if($load_template_func && $b_template) {
@@ -208,10 +195,10 @@ $_msg_help        = _('View Text Formatting Rules');
 		$s_pages  = join("\n", $pages);
 		$template = <<<EOD
   <select name="template_page">
-   <option value="">-- $_btn_template --</option>
+   <option value="">-- {$_button['template']} --</option>
 $s_pages
   </select>
-  <input type="submit" name="template" value="$_btn_load" accesskey="r" />
+  <input type="submit" name="template" value="{$_button['load']}" accesskey="r" />
   <br />
 EOD;
 
@@ -226,7 +213,7 @@ EOD;
 	$s_original  = isset($vars['original']) ? htmlspecialchars($vars['original']) : $s_postdata;
 	$s_id        = isset($vars['id']) ? htmlspecialchars($vars['id']) : '';
 	$b_preview   = isset($vars['preview']); // TRUE when preview
-	$btn_preview = $b_preview ? $_btn_repreview : $_btn_preview;
+	$btn_preview = $b_preview ? $_button['repreview'] : $_button['preview'];
 
 	$refpage = htmlspecialchars($vars['refpage']);
 	$add_assistant = edit_form_assistant();
@@ -245,11 +232,11 @@ $template
   $add_assistant
   <br />
   <input type="submit" name="preview" value="$btn_preview" accesskey="p" />
-  <input type="submit" name="write"   value="$_btn_update" accesskey="s" />
+  <input type="submit" name="write"   value="{$_button['update']}" accesskey="s" />
   $add_top
   <input type="checkbox" name="notimestamp" value="true"$checked_time />
-  <span style="small">$_btn_notchangetimestamp</span> &nbsp;
-  <input type="submit" name="cancel"  value="$_btn_cancel" accesskey="c" />
+  <span style="small">{$_button['notchangetimestamp']}</span> &nbsp;
+  <input type="submit" name="cancel"  value="{$_button['cancel']}" accesskey="c" />
   <textarea name="original" rows="1" cols="1" style="display:none">$s_original</textarea>
  </div>
 </form>
@@ -260,7 +247,7 @@ EOD;
 	} else {
 		$body .= '<ul><li><a href="' .
 			$script . '?cmd=edit&amp;help=true&amp;page=' . $r_page .
-			'">' . $_msg_help . '</a></li></ul>';
+			'">' . $_string['help'] . '</a></li></ul>';
 	}
 
 	return $body;

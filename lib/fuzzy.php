@@ -6,12 +6,7 @@
 function do_search_fuzzy($word, $type = 'AND', $non_format = FALSE, $non_fuzzy = FALSE)
 {
 	global $script, $whatsnew, $non_list, $search_non_list;
-//	global $_msg_andresult, $_msg_orresult, $_msg_notfoundresult;
  	global $search_auth, $search_fuzzy;
-
-	$_msg_andresult   = _('In the page <strong> $2</strong>, <strong> $3</strong> pages that contain all the terms $1 were found.');
-	$_msg_orresult    = _('In the page <strong> $2</strong>, <strong> $3</strong> pages that contain at least one of the terms $1 were found.');
-	$_msg_notfoundresult = _('No page which contains $1 has been found.');
 
 	static $fuzzypattern = array(
 		'任央' => '田',	'任奴' => '申',	'任尼' => '矛',	'任巧' => '示',
@@ -76,7 +71,7 @@ function do_search_fuzzy($word, $type = 'AND', $non_format = FALSE, $non_fuzzy =
 	$r_word = rawurlencode($word);
 	$s_word = htmlspecialchars($word);
 	if (empty($pages))
-		return str_replace('$1', $s_word, $_msg_notfoundresult);
+		return str_replace('$1', $s_word, $_string['notfoundresult']);
 
 	ksort($pages);
 	$retval = '<ul>' . "\n";
@@ -91,7 +86,7 @@ function do_search_fuzzy($word, $type = 'AND', $non_format = FALSE, $non_fuzzy =
 	$retval .= '</ul>' . "\n";
 
 	$retval .= str_replace('$1', $s_word, str_replace('$2', count($pages),
-		str_replace('$3', count($_pages), $b_type ? $_msg_andresult : $_msg_orresult)));
+		str_replace('$3', count($_pages), $b_type ? $_string['andresult'] : $_string['orresult'])));
 
 	return $retval;
 }

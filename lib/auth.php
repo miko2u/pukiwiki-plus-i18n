@@ -8,21 +8,20 @@
 function check_editable($page, $auth_flag = TRUE, $exit_flag = TRUE)
 {
 	global $script;
-	$_title_cannotedit = _('$1 is not editable');
-	$_msg_unfreeze = _('Unfreeze');
+	global $_title, $_string;
 
 	if (edit_auth($page, $auth_flag, $exit_flag) && is_editable($page))
 		return TRUE;
 
 	if (! $exit_flag) return FALSE;
 
-	$body = $title = str_replace('$1', htmlspecialchars(strip_bracket($page)), $_title_cannotedit);
+	$body = $title = str_replace('$1', htmlspecialchars(strip_bracket($page)), $_title['cannotedit']);
 
 	if (is_freeze($page))
 		$body .= '(<a href="' . $script . '?cmd=unfreeze&amp;page=' .
-			rawurlencode($page) . '">' . $_msg_unfreeze . '</a>)';
+			rawurlencode($page) . '">' . $_string['unfreeze'] . '</a>)';
 
-	$page = str_replace('$1', make_search($page), $_title_cannotedit);
+	$page = str_replace('$1', make_search($page), $_title['cannotedit']);
 
 	catbody($title, $page, $body);
 	exit;
@@ -37,9 +36,10 @@ function check_readable($page, $auth_flag = TRUE, $exit_flag = TRUE)
 // ÊÔ½¸Ç§¾Ú
 function edit_auth($page, $auth_flag = TRUE, $exit_flag = TRUE)
 {
-	global $edit_auth, $edit_auth_pages; //, $_title_cannotedit;
+	global $edit_auth, $edit_auth_pages;
+	global $_title;
 
-	return $edit_auth ? basic_auth($page, $auth_flag, $exit_flag, $edit_auth_pages, _('$1 is not editable')) : TRUE;
+	return $edit_auth ? basic_auth($page, $auth_flag, $exit_flag, $edit_auth_pages, $_title['cannnotedit']) : TRUE;
 }
 
 // ±ÜÍ÷Ç§¾Ú
@@ -47,16 +47,14 @@ function read_auth($page, $auth_flag = TRUE, $exit_flag = TRUE)
 {
 	global $read_auth, $read_auth_pages; //, $_title_cannotread;
 
-	return $read_auth ? basic_auth($page, $auth_flag, $exit_flag, $read_auth_pages, _('$1 is not readable')) : TRUE;
+	return $read_auth ? basic_auth($page, $auth_flag, $exit_flag, $read_auth_pages, $_title['cannnotedit']) : TRUE;
 }
 
 // Basic authentication
 function basic_auth($page, $auth_flag, $exit_flag, $auth_pages, $title_cannot)
 {
 	global $auth_users, $auth_method_type;
-//	global $_msg_auth
-
-	$msg_auth = _('PukiWikiAuth');
+	global $_string;
 
 	// Ç§¾ÚÍ×ÈÝÈ½ÃÇÂÐ¾Ý
 	$target_str = '';
@@ -98,7 +96,7 @@ function basic_auth($page, $auth_flag, $exit_flag, $auth_pages, $title_cannot)
 	{
 		pkwk_common_headers();
 		if ($auth_flag) {
-			header('WWW-Authenticate: Basic realm="'.$_msg_auth.'"');
+			header('WWW-Authenticate: Basic realm="'.$_string['realm'].'"');
 			header('HTTP/1.0 401 Unauthorized');
 		}
 		if ($exit_flag) {

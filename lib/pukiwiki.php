@@ -80,17 +80,21 @@ if (! extension_loaded('gettext')) {
 // 初期化: 設定ファイルの読み込み
 require(LIB_DIR . 'init.php');
 
-/////////////////////////////////////////////////
-// Main
-
-$base    = $defaultpage;
-$retvars = array();
-
+// 言語設定
 putenv('LC_ALL=' . PO_LANG);
 setlocale(LC_ALL, PO_LANG);
 bindtextdomain(DOMAIN, LANG_DIR);
 bind_textdomain_codeset(DOMAIN, SOURCE_ENCODING);
 textdomain(DOMAIN);
+
+// リソースファイルの読み込み
+require(LIB_DIR . 'resource.php');
+
+/////////////////////////////////////////////////
+// Main
+
+$base    = $defaultpage;
+$retvars = array();
 
 if (isset($vars['plugin'])) {
 	// Plug-in action
