@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: tracker.inc.php,v 1.28 2005/01/23 08:29:20 henoheno Exp $
+// $Id: tracker.inc.php,v 1.29.1 2005/03/09 08:31:05 miko Exp $
 //
 // Issue tracker plugin (See Also bugtrack plugin)
 
@@ -210,7 +210,18 @@ function plugin_tracker_inline()
 // フィールドオブジェクトを構築する
 function plugin_tracker_get_fields($base,$refer,&$config)
 {
-	global $now,$_tracker_messages;
+	global $now;
+	$_tracker_messages = array(
+		'btn_page'   => _('Page'),
+		'btn_name'   => _('Name'),
+		'btn_real'   => _('Realname'),
+		'btn_submit' => _('Add'),
+		'btn_date'   => _('Date'),
+		'btn_refer'  => _('Refer page'),
+		'btn_base'   => _('Base page'),
+		'btn_update' => _('Update'),
+		'btn_past'   => _('Past'),
+	);
 
 	$fields = array();
 	// 予約語
@@ -256,11 +267,14 @@ class Tracker_field
 	var $config;
 	var $data;
 	var $sort_type = SORT_REGULAR;
+	var $id = 0;
 
 	function Tracker_field($field,$page,$refer,&$config)
 	{
 		global $post;
+		static $id = 0;
 
+		$this->id = ++$id;
 		$this->name = $field[0];
 		$this->title = $field[1];
 		$this->values = explode(',',$field[3]);
@@ -436,11 +450,16 @@ class Tracker_field_radio extends Tracker_field_format
 	{
 		$s_name = htmlspecialchars($this->name);
 		$retval = '';
+		$id = 0;
 		foreach ($this->config->get($this->name) as $option)
 		{
 			$s_option = htmlspecialchars($option[0]);
 			$checked = trim($option[0]) == trim($this->default_value) ? ' checked="checked"' : '';
-			$retval .= "<input type=\"radio\" name=\"$s_name\" value=\"$s_option\"$checked />$s_option\n";
+			++$id;
+			$s_id = '_p_tracker_' . $s_name . '_' . $this->id . '_' . $id;
+			$retval .= '<input type="radio" name="' .  $s_name . '" id="' . $s_id .
+				'" value="' . $s_option . '"' . $checked . ' />' .
+				'<label for="' . $s_id . '">' . $s_option . '</label>' . "\n";
 		}
 
 		return $retval;
@@ -496,12 +515,17 @@ class Tracker_field_checkbox extends Tracker_field_radio
 		$s_name = htmlspecialchars($this->name);
 		$defaults = array_flip(preg_split('/\s*,\s*/',$this->default_value,-1,PREG_SPLIT_NO_EMPTY));
 		$retval = '';
+		$id = 0;
 		foreach ($this->config->get($this->name) as $option)
 		{
 			$s_option = htmlspecialchars($option[0]);
 			$checked = array_key_exists(trim($option[0]),$defaults) ?
 				' checked="checked"' : '';
-			$retval .= "<input type=\"checkbox\" name=\"{$s_name}[]\" value=\"$s_option\"$checked />$s_option\n";
+			++$id;
+			$s_id = '_p_tracker_' . $s_name . '_' . $this->id . '_' . $id;
+			$retval .= '<input type="checkbox" name="' . $s_name .
+				'[]" id="' . $s_id . '" value="' . $s_option . '"' . $checked . ' />' .
+				'<label for="' . $s_id . '">' . $s_option . '</label>' . "\n";
 		}
 
 		return $retval;
@@ -593,7 +617,7 @@ function plugin_tracker_list_convert()
 }
 function plugin_tracker_list_action()
 {
-	global $script,$vars,$_tracker_messages;
+	global $script,$vars;
 
 	$page = $refer = $vars['refer'];
 	$s_page = make_pagelink($page);
@@ -602,8 +626,8 @@ function plugin_tracker_list_action()
 	$order = array_key_exists('order',$vars) ? $vars['order'] : '_real:SORT_DESC';
 
 	return array(
-		'msg' => $_tracker_messages['msg_list'],
-		'body'=> str_replace('$1',$s_page,$_tracker_messages['msg_back']).
+		'msg' => _('List items of  $1'),
+		'body'=> str_replace('$1',$s_page, '<p>$1</p>').
 			plugin_tracker_getlist($page,$refer,$config,$list,$order)
 	);
 }
@@ -845,8 +869,6 @@ class Tracker_list
 	}
 	function toString($limit=NULL)
 	{
-		global $_tracker_messages;
-
 		$source = '';
 		$body = array();
 
@@ -855,7 +877,7 @@ class Tracker_list
 			$source = str_replace(
 				array('$1','$2'),
 				array(count($this->rows),$limit),
-				$_tracker_messages['msg_limit'])."\n";
+				_('top  $2 results out of  $1.'))."\n";
 			$this->rows = array_splice($this->rows,0,$limit);
 		}
 		if (count($this->rows) == 0)

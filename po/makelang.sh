@@ -13,6 +13,7 @@ msgfmt -o ../locale/ja/LC_MESSAGES/newpage.mo newpage.ja.po
 msgfmt -o ../locale/ja/LC_MESSAGES/memo.mo memo.ja.po
 msgfmt -o ../locale/ja/LC_MESSAGES/search.mo search.ja.po
 msgfmt -o ../locale/ja/LC_MESSAGES/source.mo source.ja.po
+msgfmt -o ../locale/ja/LC_MESSAGES/tracker.mo tracker.ja.po
 msgfmt -o ../locale/ja/LC_MESSAGES/unfreeze.mo unfreeze.ja.po
 msgfmt -o ../locale/ja/LC_MESSAGES/vote.mo vote.ja.po
 msgfmt -o ../locale/ja/LC_MESSAGES/versionlist.mo versionlist.ja.po
