@@ -84,6 +84,17 @@ foreach (array('LANG_FILE_HINT', 'LANG_FILE') as $langfile) {
 if ($die) die_message(nl2br("\n\n" . $die));
 
 /////////////////////////////////////////////////
+// LANG_FILE: Init Resource(for gettext)
+putenv('LC_ALL=' . PO_LANG);
+setlocale(LC_ALL, PO_LANG);
+bindtextdomain(DOMAIN, LANG_DIR);
+bind_textdomain_codeset(DOMAIN, SOURCE_ENCODING);
+textdomain(DOMAIN);
+
+// リソースファイルの読み込み
+require(LIB_DIR . 'resource.php');
+
+/////////////////////////////////////////////////
 // LANG_FILE: Init encoding hint
 
 define('PKWK_ENCODING_HINT', isset($_LANG['encode_hint'][LANG]) ? $_LANG['encode_hint'][LANG] : '');
@@ -91,8 +102,8 @@ unset($_LANG['encode_hint']);
 
 /////////////////////////////////////////////////
 // LANG_FILE: Init severn days of the week
-
-$weeklabels = $_msg_week;
+//
+//$weeklabels = $_string['week'];
 
 /////////////////////////////////////////////////
 // INI_FILE: Init $script

@@ -6,10 +6,11 @@
 // Warning: This file is PukiWiki "core" resource strings.
 //          Please Without customizing it. 
 
-$_string = array(
-	// Common country string(s)
-	'week'      => array(_('Sun'),_('Mon'),_('Tue'),_('Wed'),_('Thu'),_('Fri'),_('Sat'));
+$weeklabels = array(
+	_('Sun'),_('Mon'),_('Tue'),_('Wed'),_('Thu'),_('Fri'),_('Sat'),
+);
 
+$_string = array(
 	// Common core string(s)
 	'realm'     => _('PukiWikiAuth'),
 	'freeze'    => _('Freeze'),
