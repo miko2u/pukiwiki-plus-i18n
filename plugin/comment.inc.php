@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: comment.inc.php,v 1.26.4 2005/01/23 07:01:56 miko Exp $
+// $Id: comment.inc.php,v 1.28.4 2005/03/05 12:23:10 miko Exp $
 //
 // Comment plugin
 
@@ -34,15 +34,20 @@ function plugin_comment_action()
 
 	$_msg  = str_replace('$msg', $vars['msg'], PLUGIN_COMMENT_FORMAT_MSG);
 
-	$_name = (! isset($vars['name']) || $vars['name'] == '') ? $_no_name : $vars['name'];
-	$_name = ($_name == '') ? '' : str_replace('$name', $_name, PLUGIN_COMMENT_FORMAT_NAME);
+	if(isset($vars['name']) || ($vars['nodate'] != '1')) {
+		$_name = (! isset($vars['name']) || $vars['name'] == '') ? $_no_name : $vars['name'];
+		$_name = ($_name == '') ? '' : str_replace('$name', $_name, PLUGIN_COMMENT_FORMAT_NAME);
 
-	$_now  = ($vars['nodate'] == '1') ? '' : str_replace('$now', $now, PLUGIN_COMMENT_FORMAT_NOW);
+		$_now  = ($vars['nodate'] == '1') ? '' : str_replace('$now', $now, PLUGIN_COMMENT_FORMAT_NOW);
 
-	$comment = str_replace("\x08MSG\x08",  $_msg,  PLUGIN_COMMENT_FORMAT_STRING);
-	$comment = str_replace("\x08NAME\x08", $_name, $comment);
-	$comment = str_replace("\x08NOW\x08",  $_now,  $comment);
-	$comment = $head . $comment;
+		$comment = str_replace("\x08MSG\x08",  $_msg,  PLUGIN_COMMENT_FORMAT_STRING);
+		$comment = str_replace("\x08NAME\x08", $_name, $comment);
+		$comment = str_replace("\x08NOW\x08",  $_now,  $comment);
+		$comment = $head . $comment;
+	}
+	else {
+		$comment = $_msg;
+	}
 
 	$postdata = '';
 	$postdata_old  = get_source($vars['refer']);
@@ -93,10 +98,11 @@ function plugin_comment_convert()
 	$options = func_num_args() ? func_get_args() : array();
 
 	if (in_array('noname', $options)) {
-		$nametags = $_msg_comment;
+		$nametags = '<label for="_p_comment_comment_' . $comment_no . '">' . $_msg_comment . '</label>';
 	} else {
-		$nametags = $_btn_name .
-			'<input type="text" name="name" size="' . PLUGIN_COMMENT_SIZE_NAME . "\" /><br />\n";
+		$nametags = '<label for="_p_comment_name_' . $comment_no . '">' . $_btn_name . '</label>' .
+			'<input type="text" name="name" id="_p_comment_name_' . $comment_no .
+			'" size="' . PLUGIN_COMMENT_SIZE_NAME . '" />' . "\n";
 	}
 
 	$helptags = edit_form_assistant();
@@ -118,7 +124,7 @@ function plugin_comment_convert()
   <input type="hidden" name="above"  value="$above" />
   <input type="hidden" name="digest" value="$digest" />
   $nametags
-  <input type="text"   name="msg" size="$comment_cols" />
+  <input type="text"   name="msg" id="_p_comment_comment_{$comment_no}" size="$comment_cols" />
   <input type="submit" name="comment" value="$_btn_comment" />
   $helptags
  </div>
