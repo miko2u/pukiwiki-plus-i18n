@@ -155,9 +155,9 @@ if ($html_transitional) { ?>
  </div></td>
  <td id="footerrtable"><div id="validxhtml">
 <?php if ($html_transitional) { ?>
-  <a href="http://validator.w3.org/check/referer"><img src="image/valid-xhtml10.png" width="88" height="31" alt="Vaild XHTML 1.0" title="Vaild XHTML 1.0" /></a>
+  <a href="http://validator.w3.org/check/referer"><img src="image/valid-xhtml10.png" width="88" height="31" alt="Valid XHTML 1.0" title="Valid XHTML 1.0" /></a>
 <?php } else { ?>
-  <a href="http://validator.w3.org/check/referer"><img src="image/valid-xhtml11.png" width="88" height="31" alt="Vaild XHTML 1.1" title="Vaild XHTML 1.1" /></a>
+  <a href="http://validator.w3.org/check/referer"><img src="image/valid-xhtml11.png" width="88" height="31" alt="Valid XHTML 1.1" title="Valid XHTML 1.1" /></a>
 <?php } ?>
  </div></td>
 </tr>
