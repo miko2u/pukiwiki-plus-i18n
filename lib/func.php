@@ -503,9 +503,11 @@ function get_glossary_pattern()
 	// ここでキーワードを調べる
 	$source = get_source('Glossary');
 	foreach ( $source as $line ){
-		if ( preg_match('/^[:|]([^|]+)\|([^|]+)\|?$/', $line, $match) ){
+		if ( preg_match('/^[:|]([^|]+)\|([^|]+)\|?$/', $line, $match)) {
 			$dt = trim($match[1]);
-			$auto_pages[] = $dt;
+			if (mb_strlen($dt) >= $autoglossary) {
+				$auto_pages[] = $dt;
+			}
 		}
 	}
 
