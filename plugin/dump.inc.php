@@ -166,7 +166,7 @@ function plugin_dump_upload()
 	$files = $tar->extract($pattern);
 	if (empty($files)) {
 		@unlink($uploadfile);
-		return array('code' => FALSE, 'msg' => '<p>' . _("There was no file that was able to be developed.") . '</p>');
+		return array('code' => FALSE, 'msg' => '<p>' . _("There was no file that was able to be expanded.") . '</p>');
 	}
 
 	$msg  = '<p><strong>' . _("Progressing file list") . '</strong><ul>';

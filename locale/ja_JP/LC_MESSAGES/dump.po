@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PukiWiki Plus! 1.4.5-u2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-04-02 21:12+0900\n"
-"PO-Revision-Date: 2005-04-02 21:13+0900\n"
+"POT-Creation-Date: 2005-04-02 21:47+0900\n"
+"PO-Revision-Date: 2005-04-02 21:48+0900\n"
 "Last-Translator: Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>\n"
 "Language-Team: Japanese <ja@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -36,7 +36,7 @@ msgid "The file was not found."
 msgstr "ファイルがみつかりませんでした。"
 
 #: ../../plugin/dump.inc.php:169
-msgid "There was no file that was able to be developed."
+msgid "There was no file that was able to be expanded."
 msgstr "展開できるファイルがありませんでした。"
 
 #: ../../plugin/dump.inc.php:172
@@ -93,8 +93,7 @@ msgstr "[重要]"
 #: ../../plugin/dump.inc.php:226
 msgid ""
 "Attention: Please note that the data file of the same name is overwrited."
-msgstr ""
-" 同じ名前のデータファイルは上書きされますので、十分ご注意ください。"
+msgstr " 同じ名前のデータファイルは上書きされますので、十分ご注意ください。"
 
 #: ../../plugin/dump.inc.php:228
 msgid "File"
