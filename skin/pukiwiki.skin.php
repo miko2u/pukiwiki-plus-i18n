@@ -1,46 +1,38 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: pukiwiki.skin.php,v 1.32 2004/12/24 15:22:10 henoheno Exp $
+// $Id: pukiwiki.skin.php,v 1.41 2005/01/26 13:04:08 henoheno Exp $
 //
 // PukiWiki default skin
+
+// Set site logo
+$_IMAGE['skin']['logo']     = 'pukiwiki.png';
 
 // SKIN_DEFAULT_DISABLE_TOPICPATH
 //   1 = Show reload URL
 //   0 = Show topicpath
 if (! defined('SKIN_DEFAULT_DISABLE_TOPICPATH'))
-	define('SKIN_DEFAULT_DISABLE_TOPICPATH', 1);
+	define('SKIN_DEFAULT_DISABLE_TOPICPATH', 1); // 1, 0
+
+// Show / Hide navigation bar UI at your choice
+// NOTE: This is not stop their functionalities!
+if (! defined('PKWK_SKIN_SHOW_NAVBAR'))
+	define('PKWK_SKIN_SHOW_NAVBAR', 1); // 1, 0
+
+// Show / Hide toolbar UI at your choice
+// NOTE: This is not stop their functionalities!
+if (! defined('PKWK_SKIN_SHOW_TOOLBAR'))
+	define('PKWK_SKIN_SHOW_TOOLBAR', 1); // 1, 0
 
 // ----
-
 // Prohibit direct access
 if (! defined('UI_LANG')) die('UI_LANG is not set');
 if (! isset($_LANG)) die('$_LANG is not set');
+if (! defined('PKWK_READONLY')) die('PKWK_READONLY is not set');
 
-// Set skin-specific images
-$_IMAGE['skin']['logo']     = 'pukiwiki.png';
-$_IMAGE['skin']['reload']   = 'reload.png';
-$_IMAGE['skin']['new']      = 'new.png';
-$_IMAGE['skin']['edit']     = 'edit.png';
-$_IMAGE['skin']['freeze']   = 'freeze.png';
-$_IMAGE['skin']['unfreeze'] = 'unfreeze.png';
-$_IMAGE['skin']['diff']     = 'diff.png';
-$_IMAGE['skin']['upload']   = 'file.png';
-$_IMAGE['skin']['copy']     = 'copy.png';
-$_IMAGE['skin']['rename']   = 'rename.png';
-$_IMAGE['skin']['top']      = 'top.png';
-$_IMAGE['skin']['list']     = 'list.png';
-$_IMAGE['skin']['search']   = 'search.png';
-$_IMAGE['skin']['recent']   = 'recentchanges.png';
-$_IMAGE['skin']['backup']   = 'backup.png';
-$_IMAGE['skin']['help']     = 'help.png';
-$_IMAGE['skin']['rss']      = 'rss.png';
-$_IMAGE['skin']['rss10']    = & $_IMAGE['skin']['rss'];
-$_IMAGE['skin']['rss20']    = 'rss20.png';
-$_IMAGE['skin']['rdf']      = 'rdf.png';
-
-$lang  = $_LANG['skin'];
-$link  = $_LINK;
-$image = $_IMAGE['skin'];
+$lang  = & $_LANG['skin'];
+$link  = & $_LINK;
+$image = & $_IMAGE['skin'];
+$rw    = ! PKWK_READONLY;
 
 // Decide charset for CSS
 $css_charset = 'iso-8859-1';
@@ -48,28 +40,27 @@ switch(UI_LANG){
 	case 'ja': $css_charset = 'Shift_JIS'; break;
 }
 
-// Output header
+// Output HTTP headers
 pkwk_common_headers();
 header('Cache-control: no-cache');
 header('Pragma: no-cache');
 header('Content-Type: text/html; charset=' . CONTENT_CHARSET);
 
-// Output body
-echo '<?xml version="1.0" encoding="' . CONTENT_CHARSET . '"?>';
-if ($html_transitional) { ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo LANG ?>" lang="<?php echo LANG ?>">
-<?php } else { ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo LANG ?>">
-<?php } ?>
+// Output HTML DTD, <html>, and receive content-type
+if (isset($pkwk_dtd)) {
+	$meta_content_type = pkwk_output_dtd($pkwk_dtd);
+} else {
+	$meta_content_type = pkwk_output_dtd();
+}
+
+?>
 <head>
- <meta http-equiv="content-type" content="application/xhtml+xml; charset=<?php echo CONTENT_CHARSET ?>" />
+ <?php echo $meta_content_type ?>
  <meta http-equiv="content-style-type" content="text/css" />
 <?php if (! $is_read)  { ?> <meta name="robots" content="NOINDEX,NOFOLLOW" /><?php } ?>
 <?php if (PKWK_ALLOW_JAVASCRIPT && isset($javascript)) { ?> <meta http-equiv="Content-Script-Type" content="text/javascript" /><?php } ?>
 
- <title><?php echo "$title - $page_title" ?></title>
+ <title><?php echo $title ?> - <?php echo $page_title ?></title>
  <link rel="stylesheet" href="skin/pukiwiki.css.php?charset=<?php echo $css_charset ?>" type="text/css" media="screen" charset="<?php echo $css_charset ?>" />
  <link rel="stylesheet" href="skin/pukiwiki.css.php?charset=<?php echo $css_charset ?>&amp;media=print" type="text/css" media="print" charset="<?php echo $css_charset ?>" />
   <link rel="alternate" type="application/rss+xml" title="RSS" href="<?php echo $link['rss'] ?>" /><?php // RSS auto-discovery ?>
@@ -98,10 +89,11 @@ if ($html_transitional) { ?>
 </div>
 
 <div id="navigator">
+<?php if(PKWK_SKIN_SHOW_NAVBAR) { ?>
 <?php
 function _navigator($key, $value = '', $javascript = ''){
-	$lang = $GLOBALS['_LANG']['skin'];
-	$link = $GLOBALS['_LINK'];
+	$lang = & $GLOBALS['_LANG']['skin'];
+	$link = & $GLOBALS['_LINK'];
 	if (! isset($lang[$key])) { echo 'LANG NOT FOUND'; return FALSE; }
 	if (! isset($link[$key])) { echo 'LINK NOT FOUND'; return FALSE; }
 	if (! PKWK_ALLOW_JAVASCRIPT) $javascript = '';
@@ -116,25 +108,31 @@ function _navigator($key, $value = '', $javascript = ''){
  [ <?php _navigator('top') ?> ] &nbsp;
 
 <?php if ($is_page) { ?>
- [ <?php _navigator('edit')   ?>
- <?php if ($is_read && $function_freeze) { ?>
- |  <?php (! $is_freeze) ? _navigator('freeze') : _navigator('unfreeze') ?>
+ [
+ <?php if ($rw) { ?>
+	<?php _navigator('edit') ?> |
+	<?php if ($is_read && $function_freeze) { ?>
+		<?php (! $is_freeze) ? _navigator('freeze') : _navigator('unfreeze') ?> |
+	<?php } ?>
  <?php } ?>
- | <?php _navigator('diff') ?>
+ <?php _navigator('diff') ?>
  <?php if ($do_backup) { ?>
- | <?php _navigator('backup') ?>
+	| <?php _navigator('backup') ?>
  <?php } ?>
- <?php if ((bool)ini_get('file_uploads')) { ?>
- | <?php _navigator('upload') ?>
+ <?php if ($rw && (bool)ini_get('file_uploads')) { ?>
+	| <?php _navigator('upload') ?>
  <?php } ?>
- | <?php _navigator('reload')    ?>
+ | <?php _navigator('reload') ?>
  ] &nbsp;
 <?php } ?>
 
- [ <?php _navigator('new')  ?>
- | <?php _navigator('list') ?>
+ [
+ <?php if ($rw) { ?>
+	<?php _navigator('new') ?> |
+ <?php } ?>
+   <?php _navigator('list') ?>
  <?php if (arg_check('list')) { ?>
- | <?php _navigator('filelist') ?>
+	| <?php _navigator('filelist') ?>
  <?php } ?>
  | <?php _navigator('search') ?>
  | <?php _navigator('recent') ?>
@@ -148,7 +146,7 @@ function _navigator($key, $value = '', $javascript = ''){
 <?php if ($referer)   { ?> &nbsp;
  [ <?php _navigator('refer') ?> ]
 <?php } ?>
-
+<?php } // PKWK_SKIN_SHOW_NAVBAR ?>
 </div>
 
 <?php echo $hr ?>
@@ -168,11 +166,11 @@ function _navigator($key, $value = '', $javascript = ''){
 <div id="body"><?php echo $body ?></div>
 <?php } ?>
 
-<?php if ($notes) { ?>
+<?php if ($notes != '') { ?>
 <div id="note"><?php echo $notes ?></div>
 <?php } ?>
 
-<?php if ($attaches) { ?>
+<?php if ($attaches != '') { ?>
 <div id="attach">
 <?php echo $hr ?>
 <?php echo $attaches ?>
@@ -181,12 +179,36 @@ function _navigator($key, $value = '', $javascript = ''){
 
 <?php echo $hr ?>
 
+<?php if (PKWK_SKIN_SHOW_TOOLBAR) { ?>
+<!-- Toolbar -->
 <div id="toolbar">
 <?php
+
+// Set toolbar-specific images
+$_IMAGE['skin']['reload']   = 'reload.png';
+$_IMAGE['skin']['new']      = 'new.png';
+$_IMAGE['skin']['edit']     = 'edit.png';
+$_IMAGE['skin']['freeze']   = 'freeze.png';
+$_IMAGE['skin']['unfreeze'] = 'unfreeze.png';
+$_IMAGE['skin']['diff']     = 'diff.png';
+$_IMAGE['skin']['upload']   = 'file.png';
+$_IMAGE['skin']['copy']     = 'copy.png';
+$_IMAGE['skin']['rename']   = 'rename.png';
+$_IMAGE['skin']['top']      = 'top.png';
+$_IMAGE['skin']['list']     = 'list.png';
+$_IMAGE['skin']['search']   = 'search.png';
+$_IMAGE['skin']['recent']   = 'recentchanges.png';
+$_IMAGE['skin']['backup']   = 'backup.png';
+$_IMAGE['skin']['help']     = 'help.png';
+$_IMAGE['skin']['rss']      = 'rss.png';
+$_IMAGE['skin']['rss10']    = & $_IMAGE['skin']['rss'];
+$_IMAGE['skin']['rss20']    = 'rss20.png';
+$_IMAGE['skin']['rdf']      = 'rdf.png';
+
 function _toolbar($key, $x = 20, $y = 20){
-	$lang  = $GLOBALS['_LANG']['skin'];
-	$link  = $GLOBALS['_LINK'];
-	$image = $GLOBALS['_IMAGE']['skin'];
+	$lang  = & $GLOBALS['_LANG']['skin'];
+	$link  = & $GLOBALS['_LINK'];
+	$image = & $GLOBALS['_IMAGE']['skin'];
 	if (! isset($lang[$key]) ) { echo 'LANG NOT FOUND';  return FALSE; }
 	if (! isset($link[$key]) ) { echo 'LINK NOT FOUND';  return FALSE; }
 	if (! isset($image[$key])) { echo 'IMAGE NOT FOUND'; return FALSE; }
@@ -202,46 +224,49 @@ function _toolbar($key, $x = 20, $y = 20){
 
 <?php if ($is_page) { ?>
  &nbsp;
- <?php _toolbar('edit') ?>
- <?php if ($is_read && $function_freeze) { ?>
-  <?php if (! $is_freeze) { _toolbar('freeze'); } else { _toolbar('unfreeze'); } ?>
+ <?php if ($rw) { ?>
+	<?php _toolbar('edit') ?>
+	<?php if ($is_read && $function_freeze) { ?>
+		<?php if (! $is_freeze) { _toolbar('freeze'); } else { _toolbar('unfreeze'); } ?>
+	<?php } ?>
  <?php } ?>
  <?php _toolbar('diff') ?>
 <?php if ($do_backup) { ?>
-  <?php _toolbar('backup') ?>
+	<?php _toolbar('backup') ?>
 <?php } ?>
- <?php if ((bool)ini_get('file_uploads')) { ?>
-  <?php _toolbar('upload') ?>
- <?php } ?>
- <?php _toolbar('copy') ?>
- <?php _toolbar('rename') ?>
+<?php if ($rw) { ?>
+	<?php if ((bool)ini_get('file_uploads')) { ?>
+		<?php _toolbar('upload') ?>
+	<?php } ?>
+	<?php _toolbar('copy') ?>
+	<?php _toolbar('rename') ?>
+<?php } ?>
  <?php _toolbar('reload') ?>
 <?php } ?>
  &nbsp;
- <?php _toolbar('new')    ?>
+<?php if ($rw) { ?>
+	<?php _toolbar('new') ?>
+<?php } ?>
  <?php _toolbar('list')   ?>
  <?php _toolbar('search') ?>
  <?php _toolbar('recent') ?>
  &nbsp; <?php _toolbar('help') ?>
  &nbsp; <?php _toolbar('rss10', 36, 14) ?>
 </div>
+<?php } // PKWK_SKIN_SHOW_TOOLBAR ?>
 
-<?php if ($lastmodified) { ?>
+<?php if ($lastmodified != '') { ?>
 <div id="lastmodified">Last-modified: <?php echo $lastmodified ?></div>
 <?php } ?>
 
-<?php if ($related) { ?>
+<?php if ($related != '') { ?>
 <div id="related">Link: <?php echo $related ?></div>
 <?php } ?>
 
 <div id="footer">
- Modified by <a href="<?php echo $modifierlink ?>"><?php echo $modifier ?></a>
- <br /><br />
- <?php echo S_COPYRIGHT ?>
- <br />
- Powered by PHP <?php echo PHP_VERSION ?>
- <br /><br />
- HTML convert time to <?php echo $taketime ?> sec.
+ Site admin: <a href="<?php echo $modifierlink ?>"><?php echo $modifier ?></a><p />
+ <?php echo S_COPYRIGHT ?>.
+ Powered by PHP <?php echo PHP_VERSION ?>. HTML convert time: <?php echo $taketime ?> sec.
 </div>
 
 </body>

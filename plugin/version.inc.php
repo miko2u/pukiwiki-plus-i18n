@@ -1,12 +1,20 @@
 <?php
-// $Id: version.inc.php,v 1.6 2003/01/27 05:38:47 panda Exp $
+// PukiWiki - Yet another WikiWikiWeb clone
+// $Id: version.inc.php,v 1.8 2005/01/29 02:07:58 henoheno Exp $
+//
+// Show PukiWiki version
 
 function plugin_version_convert()
 {
-	return '<p>'.plugin_version_inline().'</p>';
+	if (PKWK_SAFE_MODE) return ''; // Show nothing
+
+	return '<p>' . S_VERSION . '</p>';
 }
+
 function plugin_version_inline()
 {
+	if (PKWK_SAFE_MODE) return ''; // Show nothing
+
 	return S_VERSION;
 }
 ?>

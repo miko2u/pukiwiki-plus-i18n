@@ -1,38 +1,32 @@
 <?php
-/////////////////////////////////////////////////
-// PukiWiki - Yet another WikiWikiWeb clone.
+// PukiWiki - Yet another WikiWikiWeb clone
 //
-// $Id: paint.inc.php,v 1.16 2004/10/09 08:01:58 henoheno Exp $
+// $Id: paint.inc.php,v 1.18 2005/01/29 02:49:41 henoheno Exp $
 //
+// Paint plugin
 
 /*
-*プラグイン paint
-絵を描く
-
-*Usage
- #paint(width,height)
-
-*パラメータ
--width,height~
- キャンバスの幅と高さ
-
-*/
+ * Usage
+ *  #paint(width,height)
+ * パラメータ
+ *  キャンバスの幅と高さ
+ */
 
 // 挿入する位置 1:欄の前 0:欄の後
 define('PAINT_INSERT_INS',0);
-//
+
 // デフォルトの描画領域の幅と高さ
 define('PAINT_DEFAULT_WIDTH',80);
 define('PAINT_DEFAULT_HEIGHT',60);
-//
+
 // 描画領域の幅と高さの制限値
 define('PAINT_MAX_WIDTH',320);
 define('PAINT_MAX_HEIGHT',240);
-//
+
 // アプレット領域の幅と高さ 50x50未満で別ウインドウが開く
 define('PAINT_APPLET_WIDTH',800);
 define('PAINT_APPLET_HEIGHT',300);
-//
+
 //コメントの挿入フォーマット
 define('PAINT_NAME_FORMAT','[[$name]]');
 define('PAINT_MSG_FORMAT','$msg');
@@ -44,10 +38,10 @@ define('PAINT_FORMAT_NOMSG',"\x08NAME\x08 \x08NOW\x08");
 
 function plugin_paint_action()
 {
-	global $script,$vars;
-	global $_paint_messages;
-	global $html_transitional;
+	global $script, $vars, $pkwk_dtd, $_paint_messages;
 
+	if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
+	
 	//戻り値を初期化
 	$retval['msg'] = $_paint_messages['msg_title'];
 	$retval['body'] = '';
@@ -150,15 +144,19 @@ function plugin_paint_action()
  </div>
 EOD;
 		// XHTML 1.0 Transitional
-		$html_transitional = TRUE;
+		if (! isset($pkwk_dtd) || $pkwk_dtd == PKWK_DTD_XHTML_1_1)
+			$pkwk_dtd = PKWK_DTD_XHTML_1_0_TRANSITIONAL;
 	}
 	return $retval;
 }
+
 function plugin_paint_convert()
 {
 	global $script,$vars,$digest;
 	global $_paint_messages;
 	static $numbers = array();
+
+	if (PKWK_READONLY) return ''; // Show nothing
 
 	if (!array_key_exists($vars['page'],$numbers))
 	{

@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: rename.inc.php,v 1.22 2004/12/30 13:04:12 henoheno Exp $
+// $Id: rename.inc.php,v 1.24 2005/02/08 13:21:06 henoheno Exp $
 //
 // Rename plugin: Rename page-name and related data
 //
@@ -11,6 +11,8 @@ define('PLUGIN_RENAME_LOGPAGE', ':RenameLog');
 function plugin_rename_action()
 {
 	global $whatsnew;
+
+	if (PKWK_READONLY) die_message('PKWK_READONLY prohibits this');
 
 	$method = plugin_rename_getvar('method');
 	if ($method == 'regex') {
@@ -93,9 +95,9 @@ function plugin_rename_phase1($err = '', $page = '')
 
 	$radio_regex = $radio_page = '';
 	if ($method == 'regex') {
-		$radio_regex =' checked';
+		$radio_regex = ' checked="checked"';
 	} else {
-		$radio_page = ' checked';
+		$radio_page  = ' checked="checked"';
 	}
 	$select_refer = plugin_rename_getselecttag($refer);
 
@@ -103,7 +105,7 @@ function plugin_rename_phase1($err = '', $page = '')
 	$s_dst = htmlspecialchars(plugin_rename_getvar('dst'));
 
 	$ret = array();
-	$ret['msg'] = $_rename_messages['msg_title'];
+	$ret['msg']  = $_rename_messages['msg_title'];
 	$ret['body'] = <<<EOD
 $msg
 <form action="$script" method="post">

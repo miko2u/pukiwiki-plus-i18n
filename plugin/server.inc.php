@@ -1,27 +1,20 @@
 <?php
- /*
+// $Id: server.inc.php,v 1.6 2005/01/29 02:07:58 henoheno Exp $
+//
+// Server information plugin
+// by Reimy http://pukiwiki.reimy.com/
 
- PukiWiki サーバー情報表示プラグイン
+function plugin_server_convert()
+{
 
- by Reimy
- http://pukiwiki.reimy.com/
+	if (PKWK_SAFE_MODE) return ''; // Show nothing
 
- $Id: server.inc.php,v 1.4 2004/07/31 03:09:20 henoheno Exp $
-
- */
-
- function plugin_server_convert()
- {
-   $string = "<dl><dt>Server Name</dt>\n<dd>"
-   .SERVER_NAME
-   ."</dd>\n<dt>Server Software</dt>\n<dd>"
-   .SERVER_SOFTWARE
-   ."</dd>\n<dt>Server Admin</dt>\n<dd>"
-   ."<a href=\"mailto:"
-   .SERVER_ADMIN
-   ."\">"
-   .SERVER_ADMIN
-   ."</a></dd></dl>\n";
-   return $string;
- }
+	return '<dl>' . "\n" .
+		'<dt>Server Name</dt>'     . '<dd>' . SERVER_NAME . '</dd>' . "\n" .
+		'<dt>Server Software</dt>' . '<dd>' . SERVER_SOFTWARE . '</dd>' . "\n" .
+		'<dt>Server Admin</dt>'    . '<dd>' .
+			'<a href="mailto:' . SERVER_ADMIN . '">' .
+			SERVER_ADMIN . '</a></dd>' . "\n" .
+		'</dl>' . "\n";
+}
 ?>

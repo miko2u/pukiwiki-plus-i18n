@@ -1,14 +1,10 @@
 <?php
-/////////////////////////////////////////////////
-// PukiWiki - Yet another WikiWikiWeb clone.
+// PukiWiki - Yet another WikiWikiWeb clone
+// $Id: pcomment.inc.php,v 1.38 2005/01/30 01:13:11 henoheno Exp $
 //
-// $Id: pcomment.inc.php,v 1.35 2004/12/02 11:34:25 henoheno Exp $
-//
+// pcomment plugin - Insetring comment into specified (another) page
 
 /*
-
-*プラグイン pcomment
-指定したページにコメントを挿入
 
 *Usage
  #pcomment([ページ名][,表示するコメント数][,オプション])
@@ -61,6 +57,8 @@ define('PCMT_TIMESTAMP', 0);
 function plugin_pcomment_action()
 {
 	global $vars;
+
+	if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
 
 	if (! isset($vars['msg']) || $vars['msg'] == '') return array();
 	$refer = isset($vars['refer']) ? $vars['refer'] : '';
@@ -118,25 +116,30 @@ function plugin_pcomment_convert()
 	// コメントを取得
 	list($comments, $digest) = pcmt_get_comments($_page, $count, $dir, $params['reply']);
 
-	// フォームを表示
-	if ($params['noname']) {
-		$title = $_pcmt_messages['msg_comment'];
-		$name = '';
+	if (PKWK_READONLY) {
+		$form_start = $form = $form_end = '';
 	} else {
-		$title = $_pcmt_messages['btn_name'];
-		$name = '<input type="text" name="name" size="' . PCMT_COLS_NAME . '" />';
-	}
+		// フォームを表示
+		if ($params['noname']) {
+			$title = $_pcmt_messages['msg_comment'];
+			$name = '';
+		} else {
+			$title = $_pcmt_messages['btn_name'];
+			$name = '<input type="text" name="name" size="' . PCMT_COLS_NAME . '" />';
+		}
 
-	$radio   = $params['reply'] ? '<input type="radio" name="reply" value="0" tabindex="0" checked="checked" />' : '';
-	$comment = '<input type="text" name="msg" size="' . PCMT_COLS_COMMENT . '" />';
+		$radio   = $params['reply'] ?
+			'<input type="radio" name="reply" value="0" tabindex="0" checked="checked" />' : '';
+		$comment = '<input type="text" name="msg" size="' . PCMT_COLS_COMMENT . '" />';
 
-	// XSS脆弱性対策 - 外部から来た変数をエスケープ
-	$s_page   = htmlspecialchars($page);
-	$s_refer  = htmlspecialchars($vars_page);
-	$s_nodate = htmlspecialchars($params['nodate']);
-	$s_count  = htmlspecialchars($count);
+		// Excape
+		$s_page   = htmlspecialchars($page);
+		$s_refer  = htmlspecialchars($vars_page);
+		$s_nodate = htmlspecialchars($params['nodate']);
+		$s_count  = htmlspecialchars($count);
 
-	$form = <<<EOD
+		$form_start = '<form action="' . $script . '" method="post">' . "\n";
+		$form = <<<EOD
   <div>
   <input type="hidden" name="digest" value="$digest" />
   <input type="hidden" name="plugin" value="pcomment" />
@@ -149,6 +152,9 @@ function plugin_pcomment_convert()
   <input type="submit" value="{$_pcmt_messages['btn_comment']}" />
   </div>
 EOD;
+		$form_end = '</form>' . "\n";
+	}
+
 	if (! is_page($_page)) {
 		$link   = make_pagelink($_page);
 		$recent = $_pcmt_messages['msg_none'];
@@ -158,9 +164,23 @@ EOD;
 		$recent = ! empty($count) ? sprintf($_pcmt_messages['msg_recent'], $count) : '';
 	}
 
-	return $dir ?
-		"<div><p>$recent $link</p>\n<form action=\"$script\" method=\"post\">$comments$form</form></div>" :
-		"<div><form action=\"$script\" method=\"post\">$form$comments</form>\n<p>$recent $link</p></div>";
+	if ($dir) {
+		return '<div>' .
+			'<p>' . $recent . ' ' . $link . '</p>' . "\n" .
+			$form_start .
+				$comments . "\n" .
+				$form .
+			$form_end .
+			'</div>' . "\n";
+	} else {
+		return '<div>' .
+			$form_start .
+				$form .
+				$comments. "\n" .
+			$form_end .
+			'<p>' . $recent . ' ' . $link . '</p>' . "\n" .
+			'</div>' . "\n";
+	}
 }
 
 function pcmt_insert()
@@ -327,6 +347,8 @@ function pcmt_get_comments($page, $count, $dir, $reply)
 	if (! check_readable($page, false, false))
 		return array(str_replace('$1', $page, $_msg_pcomment_restrict));
 
+	$reply = (! PKWK_READONLY && $reply); // Suprress radio-buttons
+
 	$data = get_source($page);
 	$data = preg_replace('/^#pcomment\(?.*/i', '', $data);	// Avoid eternal recurse
 
@@ -343,6 +365,8 @@ function pcmt_get_comments($page, $count, $dir, $reply)
 
 		if (preg_match('/^(\-{1,2})(?!\-)(.+)$/', $line, $matches)) {
 			if ($count > 0 && strlen($matches[1]) == 1 && ++$cnt > $count) break;
+
+			// Ready for radio-buttons
 			if ($reply) {
 				++$num;
 				$cmts[] = "$matches[1]\x01$num\x02" . md5($matches[2]) . "\x03$matches[2]\n";
@@ -363,12 +387,11 @@ function pcmt_get_comments($page, $count, $dir, $reply)
 	$comments = convert_html($data);
 	unset($data);
 
-	//コメントにラジオボタンの印をつける
-	if ($reply) {
+	// Add radio-buttons
+	if ($reply)
 		$comments = preg_replace("/<li>\x01(\d+)\x02(.*)\x03/",
 			'<li class="pcmt"><input class="pcmt" type="radio" name="reply" value="$2" tabindex="$1" />',
 			$comments);
-	}
 
 	return array($comments, $digest);
 }
