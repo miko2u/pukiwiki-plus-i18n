@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: convert_html.php,v 1.5.8 2004/11/23 11:27:25 miko Exp $
+// $Id: convert_html.php,v 1.5.9 2004/11/23 11:27:25 miko Exp $
 //
 
 function convert_html($lines)
@@ -907,6 +907,23 @@ class Body extends Element
 				$here = str_repeat('}', substr_count($matches[5], '{'));
 				$line = $name . "(" . $args . "\r";
 				while (count($lines)) {
+					$nextline = array_shift($lines);
+					if (preg_match("/^$here/",$nextline)) {
+						$line .= ")";
+						break;
+					} else {
+						$line .= preg_replace("/[\r\n]*$/",'',$nextline) . "\r";
+					}
+				}
+			} // Matsuda's Version (Here Documents)
+			else if (preg_match('/^(#[^\(]*)(\((.*)\))?<<(PRE:)?([A-Z0-9_]+)$/',$line, $matches))
+			{
+				$name = $matches[1];
+				$args = $matches[3];
+				$here = $matches[5];
+				$line = $name . "(" . $args . "\r";
+				while (count($lines))
+				{
 					$nextline = array_shift($lines);
 					if (preg_match("/^$here/",$nextline)) {
 						$line .= ")";
