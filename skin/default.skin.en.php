@@ -1,1 +1,1 @@
-<?php require('pukiwiki.skin.php' ?>
+<?php require('pukiwiki.skin.php'); ?>

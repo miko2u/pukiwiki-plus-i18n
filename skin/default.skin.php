@@ -9,12 +9,12 @@ if (!defined('DATA_DIR')) { exit; }
 // Output header
 header('Cache-control: no-cache');
 header('Pragma: no-cache');
-header('Content-Type: text/html; charset=EUC-JP');
+header('Content-Type: text/html; charset=' . CONTENT_CHARSET);
 if(ini_get('zlib.output_compression') && preg_match('/\bgzip\b/i', $_SERVER['HTTP_ACCEPT_ENCODING'])) {
 	header('Content-Encoding: gzip');
 	header('Vary: Accept-Encoding');
 }
-echo '<?xml version="1.0" encoding="EUC-JP"?>';
+echo '<?xml version="1.0" encoding="' . CONTENT_CHARSET . '"?>';
 if ($html_transitional) { ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
@@ -23,7 +23,7 @@ if ($html_transitional) { ?>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
 <?php } ?>
 <head>
- <meta http-equiv="content-type" content="application/xhtml+xml; charset=EUC-JP" />
+ <meta http-equiv="content-type" content="application/xhtml+xml; charset=<?php echo(CONTENT_CHARSET); ?>" />
  <meta http-equiv="content-style-type" content="text/css" />
  <meta http-equiv="content-script-type" content="text/javascript" />
 

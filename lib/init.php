@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: init.php,v 1.26.1 2005/02/20 14:24:50 miko Exp $
+// $Id: init.php,v 1.26.3 2005/02/24 14:24:50 miko Exp $
 //
 // Init PukiWiki here
 
@@ -62,13 +62,21 @@ case 'en':
 	// Internal content encoding (for mbstring extension)
 	define('SOURCE_ENCODING', 'ASCII');	// 'UTF-8', 'ASCII', or 'EUC-JP'
 	break;
-	
 case 'ja': // EUC-JP
 	define('CONTENT_CHARSET', 'EUC-JP');
 	define('MB_LANGUAGE',   'Japanese');
 	define('SOURCE_ENCODING', 'EUC-JP');
 	break;
-
+case 'ko.utf8': // UTF-8
+	define('CONTENT_CHARSET', 'UTF-8');
+	define('MB_LANGUAGE',    'Korean');
+	define('SOURCE_ENCODING', 'UTF-8');
+	break;
+case 'ja.utf8': // UTF-8
+	define('CONTENT_CHARSET', 'UTF-8');
+	define('MB_LANGUAGE',  'Japanese');
+	define('SOURCE_ENCODING', 'UTF-8');
+	break;
 default:
 	die_message('No such language "' . LANG . '"');
 }

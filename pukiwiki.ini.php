@@ -242,10 +242,10 @@ $edit_auth_pages = array(
 $search_auth = 0;
 
 /////////////////////////////////////////////////
-// Fuzzy Search (for Japanese Only)
+// Fuzzy Search (for Japanese EUC-JP Only)
 // 0: Disabled
 // 1: Enabled
-$search_fuzzy = 1;
+$search_fuzzy = 0;
 
 /////////////////////////////////////////////////
 // $whatsnew: Max number of RecentChanges
