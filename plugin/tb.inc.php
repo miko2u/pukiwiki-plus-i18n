@@ -13,11 +13,6 @@
  * plugin_tb_mode_view($tb_id)  ?__mode=view
  */
 
-switch(LANG){
-case 'ja': define('PLUGIN_TB_LANGUAGE', 'ja-Jp'); break;
-default  : define('PLUGIN_TB_LANGUAGE', 'en-us'); break;
-}
-
 function plugin_tb_action()
 {
 	global $vars, $trackback;
@@ -113,7 +108,7 @@ function plugin_tb_return($rc, $msg = '')
 // ?__mode=rss
 function plugin_tb_mode_rss($tb_id)
 {
-	global $script, $vars, $entity_pattern;
+	global $script, $vars, $entity_pattern, $language;
 
 	$page = tb_id2page($tb_id);
 	if ($page === FALSE) return FALSE;
@@ -140,7 +135,6 @@ EOD;
 	$excerpt = strip_htmltag(convert_html(get_source($page)));
 	$excerpt = preg_replace("/&$entity_pattern;/", '', $excerpt);
 	$excerpt = mb_strimwidth(preg_replace("/[\r\n]/", ' ', $excerpt), 0, 255, '...');
-	$lang    = PLUGIN_TB_LANGUAGE;
 
 	$rc = <<<EOD
 <?xml version="1.0" encoding="utf-8" ?>
@@ -151,7 +145,7 @@ EOD;
    <title>$title</title>
    <link>$link</link>
    <description>$excerpt</description>
-   <language>$lang</language>$items
+   <language>$language</language>$items
   </channel>
  </rss>
 </response>
