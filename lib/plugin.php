@@ -56,6 +56,9 @@ function do_plugin_init($name)
 
 	if (isset($checked[$name])) return $checked[$name];
 
+	bindtextdomain($name, LANG_DIR);
+	bind_textdomain_codeset($name, SOURCE_ENCODING);
+
 	$func = 'plugin_' . $name . '_init';
 	if (function_exists($func)) {
 		// TRUE or FALSE or NULL (return nothing)
@@ -75,7 +78,6 @@ function do_plugin_action($name)
 	if(do_plugin_init($name) === FALSE)
 		die_message('Plugin init failed: ' . $name);
 
-	bindtextdomain($name, LANG_DIR);
 	textdomain($name);
 	$retvar = call_user_func('plugin_' . $name . '_action');
 	textdomain(DOMAIN);
@@ -114,7 +116,6 @@ function do_plugin_convert($name, $args = '')
 	}
 
 	$_digest = $digest;
-	bindtextdomain($name, LANG_DIR);
 	textdomain($name);
 	$retvar  = call_user_func_array('plugin_' . $name . '_convert', $aryargs);
 	textdomain(DOMAIN);
@@ -151,7 +152,6 @@ function do_plugin_inline($name, $args, & $body)
 	$aryargs[] = & $body; // func_num_args() != 0
 
 	$_digest = $digest;
-	bindtextdomain($name, LANG_DIR);
 	textdomain($name);
 	$retvar  = call_user_func_array('plugin_' . $name . '_inline', $aryargs);
 	textdomain(DOMAIN);
