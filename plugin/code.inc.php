@@ -53,11 +53,11 @@ function plugin_code_action() {
 
 	if (!is_page($vars['page']) || !check_readable($vars['page'],false,false)) {
 		return array( 'msg'=>$_source_messages['msg_notfound'],
-					  'body'=>$_source_messages['err_notfound'] );
+			      'body'=>$_source_messages['err_notfound'] );
 	}
 	return array( 'msg'=>$_source_messages['msg_title'],
 				  'body' => plugin_code_convert('pukiwiki',
-												join('',get_source($vars['page']))."\n"));
+						join('',get_source($vars['page']))."\n"));
 }
 
 function plugin_code_convert() {
@@ -70,12 +70,12 @@ function plugin_code_convert() {
                   "nonumber"    => FALSE,  // 行番号を表示しない
                   "outline"     => FALSE,  // アウトライン モード
                   "nooutline"   => FALSE,  // アウトライン 無効
-				  "comment"     => FALSE,  // コメント
-				  "nocomment"   => FALSE,  // define("PLUGIN_CODE_", TRUE);
-				  "menu"        => FALSE,  // メニューを表示する
-				  "nomenu"      => FALSE,  // メニューを表示しない
-				  "icon"        => FALSE,  // アイコンを表示する
-				  "noicon"      => FALSE,  // アイコンを表示しない
+		  "comment"     => FALSE,  // コメント
+		  "nocomment"   => FALSE,  // define("PLUGIN_CODE_", TRUE);
+		  "menu"        => FALSE,  // メニューを表示する
+		  "nomenu"      => FALSE,  // メニューを表示しない
+		  "icon"        => FALSE,  // アイコンを表示する
+		  "noicon"      => FALSE,  // アイコンを表示しない
                   "link"        => FALSE,  // オートリンク 有効
                   "nolink"      => FALSE,  // オートリンク 無効
               );
@@ -229,10 +229,12 @@ class CodeHighlight {
 			$menu .= '<div class="'.CODE_HEADER.'menu">';
 			if ($option["outline"]) {
 				// アウトラインのメニュー
-				$menu .= "<img src=\"".CODE_OUTLINE_OPEN_FILE."\" style=\"cursor: hand\" alt=\"すべてを展開\" title=\"すべてを展開\" "
+				$_code_expand = _("Everything is expanded.");
+				$_code_short = _("Everything is shortened.");
+				$menu .= "<img src=\"".CODE_OUTLINE_OPEN_FILE."\" style=\"cursor: hand\" alt=\"$_code_expand\" title=\"$_code_expand\" "
 					."onclick=\"javascript:code_all_outline('".CODE_HEADER.$id_number."',".$data['blocknum'].",'','".IMAGE_DIR."')\" "
 					."onkeypress=\"javascript:code_all_outline('".CODE_HEADER.$id_number."',".$data['blocknum'].",'','".IMAGE_DIR."')\" />";
-				$menu .= "<img src=\"".CODE_OUTLINE_CLOSE_FILE."\" style=\"cursor: hand\" alt=\"すべてを収束\" title=\"すべてを収束\" "
+				$menu .= "<img src=\"".CODE_OUTLINE_CLOSE_FILE."\" style=\"cursor: hand\" alt=\"$_code_short\" title=\"$_code_short\" "
 					."onclick=\"javascript:code_all_outline('".CODE_HEADER.$id_number."',".$data['blocknum'].",'none','".IMAGE_DIR."')\" "
 					."onkeypress=\"javascript:code_all_outline('".CODE_HEADER.$id_number."',".$data['blocknum'].",'none','".IMAGE_DIR."')\" />\n";
 			}
