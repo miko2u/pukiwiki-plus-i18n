@@ -323,11 +323,11 @@ EOD;
 	$backups = _backup_file_exists($page) ? get_backup($page) : array();
 	if (count($backups) == 0)
 	{
-		$retval[1] .= "<option value=\"$script?$r_page\" selected=\"selected\">вк $date(No.1)</option>\n";
+		$retval[1] .= "<option value=\"$script?$r_page\" selected=\"selected\">&rarr; $date(No.1)</option>\n";
 		return join('',$retval);
 	}
 	$maxcnt = count($backups) + 1;
-	$retval[1] .= "<option value=\"$script?$r_page\" selected=\"selected\">вк $date(No.$maxcnt)</option>\n";
+	$retval[1] .= "<option value=\"$script?$r_page\" selected=\"selected\">&rarr; $date(No.$maxcnt)</option>\n";
 	$backups = array_reverse($backups, True);
 	foreach ($backups as $age=>$data) {
 		$date = get_date("m/d", $data['time']);
