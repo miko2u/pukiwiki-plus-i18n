@@ -1,0 +1,116 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2005-04-02 23:30+0900\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../plugin/amazon.inc.php:47
+msgid "Author"
+msgstr ""
+
+#: ../../plugin/amazon.inc.php:47 ../../plugin/amazon.inc.php:51
+#: ../../plugin/amazon.inc.php:55
+msgid "THIS EDIT"
+msgstr ""
+
+#: ../../plugin/amazon.inc.php:48
+msgid "Critic"
+msgstr ""
+
+#: ../../plugin/amazon.inc.php:48
+msgid "MY_NAME"
+msgstr ""
+
+#: ../../plugin/amazon.inc.php:49
+msgid "Date"
+msgstr ""
+
+#: ../../plugin/amazon.inc.php:50
+msgid "RECOMMENDATION"
+msgstr ""
+
+#: ../../plugin/amazon.inc.php:54
+msgid "Impression"
+msgstr ""
+
+#: ../../plugin/amazon.inc.php:57
+msgid ""
+"// First of all, please delete the full text when you stop this review, and "
+"push the [update] button on the page.\n"
+msgstr ""
+
+#: ../../plugin/amazon.inc.php:58
+msgid "// (It has already been registered in PukiWiki.)\n"
+msgstr ""
+
+#: ../../plugin/amazon.inc.php:59
+msgid ""
+"// Please delete the [[THIS EDIT]] part on including parentheses, and "
+"rewrite it if you continue.\n"
+msgstr ""
+
+#: ../../plugin/amazon.inc.php:60
+msgid "// Please change the MY_NAME part to my name.\n"
+msgstr ""
+
+#: ../../plugin/amazon.inc.php:61
+msgid ""
+"// **RECOMMENDATION Above, please do not add a new line. Because it uses it "
+"for the contents making.\n"
+msgstr ""
+
+#: ../../plugin/amazon.inc.php:62
+msgid "// Please cut all the comment lines that start in // finally.\n"
+msgstr ""
+
+#: ../../plugin/amazon.inc.php:63
+msgid "// There is a possibility that contents cannot be normally made.\n"
+msgstr ""
+
+#: ../../plugin/amazon.inc.php:69
+msgid "Review edit"
+msgstr ""
+
+#: ../../plugin/amazon.inc.php:70
+msgid "(ISBN(10) or ASIN(12))"
+msgstr ""
+
+#: ../../plugin/amazon.inc.php:71
+msgid "To the shopping basket"
+msgstr ""
+
+#: ../../plugin/amazon.inc.php:72
+msgid "Price"
+msgstr ""
+
+#: ../../plugin/amazon.inc.php:73
+msgid "Fixed price"
+msgstr ""
+
+#: ../../plugin/amazon.inc.php:74
+msgid "(Including tax)"
+msgstr ""
+
+#: ../../plugin/amazon.inc.php:75
+msgid "Book review edit"
+msgstr ""
+
+#: ../../plugin/amazon.inc.php:76
+msgid "Amazon.co.jp associate"
+msgstr ""
+
+#: ../../plugin/amazon.inc.php:77
+msgid "Relation"
+msgstr ""

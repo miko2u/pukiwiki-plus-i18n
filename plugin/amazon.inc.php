@@ -43,28 +43,46 @@ function plugin_amazon_init() {
   $keys = array(); 
   $genre = array("books", "videogames", "dvd", "music");
 
-  $amazon_body = <<<EOD
--作者: [[ここ編集のこと]]
--評者: お名前
--日付: &date;
-**お薦め対象
-[[ここ編集のこと]]
+  $amazon_body = sprintf(
+    "-" . _("Author") . ": [[" . _("THIS EDIT") . "]]\n" .
+    "-" . _("Critic") . ": " . _("MY_NAME") . "\n" .
+    "-" . _("Date") . ": &date;\n" .
+    "**" . _("RECOMMENDATION") . "\n" .
+    "[[" . _("THIS EDIT") . "]]\n" .
+    "\n" .
+    "#amazon(,clear)\n" .
+    "**" . _("Impression") . "\n" .
+    "[[" . _("THIS EDIT") . "]]\n" .
+    "\n" .
+    _("// First of all, please delete the full text when you stop this review, and push the [update] button on the page.\n") .
+    _("// (It has already been registered in PukiWiki.)\n") .
+    _("// Please delete the [[THIS EDIT]] part on including parentheses, and rewrite it if you continue.\n") .
+    _("// Please change the MY_NAME part to my name.\n") .
+    _("// **RECOMMENDATION Above, please do not add a new line. Because it uses it for the contents making.\n") .
+    _("// Please cut all the comment lines that start in // finally.\n") .
+    _("// There is a possibility that contents cannot be normally made.\n") .
+    "#comment\n"
+  );
 
-#amazon(,clear)
-**感想
-[[ここ編集のこと]]
-
-// まず、このレビューを止める場合、全文を削除し、ページの[更新ボタン]を押してください！(PukiWiki にはもう登録されています)
-// 続けるなら、上の、[[ここ編集のこと]]部分を括弧を含めて削除し、書き直してください。
-// お名前、部分はご自分の名前に変更してください。私だと、閑舎、です。
-// **お薦め対象、より上は、新しい行を追加しないでください。目次作成に使用するので。
-// //で始まるコメント行は、最終的に全部カットしてください。目次が正常に作成できない可能性があります。
-#comment
-EOD;
+  $msg = array(
+    '_amazon_msg' => array(
+      'msg_ReviewEdit'     => _("Review edit"),
+      'msg_Code'           => _("(ISBN(10) or ASIN(12))"),
+      'msg_Cargo'          => _("To the shopping basket"),
+      'msg_Price'          => _("Price"),
+      'msg_FixedPrice'     => _("Fixed price"),
+      'msg_Tax'            => _("(Including tax)"),
+      'msg_BookReviewEdit' => _("Book review edit"),
+      'msg_amazon'         => _("Amazon.co.jp associate"),
+      'msg_Relation'       => _("Relation"),
+    )
+  );
+  set_plugin_messages($msg);
 }
 
 function plugin_amazon_convert() {
   global $script, $vars;
+  global $_amazon_msg;
 
   $aryargs = func_get_args();
   if (func_num_args() == 0) { // レビュー作成
@@ -77,7 +95,7 @@ function plugin_amazon_convert() {
   <input type="hidden" name="refer" value="$s_page" />
   ASIN:
   <input type="text" name="asin" size="30" value="" />
-  <input type="submit" value="レビュー編集" /> (ISBN 10 桁 or ASIN 12 桁)
+  <input type="submit" value="{$_amazon_msg['msg_ReviewEdit']}" /> {$_amazon_msg['msg_Code']}
  </div>
 </form>
 EOD;
@@ -121,13 +139,13 @@ EOD;
 	$div .= "<input type='hidden' name='tag_value' value='" . AMAZON_AID . "' />";
 	$div .= "<input type='hidden' name='dev-tag-value' value='" . AMAZON_DT . "' />";
 	$div .= "<div class='amazon_sub" . $css_m_s . "' style='text-align:$align'>";
-	$div .= "<input type='image' src='" . AMAZON_CARGO . "' name='submit' value='買物かごへ' /><br />";
+	$div .= "<input type='image' src='" . AMAZON_CARGO . "' name='submit' value='{$_amazon_msg['msg_Cargo']}' /><br />";
       } else $div .= "<div class='amazon_sub" . $css_m_s . "' style='text-align:$align'>";
       if (preg_match("/^((no)?contentS)$/", $item))
         $div .= '<a href="' . AMAZON_SHOP . "$check->asin/" . AMAZON_AID . AMAZON_SIM . '">' . $info->items['title'] . "</a><br />";
       $div .= $info->items['author'] . "<br />";
       $div .= $info->items['manufact'] . " (". $info->items['media'] . ")<br />";
-      $div .= "<b>定価:</b> <del>" . $info->items['pricel'] . "</del>, <b>価格:</b> " . $info->items['price'] . "(税込)</div>";
+      $div .= "<b>{$_amazon_msg['msg_FixedPrice']}:</b> <del>" . $info->items['pricel'] . "</del>, <b>{$_amazon_msg['msg_Price']}:</b> " . $info->items['price'] . "{$_amazon_msg['msg_Tax']}</div>";
       $div .= "<div class='amazon_avail" . $css_m_s . "' style='text-align:$align" . $css_avail . "'>" . $info->items['avail'] . "</div>";
       if ($iscargo) $div .= "</div></form>";
       if ($item == 'content') $div .= "<br />" . $info->items['content'] . '<div style="display:block;"></div>';
@@ -166,10 +184,11 @@ EOD;
 function plugin_amazon_action() {
   global $vars, $script;
   global $amazon_body;
+  global $_amazon_msg;
 
   $check = new amazon_check_asin(htmlspecialchars(rawurlencode(strip_bracket($vars['asin']))));
   if (! $check->is_asin) {
-    $retvars['msg'] = "ブックレビュー編集";
+    $retvars['msg'] = $_amazon_msg['msg_BookReviewEdit'];
     $retvars['refer'] = $vars['refer'];
     $s_page = $vars['refer'];
     $r_page = $s_page . '/' . $check->asin;
@@ -240,13 +259,15 @@ function amazon_review_save($page, $data) {
 }
 
 function amazon_getlib($id, $type) {
+  global $_amazon_msg;
+
   $id = trim($id);
   $tmpary = array();
   if (! preg_match("/^([0-9]+)([a-z])?$/", $id, $tmpary)) return false; // a-z 1 文字はグラフィックパターン
   $id0 = $tmpary[1];
   if ($type == 1) $imagelink = '<a href="' . AMAZON_LIB . $id0 . '"><img src="' . CACHE_DIR . "AZ" . $id . '.gif" ';
   else $imagelink = '<a href="' . AMAZON_LIB0 . '"><img src="' . CACHE_DIR . "AZ" . $id . '.gif" ';
-  $imagelink .= 'alt="Amazon.co.jp アソシエイト" /></a>';
+  $imagelink .= 'alt="{$_amazon_msg["msg_amazon"]}" /></a>';
   return $imagelink;
 }
 
@@ -270,6 +291,7 @@ function amazon_getlink ($id) {
 
 function amazon_getkey ($id, $key, $media) {
   global $vars, $array, $genre;
+  global $_amazon_msg;
 
   $filename = CACHE_DIR . "AZ" . $id . ".link";
   $body = amazon_getfile($filename);
@@ -286,7 +308,7 @@ function amazon_getkey ($id, $key, $media) {
 
   $body = preg_replace("'mode=[^&]+'", $mode, $body);
   $body = preg_replace("'search=[^&]+'", $search, $body);
-  $footer = "</iframe><div style='text-align:center'><span style='color:red'>$key0" . "関連<br />($media)</span></div>";
+  $footer = "</iframe><div style='text-align:center'><span style='color:red'>$key0" . "{$_amazon_msg['msg_Relation']}<br />($media)</span></div>";
   $body = preg_replace("'</iframe>'", $footer, $body);
 
   return $body;
