@@ -90,7 +90,7 @@ if (!defined('UA_PROFILE') || UA_PROFILE == 'default') {
 		if (exist_plugin('topicpath')) {
 			$ret = "<div id=\"topicpath\"><a href=\"".$script."\">".PLUGIN_TOPICPATH_TOP_LABEL."</a>".PLUGIN_TOPICPATH_TOP_SEPARATOR."calendar - ".$s_base."</div>\n";
 		}
-		$ret .= "<h2>".sprintf('%04d«Ø %02d∑Ó §Œ %s',$y,$m,$s_base)."</h2>\n";
+		$ret .= "<h2>".sprintf(_('%04d/%02d %s'),$y,$m,$s_base)."</h2>\n";
 		$ret .= "<table style=\"width:92%\" border=\"0\" cellspacing=\"0\" cellpadding=\"8\" summary=\"calendar frame\">\n <tr>\n  <td valign=\"top\" width=\"160\">\n";
 	}
 	$ret .= <<<EOD
