@@ -1,13 +1,13 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: source.inc.php,v 1.14.1 2005/03/09 03:07:58 miko Exp $
+// $Id: source.inc.php,v 1.14.2 2005/03/10 03:07:58 miko Exp $
 //
 // Source plugin
 
 // Output source text of the page
 function plugin_source_action()
 {
-	global $vars, $_source_messages;
+	global $vars; //, $_source_messages;
 
 	if (PKWK_SAFE_MODE) die_message('PKWK_SAFE_MODE prohibits this');
 

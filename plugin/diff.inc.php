@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: diff.inc.php,v 1.13.1 2005/03/09 05:21:47 miko Exp $
+// $Id: diff.inc.php,v 1.13.2 2005/03/10 05:21:47 miko Exp $
 //
 
 //ページの差分を表示する
@@ -33,8 +33,8 @@ function plugin_diff_view($page)
 	$_msg_delline        = _('The deleted line is <span class="diff_removed">THIS COLOR</span>.');
 	$_msg_goto           = _('Go to $1.');
 	$_msg_deleted        = _(' $1 has been deleted.');
-	$_title_diff         = _('Diff of  $1');
-	$_title_diff_delete  = _('Deleting diff of  $1');
+	$_title_diff         = _('Diff of $1');
+	$_title_diff_delete  = _('Deleting diff of $1');
 
 	$r_page = rawurlencode($page);
 	$s_page = htmlspecialchars($page);
@@ -83,8 +83,14 @@ EOD;
 function plugin_diff_delete($page)
 {
 	global $script, $vars;
-	global $_title_diff_delete, $_msg_diff_deleted;
-	global $_msg_diff_adminpass, $_btn_delete, $_msg_invalidpass;
+//	global $_title_diff_delete, $_msg_diff_deleted;
+//	global $_msg_diff_adminpass, $_btn_delete, $_msg_invalidpass;
+
+	$_title_diff_delete  = _('Deleting diff of $1');
+	$_msg_diff_deleted   = _('Diff of  $1 has been deleted.');
+	$_msg_diff_adminpass = _('Please input the password for deleting.');
+	$_btn_delete         = _('Delete');
+	$_msg_invalidpass    = _('Invalid password.');
 
 	$filename = DIFF_DIR . encode($page) . '.txt';
 	$body = '';

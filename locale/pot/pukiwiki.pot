@@ -1,0 +1,101 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2005-03-10 18:12+0900\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: auth.php:11 auth.php:42
+msgid "$1 is not editable"
+msgstr ""
+
+#: auth.php:12
+msgid "Unfreeze"
+msgstr ""
+
+#: auth.php:50
+msgid "$1 is not readable"
+msgstr ""
+
+#: auth.php:59
+msgid "PukiWikiAuth"
+msgstr ""
+
+#: file.php:99
+msgid "$1 is not a valid $2."
+msgstr ""
+
+#: func.php:179 fuzzy.php:12
+msgid ""
+"In the page <strong> $2</strong>, <strong> $3</strong> pages that contain "
+"all the terms $1 were found."
+msgstr ""
+
+#: func.php:180 fuzzy.php:13
+msgid ""
+"In the page <strong> $2</strong>, <strong> $3</strong> pages that contain at "
+"least one of the terms $1 were found."
+msgstr ""
+
+#: func.php:181 fuzzy.php:14
+msgid "No page which contains $1 has been found."
+msgstr ""
+
+#: func.php:279
+msgid "Symbols"
+msgstr ""
+
+#: func.php:280
+msgid "Others"
+msgstr ""
+
+#: html.php:24
+msgid "These search terms have been highlighted:"
+msgstr ""
+
+#: html.php:173
+msgid "Preview"
+msgstr ""
+
+#: html.php:174
+msgid "Preview again"
+msgstr ""
+
+#: html.php:175
+msgid "Update"
+msgstr ""
+
+#: html.php:176
+msgid "Cancel"
+msgstr ""
+
+#: html.php:177
+msgid "Do not change timestamp"
+msgstr ""
+
+#: html.php:178
+msgid "Add to top of page"
+msgstr ""
+
+#: html.php:179
+msgid "Use page as template"
+msgstr ""
+
+#: html.php:180
+msgid "Load"
+msgstr ""
+
+#: html.php:181
+msgid "View Text Formatting Rules"
+msgstr ""

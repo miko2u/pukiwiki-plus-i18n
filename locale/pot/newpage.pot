@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-03-10 16:46+0900\n"
+"POT-Creation-Date: 2005-03-10 18:35+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,10 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../plugin/newpage.inc.php:18 ../plugin/newpage.inc.php:41
+#: ../../plugin/newpage.inc.php:9 ../../plugin/newpage.inc.php:38
+msgid "Edit"
+msgstr ""
+
+#: ../../plugin/newpage.inc.php:19 ../../plugin/newpage.inc.php:43
 msgid "New page"
 msgstr ""

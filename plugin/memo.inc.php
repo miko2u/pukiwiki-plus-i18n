@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: memo.inc.php,v 1.14.1 2005/01/23 08:01:29 miko Exp $
+// $Id: memo.inc.php,v 1.14.2 2005/03/10 08:01:29 miko Exp $
 //
 // Memo box plugin
 
@@ -10,7 +10,14 @@ define('MEMO_ROWS',  5); // Rows of textarea
 function plugin_memo_action()
 {
 	global $script, $vars, $cols, $rows;
-	global $_title_collided, $_msg_collided, $_title_updated;
+//	global $_title_collided, $_msg_collided, $_title_updated;
+
+$_title_collided   = _('On updating $1, a collision has occurred.');
+$_title_updated    = _('$1 was updated');
+$_msg_collided = _('It seems that someone has already updated this page while you were editing it.<br />
+ + is placed at the beginning of a line that was newly added.<br />
+ ! is placed at the beginning of a line that has possibly been updated.<br />
+ Edit those lines, and submit again.');
 
 	if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
 	if (! isset($vars['msg']) || $vars['msg'] == '') return;

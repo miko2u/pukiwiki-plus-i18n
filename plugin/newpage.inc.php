@@ -1,11 +1,12 @@
 <?php
-// $Id: newpage.inc.php,v 1.14.1 2005/03/09 05:05:38 miko Exp $
+// $Id: newpage.inc.php,v 1.14.2 2005/03/10 05:05:38 miko Exp $
 //
 // Newpage plugin
 
 function plugin_newpage_convert()
 {
-	global $script, $vars, $_btn_edit, $BracketName;
+	global $script, $vars, $BracketName;
+	$_btn_edit = _('Edit');
 
 	if (PKWK_READONLY) return ''; // Show nothing
 
@@ -33,7 +34,8 @@ EOD;
 
 function plugin_newpage_action()
 {
-	global $vars, $_btn_edit;
+	global $vars; //, $_btn_edit;
+	$_btn_edit = _('Edit');
 
 	if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
 

@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: attach.inc.php,v 1.73.5 2005/03/10 07:44:53 miko Exp $
+// $Id: attach.inc.php,v 1.73.6 2005/03/10 07:44:53 miko Exp $
 //
 // File attach plugin
 
@@ -726,10 +726,10 @@ class AttachFiles
 	// ファイル一覧を取得
 	function toString($flat)
 	{
-		global $_title_cannotread;
+//		global $_title_cannotread;
 
 		if (! check_readable($this->page, FALSE, FALSE)) {
-			return str_replace('$1', make_pagelink($this->page), $_title_cannotread);
+			return str_replace('$1', make_pagelink($this->page), _('$1 is not readable'));
 		} else if ($flat) {
 			return $this->to_flat();
 		}
@@ -779,10 +779,10 @@ class AttachFiles
 	// ファイル一覧をテーブルで取得
 	function toRender($flat)
 	{
-		global $_title_cannotread;
+//		global $_title_cannotread;
 
 		if (! check_readable($this->page, FALSE, FALSE)) {
-			return str_replace('$1', make_pagelink($this->page), $_title_cannotread);
+			return str_replace('$1', make_pagelink($this->page), _('$1 is not readable'));
 		} else if ($flat) {
 			return $this->to_flat();
 		}

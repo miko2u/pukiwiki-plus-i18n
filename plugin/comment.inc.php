@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: comment.inc.php,v 1.28.5 2005/03/09 08:23:10 miko Exp $
+// $Id: comment.inc.php,v 1.28.6 2005/03/10 08:23:10 miko Exp $
 //
 // Comment plugin
 
@@ -16,7 +16,9 @@ define('PLUGIN_COMMENT_FORMAT_STRING', "\x08MSG\x08 -- \x08NAME\x08 \x08NOW\x08"
 function plugin_comment_action()
 {
 	global $script, $vars, $now;
-	global $_title_updated, $_no_name;
+	global $_no_name;
+//	global $_title_updated, $_no_name;
+	$_title_updated = _('$1 was updated');
 	$_title_comment_collided = _('On updating  $1, a collision has occurred.');
 	$_msg_comment_collided   = _('It seems that someone has already updated the page you were editing.<br />' .
 	                             ' The comment was added, alhough it may be inserted in the wrong position.<br />');

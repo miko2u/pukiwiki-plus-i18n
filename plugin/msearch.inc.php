@@ -2,8 +2,8 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: msearch.inc.php,v 0.3 2003/08/27 05:00:10 sha Exp $
-//
+// $Id: msearch.inc.php,v 0.3.1 2005/03/10 05:00:10 miko Exp $
+// Original is sha
 /* 
 *プラグイン msearch
  複数サイトのPukiWikiの検索を実行して表示
@@ -38,7 +38,8 @@ function plugin_msearch_init()
 //=========================================================
 function plugin_msearch_action()
 {
-	global $vars, $_msearch_messages, $_title_result;
+	global $vars, $_msearch_messages; //, $_title_result;
+	$_title_result  = 'Search result of $1';
 
 	$options = array(
 		'word' => '',
@@ -72,8 +73,13 @@ function plugin_msearch_action()
 //=========================================================
 function plugin_msearch_form($opts,$ctall,$ctfound)
 {
-	global $_btn_and, $_btn_or, $_btn_search;
-	global $_msg_orresult, $_msg_andresult;
+//	global $_btn_and, $_btn_or, $_btn_search;
+//	global $_msg_orresult, $_msg_andresult;
+	$_btn_search    = _('Search');
+	$_btn_and       = _('AND');
+	$_btn_or        = _('OR');
+	$_msg_andresult = _('In the page <strong> $2</strong>, <strong> $3</strong> pages that contain all the terms $1 were found.');
+	$_msg_orresult  = _('In the page <strong> $2</strong>, <strong> $3</strong> pages that contain at least one of the terms $1 were found.');
 
 	$s_word = htmlspecialchars($opts['word']);
 	$s_site = htmlspecialchars($opts['site']);
@@ -239,7 +245,10 @@ EOD;
 //=========================================================
 function plugin_msearch_parse_html($ary,$ct,$site,$html,$type)
 {
-	global $_msg_orresult, $_msg_andresult;
+//	global $_msg_orresult, $_msg_andresult;
+	$_msg_andresult   = _('In the page <strong> $2</strong>, <strong> $3</strong> pages that contain all the terms $1 were found.');
+	$_msg_orresult    = _('In the page <strong> $2</strong>, <strong> $3</strong> pages that contain at least one of the terms $1 were found.');
+
 	static $reg = '';
 	static $mins = array(
 		'm' => 1,

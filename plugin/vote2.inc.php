@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: vote2.inc.php,v 0.12.1 2003/10/05 17:55:04 miko Exp $
+// $Id: vote2.inc.php,v 0.12.2 2005/03/10 17:55:04 miko Exp $
 // based on vote.inc.php v1.14
 //
 // v0.2はインラインのリンクにtitleを付けた。
@@ -88,9 +88,11 @@ function plugin_vote2_action()
 function plugin_vote2_inline()
 {
 	global $script,$vars,$digest, $_vote2_messages, $_vote_plugin_votes;
-	global $_vote_plugin_choice, $_vote_plugin_votes;
+//	global $_vote_plugin_choice, $_vote_plugin_votes;
 	static $numbers = array();
 	static $notitle = FALSE;
+$_vote_plugin_choice = _('Selection');
+$_vote_plugin_votes  = _('Vote');
 	$str_notimestamp = $_vote2_messages['arg_notimestamp'];
 	$str_nonumber    = $_vote2_messages['arg_nonumber'];
 	$str_nolabel     = $_vote2_messages['arg_nolabel'];
@@ -330,8 +332,16 @@ EOD;
 function plugin_vote2_action_inline($vote_no)
 {
 	global $get,$vars,$script,$cols,$rows, $_vote2_messages;
-	global $_title_collided,$_msg_collided,$_title_updated;
-	global $_vote_plugin_choice, $_vote_plugin_votes;
+//	global $_title_collided,$_msg_collided,$_title_updated;
+//	global $_vote_plugin_choice, $_vote_plugin_votes;
+$_title_collided   = _('On updating $1, a collision has occurred.');
+$_title_updated    = _('$1 was updated');
+$_msg_collided = _('It seems that someone has already updated this page while you were editing it.<br />
+ + is placed at the beginning of a line that was newly added.<br />
+ ! is placed at the beginning of a line that has possibly been updated.<br />
+ Edit those lines, and submit again.');
+$_vote_plugin_choice = _('Selection');
+$_vote_plugin_votes  = _('Vote');
 	$str_notimestamp = $_vote2_messages['arg_notimestamp'];
 	$str_nonumber    = $_vote2_messages['arg_nonumber'];
 	$str_nolabel     = $_vote2_messages['arg_nolabel'];
@@ -431,8 +441,16 @@ function plugin_vote2_action_inline($vote_no)
 function plugin_vote2_action_block($vote_no)
 {
 	global $post,$vars,$script,$cols,$rows, $_vote2_messages;
-	global $_title_collided,$_msg_collided,$_title_updated;
-	global $_vote_plugin_choice, $_vote_plugin_votes;
+//	global $_title_collided,$_msg_collided,$_title_updated;
+//	global $_vote_plugin_choice, $_vote_plugin_votes;
+$_title_collided   = _('On updating $1, a collision has occurred.');
+$_title_updated    = _('$1 was updated');
+$_msg_collided = _('It seems that someone has already updated this page while you were editing it.<br />
+ + is placed at the beginning of a line that was newly added.<br />
+ ! is placed at the beginning of a line that has possibly been updated.<br />
+ Edit those lines, and submit again.');
+$_vote_plugin_choice = _('Selection');
+$_vote_plugin_votes  = _('Vote');
 	$str_notimestamp = $_vote2_messages['arg_notimestamp'];
 	$str_nonumber    = $_vote2_messages['arg_nonumber'];
 	$str_nolabel     = $_vote2_messages['arg_nolabel'];

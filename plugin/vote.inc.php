@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: vote.inc.php,v 1.22.3 2005/03/09 02:43:06 miko Exp $
+// $Id: vote.inc.php,v 1.22.4 2005/03/10 02:43:06 miko Exp $
 //
 // Vote box plugin
 
@@ -9,9 +9,15 @@ define(PLUGIN_VOTE_COOKIE_EXPIRED,60*60*24*3);
 
 function plugin_vote_action()
 {
-	global $vars, $script, $cols,$rows;
-	global $_title_collided, $_msg_collided, $_title_updated;
+	global $vars, $script, $cols, $rows;
+//	global $_title_collided, $_msg_collided, $_title_updated;
 	$s_votes  = _('Vote');
+$_title_collided   = _('On updating $1, a collision has occurred.');
+$_title_updated    = _('$1 was updated');
+$_msg_collided = _('It seems that someone has already updated this page while you were editing it.<br />
+ + is placed at the beginning of a line that was newly added.<br />
+ ! is placed at the beginning of a line that has possibly been updated.<br />
+ Edit those lines, and submit again.');
 
 	if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-03-10 16:46+0900\n"
+"POT-Creation-Date: 2005-03-10 18:35+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,10 +16,10 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../plugin/ls2.inc.php:44 ../plugin/ls2.inc.php:72
+#: ../../plugin/ls2.inc.php:44 ../../plugin/ls2.inc.php:72
 msgid "List of pages which begin with ' $1'"
 msgstr ""
 
-#: ../plugin/ls2.inc.php:105
+#: ../../plugin/ls2.inc.php:105
 msgid "There is no child page in ' $1'"
 msgstr ""

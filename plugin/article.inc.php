@@ -1,5 +1,5 @@
 <?php
-// $Id: article.inc.php,v 1.22.1 2005/03/09 07:01:56 miko Exp $
+// $Id: article.inc.php,v 1.22.2 2005/03/10 07:01:56 miko Exp $
  /*
 
  PukiWiki BBS風プラグイン
@@ -46,8 +46,15 @@ $_plugin_article_mailto = array (
 function plugin_article_action()
 {
 	global $script, $post, $vars, $cols, $rows, $now;
-	global $_title_collided, $_msg_collided, $_title_updated;
+//	global $_title_collided, $_msg_collided, $_title_updated;
 	global $_plugin_article_mailto, $_no_subject, $_no_name;
+
+$_title_collided   = _('On updating $1, a collision has occurred.');
+$_title_updated    = _('$1 was updated');
+$_msg_collided = _('It seems that someone has already updated this page while you were editing it.<br />
+ + is placed at the beginning of a line that was newly added.<br />
+ ! is placed at the beginning of a line that has possibly been updated.<br />
+ Edit those lines, and submit again.');
 
 	if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
 

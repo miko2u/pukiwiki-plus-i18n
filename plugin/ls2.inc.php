@@ -1,7 +1,7 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: ls2.inc.php,v 1.23.1 2005/03/09 07:37:37 miko Exp $
+// $Id: ls2.inc.php,v 1.23.2 2005/03/10 07:37:37 miko Exp $
 //
 // List plugin 2
 
@@ -85,7 +85,7 @@ function plugin_ls2_convert()
 
 function plugin_ls2_show_lists($prefix, & $params)
 {
-	global $_ls2_err_nopages;
+//	global $_ls2_err_nopages;
 
 	$pages = array();
 	if ($prefix != '') {
