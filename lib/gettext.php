@@ -2,8 +2,8 @@
 /**
  * GETTEXT EMULATION FUNCTION
  *
- * @copyright   Copyright &copy; 2004, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: gettext.php,v 0.6 2004/11/22 20:45:00 upk Exp $
+ * @copyright   Copyright &copy; 2004-2005, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * @version     $Id: gettext.php,v 0.7 2005/04/04 01:06:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License
  * @link        http://jo1upk.blogdns.net/saito/
  *
@@ -58,12 +58,14 @@ if (! defined('MO_BIG_ENDIAN')) {
 	define('MO_BIG_ENDIAN', 1);		// POWER system
 }
 
-if (! defined('PO_LANG')) {
-	define('PO_LANG', 'ja_JP');		// locale name specified by setlocale().
-}
-if (! defined('SOURCE_ENCODING')) {
-	define('SOURCE_ENCODING', 'EUC-JP');	// A character code to output. Change by bind_textdomain_codeset() is possible.
-}
+/*
+ * if (! defined('PO_LANG')) {
+ *	define('PO_LANG', 'ja_JP');		// locale name specified by setlocale().
+ * }
+ * if (! defined('SOURCE_ENCODING')) {
+ * 	define('SOURCE_ENCODING', 'EUC-JP');	// A character code to output. Change by bind_textdomain_codeset() is possible.
+ * }
+ */
 
 /*
  * setlocale
@@ -83,8 +85,8 @@ function bindtextdomain($domain, $directory)
 	if (! isset($po_category)) $po_category = 'LC_MESSAGES';
 
 	if (isset($po_filename[$domain][$po_category])) return;
-	$locale = PO_LANG;
 
+	$locale = (defined('PO_LANG')) ? PO_LANG : 'ja_JP';	// locale name specified by setlocale().
 	$filename_pref = $directory . '/';
 	$filename_suff = '/' . $po_category . '/' . $domain . '.mo';
 
@@ -153,7 +155,10 @@ function _($message)
 {
 	global $po_msg, $po_charset, $po_codeset, $po_domain, $po_category;
 	if (!isset($po_msg[$po_domain][$po_category][$message])) return $message;
-	if (!isset($po_codeset[$po_domain])) $po_codeset[$po_domain] = strtoupper(SOURCE_ENCODING);
+	if (!isset($po_codeset[$po_domain])) {
+		$_enc = (defined('SOURCE_ENCODING')) ? SOURCE_ENCODING : 'EUC-JP';
+		$po_codeset[$po_domain] = strtoupper($_enc);
+	}
 
 	$charset = (empty($po_charset[$po_domain][$po_category])) ? 'auto' : $po_charset[$po_domain][$po_category];
 
