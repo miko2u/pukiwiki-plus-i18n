@@ -3,7 +3,6 @@
 # License is GPL2
 # Author: Miko.Hoshina(E.Satoh) <miko@cafeterrace.com>, 2005.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PukiWiki Plus! 1.4.5-u2\n"
@@ -16,27 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8-bit\n"
 
-#: auth.php:11 auth.php:42
-msgid "$1 is not editable"
-msgstr "$1 は編集できません"
-
-#: auth.php:12
-msgid "Unfreeze"
-msgstr "凍結解除"
-
-#: auth.php:50
-msgid "$1 is not readable"
-msgstr "$1 は閲覧できません"
-
-#: auth.php:59
-msgid "PukiWikiAuth"
-msgstr "PukiWikiAuth"
-
-#: file.php:99
-msgid "$1 is not a valid $2."
-msgstr "$1 は有効な $2 ではありません。"
-
-#: func.php:179 fuzzy.php:12
+#: fuzzy.php:12 resource.php:17
 msgid ""
 "In the page <strong> $2</strong>, <strong> $3</strong> pages that contain "
 "all the terms $1 were found."
@@ -44,7 +23,7 @@ msgstr ""
 "$1 のすべてを含むページは <strong>$3</strong> ページ中、 <strong>$2</strong> "
 "ページ見つかりました。"
 
-#: func.php:180 fuzzy.php:13
+#: fuzzy.php:13 resource.php:18
 msgid ""
 "In the page <strong> $2</strong>, <strong> $3</strong> pages that contain at "
 "least one of the terms $1 were found."
@@ -52,54 +31,122 @@ msgstr ""
 "$1 のいずれかを含むページは <strong>$3</strong> ページ中、 <strong>$2</strong> "
 "ページ見つかりました。"
 
-#: func.php:181 fuzzy.php:14
+#: fuzzy.php:14 resource.php:19
 msgid "No page which contains $1 has been found."
 msgstr "$1 を含むページは見つかりませんでした。"
 
-#: func.php:279
+#: resource.php:11
+msgid "PukiWikiAuth"
+msgstr "PukiWikiAuth"
+
+#: resource.php:12
+msgid "Freeze"
+msgstr "凍結"
+
+#: resource.php:13
+msgid "Unfreeze"
+msgstr "凍結解除"
+
+#: resource.php:14
 msgid "Symbols"
 msgstr "記号"
 
-#: func.php:280
+#: resource.php:15
 msgid "Others"
 msgstr "日本語"
 
-#: html.php:24
+#: resource.php:20
 msgid "These search terms have been highlighted:"
 msgstr "これらのキーワードがハイライトされています："
 
-#: html.php:173
+#: resource.php:21
+msgid "View Text Formatting Rules"
+msgstr "テキスト整形のルールを表示する"
+
+#: resource.php:24
+msgid "Invalid password."
+msgstr "パスワードが間違っています。"
+
+#: resource.php:25
+msgid "$1 is not a valid $2."
+msgstr "$1 は有効な $2 ではありません。"
+
+#: resource.php:26
+msgid ""
+"It seems that someone has already updated the page you were editing.<br />"
+"The string was added, alhough it may be inserted in the wrong position.<br />"
+msgstr ""
+"あなたがこのページを編集している間に、他の人が同じページを更新してしまったようです。<br />"
+"コメントを追加しましたが、違う位置に挿入されているかもしれません。<br />"
+
+#: resource.php:31
 msgid "Preview"
 msgstr "プレビュー"
 
-#: html.php:174
+#: resource.php:32
 msgid "Preview again"
 msgstr "再度プレビュー"
 
-#: html.php:175
+#: resource.php:33
 msgid "Update"
 msgstr "ページの更新"
 
-#: html.php:176
+#: resource.php:34
 msgid "Cancel"
 msgstr "キャンセル"
 
-#: html.php:177
-msgid "Do not change timestamp"
-msgstr "タイムスタンプを変更しない"
+#: resource.php:35
+msgid "Add"
+msgstr "追加"
 
-#: html.php:178
-msgid "Add to top of page"
-msgstr "ページの上に追加"
+#: resource.php:36
+msgid "Search"
+msgstr "検索"
 
-#: html.php:179
-msgid "Use page as template"
-msgstr "雛形とするページ"
-
-#: html.php:180
+#: resource.php:37
 msgid "Load"
 msgstr "読込"
 
-#: html.php:181
-msgid "View Text Formatting Rules"
-msgstr "テキスト整形のルールを表示する"
+#: resource.php:38
+msgid "Edit"
+msgstr "編集"
+
+#: resource.php:39
+msgid "Delete"
+msgstr "削除"
+
+#: resource.php:42
+msgid "Do not change timestamp"
+msgstr "タイムスタンプを変更しない"
+
+#: resource.php:43
+msgid "Add to top of page"
+msgstr "ページの上に追加"
+
+#: resource.php:44
+msgid "Use page as template"
+msgstr "雛形とするページ"
+
+#: resource.php:45
+msgid "AND"
+msgstr "AND検索"
+
+#: resource.php:46
+msgid "OR"
+msgstr "OR検索"
+
+#: resource.php:51
+msgid "$1 is not editable"
+msgstr "$1 は編集できません"
+
+#: resource.php:52
+msgid "$1 is not readable"
+msgstr "$1 は閲覧できません"
+
+#: resource.php:53
+msgid "On updating $1, a collision has occurred."
+msgstr "$1 で【更新の衝突】が起きました"
+
+#: resource.php:54
+msgid "$1 was updated"
+msgstr "$1 を更新しました"
