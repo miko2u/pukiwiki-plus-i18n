@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: side.inc.php,v 1.6.5 2004/12/13 14:37:37 miko Exp $
+// $Id: side.inc.php,v 1.6.6 2004/12/15 14:37:37 miko Exp $
 //
 
 // サブメニューを使用する
@@ -23,14 +23,22 @@ function plugin_side_convert()
 		return preg_replace('/<ul class="list[^>]*>/','<ul class="menu">', $sidehtml);
 //miko patched
 
-	if (func_num_args()) {
+	$num = func_num_args();
+	if ($num > 0) {
+		// Try to change default 'sideBar' page name (only)
+		if ($num > 1)       return '#side(): Zero or One argument needed';
+		if ($side !== NULL) return '#side(): Already set: ' . htmlspecialchars($side);
 		$args = func_get_args();
-		if (is_page($args[0])) $side = $args[0];
-		return '';
+		if (! is_page($args[0])) {
+			return '#side(): No such page: ' . htmlspecialchars($args[0]);
+		} else {
+			$side = $args[0]; // Set
+			return '';
+		}
+
 	}
 
 	$page = ($side === NULL) ? $sidebar : $side;
-	if ($page == '') return '';
 
 	if (SIDE_ENABLE_SUBMENU) {
 		$path = explode('/', strip_bracket($vars['page']));
@@ -60,6 +68,7 @@ function plugin_side_convert()
 	$top = '';
 	$sidehtml = convert_html($sidetext);
 	$top = $tmptop;
+	$sidehtml = str_replace("\n",'',$sidehtml);
 	return preg_replace('/<ul class="list[^>]*>/','<ul class="menu">',$sidehtml);
 }
 ?>
