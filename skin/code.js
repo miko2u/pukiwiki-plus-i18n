@@ -1,8 +1,10 @@
 function code_outline(id,path)
 {
-    if(navigator.appVersion.match(/MSIE\s*6\./)){
-        if(document.getElementById(id+"_img"))document.getElementById(id+"_img").style.height="1.2em";
-        if(document.getElementById(id+"_img"))document.getElementById(id+"_img").style.verticalAlign="bottom";
+    if(navigator.appVersion.match(/MSIE\s*(6\.|5\.5)/)){
+        if(document.getElementById(id+"_img")) {
+			document.getElementById(id+"_img").style.height="1.2em";
+			document.getElementById(id+"_img").style.verticalAlign="bottom";
+		}
     }
     var vis=document.getElementById(id).style.display;
     if (vis=="none") {
@@ -24,23 +26,24 @@ function code_outline(id,path)
 
 function code_all_outline(id,num,disp,path)
 {
-
-    var ch = '+';
+    var ch = '';
 	var dotimage = '';
     if (disp=="") {
         ch = '-';
 		dotimage = '';
     } else {
+		ch = '+';
 		dotimage = "<img src=\""+path+"code_dot.png\" alt=\"\" title=\"...\" />";
 	}
     for (var i=num; i>0; i--) {
-        if(navigator.appVersion.match(/MSIE\s*6\./))
-            if(document.getElementById(id+"_"+i+"_img"))document.getElementById(id+"_"+i+"_img").style.height="1.2em";
-        //if(document.getElementById(id+"_"+i+"n")) 
-
-		if(document.getElementById(id+"_"+i)) document.getElementById(id+"_"+i).style.display=disp;
-		if(document.getElementById(id+"_"+i+"_img")) document.getElementById(id+"_"+i+"_img").innerHTML=dotimage;
-		
+        if(navigator.appVersion.match(/MSIE\s*(6\.|5\.5)/)) {
+			document.getElementById(id+"_"+i+"_img").style.height="1.2em";
+			document.getElementById(id+"_"+i+"_img").style.verticalAlign="bottom";
+		}
+        if(document.getElementById(id+"_"+i+"o")) {
+			if(document.getElementById(id+"_"+i)) document.getElementById(id+"_"+i).style.display=disp;
+			if(document.getElementById(id+"_"+i+"_img")) document.getElementById(id+"_"+i+"_img").innerHTML=dotimage;
+		}
 		if(document.getElementById(id+"_"+i+"n")) document.getElementById(id+"_"+i+"n").style.display=disp;
 		if(document.getElementById(id+"_"+i+"o")) document.getElementById(id+"_"+i+"o").style.display=disp;
 		if(document.getElementById(id+"_"+i+"a")) document.getElementById(id+"_"+i+"a").innerHTML=ch;

@@ -8,15 +8,19 @@ $capital = true;                      // 予約語の大文字小文字を区別しない
 $mkoutline = $option["outline"] = false; // アウトラインモード不可 
 
 // コメント定義
-$switchHash["'"] = COMMENT;   // コメントは ' から改行まで
-$switchHash["R"] = COMMENT;   // コメントは REM から改行まで
+$switchHash["'"] = COMMENT;        // コメントは ' から改行まで
+$switchHash["r"] = COMMENT_WORD;   // コメントは REM から改行まで
+$switchHash["R"] = COMMENT_WORD;
 $code_comment = Array(
 	"'" => Array(
 		"/^'.*\n/",
+	    ),
+	"r" => Array(
+		"/^rem\s.*\n/i",
 		),
 	"R" => Array(
-		"/^REM.*\n/",
-	)
+		"/^iem\s.*\n/i",
+		),
 );
 
 $code_css = Array(
@@ -47,6 +51,10 @@ $code_keyword = Array(
 "function" => 2,
 "gosub" => 2,
 "if" => 2,
+"then" => 2,
+"else" => 2,
+"next" => 2,
+"end" => 2,
 "input" => 2,
 "ioctl" => 2,
 "kill" => 2,
@@ -86,7 +94,9 @@ $code_keyword = Array(
 "abs" => 2,
 "atn" => 2,
 "cint" => 2,
+"sin" => 2,
 "cos" => 2,
+"tan" => 2,
 "csrlin" => 2,
 "cvdmbf" => 2,
 "cvl" => 2,
@@ -125,7 +135,8 @@ $code_keyword = Array(
 "space" => 2,
 "string" => 2,
 "ucase" => 2,
-
+"paint" => 2,
+"cls" => 2,
 
   );
 ?>

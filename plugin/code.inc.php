@@ -1,43 +1,68 @@
 <?php
 /**
  * コードハイライト機能をPukiWikiに追加する
- * last-update: 2004/12/07
+ * Time-stamp: 04/12/15 01:52:55
  *
  * GPL
  *
- * Ver. 0.4.2.3
+ * Ver. 0.4.3 pr6
  */
 
+define("PLUGIN_CODE_LANGUAGE", 'pre');  // 標準言語
 // 標準設定
-define("PLUGIN_CODE_NUMBER",  TRUE); // 行番号
-define("PLUGIN_CODE_OUTLINE", TRUE); // アウトライン;
-define("PLUGIN_CODE_COMMENT", FALSE); // コメント表示/非表示 // 0.4.0 では非推奨
-
+define("PLUGIN_CODE_NUMBER",    TRUE);  // 行番号
+define("PLUGIN_CODE_OUTLINE",   TRUE);  // アウトライン;
+define("PLUGIN_CODE_COMMENT",   FALSE); // コメント表示/非表示 // 0.4.0 では非推奨
+define("PLUGIN_CODE_MENU",      TRUE);  // メニューの表示/非表示;
+define("PLUGIN_CODE_FILE_ICON", TRUE);  // 添付ファイルにダウンロードアイコンを付ける
 // URLで指定したファイルを読み込むか否か
-define("PLUGIN_CODE_READ_URL", FALSE); // 標準では添付ファイル以外読み込まない
+define("PLUGIN_CODE_READ_URL",  TRUE);  // 標準では添付ファイル以外読み込まない
 
 // テーブルを使うか否か(FALSEはCSSのdivによる分割)
-define("PLUGIN_CODE_TABLE", TRUE);
+define("PLUGIN_CODE_TABLE",     TRUE);
 
 // TAB幅
 define("WIDTHOFTAB", "    ");
 
-define("PLUGIN_CODE_USAGE", '<p>Plugin code: Usage:<br />#code(Lang)<< EOF<br />src<br />EOF</p>');
-// define("PLUGIN_CODE_USAGE", '<p>Plugin code: Usage:<br />#code(Lang){{<br />src<br />}}</p>');
+define("PLUGIN_CODE_USAGE", 
+       //'<p class="error">Plugin code: Usage:<br />#code(Lang){{<br />src<br />}}</p>');
+	   '<p class="error">Plugin code: Usage:<br />#code(Lang)<< EOF<br />src<br />EOF</p>');
 
 // for PukiWiki 1.4.5 or later
 global $javascript; $javascript = TRUE;
 
 define("CODE_HEADER", "code_");
+// 画像ファイルの設定
 define("CODE_IMAGE_FILE", IMAGE_DIR.'code_dot.png');
 define("CODE_OUTLINE_OPEN_FILE",  IMAGE_DIR.'plus/outline_open.png');
 define("CODE_OUTLINE_CLOSE_FILE", IMAGE_DIR.'plus/outline_close.png');
+if (! defined('FILE_ICON')) {
+	define('FILE_ICON',
+	'<img src="' . IMAGE_DIR . 'file.png" width="20" height="20"' .
+	' alt="file" style="border-width:0px" />');
+}
 
+
+function plugin_code_action() {
+	global $vars;
+	global $_source_messages;
+
+	$vars['refer'] = $vars['page'];
+
+	if (!is_page($vars['page']) || !check_readable($vars['page'],false,false)) {
+		return array( 'msg'=>$_source_messages['msg_notfound'],
+					  'body'=>$_source_messages['err_notfound'] );
+	}
+	return array( 'msg'=>$_source_messages['msg_title'],
+				  'body' => plugin_code_convert('pukiwiki',
+												join('',get_source($vars['page']))."\n"));
+}
 
 function plugin_code_convert() {
 	static $plugin_code_jscript_flag = TRUE;
 
     $title = "";
+	$lang = null;
     $option = array(
                   "number"      => FALSE,  // 行番号を表示する
                   "nonumber"    => FALSE,  // 行番号を表示しない
@@ -45,25 +70,37 @@ function plugin_code_convert() {
                   "nooutline"   => FALSE,  // アウトライン 無効
 				  "comment"     => FALSE,  // コメント
 				  "nocomment"   => FALSE,  // define("PLUGIN_CODE_", TRUE);
+				  "menu"        => FALSE,  // メニューを表示する
+				  "nomenu"      => FALSE,  // メニューを表示しない
+				  "icon"        => FALSE,  // アイコンを表示する
+				  "noicon"      => FALSE,  // アイコンを表示しない
 
                   //"link"        => FALSE,  // オートリンク 有効
                   //"nolink"      => FALSE,  // オートリンク 無効
               );
     $num_of_arg = func_num_args();
     $args = func_get_args();
-    if ($num_of_arg < 2) {
+    if ($num_of_arg < 1) {
         return PLUGIN_CODE_USAGE;
     }
-    $lang = array_shift($args);
 
-    // オプションを調べる
-    for ($i = 0;$i < $num_of_arg-2; $i++) {
-        code_check_argment($args[$i], $option);
-    }
-	$data = $args[$num_of_arg-2];
+	$data = $args[$num_of_arg-1];
     if (strlen($data) == 0) {
         return PLUGIN_CODE_USAGE;
     }
+
+	if ($num_of_arg != 1 && !code_check_argment($args[0], $option)) {
+		$is_setlang = TRUE;
+		$lang = $args[0]; // 言語名かオプションの判定
+	}
+	else
+		$lang = PLUGIN_CODE_LANGUAGE; // default
+		
+    // オプションを調べる
+    for ($i = 1;$i < $num_of_arg-1; $i++) {
+        code_check_argment($args[$i], $option);
+    }
+	
 
     // 改行コード変換
 	$data = str_replace("\r\n", "\n", $data);
@@ -76,11 +113,18 @@ function plugin_code_convert() {
             return '<p class="error">#code(): ' . $params['_error'] . ';</p>';
         }
         $data = $params['data'];
-        if ($data == '' || $data == null) {
+        if ($data == "\n" || $data == "" || $data == null) {
             return '<p class="error">file '.htmlspecialchars($params['title']). ' is empty.</p>';
         }
-        $title .= '<h4 class="'.CODE_HEADER.'title">' .$params['title']. "</h4>\n";
+		$url = $params['url'];
+		$info = $params['info'];
+		if (PLUGIN_CODE_FILE_ICON && !$option['noicon'] || $option['icon']) $icon = FILE_ICON;
+		else                                                       $icon = '';
+
+        $title .= '<h5 class="'.CODE_HEADER.'title">'."<a href=\"$url\" title=\"$info\">$icon"
+			.$params['title']."</a></h5>\n";
     }
+
     $highlight = new CodeHighlight;
     $lines = $highlight->highlight($lang, $data, $option);
 	if ($plugin_code_jscript_flag && ($option["outline"] || $option["comment"])) {
@@ -111,7 +155,8 @@ class CodeHighlight {
         define("COMMENT_CHAR",        50); // 1文字でコメントと決定できるもの
         define("COMMENT_WORD",        51); // コメントが文字列で始まるもの
         define("HEAD_COMMENT",        52); // コメントが行頭だけのもの (1文字)  // fortran
-        define("CHAR_COMMENT",        53); // コメントが行頭だけかつ英字であるのもの (1文字) // fortran
+        define("HEADW_COMMENT",       53); // コメントが行頭だけのもの   // pukiwiki
+        define("CHAR_COMMENT",        54); // コメントが行頭だけかつ英字であるのもの (1文字) // fortran
         define("IDENTIFIRE_CHAR",     60); // 1文字で命令が決定するもの
         define("IDENTIFIRE_WORD",     61); // 命令が文字列で決定するもの
         define("MULTILINE",           62); // 複数文字列への命令
@@ -127,14 +172,14 @@ class CodeHighlight {
 		if (strlen($lang) > 16)
             return null;
 		
-		$option["number"]  = (PLUGIN_CODE_NUMBER  && !$option["nonumber"])  || $option["number"];
-		$option["outline"] = (PLUGIN_CODE_OUTLINE && !$option["nooutline"]) || $option["outline"];
-		$option["comment"] = (PLUGIN_CODE_COMMENT && !$option["nocomment"]) || $option["comment"];
+		$option["number"]  = (PLUGIN_CODE_NUMBER  && !$option["nonumber"]  || $option["number"]);
+		$option["outline"] = (PLUGIN_CODE_OUTLINE && !$option["nooutline"] || $option["outline"]);
+		$option["comment"] = (PLUGIN_CODE_COMMENT && !$option["nocomment"] || $option["comment"]);
 
         // mozillaの空白行対策
         if($option["number"] || $option["outline"]) {
             // ライン表示用補正
-            $src=preg_replace("/^$/m"," ",$src);
+            $src = preg_replace("/^$/m"," ",$src);
         }
 		
         $lang = strtolower($lang);
@@ -163,9 +208,8 @@ class CodeHighlight {
 			if ($option["number"]) {
 				// 行数を得る
 				$num_of_line = substr_count($src, "\n");
-				if($src[strlen($src)-1]=="\n")
-					$src=substr($src,0,-1);
-				$src=preg_replace("/^$/m"," ",$src);
+ 				if($src[strlen($src)-1]=="\n")
+ 					$src=substr($src,0,-1);
 				$data = array('number' => '');	
 				$data['number'] = $this->makeNumber($num_of_line-1);
 			}
@@ -177,42 +221,41 @@ class CodeHighlight {
 				$src =  "<pre class=\"code\"><code class=\"unknown\">" .htmlspecialchars($src). "</code></pre>";
 		}
 
-		$button = '';
-		if ($option["outline"] || $option["comment"]) {
+		$option["menu"]  = (PLUGIN_CODE_MENU  && !$option["nomenu"]  || $option["menu"]);
+		$option["menu"]  = ($option["menu"] && ($option["outline"] || $option["comment"]));
+
+		$menu = '';
+		if ($option["menu"]) {
 			// アイコンの設定
-			$button .= '<div class="'.CODE_HEADER.'icon">';
-			if ($option["outline"]){
-				// アウトラインの開閉ボタン
-				/*
-                $button .= "<img id=\"".CODE_HEADER.$id_number."_button\" src=\"".CODE_OUTLINE_CLOSE_FILE."\" style=\"cursor: hand\" alt=\"すべてを収束\" title=\"すべてを収束\" "
-					."onclick=\"javascript:code_all_outline('".CODE_HEADER.$id_number."',".$data['blocknum'].",'none')\" "
-					."onkeypress=\"javascript:code_all_outline('".CODE_HEADER.$id_number."',".$data['blocknum'].",'none')\" />\n";
-				*/
-				$button .= "<img src=\"".CODE_OUTLINE_OPEN_FILE."\" style=\"cursor: hand\" alt=\"すべてを展開\" title=\"すべてを展開\" "
+			$menu .= '<div class="'.CODE_HEADER.'menu">';
+			if ($option["outline"]) {
+				// アウトラインのメニュー
+				$menu .= "<img src=\"".CODE_OUTLINE_OPEN_FILE."\" style=\"cursor: hand\" alt=\"すべてを展開\" title=\"すべてを展開\" "
 					."onclick=\"javascript:code_all_outline('".CODE_HEADER.$id_number."',".$data['blocknum'].",'','".IMAGE_DIR."')\" "
 					."onkeypress=\"javascript:code_all_outline('".CODE_HEADER.$id_number."',".$data['blocknum'].",'','".IMAGE_DIR."')\" />";
-				$button .= "<img src=\"".CODE_OUTLINE_CLOSE_FILE."\" style=\"cursor: hand\" alt=\"すべてを収束\" title=\"すべてを収束\" "
+				$menu .= "<img src=\"".CODE_OUTLINE_CLOSE_FILE."\" style=\"cursor: hand\" alt=\"すべてを収束\" title=\"すべてを収束\" "
 					."onclick=\"javascript:code_all_outline('".CODE_HEADER.$id_number."',".$data['blocknum'].",'none','".IMAGE_DIR."')\" "
 					."onkeypress=\"javascript:code_all_outline('".CODE_HEADER.$id_number."',".$data['blocknum'].",'none','".IMAGE_DIR."')\" />\n";
 			}
 			if ($option["comment"]){
 				// コメントの開閉ボタン
-				$button .= "<input type=\"button\" value=\"comment open\" accesskey=\"\" "
+				$menu .= "<input type=\"button\" value=\"comment open\" "
 					."onclick=\"javascript:code_comment('".CODE_HEADER.$id_number."',".$data['commentnum'].",'')\" "
-					."onkeypress=\"javascript:code_comment('".CODE_HEADER.$id_number."',".$data['commentnum'].",'')\" />\n";
-				$button .= "<input type=\"button\" value=\"comment close\" accesskey=\"\" "
+					."onkeypress=\"javascript:code_comment('".CODE_HEADER.$id_number."',".$data['commentnum'].",'')\" />";
+				$menu .= "<input type=\"button\" value=\"comment close\" "
 					." onclick=\"javascript:code_comment('".CODE_HEADER.$id_number."',".$data['commentnum'].",'none')\" "
-					." onkeypress=\"javascript:code_comment('".CODE_HEADER.$id_number."',".$data['commentnum'].",'none')\" />\n";
+					." onkeypress=\"javascript:code_comment('".CODE_HEADER.$id_number."',".$data['commentnum'].",'none')\" />";
 			}
-			$button .= '</div>';
+			$menu .= '</div>';
 		}
 
 		if ($option["outline"] || $option["number"] || $option["comment"]) {
 			if (PLUGIN_CODE_TABLE) {
 				// テーブルによる段組
-				$html .= "<div id=\"".CODE_HEADER.$id_number."\">";
-				$html .= $button;
-				$html .= "<table id=\"".CODE_HEADER.$id_number."\" class=\"".CODE_HEADER."table\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr>\n";
+				$html .= "<div id=\"".CODE_HEADER.$id_number."\" class=\"".CODE_HEADER."table\">";
+				$html .= $menu;
+				$html .= "<table id=\"".CODE_HEADER.$id_number."\" class=\"".CODE_HEADER.
+					"table\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr>\n";
 				if ($option["number"])
 					$html .= "<td><pre class=\"".CODE_HEADER."number\">".$data["number"]."</pre></td>\n";
 				if ($option["outline"])
@@ -222,7 +265,7 @@ class CodeHighlight {
 			} else {
 				// CSSのdivによる段組
 				$html .= '<div  id="'.CODE_HEADER.$id_number.'" class="'.CODE_HEADER.'table">';
-				$html .= $button;
+				$html .= $menu;
 				if ($option["number"])
 					$html .= '<div class="'.CODE_HEADER.'number"><pre class="'.CODE_HEADER.'number"><code>'
 						.$data['number']. '</code></pre></div>';
@@ -305,16 +348,8 @@ class CodeHighlight {
 				$num_of_line++;
 				$line .= $this->getline($string);
 			}
-			
 			// 行頭文字の判定
             switch ($switchHash[$line[0]]) {
-
-			case CARRIAGERETURN:
-				// PukiWiki対策
-				$html .= "<span>\n</span>";
-
-				$line = $this->getline($string); // next line
-				continue 2;
 
 			case CHAR_COMMENT:
 			case HEAD_COMMENT:
@@ -331,9 +366,10 @@ class CodeHighlight {
 				$line = $this->getline($string); // next line
 				continue 2;
 
+			case HEADW_COMMENT:
 			case COMMENT_WORD:
 				// 2文字以上のパターンから始まるコメント
-				if (strncmp($line, COMMENT_PATTERN, strlen(COMMENT_PATTERN)) == 0) {
+				if (strncmp($line, $commentpattern, strlen($commentpattern)) == 0) {
 					// htmlに追加
 					$commentnum++;
 					$line = htmlspecialchars(substr($line,0,-1), ENT_QUOTES);
@@ -341,7 +377,7 @@ class CodeHighlight {
 					$html .= '<span class="'.CODE_HEADER.'comment" id="'.CODE_HEADER.$id_number.'_cmt_'.$commentnum.'">'
 						.$line."</span>\n";
 					
-					$line = $this->getline($string); // next line$html.= 
+					$line = $this->getline($string); // next line
 					continue 2;
 				}
 				// コメントではない
@@ -362,6 +398,7 @@ class CodeHighlight {
 
 
 			case IDENTIFIRE_WORD:
+				if (strlen($line) < 2 && $line[0] == ' ') break; // 空行判定
 				// 行頭のパターンを調べる
 				foreach ($code_identifire[$line[0]] as $pattern) {
 					if (strncmp($line, $pattern, strlen($pattern)) == 0) {
@@ -526,23 +563,6 @@ class CodeHighlight {
 					
 					$line = $this->getline($string); // next line
 					continue 3;
-					
-				case COMMENT_WORD: // 複数文字で決まるコメント
-					$line = substr($line, $str_pos-1);
-					if (strncmp($line, $commentpattern, strlen($commentpattern)) == 0) {
-						$commentnum++;
-						$line = htmlspecialchars(substr($line,0,-1), ENT_QUOTES);
-						$line = preg_replace("/(s?https?:\/\/|ftp:\/\/|mailto:)([-_.!~*()a-zA-Z0-9;\/:@?=+$,%#]|&amp;)+/","<a href=\"$0\">$0</a>",$line);
-						$html .= '<span class="'.CODE_HEADER.'comment" id="'.CODE_HEADER.$id_number.'_cmt_'.$commentnum.'">'
-							.$line."</span>\n";
-					
-						$line = $this->getline($string); // next line
-						continue 3;
-						
-					}
-					// コメントではない
-					$str_len = $str_len-$str_pos+1; if ($str_len == 0) $code = false; $str_pos = 1;
-					break;
 
 				} //switch
 				// その他の文字
@@ -559,13 +579,13 @@ class CodeHighlight {
 			
 			$line = $this->getline($string); // next line
 		} // while
-
+		
 		// 最後の余分な改行を削除
 		if ($html[strlen($html)-2] == ' ')
 			$html = substr($html, 0, -2);
 		else
 			$html = substr($html, 0, -1);
-
+		
 		$html = array( 'src' => $html,  'number' => '', 'outline' => '', 'commentnum' => $commentnum,);
 		if($mknumber) $html['number'] = $this->makeNumber($num_of_line-2); // 最後に改行を削除したため -2
 		return $html;
@@ -656,6 +676,64 @@ class CodeHighlight {
 				if ($str_len == $str_pos) $code = false; else $code = $string[$str_pos++]; // getc
 				continue 2;
 				
+			case COMMENT:
+				// コメント
+				
+				// 出来る限り長く識別子を得る
+				$str_pos--;
+				$result = substr($string, $str_pos);
+				foreach($code_comment[$code] as $pattern) {
+					if(preg_match($pattern, $result, $matches)==1) {
+						$str_pos += strlen($matches[0]);
+						$result = $matches[0];
+						
+						// ライン数カウント
+						$line+=substr_count($result,"\n");
+						$commentno++;
+						
+						// htmlに追加
+						$result = str_replace("\t", WIDTHOFTAB, htmlspecialchars($result, ENT_QUOTES));
+						$result = preg_replace("/(s?https?:\/\/|ftp:\/\/|mailto:)([-_.!~*()a-zA-Z0-9;\/:@?=+$,%#]|&amp;)+/","<a href=\"$0\">$0</a>",$result);
+						$html .= '<span class="'.CODE_HEADER.'comment" id="'.CODE_HEADER.$id_number.'_cmt_'.$commentno.'">'
+							.$result.'</span>';
+						
+						// 次の検索用に読み込み
+						if ($str_len == $str_pos) $code = false; else $code = $string[$str_pos++]; // getc
+						continue 3;
+					}
+				}
+				// コメントではない
+				$str_pos++;
+				break;
+				
+			case COMMENT_WORD:
+				// 文字列から始まるコメント
+				
+				// 出来る限り長く識別子を得る
+				$str_pos--;
+				$result = substr($string, $str_pos);
+				foreach($code_comment[$code] as $pattern) {
+					if(preg_match($pattern, $result, $matches)==1) {
+						$str_pos += strlen($matches[0]);
+						$result = $matches[0];
+						
+						// ライン数カウント
+						$line+=substr_count($result,"\n");
+						$commentno++;
+						
+						// htmlに追加
+						$result = str_replace("\t", WIDTHOFTAB, htmlspecialchars($result, ENT_QUOTES));
+						$result = preg_replace("/(s?https?:\/\/|ftp:\/\/|mailto:)([-_.!~*()a-zA-Z0-9;\/:@?=+$,%#]|&amp;)+/","<a href=\"$0\">$0</a>",$result);
+						$html .= '<span class="'.CODE_HEADER.'comment" id="'.CODE_HEADER.$id_number.'_cmt_'.$commentno.'">'
+							.$result.'</span>';
+						
+						// 次の検索用に読み込み
+						if ($str_len == $str_pos) $code = false; else $code = $string[$str_pos++]; // getc
+						continue 3;
+					}
+				}
+				$str_pos++;
+				// コメントでなければ文字列 break を使わない
 			case IDENTIFIRE:
 				// 識別子(アルファベットから始まっている)
 				
@@ -751,6 +829,7 @@ class CodeHighlight {
 				if ($str_len == $str_pos) $code = false; else $code = $string[$str_pos++]; // getc
 				continue 2;
 				
+
 			case STRING_LITERAL:
 				// 文字列
 				
@@ -828,36 +907,6 @@ class CodeHighlight {
 				if ($str_len == $str_pos) $code = false; else $code = $string[$str_pos++]; // getc
 				continue 2;
 				
-			case COMMENT:
-				// コメント
-				
-				// 出来る限り長く識別子を得る
-				$str_pos--;
-				$result = substr($string, $str_pos);
-				foreach($code_comment[$code] as $pattern) {
-					if(preg_match($pattern, $result, $matches)==1) {
-						$str_pos += strlen($matches[0]);
-						$result = $matches[0];
-						
-						// ライン数カウント
-						$line+=substr_count($result,"\n");
-						$commentno++;
-						
-						// htmlに追加
-						$result = str_replace("\t", WIDTHOFTAB, htmlspecialchars($result, ENT_QUOTES));
-						$result = preg_replace("/(s?https?:\/\/|ftp:\/\/|mailto:)([-_.!~*()a-zA-Z0-9;\/:@?=+$,%#]|&amp;)+/","<a href=\"$0\">$0</a>",$result);
-						$html .= '<span class="'.CODE_HEADER.'comment" id="'.CODE_HEADER.$id_number.'_cmt_'.$commentno.'">'
-							.$result.'</span>';
-						
-						// 次の検索用に読み込み
-						if ($str_len == $str_pos) $code = false; else $code = $string[$str_pos++]; // getc
-						continue 3;
-					}
-				}
-				// コメントではない
-				$str_pos++;
-				break;
-				
 			case FORMULA:
 				// TeXの数式に使用 将来的には汎用性を持たせる 
 
@@ -890,7 +939,7 @@ class CodeHighlight {
 				}
 				array_push($outline[$line],Array("nest"=>$nest, "blockno"=>$blockno));
 				// アウトラインが閉じた時に表示する画像を埋め込む場所
-				$html .= $code.'<span id="'.CODE_HEADER.$id_number._.$blockno.'_img"></span>'
+				$html .= $code.'<span id="'.CODE_HEADER.$id_number._.$blockno.'_img" display="none"></span>'
 					.'<span id="'.CODE_HEADER.$id_number._.$blockno.'">';
 				if ($str_len == $str_pos)
 					$code = false;
@@ -977,7 +1026,8 @@ class CodeHighlight {
 					if ($nest<=$array["nest"]) {
 						$id=$id_number."_".$array["blockno"];
 						if($plus=="")
-							$plus = '<a class="'.CODE_HEADER.'outline" href="javascript:code_outline(\''.CODE_HEADER.$id.'\',\''.IMAGE_DIR.'\')" id="'.CODE_HEADER.$id.'a">-</a>';
+							$plus = '<a class="'.CODE_HEADER.'outline" href="javascript:code_outline(\''
+								.CODE_HEADER.$id.'\',\''.IMAGE_DIR.'\')" id="'.CODE_HEADER.$id.'a">-</a>';
 						$plus1 .= '<span id="'.CODE_HEADER.$id.'o">';
 						$plus2 .= '<span id="'.CODE_HEADER.$id.'n">';
 						$nest=$array["nest"];
@@ -1002,11 +1052,11 @@ class CodeHighlight {
 			} else if($plus!="" && $minus != "") {
 				$outline.= $plus.$minus.$plus1;
 			}
-			//$outline.=$i."\n";
 			$outline.="\n";
 		}
-		while($nest>1) {// ネストがちゃんとしてなかった場合の対策
-			$outline .= "</span> ";
+		while ($nest>1) {// ネストがちゃんとしてなかった場合の対策
+			$number .= "</span>";
+			$outline .= "</span>";
 			$nest--;
 		}
 		$html['number'] = $number;
@@ -1015,7 +1065,7 @@ class CodeHighlight {
 	}
 	
 	
-	// number
+	// number の形成
 	function makeNumber($num_of_line){
 		$number="";
 		$linelen=$num_of_line+1;
@@ -1026,6 +1076,9 @@ class CodeHighlight {
 		return $number;
 	}
 
+	/**
+	 * PHPを標準関数でハイライトする
+	 */
 	function highlightPHP($src) {
 		// phpタグが存在するか？
 		$phptagf = false;
@@ -1033,30 +1086,25 @@ class CodeHighlight {
 			$phptagf = TRUE;
 			$src="<"."?php ".$src." ?".">";
 		}
-		/*
-		if(!preg_match("/<\?php/m",$src)){
-			$phptagf = TRUE;
-			$src="<"."?php ".$src." ?".">";
-		}
-		*/
 		ob_start(); //出力のバッファリングを有効に
 		highlight_string($src); //phpは標準関数でハイライト
-		$_str = ob_get_contents(); //バッファの内容を得る
+		$html = ob_get_contents(); //バッファの内容を得る
 		ob_end_clean(); //バッファクリア?
 		// phpタグを取り除く。
-		if($phptagf){
-			$_str = preg_replace("/&lt;\?php (.*)?(<font[^>]*>\?&gt;<\/font>|\?&gt;)/m","$1",$_str);
+		if ($phptagf) {
+			$html = preg_replace("/&lt;\?php (.*)?(<font[^>]*>\?&gt;<\/font>|\?&gt;)/m","$1",$html);
 		}
-		$_str = str_replace("\n", '', $_str); //$_str内の"\n"を''で置き換える
+		$html = str_replace('&nbsp;', ' ', $html);
+		$html = str_replace("\n", '', $html); //$html内の"\n"を''で置き換える
+		$html = str_replace('<br />', "\n", $html);
 		//Vaild XHTML 1.1 Patch (thanks miko)
-		$_str = str_replace('<font color="', '<span style="color:', $_str);
-		$_str = str_replace('</font>', '</span>', $_str);
-		return $_str;
+		$html = str_replace('<font color="', '<span style="color:', $html);
+		$html = str_replace('</font>', '</span>', $html);
+		return $html;
 	}
 
 
 }
-
 
 /**
  * この関数は引数に与えられたファイルの内容を文字列に変換して返す
@@ -1111,26 +1159,14 @@ function code_read_file_data($name) {
         }
         $params['title'] = htmlspecialchars($fname);
         $fname = $file;
+
+		$url = $script . '?plugin=attach' . '&amp;refer=' . rawurlencode($page) .
+			'&amp;openfile=' . rawurlencode($name); // Show its filename at the last
     }
 
-    //Check file Propaties
-    /*
-    if (file_exists ($fname)) {
-        $params['_error'] = htmlspecialchars('File not exist: "' .$fname . '" at page "' . $page . '"');
-        return $params;
-    }
-    if (is_readable ($fname)) {
-        $params['_error'] = htmlspecialchars('File unreaderble: "' .$fname . '" at page "' . $page . '"');
-        return $params;
-    }
-    */
-    if (extension_loaded('mime_magic') && is_readable('mime_magic.magicfile')) {
-		return mime_content_type( $fname);
-        if ( !preg_match('/text\/.*$/', mime_content_type( $fname))) {
-            $params['_error'] = htmlspecialchars('File not text: "' . $fname . '" at page "' . $page . '"');
-            return $params;
-        }
-    }
+	$params['url'] = $url;
+	$params['info'] = get_date('Y/m/d H:i:s', filemtime($file) - LOCALZONE)
+		. ' ' . sprintf('%01.1f', round(filesize($file)/1024, 1)) . 'KB';
 
     /* Read file data */
 
@@ -1159,15 +1195,17 @@ function code_read_file_data($name) {
     return $params;
 }
 
-
 /**
  * オプション解析
  * 引数に対応するキーをOnにする
  */
 function code_check_argment($arg, &$option) {
     $arg = strtolower($arg);
-    if (array_key_exists($arg, $option))
+    if (array_key_exists($arg, $option)) {
         $option[$arg] = TRUE;
+		return TRUE;
+	}
+	return FALSE;
 }
 
 

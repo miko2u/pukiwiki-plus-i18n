@@ -3,13 +3,12 @@
  *キーワード定義ファイル
  */
 
-$switchHash["\n"] = CARRIAGERETURN;  // 行頭の空白行の整形済出力抑制
 $switchHash['#'] = SPECIAL_IDENTIFIRE;  // # から始まる予約語あり
 $switchHash['&'] = SPECIAL_IDENTIFIRE;  // & から始まる予約語あり
 $switchHash['*'] = IDENTIFIRE_CHAR;  // 見出し
 $switchHash[','] = IDENTIFIRE_CHAR;  // 表
 $switchHash['|'] = IDENTIFIRE_CHAR;  // 表
-$switchHash[' '] = IDENTIFIRE_CHAR;  // 整形済出力
+$switchHash[' '] = IDENTIFIRE_WORD;  // 整形済出力
 $switchHash['-'] = MULTILINE;        // 箇条書
 $switchHash['+'] = MULTILINE;        // 箇条書
 $switchHash[':'] = MULTILINE;        // 箇条書
@@ -18,29 +17,21 @@ $switchHash['>'] = MULTILINE;        // 引用
 // 複数行の終端記号
 $multilineEOL = Array(
 '#','*',',','|',' ','-','+',':','>','<',"\n");
+// 空白のみの行対策
+$code_identifire = array(
+	 ' ' => Array(
+		  " \n",
+		 ),
+	 );
 
-/*
-// 識別子開始文字
-for ($i = ord("a"); $i <= ord("z"); $i++)
-	 $switchHash[chr($i)] = 0;
-for ($i = ord("A"); $i <= ord("Z"); $i++)
-	 $switchHash[chr($i)] = 0;
-	 $switchHash["_"] = 0;
-*/
+
 
 $capital = true;                        // 予約語の大文字小文字を区別しない
 $mkoutline = $option["outline"] = false; // アウトラインモード不可 
 
 // コメント定義
-$switchHash["/"] = COMMENT_WORD;        //  コメントは // から改行まで
+$switchHash["/"] = HEADW_COMMENT;        //  コメントは 行頭の // から改行まで
 $commentpattern = '//';
-/*
-$code_comment = Array(
-	"/" => Array(
-		"/^\/\/.*\\n/",
-	)
-);
-*/
 
 $code_css = Array(
   'operator',		// オペレータ関数
@@ -125,6 +116,7 @@ $code_keyword = Array(
  '+' => 7,     // 箇条書
  ':' => 7,     // 箇条書
  ' ' => 8,     // 整形済出力
+ " \n" => 0,   // ハイライト無効
  '<' => 9,     // 引用
  '>' => 9,     // 引用
 

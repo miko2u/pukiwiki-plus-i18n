@@ -8,10 +8,18 @@ $mkoutline = $option["outline"] = false; // アウトラインモード不可
 
 // コメント定義
 $switchHash["'"] = COMMENT;    // コメントは ' から改行まで
+$switchHash["r"] = COMMENT_WORD;   // コメントは REM から改行まで
+$switchHash["R"] = COMMENT_WORD;
 $code_comment = Array(
 	"'" => Array(
 		"/^'.*\n/",
-	)
+		),
+	"r" => Array(
+		"/^rem\s.*\n/i",
+		),
+	"R" => Array(
+		"/^rem\s.*\n/i",
+		),
 );
 
 $code_css = Array(
