@@ -443,7 +443,8 @@ class amazon_getinfo {
     elseif ($expire * 3600 < time() - filemtime($filename)) $get_it = 1;
     if ($get_it) {
       $rc = http_request(AMAZON_XML . "type=$type&AsinSearch=" . $asin);
-      $body = mb_convert_encoding($rc["data"], SOURCE_ENCODING, "UTF-8");
+      // $body = mb_convert_encoding($rc["data"], SOURCE_ENCODING, "UTF-8");
+      $body = $rc["data"];
       amazon_savefile($filename, $body);
       if ($type == 'heavy') {
 	$filename = CACHE_DIR . "ASIN" . $asin . ".lite";
