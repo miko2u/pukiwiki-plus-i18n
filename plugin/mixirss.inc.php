@@ -6,7 +6,7 @@
 // Usage: mixirss.inc.php?ver=[0.91|1.0(default)|2.0]
 
 // View Description Letters
-define('MIXIRSS_DESCRIPTION_LENGTH', 512);
+define('MIXIRSS_DESCRIPTION_LENGTH', 256);
 define('MIXIRSS_LANG', 'ja_JP');
 
 // XSLT extra parameters
@@ -88,6 +88,7 @@ EOD;
 			}
 			if (plugin_mixirss_isValidDate(substr($page,-10)) && check_readable($page,false,false)) {
 				// for Calendar/MiniCalendar
+				$vars['page'] = $page;
 				$source = get_source($page);
 				$rdf_hx = '';
 				$rdf_lx = '';
@@ -133,6 +134,20 @@ EOD;
 				} else if ($itemlx != '') {
 					$rdf_li .= $rdf_lx;
 					$items .= $itemlx;
+				} else {
+					// default
+					$rdf_li .= '    <rdf:li rdf:resource="' . $self . '?' . $r_page . '" />' . "\n";
+					$items .= <<<EOD
+<item rdf:about="$self?$r_page">
+ <title>$title</title>
+ <link>$self?$r_page</link>
+$description
+ <dc:date>$date</dc:date>
+ <dc:identifier>$self?$r_page</dc:identifier>
+$trackback_ping
+</item>
+
+EOD;
 				}
 			} else {
 //miko added
