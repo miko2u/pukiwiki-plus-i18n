@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: side.inc.php,v 1.6.2 2004/09/04 05:42:37 miko Exp $
+// $Id: side.inc.php,v 1.6.3 2004/12/11 16:37:37 miko Exp $
 //
 
 // サブメニューを使用する
@@ -23,6 +23,7 @@ function plugin_side_convert()
 	}
 
 	$page = ($side === NULL) ? $sidebar : $side;
+	if ($page == '') return '';
 
 	if (SIDE_ENABLE_SUBMENU) {
 		$path = explode('/', strip_bracket($vars['page']));
