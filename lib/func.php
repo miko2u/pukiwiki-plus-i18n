@@ -541,7 +541,7 @@ function get_autoalias_pattern(& $pages)
 	}
 
 	if (empty($auto_pages))
-		return $nowikiname ? '(?!)' : $WikiName;
+		return $nowikiname ? array('(?!)','PukiWiki','') : $WikiName;
 
 	$auto_pages = array_unique($auto_pages);
 	sort($auto_pages, SORT_STRING);

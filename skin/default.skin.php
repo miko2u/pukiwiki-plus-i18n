@@ -150,7 +150,7 @@ if ($html_transitional) { ?>
  <td id="footerctable"><div id="sigunature">
   Modified by <a href="<?php echo $modifierlink ?>"><?php echo $modifier ?></a>.
   <br />
-  Powered by PukiWiki 1.4.4/PukiWiki Plus! u3/PHP <?php echo PHP_VERSION ?>.
+  Powered by PukiWiki 1.4.4/PukiWiki Plus! u5/PHP <?php echo PHP_VERSION ?>.
   HTML convert time to <?php echo $taketime ?> sec.
  </div></td>
  <td id="footerrtable"><div id="validxhtml">
