@@ -1,34 +1,10 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: tdiary.skin.php,v 1.3 2004/12/31 01:08:47 henoheno Exp $
+// $Id: tdiary.skin.php,v 1.8 2005/01/13 13:42:21 henoheno Exp $
 //
 // tDiary-wrapper skin
 
 // Select theme
-//define('TDIARY_THEME', '3minutes');
-//define('TDIARY_THEME', 'aoikuruma');
-//define('TDIARY_THEME', 'bill');
-//define('TDIARY_THEME', 'black-lingerie');
-//define('TDIARY_THEME', 'black_mamba');
-//define('TDIARY_THEME', 'blog');
-//define('TDIARY_THEME', 'bubble');
-//define('TDIARY_THEME', 'cards');
-//define('TDIARY_THEME', 'cat');
-//define('TDIARY_THEME', 'christmas');
-//define('TDIARY_THEME', 'clover');
-//define('TDIARY_THEME', 'dot');
-//define('TDIARY_THEME', 'gear');
-//define('TDIARY_THEME', 'gingham-gray');
-//define('TDIARY_THEME', 'green-border');	// With frogs
-//define('TDIARY_THEME', 'himawari');
-//define('TDIARY_THEME', 'hatena');
-//define('TDIARY_THEME', 'kaeru');
-//define('TDIARY_THEME', 'loose-leaf');
-//define('TDIARY_THEME', 'petith');
-//define('TDIARY_THEME', 'piyo-family');
-//define('TDIARY_THEME', 'plum');
-//define('TDIARY_THEME', 'puppy');
-//define('TDIARY_THEME', 'snowy');
 if (! defined('TDIARY_THEME')) define('TDIARY_THEME', 'loose-leaf'); // Default
 
 // Show someting with <div class="calendar"> design
@@ -45,7 +21,7 @@ if (! isset($_LANG)) die('$_LANG is not set');
 
 // Check theme
 $theme = TDIARY_THEME;
-if ($theme == '') {
+if ($theme == '' || $theme == 'TDIARY_THEME') {
 	die('Theme is not specified. Set "TDIARY_THEME" correctly');
 } else {
 	$theme = rawurlencode($theme); // Supress all nasty letters
@@ -68,7 +44,7 @@ if (defined('TDIARY_SIDEBAR_POSITION')) {
 	//     75 list-sidebar.txt
 	//    193 list-all.txt
 	$sidebar = 'another'; // Default: Show as an another page below
-	switch($theme){
+	switch(TDIARY_THEME){
 	case '3minutes':	/*FALLTHROUGH*/
 	case '3pink':
 	case 'aoikuruma':
@@ -149,7 +125,7 @@ if (defined('TDIARY_SIDEBAR_POSITION')) {
 	}
 
 	// Adjust sidebar's default position
-	switch($theme){
+	switch(TDIARY_THEME){
 	case 'autumn':	/*FALLTHROUGH*/
 	case 'cosmos':
 	case 'happa':
@@ -225,11 +201,21 @@ if ($menu) {
 
 // Adjust reverse-link default design manually
 $disable_reverse_link = FALSE;
-switch($theme){
+switch(TDIARY_THEME){
 case 'hatena':	/*FALLTHROUGH*/
 case 'repro':
 case 'yukon':
 	$disable_reverse_link = TRUE;
+	break;
+}
+
+// Adjust DTD (between theme(=CSS) and MSIE bug)
+// NOTE:
+//    PukiWiki default: PKWK_DTD_XHTML_1_1
+//    tDiary's default: PKWK_DTD_HTML_4_01_STRICT
+switch(TDIARY_THEME){
+case 'christmas':
+	$pkwk_dtd = PKWK_DTD_HTML_4_01_STRICT; // or centering will be ignored via MSIE
 	break;
 }
 
@@ -242,18 +228,22 @@ switch(UI_LANG){
 	case 'ja': $css_charset = 'Shift_JIS'; break;
 }
 
-// Output header
+// Output HTTP headers
 pkwk_common_headers();
 header('Cache-control: no-cache');
 header('Pragma: no-cache');
 header('Content-Type: text/html; charset=' . CONTENT_CHARSET);
 
-// Output body
+// Output HTML DTD, <html>, and receive content-type
+if (isset($pkwk_dtd)) {
+	$meta_content_type = pkwk_output_dtd($pkwk_dtd);
+} else {
+	$meta_content_type = pkwk_output_dtd();
+}
+
 ?>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html lang="<?php echo LANG ?>">
 <head>
- <meta http-equiv="content-type" content="text/html; charset=<?php echo CONTENT_CHARSET ?>" />
+ <?php echo $meta_content_type ?>
  <meta http-equiv="content-style-type" content="text/css" />
 <?php if (! $is_read)  { ?> <meta name="robots" content="NOINDEX,NOFOLLOW" /><?php } ?>
 <?php if (PKWK_ALLOW_JAVASCRIPT && isset($javascript)) { ?> <meta http-equiv="Content-Script-Type" content="text/javascript" /><?php } ?>
@@ -393,6 +383,8 @@ if ($disable_reverse_link === TRUE) {
 	// For read and preview: tDiary have no <h2> inside body
 	$body = preg_replace('#<h2 ([^>]*)>(.*?)<a class="anchor_super" ([^>]*)>.*?</a></h2>#',
 		'<h3 $1><a $3><span class="sanchor">_</span></a> $2</h3>', $body);
+	$body = preg_replace('#<h([34]) ([^>]*)>(.*?)<a class="anchor_super" ([^>]*)>.*?</a></h\1>#',
+		'<h$1 $2><a $4>_</a> $3</h$1>', $body);
 	$body = preg_replace('#<h2 ([^>]*)>(.*?)</h2>#',
 		'<h3 $1><span class="sanchor">_</span> $2</h3>', $body);
 	if ($is_read) {
@@ -407,7 +399,7 @@ if ($disable_reverse_link === TRUE) {
 	</div>
 </div><!-- class="body" -->
 
-<?php if ($notes) { ?>
+<?php if ($notes != '') { ?>
 <div class="comment"><!-- Design for tDiary "Comments" -->
 	<div class="caption">&nbsp;</div>
 	<div class="commentbody"><br/>
@@ -422,7 +414,7 @@ if ($disable_reverse_link === TRUE) {
 </div>
 <?php } ?>
 
-<?php if ($attaches) { ?>
+<?php if ($attaches != '') { ?>
 <div class="comment">
 	<div class="caption">&nbsp;</div>
 	<div class="commentshort">
@@ -431,7 +423,7 @@ if ($disable_reverse_link === TRUE) {
 </div>
 <?php } ?>
 
-<?php if ($related) { ?>
+<?php if ($related != '') { ?>
 <div class="comment">
 	<div class="caption">&nbsp;</div>
 	<div class="commentshort">
@@ -441,7 +433,7 @@ if ($disable_reverse_link === TRUE) {
 <?php } ?>
 
 <!-- Design for tDiary "Today's referrer" -->
-<div class="referer"><?php if ($lastmodified) echo 'Last-modified: ' . $lastmodified; ?></div>
+<div class="referer"><?php if ($lastmodified != '') echo 'Last-modified: ' . $lastmodified; ?></div>
 
 </div><!-- class="day" -->
 
@@ -492,12 +484,11 @@ if ($disable_reverse_link === TRUE) {
 
 <!-- Copyright etc -->
 <div class="footer">
- Modified by <a href="<?php echo $modifierlink ?>"><?php echo $modifier ?></a><br />
- <?php echo S_COPYRIGHT ?><br />
+ Site admin: <a href="<?php echo $modifierlink ?>"><?php echo $modifier ?></a><p />
+ <?php echo S_COPYRIGHT ?>.
  Powered by PHP <?php echo PHP_VERSION ?><br />
- HTML convert time to <?php echo $taketime ?> sec.
+ HTML convert time: <?php echo $taketime ?> sec.
 </div>
-
 
 <?php if ($menu && ($sidebar != 'top' && $sidebar != 'bottom')) { ?>
 </div><!-- class="main" -->

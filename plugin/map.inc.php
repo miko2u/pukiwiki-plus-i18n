@@ -1,8 +1,8 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: map.inc.php,v 1.12 2005/01/06 13:35:11 henoheno Exp $
+// $Id: map.inc.php,v 1.14 2005/01/10 09:17:11 henoheno Exp $
 //
-// Site-map plugin
+// Site map plugin
 
 /*
  * プラグイン map: サイトマップ(のようなもの)を表示
@@ -14,9 +14,12 @@
  *     あるページがどこからリンクされているかを一覧。
 */
 
+// Show $non_list files
+define('PLUGIN_MAP_SHOW_HIDDEN', 0); // 0, 1
+
 function plugin_map_action()
 {
-	global $vars, $whatsnew, $defaultpage;
+	global $vars, $whatsnew, $defaultpage, $non_list;
 
 	$reverse = isset($vars['reverse']);
 	$refer   = isset($vars['refer']) ? $vars['refer'] : '';
@@ -26,22 +29,25 @@ function plugin_map_action()
 	$retval['msg']  = $reverse ? 'Relation map (link from)' : 'Relation map, from $1';
 	$retval['body'] = '';
 
+	// Get pages
 	$pages = array_values(array_diff(get_existpages(), array($whatsnew)));
-
-	$count = count($pages);
-	if ($count == 0) {
-		$retval['body'] = 'no pages.';
+	if (! PLUGIN_MAP_SHOW_HIDDEN)
+		$pages = array_diff($pages, preg_grep('/' . $non_list . '/', $pages));
+	if (empty($pages)) {
+		$retval['body'] = 'No pages.';
 		return $retval;
+	} else {
+		$retval['body'] .= '<p>' . "\n" .  'Total: ' . count($pages) .
+			' page(s) on this site.' . "\n" . '</p>' . "\n";
 	}
 
-	// ページ数
-	$retval['body'] .= '<p>' . "\n" . 'total: ' . $count .
-		' page(s) on this site.' . "\n" . '</p>' . "\n";
-
-	// ツリー作成
+	// Generate a tree
 	$nodes = array();
 	foreach ($pages as $page)
 		$nodes[$page] = & new MapNode($page, $reverse);
+
+	// Node not found: Because of filtererd by $non_list
+	if (! isset($nodes[$refer])) $vars['refer'] = $refer = $defaultpage;
 
 	if ($reverse) {
 		$keys = array_keys($nodes);
@@ -57,7 +63,8 @@ function plugin_map_action()
 		}
 		$retval['body'] .= '</ul>' . "\n";
 		if (! empty($alone)) {
-			$retval['body'] .= '<hr />' . "\n" . '<p>no link from anywhere in this site.</p>' . "\n";
+			$retval['body'] .= '<hr />' . "\n" .
+				'<p>No link from anywhere in this site.</p>' . "\n";
 			$retval['body'] .= '<ul>' . "\n";
 			foreach ($alone as $page)
 				$retval['body'] .= $nodes[$page]->toString($nodes, 1, $nodes[$page]->parent_id);
@@ -66,7 +73,8 @@ function plugin_map_action()
 	} else {
 		$nodes[$refer]->chain($nodes);
 		$retval['body'] .= '<ul>' . "\n" . $nodes[$refer]->toString($nodes) . '</ul>' . "\n";
-		$retval['body'] .= '<hr /><p>not related from ' . htmlspecialchars($refer) . '</p>' . "\n";
+		$retval['body'] .= '<hr />' . "\n" .
+			'<p>Not related from ' . htmlspecialchars($refer) . '</p>' . "\n";
 		$keys = array_keys($nodes);
 		sort($keys);
 		$retval['body'] .= '<ul>' . "\n";
@@ -78,6 +86,7 @@ function plugin_map_action()
 		}
 		$retval['body'] .= '</ul>' . "\n";
 	}
+
 	// 終了
 	return $retval;
 }
@@ -91,10 +100,11 @@ class MapNode
 	var $rels;
 	var $parent_id = 0;
 	var $done;
+	var $hide_pattern;
 
 	function MapNode($page, $reverse = FALSE)
 	{
-		global $script;
+		global $script, $non_list;
 
 		static $id = 0;
 
@@ -104,12 +114,20 @@ class MapNode
 		$this->done    = ! $this->is_page;
 		$this->link    = make_pagelink($page);
 		$this->id      = ++$id;
+		$this->hide_pattern = '/' . $non_list . '/';
 
 		$this->rels = $reverse ? $this->ref() : $this->rel();
 		$mark       = $reverse ? '' : '<sup>+</sup>';
 		$this->mark = '<a id="rel_' . $this->id . '" href="' . $script .
 			'?plugin=map&amp;refer=' . rawurlencode($this->page) . '">' .
 			$mark . '</a>';
+	}
+
+	function hide(& $pages)
+	{
+		if (! PLUGIN_MAP_SHOW_HIDDEN)
+			$pages = array_diff($pages, preg_grep($this->hide_pattern, $pages));
+		return $pages;
 	}
 
 	function ref()
@@ -121,6 +139,7 @@ class MapNode
 				$ref = explode("\t", $line);
 				$refs[] = $ref[0];
 			}
+			$this->hide($refs);
 			sort($refs);
 		}
 		return $refs;
@@ -133,6 +152,7 @@ class MapNode
 		if (file_exists($file)) {
 			$data = file($file);
 			$rels = explode("\t", trim($data[0]));
+			$this->hide($rels);
 			sort($rels);
 		}
 		return $rels;
@@ -169,7 +189,7 @@ class MapNode
 			$childs = array();
 			$level += 2;
 			foreach ($this->rels as $page)
-				if ($this->parent_id != $nodes[$page]->id)
+				if (isset($nodes[$page]) && $this->parent_id != $nodes[$page]->id)
 					$childs[] = $nodes[$page]->toString($nodes, $level, $this->id);
 
 			if (! empty($childs))

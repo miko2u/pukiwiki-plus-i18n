@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: filelist.inc.php,v 1.2.1 2004/07/31 03:09:20 upk/miko Exp $
+// $Id: filelist.inc.php,v 1.3.1 2005/01/09 08:16:28 miko Exp $
 //
 // Filelist plugin: redirect to list plugin
 // cmd=filelist
