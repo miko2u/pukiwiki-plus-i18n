@@ -76,6 +76,7 @@ function do_plugin_action($name)
 		die_message('Plugin init failed: ' . $name);
 
 	bindtextdomain($name, LANG_DIR);
+	textdomain($name);
 	$retvar = call_user_func('plugin_' . $name . '_action');
 	textdomain(DOMAIN);
 
@@ -114,6 +115,7 @@ function do_plugin_convert($name, $args = '')
 
 	$_digest = $digest;
 	bindtextdomain($name, LANG_DIR);
+	textdomain($name);
 	$retvar  = call_user_func_array('plugin_' . $name . '_convert', $aryargs);
 	textdomain(DOMAIN);
 	$digest  = $_digest; // Revert
@@ -150,6 +152,7 @@ function do_plugin_inline($name, $args, & $body)
 
 	$_digest = $digest;
 	bindtextdomain($name, LANG_DIR);
+	textdomain($name);
 	$retvar  = call_user_func_array('plugin_' . $name . '_inline', $aryargs);
 	textdomain(DOMAIN);
 	$digest  = $_digest; // Revert
