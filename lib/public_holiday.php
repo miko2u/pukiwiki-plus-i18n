@@ -11,10 +11,10 @@
  * Function Name: public_holiday(Year,Month,Day)
  * Return Value : array
  * ["name"] Public holiday name
- * ["rc"]   0:Weekday            (Ê¿Æü)
- *          1:Public holiday     (½ËÆü)
- *          2:Substitute holiday (¿¶ÂØµÙÆü)
- *          3:National holiday   (¹ñÌ±¤ÎµÙÆü)
+ * ["rc"]   0:Weekday            (å¹³æ—¥)
+ *          1:Public holiday     (ç¥æ—¥)
+ *          2:Substitute holiday (æŒ¯æ›¿ä¼‘æ—¥)
+ *          3:National holiday   (å›½æ°‘ã®ä¼‘æ—¥)
  */
 
 /* *************************************************************************
@@ -58,16 +58,16 @@ if (!defined("STATE")) {
  * ph_HappyMonday($y,$m,$d)        Move Public Holiday
  * ph_Calculation($y,$m,$d)        Calculation of a public holiday
  * ph_NationalHoliday($y,$m,$d)    NationalHoliday (ONLY JAPAN)
- * ph_SubstituteHoliday($y,$m,$d)  Substitute holiday (¿¶ÂØµÙÆü)
- * jp_NationalHoliday($y,$m,$d)    A national holiday (¹ñÌ±¤ÎµÙÆü)
+ * ph_SubstituteHoliday($y,$m,$d)  Substitute holiday (æŒ¯æ›¿ä¼‘æ—¥)
+ * jp_NationalHoliday($y,$m,$d)    A national holiday (å›½æ°‘ã®ä¼‘æ—¥)
  * chk_from_to($y,$m,$d,$from,$to) Applicable period check
  * is_LastDayOfWeek($y,$m,$d)      The last day of the week
  * zeller($y,$m,$d)                Calculation of a day of the week
  * mkdate($y,$m,$d,$offset)        The date of the specified displacement is computed
  * date2jd()                       Calculation of the Julius day
  * jd2date($jd)                    A date is set up from the Julius day
- * VernalEquinox($y)               Vernal Equinox Day   (½ÕÊ¬¤ÎÆü: Àµ¼°¤Ï´±Êó)
- * AutumnalEquinox($y)             Autumnal Equinox Day (½©Ê¬¤ÎÆü: Àµ¼°¤Ï´±Êó)
+ * VernalEquinox($y)               Vernal Equinox Day   (æ˜¥åˆ†ã®æ—¥: æ­£å¼ã¯å®˜å ±)
+ * AutumnalEquinox($y)             Autumnal Equinox Day (ç§‹åˆ†ã®æ—¥: æ­£å¼ã¯å®˜å ±)
  * lastday($y,$m)                  End-of-the-month calculation
  * LeapYear($y)                    Leap year judging
  * iso8601($y,$m,$d,$format)       The standard strings for ISO-8601
@@ -84,22 +84,22 @@ function tbl_SpecificDay() {
     case "JP":
       $tbl = array(
         //     M, D, StartYMD, EndYMD  ,Public Holiday Name
-        array( 1, 1, 19480725, 99999999,'¸µÆü'),
-        array( 1,15, 19480725, 19991231,'À®¿Í¤ÎÆü'),
-        array( 2,11, 19661209, 99999999,'·ú¹ñµ­Ç°¤ÎÆü'),
-        array( 2,24, 19890224, 19890224,'¾¼ÏÂÅ·¹Ä¤ÎÂçÁÓ¤ÎÎé'),
-        array( 4,29, 19480725, 19890216,'Å·¹ÄÃÂÀ¸Æü'),
-        array( 4,29, 19890217, 99999999,'¤ß¤É¤ê¤ÎÆü'),
-        array( 5, 3, 19480725, 99999999,'·ûË¡µ­Ç°Æü'),
-        array( 5, 5, 19480725, 99999999,'¤³¤É¤â¤ÎÆü'),
-        array( 6, 9, 19930609, 19930609,'¹ÄÂÀ»ÒÆÁ¿Î¿Æ²¦¤Î·ëº§¤Îµ·'),
-        array( 7,20, 19960101, 20021231,'³¤¤ÎÆü'),
-        array( 9,15, 19660625, 20021231,'·ÉÏ·¤ÎÆü'),
-        array(10,10, 19660625, 19991231,'ÂÎ°é¤ÎÆü'),
-        array(11, 3, 19480725, 99999999,'Ê¸²½¤ÎÆü'),
-        array(11,12, 19901112, 19901112,'Â¨°ÌÎéÀµÅÂ¤Îµ·'),
-        array(11,23, 19480725, 99999999,'¶ĞÏ«´¶¼Õ¤ÎÆü'),
-        array(12,23, 19890217, 99999999,'Å·¹ÄÃÂÀ¸Æü'),
+        array( 1, 1, 19480725, 99999999,'å…ƒæ—¥'),
+        array( 1,15, 19480725, 19991231,'æˆäººã®æ—¥'),
+        array( 2,11, 19661209, 99999999,'å»ºå›½è¨˜å¿µã®æ—¥'),
+        array( 2,24, 19890224, 19890224,'æ˜­å’Œå¤©çš‡ã®å¤§å–ªã®ç¤¼'),
+        array( 4,29, 19480725, 19890216,'å¤©çš‡èª•ç”Ÿæ—¥'),
+        array( 4,29, 19890217, 99999999,'ã¿ã©ã‚Šã®æ—¥'),
+        array( 5, 3, 19480725, 99999999,'æ†²æ³•è¨˜å¿µæ—¥'),
+        array( 5, 5, 19480725, 99999999,'ã“ã©ã‚‚ã®æ—¥'),
+        array( 6, 9, 19930609, 19930609,'çš‡å¤ªå­å¾³ä»è¦ªç‹ã®çµå©šã®å„€'),
+        array( 7,20, 19960101, 20021231,'æµ·ã®æ—¥'),
+        array( 9,15, 19660625, 20021231,'æ•¬è€ã®æ—¥'),
+        array(10,10, 19660625, 19991231,'ä½“è‚²ã®æ—¥'),
+        array(11, 3, 19480725, 99999999,'æ–‡åŒ–ã®æ—¥'),
+        array(11,12, 19901112, 19901112,'å³ä½ç¤¼æ­£æ®¿ã®å„€'),
+        array(11,23, 19480725, 99999999,'å‹¤åŠ´æ„Ÿè¬ã®æ—¥'),
+        array(12,23, 19890217, 99999999,'å¤©çš‡èª•ç”Ÿæ—¥'),
       );
       return $tbl;
     case "US":
@@ -145,10 +145,10 @@ function tbl_HappyMonday() {
     case "JP":
       $tbl = array(
         //     M,No,WEEK, StartYMD, EndYMD  ,Public Holiday Name
-        array( 1, 2,   1, 20000101, 99999999,'À®¿Í¤ÎÆü'),
-        array( 7, 3,   1, 20030101, 99999999,'³¤¤ÎÆü'),
-        array( 9, 3,   1, 20030101, 99999999,'·ÉÏ·¤ÎÆü'),
-        array(10, 2,   1, 20000101, 99999999,'ÂÎ°é¤ÎÆü'),
+        array( 1, 2,   1, 20000101, 99999999,'æˆäººã®æ—¥'),
+        array( 7, 3,   1, 20030101, 99999999,'æµ·ã®æ—¥'),
+        array( 9, 3,   1, 20030101, 99999999,'æ•¬è€ã®æ—¥'),
+        array(10, 2,   1, 20000101, 99999999,'ä½“è‚²ã®æ—¥'),
       );
       return $tbl;
     case "US":
@@ -207,11 +207,11 @@ function tbl_Calculation() {
   switch (COUNTRY) {
     case "JP":
       $tbl = array(
-        //    ·î,rc,³«»ÏÇ¯·îÆü, ½ªÎ»Ç¯·îÆü,´Ø¿ôÌ¾            ,½ËÆüÌ¾¾Î
-        array( 3, 1,19480725, 99999999,'VernalEquinox'       ,'½ÕÊ¬¤ÎÆü'),
-        array( 9, 1,19480725, 99999999,'AutumnalEquinox'     ,'½©Ê¬¤ÎÆü'),
-        array( 0, 2,19730421, 99999999,'ph_SubstituteHoliday','¿¶ÂØµÙÆü'),
-        // array( 0, 3,19851227, 99999999,'jp_NationalHoliday'  ,'¹ñÌ±¤ÎµÙÆü'),
+        //    æœˆ,rc,é–‹å§‹å¹´æœˆæ—¥, çµ‚äº†å¹´æœˆæ—¥,é–¢æ•°å            ,ç¥æ—¥åç§°
+        array( 3, 1,19480725, 99999999,'VernalEquinox'       ,'æ˜¥åˆ†ã®æ—¥'),
+        array( 9, 1,19480725, 99999999,'AutumnalEquinox'     ,'ç§‹åˆ†ã®æ—¥'),
+        array( 0, 2,19730421, 99999999,'ph_SubstituteHoliday','æŒ¯æ›¿ä¼‘æ—¥'),
+        // array( 0, 3,19851227, 99999999,'jp_NationalHoliday'  ,'å›½æ°‘ã®ä¼‘æ—¥'),
       );
       return $tbl;
     case "US":
@@ -230,8 +230,8 @@ function tbl_NationalHoliday() {
   switch (COUNTRY) {
     case "JP":
       $tbl = array(
-        //    ·î,rc,³«»ÏÇ¯·îÆü, ½ªÎ»Ç¯·îÆü,´Ø¿ôÌ¾            ,½ËÆüÌ¾¾Î
-        array( 0, 3,19851227, 99999999,'jp_NationalHoliday'  ,'¹ñÌ±¤ÎµÙÆü'),
+        //    æœˆ,rc,é–‹å§‹å¹´æœˆæ—¥, çµ‚äº†å¹´æœˆæ—¥,é–¢æ•°å            ,ç¥æ—¥åç§°
+        array( 0, 3,19851227, 99999999,'jp_NationalHoliday'  ,'å›½æ°‘ã®ä¼‘æ—¥'),
       );
       return $tbl;
     case "US":
@@ -243,7 +243,7 @@ function tbl_NationalHoliday() {
   return 0;
 }
 
-// µÙÆüÈ½Äê
+// ä¼‘æ—¥åˆ¤å®š
 function public_holiday($y,$m,$d) {
 
   $ret = ph_SpecificDay($y,$m,$d);
@@ -459,7 +459,7 @@ function chk_from_to($y,$m,$d,$from,$to) {
 
 // The last day of the week
 function is_LastDayOfWeek($y,$m,$d) {
-  // Íâ½µ¤ÎÆ±ÍËÆü¤¬Íâ·î¤Ê¤é¤ĞºÇ½ª¤ÈÈ½ÃÇ
+  // ç¿Œé€±ã®åŒæ›œæ—¥ãŒç¿Œæœˆãªã‚‰ã°æœ€çµ‚ã¨åˆ¤æ–­
   $x = mkdate($y,$m,$d,7);
   if ($m == $x['m']) return 0;
   return 1;
@@ -570,7 +570,7 @@ function AutumnalEquinox() {
   return (int)($a+0.242194 * $b - (int)($b/4));
 }
 
-// ËöÆü¤Î»»½Ğ
+// æœ«æ—¥ã®ç®—å‡º
 // End-of-the-month calculation
 function lastday($y,$m) {
   $last = array(31,28,31,30,31,30,31,31,30,31,30,31);
@@ -578,7 +578,7 @@ function lastday($y,$m) {
   return $last[$m-1];
 }
 
-// ±¼Ç¯È½Äê
+// é–å¹´åˆ¤å®š
 // Leap year judging
 function LeapYear($y) {
   if (($y%400) == 0) return 1;
@@ -600,29 +600,29 @@ function date2WeekDate($y,$m,$d)
 	if ($cz == 0) $cz = 7;
 
 	if ($m == 12) {
-		// ÍâÇ¯¤Î1/1
+		// ç¿Œå¹´ã®1/1
 		$w = zeller($y+1,1,1);
 		$offset = ($w == 0) ? 7 : $w;
-		// ÍâÇ¯¤Î1/1¤¬ÌÚ¤Ş¤Ç¤Î¾ì¹ç
-		// 2:²Ğ 3:¿å 4:ÌÚ
+		// ç¿Œå¹´ã®1/1ãŒæœ¨ã¾ã§ã®å ´åˆ
+		// 2:ç« 3:æ°´ 4:æœ¨
 		if ($offset < 5 && $offset > 1) {
-			// 12·î¤ÎºÇ½ª½µ¤Ï¡¢ÍâÇ¯¤ËÂ°¤¹¤ë²ÄÇ½À­¤¬¤¢¤ë
+			// 12æœˆã®æœ€çµ‚é€±ã¯ã€ç¿Œå¹´ã«å±ã™ã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹
 			$jd_y0101 = date2jd($y+1,1,1);
 			$seq = $jd_y0101 - $jd;
-			// ·î²Ğ¿å¤Ş¤Ç¤Ê¤éÍâÇ¯
+			// æœˆç«æ°´ã¾ã§ãªã‚‰ç¿Œå¹´
 			if ($seq < $offset) return array($y-1,"01", $cz);
 		}
 	}
 
 	$w = zeller($y,1,1);
-	// $offset = 1:·î 2:²Ğ 3:¿å 4:ÌÚ 5:¶â 6:ÅÚ 7:Æü
+	// $offset = 1:æœˆ 2:ç« 3:æ°´ 4:æœ¨ 5:é‡‘ 6:åœŸ 7:æ—¥
 	$offset = ($w == 0) ? 7 : $w;
 	$jd_y0101 = date2jd($y,1,1);
 	$week = ceil(($jd - $jd_y0101 + $offset) / 7);
 
-	// 1/1¤¬ ¶âÅÚÆü¤Î¾ì¹ç¤Ï¡¢Á°Ç¯¤ËÂ°¤¹¤ë¤Î¤Ç·×»»·ë²Ì¤«¤é1½µ¸º¤é¤¹
+	// 1/1ãŒ é‡‘åœŸæ—¥ã®å ´åˆã¯ã€å‰å¹´ã«å±ã™ã‚‹ã®ã§è¨ˆç®—çµæœã‹ã‚‰1é€±æ¸›ã‚‰ã™
 	if ($offset > 4) $week--;
-	// ·×»»¤·¤¿¤¤Æü¤¬·ë²Ì¥¼¥í½µ¤Î¾ì¹ç¤Ï¡¢Á°Ç¯½µ¤òºÆ»»½Ğ
+	// è¨ˆç®—ã—ãŸã„æ—¥ãŒçµæœã‚¼ãƒ­é€±ã®å ´åˆã¯ã€å‰å¹´é€±ã‚’å†ç®—å‡º
 	if ($week == 0) return date2WeekDate($y-1,12,31);
 	return array($y,str_pad($week ,2, "0", STR_PAD_LEFT), $cz);
         // return sprintf("%02d", $week);
