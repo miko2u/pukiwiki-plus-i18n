@@ -16,16 +16,18 @@ function plugin_replace_init()
 
 	$messages = array(
 		'_replace_msg' => array(
-			'msg_input_pass'         => '検索文字列、置換文字列および管理者用のパスワードを入力してください。',
-			'msg_input_search_word'  => '検索文字列:',
-			'msg_input_replace_word' => '置換文字列:',
-			'btn_exec'               => '実行',
-			'msg_warn_pass'          => 'セキュリティエラー：管理者パスワードが配布時のままです。パスワードを変更してください。',
-			'msg_no_pass'            => 'パスワードが間違っています。',
-			'msg_no_search'          => '置換するための検索文字列がありません。',
-			'msg_H0_replace'         => '全ページの文字列置換',
-			'msg_no_replaced'        => '置換する文字列はありません',
-			'msg_replaced'           => '以下のページを置換しました',
+			'msg_input_pass'         => _('Please input the retrieval character string, the substitution character string, and the password for the Administrator.'),
+			'msg_input_search_word'  => _('Retrieval character string:'),
+			'msg_input_replace_word' => _('Substitution character string:'),
+			'btn_exec'               => _('Exec'),
+			'msg_warn_pass'          => _('SECURITY ERROR:') .
+						    _('It remains as the Administrator password distributes it.') .
+						    _('Please change the password.'),
+			'msg_no_pass'            => _('The password is wrong.'),
+			'msg_no_search'          => _('The retrieval character string to substitute it is empty.'),
+			'msg_H0_replace'         => _('All page character string substitution'),
+			'msg_no_replaced'        => _('There is no substituted character string.'),
+			'msg_replaced'           => _('The following pages were substituted.'),
 		)
 	);
 	set_plugin_messages($messages);
