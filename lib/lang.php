@@ -3,7 +3,7 @@
  * Language judgment (言語判定)
  *
  * @copyright   Copyright &copy; 2005, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: lang.php,v 0.7 2005/03/14 01:08:00 upk Exp $
+ * @version     $Id: lang.php,v 0.8 2005/03/16 01:08:00 upk Exp $
  *
  */
 
@@ -54,22 +54,20 @@ function get_language($level = 0)
 	$obj_l2c = new lang2country();
 
 	for($i=0; $i < $level; $i++){
+		if ($i == $level) return DEFAULT_LANG;
 		// 指定関数の実行
 		$_x = $obj_lng->$lng_func[$i]();
 		if (! is_array($_x)) continue;
 
-		// 完全一致の場合 (ex. ja_JP)
 		foreach($_x as $_lang) {
+			// 完全一致の場合 (ex. ja_JP)
 			if (in_array($_lang[0], $language_prepared)) return $_lang[0];
-		}
-
-		// 言語のみの場合の対応
-		foreach($_x as $_lang) {
+			// 言語のみの場合の対応
 			$_x1 = split('_', $_lang[0]);
 			if ( count($_x1) == 2) continue;
 			$c = $obj_l2c->get_country2lang($_x1[0]);
-			$str = $_x1[0].'_'.$c;
 			if (empty($c)) continue;
+			$str = $_x1[0].'_'.$c;
 			if (in_array($str, $language_prepared)) return $str;
 		}
 	}
