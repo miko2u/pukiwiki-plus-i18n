@@ -11,7 +11,6 @@ $help_page = 'Help';
 $weeklabels = array(
 	_('Sun'),_('Mon'),_('Tue'),_('Wed'),_('Thu'),_('Fri'),_('Sat'),
 );
-$_msg_week = $weeklabels;
 
 $_string = array(
 	// Common core string(s)
