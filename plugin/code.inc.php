@@ -1,11 +1,11 @@
 <?php
 /**
  * コードハイライト機能をPukiWikiに追加する
- * Time-stamp: <04/12/15 12:47:15 sasaki>
+ * Time-stamp: <04/12/28 00:57:17 sasaki>
  *
  * GPL
  *
- * Ver. 0.4.3_1
+ * Ver. 0.4.3_2.1
  */
 
 define("PLUGIN_CODE_LANGUAGE", 'pre');  // 標準言語
@@ -15,6 +15,8 @@ define("PLUGIN_CODE_OUTLINE",   TRUE);  // アウトライン;
 define("PLUGIN_CODE_COMMENT",   FALSE); // コメント表示/非表示 // 0.4.0 では非推奨
 define("PLUGIN_CODE_MENU",      TRUE);  // メニューの表示/非表示;
 define("PLUGIN_CODE_FILE_ICON", TRUE);  // 添付ファイルにダウンロードアイコンを付ける
+define("PLUGIN_CODE_LINK",      TRUE);  // オートリンク
+
 // URLで指定したファイルを読み込むか否か
 define("PLUGIN_CODE_READ_URL",  TRUE);  // 標準では添付ファイル以外読み込まない
 
@@ -74,9 +76,8 @@ function plugin_code_convert() {
 				  "nomenu"      => FALSE,  // メニューを表示しない
 				  "icon"        => FALSE,  // アイコンを表示する
 				  "noicon"      => FALSE,  // アイコンを表示しない
-
-                  //"link"        => FALSE,  // オートリンク 有効
-                  //"nolink"      => FALSE,  // オートリンク 無効
+                  "link"        => FALSE,  // オートリンク 有効
+                  "nolink"      => FALSE,  // オートリンク 無効
               );
     $num_of_arg = func_num_args();
     $args = func_get_args();
@@ -141,7 +142,6 @@ class CodeHighlight {
         define("CODE_CANCEL",          0); // 指定を無効化する
         define("IDENTIFIRE",           2); 
         define("SPECIAL_IDENTIFIRE",   3); 
-        define("ESCAPE_IDENTIFIRE",    4); 
         define("STRING_LITERAL",       5); 
         define("NONESCAPE_LITERAL",    6); 
         define("PAIR_LITERAL",         7); 
@@ -175,6 +175,7 @@ class CodeHighlight {
 		$option["number"]  = (PLUGIN_CODE_NUMBER  && !$option["nonumber"]  || $option["number"]);
 		$option["outline"] = (PLUGIN_CODE_OUTLINE && !$option["nooutline"] || $option["outline"]);
 		$option["comment"] = (PLUGIN_CODE_COMMENT && !$option["nocomment"] || $option["comment"]);
+		$option["link"]    = (PLUGIN_CODE_LINK    && !$option["nolink"]    || $option["link"]);
 
         // mozillaの空白行対策
         if($option["number"] || $option["outline"]) {
@@ -182,17 +183,15 @@ class CodeHighlight {
             $src = preg_replace("/^$/m"," ",$src);
         }
 		
-        $lang = strtolower($lang);
+        $lang = htmlspecialchars(strtolower($lang));
 
-        $keywordfile = sprintf("code/keyword.%s.php", $lang);
-        $linekeywordfile = sprintf("code/line.%s.php", $lang); // 行指向解析用設定ファイル
-		if (file_exists(PLUGIN_DIR.$keywordfile)) {
+		if (file_exists(PLUGIN_DIR.'code/keyword.'.$lang.'.php')) {
 			// 言語定義ファイルが有る言語
-			$data = $this->srcToHTML($src, $keywordfile, $id_number, $option);
+			$data = $this->srcToHTML($src, $lang, $id_number, $option);
 			$src = "<pre class=\"code\"><code class=\"" .$lang. "\">".$data['src']."</code></pre>";
-		} else if (file_exists(PLUGIN_DIR.$linekeywordfile)) {
+		} else if (file_exists(PLUGIN_DIR.'code/line.'.$lang.'.php')) {
 			// 行指向解析用設定ファイルが有る言語
-			$data = $this->lineToHTML($src, $linekeywordfile, $id_number, $option);
+			$data = $this->lineToHTML($src, $lang, $id_number, $option);
 			$src = "<pre class=\"code\"><code class=\"" .$lang. "\">".$data['src']."</code></pre>";
 		} else {
 			// PHP と 未定義言語
@@ -303,7 +302,7 @@ class CodeHighlight {
 	 * この関数は行頭の文字を判定して解析・変換する
 	 * 定型フォーマットを持つ言語用
 	 */
-	function lineToHTML($string, $keywordfile, $id_number, &$option) {
+	function lineToHTML($string, $lang, $id_number, &$option) {
 
         // テーブルジャンプ用ハッシュ
         $switchHash = Array();
@@ -328,7 +327,7 @@ class CodeHighlight {
 		$linemode = false; // 行内を解析するか否か
 
         // 言語定義ファイル読み込み
-        include $keywordfile;
+        include(PLUGIN_DIR.'code/line.'.$lang.'.php');
 
 
         $str_len = strlen($string);
@@ -359,7 +358,9 @@ class CodeHighlight {
 				// htmlに追加
 				$commentnum++;
 				$line = htmlspecialchars(substr($line,0,-1), ENT_QUOTES);
-				$line = preg_replace("/(s?https?:\/\/|ftp:\/\/|mailto:)([-_.!~*()a-zA-Z0-9;\/:@?=+$,%#]|&amp;)+/","<a href=\"$0\">$0</a>",$line);
+				if ($option["link"]) 
+					$line = preg_replace("/(s?https?:\/\/|ftp:\/\/|mailto:)([-_.!~*()a-zA-Z0-9;\/:@?=+$,%#]|&amp;)+/",
+										 "<a href=\"$0\">$0</a>",$line);
 				$html .= '<span class="'.CODE_HEADER.'comment" id="'.CODE_HEADER.$id_number.'_cmt_'.$commentnum.'">'
 					.$line."</span>\n";
 
@@ -373,7 +374,9 @@ class CodeHighlight {
 					// htmlに追加
 					$commentnum++;
 					$line = htmlspecialchars(substr($line,0,-1), ENT_QUOTES);
-					$line = preg_replace("/(s?https?:\/\/|ftp:\/\/|mailto:)([-_.!~*()a-zA-Z0-9;\/:@?=+$,%#]|&amp;)+/","<a href=\"$0\">$0</a>",$line);
+				if ($option["link"]) 
+					$line = preg_replace("/(s?https?:\/\/|ftp:\/\/|mailto:)([-_.!~*()a-zA-Z0-9;\/:@?=+$,%#]|&amp;)+/",
+										 "<a href=\"$0\">$0</a>",$line);
 					$html .= '<span class="'.CODE_HEADER.'comment" id="'.CODE_HEADER.$id_number.'_cmt_'.$commentnum.'">'
 						.$line."</span>\n";
 					
@@ -387,7 +390,9 @@ class CodeHighlight {
 				// 行頭の1文字が意味を持つもの
 				$index = $code_keyword[$line[0]];
 				$line = htmlspecialchars($line, ENT_QUOTES);
-				$line = preg_replace("/(s?https?:\/\/|ftp:\/\/|mailto:)([-_.!~*()a-zA-Z0-9;\/:@?=+$,%#]|&amp;)+/","<a href=\"$0\">$0</a>",$line);
+				if ($option["link"]) 
+					$line = preg_replace("/(s?https?:\/\/|ftp:\/\/|mailto:)([-_.!~*()a-zA-Z0-9;\/:@?=+$,%#]|&amp;)+/",
+										 "<a href=\"$0\">$0</a>",$line);
 				if ($index != "")
 					$html .= '<span class="'.CODE_HEADER.$code_css[$index-1].'">'.$line.'</span>';
 				else
@@ -405,7 +410,9 @@ class CodeHighlight {
 						$index = $code_keyword[$pattern];
 						// htmlに追加
 						$line = htmlspecialchars($line, ENT_QUOTES);
-						$line = preg_replace("/(s?https?:\/\/|ftp:\/\/|mailto:)([-_.!~*()a-zA-Z0-9;\/:@?=+$,%#]|&amp;)+/","<a href=\"$0\">$0</a>",$line);
+						if ($option["link"]) 
+							$line = preg_replace("/(s?https?:\/\/|ftp:\/\/|mailto:)([-_.!~*()a-zA-Z0-9;\/:@?=+$,%#]|&amp;)+/",
+												 "<a href=\"$0\">$0</a>",$line);
 						if ($index != "")
 							$html .= '<span class="'.CODE_HEADER.$code_css[$index-1].'">'.$line.'</span>';
 						else
@@ -439,7 +446,9 @@ class CodeHighlight {
 					$line = $this->getline($string);
 				}
 				$src = htmlspecialchars($src, ENT_QUOTES);
-				$src = preg_replace("/(s?https?:\/\/|ftp:\/\/|mailto:)([-_.!~*()a-zA-Z0-9;\/:@?=+$,%#]|&amp;)+/","<a href=\"$0\">$0</a>",$src);
+				if ($option["link"]) 
+					$src = preg_replace("/(s?https?:\/\/|ftp:\/\/|mailto:)([-_.!~*()a-zA-Z0-9;\/:@?=+$,%#]|&amp;)+/",
+										"<a href=\"$0\">$0</a>",$src);
 				if ($index != "")
 					$html .= '<span class="'.CODE_HEADER.$code_css[$index-1].'">'.$src.'</span>';
 				else
@@ -466,7 +475,9 @@ class CodeHighlight {
 				// 行内を解析せずにHTMLに追加する (diff)
 				if($linemode) {
 					$line = htmlspecialchars($line, ENT_QUOTES);
-					$html .= preg_replace("/(s?https?:\/\/|ftp:\/\/|mailto:)([-_.!~*()a-zA-Z0-9;\/:@?=+$,%#]|&amp;)+/","<a href=\"$0\">$0</a>",$line);
+				if ($option["link"]) 
+					$html .= preg_replace("/(s?https?:\/\/|ftp:\/\/|mailto:)([-_.!~*()a-zA-Z0-9;\/:@?=+$,%#]|&amp;)+/",
+										  "<a href=\"$0\">$0</a>",$line);
 
 					$line = $this->getline($string); // next line
 					continue 2;
@@ -544,7 +555,9 @@ class CodeHighlight {
 					
 					// htmlに追加
 					$result = htmlspecialchars($result, ENT_QUOTES);
-					$result = preg_replace("/(s?https?:\/\/|ftp:\/\/|mailto:)([-_.!~*()a-zA-Z0-9;\/:@?=+$,%#]|&amp;)+/","<a href=\"$0\">$0</a>",$result);
+					if ($option["link"]) 
+						$result = preg_replace("/(s?https?:\/\/|ftp:\/\/|mailto:)([-_.!~*()a-zA-Z0-9;\/:@?=+$,%#]|&amp;)+/",
+											   "<a href=\"$0\">$0</a>",$result);
 					$html .= '<span class="'.CODE_HEADER.'string">'.$result.'</span>';
 					
 					// 次の検索用に読み込み
@@ -555,7 +568,9 @@ class CodeHighlight {
 					$line = substr($line, $str_pos-1, $str_len-$str_pos);
 					$commentnum++;
 					$line = htmlspecialchars($line, ENT_QUOTES);
-					$line = preg_replace("/(s?https?:\/\/|ftp:\/\/|mailto:)([-_.!~*()a-zA-Z0-9;\/:@?=+$,%#]|&amp;)+/","<a href=\"$0\">$0</a>",$line);
+					if ($option["link"]) 
+						$line = preg_replace("/(s?https?:\/\/|ftp:\/\/|mailto:)([-_.!~*()a-zA-Z0-9;\/:@?=+$,%#]|&amp;)+/",
+											 "<a href=\"$0\">$0</a>",$line);
 					$html .= '<span class="'.CODE_HEADER.'comment" id="'.CODE_HEADER.$id_number.'_cmt_'.$commentnum.'">'
 						.$line."</span>\n";
 					
@@ -592,7 +607,7 @@ class CodeHighlight {
     /**
       * ソースからHTML生成
       */
-    function srcToHTML($string, $keywordfile, $id_number, &$option) {
+    function srcToHTML($string, $lang, $id_number, &$option) {
 
         // テーブルジャンプ用ハッシュ
         $switchHash = Array();
@@ -615,7 +630,7 @@ class CodeHighlight {
         $switchHash["\""] = STRING_LITERAL;
 
         // 言語定義ファイル読み込み
-        include $keywordfile;
+        include(PLUGIN_DIR.'code/keyword.'.$lang.'.php');
 		
         // 文字->html変換用ハッシュ
         $htmlHash = Array("\"" => "&quot;", "'" => "&#039;", "<" => "&lt;", ">" => "&gt;", 
@@ -691,7 +706,9 @@ class CodeHighlight {
 						
 						// htmlに追加
 						$result = str_replace("\t", WIDTHOFTAB, htmlspecialchars($result, ENT_QUOTES));
-						$result = preg_replace("/(s?https?:\/\/|ftp:\/\/|mailto:)([-_.!~*()a-zA-Z0-9;\/:@?=+$,%#]|&amp;)+/","<a href=\"$0\">$0</a>",$result);
+						if ($option["link"]) 
+							$result = preg_replace("/(s?https?:\/\/|ftp:\/\/|mailto:)([-_.!~*()a-zA-Z0-9;\/:@?=+$,%#]|&amp;)+/",
+												   "<a href=\"$0\">$0</a>",$result);
 						$html .= '<span class="'.CODE_HEADER.'comment" id="'.CODE_HEADER.$id_number.'_cmt_'.$commentno.'">'
 							.$result.'</span>';
 						
@@ -721,7 +738,9 @@ class CodeHighlight {
 						
 						// htmlに追加
 						$result = str_replace("\t", WIDTHOFTAB, htmlspecialchars($result, ENT_QUOTES));
-						$result = preg_replace("/(s?https?:\/\/|ftp:\/\/|mailto:)([-_.!~*()a-zA-Z0-9;\/:@?=+$,%#]|&amp;)+/","<a href=\"$0\">$0</a>",$result);
+						if ($option["link"]) 
+							$result = preg_replace("/(s?https?:\/\/|ftp:\/\/|mailto:)([-_.!~*()a-zA-Z0-9;\/:@?=+$,%#]|&amp;)+/",
+												   "<a href=\"$0\">$0</a>",$result);
 						$html .= '<span class="'.CODE_HEADER.'comment" id="'.CODE_HEADER.$id_number.'_cmt_'.$commentno.'">'
 							.$result.'</span>';
 						
@@ -739,15 +758,6 @@ class CodeHighlight {
 				$str_pos--;// エラー処理したくないからpreg_matchで必ず見つかるようにする
 				$result = substr($string, $str_pos);
 				preg_match("/[A-Za-z0-9_\-]+/", $result, $matches);
-				/* //マークアップ言語モードが出来るまで利用停止
-                          if(preg_match("/^(s?https?:\/\/|ftp:\/\/|mailto:)[-_.!~*()a-zA-Z0-9;\/:@?&=+$,%#]+/",$result,$matches2)){
-                            $matches=$matches2;
-                            $start="<a href=\"".$matches[0]."\">";
-                            $end = "</a>";
-                          }else{
-                            $start="";$end="";
-                          }
-				*/
 				$str_pos += strlen($matches[0]);
 				$result = $matches[0];
 				
@@ -789,42 +799,6 @@ class CodeHighlight {
 				if ($str_len == $str_pos) $code = false; else $code = $string[$str_pos++]; // getc
 				continue 2;
 
-			case ESCAPE_IDENTIFIRE:
-				// エスケープする必要がある特殊文字を記号として利用し且この文字から始まる識別子 TeX
-				if($string[$str_pos] == "\\" && $string[$str_pos+1] == "\n") {
-					$html .=  "<span>\\\\\n</span>";
-					$str_pos += 2;
-
-					$line++; // ライン数カウント
-
-					// 次の検索用に読み込み
-					if ($str_len == $str_pos) $code = false; else $code = $string[$str_pos++]; // getc
-					continue 2;					
-				}
-				// 次の文字が英字か判定
-				if (!ctype_alpha($string[$str_pos])) break;
-				// 出来る限り長く識別子を得る
-				$result = substr($string, $str_pos);
-				preg_match("/[A-Za-z0-9_\-]+/", $result, $matches);
-				$str_pos += strlen($matches[0]);
-				$result = $code.$matches[0];
-				
-				// htmlに追加
-				if($capital)
-					$index = $code_keyword[strtolower($result)];// 大文字小文字を区別しない
-				else
-					$index = $code_keyword[$result];
-				$result = htmlspecialchars($result, ENT_QUOTES);
-				if ($index!="")
-					$html .= '<span class="'.CODE_HEADER.$code_css[$index-1].'">'.$result.'</span>';
-				else
-					$html .= $result;
-				
-				// 次の検索用に読み込み
-				if ($str_len == $str_pos) $code = false; else $code = $string[$str_pos++]; // getc
-				continue 2;
-				
-
 			case STRING_LITERAL:
 				// 文字列
 				
@@ -846,7 +820,9 @@ class CodeHighlight {
 				
 				// htmlに追加
 				$result = htmlspecialchars($result, ENT_QUOTES);
-				$result = preg_replace("/(s?https?:\/\/|ftp:\/\/|mailto:)([-_.!~*()a-zA-Z0-9;\/:@?=+$,%#]|&amp;)+/","<a href=\"$0\">$0</a>",$result);
+				if ($option["link"]) 
+					$result = preg_replace("/(s?https?:\/\/|ftp:\/\/|mailto:)([-_.!~*()a-zA-Z0-9;\/:@?=+$,%#]|&amp;)+/",
+										   "<a href=\"$0\">$0</a>",$result);
 				$html .= '<span class="'.CODE_HEADER.'string">'.$result.'</span>';
 				
 				// 次の検索用に読み込み
@@ -869,7 +845,9 @@ class CodeHighlight {
 				
 				// htmlに追加
 				$result = htmlspecialchars($result, ENT_QUOTES);
-				$result = preg_replace("/(s?https?:\/\/|ftp:\/\/|mailto:)([-_.!~*()a-zA-Z0-9;\/:@?=+$,%#]|&amp;)+/","<a href=\"$0\">$0</a>",$result);
+				if ($option["link"]) 
+					$result = preg_replace("/(s?https?:\/\/|ftp:\/\/|mailto:)([-_.!~*()a-zA-Z0-9;\/:@?=+$,%#]|&amp;)+/",
+										   "<a href=\"$0\">$0</a>",$result);
 				$html .= '<span class="'.CODE_HEADER.'string">'.$result.'</span>';
 				
 				// 次の検索用に読み込み
@@ -895,7 +873,9 @@ class CodeHighlight {
 				
 				// htmlに追加
 				$result = htmlspecialchars($result, ENT_QUOTES);
-				$result = preg_replace("/(s?https?:\/\/|ftp:\/\/|mailto:)([-_.!~*()a-zA-Z0-9;\/:@?=+$,%#]|&amp;)+/","<a href=\"$0\">$0</a>",$result);
+				if ($option["link"]) 
+					$result = preg_replace("/(s?https?:\/\/|ftp:\/\/|mailto:)([-_.!~*()a-zA-Z0-9;\/:@?=+$,%#]|&amp;)+/",
+										   "<a href=\"$0\">$0</a>",$result);
 				$html .= '<span class="'.CODE_HEADER.'string">'.$result.'</span>';
 				
 				// 次の検索用に読み込み
@@ -917,7 +897,9 @@ class CodeHighlight {
 				
 				// htmlに追加
 				$result = htmlspecialchars($result, ENT_QUOTES);
-				$result = preg_replace("/(s?https?:\/\/|ftp:\/\/|mailto:)([-_.!~*()a-zA-Z0-9;\/:@?=+$,%#]|&amp;)+/","<a href=\"$0\">$0</a>",$result);
+				if ($option["link"]) 
+					$result = preg_replace("/(s?https?:\/\/|ftp:\/\/|mailto:)([-_.!~*()a-zA-Z0-9;\/:@?=+$,%#]|&amp;)+/",
+										   "<a href=\"$0\">$0</a>",$result);
 				$html .= '<span class="'.CODE_HEADER.'formula">'.$result.'</span>';
 				
 				// 次の検索用に読み込み

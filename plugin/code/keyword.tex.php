@@ -4,7 +4,7 @@
  */
 
 $switchHash['$']  = FORMULA;  // Texでは$は数式に使用する
-$switchHash['\\'] = ESCAPE_IDENTIFIRE;  // Texでは\は予約語に使用する
+$switchHash['\\'] = SPECIAL_IDENTIFIRE;  // Texでは\は予約語に使用する
 $mkoutline = $option["outline"] = false; // アウトラインモード不可 
 
 // コメント定義
