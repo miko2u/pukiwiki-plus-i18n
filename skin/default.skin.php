@@ -2,20 +2,18 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: default.skin.php,v 1.34.13 2004/10/17 15:33:43 miko Exp $
+// $Id: default.skin.php,v 1.34.14 2004/12/11 16:23:43 miko Exp $
 //
 if (!defined('DATA_DIR')) { exit; }
-
-global $menubar, $sidebar;
 
 // Output header
 header('Cache-control: no-cache');
 header('Pragma: no-cache');
-header('Content-Type: text/html; charset=EUC-JP');                                   
-if(ini_get('zlib.output_compression') && preg_match('/\bgzip\b/i', $_SERVER['HTTP_ACCEPT_ENCODING'])) {         
-        header('Content-Encoding: gzip');                                                        
-        header('Vary: Accept-Encoding');                                                         
-}                                                                                                
+header('Content-Type: text/html; charset=EUC-JP');
+if(ini_get('zlib.output_compression') && preg_match('/\bgzip\b/i', $_SERVER['HTTP_ACCEPT_ENCODING'])) {
+	header('Content-Encoding: gzip');
+	header('Vary: Accept-Encoding');
+}
 echo '<?xml version="1.0" encoding="EUC-JP"?>';
 if ($html_transitional) { ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -82,14 +80,14 @@ if ($html_transitional) { ?>
 <div id="contents">
 <table class="contents" width="100%" border="0" cellspacing="0" cellpadding="0">
  <tr>
-<?php if (arg_check('read') and exist_plugin_convert('menu') and $menubar != '') { ?>
+<?php if (arg_check('read') && exist_plugin_convert('menu') && do_plugin_convert('menu') == '') { ?>
   <td class="ltable" valign="top"><div id="menubar"><?php echo do_plugin_convert('menu') ?></div></td>
 <?php } ?>
   <td class="ctable" valign="top">
    <?php if ($is_page and exist_plugin_convert('topicpath')) { echo do_plugin_convert('topicpath'); } ?>
    <div id="body"><?php echo $body ?></div>
   </td>
-<?php if (arg_check('read') and exist_plugin_convert('side') and $sidebar != '') { ?>
+<?php if (arg_check('read') && exist_plugin_convert('side') && do_plugin_convert('side') == '') { ?>
   <td class="rtable" valign="top"><div id="sidebar"><?php echo do_plugin_convert('side') ?></div></td>
 <?php } ?>
  </tr>
@@ -152,7 +150,7 @@ if ($html_transitional) { ?>
  <td id="footerctable"><div id="sigunature">
   Modified by <a href="<?php echo $modifierlink ?>"><?php echo $modifier ?></a>.
   <br />
-  Powered by PukiWiki 1.4.4/PukiWiki Plus!/PHP <?php echo PHP_VERSION ?>.
+  Powered by PukiWiki 1.4.4/PukiWiki Plus! u3/PHP <?php echo PHP_VERSION ?>.
   HTML convert time to <?php echo $taketime ?> sec.
  </div></td>
  <td id="footerrtable"><div id="validxhtml">
@@ -167,10 +165,6 @@ if ($html_transitional) { ?>
 </div>
 <?php } ?>
 
-<script type="text/javascript">
-<!-- <![CDATA[
-pukiwiki_initTexts();
-// ]]>-->
-</script>
+<script type="text/javascript" src="assistloaded.js"></script>
 </body>
 </html>
