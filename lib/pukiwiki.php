@@ -77,9 +77,6 @@ if (! extension_loaded('gettext')) {
 	}
 }
 
-// 初期化: 設定ファイルの読み込み
-require(LIB_DIR . 'init.php');
-
 // 言語設定
 putenv('LC_ALL=' . PO_LANG);
 setlocale(LC_ALL, PO_LANG);
@@ -89,6 +86,8 @@ textdomain(DOMAIN);
 
 // リソースファイルの読み込み
 require(LIB_DIR . 'resource.php');
+// 初期化: 設定ファイルの読み込み
+require(LIB_DIR . 'init.php');
 
 /////////////////////////////////////////////////
 // Main

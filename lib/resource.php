@@ -7,12 +7,16 @@
 //          Please Without customizing it. 
 
 $_string = array(
+	// Common country string(s)
+	'week'      => array(_('Sun'),_('Mon'),_('Tue'),_('Wed'),_('Thu'),_('Fri'),_('Sat'));
+
 	// Common core string(s)
 	'realm'     => _('PukiWikiAuth'),
 	'freeze'    => _('Freeze'),
 	'unfreeze'  => _('Unfreeze'),
 	'symbol'    => _('Symbols'),
 	'other'     => _('Others'),
+
 	// Common core message(s)
 	'andresult' => _('In the page <strong> $2</strong>, <strong> $3</strong> pages that contain all the terms $1 were found.'),
 	'orresult'  => _('In the page <strong> $2</strong>, <strong> $3</strong> pages that contain at least one of the terms $1 were found.'),
@@ -23,7 +27,7 @@ $_string = array(
 	// Common core error message(s)
 	'invalidpass' => _('Invalid password.'),
 	'invalidiwn'  => _('$1 is not a valid $2.'),
-	'collided' => _('It seems that someone has already updated the page you were editing.<br />The string was added, alhough it may be inserted in the wrong position.<br />'),
+	'collided_comment' => _('It seems that someone has already updated the page you were editing.<br />The string was added, alhough it may be inserted in the wrong position.<br />'),
 );
 
 $_button = array(

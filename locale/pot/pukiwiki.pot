@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-03-10 18:12+0900\n"
+"POT-Creation-Date: 2005-03-15 14:22+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,86 +16,133 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: auth.php:11 auth.php:42
-msgid "$1 is not editable"
-msgstr ""
-
-#: auth.php:12
-msgid "Unfreeze"
-msgstr ""
-
-#: auth.php:50
-msgid "$1 is not readable"
-msgstr ""
-
-#: auth.php:59
-msgid "PukiWikiAuth"
-msgstr ""
-
-#: file.php:99
-msgid "$1 is not a valid $2."
-msgstr ""
-
-#: func.php:179 fuzzy.php:12
+#: fuzzy.php:12 resource.php:17
 msgid ""
 "In the page <strong> $2</strong>, <strong> $3</strong> pages that contain "
 "all the terms $1 were found."
 msgstr ""
 
-#: func.php:180 fuzzy.php:13
+#: fuzzy.php:13 resource.php:18
 msgid ""
 "In the page <strong> $2</strong>, <strong> $3</strong> pages that contain at "
 "least one of the terms $1 were found."
 msgstr ""
 
-#: func.php:181 fuzzy.php:14
+#: fuzzy.php:14 resource.php:19
 msgid "No page which contains $1 has been found."
 msgstr ""
 
-#: func.php:279
+#: resource.php:11
+msgid "PukiWikiAuth"
+msgstr ""
+
+#: resource.php:12
+msgid "Freeze"
+msgstr ""
+
+#: resource.php:13
+msgid "Unfreeze"
+msgstr ""
+
+#: resource.php:14
 msgid "Symbols"
 msgstr ""
 
-#: func.php:280
+#: resource.php:15
 msgid "Others"
 msgstr ""
 
-#: html.php:24
+#: resource.php:20
 msgid "These search terms have been highlighted:"
 msgstr ""
 
-#: html.php:173
+#: resource.php:21
+msgid "View Text Formatting Rules"
+msgstr ""
+
+#: resource.php:24
+msgid "Invalid password."
+msgstr ""
+
+#: resource.php:25
+msgid "$1 is not a valid $2."
+msgstr ""
+
+#: resource.php:26
+msgid ""
+"It seems that someone has already updated the page you were editing.<br /"
+">The string was added, alhough it may be inserted in the wrong position.<br /"
+">"
+msgstr ""
+
+#: resource.php:31
 msgid "Preview"
 msgstr ""
 
-#: html.php:174
+#: resource.php:32
 msgid "Preview again"
 msgstr ""
 
-#: html.php:175
+#: resource.php:33
 msgid "Update"
 msgstr ""
 
-#: html.php:176
+#: resource.php:34
 msgid "Cancel"
 msgstr ""
 
-#: html.php:177
-msgid "Do not change timestamp"
+#: resource.php:35
+msgid "Add"
 msgstr ""
 
-#: html.php:178
-msgid "Add to top of page"
+#: resource.php:36
+msgid "Search"
 msgstr ""
 
-#: html.php:179
-msgid "Use page as template"
-msgstr ""
-
-#: html.php:180
+#: resource.php:37
 msgid "Load"
 msgstr ""
 
-#: html.php:181
-msgid "View Text Formatting Rules"
+#: resource.php:38
+msgid "Edit"
+msgstr ""
+
+#: resource.php:39
+msgid "Delete"
+msgstr ""
+
+#: resource.php:42
+msgid "Do not change timestamp"
+msgstr ""
+
+#: resource.php:43
+msgid "Add to top of page"
+msgstr ""
+
+#: resource.php:44
+msgid "Use page as template"
+msgstr ""
+
+#: resource.php:45
+msgid "AND"
+msgstr ""
+
+#: resource.php:46
+msgid "OR"
+msgstr ""
+
+#: resource.php:51
+msgid "$1 is not editable"
+msgstr ""
+
+#: resource.php:52
+msgid "$1 is not readable"
+msgstr ""
+
+#: resource.php:53
+msgid "On updating $1, a collision has occurred."
+msgstr ""
+
+#: resource.php:54
+msgid "$1 was updated"
 msgstr ""
