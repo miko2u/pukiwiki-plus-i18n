@@ -67,7 +67,7 @@ function plugin_toolbar_convert()
 			}
 			break;
 		case 'rss':
-		case 'rssplus':
+		case 'mixirss':
 			if ($body != '') { $body .= "\n"; }
 			$body .= _toolbar($name, 36, 14);
 			break;
@@ -114,6 +114,7 @@ $_IMAGE['skin']['refer']    = 'plus/referer.png';
 $_IMAGE['skin']['help']     = 'help.png';
 $_IMAGE['skin']['rss']      = 'rss.png';
 $_IMAGE['skin']['rssplus']  = 'rss.png';
+$_IMAGE['skin']['mixirss']  = 'rss.png';
 
 	$lang = $_LANG['skin'];
 	$link = $_LINK;

@@ -59,7 +59,7 @@ function catbody($title,$page,$body)
 	$_LINK['rss']      = "$script?cmd=rss";
 	$_LINK['rss10']    = "$script?cmd=rss&amp;ver=1.0"; // Same as 'rdf'
 	$_LINK['rss20']    = "$script?cmd=rss&amp;ver=2.0";
-	$_LINK['rssplus']  = "$script?cmd=rss10plus";
+	$_LINK['mixirss']  = "$script?cmd=mixirss";			// Same as 'rdf' for mixi
 	$_LINK['search']   = "$script?cmd=search";
 	$_LINK['side']     = "$script?$sidebar";
 	$_LINK['source']   = "$script?plugin=source&amp;refer=$r_page";
@@ -88,6 +88,7 @@ function catbody($title,$page,$body)
 	$link_rss       = & $_LINK['rss'];
 	$link_rss10     = & $_LINK['rss10'];		// New!
 	$link_rss20     = & $_LINK['rss20'];		// New!
+	$link_mixirss   = & $_LINK['mixirss'];
 	$link_freeze    = & $_LINK['freeze'];
 	$link_unfreeze  = & $_LINK['unfreeze'];
 	$link_upload    = & $_LINK['upload'];
