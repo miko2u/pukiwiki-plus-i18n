@@ -753,13 +753,17 @@ class AttachFiles
 			ksort($_files);
 			$_file = $_files[0];
 			unset($_files[0]);
-			$ret .= " <li>$_file\n";
-			if (count($_files)) {
-				$ret .= "<ul>\n<li>" . join("</li>\n<li>", $_files) . "</li>\n</ul>\n";
-			}
-			$ret .= " </li>\n";
+			$cssstyle = ($cssstyle == 'attach_td1') ? 'attach_td2':'attach_td1';
+			$ret .= '<tr><td class="' . $cssstyle . '">' . "$_file</td>"
+			     .  '<td class="' . $cssstyle . '">' . "{$this->files[$file][0]->size_str}</td>"
+			     .  '<td class="' . $cssstyle . '">' . "{$this->files[$file][0]->type}</td>"
+			     .  '<td class="' . $cssstyle . '">' . "{$this->files[$file][0]->time_str}</td></tr>\n";
 		}
-		return "\n<ul>\n$ret</ul>\n";
+		return '<table width="100%" class="attach_table">' . "\n" .
+		       '<tr><th class="attach_th">ファイル</th>' .
+			   '<th class="attach_th">サイズ</th>' .
+		       '<th class="attach_th">タイプ</th>' .
+		       '<th class="attach_th">日時</th></tr>' . "\n$ret</table>\n";
 	}
 }
 
@@ -836,9 +840,9 @@ class AttachPages
 
 		foreach ($pages as $page) {
 			if (preg_match("/$non_list/", $page)) continue;
-			$ret .= '<li>' . $this->pages[$page]->toRender($pattern) . "</li>\n";
+			$ret .= '<tr><td>' . $this->pages[$page]->toRender($pattern) . "</td></tr>\n";
 		}
-		return "\n<ul>\n" . $ret . "</ul>\n";
+		return "\n<table>\n" . $ret . "</table>\n";
 	}
 }
 ?>

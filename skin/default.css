@@ -1652,3 +1652,29 @@ a.code_outline:active
 	border: 1px solid #888888;
 	text-decoration: none;
 }
+/* extra attach table */
+table.attach_table
+{
+	padding:0px;
+	border:0px;
+	margin:auto;
+	text-align:left;
+	color:inherit;
+	background-color: #CCCCCC;
+}
+th.attach_th
+{
+	padding:2px;
+	margin:1px;
+	text-align:center;
+	color:inherit;
+	background-color: #FFEECC;
+}
+td.attach_td1
+{
+	background-color: #FFFFFF;
+}
+td.attach_td2
+{
+	background-color: #CCFFCC;
+}

@@ -57,7 +57,7 @@ class InlineConverter
 				'url_interwiki', // URL (interwiki definition)
 				'mailto',        // mailto:
 				'interwikiname', // InterWikiName
-				'glossary',	 // AutoGlossary
+				'glossary',	     // AutoGlossary
 				'autolink',      // AutoLink
 				'bracketname',   // BracketName
 				'wikiname',      // WikiName
