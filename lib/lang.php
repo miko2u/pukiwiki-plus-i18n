@@ -3,12 +3,12 @@
  * Language judgment (言語判定)
  *
  * @copyright   Copyright &copy; 2005, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: lang.php,v 0.8 2005/03/16 01:08:00 upk Exp $
+ * @version     $Id: lang.php,v 0.9 2005/03/19 23:08:00 upk Exp $
  *
  */
 
-// CORRESPONDENCE LANGUAGE
-// == CASE SENSITIVE ==
+// CORRESPONDENCE LANGUAGE : 対応言語
+// == CASE SENSITIVE ==    : 大文字小文字を区別
 // $language_prepared = array('ja_JP', 'ko_KR', 'en_US', 'zh_TW');
 $language_prepared = array('ja_JP', 'ko_KR', 'en_US');
 $language = '';
@@ -23,17 +23,21 @@ function set_ui_language()
 
 	// LANG - Internal content encoding ('en', 'ja', or ...)
 	define('LANG', $language);
+
+	// FIXME:
 	// UI_LANG - Content Language for buttons, menus,  etc
 	define('UI_LANG', LANG); // 'en' for Internationalized wikisite
 	// LANG_ENCODING - content encoding ('', 'UTF-8', or ...)
 	define('LANG_ENCODING', 'UTF-8');
 
+	// I18N
+
 	// LOCALE Name specified by GETTEXT().
 	define('DOMAIN', 'pukiwiki');
-
 	// LOCALE Name specified by SETLOCALE().
-	if (! defined('PO_LANG'))
+	if (! defined('PO_LANG')) {
 		define('PO_LANG', $language); // 'en_US', 'ja_JP'
+	}
 }
 
 function get_language($level = 0)
@@ -65,7 +69,7 @@ function get_language($level = 0)
 			// 言語のみの場合の対応
 			$_x1 = split('_', $_lang[0]);
 			if ( count($_x1) == 2) continue;
-			$c = $obj_l2c->get_country2lang($_x1[0]);
+			$c = $obj_l2c->get_lang2country($_x1[0]);
 			if (empty($c)) continue;
 			$str = $_x1[0].'_'.$c;
 			if (in_array($str, $language_prepared)) return $str;
@@ -458,12 +462,12 @@ class lang2country
 	);
 
 	/*
-	 * get_country2lang
+	 * get_lang2country
 	 *
 	 * 言語から国を推測する
 	 * @return string
 	 */
-	function get_country2lang($x)
+	function get_lang2country($x)
 	{
 		if (isset($this->lang[$x])) return $this->lang[$x];
 		return "";

@@ -3,600 +3,767 @@
  * TimeZone
  *
  * @copyright   Copyright &copy; 2005, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: timezone.php,v 0.1 2005/03/13 16:00:00 upk Exp $
+ * @version     $Id: timezone.php,v 0.2 2005/03/19 23:08:00 upk Exp $
  *
  */
 
 function set_timezone()
 {
 	global $language;
+
+	if (empty($language)) {
+		return array('UTC', 0);
+	}
 	$l = accept_language::split_locale_str( $language );
 
+	// When the name of a country is uncertain (‘–¼‚ª•s–¾‚Èê‡)
 	if (empty($l[2])) {
 		$obj_l2c = new lang2country();
-		$l[2] = $obj_l2c->get_country2lang($l[1]);
+		$l[2] = $obj_l2c->get_lang2country($l[1]);
+		if (empty($l[2])) {
+			return array('UTC', 0);
+		}
 	}
 
-	$obj = new timezone( $l[2] );
+	$obj = new timezone();
+	$obj->set_country($l[2]);
 	$zone = $obj->get_zone();
 	$zonetime = $obj->get_zonetime(0); // FIXME: DST
 
 	if ($zonetime == 0 || empty($zone)) {
-		define('ZONE', 'UTC');
-		define('ZONETIME', 0);
+		return array('UTC', 0);
 	}
 
-	define('ZONE', $zone);
-	define('ZONETIME', $zonetime);
+	return array($zone, $zonetime);
 }
 
 class timezone
 {
-	var $country;
-	var $tz = array(
-		// Key - TimeZone Name			=> 0: OFFSET, 1:HOUR, 2:MINUTE, 3:ISO3166
-		//					   4: ABBREV, 5:DAYLIGHT
-		'Africa/Abidjan'			=> array(+1,  0,  0, 'CI', '',     0),
-		'Africa/Accra'				=> array(+1,  0,  0, 'GH', '',     0),
-		'Africa/Addis_Ababa'			=> array(+1,  3,  0, 'ET', '',     0),
-		'Africa/Algiers'			=> array(+1,  1,  0, 'DZ', '',     0),
-		'Africa/Asmera'				=> array(+1,  3,  0, 'ER', '',     0),
-		'Africa/Bamako'				=> array(+1,  0,  0, 'ML', '',     0),
-		'Africa/Bangui'				=> array(+1,  1,  0, 'CF', '',     0),
-		'Africa/Banjul'				=> array(+1,  0,  0, 'GM', '',     0),
-		'Africa/Bissau'				=> array(+1,  0,  0, 'GW', '',     0),
-		'Africa/Blantyre'			=> array(+1,  2,  0, 'MW', '',     0),
-		'Africa/Brazzaville'			=> array(+1,  1,  0, 'CG', '',     0),
-		'Africa/Bujumbura'			=> array(+1,  2,  0, 'BI', '',     0),
-		'Africa/Cairo'				=> array(+1,  2,  0, 'EG', 'EET',  1),
-		'Africa/Casablanca'			=> array(+1,  0,  0, 'MA', '',     0),
-		'Africa/Ceuta'				=> array(+1,  1,  0, 'ES', '',     1),
-		'Africa/Conakry'			=> array(+1,  0,  0, 'GN', '',     0),
-		'Africa/Dakar'				=> array(+1,  0,  0, 'SN', '',     0),
-		'Africa/Dar_es_Salaam'			=> array(+1,  3,  0, 'TZ', '',     0),
-		'Africa/Djibouti'			=> array(+1,  3,  0, 'DJ', '',     0),
-		'Africa/Douala'				=> array(+1,  1,  0, 'CM', '',     0),
-		'Africa/El_Aaiun'			=> array(+1,  0,  0, 'EH', '',     0),
-		'Africa/Freetown'			=> array(+1,  0,  0, 'SL', '',     0),
-		'Africa/Gaborone'			=> array(+1,  2,  0, 'BW', '',     0),
-		'Africa/Harare'				=> array(+1,  2,  0, 'ZW', 'CAT',  0),
-		'Africa/Johannesburg'			=> array(+1,  2,  0, 'ZA', 'SAST', 0),
-		'Africa/Kampala'			=> array(+1,  3,  0, 'UG', '',     0),
-		'Africa/Khartoum'			=> array(+1,  3,  0, 'SD', '',     0),
-		'Africa/Kigali'				=> array(+1,  2,  0, 'RW', '',     0),
-		'Africa/Kinshasa'			=> array(+1,  1,  0, 'CD', '',     0),
-		'Africa/Lagos'				=> array(+1,  1,  0, 'NG', 'WAT',  0),
-		'Africa/Libreville'			=> array(+1,  1,  0, 'GA', '',     0),
-		'Africa/Lome'				=> array(+1,  0,  0, 'TG', '',     0),
-		'Africa/Luanda'				=> array(+1,  1,  0, 'AO', '',     0),
-		'Africa/Lubumbashi'			=> array(+1,  2,  0, 'CD', '',     0),
-		'Africa/Lusaka'				=> array(+1,  2,  0, 'ZM', '',     0),
-		'Africa/Malabo'				=> array(+1,  1,  0, 'GQ', '',     0),
-		'Africa/Maputo'				=> array(+1,  2,  0, 'MZ', '',     0),
-		'Africa/Maseru'				=> array(+1,  2,  0, 'LS', '',     0),
-		'Africa/Mbabane'			=> array(+1,  2,  0, 'SZ', '',     0),
-		'Africa/Mogadishu'			=> array(+1,  3,  0, 'SO', '',     0),
-		'Africa/Monrovia'			=> array(+1,  0,  0, 'LR', '',     0),
-		'Africa/Nairobi'			=> array(+1,  3,  0, 'KE', 'EAT',  0),
-		'Africa/Ndjamena'			=> array(+1,  1,  0, 'TD', '',     0),
-		'Africa/Niamey'				=> array(+1,  1,  0, 'NE', '',     0),
-		'Africa/Nouakchott'			=> array(+1,  0,  0, 'MR', '',     0),
-		'Africa/Ouagadougou'			=> array(+1,  0,  0, 'BF', '',     0),
-		'Africa/Porto-Novo'			=> array(+1,  1,  0, 'BJ', '',     0),
-		'Africa/Sao_Tome'			=> array(+1,  0,  0, 'ST', '',     0),
-		'Africa/Timbuktu'			=> array(+1,  0,  0, 'ML', '',     0),
-		'Africa/Tripoli'			=> array(+1,  2,  0, 'LY', '',     0),
-		'Africa/Tunis'				=> array(+1,  1,  0, 'TN', 'CET',  0),
-		'Africa/Windhoek'			=> array(+1,  1,  0, 'NA', 'WAST', 1),
-		'America/Adak'				=> array(-1, 10,  0, 'US', 'HAST', 1),
-		'America/Anchorage'			=> array(-1,  9,  0, 'US', 'AKST', 1),
-		'America/Anguilla'			=> array(-1,  4,  0, 'AI', '',     0),
-		'America/Antigua'			=> array(-1,  4,  0, 'AG', '',     0),
-		'America/Araguaina'			=> array(-1,  3,  0, 'BR', '',     0),
-		'America/Argentina/Buenos_Aires'	=> array(-1,  3,  0, 'AR', '',     0),
-		'America/Argentina/Catamarca'		=> array(-1,  3,  0, 'AR', '',     0),
-		'America/Argentina/ComodRivadavia'	=> array(-1,  3,  0, 'AR', '',     0),
-		'America/Argentina/Cordoba'		=> array(-1,  3,  0, 'AR', '',     0),
-		'America/Argentina/Jujuy'		=> array(-1,  3,  0, 'AR', '',     0),
-		'America/Argentina/La_Rioja'		=> array(-1,  3,  0, 'AR', '',     0),
-		'America/Argentina/Mendoza'		=> array(-1,  3,  0, 'AR', '',     0),
-		'America/Argentina/Rio_Gallegos'	=> array(-1,  3,  0, 'AR', '',     0),
-		'America/Argentina/San_Juan'		=> array(-1,  3,  0, 'AR', '',     0),
-		'America/Argentina/Tucuman'		=> array(-1,  3,  0, 'AR', '',     0),
-		'America/Argentina/Ushuaia'		=> array(-1,  3,  0, 'AR', '',     0),
-		'America/Aruba'				=> array(-1,  4,  0, 'AW', '',     0),
-		'America/Asuncion'			=> array(-1,  4,  0, 'PY', 'PYST', 1),
-		'America/Atka'				=> array(-1, 10,  0, '',   '',     1),
-		'America/Bahia'				=> array(-1,  3,  0, 'BR', '',     0),
-		'America/Barbados'			=> array(-1,  4,  0, 'BB', '',     0),
-		'America/Belem'				=> array(-1,  3,  0, 'BR', 'BRT',  0),
-		'America/Belize'			=> array(-1,  6,  0, 'BZ', '',     0),
-		'America/Boa_Vista'			=> array(-1,  4,  0, 'BR', '',     0),
-		'America/Bogota'			=> array(-1,  5,  0, 'CO', 'COT',  0),
-		'America/Boise'				=> array(-1,  7,  0, 'US', '',     1),
-		'America/Buenos_Aires'			=> array(-1,  3,  0, '',   'ART',  0),
-		'America/Cambridge_Bay'			=> array(-1,  7,  0, 'CA', '',     1),
-		'America/Campo_Grande'			=> array(-1,  4,  0, 'BR', '',     1),
-		'America/Cancun'			=> array(-1,  6,  0, 'MX', '',     1),
-		'America/Caracas'			=> array(-1,  4,  0, 'VE', 'VET',  0),
-		'America/Catamarca'			=> array(-1,  3,  0, '',   '',     0),
-		'America/Cayenne'			=> array(-1,  3,  0, 'GF', '',     0),
-		'America/Cayman'			=> array(-1,  5,  0, 'KY', '',     0),
-		'America/Chicago'			=> array(-1,  6,  0, 'US', 'CST',  1),
-		'America/Chihuahua'			=> array(-1,  7,  0, 'MX', '',     1),
-		'America/Cordoba'			=> array(-1,  3,  0, '',   '',     0),
-		'America/Costa_Rica'			=> array(-1,  6,  0, 'CR', '',     0),
-		'America/Cuiaba'			=> array(-1,  4,  0, 'BR', 'AMT',  1),
-		'America/Curacao'			=> array(-1,  4,  0, 'AN', '',     0),
-		'America/Danmarkshavn'			=> array(+1,  0,  0, 'GL', 'GMT',  0),
-		'America/Dawson'			=> array(-1,  8,  0, 'CA', '',     1),
-		'America/Dawson_Creek'			=> array(-1,  7,  0, 'CA', '',     0),
-		'America/Denver'			=> array(-1,  7,  0, 'US', 'MST',  1),
-		'America/Detroit'			=> array(-1,  5,  0, 'US', '',     1),
-		'America/Dominica'			=> array(-1,  4,  0, 'DM', '',     0),
-		'America/Edmonton'			=> array(-1,  7,  0, 'CA', '',     1),
-		'America/Eirunepe'			=> array(-1,  5,  0, 'BR', 'ACT',  0),
-		'America/El_Salvador'			=> array(-1,  6,  0, 'SV', '',     0),
-		'America/Ensenada'			=> array(-1,  8,  0, '',   '',     1),
-		'America/Fort_Wayne'			=> array(-1,  5,  0, '',   '',     0),
-		'America/Fortaleza'			=> array(-1,  3,  0, 'BR', '',     0),
-		'America/Glace_Bay'			=> array(-1,  4,  0, 'CA', '',     1),
-		'America/Godthab'			=> array(-1,  3,  0, 'GL', 'WGT',  1),
-		'America/Goose_Bay'			=> array(-1,  4,  0, 'CA', '',     1),
-		'America/Grand_Turk'			=> array(-1,  5,  0, 'TC', '',     1),
-		'America/Grenada'			=> array(-1,  4,  0, 'GD', '',     0),
-		'America/Guadeloupe'			=> array(-1,  4,  0, 'GP', '',     0),
-		'America/Guatemala'			=> array(-1,  6,  0, 'GT', '',     0),
-		'America/Guayaquil'			=> array(-1,  5,  0, 'EC', 'ECT',  0),
-		'America/Guyana'			=> array(-1,  4,  0, 'GY', '',     0),
-		'America/Halifax'			=> array(-1,  4,  0, 'CA', 'AST',  1),
-		'America/Havana'			=> array(-1,  5,  0, 'CU', 'CST',  1),
-		'America/Hermosillo'			=> array(-1,  7,  0, 'MX', '',     0),
-		'America/Indiana/Indianapolis'		=> array(-1,  5,  0, '',   '',     0),
-		'America/Indiana/Knox'			=> array(-1,  5,  0, 'US', '',     0),
-		'America/Indiana/Marengo'		=> array(-1,  5,  0, 'US', '',     0),
-		'America/Indiana/Vevay'			=> array(-1,  5,  0, 'US', '',     0),
-		'America/Indianapolis'			=> array(-1,  5,  0, 'US', '',     0),
-		'America/Inuvik'			=> array(-1,  7,  0, 'CA', '',     1),
-		'America/Iqaluit'			=> array(-1,  5,  0, 'CA', '',     1),
-		'America/Jamaica'			=> array(-1,  5,  0, 'JM', '',     0),
-		'America/Jujuy'				=> array(-1,  3,  0, '',   '',     0),
-		'America/Juneau'			=> array(-1,  9,  0, 'US', '',     1),
-		'America/Kentucky/Louisville'		=> array(-1,  5,  0, '',   '',     1),
-		'America/Kentucky/Monticello'		=> array(-1,  5,  0, 'US', '',     1),
-		'America/Knox_IN'			=> array(-1,  5,  0, '',   '',     0),
-		'America/La_Paz'			=> array(-1,  4,  0, 'BO', '',     0),
-		'America/Lima'				=> array(-1,  5,  0, 'PE', 'PET',  0),
-		'America/Los_Angeles'			=> array(-1,  8,  0, 'US', 'PST',  1),
-		'America/Louisville'			=> array(-1,  5,  0, 'US', '',     1),
-		'America/Maceio'			=> array(-1,  3,  0, 'BR', '',     0),
-		'America/Managua'			=> array(-1,  6,  0, 'NI', '',     0),
-		'America/Manaus'			=> array(-1,  4,  0, 'BR', '',     0),
-		'America/Martinique'			=> array(-1,  4,  0, 'MQ', '',     0),
-		'America/Mazatlan'			=> array(-1,  7,  0, 'MX', '',     1),
-		'America/Mendoza'			=> array(-1,  3,  0, '',   '',     0),
-		'America/Menominee'			=> array(-1,  6,  0, 'US', '',     1),
-		'America/Merida'			=> array(-1,  6,  0, 'MX', '',     1),
-		'America/Mexico_City'			=> array(-1,  6,  0, 'MX', '',     1),
-		'America/Miquelon'			=> array(-1,  3,  0, 'PM', 'PMST', 1),
-		'America/Monterrey'			=> array(-1,  6,  0, 'MX', '',     1),
-		'America/Montevideo'			=> array(-1,  3,  0, 'UY', 'UYT',  1),
-		'America/Montreal'			=> array(-1,  5,  0, 'CA', '',     1),
-		'America/Montserrat'			=> array(-1,  4,  0, 'MS', '',     0),
-		'America/Nassau'			=> array(-1,  5,  0, 'BS', '',     1),
-		'America/New_York'			=> array(-1,  5,  0, 'US', 'EST',  1),
-		'America/Nipigon'			=> array(-1,  5,  0, 'CA', '',     1),
-		'America/Nome'				=> array(-1,  9,  0, 'US', '',     1),
-		'America/Noronha'			=> array(-1,  2,  0, 'BR', 'FNT',  0),
-		'America/North_Dakota/Center'		=> array(-1,  6,  0, 'US', '',     1),
-		'America/Panama'			=> array(-1,  5,  0, 'PA', '',     0),
-		'America/Pangnirtung'			=> array(-1,  5,  0, 'CA', '',     1),
-		'America/Paramaribo'			=> array(-1,  3,  0, 'SR', '',     0),
-		'America/Phoenix'			=> array(-1,  7,  0, 'US', '',     0),
-		'America/Port-au-Prince'		=> array(-1,  5,  0, 'HT', '',     0),
-		'America/Port_of_Spain'			=> array(-1,  4,  0, 'TT', '',     0),
-		'America/Porto_Acre'			=> array(-1,  5,  0, '',   '',     0),
-		'America/Porto_Velho'			=> array(-1,  4,  0, 'BR', 'AMT',  0),
-		'America/Puerto_Rico'			=> array(-1,  4,  0, 'PR', '',     0),
-		'America/Rainy_River'			=> array(-1,  6,  0, 'CA', '',     1),
-		'America/Rankin_Inlet'			=> array(-1,  6,  0, 'CA', '',     1),
-		'America/Recife'			=> array(-1,  3,  0, 'BR', '',     0),
-		'America/Regina'			=> array(-1,  6,  0, 'CA', '',     0),
-		'America/Rio_Branco'			=> array(-1,  5,  0, 'BR', '',     0),
-		'America/Rosario'			=> array(-1,  3,  0, '',   '',     0),
-		'America/Santiago'			=> array(-1,  4,  0, 'CL', 'CLST', 1),
-		'America/Santo_Domingo'			=> array(-1,  4,  0, 'DO', '',     0),
-		'America/Sao_Paulo'			=> array(-1,  3,  0, 'BR', 'BRT',  1),
-		'America/Scoresbysund'			=> array(-1,  1,  0, 'GL', 'EGT',  1),
-		'America/Shiprock'			=> array(-1,  7,  0, 'US', '',     1),
-		'America/St_Johns'			=> array(-1,  3, 30, 'CA', 'NST',  1),
-		'America/St_Kitts'			=> array(-1,  4,  0, 'KN', '',     0),
-		'America/St_Lucia'			=> array(-1,  4,  0, 'LC', '',     0),
-		'America/St_Thomas'			=> array(-1,  4,  0, 'VI', '',     0),
-		'America/St_Vincent'			=> array(-1,  4,  0, 'VC', '',     0),
-		'America/Swift_Current'			=> array(-1,  6,  0, 'CA', '',     0),
-		'America/Tegucigalpa'			=> array(-1,  6,  0, 'HN', '',     0),
-		'America/Thule'				=> array(-1,  4,  0, 'GL', '',     1),
-		'America/Thunder_Bay'			=> array(-1,  5,  0, 'CA', '',     1),
-		'America/Tijuana'			=> array(-1,  8,  0, 'MX', '',     1),
-		'America/Toronto'			=> array(-1,  5,  0, 'CA', '',     1),
-		'America/Tortola'			=> array(-1,  4,  0, 'VG', '',     0),
-		'America/Vancouver'			=> array(-1,  8,  0, 'CA', '',     1),
-		'America/Virgin'			=> array(-1,  4,  0, '',   '',     0),
-		'America/Whitehorse'			=> array(-1,  8,  0, 'CA', '',     1),
-		'America/Winnipeg'			=> array(-1,  6,  0, 'CA', '',     1),
-		'America/Yakutat'			=> array(-1,  9,  0, 'US', '',     1),
-		'America/Yellowknife'			=> array(-1,  7,  0, 'CA', '',     1),
-		'Antarctica/Casey'			=> array(+1,  8,  0, 'AQ', '',     0),
-		'Antarctica/Davis'			=> array(+1,  7,  0, 'AQ', '',     0),
-		'Antarctica/DumontDUrville'		=> array(+1, 10,  0, 'AQ', '',     0),
-		'Antarctica/Mawson'			=> array(+1,  6,  0, 'AQ', '',     0),
-		'Antarctica/McMurdo'			=> array(+1, 12,  0, 'AQ', '',     1),
-		'Antarctica/Palmer'			=> array(-1,  4,  0, 'AQ', '',     1),
-		'Antarctica/Rothera'			=> array(-1,  3,  0, 'AQ', '',     0),
-		'Antarctica/South_Pole'			=> array(+1, 12,  0, 'AQ', '',     1),
-		'Antarctica/Syowa'			=> array(+1,  3,  0, 'AQ', '',     0),
-		'Antarctica/Vostok'			=> array(+1,  6,  0, 'AQ', '',     0),
-		'Arctic/Longyearbyen'			=> array(+1,  1,  0, 'SJ', '',     1),
-		'Asia/Aden'				=> array(+1,  3,  0, 'YE', '',     0),
-		'Asia/Almaty'				=> array(+1,  6,  0, 'KZ', '',     1),
-		'Asia/Amman'				=> array(+1,  2,  0, 'JO', '',     1),
-		'Asia/Anadyr'				=> array(+1, 12,  0, 'RU', 'ANAT', 1),
-		'Asia/Aqtau'				=> array(+1,  4,  0, 'KZ', '',     1),
-		'Asia/Aqtobe'				=> array(+1,  5,  0, 'KZ', '',     1),
-		'Asia/Ashgabat'				=> array(+1,  5,  0, 'TM', '',     0),
-		'Asia/Ashkhabad'			=> array(+1,  5,  0, '',   '',     0),
-		'Asia/Baghdad'				=> array(+1,  3,  0, 'IQ', 'AST',  1),
-		'Asia/Bahrain'				=> array(+1,  3,  0, 'BH', '',     0),
-		'Asia/Baku'				=> array(+1,  4,  0, 'AZ', '',     1),
-		'Asia/Bangkok'				=> array(+1,  7,  0, 'TH', '',     0),
-		'Asia/Beirut'				=> array(+1,  2,  0, 'LB', '',     1),
-		'Asia/Bishkek'				=> array(+1,  5,  0, 'KG', '',     1),
-		'Asia/Brunei'				=> array(+1,  8,  0, 'BN', '',     0),
-		'Asia/Calcutta'				=> array(+1,  5, 30, 'IN', 'IST',  0),
-		'Asia/Choibalsan'			=> array(+1,  9,  0, 'MN', '',     1),
-		'Asia/Chongqing'			=> array(+1,  8,  0, 'CN', '',     0),
-		'Asia/Chungking'			=> array(+1,  8,  0, '',   '',     0),
-		'Asia/Colombo'				=> array(+1,  6,  0, 'LK', '',     0),
-		'Asia/Dacca'				=> array(+1,  6,  0, '',   '',     0),
-		'Asia/Damascus'				=> array(+1,  2,  0, 'SY', 'EET',  1),
-		'Asia/Dhaka'				=> array(+1,  6,  0, 'BD', 'BDT',  0),
-		'Asia/Dili'				=> array(+1,  9,  0, '',   '',     0),
-		'Asia/Dubai'				=> array(+1,  4,  0, 'AE', '',     0),
-		'Asia/Dushanbe'				=> array(+1,  5,  0, 'TJ', '',     0),
-		'Asia/Gaza'				=> array(+1,  2,  0, 'PS', '',     1),
-		'Asia/Harbin'				=> array(+1,  8,  0, 'CN', '',     0),
-		'Asia/Hong_Kong'			=> array(+1,  8,  0, '',   'HKT',  0),
-		'Asia/Hovd'				=> array(+1,  7,  0, 'MN', '',     1),
-		'Asia/Irkutsk'				=> array(+1,  8,  0, 'RU', 'IRKT', 1),
-		'Asia/Istanbul'				=> array(+1,  2,  0, '',   '',     1),
-		'Asia/Jakarta'				=> array(+1,  7,  0, 'ID', 'WIT',  0),
-		'Asia/Jayapura'				=> array(+1,  9,  0, 'ID', 'EIT',  0),
-		'Asia/Jerusalem'			=> array(+1,  2,  0, 'IL', 'IST',  1),
-		'Asia/Kabul'				=> array(+1,  4, 30, 'AF', 'AFT',  0),
-		'Asia/Kamchatka'			=> array(+1, 12,  0, 'RU', 'PETT', 1),
-		'Asia/Karachi'				=> array(+1,  5,  0, 'PK', 'PKT',  0),
-		'Asia/Kashgar'				=> array(+1,  8,  0, 'CN', '',     0),
-		'Asia/Katmandu'				=> array(+1,  5, 45, 'NP', 'NPT',  0),
-		'Asia/Krasnoyarsk'			=> array(+1,  7,  0, 'RU', 'KRAT', 1),
-		'Asia/Kuala_Lumpur'			=> array(+1,  8,  0, 'MY', '',     0),
-		'Asia/Kuching'				=> array(+1,  8,  0, 'MY', '',     0),
-		'Asia/Kuwait'				=> array(+1,  3,  0, 'KW', '',     0),
-		'Asia/Macao'				=> array(+1,  8,  0, '',   '',     0),
-		'Asia/Macau'				=> array(+1,  8,  0, 'MO', '',     0),
-		'Asia/Magadan'				=> array(+1, 11,  0, 'RU', 'MAGT', 1),
-		'Asia/Makassar'				=> array(+1,  8,  0, 'ID', 'CIT',  0),
-		'Asia/Manila'				=> array(+1,  8,  0, 'PH', 'PHT',  0),
-		'Asia/Muscat'				=> array(+1,  4,  0, 'OM', 'GST',  0),
-		'Asia/Nicosia'				=> array(+1,  2,  0, 'CY', '',     1),
-		'Asia/Novosibirsk'			=> array(+1,  6,  0, 'RU', 'NOVT', 1),
-		'Asia/Omsk'				=> array(+1,  6,  0, 'RU', 'OMST', 1),
-		'Asia/Oral'				=> array(+1,  4,  0, 'KZ', '',     1),
-		'Asia/Phnom_Penh'			=> array(+1,  7,  0, 'KH', '',     0),
-		'Asia/Pontianak'			=> array(+1,  7,  0, 'ID', '',     0),
-		'Asia/Pyongyang'			=> array(+1,  9,  0, 'KP', '',     0),
-		'Asia/Qatar'				=> array(+1,  3,  0, 'QA', '',     0),
-		'Asia/Qyzylorda'			=> array(+1,  6,  0, 'KZ', '',     1),
-		'Asia/Rangoon'				=> array(+1,  6, 30, 'MM', 'MMT',  0),
-		'Asia/Riyadh'				=> array(+1,  3,  0, 'SA', 'AST',  0),
-		'Asia/Riyadh87'				=> array(+1,  3,  7, '',   '',     0),
-		'Asia/Riyadh88'				=> array(+1,  3,  7, '',   '',     0),
-		'Asia/Riyadh89'				=> array(+1,  3,  7, '',   '',     0),
-		'Asia/Saigon'				=> array(+1,  7,  0, 'VN', 'ICT',  0),
-		'Asia/Sakhalin'				=> array(+1, 10,  0, 'RU', 'SAKT', 1),
-		'Asia/Samarkand'			=> array(+1,  5,  0, 'UZ', '',     0),
-		'Asia/Seoul'				=> array(+1,  9,  0, 'KR', 'KST',  0),
-		'Asia/Shanghai'				=> array(+1,  8,  0, 'CN', 'CST',  0),
-		'Asia/Singapore'			=> array(+1,  8,  0, 'SG', '',     0),
-		'Asia/Taipei'				=> array(+1,  8,  0, 'TW', 'CST',  0),
-		'Asia/Tashkent'				=> array(+1,  5,  0, 'UZ', 'UZT',  0),
-		'Asia/Tbilisi'				=> array(+1,  3,  0, 'GE', '',     1),
-		'Asia/Tehran'				=> array(+1,  3, 30, 'IR', 'IRT',  1),
-		'Asia/Tel_Aviv'				=> array(+1,  2,  0, '',   '',     1),
-		'Asia/Thimbu'				=> array(+1,  6,  0, '',   '',     0),
-		'Asia/Thimphu'				=> array(+1,  6,  0, 'BT', '',     0),
-		'Asia/Tokyo'				=> array(+1,  9,  0, 'JP', 'JST',  0),
-		'Asia/Ujung_Pandang'			=> array(+1,  8,  0, '',   '',     0),
-		'Asia/Ulaanbaatar'			=> array(+1,  8,  0, 'MN', '',     1),
-		'Asia/Ulan_Bator'			=> array(+1,  8,  0,   '', '',     1),
-		'Asia/Urumqi'				=> array(+1,  8,  0, 'CN', '',     0),
-		'Asia/Vientiane'			=> array(+1,  7,  0, 'LA', '',     0),
-		'Asia/Vladivostok'			=> array(+1, 10,  0, 'RU', 'VLAT', 1),
-		'Asia/Yakutsk'				=> array(+1,  9,  0, 'RU', 'YAKT', 1),
-		'Asia/Yekaterinburg'			=> array(+1,  5,  0, 'RU', 'YEKT', 1),
-		'Asia/Yerevan'				=> array(+1,  4,  0, 'AM', '',     1),
-		'Atlantic/Azores'			=> array(-1,  1,  0, 'PT', 'AZOT', 1),
-		'Atlantic/Bermuda'			=> array(-1,  4,  0, 'BM', '',     1),
-		'Atlantic/Canary'			=> array(+1,  0,  0, 'ES', 'WET',  1),
-		'Atlantic/Cape_Verde'			=> array(-1,  1,  0, 'CV', 'CVT',  0),
-		'Atlantic/Faeroe'			=> array(+1,  0,  0, 'FO', '',     1),
-		'Atlantic/Jan_Mayen'			=> array(+1,  1,  0, 'SJ', '',     1),
-		'Atlantic/Madeira'			=> array(+1,  0,  0, 'PT', '',     1),
-		'Atlantic/Reykjavik'			=> array(+1,  0,  0, 'IS', '',     0),
-		'Atlantic/South_Georgia'		=> array(-1,  2,  0, 'GS', 'GST',  0),
-		'Atlantic/St_Helena'			=> array(+1,  0,  0, 'SH', '',     0),
-		'Atlantic/Stanley'			=> array(-1,  4,  0, 'FK', 'FKST', 1),
-		'Australia/ACT'				=> array(+1, 10,  0, '',   '',     1),
-		'Australia/Adelaide'			=> array(+1,  9, 30, 'AU', 'CST',  1),
-		'Australia/Brisbane'			=> array(+1, 10,  0, 'AU', 'EST',  0),
-		'Australia/Broken_Hill'			=> array(+1,  9, 30, 'AU', '',     1),
-		'Australia/Canberra'			=> array(+1, 10,  0, '',   '',     1),
-		'Australia/Darwin'			=> array(+1,  9, 30, 'AU', 'CST',  0),
-		'Australia/Hobart'			=> array(+1, 10,  0, 'AU', 'EST',  1),
-		'Australia/LHI'				=> array(+1, 10, 30, '',   '',     1),
-		'Australia/Lindeman'			=> array(+1, 10,  0, 'AU', '',     0),
-		'Australia/Lord_Howe'			=> array(+1, 10, 30, 'AU', 'LHST', 1),
-		'Australia/Melbourne'			=> array(+1, 10,  0, 'AU', '',     1),
-		'Australia/NSW'				=> array(+1, 10,  0, '',   '',     1),
-		'Australia/North'			=> array(+1,  9, 30, '',   '',     0),
-		'Australia/Perth'			=> array(+1,  8,  0, 'AU', 'WST',  0),
-		'Australia/Queensland'			=> array(+1, 10,  0, '',   '',     0),
-		'Australia/South'			=> array(+1,  9, 30, '',   '',     1),
-		'Australia/Sydney'			=> array(+1, 10,  0, 'AU', 'EST',  1),
-		'Australia/Tasmania'			=> array(+1, 10,  0, '',   '',     1),
-		'Australia/Victoria'			=> array(+1, 10,  0, '',   '',     1),
-		'Australia/West'			=> array(+1,  8,  0, '',   '',     0),
-		'Australia/Yancowinna'			=> array(+1,  9, 30, '',   '',     1),
-		'Brazil/Acre'				=> array(-1,  5,  0, '',   '',     0),
-		'Brazil/DeNoronha'			=> array(-1,  2,  0, '',   '',     0),
-		'Brazil/East'				=> array(-1,  3,  0, '',   '',     1),
-		'Brazil/West'				=> array(-1,  4,  0, '',   '',     0),
-		'CET'					=> array(+1,  1,  0, '',   '',     1),
-		'CST6CDT'				=> array(-1,  6,  0, '',   '',     1),
-		'Canada/Atlantic'			=> array(-1,  4,  0, '',   '',     1),
-		'Canada/Central'			=> array(-1,  6,  0, '',   '',     1),
-		'Canada/East-Saskatchewan'		=> array(-1,  6,  0, '',   '',     0),
-		'Canada/Eastern'			=> array(-1,  5,  0, '',   '',     1),
-		'Canada/Mountain'			=> array(-1,  7,  0, '',   '',     1),
-		'Canada/Newfoundland'			=> array(-1,  3, 30, '',   '',     1),
-		'Canada/Pacific'			=> array(-1,  8,  0, '',   '',     1),
-		'Canada/Saskatchewan'			=> array(-1,  6,  0, '',   '',     0),
-		'Canada/Yukon'				=> array(-1,  8,  0, '',   '',     1),
-		'Chile/Continental'			=> array(-1,  4,  0, '',   '',     1),
-		'Chile/EasterIsland'			=> array(-1,  6,  0, '',   '',     1),
-		'Cuba'					=> array(-1,  5,  0, '',   '',     1),
-		'EET'					=> array(+1,  2,  0, '',   '',     1),
-		'EST'					=> array(-1,  5,  0, '',   'EST',  0),
-		'EST5EDT'				=> array(-1,  5,  0, '',   '',     1),
-		'Egypt'					=> array(+1,  2,  0, '',   '',     1),
-		'Eire'					=> array(+1,  0,  0, '',   '',     1),
-		'Etc/GMT'				=> array(+1,  0,  0, '',   '',     0),
-		'Etc/GMT+0'				=> array(+1,  0,  0, '',   '',     0),
-		'Etc/GMT+1'				=> array(-1,  1,  0, '',   '',     0),
-		'Etc/GMT+10'				=> array(-1, 10,  0, '',   '',     0),
-		'Etc/GMT+11'				=> array(-1, 11,  0, '',   '',     0),
-		'Etc/GMT+12'				=> array(-1, 12,  0, '',   '',     0),
-		'Etc/GMT+2'				=> array(-1,  2,  0, '',   '',     0),
-		'Etc/GMT+3'				=> array(-1,  3,  0, '',   '',     0),
-		'Etc/GMT+4'				=> array(-1,  4,  0, '',   '',     0),
-		'Etc/GMT+5'				=> array(-1,  5,  0, '',   '',     0),
-		'Etc/GMT+6'				=> array(-1,  6,  0, '',   '',     0),
-		'Etc/GMT+7'				=> array(-1,  7,  0, '',   '',     0),
-		'Etc/GMT+8'				=> array(-1,  8,  0, '',   '',     0),
-		'Etc/GMT+9'				=> array(-1,  9,  0, '',   '',     0),
-		'Etc/GMT-0'				=> array(+1,  0,  0, '',   '',     0),
-		'Etc/GMT-1'				=> array(+1,  1,  0, '',   '',     0),
-		'Etc/GMT-10'				=> array(+1, 10,  0, '',   '',     0),
-		'Etc/GMT-11'				=> array(+1, 11,  0, '',   '',     0),
-		'Etc/GMT-12'				=> array(+1, 12,  0, '',   '',     0),
-		'Etc/GMT-13'				=> array(+1, 13,  0, '',   '',     0),
-		'Etc/GMT-14'				=> array(+1, 14,  0, '',   '',     0),
-		'Etc/GMT-2'				=> array(+1,  2,  0, '',   '',     0),
-		'Etc/GMT-3'				=> array(+1,  3,  0, '',   '',     0),
-		'Etc/GMT-4'				=> array(+1,  4,  0, '',   '',     0),
-		'Etc/GMT-5'				=> array(+1,  5,  0, '',   '',     0),
-		'Etc/GMT-6'				=> array(+1,  6,  0, '',   '',     0),
-		'Etc/GMT-7'				=> array(+1,  7,  0, '',   '',     0),
-		'Etc/GMT-8'				=> array(+1,  8,  0, '',   '',     0),
-		'Etc/GMT-9'				=> array(+1,  9,  0, '',   '',     0),
-		'Etc/GMT0'				=> array(+1,  0,  0, '',   'GMT',  0),
-		'Etc/Greenwich'				=> array(+1,  0,  0, '',   '',     0),
-		'Etc/UCT'				=> array(+1,  0,  0, '',   '',     0),
-		'Etc/UTC'				=> array(+1,  0,  0, '',   'UTC',  0),
-		'Etc/Universal'				=> array(+1,  0,  0, '',   'UTC',  0),
-		'Etc/Zulu'				=> array(+1,  0,  0, '',   '',     0),
-		'Europe/Amsterdam'			=> array(+1,  1,  0, 'NL', '',     1),
-		'Europe/Andorra'			=> array(+1,  1,  0, 'AD', '',     1),
-		'Europe/Athens'				=> array(+1,  2,  0, 'GR', '',     1),
-		'Europe/Belfast'			=> array(+1,  0,  0, 'GB', '',     1),
-		'Europe/Belgrade'			=> array(+1,  1,  0, '',   '',     1),
-		'Europe/Berlin'				=> array(+1,  1,  0, 'DE', '',     1),
-		'Europe/Bratislava'			=> array(+1,  1,  0, 'SK', '',     1),
-		'Europe/Brussels'			=> array(+1,  1,  0, 'BE', '',     1),
-		'Europe/Bucharest'			=> array(+1,  2,  0, 'RO', '',     1),
-		'Europe/Budapest'			=> array(+1,  1,  0, 'HU', '',     1),
-		'Europe/Chisinau'			=> array(+1,  2,  0, 'MD', '',     1),
-		'Europe/Copenhagen'			=> array(+1,  1,  0, 'DK', '',     1),
-		'Europe/Dublin'				=> array(+1,  0,  0, 'IE', '',     1),
-		'Europe/Gibraltar'			=> array(+1,  1,  0, 'GI', '',     1),
-		'Europe/Helsinki'			=> array(+1,  2,  0, 'FI', '',     1),
-		'Europe/Istanbul'			=> array(+1,  2,  0, 'TR', 'EET',  1),
-		'Europe/Kaliningrad'			=> array(+1,  2,  0, 'RU', '',     1),
-		'Europe/Kiev'				=> array(+1,  2,  0, 'UA', '',     1),
-		'Europe/Lisbon'				=> array(+1,  0,  0, 'PT', '',     1),
-		'Europe/Ljubljana'			=> array(+1,  1,  0, 'SI', '',     1),
-		'Europe/London'				=> array(+1,  0,  0, 'GB', 'BST',  1),
-		'Europe/Luxembourg'			=> array(+1,  1,  0, 'LU', '',     1),
-		'Europe/Madrid'				=> array(+1,  1,  0, 'ES', '',     1),
-		'Europe/Malta'				=> array(+1,  1,  0, 'MT', '',     1),
-		'Europe/Mariehamn'			=> array(+1,  2,  0, '',   '',     1),
-		'Europe/Minsk'				=> array(+1,  2,  0, 'BY', 'EET',  1),
-		'Europe/Monaco'				=> array(+1,  1,  0, 'MC', '',     1),
-		'Europe/Moscow'				=> array(+1,  3,  0, 'RU', 'MSK',  1),
-		'Europe/Nicosia'			=> array(+1,  2,  0, '',   '',     1),
-		'Europe/Oslo'				=> array(+1,  1,  0, 'NO', '',     1),
-		'Europe/Paris'				=> array(+1,  1,  0, 'FR', '',     1),
-		'Europe/Prague'				=> array(+1,  1,  0, 'CZ', '',     1),
-		'Europe/Riga'				=> array(+1,  2,  0, 'LV', '',     1),
-		'Europe/Rome'				=> array(+1,  1,  0, 'IT', 'CET',  1),
-		'Europe/Samara'				=> array(+1,  4,  0, 'RU', 'SAMT', 1),
-		'Europe/San_Marino'			=> array(+1,  1,  0, 'SM', '',     1),
-		'Europe/Sarajevo'			=> array(+1,  1,  0, 'BA', '',     1),
-		'Europe/Simferopol'			=> array(+1,  2,  0, 'UA', '',     1),
-		'Europe/Skopje'				=> array(+1,  1,  0, 'MK', '',     1),
-		'Europe/Sofia'				=> array(+1,  2,  0, 'BG', '',     1),
-		'Europe/Stockholm'			=> array(+1,  1,  0, 'SE', '',     1),
-		'Europe/Tallinn'			=> array(+1,  2,  0, 'EE', '',     1),
-		'Europe/Tirane'				=> array(+1,  1,  0, 'AL', '',     1),
-		'Europe/Tiraspol'			=> array(+1,  2,  0, '',   '',     1),
-		'Europe/Uzhgorod'			=> array(+1,  2,  0, 'UA', '',     1),
-		'Europe/Vaduz'				=> array(+1,  1,  0, 'LI', '',     1),
-		'Europe/Vatican'			=> array(+1,  1,  0, 'VA', '',     1),
-		'Europe/Vienna'				=> array(+1,  1,  0, 'AT', '',     1),
-		'Europe/Vilnius'			=> array(+1,  2,  0, 'LT', 'EET',  1),
-		'Europe/Warsaw'				=> array(+1,  1,  0, 'PL', '',     1),
-		'Europe/Zagreb'				=> array(+1,  1,  0, 'HR', '',     1),
-		'Europe/Zaporozhye'			=> array(+1,  2,  0, 'UA', '',     1),
-		'Europe/Zurich'				=> array(+1,  1,  0, 'CH', '',     1),
-		'Factory'				=> array(+1,  0,  0, '',   '',     0),
-		'GB'					=> array(+1,  0,  0, '',   '',     1),
-		'GB-Eire'				=> array(+1,  0,  0, '',   '',     1),
-		'GMT'					=> array(+1,  0,  0, '',   'GMT',  0),
-		'GMT+0'					=> array(+1,  0,  0, '',   'GMT',  0),
-		'GMT-0'					=> array(+1,  0,  0, '',   'GMT',  0),
-		'GMT0'					=> array(+1,  0,  0, '',   'GMT',  0),
-		'Greenwich'				=> array(+1,  0,  0, '',   'GMT',  0),
-		'HST'					=> array(-1, 10,  0, '',   '',     0),
-		'Hongkong'				=> array(+1,  8,  0, '',   '',     0),
-		'Iceland'				=> array(+1,  0,  0, '',   '',     0),
-		'Indian/Antananarivo'			=> array(+1,  3,  0, 'MG', '',     0),
-		'Indian/Chagos'				=> array(+1,  6,  0, 'IO', '',     0),
-		'Indian/Christmas'			=> array(+1,  7,  0, 'CX', '',     0),
-		'Indian/Cocos'				=> array(+1,  6, 30, 'CC', '',     0),
-		'Indian/Comoro'				=> array(+1,  3,  0, 'KM', '',     0),
-		'Indian/Kerguelen'			=> array(+1,  5,  0, 'TF', '',     0),
-		'Indian/Mahe'				=> array(+1,  4,  0, 'SC', '',     0),
-		'Indian/Maldives'			=> array(+1,  5,  0, 'MV', '',     0),
-		'Indian/Mauritius'			=> array(+1,  4,  0, 'MU', '',     0),
-		'Indian/Mayotte'			=> array(+1,  3,  0, 'YT', '',     0),
-		'Indian/Reunion'			=> array(+1,  4,  0, 'RE', '',     0),
-		'Iran'					=> array(+1,  3, 30, 'IR', '',     1),
-		'Israel'				=> array(+1,  2,  0, 'IL', '',     1),
-		'Jamaica'				=> array(-1,  5,  0, 'JM', '',     0),
-		'Japan'					=> array(+1,  9,  0, 'JP', 'JST',  0),
-		'Kwajalein'				=> array(+1, 12,  0, '',   '',     0),
-		'Libya'					=> array(+1,  2,  0, 'LY', '',     0),
-		'MET'					=> array(+1,  1,  0, '',   '',     1),
-		'MST'					=> array(-1,  7,  0, '',   'MST',  0),
-		'MST7MDT'				=> array(-1,  7,  0, '',   '',     1),
-		'Mexico/BajaNorte'			=> array(-1,  8,  0, '',   '',     1),
-		'Mexico/BajaSur'			=> array(-1,  7,  0, '',   '',     1),
-		'Mexico/General'			=> array(-1,  6,  0, '',   '',     1),
-		'Mideast/Riyadh87'			=> array(+1,  3,  7, '',   '',     0),
-		'Mideast/Riyadh88'			=> array(+1,  3,  7, '',   '',     0),
-		'Mideast/Riyadh89'			=> array(+1,  3,  7, '',   '',     0),
-		'NZ'					=> array(+1, 12,  0, '',   '',     1),
-		'NZ-CHAT'				=> array(+1, 12, 45, '',   '',     1),
-		'Navajo'				=> array(-1,  7,  0, '',   '',     1),
-		'PRC'					=> array(+1,  8,  0, '',   '',     0),
-		'PST8PDT'				=> array(-1,  8,  0, '',   '',     1),
-		'Pacific/Apia'				=> array(-1, 11,  0, 'WS', 'WST',  0),
-		'Pacific/Auckland'			=> array(+1, 12,  0, 'NZ', 'NZDT', 1),
-		'Pacific/Chatham'			=> array(+1, 12, 45, 'NZ', 'CHADT',1),
-		'Pacific/Easter'			=> array(-1,  6,  0, 'CL', 'EASST',1),
-		'Pacific/Efate'				=> array(+1, 11,  0, 'VU', '',     0),
-		'Pacific/Enderbury'			=> array(+1, 13,  0, 'KI', 'PHOT', 0),
-		'Pacific/Fakaofo'			=> array(-1, 10,  0, 'TK', '',     0),
-		'Pacific/Fiji'				=> array(+1, 12,  0, 'FJ', 'FJT',  0),
-		'Pacific/Funafuti'			=> array(+1, 12,  0, 'TV', '',     0),
-		'Pacific/Galapagos'			=> array(-1,  6,  0, 'EC', 'GALT', 0),
-		'Pacific/Gambier'			=> array(-1,  9,  0, 'PF', 'GAMT', 0),
-		'Pacific/Guadalcanal'			=> array(+1, 11,  0, 'SB', 'SBT',  0),
-		'Pacific/Guam'				=> array(+1, 10,  0, 'GU', 'ChST', 0),
-		'Pacific/Honolulu'			=> array(-1, 10,  0, 'US', 'HST',  0),
-		'Pacific/Johnston'			=> array(-1, 10,  0, 'UM', '',     0),
-		'Pacific/Kiritimati'			=> array(+1, 14,  0, 'KI', 'LINT', 0),
-		'Pacific/Kosrae'			=> array(+1, 11,  0, 'FM', '',     0),
-		'Pacific/Kwajalein'			=> array(+1, 12,  0, 'MH', '',     0),
-		'Pacific/Majuro'			=> array(+1, 12,  0, 'MH', '',     0),
-		'Pacific/Marquesas'			=> array(-1,  9, 30, 'PF', 'MART', 0),
-		'Pacific/Midway'			=> array(-1, 11,  0, 'UM', '',     0),
-		'Pacific/Nauru'				=> array(+1, 12,  0, 'NR', '',     0),
-		'Pacific/Niue'				=> array(-1, 11,  0, 'NU', '',     0),
-		'Pacific/Norfolk'			=> array(+1, 11, 30, 'NF', 'NFT',  0),
-		'Pacific/Noumea'			=> array(+1, 11,  0, 'NC', '',     0),
-		'Pacific/Pago_Pago'			=> array(-1, 11,  0, 'AS', '',     0),
-		'Pacific/Palau'				=> array(+1,  9,  0, 'PW', '',     0),
-		'Pacific/Pitcairn'			=> array(-1,  8,  0, 'PN', 'PST',  0),
-		'Pacific/Ponape'			=> array(+1, 11,  0, 'FM', '',     0),
-		'Pacific/Port_Moresby'			=> array(+1, 10,  0, 'PG', '',     0),
-		'Pacific/Rarotonga'			=> array(-1, 10,  0, 'CK', 'CKT',  0),
-		'Pacific/Saipan'			=> array(+1, 10,  0, 'MP', '',     0),
-		'Pacific/Samoa'				=> array(-1, 11,  0, '',   '',     0),
-		'Pacific/Tahiti'			=> array(-1, 10,  0, 'PF', 'TAHT', 0),
-		'Pacific/Tarawa'			=> array(+1, 12,  0, 'KI', 'GILT', 0),
-		'Pacific/Tongatapu'			=> array(+1, 13,  0, 'TO', '',     0),
-		'Pacific/Truk'				=> array(+1, 10,  0, 'FM', '',     0),
-		'Pacific/Wake'				=> array(+1, 12,  0, 'UM', '',     0),
-		'Pacific/Wallis'			=> array(+1, 12,  0, 'WF', '',     0),
-		'Pacific/Yap'				=> array(+1, 10,  0, 'FM', '',     0),
-		'Poland'				=> array(+1,  1,  0, 'PL', '',     1),
-		'Portugal'				=> array(+1,  0,  0, 'PT', '',     1),
-		'ROC'					=> array(+1,  8,  0, '',   '',     0),
-		'ROK'					=> array(+1,  9,  0, 'KR', 'KST',  0), // Republic of Korea
-		'Singapore'				=> array(+1,  8,  0, 'SG', '',     0),
-		'SystemV/AST4'				=> array(-1,  4,  0, '',   'AST',  0),
-		'SystemV/AST4ADT'			=> array(-1,  4,  0, '',   '',     1),
-		'SystemV/CST6'				=> array(-1,  6,  0, '',   'CST',  0),
-		'SystemV/CST6CDT'			=> array(-1,  6,  0, '',   '',     1),
-		'SystemV/EST5'				=> array(-1,  5,  0, '',   '',     0),
-		'SystemV/EST5EDT'			=> array(-1,  5,  0, '',   '',     1),
-		'SystemV/HST10'				=> array(-1, 10,  0, '',   '',     0),
-		'SystemV/MST7'				=> array(-1,  7,  0, '',   '',     0),
-		'SystemV/MST7MDT'			=> array(-1,  7,  0, '',   '',     1),
-		'SystemV/PST8'				=> array(-1,  8,  0, '',   '',     0),
-		'SystemV/PST8PDT'			=> array(-1,  8,  0, '',   '',     1),
-		'SystemV/YST9'				=> array(-1,  9,  0, '',   '',     0),
-		'SystemV/YST9YDT'			=> array(-1,  9,  0, '',   '',     1),
-		'Turkey'				=> array(+1,  2,  0, 'TR', '',     1),
-		'UCT'					=> array(+1,  0,  0, '',   '',     0),
-		'US/Alaska'				=> array(-1,  9,  0, '',   '',     1),
-		'US/Aleutian'				=> array(-1, 10,  0, '',   '',     1),
-		'US/Arizona'				=> array(-1,  7,  0, '',   '',     0),
-		'US/Central'				=> array(-1,  6,  0, '',   '',     1),
-		'US/East-Indiana'			=> array(-1,  5,  0, '',   '',     0),
-		'US/Eastern'				=> array(-1,  5,  0, '',   '',     1),
-		'US/Hawaii'				=> array(-1, 10,  0, 'US', '',     0),
-		'US/Indiana-Starke'			=> array(-1,  5,  0, '',   '',     0),
-		'US/Michigan'				=> array(-1,  5,  0, '',   '',     1),
-		'US/Mountain'				=> array(-1,  7,  0, '',   '',     1),
-		'US/Pacific'				=> array(-1,  8,  0, '',   '',     1),
-		'US/Pacific-New'			=> array(-1,  8,  0, '',   '',     1),
-		'US/Samoa'				=> array(-1, 11,  0, '',   '',     0),
-		'UTC'					=> array(+1,  0,  0, '',   'UTC',  0),
-		'Universal'				=> array(+1,  0,  0, '',   'UTC',  0),
-		'W-SU'					=> array(+1,  3,  0, '',   '',     1),
-		'WET'					=> array(+1,  0,  0, '',   '',     1),
-		'Zulu'					=> array(+1,  0,  0, '',   '',     0),
-	);
+  var $country;
+  var $tz_country;
+  var $tz = array(
+    // Key - TimeZone => 0: OFFSET, 1:HOUR, 2:MINUTE, 3:ISO3166
+    //                   4: ABBREV, 5:DAYLIGHT, 6:RULE(DST)
+    'Africa/Abidjan'                   => array( 1,  0,  0, 'CI', 'GMT',  '',     ''),
+    'Africa/Accra'                     => array( 1,  0,  0, 'GH', 'GMT',  '',     ''),
+    'Africa/Addis_Ababa'               => array( 1,  3,  0, 'ET', 'EAT',  '',     ''),
+    'Africa/Algiers'                   => array( 1,  1,  0, 'DZ', 'CET',  '',     ''),
+    'Africa/Asmera'                    => array( 1,  3,  0, 'ER', 'EAT',  '',     ''),
+    'Africa/Bamako'                    => array( 1,  0,  0, 'ML', 'GMT',  '',     ''),
+    'Africa/Bangui'                    => array( 1,  1,  0, 'CF', 'WAT',  '',     ''),
+    'Africa/Banjul'                    => array( 1,  0,  0, 'GM', 'GMT',  '',     ''),
+    'Africa/Bissau'                    => array( 1,  0,  0, 'GW', 'GMT',  '',     ''),
+    'Africa/Blantyre'                  => array( 1,  2,  0, 'MW', 'CAT',  '',     ''),
+    'Africa/Brazzaville'               => array( 1,  1,  0, 'CG', 'WAT',  '',     ''),
+    'Africa/Bujumbura'                 => array( 1,  2,  0, 'BI', 'CAT',  '',     ''),
+    'Africa/Cairo'                     => array( 1,  2,  0, 'EG', 'EET',  'EEST', 'Egypt'),
+    'Africa/Casablanca'                => array( 1,  0,  0, 'MA', 'WET',  '',     ''),
+    'Africa/Ceuta'                     => array( 1,  1,  0, 'ES', 'CET',  'CEST', 'EU'),
+    'Africa/Conakry'                   => array( 1,  0,  0, 'GN', 'GMT',  '',     ''),
+    'Africa/Dakar'                     => array( 1,  0,  0, 'SN', 'GMT',  '',     ''),
+    'Africa/Dar_es_Salaam'             => array( 1,  3,  0, 'TZ', 'EAT',  '',     ''),
+    'Africa/Djibouti'                  => array( 1,  3,  0, 'DJ', 'EAT',  '',     ''),
+    'Africa/Douala'                    => array( 1,  1,  0, 'CM', 'WAT',  '',     ''),
+    'Africa/El_Aaiun'                  => array( 1,  0,  0, 'EH', 'WET',  '',     ''),
+    'Africa/Freetown'                  => array( 1,  0,  0, 'SL', 'GMT',  '',     'SL'),
+    'Africa/Gaborone'                  => array( 1,  2,  0, 'BW', 'CAT',  '',     ''),
+    'Africa/Harare'                    => array( 1,  2,  0, 'ZW', 'CAT',  '',     ''),
+    'Africa/Johannesburg'              => array( 1,  2,  0, 'ZA', 'SAST', '',     'SA'),
+    'Africa/Kampala'                   => array( 1,  3,  0, 'UG', 'EAT',  '',     ''),
+    'Africa/Khartoum'                  => array( 1,  3,  0, 'SD', 'EAT',  '',     ''),
+    'Africa/Kigali'                    => array( 1,  2,  0, 'RW', 'CAT',  '',     ''),
+    'Africa/Kinshasa'                  => array( 1,  1,  0, 'CD', 'WAT',  '',     ''),
+    'Africa/Lagos'                     => array( 1,  1,  0, 'NG', 'WAT',  '',     ''),
+    'Africa/Libreville'                => array( 1,  1,  0, 'GA', 'WAT',  '',     ''),
+    'Africa/Lome'                      => array( 1,  0,  0, 'TG', 'GMT',  '',     ''),
+    'Africa/Luanda'                    => array( 1,  1,  0, 'AO', 'WAT',  '',     ''),
+    'Africa/Lubumbashi'                => array( 1,  2,  0, 'CD', 'CAT',  '',     ''),
+    'Africa/Lusaka'                    => array( 1,  2,  0, 'ZM', 'CAT',  '',     ''),
+    'Africa/Malabo'                    => array( 1,  1,  0, 'GQ', 'WAT',  '',     ''),
+    'Africa/Maputo'                    => array( 1,  2,  0, 'MZ', 'CAT',  '',     ''),
+    'Africa/Maseru'                    => array( 1,  2,  0, 'LS', 'SAST', '',     ''),
+    'Africa/Mbabane'                   => array( 1,  2,  0, 'SZ', 'SAST', '',     ''),
+    'Africa/Mogadishu'                 => array( 1,  3,  0, 'SO', 'EAT',  '',     ''),
+    'Africa/Monrovia'                  => array( 1,  0,  0, 'LR', 'GMT',  '',     ''),
+    'Africa/Nairobi'                   => array( 1,  3,  0, 'KE', 'EAT',  '',     ''),
+    'Africa/Ndjamena'                  => array( 1,  1,  0, 'TD', 'WAT',  '',     ''),
+    'Africa/Niamey'                    => array( 1,  1,  0, 'NE', 'WAT',  '',     ''),
+    'Africa/Nouakchott'	               => array( 1,  0,  0, 'MR', 'GMT',  '',     ''),
+    'Africa/Ouagadougou'               => array( 1,  0,  0, 'BF', 'GMT',  '',     ''),
+    'Africa/Porto-Novo'                => array( 1,  1,  0, 'BJ', 'WAT',  '',     ''),
+    'Africa/Sao_Tome'                  => array( 1,  0,  0, 'ST', 'GMT',  '',     ''),
+    'Africa/Timbuktu'                  => array( 1,  0,  0, 'ML', 'GMT',  '',     ''),
+    'Africa/Tripoli'                   => array( 1,  2,  0, 'LY', 'EET',  '',     ''),
+    'Africa/Tunis'                     => array( 1,  1,  0, 'TN', 'CET',  '',     'Tunisia'),
+    'Africa/Windhoek'                  => array( 1,  1,  0, 'NA', 'WAT',  'WAST', 'Namibia'),
+    'America/Adak'                     => array(-1, 10,  0, 'US', 'HAST', 'HADT', 'US'),
+    'America/Anchorage'                => array(-1,  9,  0, 'US', 'AKST', 'AKDT', 'US'),
+    'America/Anguilla'                 => array(-1,  4,  0, 'AI', 'AST',  '',     ''),
+    'America/Antigua'                  => array(-1,  4,  0, 'AG', 'AST',  '',     ''),
+    'America/Araguaina'                => array(-1,  3,  0, 'BR', 'BRT',  '',     ''),
+    'America/Argentina/Buenos_Aires'   => array(-1,  3,  0, 'AR', 'ART',  '',     ''),
+    'America/Argentina/Catamarca'      => array(-1,  3,  0, 'AR', 'ART',  '',     ''),
+    'America/Argentina/ComodRivadavia' => array(-1,  3,  0, 'AR', 'ART',  '',     ''),
+    'America/Argentina/Cordoba'        => array(-1,  3,  0, 'AR', 'ART',  '',     ''),
+    'America/Argentina/Jujuy'          => array(-1,  3,  0, 'AR', 'ART',  '',     ''),
+    'America/Argentina/La_Rioja'       => array(-1,  3,  0, 'AR', 'ART',  '',     ''),
+    'America/Argentina/Mendoza'        => array(-1,  3,  0, 'AR', 'ART',  '',     ''),
+    'America/Argentina/Rio_Gallegos'   => array(-1,  3,  0, 'AR', 'ART',  '',     ''),
+    'America/Argentina/San_Juan'       => array(-1,  3,  0, 'AR', 'ART',  '',     ''),
+    'America/Argentina/Tucuman'        => array(-1,  3,  0, 'AR', 'ART',  '',     ''),
+    'America/Argentina/Ushuaia'        => array(-1,  3,  0, 'AR', 'ART',  '',     ''),
+    'America/Aruba'                    => array(-1,  4,  0, 'AW', 'AST',  '',     ''),
+    'America/Asuncion'                 => array(-1,  4,  0, 'PY', 'PYT',  'PYST', 'Para'),
+    'America/Atka'                     => array(-1, 10,  0, 'US', 'HAST', 'HADT', 'US'), // America/Adak
+    'America/Bahia'                    => array(-1,  3,  0, 'BR', 'BRT',  '',     ''),
+    'America/Barbados'                 => array(-1,  4,  0, 'BB', 'AST',  '',     'Barb'),
+    'America/Belem'                    => array(-1,  3,  0, 'BR', 'BRT',  '',     ''),
+    'America/Belize'                   => array(-1,  6,  0, 'BZ', 'CST',  '',     'Belize'),
+    'America/Boa_Vista'                => array(-1,  4,  0, 'BR', 'AMT',  '',     ''),
+    'America/Bogota'                   => array(-1,  5,  0, 'CO', 'COT',  '',     'CO'),
+    'America/Boise'                    => array(-1,  7,  0, 'US', 'MST',  'MDT',  'US'),
+    'America/Buenos_Aires'             => array(-1,  3,  0, 'AR', 'ART',  '',     ''), // America/Argentina/Buenos_Aires
+    'America/Cambridge_Bay'            => array(-1,  7,  0, 'CA', 'MST',  'MDT',  'Canada'),
+    'America/Campo_Grande'             => array(-1,  4,  0, 'BR', 'AMT',  'AMST', 'Brazil'),
+    'America/Cancun'                   => array(-1,  6,  0, 'MX', 'CST',  'CDT',  'Mexico'),
+    'America/Caracas'                  => array(-1,  4,  0, 'VE', 'VET',  '',     ''),
+    'America/Catamarca'                => array(-1,  3,  0, 'AR', 'ART',  '',     ''), // America/Argentina/Catamarca
+    'America/Cayenne'                  => array(-1,  3,  0, 'GF', 'GFT',  '',     ''),
+    'America/Cayman'                   => array(-1,  5,  0, 'KY', 'EST',  '',     ''),
+    'America/Chicago'                  => array(-1,  6,  0, 'US', 'CST',  'CDT',  'US'),
+    'America/Chihuahua'                => array(-1,  7,  0, 'MX', 'MST',  'MDT',  'Mexico'),
+    'America/Cordoba'                  => array(-1,  3,  0, 'AR', 'ART',  '',     ''), // America/Argentina/Cordoba
+    'America/Costa_Rica'               => array(-1,  6,  0, 'CR', 'CST',  '',     'CR'),
+    'America/Cuiaba'                   => array(-1,  4,  0, 'BR', 'AMT',  'AMST', 'Brazil'),
+    'America/Curacao'                  => array(-1,  4,  0, 'AN', 'AST',  '',     ''),
+    'America/Danmarkshavn'             => array( 1,  0,  0, 'GL', 'GMT',  '',     ''),
+    'America/Dawson'                   => array(-1,  8,  0, 'CA', 'PST',  'PDT',  'NT_YK'),
+    'America/Dawson_Creek'             => array(-1,  7,  0, 'CA', 'MST',  '',     ''),
+    'America/Denver'                   => array(-1,  7,  0, 'US', 'MST',  'MDT',  'US'),
+    'America/Detroit'                  => array(-1,  5,  0, 'US', 'EST',  'EDT',  'US'),
+    'America/Dominica'                 => array(-1,  4,  0, 'DM', 'AST',  '',     ''),
+    'America/Edmonton'                 => array(-1,  7,  0, 'CA', 'MST',  'MDT',  'Edm'),
+    'America/Eirunepe'                 => array(-1,  5,  0, 'BR', 'ACT',  '',     ''),
+    'America/El_Salvador'              => array(-1,  6,  0, 'SV', 'CST',  '',     'Salv'),
+    'America/Ensenada'                 => array(-1,  8,  0, 'MX', 'PST',  'PDT',  'Mexico'), // America/Tijuana
+    'America/Fort_Wayne'               => array(-1,  5,  0, 'US', 'EST',  '',     ''),       // America/Indianapolis
+    'America/Fortaleza'                => array(-1,  3,  0, 'BR', 'BRT',  '',     ''),
+    'America/Glace_Bay'                => array(-1,  4,  0, 'CA', 'AST',  'ADT',  'Canada'),
+    'America/Godthab'                  => array(-1,  3,  0, 'GL', 'WGT',  'WGST', 'EU'),
+    'America/Goose_Bay'                => array(-1,  4,  0, 'CA', 'AST',  'ADT',  'StJohns'),
+    'America/Grand_Turk'               => array(-1,  5,  0, 'TC', 'EST',  'EDT',  'TC'),
+    'America/Grenada'                  => array(-1,  4,  0, 'GD', 'AST',  '',     ''),
+    'America/Guadeloupe'               => array(-1,  4,  0, 'GP', 'AST',  '',     ''),
+    'America/Guatemala'                => array(-1,  6,  0, 'GT', 'CST',  '',     'Guat'),
+    'America/Guayaquil'                => array(-1,  5,  0, 'EC', 'ECT',  '',     ''),
+    'America/Guyana'                   => array(-1,  4,  0, 'GY', 'GYT',  '',     ''),
+    'America/Halifax'                  => array(-1,  4,  0, 'CA', 'AST',  'ADT',  'Canada'),
+    'America/Havana'                   => array(-1,  5,  0, 'CU', 'CST',  'CDT',  'Cuba'),
+    'America/Hermosillo'               => array(-1,  7,  0, 'MX', 'MST',  '',     ''),
+    'America/Indiana/Indianapolis'     => array(-1,  5,  0, 'US', 'EST',  '',     ''), // America/Indianapolis
+    'America/Indiana/Knox'             => array(-1,  5,  0, 'US', 'EST',  '',     ''),
+    'America/Indiana/Marengo'          => array(-1,  5,  0, 'US', 'EST',  '',     ''),
+    'America/Indiana/Vevay'            => array(-1,  5,  0, 'US', 'EST',  '',     ''),
+    'America/Indianapolis'             => array(-1,  5,  0, 'US', 'EST',  '',     ''),
+    'America/Inuvik'                   => array(-1,  7,  0, 'CA', 'MST',  'MDT',  'NT_YK'),
+    'America/Iqaluit'                  => array(-1,  5,  0, 'CA', 'EST',  'EDT',  'Canada'),
+    'America/Jamaica'                  => array(-1,  5,  0, 'JM', 'EST',  '',     ''),
+    'America/Jujuy'                    => array(-1,  3,  0, 'AR', 'ART',  '',     ''),   // America/Argentina/Jujuy
+    'America/Juneau'                   => array(-1,  9,  0, 'US', 'AKST', 'AKDT', 'US'),
+    'America/Kentucky/Louisville'      => array(-1,  5,  0, 'US', 'EST',  'EDT',  'US'), // America/Louisville
+    'America/Kentucky/Monticello'      => array(-1,  5,  0, 'US', 'EST',  'EDT',  'US'),
+    'America/Knox_IN'                  => array(-1,  5,  0, 'US', 'EST',  '',     ''),   // America/Indiana/Knox
+    'America/La_Paz'                   => array(-1,  4,  0, 'BO', 'BOT',  '',     ''),
+    'America/Lima'                     => array(-1,  5,  0, 'PE', 'PET',  '',     'Peru'),
+    'America/Los_Angeles'              => array(-1,  8,  0, 'US', 'PST',  'PDT',  'US'),
+    'America/Louisville'               => array(-1,  5,  0, 'US', 'EST',  'EDT',  'US'),
+    'America/Maceio'                   => array(-1,  3,  0, 'BR', 'BRT',  '',     ''),
+    'America/Managua'                  => array(-1,  6,  0, 'NI', 'CST',  '',     ''),
+    'America/Manaus'                   => array(-1,  4,  0, 'BR', 'AMT',  '',     ''),
+    'America/Martinique'               => array(-1,  4,  0, 'MQ', 'AST',  '',     ''),
+    'America/Mazatlan'                 => array(-1,  7,  0, 'MX', 'MST',  'MDT',  'Mexico'),
+    'America/Mendoza'                  => array(-1,  3,  0, 'AR', 'ART',  '',     ''), // America/Argentina/Mendoza
+    'America/Menominee'                => array(-1,  6,  0, 'US', 'CST',  'CDT',  'US'),
+    'America/Merida'                   => array(-1,  6,  0, 'MX', 'CST',  'CDT',  'Mexico'),
+    'America/Mexico_City'              => array(-1,  6,  0, 'MX', 'CST',  'CDT',  'Mexico'),
+    'America/Miquelon'                 => array(-1,  3,  0, 'PM', 'PMST', 'PMDT', 'Canada'),
+    'America/Monterrey'                => array(-1,  6,  0, 'MX', 'CST',  'CDT',  'Mexico'),
+    'America/Montevideo'               => array(-1,  3,  0, 'UY', 'UYT',  'UYST', 'Uruguay'),
+    'America/Montreal'                 => array(-1,  5,  0, 'CA', 'EST',  'EDT',  'Canada'),
+    'America/Montserrat'               => array(-1,  4,  0, 'MS', 'AST',  '',     ''),
+    'America/Nassau'                   => array(-1,  5,  0, 'BS', 'EST',  'EDT',  'Bahamas'),
+    'America/New_York'                 => array(-1,  5,  0, 'US', 'EST',  'EDT',  'US'),
+    'America/Nipigon'                  => array(-1,  5,  0, 'CA', 'EST',  'EDT',  'Canada'),
+    'America/Nome'                     => array(-1,  9,  0, 'US', 'AKST', 'AKDT', 'Canada'),
+    'America/Noronha'                  => array(-1,  2,  0, 'BR', 'FNT',  '',     ''),
+    'America/North_Dakota/Center'      => array(-1,  6,  0, 'US', 'CST',  'CDT',  'US'),
+    'America/Panama'                   => array(-1,  5,  0, 'PA', 'EST',  '',     ''),
+    'America/Pangnirtung'              => array(-1,  5,  0, 'CA', 'EST',  'EDT',  'Canada'),
+    'America/Paramaribo'               => array(-1,  3,  0, 'SR', 'SRT',  '',     ''),
+    'America/Phoenix'                  => array(-1,  7,  0, 'US', 'MST',  '',     ''),
+    'America/Port-au-Prince'           => array(-1,  5,  0, 'HT', 'EST',  'EDT',  'Haiti'),
+    'America/Port_of_Spain'            => array(-1,  4,  0, 'TT', 'AST',  '',     ''),
+    'America/Porto_Acre'               => array(-1,  5,  0, 'BR', 'ACT',  '',     ''), // America/Rio_Branco
+    'America/Porto_Velho'              => array(-1,  4,  0, 'BR', 'AMT',  '',     ''),
+    'America/Puerto_Rico'              => array(-1,  4,  0, 'PR', 'AST',  '',     ''),
+    'America/Rainy_River'              => array(-1,  6,  0, 'CA', 'CST',  'CDT',  'Canada'),
+    'America/Rankin_Inlet'             => array(-1,  6,  0, 'CA', 'CST',  'CDT',  'Canada'),
+    'America/Recife'                   => array(-1,  3,  0, 'BR', 'BRT',  '',     ''),
+    'America/Regina'                   => array(-1,  6,  0, 'CA', 'CST',  '',     ''),
+    'America/Rio_Branco'               => array(-1,  5,  0, 'BR', 'ACT',  '',     ''),
+    'America/Rosario'                  => array(-1,  3,  0, 'AR', 'ART',  '',     ''), // America/Cordoba, FIXME: AR
+    'America/Santiago'                 => array(-1,  4,  0, 'CL', 'CLT',  'CLST', 'Chile'),
+    'America/Santo_Domingo'            => array(-1,  4,  0, 'DO', 'AST',  '',     ''),
+    'America/Sao_Paulo'                => array(-1,  3,  0, 'BR', 'BRT',  'BRST', 'Brazil'),
+    'America/Scoresbysund'             => array(-1,  1,  0, 'GL', 'EGT',  'EGST', 'EU'),
+    'America/Shiprock'                 => array(-1,  7,  0, 'US', 'MST',  'MDT',  'US'), // America/Denver
+    'America/St_Johns'                 => array(-1,  3, 30, 'CA', 'NST',  'NDT',  'StJohns'),
+    'America/St_Kitts'                 => array(-1,  4,  0, 'KN', 'AST',  '',     ''),
+    'America/St_Lucia'                 => array(-1,  4,  0, 'LC', 'AST',  '',     ''),
+    'America/St_Thomas'                => array(-1,  4,  0, 'VI', 'AST',  '',     ''), // Virgin Is
+    'America/St_Vincent'               => array(-1,  4,  0, 'VC', 'AST',  '',     ''),
+    'America/Swift_Current'            => array(-1,  6,  0, 'CA', 'CST',  '',     ''),
+    'America/Tegucigalpa'              => array(-1,  6,  0, 'HN', 'CST',  '',     'Salv'),
+    'America/Thule'                    => array(-1,  4,  0, 'GL', 'AST',  'ADT',  'Thule'),
+    'America/Thunder_Bay'              => array(-1,  5,  0, 'CA', 'EST',  'EDT',  'Canada'),
+    'America/Tijuana'                  => array(-1,  8,  0, 'MX', 'PST',  'PDT',  'Mexico'),
+    'America/Toronto'                  => array(-1,  5,  0, 'CA', 'EST',  'EDT',  'Canada'),
+    'America/Tortola'                  => array(-1,  4,  0, 'VG', 'AST',  '',     ''),
+    'America/Vancouver'                => array(-1,  8,  0, 'CA', 'PST',  'PDT',  'Vanc'),
+    'America/Virgin'                   => array(-1,  4,  0, 'VI', 'AST',  '',     ''), // America/St_Thomas
+    'America/Whitehorse'               => array(-1,  8,  0, 'CA', 'PST',  'PDT',  'NT_YK'),
+    'America/Winnipeg'                 => array(-1,  6,  0, 'CA', 'CST',  'CDT',  'Winn'),
+    'America/Yakutat'                  => array(-1,  9,  0, 'US', 'AKST', 'AKDT', 'US'),
+    'America/Yellowknife'              => array(-1,  7,  0, 'CA', 'MST',  'MDT',  'NT_YK'),
+    'Antarctica/Casey'                 => array( 1,  8,  0, 'AQ', 'WST',  '',     ''),
+    'Antarctica/Davis'                 => array( 1,  7,  0, 'AQ', 'DAVT', '',     ''),
+    'Antarctica/DumontDUrville'        => array( 1, 10,  0, 'AQ', 'DDUT', '',     ''),
+    'Antarctica/Mawson'                => array( 1,  6,  0, 'AQ', 'MAWT', '',     ''),
+    'Antarctica/McMurdo'               => array( 1, 12,  0, 'AQ', 'NZST', 'NZDT', 'NZAQ'),
+    'Antarctica/Palmer'                => array(-1,  4,  0, 'AQ', 'CLT',  'CLST', 'ChileAQ'),
+    'Antarctica/Rothera'               => array(-1,  3,  0, 'AQ', 'ROTT', '',     ''),
+    'Antarctica/South_Pole'            => array( 1, 12,  0, 'AQ', 'NZST', 'NZDT', 'NZAQ'), // Antarctica/McMurdo
+    'Antarctica/Syowa'                 => array( 1,  3,  0, 'AQ', 'SYOT', '',     ''),
+    'Antarctica/Vostok'                => array( 1,  6,  0, 'AQ', 'VOST', '',     ''),
+    'Arctic/Longyearbyen'              => array( 1,  1,  0, 'SJ', 'CET',  'CEST', 'EU'), // Europe/Oslo
+    'Asia/Aden'                        => array( 1,  3,  0, 'YE', 'AST',  '',     ''),
+    'Asia/Almaty'                      => array( 1,  6,  0, 'KZ', 'ALMT', 'ALMST','RussiaAsia'),
+    'Asia/Amman'                       => array( 1,  2,  0, 'JO', 'EET',  'EEST', 'Jordan'),
+    'Asia/Anadyr'                      => array( 1, 12,  0, 'RU', 'ANAT', 'ANAST','Russia'),
+    'Asia/Aqtau'                       => array( 1,  4,  0, 'KZ', 'AQTT', 'AQTST','RussiaAsia'),
+    'Asia/Aqtobe'                      => array( 1,  5,  0, 'KZ', 'AQTT', 'AQTST','RussiaAsia'),
+    'Asia/Ashgabat'                    => array( 1,  5,  0, 'TM', 'TMT',  '',     ''),
+    'Asia/Ashkhabad'                   => array( 1,  5,  0, 'TM', 'TMT',  '',     ''), // Asia/Ashgabat
+    'Asia/Baghdad'                     => array( 1,  3,  0, 'IQ', 'AST',  'ADT',  'Iraq'),
+    'Asia/Bahrain'                     => array( 1,  3,  0, 'BH', 'AST',  '',     ''),
+    'Asia/Baku'                        => array( 1,  4,  0, 'AZ', 'AZT',  'AZST', 'Azer'),
+    'Asia/Bangkok'                     => array( 1,  7,  0, 'TH', 'ICT',  '',     ''),
+    'Asia/Beirut'                      => array( 1,  2,  0, 'LB', 'EET',  'EEST', 'Lebanon'),
+    'Asia/Bishkek'                     => array( 1,  5,  0, 'KG', 'KGT',  'KGST', 'Kirgiz'),
+    'Asia/Brunei'                      => array( 1,  8,  0, 'BN', 'BNT',  '',     ''),
+    'Asia/Calcutta'                    => array( 1,  5, 30, 'IN', 'IST',  '',     ''),
+    'Asia/Choibalsan'                  => array( 1,  9,  0, 'MN', 'CHOT', 'CHOST','Mongol'),
+    'Asia/Chongqing'                   => array( 1,  8,  0, 'CN', 'CST',  '',     'PRC'),
+    'Asia/Chungking'                   => array( 1,  8,  0, 'CN', 'CST',  '',     'PRC'), // Asia/Chongqing
+    'Asia/Colombo'                     => array( 1,  6,  0, 'LK', 'LKT',  '',     ''),
+    'Asia/Dacca'                       => array( 1,  6,  0, 'BD', 'BDT',  '',     ''), // Asia/Dhaka
+    'Asia/Damascus'                    => array( 1,  2,  0, 'SY', 'EET',  'EEST', 'Syria'),
+    'Asia/Dhaka'                       => array( 1,  6,  0, 'BD', 'BDT',  '',     ''),
+    'Asia/Dili'                        => array( 1,  9,  0, 'TL', 'TPT',  '',     ''),
+    'Asia/Dubai'                       => array( 1,  4,  0, 'AE', 'GST',  '',     ''),
+    'Asia/Dushanbe'                    => array( 1,  5,  0, 'TJ', 'TJT',  '',     ''),
+    'Asia/Gaza'                        => array( 1,  2,  0, 'PS', 'EET',  'EEST', 'Palestine'),
+    'Asia/Harbin'                      => array( 1,  8,  0, 'CN', 'CST',  '',     'PRC'),
+    'Asia/Hong_Kong'                   => array( 1,  8,  0, 'HK', 'HKT',  '',     'HK'),
+    'Asia/Hovd'                        => array( 1,  7,  0, 'MN', 'HOVT', 'HOVST','Mongol'),
+    'Asia/Irkutsk'                     => array( 1,  8,  0, 'RU', 'IRKT', 'IRKST','Russia'),
+    'Asia/Istanbul'                    => array( 1,  2,  0, 'TR', 'EET',  'EEST', 'EU'), // Europe/Istanbul
+    'Asia/Jakarta'                     => array( 1,  7,  0, 'ID', 'WIT',  '',     ''),
+    'Asia/Jayapura'                    => array( 1,  9,  0, 'ID', 'EIT',  '',     ''),
+    'Asia/Jerusalem'                   => array( 1,  2,  0, 'IL', 'IST',  'IDT',  'Zion'),
+    'Asia/Kabul'                       => array( 1,  4, 30, 'AF', 'AFT',  '',     ''),
+    'Asia/Kamchatka'                   => array( 1, 12,  0, 'RU', 'PETT', 'PETST','Russia'),
+    'Asia/Karachi'                     => array( 1,  5,  0, 'PK', 'PKT',  '',     'Pakistan'),
+    'Asia/Kashgar'                     => array( 1,  8,  0, 'CN', 'CST',  '',     'PRC'),
+    'Asia/Katmandu'                    => array( 1,  5, 45, 'NP', 'NPT',  '',     ''),
+    'Asia/Krasnoyarsk'                 => array( 1,  7,  0, 'RU', 'KRAT', 'KRAST','Russia'),
+    'Asia/Kuala_Lumpur'                => array( 1,  8,  0, 'MY', 'MYT',  '',     ''),
+    'Asia/Kuching'                     => array( 1,  8,  0, 'MY', 'MYT',  '',     ''),
+    'Asia/Kuwait'                      => array( 1,  3,  0, 'KW', 'AST',  '',     ''),
+    'Asia/Macao'                       => array( 1,  8,  0, 'MO', 'CST',  '',     'PRC'), // Asia/Macau
+    'Asia/Macau'                       => array( 1,  8,  0, 'MO', 'CST',  '',     'PRC'),
+    'Asia/Magadan'                     => array( 1, 11,  0, 'RU', 'MAGT', 'MAGST','Russia'),
+    'Asia/Makassar'                    => array( 1,  8,  0, 'ID', 'CIT',  '',     ''),
+    'Asia/Manila'                      => array( 1,  8,  0, 'PH', 'PHT',  '',     'Phil'),
+    'Asia/Muscat'                      => array( 1,  4,  0, 'OM', 'GST',  '',     ''),
+    'Asia/Nicosia'                     => array( 1,  2,  0, 'CY', 'EET',  'EEST', 'EUAsia'),
+    'Asia/Novosibirsk'                 => array( 1,  6,  0, 'RU', 'NOVT', 'NOVST','Russia'),
+    'Asia/Omsk'                        => array( 1,  6,  0, 'RU', 'OMST', 'OMSST','Russia'),
+    'Asia/Oral'                        => array( 1,  4,  0, 'KZ', 'ORAT', 'ORAST','RussiaAsia'),
+    'Asia/Phnom_Penh'                  => array( 1,  7,  0, 'KH', 'ICT',  '',     ''),
+    'Asia/Pontianak'                   => array( 1,  7,  0, 'ID', 'WIT',  '',     ''),
+    'Asia/Pyongyang'                   => array( 1,  9,  0, 'KP', 'KST',  '',     ''),
+    'Asia/Qatar'                       => array( 1,  3,  0, 'QA', 'AST',  '',     ''),
+    'Asia/Qyzylorda'                   => array( 1,  6,  0, 'KZ', 'QYZT', 'QYZST','RussiaAsia'),
+    'Asia/Rangoon'                     => array( 1,  6, 30, 'MM', 'MMT',  '',     ''),
+    'Asia/Riyadh'                      => array( 1,  3,  0, 'SA', 'AST',  '',     ''),
+    'Asia/Riyadh87'                    => array( 1,  3,  7, '',   '',     '',     ''),       // 3:07:04
+    'Asia/Riyadh88'                    => array( 1,  3,  7, '',   '',     '',     ''),       // 3:07:04
+    'Asia/Riyadh89'                    => array( 1,  3,  7, '',   '',     '',     ''),       // 3:07:04
+    'Asia/Saigon'                      => array( 1,  7,  0, 'VN', 'ICT',  '',     ''),
+    'Asia/Sakhalin'                    => array( 1, 10,  0, 'RU', 'SAKT', 'SAKST','Russia'),
+    'Asia/Samarkand'                   => array( 1,  5,  0, 'UZ', 'UZT',  '',     ''),
+    'Asia/Seoul'                       => array( 1,  9,  0, 'KR', 'KST',  '',     'ROK'),
+    'Asia/Shanghai'                    => array( 1,  8,  0, 'CN', 'CST',  '',     'PRC'),
+    'Asia/Singapore'                   => array( 1,  8,  0, 'SG', 'SGT',  '',     ''),
+    'Asia/Taipei'                      => array( 1,  8,  0, 'TW', 'CST',  '',     'Taiwan'),
+    'Asia/Tashkent'                    => array( 1,  5,  0, 'UZ', 'UZT',  '',     ''),
+    'Asia/Tbilisi'                     => array( 1,  3,  0, 'GE', 'GET',  'GEST', 'RussiaAsia'),
+    'Asia/Tehran'                      => array( 1,  3, 30, 'IR', 'IRST', 'IRDT', 'Iran'),
+    'Asia/Tel_Aviv'                    => array( 1,  2,  0, 'IL', 'IST',  'IDT',  'Zion'),    // Asia/Jerusalem
+    'Asia/Thimbu'                      => array( 1,  6,  0, 'BT', 'BTT',  '',     ''),        // Asia/Thimphu
+    'Asia/Thimphu'                     => array( 1,  6,  0, 'BT', 'BTT',  '',     ''),
+    'Asia/Tokyo'                       => array( 1,  9,  0, 'JP', 'JST',  '',     ''),
+    'Asia/Ujung_Pandang'               => array( 1,  8,  0, 'ID', 'CIT',  '',     ''),        // Asia/Makassar
+    'Asia/Ulaanbaatar'                 => array( 1,  8,  0, 'MN', 'ULAT', 'ULAST','Mongol'),
+    'Asia/Ulan_Bator'                  => array( 1,  8,  0, 'MN', 'ULAT', 'ULAST','Mongol'),  // Asia/Ulaanbaatar
+    'Asia/Urumqi'                      => array( 1,  8,  0, 'CN', 'CST',  '',     'PRC'),
+    'Asia/Vientiane'                   => array( 1,  7,  0, 'LA', 'ICT',  '',     ''),
+    'Asia/Vladivostok'                 => array( 1, 10,  0, 'RU', 'VLAT', 'VLAST','Russia'),
+    'Asia/Yakutsk'                     => array( 1,  9,  0, 'RU', 'YAKT', 'YAKST','Russia'),
+    'Asia/Yekaterinburg'               => array( 1,  5,  0, 'RU', 'YEKT', 'YEKST','Russia'),
+    'Asia/Yerevan'                     => array( 1,  4,  0, 'AM', 'AMT',  'AMST', 'RussiaAsia'),
+    'Atlantic/Azores'                  => array(-1,  1,  0, 'PT', 'AZOT', 'AZOST','EU'),
+    'Atlantic/Bermuda'                 => array(-1,  4,  0, 'BM', 'AST',  'ADT',  'Bahamas'),
+    'Atlantic/Canary'                  => array( 1,  0,  0, 'ES', 'WET',  'WEST', 'EU'),
+    'Atlantic/Cape_Verde'              => array(-1,  1,  0, 'CV', 'CVT',  '',     ''),
+    'Atlantic/Faeroe'                  => array( 1,  0,  0, 'FO', 'WET',  'WEST', 'EU'),
+    'Atlantic/Jan_Mayen'               => array( 1,  1,  0, 'SJ', 'CET',  'CEST', 'EU'),      // Europe/Oslo
+    'Atlantic/Madeira'                 => array( 1,  0,  0, 'PT', 'WET',  'WEST', 'EU'),
+    'Atlantic/Reykjavik'               => array( 1,  0,  0, 'IS', 'GMT',  '',     ''),
+    'Atlantic/South_Georgia'           => array(-1,  2,  0, 'GS', 'GST',  '',     ''),
+    'Atlantic/St_Helena'               => array( 1,  0,  0, 'SH', 'GMT',  '',     ''),
+    'Atlantic/Stanley'                 => array(-1,  4,  0, 'FK', 'FKT',  'FKST', 'Falk'),
+    'Australia/ACT'                    => array( 1, 10,  0, 'AU', 'EST',  'EST',  'AN'),      // Australia/Sydney
+    'Australia/Adelaide'               => array( 1,  9, 30, 'AU', 'CST',  'CST',  'AS'),
+    'Australia/Brisbane'               => array( 1, 10,  0, 'AU', 'EST',  'EST',  'AQ'),
+    'Australia/Broken_Hill'            => array( 1,  9, 30, 'AU', 'CST',  'CST',  'AS'),
+    'Australia/Canberra'               => array( 1, 10,  0, 'AU', 'EST',  'EST',  'AN'),      // Australia/Sydney
+    'Australia/Darwin'                 => array( 1,  9, 30, 'AU', 'CST',  'CST',  'Aus'),
+    'Australia/Hobart'                 => array( 1, 10,  0, 'AU', 'EST',  'EST',  'AT'),
+    'Australia/LHI'                    => array( 1, 10, 30, 'AU', 'LHST', 'LHST', 'LH'),      // Australia/Lord_Howe
+    'Australia/Lindeman'               => array( 1, 10,  0, 'AU', 'EST',  'EST',  'Holiday'),
+    'Australia/Lord_Howe'              => array( 1, 10, 30, 'AU', 'LHST', 'LHST', 'LH'),
+    'Australia/Melbourne'              => array( 1, 10,  0, 'AU', 'EST',  'EST',  'AV'),
+    'Australia/NSW'                    => array( 1, 10,  0, 'AU', 'EST',  'EST',  'AN'),      // Australia/Sydney
+    'Australia/North'                  => array( 1,  9, 30, 'AU', 'CST',  'CST',  'Aus'),     // Australia/Darwin
+    'Australia/Perth'                  => array( 1,  8,  0, 'AU', 'WST',  '',     ''),
+    'Australia/Queensland'             => array( 1, 10,  0, 'AU', 'EST',  'EST',  'AQ'),      // Australia/Brisbane
+    'Australia/South'                  => array( 1,  9, 30, 'AU', 'CST',  'CST',  'AS'),      // Australia/Adelaide
+    'Australia/Sydney'                 => array( 1, 10,  0, 'AU', 'EST',  'EST',  'AN'),
+    'Australia/Tasmania'               => array( 1, 10,  0, 'AU', 'EST',  'EST',  'AT'),      // Australia/Hobart
+    'Australia/Victoria'               => array( 1, 10,  0, 'AU', 'EST',  'EST',  'AV'),      // Australia/Melbourne
+    'Australia/West'                   => array( 1,  8,  0, 'AU', 'WST',  '',     ''),        // Australia/Perth
+    'Australia/Yancowinna'             => array( 1,  9, 30, 'AU', 'CST',  'CST',  'AS'),      // Australia/Broken_Hill
+    'Brazil/Acre'                      => array(-1,  5,  0, 'BR', 'ACT',  '',     ''),        // America/Porto_Acre
+    'Brazil/DeNoronha'                 => array(-1,  2,  0, 'BR', 'FNT',  '',     ''),        // America/Noronha
+    'Brazil/East'                      => array(-1,  3,  0, 'BR', 'BRT', 'BRST',  'Brazil'),  // America/Sao_Paulo
+    'Brazil/West'                      => array(-1,  4,  0, 'BR', 'AMT',  '',     ''),        // America/Manaus
+    'CET'                              => array( 1,  1,  0, '',   '',     '',     ''),        // Central European Time (CET)
+    'CST6CDT'                          => array(-1,  6,  0, 'US', 'CST',  'CDT',  'US'),      // America/Chicago
+    'Canada/Atlantic'                  => array(-1,  4,  0, 'CA', 'AST',  'ADT',  'Canada'),  // America/Halifax
+    'Canada/Central'                   => array(-1,  6,  0, 'CA', 'CST',  'CDT',  'Winn'),    // America/Winnipeg
+    'Canada/East-Saskatchewan'         => array(-1,  6,  0, 'CA', 'CST',  '',     ''),        // America/Regina
+    'Canada/Eastern'                   => array(-1,  5,  0, 'CA', 'EST',  'EDT',  'Canada'),  // America/Toronto
+    'Canada/Mountain'                  => array(-1,  7,  0, 'CA', 'MST',  'MDT',  'Edm'),     // America/Edmonton
+    'Canada/Newfoundland'              => array(-1,  3, 30, 'CA', 'NST',  'NDT',  'StJohns'), // America/St_Johns
+    'Canada/Pacific'                   => array(-1,  8,  0, 'CA', 'PST',  'PDT',  'Vanc'),    // America/Vancouver
+    'Canada/Saskatchewan'              => array(-1,  6,  0, 'CA', 'CST',  '',     ''),        // America/Regina
+    'Canada/Yukon'                     => array(-1,  8,  0, 'CA', 'PST',  'PDT',  'NT_YK'),   // America/Whitehorse
+    'Chile/Continental'                => array(-1,  4,  0, 'CL', 'CLT',  'CLST', 'Chile'),   // America/Santiago
+    'Chile/EasterIsland'               => array(-1,  6,  0, 'CL', 'EAST', 'EASST','Chile'),   // Pacific/Easter
+    'Cuba'                             => array(-1,  5,  0, 'CU', 'CST',  'CDT',  'Cuba'),    // America/Havana
+    'EET'                              => array( 1,  2,  0, '',   'EET',  '',     ''),        // Eastern Europe Time (EET)
+    'EST'                              => array(-1,  5,  0, '',   'EST',  '',     ''),
+    'EST5EDT'                          => array(-1,  5,  0, 'US', 'EST',  'EDT',  'US'),      // America/New_York
+    'Egypt'                            => array( 1,  2,  0, 'EG', 'EET',  'EEST', 'Egypt'),   // Africa/Cairo
+    'Eire'                             => array( 1,  0,  0, 'IE', 'GMT',  'IST',  ''),        // Europe/Dublin
+    'Etc/GMT'                          => array( 1,  0,  0, '',   'GMT',  '',     ''),
+    'Etc/GMT+0'                        => array( 1,  0,  0, '',   'GMT',  '',     ''),        // Etc/GMT
+    'Etc/GMT+1'                        => array(-1,  1,  0, '',   'GMT+0','',     ''),
+    'Etc/GMT+10'                       => array(-1, 10,  0, '',   'GMT+10','',    ''),
+    'Etc/GMT+11'                       => array(-1, 11,  0, '',   'GMT+11','',    ''),
+    'Etc/GMT+12'                       => array(-1, 12,  0, '',   'GMT+12','',    ''),
+    'Etc/GMT+2'                        => array(-1,  2,  0, '',   'GMT+2','',     ''),
+    'Etc/GMT+3'                        => array(-1,  3,  0, '',   'GMT+3','',     ''),
+    'Etc/GMT+4'                        => array(-1,  4,  0, '',   'GMT+4','',     ''),
+    'Etc/GMT+5'                        => array(-1,  5,  0, '',   'GMT+5','',     ''),
+    'Etc/GMT+6'                        => array(-1,  6,  0, '',   'GMT+6','',     ''),
+    'Etc/GMT+7'                        => array(-1,  7,  0, '',   'GMT+7','',     ''),
+    'Etc/GMT+8'                        => array(-1,  8,  0, '',   'GMT+8','',     ''),
+    'Etc/GMT+9'                        => array(-1,  9,  0, '',   'GMT+9','',     ''),
+    'Etc/GMT-0'                        => array( 1,  0,  0, '',   'GMT',  '',     ''),        // Etc/GMT
+    'Etc/GMT-1'                        => array( 1,  1,  0, '',   'GMT-1','',     ''),
+    'Etc/GMT-10'                       => array( 1, 10,  0, '',   'GMT-10','',    ''),
+    'Etc/GMT-11'                       => array( 1, 11,  0, '',   'GMT-11','',    ''),
+    'Etc/GMT-12'                       => array( 1, 12,  0, '',   'GMT-12','',    ''),
+    'Etc/GMT-13'                       => array( 1, 13,  0, '',   'GMT-13','',    ''),
+    'Etc/GMT-14'                       => array( 1, 14,  0, '',   'GMT-14','',    ''),
+    'Etc/GMT-2'                        => array( 1,  2,  0, '',   'GMT-2','',     ''),
+    'Etc/GMT-3'                        => array( 1,  3,  0, '',   'GMT-3','',     ''),
+    'Etc/GMT-4'                        => array( 1,  4,  0, '',   'GMT-4','',     ''),
+    'Etc/GMT-5'                        => array( 1,  5,  0, '',   'GMT-5','',     ''),
+    'Etc/GMT-6'                        => array( 1,  6,  0, '',   'GMT-6','',     ''),
+    'Etc/GMT-7'                        => array( 1,  7,  0, '',   'GMT-7','',     ''),
+    'Etc/GMT-8'                        => array( 1,  8,  0, '',   'GMT-8','',     ''),
+    'Etc/GMT-9'                        => array( 1,  9,  0, '',   'GMT-9','',     ''),
+    'Etc/GMT0'                         => array( 1,  0,  0, '',   'GMT',  '',     ''),        // Etc/GMT
+    'Etc/Greenwich'                    => array( 1,  0,  0, '',   'GMT',  '',     ''),        // Etc/GMT
+    'Etc/UCT'                          => array( 1,  0,  0, '',   'GMT',  '',     ''),
+    'Etc/UTC'                          => array( 1,  0,  0, '',   'UTC',  '',     ''),
+    'Etc/Universal'                    => array( 1,  0,  0, '',   'UTC',  '',     ''),        // Etc/UTC
+    'Etc/Zulu'                         => array( 1,  0,  0, '',   'UTC',  '',     ''),        // Etc/UTC
+    'Europe/Amsterdam'                 => array( 1,  1,  0, 'NL', 'CET',  'CEST', 'EU'),
+    'Europe/Andorra'                   => array( 1,  1,  0, 'AD', 'CET',  'CEST', 'EU'),
+    'Europe/Athens'                    => array( 1,  2,  0, 'GR', 'EET',  'EEST', 'EU'),
+    'Europe/Belfast'                   => array( 1,  0,  0, 'GB', 'GMT',  'IST',  'EU'),
+    'Europe/Belgrade'                  => array( 1,  1,  0, 'CS', 'CET',  'CEST', 'EU'),
+    'Europe/Berlin'                    => array( 1,  1,  0, 'DE', 'CET',  'CEST', 'EU'),
+    'Europe/Bratislava'                => array( 1,  1,  0, 'SK', 'CET',  'CEST', 'EU'),      // Europe/Prague
+    'Europe/Brussels'                  => array( 1,  1,  0, 'BE', 'CET',  'CEST', 'EU'),
+    'Europe/Bucharest'                 => array( 1,  2,  0, 'RO', 'EET',  'EEST', 'EU'),
+    'Europe/Budapest'                  => array( 1,  1,  0, 'HU', 'CET',  'CEST', 'EU'),
+    'Europe/Chisinau'                  => array( 1,  2,  0, 'MD', 'EET',  'EEST', 'EU'),
+    'Europe/Copenhagen'                => array( 1,  1,  0, 'DK', 'WET',  'WEST', 'EU'),
+    'Europe/Dublin'                    => array( 1,  0,  0, 'IE', 'GMT',  'IST',  ''),
+    'Europe/Gibraltar'                 => array( 1,  1,  0, 'GI', 'CET',  'CEST', 'EU'),
+    'Europe/Helsinki'                  => array( 1,  2,  0, 'FI', 'EET',  'EEST', 'EU'),
+    'Europe/Istanbul'                  => array( 1,  2,  0, 'TR', 'EET',  'EEST', 'EU'),
+    'Europe/Kaliningrad'               => array( 1,  2,  0, 'RU', 'EET',  'EEST', 'Russia'),
+    'Europe/Kiev'                      => array( 1,  2,  0, 'UA', 'EET',  'EEST', 'EU'),
+    'Europe/Lisbon'                    => array( 1,  0,  0, 'PT', 'WET',  'WEST', 'EU'),
+    'Europe/Ljubljana'                 => array( 1,  1,  0, 'SI', 'CET',  'CEST', 'EU'),      // Europe/Belgrade
+    'Europe/London'                    => array( 1,  0,  0, 'GB', 'GMT',  'BST',  'EU'),
+    'Europe/Luxembourg'                => array( 1,  1,  0, 'LU', 'CET',  'CEST', 'EU'),
+    'Europe/Madrid'                    => array( 1,  1,  0, 'ES', 'CET',  'CEST', 'EU'),
+    'Europe/Malta'                     => array( 1,  1,  0, 'MT', 'CET',  'CEST', 'EU'),
+    'Europe/Mariehamn'                 => array( 1,  2,  0, 'TR', 'EET',  'EEST', 'EU'),      // Europe/Istanbul
+    'Europe/Minsk'                     => array( 1,  2,  0, 'BY', 'EET',  'EEST', 'Russia'),
+    'Europe/Monaco'                    => array( 1,  1,  0, 'MC', 'CET',  'CEST', 'EU'),
+    'Europe/Moscow'                    => array( 1,  3,  0, 'RU', 'MSK',  'MSD',  'Russia'),
+    'Europe/Nicosia'                   => array( 1,  2,  0, 'CY', 'EET',  'EEST', 'EUAsia'),  // Asia/Nicosia
+    'Europe/Oslo'                      => array( 1,  1,  0, 'NO', 'CET',  'CEST', 'EU'),
+    'Europe/Paris'                     => array( 1,  1,  0, 'FR', 'CET',  'CEST', 'EU'),
+    'Europe/Prague'                    => array( 1,  1,  0, 'CZ', 'CET',  'CEST', 'EU'),
+    'Europe/Riga'                      => array( 1,  2,  0, 'LV', 'EET',  'EEST', 'EU'),
+    'Europe/Rome'                      => array( 1,  1,  0, 'IT', 'CET',  'CEST', 'EU'),
+    'Europe/Samara'                    => array( 1,  4,  0, 'RU', 'SAMT', 'SAMST','Russia'),
+    'Europe/San_Marino'                => array( 1,  1,  0, 'SM', 'CET',  'CEST', 'EU'),      // Europe/Rome
+    'Europe/Sarajevo'                  => array( 1,  1,  0, 'BA', 'CET',  'CEST', 'EU'),      // Europe/Belgrade
+    'Europe/Simferopol'                => array( 1,  2,  0, 'UA', 'EET',  'EEST', 'EU'),
+    'Europe/Skopje'                    => array( 1,  1,  0, 'MK', 'CET',  'CEST', 'EU'),      // Europe/Belgrade
+    'Europe/Sofia'                     => array( 1,  2,  0, 'BG', 'EET',  'EEST', 'EU'),
+    'Europe/Stockholm'                 => array( 1,  1,  0, 'SE', 'CET',  'CEST', 'EU'),
+    'Europe/Tallinn'                   => array( 1,  2,  0, 'EE', 'EET',  'EEST', 'EU'),
+    'Europe/Tirane'                    => array( 1,  1,  0, 'AL', 'CET',  'CEST', 'EU'),
+    'Europe/Tiraspol'                  => array( 1,  2,  0, 'MD', 'EET',  'EEST', 'EU'),      // Europe/Chisinau
+    'Europe/Uzhgorod'                  => array( 1,  2,  0, 'UA', 'EET',  'EEST', 'EU'),
+    'Europe/Vaduz'                     => array( 1,  1,  0, 'LI', 'CET',  'CEST', 'EU'),
+    'Europe/Vatican'                   => array( 1,  1,  0, 'VA', 'CET',  'CEST', 'EU'),      // Europe/Rome
+    'Europe/Vienna'                    => array( 1,  1,  0, 'AT', 'CET',  'CEST', 'EU'),
+    'Europe/Vilnius'                   => array( 1,  2,  0, 'LT', 'EET',  'EEST', 'EU'),
+    'Europe/Warsaw'                    => array( 1,  1,  0, 'PL', 'CET',  'CEST', 'EU'),
+    'Europe/Zagreb'                    => array( 1,  1,  0, 'HR', 'CET',  'CEST', 'EU'),      // Europe/Belgrade
+    'Europe/Zaporozhye'                => array( 1,  2,  0, 'UA', 'EET',  'EEST', 'EU'),
+    'Europe/Zurich'                    => array( 1,  1,  0, 'CH', 'CET',  'CEST', 'EU'),
+    'Factory'                          => array( 1,  0,  0, '',   '',     '',     ''),
+    'GB'                               => array( 1,  0,  0, 'GB', 'GMT',  'BST',  'EU'),      // Europe/London
+    'GB-Eire'                          => array( 1,  0,  0, 'GB', 'GMT',  'BST',  'EU'),      // Europe/London
+    'GMT'                              => array( 1,  0,  0, '',   'GMT',  '',     ''),        // Etc/GMT
+    'GMT+0'                            => array( 1,  0,  0, '',   'GMT',  '',     ''),        // Etc/GMT+0
+    'GMT-0'                            => array( 1,  0,  0, '',   'GMT',  '',     ''),        // Etc/GMT-0
+    'GMT0'                             => array( 1,  0,  0, '',   'GMT',  '',     ''),        // Etc/GMT0
+    'Greenwich'                        => array( 1,  0,  0, '',   'GMT',  '',     ''),        // Etc/Greenwich
+    'HST'                              => array(-1, 10,  0, 'US', 'HST',  '',     ''),
+    'Hongkong'                         => array( 1,  8,  0, 'HK', 'HKT',  '',     'HK'),      // Asia/Hong_Kong
+    'Iceland'                          => array( 1,  0,  0, 'IS', 'GMT',  '',     ''),        // Atlantic/Reykjavik
+    'Indian/Antananarivo'              => array( 1,  3,  0, 'MG', 'EAT',  '',     ''),
+    'Indian/Chagos'                    => array( 1,  6,  0, 'IO', 'IOT',  '',     ''),
+    'Indian/Christmas'                 => array( 1,  7,  0, 'CX', 'CXT',  '',     ''),
+    'Indian/Cocos'                     => array( 1,  6, 30, 'CC', 'CCT',  '',     ''),
+    'Indian/Comoro'                    => array( 1,  3,  0, 'KM', 'EAT',  '',     ''),
+    'Indian/Kerguelen'                 => array( 1,  5,  0, 'TF', 'TFT',  '',     ''),
+    'Indian/Mahe'                      => array( 1,  4,  0, 'SC', 'SCT',  '',     ''),
+    'Indian/Maldives'                  => array( 1,  5,  0, 'MV', 'MVT',  '',     ''),
+    'Indian/Mauritius'                 => array( 1,  4,  0, 'MU', 'MUT',  '',     ''),
+    'Indian/Mayotte'                   => array( 1,  3,  0, 'YT', 'EAT',  '',     ''),
+    'Indian/Reunion'                   => array( 1,  4,  0, 'RE', 'RET',  '',     ''),
+    'Iran'                             => array( 1,  3, 30, 'IR', 'IRST', 'IRDT', 'Iran'),    // Asia/Tehran
+    'Israel'                           => array( 1,  2,  0, 'IL', 'IST',  'IDT',  'Zion'),    // Asia/Jerusalem
+    'Jamaica'                          => array(-1,  5,  0, 'JM', 'EST',  '',     ''),        // America/Jamaica
+    'Japan'                            => array( 1,  9,  0, 'JP', 'JST',  '',     ''),        // Asia/Tokyo
+    'Kwajalein'                        => array( 1, 12,  0, 'MH', 'MHT',  '',     ''),        // Pacific/Kwajalein
+    'Libya'                            => array( 1,  2,  0, 'LY', 'EET',  '',     ''),        // Africa/Tripoli
+    'MET'                              => array( 1,  1,  0, '',   'MET',  'MEST', 'C-Eur'),
+    'MST'                              => array(-1,  7,  0, 'US', 'MST',  '',     ''),        // America/Phoenix
+    'MST7MDT'                          => array(-1,  7,  0, 'US', 'MST',  'MDT',  'US'),      // America/Denver
+    'Mexico/BajaNorte'                 => array(-1,  8,  0, 'MX', 'PST',  'PDT',  'Mexico'),  // America/Tijuana
+    'Mexico/BajaSur'                   => array(-1,  7,  0, 'MX', 'MST',  'MDT',  'Mexico'),  // America/Mazatlan
+    'Mexico/General'                   => array(-1,  6,  0, 'MX', 'CST',  'CDT',  'Mexico'),  // America/Mexico_City
+    'Mideast/Riyadh87'                 => array( 1,  3,  7, '',   '',     '',     ''),        // 3:07:04
+    'Mideast/Riyadh88'                 => array( 1,  3,  7, '',   '',     '',     ''),        // 3:07:04
+    'Mideast/Riyadh89'                 => array( 1,  3,  7, '',   '',     '',     ''),        // 3:07:04
+    'NZ'                               => array( 1, 12,  0, 'NZ', 'NZST', 'NZDT', 'NZ'),      // Pacific/Auckland
+    'NZ-CHAT'                          => array( 1, 12, 45, 'NZ', 'CHAST','CHADT','Chatham'), // Pacific/Chatham
+    'Navajo'                           => array(-1,  7,  0, 'US', 'MST',  'MDT',  'US'),      // America/Shiprock
+    'PRC'                              => array( 1,  8,  0, 'CN', 'CST',  '',     'PRC'),     // Asia/Shanghai
+    'PST8PDT'                          => array(-1,  8,  0, 'US', 'PST',  'PDT',  'US'),      // America/Los_Angeles
+    'Pacific/Apia'                     => array(-1, 11,  0, 'WS', 'WST',  '',     ''),
+    'Pacific/Auckland'                 => array( 1, 12,  0, 'NZ', 'NZST', 'NZDT', 'NZ'),
+    'Pacific/Chatham'                  => array( 1, 12, 45, 'NZ', 'CHAST','CHADT','Chatham'),
+    'Pacific/Easter'                   => array(-1,  6,  0, 'CL', 'EAST', 'EASST','Chile'),
+    'Pacific/Efate'                    => array( 1, 11,  0, 'VU', 'VUT',  '',     'Vanuatu'),
+    'Pacific/Enderbury'                => array( 1, 13,  0, 'KI', 'PHOT', '',     ''),
+    'Pacific/Fakaofo'                  => array(-1, 10,  0, 'TK', 'TKT',  '',     ''),
+    'Pacific/Fiji'                     => array( 1, 12,  0, 'FJ', 'FJT',  '',     'Fiji'),
+    'Pacific/Funafuti'                 => array( 1, 12,  0, 'TV', 'TVT',  '',     ''),
+    'Pacific/Galapagos'                => array(-1,  6,  0, 'EC', 'GALT', '',     ''),
+    'Pacific/Gambier'                  => array(-1,  9,  0, 'PF', 'GAMT', '',     ''),
+    'Pacific/Guadalcanal'              => array( 1, 11,  0, 'SB', 'SBT',  '',     ''),
+    'Pacific/Guam'                     => array( 1, 10,  0, 'GU', 'ChST', '',     ''),
+    'Pacific/Honolulu'                 => array(-1, 10,  0, 'US', 'HST',  '',     ''),
+    'Pacific/Johnston'                 => array(-1, 10,  0, 'UM', 'HST',  '',     ''),
+    'Pacific/Kiritimati'               => array( 1, 14,  0, 'KI', 'LINT', '',     ''),
+    'Pacific/Kosrae'                   => array( 1, 11,  0, 'FM', 'KOST', '',     ''),
+    'Pacific/Kwajalein'                => array( 1, 12,  0, 'MH', 'MHT',  '',     ''),
+    'Pacific/Majuro'                   => array( 1, 12,  0, 'MH', 'MHT',  '',     ''),
+    'Pacific/Marquesas'                => array(-1,  9, 30, 'PF', 'MART', '',     ''),
+    'Pacific/Midway'                   => array(-1, 11,  0, 'UM', 'SST',  '',     ''),
+    'Pacific/Nauru'                    => array( 1, 12,  0, 'NR', 'NRT',  '',     ''),
+    'Pacific/Niue'                     => array(-1, 11,  0, 'NU', 'NUT',  '',     ''),
+    'Pacific/Norfolk'                  => array( 1, 11, 30, 'NF', 'NFT',  '',     ''),
+    'Pacific/Noumea'                   => array( 1, 11,  0, 'NC', 'NCT',  '',     'NC'),
+    'Pacific/Pago_Pago'                => array(-1, 11,  0, 'AS', 'SST',  '',     ''),
+    'Pacific/Palau'                    => array( 1,  9,  0, 'PW', 'PWT',  '',     ''),
+    'Pacific/Pitcairn'                 => array(-1,  8,  0, 'PN', 'PST',  '',     ''),
+    'Pacific/Ponape'                   => array( 1, 11,  0, 'FM', 'PONT', '',     ''),
+    'Pacific/Port_Moresby'             => array( 1, 10,  0, 'PG', 'PGT',  '',     ''),
+    'Pacific/Rarotonga'                => array(-1, 10,  0, 'CK', 'CKT',  '',     'Cook'),
+    'Pacific/Saipan'                   => array( 1, 10,  0, 'MP', 'ChST', '',     ''),
+    'Pacific/Samoa'                    => array(-1, 11,  0, 'AS', 'SST',  '',     ''),       // Pacific/Pago_Pago
+    'Pacific/Tahiti'                   => array(-1, 10,  0, 'PF', 'TAHT', '',     ''),
+    'Pacific/Tarawa'                   => array( 1, 12,  0, 'KI', 'GILT', '',     ''),
+    'Pacific/Tongatapu'                => array( 1, 13,  0, 'TO', 'TOT',  '',     'Tonga'),
+    'Pacific/Truk'                     => array( 1, 10,  0, 'FM', 'TRUT', '',     ''),
+    'Pacific/Wake'                     => array( 1, 12,  0, 'UM', 'WAKT', '',     ''),
+    'Pacific/Wallis'                   => array( 1, 12,  0, 'WF', 'WFT',  '',     ''),
+    'Pacific/Yap'                      => array( 1, 10,  0, 'FM', 'YAPT', '',     ''),
+    'Poland'                           => array( 1,  1,  0, 'PL', 'CET',  'CEST', 'EU'),     // Europe/Warsaw
+    'Portugal'                         => array( 1,  0,  0, 'PT', 'WET',  'WEST', 'EU'),     // Europe/Lisbon
+    'ROC'                              => array( 1,  8,  0, 'TW', 'CST',  '',     'Taiwan'), // Asia/Taipei
+    'ROK'                              => array( 1,  9,  0, 'KR', 'KST',  '',     'ROK'),    // Asia/Seoul
+    'Singapore'                        => array( 1,  8,  0, 'SG', 'SGT',  '',     ''),       // Asia/Singapore
+    'SystemV/AST4'                     => array(-1,  4,  0, 'PR', 'AST',  '',     ''),       // America/Puerto_Rico
+    'SystemV/AST4ADT'                  => array(-1,  4,  0, 'CA', 'AST',  'ADT',  'Canada'), // America/Halifax
+    'SystemV/CST6'                     => array(-1,  6,  0, 'CA', 'CST',  '',     ''),       // America/Regina
+    'SystemV/CST6CDT'                  => array(-1,  6,  0, 'US', 'CST',  'CDT',  'US'),     // America/Chicago
+    'SystemV/EST5'                     => array(-1,  5,  0, 'US', 'EST',  '',     ''),       // America/Indianapolis
+    'SystemV/EST5EDT'                  => array(-1,  5,  0, 'US', 'EST',  'EDT',  'US'),     // America/New_York
+    'SystemV/HST10'                    => array(-1, 10,  0, 'US', 'HST',  '',     ''),       // Pacific/Honolulu
+    'SystemV/MST7'                     => array(-1,  7,  0, 'US', 'MST',  '',     ''),       // America/Phoenix
+    'SystemV/MST7MDT'                  => array(-1,  7,  0, 'US', 'MST',  'MDT',  'US'),     // America/Denver
+    'SystemV/PST8'                     => array(-1,  8,  0, 'PN', 'PST',  '',     ''),       // Pacific/Pitcairn
+    'SystemV/PST8PDT'                  => array(-1,  8,  0, 'US', 'PST',  'PDT',  'US'),     // America/Los_Angeles
+    'SystemV/YST9'                     => array(-1,  9,  0, 'PF', 'GAMT', '',     ''),       // Pacific/Gambier
+    'SystemV/YST9YDT'                  => array(-1,  9,  0, 'US', 'AKST', 'AKDT', 'US'),     // America/Anchorage
+    'Turkey'                           => array( 1,  2,  0, 'TR', 'EET',  'EEST', 'EU'),     // Europe/Istanbul
+    'UCT'                              => array( 1,  0,  0, '',   '',     '',     ''),       // Etc/UCT
+    'US/Alaska'                        => array(-1,  9,  0, 'US', 'AKST', 'AKDT', 'US'),     // America/Anchorage
+    'US/Aleutian'                      => array(-1, 10,  0, 'US', 'HAST', 'HADT', 'US'),     // America/Adak
+    'US/Arizona'                       => array(-1,  7,  0, 'US', 'MST',  '',     ''),       // America/Phoenix
+    'US/Central'                       => array(-1,  6,  0, 'US', 'CST',  'CDT',  'US'),     // America/Chicago
+    'US/East-Indiana'                  => array(-1,  5,  0, 'US', 'EST',  '',     ''),       // America/Indianapolis
+    'US/Eastern'                       => array(-1,  5,  0, 'US', 'EST',  'EDT',  'US'),     // America/New_York
+    'US/Hawaii'                        => array(-1, 10,  0, 'US', 'HST',  '',     ''),       // Pacific/Honolulu
+    'US/Indiana-Starke'                => array(-1,  5,  0, 'US', 'EST',  '',     ''),       // America/Indiana/Knox
+    'US/Michigan'                      => array(-1,  5,  0, 'US', 'EST',  'EDT',  'US'),     // America/Detroit
+    'US/Mountain'                      => array(-1,  7,  0, 'US', 'MST',  'MDT',  'US'),     // America/Denver
+    'US/Pacific'                       => array(-1,  8,  0, 'US', 'PST',  'PDT',  'US'),     // America/Los_Angeles
+    'US/Pacific-New'                   => array(-1,  8,  0, 'US', 'PST',  'PDT',  'US'),     // America/Los_Angeles
+    'US/Samoa'                         => array(-1, 11,  0, 'AS', 'SST',  '',     ''),       // Pacific/Pago_Pago
+    'UTC'                              => array( 1,  0,  0, '',   'UTC',  '',     ''),       // Etc/UTC
+    'Universal'                        => array( 1,  0,  0, '',   'UTC',  '',     ''),       // Etc/Universal
+    'W-SU'                             => array( 1,  3,  0, 'RU', 'MSK',  'MSD',  'Russia'), // Europe/Moscow
+    'WET'                              => array( 1,  0,  0, '',   'WET',  '',     ''),       // WET:Western Europe
+    'Zulu'                             => array( 1,  0,  0, '',   'UTC',  '',     ''),       // Etc/Zulu
+  );
 
-	function timezone($x='')
+  var $dst = array(
+    //    Rule         Start  End  MM, Week,       H,M   +M, S/D
+    array('AN',        1996, 9999,  5, 'lastSun',  2, 0,  0, ''),
+    array('AN',        2001, 9999, 10, 'lastSun',  2, 0, 60, ''),
+    array('AQ',        1990, 1992,  5,  'Sun>=1',  2, 0,  0, ''), // s
+    array('AQ',        1989, 1991, 10, 'lastSun',  2, 0, 60, ''), // s
+    array('AS',        1995, 9999,  5, 'lastSun',  2, 0,  0, ''), // s
+    array('AS',        1987, 9999, 10, 'lastSun',  2, 0, 60, ''), // s
+    array('AT',        1991, 9999,  5, 'lastSun',  2, 0,  0, ''), // s
+    array('AT',        2001, 9999, 10,  'Sun>=1',  2, 0, 60, ''), // s
+    array('Aus',       1943, 1944,  5, 'lastSun',  2, 0,  0, ''),
+    array('Aus',       1943, 1943, 10,         3,  2, 0, 60, ''),
+    array('AV',        1995, 9999,  5, 'lastSun',  2, 0,  0, ''), // s
+    array('AV',        2001, 9999, 10, 'lastSun',  2, 0, 60, ''), // s
+    array('Azer',      1997, 9999,  3, 'lastSun',  1, 0, 60, 'S'),
+    array('Azer',      1997, 9999, 10, 'lastSun',  1, 0,  0, ''),
+    array('Barb',      1978, 1980,  4, 'Sun>=15',  2, 0, 60, 'D'),
+    array('Barb',      1980, 1980,  9,        25,  2, 0,  0, 'S'),
+    array('Bahamas',   1964, 9999, 10, 'lastSun',  2, 0,  0, 'S'),
+    array('Bahamas',   1987, 9999,  4,  'Sun>=1',  2, 0, 60, 'D'),
+    array('Belize',    1982, 1982, 12,        18,  0, 0, 60, 'D'),
+    array('Belize',    1983, 1983,  2,        12,  0, 0,  0, 'S'),
+    array('Brazil',    2001, 9999,  2, 'Sun>=15',  0, 0,  0, ''),
+    array('Brazil',    2005, 9999, 10, 'Sun>=15',  0, 0, 60, 'S'),
+    array('Canada',    1974, 9999, 10, 'lastSun',  2, 0,  0, 'S'),
+    array('Canada',    1987, 9999,  4,  'Sun>=1',  2, 0, 60, 'D'),
+    array('Chatham',   1990, 9999,  3, 'Sun>=15',  2,45,  0, 'S'), // s
+    array('Chatham',   1990, 9999, 10,  'Sun>=1',  2,45, 60, 'D'), // s
+    array('ChileAQ',   1999, 9999, 10,  'Sun>=9',  0, 0, 60, 'S'),
+    array('ChileAQ',   2000, 9999,  3,  'Sun>=9',  0, 0,  0, ''),
+    array('Chile',     1999, 9999, 10,  'Sun>=9',  4, 0, 60, 'S'),
+    array('Chile',     2000, 9999,  3,  'Sun>=9',  3, 0,  0, ''),
+    array('CR',        1991, 1992,  1, 'Sat>=15',  0, 0, 60, 'D'),
+    array('CR',        1992, 1992,  3,        15,  0, 0,  0, 'S'),
+    array('CO',        1992, 1992,  5,         2,  0, 0, 60, 'S'),
+    array('CO',        1992, 1992, 12,        31,  0, 0,  0, ''),
+    array('Cook',      1979, 1991,  5,  'Sun>=1',  0, 0,  0, ''),
+    array('Cook',      1979, 1990, 10, 'lastSun',  0, 0, 30, 'HS'),
+    array('Cuba',      1998, 9999, 10, 'lastSun',  0, 0,  0, 'S'), // s
+    array('Cuba',      2000, 9999,  4,  'Sun>=1',  0, 0, 60, 'D'), // s
+    array('C-Eur',     1981, 9999,  3, 'lastSun',  2, 0, 60, 'S'), // s
+    array('C-Eur',     1996, 9999, 10, 'lastSun',  2, 0,  0, ''), // s
+    array('Egypt',     1995, 9999,  4, 'lastFri',  0, 0, 60, 'S'), // s
+    array('Egypt',     1995, 9999,  9, 'lastThu', 23,0, 0, ''), // s
+    array('EU',        1981, 9999,  3, 'lastSun',  1, 0, 60, 'S'), // u
+    array('EU',        1996, 9999, 10, 'lastSun',  1, 0,  0, ''), // u
+    array('Edm',       1972, 9999, 10, 'lastSun',  2, 0,  0, 'S'),
+    array('Edm',       1987, 9999,  4,  'Sun>=1',  2, 0, 60, 'D'),
+    array('EUAsia',    1981, 9999,  3, 'lastSun',  1, 0, 60, 'S'), // u
+    array('EUAsia',    1996, 9999, 10, 'lastSun',  1, 0,  0, ''),  // u
+    array('Falk',      2001, 9999,  4, 'Sun>=15',  2, 0,  0, ''),
+    array('Falk',      2001, 9999,  9,  'Sun>=1',  2, 0, 60, 'S'),
+    array('Fiji',      1998, 1999, 11,  'Sun>=1',  2, 0, 60, 'S'),
+    array('Fiji',      1999, 2000,  2, 'lastSun',  3, 0,  0, ''),
+    array('Guat',      1991, 1991,  3,        23,  0, 0, 60, 'D'),
+    array('Guat',      1991, 1991,  9,         7,  0, 0,  0, 'S'),
+    array('Haiti',     1988, 1997,  4,  'Sun>=1',  1, 0, 60, 'D'), // s
+    array('Haiti',     1988, 1997, 10, 'lastSun',  1, 0,  0, 'S'), // s
+    array('HK',        1979, 1980,  5,  'Sun>=8',  3,30, 60, 'S'),
+    array('HK',        1979, 1980, 10, 'Sun>=16',  3,30,  0, ''),
+    array('Holiday',   1992, 1993, 10, 'lastSun',  2, 0, 60, ''),
+    array('Holiday',   1993, 1994,  5,  'Sun>=1',  2, 0,  0, ''),
+    array('Iraq',      1991, 9999,  4,         1,  3, 0, 60, 'D'), // s
+    array('Iraq',      1991, 9999, 10,         1,  3, 0,  0, 'S'), // s
+    array('Iran',      2005, 2007,  3,        22,  0, 0, 60, 'D'),
+    array('Iran',      2005, 2007,  9,        22,  0, 0,  0, 'S'),
+    array('Iran',      2008, 2008,  3,        21,  0, 0, 60, 'D'),
+    array('Iran',      2008, 2008,  9,        21,  0, 0,  0, 'S'),
+    array('Iran',      2009, 2011,  3,        22,  0, 0, 60, 'D'),
+    array('Iran',      2009, 2011,  9,        22,  0, 0,  0, 'S'),
+    array('Iran',      2012, 2012,  3,        21,  0, 0, 60, 'D'),
+    array('Iran',      2012, 2012,  9,        21,  0, 0,  0, 'S'),
+    array('Iran',      2013, 2015,  3,        22,  0, 0, 60, 'D'),
+    array('Iran',      2013, 2015,  9,        22,  0, 0,  0, 'S'),
+    array('Iran',      2016, 2016,  3,        21,  0, 0, 60, 'D'),
+    array('Iran',      2016, 2016,  9,        21,  0, 0,  0, 'S'),
+    array('Iran',      2017, 2019,  3,        22,  0, 0, 60, 'D'),
+    array('Iran',      2017, 2019,  9,        22,  0, 0,  0, 'S'),
+    array('Iran',      2020, 2020,  3,        21,  0, 0, 60, 'D'),
+    array('Iran',      2020, 2020,  9,        21,  0, 0,  0, 'S'),
+    array('Jordan',    1999, 9999,  9, 'lastThu',  0, 0,  0, ''),  // s
+    array('Jordan',    2000, 9999,  3, 'lastThu',  0, 0, 60, 'S'), // s
+    array('Kirgiz',    1997, 9999,  3, 'lastSun',  2,30, 60, 'S'),
+    array('Kirgiz',    1997, 9999, 10, 'lastSun',  2,30,  0, ''),
+    array('Lebanon',   1993, 9999,  3, 'lastSun',  0, 0, 60, 'S'),
+    array('Lebanon',   1999, 9999, 10, 'lastSun',  0, 0,  0, ''),
+    array('LH',        1996, 9999,  5, 'lastSun',  2, 0,  0, ''),
+    array('LH',        2001, 9999, 10, 'lastSun',  2, 0, 30, ''),
+    array('Mexico',    2002, 9999,  4,  'Sun>=1',  2, 0, 60, 'D'),
+    array('Mexico',    2002, 9999, 10, 'lastSun',  2, 0,  0, 'S'),
+    array('Mongol',    2001, 9999,  9, 'lastSat',  2, 0,  0, ''),
+    array('Mongol',    2002, 9999,  3, 'lastSat',  2, 0, 60, 'S'),
+    array('Namibia',   1994, 9999,  9,  'Sun>=1',  2, 0, 60, 'S'),
+    array('Namibia',   1995, 9999,  4,  'Sun>=1',  2, 0,  0, ''),
+    array('NC',        1996, 1996, 12,         1,  2, 0, 60, 'S'),
+    array('NC',        1997, 1997,  3,         2,  2, 0,  0, ''),
+    array('NT_YK',     1980, 9999, 10, 'lastSun',  2, 0,  0, 'S'),
+    array('NT_YK',     1987, 9999,  4,  'Sun>=1',  2, 0, 60, 'D'),
+    array('NZAQ',      1990, 9999, 10,  'Sun>=1',  2, 0, 60, 'D'),
+    array('NZAQ',      1990, 9999,  3, 'Sun>=15',  2, 0,  0, 'S'),
+    array('NZ',        1990, 9999,  3, 'Sun>=15',  2, 0,  0, 'S'), // s
+    array('NZ',        1990, 9999, 10,  'Sun>=1',  2, 0, 60, 'D'), // s
+    array('Pakistan',  2002, 2002,  4,  'Sun>=2',  0, 1, 60, 'S'),
+    array('Pakistan',  2002, 2002, 10,  'Sun>=2',  0, 1,  0, ''),
+    array('Para',      2002, 9999,  4,  'Sun>=1',  0, 0,  0, ''),
+    array('Para',      2002, 9999,  9,  'Sun>=1',  0, 0, 60, 'S'),
+    array('Peru',      1994, 1994,  1,         1,  0, 0, 60, 'S'),
+    array('Peru',      1994, 1994,  4,         1,  0, 0,  0, ''),
+    array('PRC',       1986, 1991,  9, 'Sun>=11',  0, 0,  0, 'S'),
+    array('PRC',       1987, 1991,  4, 'Sun>=10',  0, 0, 60, 'D'),
+    array('Palestine', 1999, 9999,  4, 'Fri>=15',  0, 0, 60, 'S'),
+    array('Palestine', 1999, 9999, 10, 'Fri>=15',  0, 0,  0, ''),
+    array('Phil',      1978, 1978,  3,        22,  0, 0, 60, 'S'),
+    array('Phil',      1978, 1978,  9,        21,  0, 0,  0, ''),
+    array('RussiaAsia',1993, 9999,  3, 'lastSun',  2, 0, 60, 'S'), // s
+    array('RussiaAsia',1996, 9999, 10, 'lastSun',  2, 0,  0, ''),  // s
+    array('Russia',    1993, 9999,  3, 'lastSun',  2, 0, 60, 'S'), // s
+    array('Russia',    1996, 9999, 10, 'lastSun',  2, 0,  0, ''),  // s
+    array('ROK',       1987, 1988,  5, 'Sun<=14',  0, 0, 60, 'D'),
+    array('ROK',       1987, 1988, 10, 'Sun<=14',  0, 0,  0, 'S'),
+    array('Salv',      1987, 1988,  5,  'Sun>=1',  0, 0, 60, 'D'),
+    array('Salv',      1987, 1988,  9, 'lastSun',  0, 0,  0, 'S'),
+    array('SA',        1942, 1943,  9, 'Sun>=15',  2, 0, 60, ''),
+    array('SA',        1943, 1944,  3, 'Sun>=15',  2, 0,  0, ''),
+    array('SL',        1957, 1962,  6,         1,  0, 0, 60, 'SLST'),
+    array('SL',        1957, 1962,  9,         1,  0, 0,  0, 'GMT'),
+    array('StJohns',   1987, 9999, 10, 'lastSun',  0, 1,  0, 'S'),
+    array('StJohns',   1989, 9999,  4,  'Sun>=1',  0, 1, 60, 'D'),
+    array('Syria',     1994, 9999, 10,         1,  0, 0,  0, ''),
+    array('Syria',     1999, 9999,  4,         1,  0, 0, 60, 'S'),
+    array('TC',        1979, 9999, 10, 'lastSun',  0, 0,  0, 'S'),
+    array('TC',        1987, 9999,  4,  'Sun>=1',  0, 0, 60, 'D'),
+    array('Tunisia',   1988, 1990,  9, 'lastSun',  0, 0,  0, ''),  // s
+    array('Tunisia',   1990, 1990,  5,         1,  0, 0, 60, 'S'), // s
+    array('Thule',     1993, 9999,  4,  'Sun>=1',  2, 0, 60, 'D'),
+    array('Thule',     1993, 9999, 10, 'lastSun',  2, 0,  0, 'S'),
+    array('Taiwan',    1980, 1980,  6,        30,  0, 0, 60, 'D'),
+    array('Taiwan',    1980, 1980,  9,        30,  0, 0,  0, 'S'),
+    array('Tonga',     2001, 2002,  1, 'lastSun',  2, 0,  0, ''),
+    array('Tonga',     2000, 2001, 11,  'Sun>=1',  2, 0, 60, 'S'),
+    array('US',        1967, 9999, 10, 'lastSun',  2, 0,  0, 'S'),
+    array('US',        1987, 9999,  4,  'Sun>=1',  2, 0, 60, 'D'),
+    array('Uruguay',   2004, 2004,  9, 'Sun>=15',  0, 0, 60, 'S'),
+    array('Uruguay',   2005, 2005,  3,  'Sun>=8',  0, 0,  0, ''),
+    array('Vanc',      1962, 9999, 10, 'lastSun',  2, 0,  0, 'S'),
+    array('Vanc',      1987, 9999,  4,  'Sun>=1',  2, 0, 60, 'D'),
+    array('Vanuatu',   1992, 1993,  1, 'Sun>=23',  0, 0,  0, ''),
+    array('Vanuatu',   1992, 1992, 10, 'Sun>=23',  0, 0, 60, 'S'),
+    array('Winn',      1987, 9999,  4,  'Sun>=1',  2, 0, 60, 'D'),
+    array('Winn',      1987, 9999, 10, 'lastSun',  2, 0,  0, 'S'), // s
+    array('Zion',      2005, 9999,  4,         1,  1, 0, 60, 'D'),
+    array('Zion',      2005, 9999, 10,         1,  1, 0,  0, 'S'),
+  );
+
+	function set_country($x='')
 	{
 		$this->country = strtoupper( $x );
+		$this->tz_country = array();
+		foreach($this->tz as $_key => $_tz) {
+			if ($_tz[3] == $this->country) $this->tz_country[$_key] = $_tz;
+		}
 	}
 
 	function get_zone()
 	{
+		// [3]JP -> [4]JST
 		foreach($this->tz as $_key => $_tz) {
 			if ($_tz[3] == $this->country) {
 				if (! empty($_tz[4])) return $_tz[4];
@@ -607,13 +774,15 @@ class timezone
 
 	function get_zonetime($dst=0)
 	{
-		foreach($this->tz as $_key => $_tz) {
-			if ($_tz[3] == $this->country) {
-				$_dst = ($dst && $_tz[5]) ? (3600 * $_tz[0]) : 0;
-				$h = $_tz[1] * 3600;
-				$i = $_tz[2] * 60;
-				return ($h + $i + $_dst) * $_tz[0];
-			}
+		foreach($this->tz_country as $_key => $_tz) {
+			// FIXME: DST
+			// Key - TimeZone Name => 0: OFFSET, 1:HOUR, 2:MINUTE, 3:ISO3166
+			//                        4: ABBREV, 5:DAYLIGHT, 6:RULE(DST)
+			// 'Mexico/General' => array(-1,  6,  0, 'MX', 'CST','CDT','Mexico'),
+			$_dst = ($dst) ? (3600 * $_tz[0]) : 0;
+			$h = $_tz[1] * 3600;
+			$i = $_tz[2] * 60;
+			return ($h + $i + $_dst) * $_tz[0];
 		}
 		return 0;
 	}
@@ -626,14 +795,5 @@ class timezone
 
 
 }
-
-/*
-$obj = new timezone('TW');
-// $obj = new timezone('LT');
-// $obj = new timezone('TC');
-
-print "ZONE=" . $obj->get_zone() ."\n";
-print "ZONETIME=" . $obj->get_zonetime(1) . "\n";
-*/
 
 ?>

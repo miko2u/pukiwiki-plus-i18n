@@ -52,7 +52,9 @@ if ($die) die_message(nl2br("\n\n" . $die));
 
 /// FIXME
 set_ui_language();
-set_timezone();
+list($zone, $zonetime) = set_timezone();
+define('ZONE', $zone);
+define('ZONETIME', $zonetime);
 set_mb_proc();
 
 // for SESSION Variables
