@@ -3,7 +3,7 @@
  * PukiWiki minicalendar_viewerプラグイン
  *
  *
- *$Id: minicalendar_viewer.inc.php,v 1.9.7 2003/07/03 05:18:50 miko Exp $
+ *$Id: minicalendar_viewer.inc.php,v 1.9.11 2004/12/15 17:18:50 miko Exp $
   calendarrecentプラグインを元に作成
  */
 /**
@@ -39,6 +39,9 @@
   past or future で月単位表示するときに、それぞれ来月、先月の一覧へのリンクを表示しないようにする
 
  */
+define('MINICALENDAR_VIEWER_HOLIDAYVIEW',TRUE);
+define('MINICALENDAR_VIEWER_COMMENT',FALSE);
+define('MINICALENDAR_VIEWER_TRACKBACK',TRUE);
 
 function plugin_minicalendar_viewer_convert()
 {
@@ -46,7 +49,7 @@ function plugin_minicalendar_viewer_convert()
   global $_err_calendar_viewer_param,$_err_calendar_viewer_param2;
   global $_msg_calendar_viewer_right,$_msg_calendar_viewer_left;
   global $_msg_calendar_viewer_restrict;
-  global $_symbol_edit,$trackback;
+  global $_symbol_paraedit,$trackback;
 
   //*デフォルト値をセット
   //基準となるページ名
@@ -198,20 +201,43 @@ function plugin_minicalendar_viewer_convert()
         $s_page_title = "$s_page";
     }
     $refpage = rawurlencode($tmppage);
-    $link = "<a href=\"$script?cmd=edit&amp;page=$r_page&amp;refpage=$refpage\">$_symbol_edit</a>";
+    $link = "<a class=\"anchor_super\" href=\"$script?cmd=edit&amp;page=$r_page&amp;refpage=$refpage\">$_symbol_paraedit</a>";
     $head = "<h3 class=\"minicalendar\">$s_page_title $link</h3>\n";
     $tail = '';
-if (0!=0) {
-    if (is_page(':config/plugin/addline/comment') && exist_plugin_inline('addline')) {
+//miko
+    if (MINICALENDAR_VIEWER_HOLIDAYVIEW === TRUE) {
+      $monthlabel = array(
+	1 =>'January','Feburary','March','April','May','June',
+	'July','August','September','Octover','November','December'
+      );
+      $yy = substr($s_page_title,0,4);
+      $mm = intval(substr($s_page_title,5,2));
+      $dd = substr($s_page_title,8,2);
+      $mmstr = $monthlabel[$mm];
+      $h_today = public_holiday($yy,$mm,$dd); 
+      $hday = $h_today['rc'];
+      $f_today = getdate(mktime(0,0,0,$mm,$dd,$yy) - LOCALZONE + ZONETIME);
+      $wday = $f_today['wday'];
+      if($hday != 0) { $classname = 'date_holiday'; }
+      else if ($wday == 0) { $classname = 'date_holiday'; }
+      else if ($wday == 6) { $classname = 'date_weekend'; }
+      else { $classname = 'date_weekday'; }
+      $head = '<h3 class="'. $classname . '"><span class="day">' . "$dd</span> <br /><b>$mmstr</b>, <b>$yy</b> $link </h3>";
+    }
+//miko
+    if (MINICALENDAR_VIEWER_COMMENT === TRUE) {
+      if (is_page(':config/plugin/addline/comment') && exist_plugin_inline('addline')) {
 	$comm = convert_html(array("&addline(comment,above){comment};"));
 	$comm = str_replace('<p>','',$comm);
 	$comm = str_replace('</p>','',$comm);
 	$tail .= str_replace('>comment','><img src="'.IMAGE_URI.'plus/comment.png" width="15" height="15" alt="Comment" title="Comment" />Comment',$comm);
+      }
     }
-}
-    if ($trackback) {
+    if (MINICALENDAR_VIEWER_TRACKBACK === TRUE) {
+      if ($trackback) {
         $tb_id = tb_get_id($page);
         $tail .= "<a href=\"$script?plugin=tb&amp;__mode=view&amp;tb_id=$tb_id\"><img src=\"".IMAGE_URI."plus/trackback.png\" width=\"15\" height=\"15\" alt=\"\" title=\"\" />Trackback(".tb_count($page).")</a>\n";
+      }
     }
     if ($tail != '') { $tail = '<div class="trackback">'. $tail . '</div>'; };
     $return_body .= $head . "<div class=\"minicalendar_viewer\">" . $body . "</div>" . $tail;

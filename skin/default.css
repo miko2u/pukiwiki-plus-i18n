@@ -1408,6 +1408,71 @@ img.inn
 	background-color: transparent;
 }
 
+/* minicalendar+public_holiday view */
+.date_weekday {
+	font-family: verdana, arial, sans-serif;
+	font-size: 100%;
+	line-height: 110%;
+	font-weight: normal;
+	padding: 3px 0;
+	border: none;
+	border-bottom: 1px solid #666;
+	margin-bottom: 10px;
+}
+
+.date_weekend {
+	color: #14F;
+	font-family: verdana, arial, sans-serif;
+	font-size: 100%;
+	line-height: 110%;
+	font-weight: normal;
+	padding: 3px 0;
+	border: none;
+	border-bottom: 1px solid #666;
+	margin-bottom: 10px;
+}
+
+.date_holiday {
+	color: #f41;
+	font-family: verdana, arial, sans-serif;
+	font-size: 100%;
+	line-height: 110%;
+	font-weight: normal;
+	padding: 3px 0px;
+	border: none;
+	border-bottom: 1px solid #666;
+	margin-bottom: 10px;
+}
+
+.day {
+	float: left;
+	font-size: 200%;
+	line-height: 100%;
+	font-weight: normal;
+	letter-spacing: 0.02em;
+	padding-left: 4pt;
+	padding-right: 3pt;
+	padding-top: 3pt;
+	padding-bottom: 3pt;
+	margin: 0px;
+	margin-top:3pt;
+	margin-right:4pt;
+}
+.date_weekday .day {
+	background-color: #333;
+	color: #fff;
+}
+.date_weekend .day {
+	background-color: #14F;
+	color: #fff;
+}
+.date_holiday .day {
+	background-color: #F41;
+	color: #fff;
+}
+
+
+
 /**
  * PukiWiki Plugin Code highlight
  *
