@@ -58,41 +58,39 @@ set_time();
 require(LIB_DIR . 'public_holiday.php');
 
 /////////////////////////////////////////////////
-// INI_FILE: Require LANG_FILE
-
-if(defined('LANG_ENCODING') && LANG_ENCODING != '') {
-	define('LANG_FILE_HINT',    LANG_DIR . LANG . '.' . LANG_ENCODING . '.lng.php');
-	define('LANG_FILE',         LANG_DIR . UI_LANG . '.' . LANG_ENCODING . '.lng.php');    // For UI resource
-} else {
-	define('LANG_FILE_HINT',    LANG_DIR . LANG . '.lng.php');     // For encoding hint
-	define('LANG_FILE',         LANG_DIR . UI_LANG . '.lng.php');  // For UI resource
-}
-$die = '';
-foreach (array('LANG_FILE_HINT', 'LANG_FILE') as $langfile) {
-	if (! file_exists(constant($langfile)) || ! is_readable(constant($langfile))) {
-		$die .= 'File is not found or not readable. (' . $langfile . ')' . "\n";
-	} else {
-		require_once(constant($langfile));
-	}
-}
-if ($die) die_message(nl2br("\n\n" . $die));
-
-/////////////////////////////////////////////////
-// LANG_FILE: Init Resource(for gettext)
+// Init Resource(for gettext)
 putenv('LC_ALL=' . PO_LANG);
 setlocale(LC_ALL, PO_LANG);
 bindtextdomain(DOMAIN, LANG_DIR);
 bind_textdomain_codeset(DOMAIN, SOURCE_ENCODING);
 textdomain(DOMAIN);
 
+/////////////////////////////////////////////////
 // リソースファイルの読み込み
 require(LIB_DIR . 'resource.php');
+// Init encoding hint
+define('PKWK_ENCODING_HINT', isset($_LANG['encode_hint']) ? $_LANG['encode_hint'] : '');
+// unset($_LANG['encode_hint']);
 
 /////////////////////////////////////////////////
-// LANG_FILE: Init encoding hint
-
-define('PKWK_ENCODING_HINT', isset($_LANG['encode_hint'][LANG]) ? $_LANG['encode_hint'][LANG] : '');
-unset($_LANG['encode_hint']);
+// INI_FILE: Require LANG_FILE
+//
+//if(defined('LANG_ENCODING') && LANG_ENCODING != '') {
+//	define('LANG_FILE_HINT',    LANG_DIR . LANG . '.' . LANG_ENCODING . '.lng.php');
+//	define('LANG_FILE',         LANG_DIR . UI_LANG . '.' . LANG_ENCODING . '.lng.php');    // For UI resource
+//} else {
+//	define('LANG_FILE_HINT',    LANG_DIR . LANG . '.lng.php');     // For encoding hint
+//	define('LANG_FILE',         LANG_DIR . UI_LANG . '.lng.php');  // For UI resource
+//}
+//$die = '';
+//foreach (array('LANG_FILE_HINT', 'LANG_FILE') as $langfile) {
+//	if (! file_exists(constant($langfile)) || ! is_readable(constant($langfile))) {
+//		$die .= 'File is not found or not readable. (' . $langfile . ')' . "\n";
+//	} else {
+//		require_once(constant($langfile));
+//	}
+//}
+//if ($die) die_message(nl2br("\n\n" . $die));
 
 /////////////////////////////////////////////////
 // LANG_FILE: Init severn days of the week

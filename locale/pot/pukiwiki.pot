@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-03-15 18:14+0900\n"
+"POT-Creation-Date: 2005-04-03 21:11+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -48,11 +48,11 @@ msgstr ""
 msgid "PukiWikiAuth"
 msgstr ""
 
-#: ../../lib/resource.php:16 ../../lib/resource.php:69
+#: ../../lib/resource.php:16 ../../lib/resource.php:73
 msgid "Freeze"
 msgstr ""
 
-#: ../../lib/resource.php:17 ../../lib/resource.php:84
+#: ../../lib/resource.php:17 ../../lib/resource.php:88
 msgid "Unfreeze"
 msgstr ""
 
@@ -119,11 +119,11 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
-#: ../../lib/resource.php:40 ../../lib/resource.php:63
+#: ../../lib/resource.php:40 ../../lib/resource.php:67
 msgid "Add"
 msgstr ""
 
-#: ../../lib/resource.php:41 ../../lib/resource.php:81
+#: ../../lib/resource.php:41 ../../lib/resource.php:85
 msgid "Search"
 msgstr ""
 
@@ -131,7 +131,7 @@ msgstr ""
 msgid "Load"
 msgstr ""
 
-#: ../../lib/resource.php:43 ../../lib/resource.php:67
+#: ../../lib/resource.php:43 ../../lib/resource.php:71
 msgid "Edit"
 msgstr ""
 
@@ -176,66 +176,70 @@ msgid "$1 was updated"
 msgstr ""
 
 #: ../../lib/resource.php:64
-msgid "Backup"
-msgstr ""
-
-#: ../../lib/resource.php:65
-msgid "Copy"
-msgstr ""
-
-#: ../../lib/resource.php:66
-msgid "Diff"
+msgid "encode_hint"
 msgstr ""
 
 #: ../../lib/resource.php:68
-msgid "List of page files"
+msgid "Backup"
+msgstr ""
+
+#: ../../lib/resource.php:69
+msgid "Copy"
 msgstr ""
 
 #: ../../lib/resource.php:70
-msgid "Help"
-msgstr ""
-
-#: ../../lib/resource.php:71
-msgid "List of pages"
+msgid "Diff"
 msgstr ""
 
 #: ../../lib/resource.php:72
-msgid "New"
-msgstr ""
-
-#: ../../lib/resource.php:73
-msgid "RDF of recent changes"
+msgid "List of page files"
 msgstr ""
 
 #: ../../lib/resource.php:74
-msgid "Recent changes"
+msgid "Help"
 msgstr ""
 
 #: ../../lib/resource.php:75
-msgid "Referer"
+msgid "List of pages"
 msgstr ""
 
 #: ../../lib/resource.php:76
-msgid "Reload"
+msgid "New"
 msgstr ""
 
 #: ../../lib/resource.php:77
+msgid "RDF of recent changes"
+msgstr ""
+
+#: ../../lib/resource.php:78
+msgid "Recent changes"
+msgstr ""
+
+#: ../../lib/resource.php:79
+msgid "Referer"
+msgstr ""
+
+#: ../../lib/resource.php:80
+msgid "Reload"
+msgstr ""
+
+#: ../../lib/resource.php:81
 msgid "Rename"
 msgstr ""
 
-#: ../../lib/resource.php:78 ../../lib/resource.php:79
-#: ../../lib/resource.php:80
+#: ../../lib/resource.php:82 ../../lib/resource.php:83
+#: ../../lib/resource.php:84
 msgid "RSS of recent changes"
 msgstr ""
 
-#: ../../lib/resource.php:82
+#: ../../lib/resource.php:86
 msgid "Front page"
 msgstr ""
 
-#: ../../lib/resource.php:83
+#: ../../lib/resource.php:87
 msgid "Trackback"
 msgstr ""
 
-#: ../../lib/resource.php:85
+#: ../../lib/resource.php:89
 msgid "Upload"
 msgstr ""

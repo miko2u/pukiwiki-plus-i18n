@@ -59,6 +59,10 @@ $_title = array(
 	'updated' => _('$1 was updated'),
 );
 
+
+// Encoding hint
+$_LANG['encode_hint'] = _('encode_hint');
+
 $_LANG['skin'] = array(
 	'add'       => _('Add'),
 	'backup'    => _('Backup'),
