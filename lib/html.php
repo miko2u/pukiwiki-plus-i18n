@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: html.php,v 1.21.13 2004/12/31 09:10:45 miko Exp $
+// $Id: html.php,v 1.27.13 2005/01/26 13:26:37 miko Exp $
 //
 // HTML-publishing related functions
 
@@ -13,13 +13,13 @@ function catbody($title, $page, $body)
 	global $trackback, $trackback_javascript, $referer, $javascript;
 	global $_LANG, $_LINK, $_IMAGE;
 
-	global $skin_file, $menubar, $sidebar;
+	global $pkwk_dtd;     // XHTML 1.1, XHTML1.0, HTML 4.01 Transitional...
+	global $page_title;   // Title of this site
+	global $do_backup;    // Do backup or not
+	global $modifier;     // Site administrator's  web page
+	global $modifierlink; // Site administrator's name
 
-	global $html_transitional; // FALSE:XHTML1.1 TRUE:XHTML1.0 Transitional
-	global $page_title;        // Title of this site
-	global $do_backup;         // Do backup or not
-	global $modifier;          // Site administrator's  web page
-	global $modifierlink;      // Site administrator's name
+	global $skin_file, $menubar, $sidebar;
 
 	if (!defined('SKIN_FILE') || ! file_exists(SKIN_FILE) || ! is_readable(SKIN_FILE)) {
 		if (! file_exists($skin_file) || ! is_readable($skin_file)) {
@@ -183,7 +183,7 @@ function edit_form($page, $postdata, $digest = 0, $b_template = TRUE)
 
 	if($load_template_func && $b_template) {
 		$pages  = array();
-		$non_list_pattern = '#' . $non_list . '#';
+		$non_list_pattern = '/' . $non_list . '/';
 		foreach(get_existpages() as $_page) {
 			if ($_page == $whatsnew || preg_match($non_list_pattern, $_page))
 				continue;
@@ -310,7 +310,7 @@ function make_related($page, $tag = '')
 	}
 
 	$_links = array();
-	$non_list_pattern = '#' . $non_list . '#';
+	$non_list_pattern = '/' . $non_list . '/';
 	foreach ($links as $page=>$lastmod) {
 		if (preg_match($non_list_pattern, $page)) continue;
 
@@ -368,7 +368,7 @@ function strip_htmltag($str)
 	return preg_replace('/<[^>]+>/', '', $str);
 }
 
-// Make a search-link of the page name, by the page name, for the page name
+// Make a backlink. searching-link of the page name, by the page name, for the page name
 function make_search($page)
 {
 	global $script;
@@ -376,11 +376,7 @@ function make_search($page)
 	$s_page = htmlspecialchars($page);
 	$r_page = rawurlencode($page);
 
-	//WikiWikiWeb like...
-	//if(preg_match("/^$WikiName$/", $page))
-	//	$name = preg_replace('/([A-Z][a-z]+)/', '$1 ', $name);
-
-	return '<a href="' . $script . '?cmd=search&amp;word=' . $r_page .
+	return '<a href="' . $script . '?plugin=related&amp;page=' . $r_page .
 		'">' . $s_page . '</a> ';
 }
 
@@ -429,7 +425,7 @@ function anchor_explode($page, $strict_editable = FALSE)
 	}
 }
 
-// Check header()s were sent already, or
+// Check HTTP header()s were sent already, or
 // there're blank lines or something out of php blocks
 function pkwk_headers_sent()
 {
@@ -447,15 +443,75 @@ function pkwk_headers_sent()
 	}
 }
 
+// Output common HTTP headers
 function pkwk_common_headers()
 {
 	if (! PKWK_OPTIMISE) pkwk_headers_sent();
 
-	$matches = array();
-	if(ini_get('zlib.output_compression') &&
-	    preg_match('/\b(gzip|deflate)\b/i', $_SERVER['HTTP_ACCEPT_ENCODING'], $matches)) {
-		header('Content-Encoding: ' . $matches[1]);
-		header('Vary: Accept-Encoding');
+	if(defined('PKWK_ZLIB_LOADABLE_MODULE')) {
+		$matches = array();
+		if(ini_get('zlib.output_compression') &&
+		    preg_match('/\b(gzip|deflate)\b/i', $_SERVER['HTTP_ACCEPT_ENCODING'], $matches)) {
+		    	// Bug #29350 output_compression compresses everything _without header_ as loadable module
+		    	// http://bugs.php.net/bug.php?id=29350
+			header('Content-Encoding: ' . $matches[1]);
+			header('Vary: Accept-Encoding');
+		}
+	}
+}
+
+// DTD definitions
+define('PKWK_DTD_XHTML_1_1',              17); // Strict only
+define('PKWK_DTD_XHTML_1_0',              16); // Strict
+define('PKWK_DTD_XHTML_1_0_STRICT',       16);
+define('PKWK_DTD_XHTML_1_0_TRANSITIONAL', 15);
+define('PKWK_DTD_XHTML_1_0_FRAMESET',     14);
+define('PKWK_DTD_HTML_4_01',               3); // Strict
+define('PKWK_DTD_HTML_4_01_STRICT',        3);
+define('PKWK_DTD_HTML_4_01_TRANSITIONAL',  2);
+define('PKWK_DTD_HTML_4_01_FRAMESET',      1);
+
+// Output HTML DTD, <html> start tag. Return content-type.
+function pkwk_output_dtd($pkwk_dtd = PKWK_DTD_XHTML_1_1)
+{
+	static $called;
+	if (isset($called)) die('pkwk_output_dtd() already called. Why?');
+	$called = TRUE;
+
+	$type = 'XHTML';
+	$option = '';
+	switch($pkwk_dtd){
+	case PKWK_DTD_XHTML_1_1             : $version = '1.1' ; $dtd = 'http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd'; break;
+	case PKWK_DTD_XHTML_1_0_STRICT      : $version = '1.0' ; $option = 'Strict';       $dtd = 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd';      break;
+	case PKWK_DTD_XHTML_1_0_TRANSITIONAL: $version = '1.0' ; $option = 'Transitional'; $dtd = 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'; break;
+	case PKWK_DTD_HTML_4_01_STRICT      : $type = 'HTML'; $version = '4.01'; $dtd = 'http://www.w3.org/TR/html4/strict.dtd';   break;
+	case PKWK_DTD_HTML_4_01_TRANSITIONAL: $type = 'HTML'; $version = '4.01'; $option = 'Transitional'; $dtd = 'http://www.w3.org/TR/html4/loose.dtd';    break;
+	default: die('DTD not specified or invalid DTD'); break;
+	}
+
+	// Output XML or not
+	if ($type == 'XHTML') echo '<?xml version="1.0" encoding="' . CONTENT_CHARSET . '" ?>' . "\n";
+
+	// Output doctype
+	echo '<!DOCTYPE html PUBLIC "-//W3C//DTD ' . $type . ' ' . $version . ($option != '' ? ' ' . $option : '') . '//EN" "' . $dtd . '">' . "\n";
+
+	// Output <html> start tag
+	echo '<html';
+	if ($type == 'XHTML') {
+		echo ' xmlns="http://www.w3.org/1999/xhtml"'; // dir="ltr" /* LeftToRight */
+		echo ' xml:lang="' . LANG . '"';
+		if ($version == '1.0') echo ' lang="' . LANG . '"'; // Only XHTML 1.0
+	} else {
+		echo ' lang="' . LANG . '"'; // HTML
+	}
+	echo '>' . "\n"; // <html>
+
+	// Return content-type (with MIME type)
+	if ($type == 'XHTML') {
+		// NOTE: XHTML 1.1 browser will ignore http-equiv
+		return '<meta http-equiv="content-type" content="application/xhtml+xml; charset=' . CONTENT_CHARSET . '" />' . "\n";
+	} else {
+		return '<meta http-equiv="content-type" content="text/html; charset=' . CONTENT_CHARSET . '" />' . "\n";
 	}
 }
 ?>
