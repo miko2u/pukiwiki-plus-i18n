@@ -1,5 +1,5 @@
 <?php
-// $Id: article.inc.php,v 1.23 2005/03/02 13:05:07 henoheno Exp $
+// $Id: article.inc.php,v 1.23.1 2005/04/06 13:05:07 miko Exp $
  /*
 
  PukiWiki BBS風プラグイン
@@ -151,6 +151,8 @@ function plugin_article_convert()
 
 	$article_no = $numbers[$vars['page']]++;
 
+	$helptags = edit_form_assistant();
+
 	$s_page   = htmlspecialchars($vars['page']);
 	$s_digest = htmlspecialchars($digest);
 	$name_cols = PLUGIN_ARTICLE_NAME_COLS;
@@ -159,7 +161,7 @@ function plugin_article_convert()
 	$article_cols = PLUGIN_ARTICLE_COLS;
 	$string = <<<EOD
 <form action="$script" method="post">
- <div>
+ <div class="articleform" onmouseup="pukiwiki_pos()" onkeyup="pukiwiki_pos()">
   <input type="hidden" name="article_no" value="$article_no" />
   <input type="hidden" name="plugin" value="article" />
   <input type="hidden" name="digest" value="$s_digest" />
@@ -170,6 +172,7 @@ function plugin_article_convert()
   <input type="text" name="subject" id="_p_article_subject_$article_no" size="$subject_cols" /><br />
   <textarea name="msg" rows="$article_rows" cols="$article_cols">\n</textarea><br />
   <input type="submit" name="article" value="$_btn_article" />
+  $helptags
  </div>
 </form>
 EOD;
