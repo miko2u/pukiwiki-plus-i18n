@@ -3,11 +3,11 @@
  * 言語を判定しメッセージを表示
  *
  * @copyright   Copyright &copy; 2005, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: i18n_msg.inc.php,v 0.3 2005/03/09 02:13:00 upk Exp $
+ * @version     $Id: multilang.inc.php,v 0.3 2005/03/09 23:15:00 upk Exp $
  *
  */
 
-function plugin_i18n_msg_convert()
+function plugin_multilang_convert()
 {
 	global $language_considering_setting_level;
 	global $language;
