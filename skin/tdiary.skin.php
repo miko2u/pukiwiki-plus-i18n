@@ -1,23 +1,35 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: tdiary.skin.php,v 1.8 2005/01/13 13:42:21 henoheno Exp $
+// $Id: tdiary.skin.php,v 1.18 2005/02/05 07:19:05 henoheno Exp $
 //
 // tDiary-wrapper skin
 
 // Select theme
 if (! defined('TDIARY_THEME')) define('TDIARY_THEME', 'loose-leaf'); // Default
 
-// Show someting with <div class="calendar"> design
-//   1    = Show reload URL
-//   0    = Show topicpath
+// Show link(s) at your choice, with <div class="calendar"> design
+// NOTE: Some theme become looking worse with this!
 //   NULL = Show nothing
+//   0    = Show topicpath
+//   1    = Show reload URL
 if (! defined('TDIARY_CALENDAR_DESIGN'))
-	define('TDIARY_CALENDAR_DESIGN', NULL);
+	define('TDIARY_CALENDAR_DESIGN', NULL); // NULL, 0, 1
+
+// Show / Hide navigation bar UI at your choice
+// NOTE: This is not stop their functionalities!
+if (! defined('PKWK_SKIN_SHOW_NAVBAR'))
+	define('PKWK_SKIN_SHOW_NAVBAR', 1); // 1, 0
+
+// Show toolbar at your choice, with <div class="footer"> design
+// NOTE: Some theme become looking worse with this!
+if (! defined('PKWK_SKIN_SHOW_TOOLBAR'))
+	define('PKWK_SKIN_SHOW_TOOLBAR', 0); // 0, 1
 
 // --------
 // Prohibit direct access
 if (! defined('UI_LANG')) die('UI_LANG is not set');
 if (! isset($_LANG)) die('$_LANG is not set');
+if (! defined('PKWK_READONLY')) die('PKWK_READONLY is not set');
 
 // Check theme
 $theme = TDIARY_THEME;
@@ -35,6 +47,122 @@ if ($theme == '' || $theme == 'TDIARY_THEME') {
 	 }
 }
 
+// Adjust DTD (between theme(=CSS) and MSIE bug)
+// NOTE:
+//    PukiWiki default: PKWK_DTD_XHTML_1_1
+//    tDiary's default: PKWK_DTD_HTML_4_01_STRICT
+switch(TDIARY_THEME){
+case 'christmas':
+	$pkwk_dtd = PKWK_DTD_HTML_4_01_STRICT; // or centering will be ignored via MSIE
+	break;
+}
+
+// Adjust reverse-link default design manually
+$disable_backlink = FALSE;
+switch(TDIARY_THEME){
+case 'hatena':	/*FALLTHROUGH*/
+	$disable_backlink = TRUE;
+	break;
+}
+
+// Select CSS color theme (testing)
+$css_theme = '';
+switch(TDIARY_THEME){
+case 'alfa':
+case 'bill':
+case 'black-lingerie':
+case 'bubble':
+case 'cosmos':
+case 'darkness-pop':
+case 'fine':
+case 'fri':
+case 'giza':
+case 'kaizou':
+case 'lightning':
+case 'lime':
+case 'line':
+case 'midnight':
+case 'moo':
+case 'nachtmusik':
+case 'nebula':
+case 'nippon':
+case 'noel':
+case 'petith-b':
+case 'quiet_black':
+case 'redgrid':
+case 'starlight':
+case 'tinybox_green':
+case 'white-lingerie':
+case 'whiteout':
+case 'wine':
+case 'wood':
+case 'xmastree':
+case 'yukon':
+	$css_theme = 'black';
+
+// Another theme needed?
+case 'bluely':
+case 'brown':
+case 'deepblue':
+case 'scarlet':
+case 'smoking_black':
+	;
+}
+
+// Select title design (which is fancy, date and text?)
+$title_design_date = 1; // Default: Select the date desin, or 'the same design'
+switch(TDIARY_THEME){
+case '3minutes':
+case 'aoikuruma':
+case 'black-lingerie':
+case 'blog':
+case 'book':
+case 'book2-feminine':
+case 'book3-sky':
+case 'candy':
+case 'cards':
+case 'desert':
+case 'dot':
+case 'himawari':
+case 'light-blue':
+case 'lovely':
+case 'lovely_pink':
+case 'lr':
+case 'magic':
+case 'maroon':
+case 'midnight':
+case 'momonga':
+case 'nande-ya-nen':
+case 'narrow':
+case 'nebula':
+case 'orange':
+case 'parabola':
+case 'plum':
+case 'pool_side':
+case 'rainy-season':
+case 'right':
+case 's-blue':
+case 's-pink':
+case 'sky':
+case 'snow_man':
+case 'spring':
+case 'tag':
+case 'white-lingerie':
+case 'whiteout':
+case 'wood':
+	$title_design_date = 0; // Select text design	
+	break;
+
+// Show both :)
+case 'arrow':
+case 'fluxbox':
+case 'fluxbox2':
+case 'fluxbox3':
+	$title_design_date = 2;
+	break;
+}
+
+// Sidebar: default position
 if (defined('TDIARY_SIDEBAR_POSITION')) {
 	$sidebar = TDIARY_SIDEBAR_POSITION;
 } else {
@@ -126,17 +254,22 @@ if (defined('TDIARY_SIDEBAR_POSITION')) {
 
 	// Adjust sidebar's default position
 	switch(TDIARY_THEME){
+
+	// Assuming sidebar is above of the body
 	case 'autumn':	/*FALLTHROUGH*/
 	case 'cosmos':
+	case 'dice':	// Sidebar text (white) seems unreadable
 	case 'happa':
 	case 'kaeru':
 	case 'note':
+	case 'paper':	// Sidebar text (white) seems unreadable
 	case 'sunset':
 	case 'tinybox':	// For MSIE with narrow window width, seems meanless
 	case 'tinybox_green':	// The same
-		$sidebar = 'top';	// Assuming sidebar is above of the body
+		$sidebar = 'top';
 		break;
 
+	// Strict separation between sidebar and main contents needed
 	case '3minutes':	/*FALLTHROUGH*/
 	case '3pink':
 	case 'aoikuruma':
@@ -147,6 +280,7 @@ if (defined('TDIARY_SIDEBAR_POSITION')) {
 	case 'cool_ice':
 	case 'flower':
 	case 'germany':
+	case 'hiki':
 	case 'himawari':
 	case 'kotatsu':
 	case 'light-blue':
@@ -167,27 +301,23 @@ if (defined('TDIARY_SIDEBAR_POSITION')) {
 	case 'spring':
 	case 'teacup':
 	case 'wine':
-		$sidebar = 'strict'; // Strict separation between sidebar and main needed
+		$sidebar = 'strict';
 		break;
 
+	// They have sidevar-design, but can not show it at the 'side' of the contents
 	case 'babypink':	/*FALLTHROUGH*/
-	case 'blog':
 	case 'bubble':
 	case 'cherry':
 	case 'darkness-pop':
 	case 'diamond_dust':
-	case 'dice':
 	case 'gear':
 	case 'pale':
-	case 'paper':
 	case 'pink-border':
-	case 'purple_sun':
 	case 'rectangle':
 	case 'russet':
 	case 'smoking_black':
 		$sidebar = 'another'; // Show as an another page below
 		break;
-
 	}
 }
 // Check menu (sidebar) is ready and $menubar is there
@@ -199,28 +329,9 @@ if ($menu) {
 		do_plugin_convert('menu'));
 }
 
-// Adjust reverse-link default design manually
-$disable_reverse_link = FALSE;
-switch(TDIARY_THEME){
-case 'hatena':	/*FALLTHROUGH*/
-case 'repro':
-case 'yukon':
-	$disable_reverse_link = TRUE;
-	break;
-}
-
-// Adjust DTD (between theme(=CSS) and MSIE bug)
-// NOTE:
-//    PukiWiki default: PKWK_DTD_XHTML_1_1
-//    tDiary's default: PKWK_DTD_HTML_4_01_STRICT
-switch(TDIARY_THEME){
-case 'christmas':
-	$pkwk_dtd = PKWK_DTD_HTML_4_01_STRICT; // or centering will be ignored via MSIE
-	break;
-}
-
-$lang  = $_LANG['skin'];
-$link  = $_LINK;
+$lang  = & $_LANG['skin'];
+$link  = & $_LINK;
+$rw    = ! PKWK_READONLY;
 
 // Decide charset for CSS
 $css_charset = 'iso-8859-1';
@@ -248,12 +359,12 @@ if (isset($pkwk_dtd)) {
 <?php if (! $is_read)  { ?> <meta name="robots" content="NOINDEX,NOFOLLOW" /><?php } ?>
 <?php if (PKWK_ALLOW_JAVASCRIPT && isset($javascript)) { ?> <meta http-equiv="Content-Script-Type" content="text/javascript" /><?php } ?>
 
- <title><?php echo "$title - $page_title" ?></title>
+ <title><?php echo $title ?> - <?php echo $page_title ?></title>
 
  <link rel="stylesheet" href="skin/theme/base.css" type="text/css" media="all" />
  <link rel="stylesheet" href="skin/theme/<?php echo $theme ?>/<?php echo $theme ?>.css" type="text/css" media="all" />
- <link rel="stylesheet" href="skin/tdiary.css.php?charset=<?php echo $css_charset ?>" type="text/css" media="screen" charset="<?php echo $css_charset ?>" />
- <link rel="stylesheet" href="skin/tdiary.css.php?charset=<?php echo $css_charset ?>&amp;media=print" type="text/css" media="print" charset="<?php echo $css_charset ?>" />
+ <link rel="stylesheet" href="skin/tdiary.css.php?charset=<?php echo $css_charset ?>&amp;color=<?php echo $css_theme ?>" type="text/css" media="screen" charset="<?php echo $css_charset ?>" />
+ <link rel="stylesheet" href="skin/tdiary.css.php?charset=<?php echo $css_charset ?>&amp;color=<?php echo $css_theme ?>&amp;media=print" type="text/css" media="print" charset="<?php echo $css_charset ?>" />
 
  <link rel="alternate" type="application/rss+xml" title="RSS" href="<?php echo $link['rss'] ?>" /><?php // RSS auto-discovery ?>
 
@@ -276,7 +387,8 @@ if (isset($pkwk_dtd)) {
 <?php } // if ($menu && $sidebar == 'strict') ?>
 
 <!-- Navigation buttuns -->
-<div class="adminmenu">
+<?php if (PKWK_SKIN_SHOW_NAVBAR) { ?>
+<div class="adminmenu"><div id="navigator">
 <?php
 function _navigator($key, $value = '', $javascript = ''){
 	$lang = $GLOBALS['_LANG']['skin'];
@@ -295,22 +407,26 @@ function _navigator($key, $value = '', $javascript = ''){
  <?php _navigator('top') ?> &nbsp;
 
 <?php if ($is_page) { ?>
-   <?php _navigator('edit')   ?>
- <?php if ($is_read && $function_freeze) { ?>
-    <?php (! $is_freeze) ? _navigator('freeze') : _navigator('unfreeze') ?>
+  <?php if ($rw) { ?>
+	<?php _navigator('edit') ?>
+	<?php if ($is_read && $function_freeze) { ?>
+		<?php (! $is_freeze) ? _navigator('freeze') : _navigator('unfreeze') ?>
+	<?php } ?>
  <?php } ?>
    <?php _navigator('diff') ?>
  <?php if ($do_backup) { ?>
-   <?php _navigator('backup') ?>
+	<?php _navigator('backup') ?>
  <?php } ?>
- <?php if ((bool)ini_get('file_uploads')) { ?>
-   <?php _navigator('upload') ?>
+ <?php if ($rw && (bool)ini_get('file_uploads')) { ?>
+	<?php _navigator('upload') ?>
  <?php } ?>
-   <?php _navigator('reload')    ?>
+   <?php _navigator('reload') ?>
    &nbsp;
 <?php } ?>
 
-   <?php _navigator('new')  ?>
+ <?php if ($rw) { ?>
+	<?php _navigator('new') ?>
+ <?php } ?>
    <?php _navigator('list') ?>
  <?php if (arg_check('list')) { ?>
    <?php _navigator('filelist') ?>
@@ -326,7 +442,10 @@ function _navigator($key, $value = '', $javascript = ''){
 <?php if ($referer)   { ?> &nbsp;
    <?php _navigator('refer') ?>
 <?php } ?>
-</div>
+</div></div>
+<?php } else { ?>
+<div id="navigator"></div>
+<?php } // PKWK_SKIN_SHOW_NAVBAR ?>
 
 <h1><?php echo $page_title ?></h1>
 
@@ -354,28 +473,41 @@ function _navigator($key, $value = '', $javascript = ''){
 <?php if ($menu && ($sidebar == 'top' || $sidebar == 'bottom')) { ?>
 <div class="pkwk_body">
 <div class="main">
-<?php } // if ($menu && $sidebar == 'top') ?>
-
+<?php } ?>
 
 <hr class="sep" />
 
 <div class="day">
 
-<h2><span class="date"></span> <span class="title"><?php
-if ($disable_reverse_link === TRUE) {
+<?php
+// Page title (page name)
+$title = '';
+if ($disable_backlink) {
 	if ($_page != '') {
-		echo htmlspecialchars($_page);
+		$title = htmlspecialchars($_page);
 	} else {
-		echo $page; // Search, or something message
+		$title = $page; // Search, or something message
 	}
 } else {
 	if ($page != '') {
-		echo $page;
+		$title = $page;
 	} else {
-		echo htmlspecialchars($_page);
+		$title =  htmlspecialchars($_page);
 	}
 }
-?></span></h2>
+$title_date = $title_text = '';
+switch($title_design_date){
+case 1: $title_date = & $title; break;
+case 0: $title_text = & $title; break;
+default:
+	// Show both (for debug or someting)
+	$title_date = & $title;
+	$title_text = & $title;
+	break;
+}
+?>
+<h2><span class="date"><?php  echo $title_date ?></span>
+    <span class="title"><?php echo $title_text ?></span></h2>
 
 <div class="body">
 	<div class="section">
@@ -398,6 +530,7 @@ if ($disable_reverse_link === TRUE) {
 ?>
 	</div>
 </div><!-- class="body" -->
+
 
 <?php if ($notes != '') { ?>
 <div class="comment"><!-- Design for tDiary "Comments" -->
@@ -482,13 +615,89 @@ if ($disable_reverse_link === TRUE) {
 <?php } // if ($menu && $sidebar == 'bottom') ?>
 
 
-<!-- Copyright etc -->
 <div class="footer">
+<?php if (PKWK_SKIN_SHOW_TOOLBAR) { ?>
+<!-- Toolbar -->
+<?php
+
+// Set toolbar-specific images
+$_IMAGE['skin']['reload']   = 'reload.png';
+$_IMAGE['skin']['new']      = 'new.png';
+$_IMAGE['skin']['edit']     = 'edit.png';
+$_IMAGE['skin']['freeze']   = 'freeze.png';
+$_IMAGE['skin']['unfreeze'] = 'unfreeze.png';
+$_IMAGE['skin']['diff']     = 'diff.png';
+$_IMAGE['skin']['upload']   = 'file.png';
+$_IMAGE['skin']['copy']     = 'copy.png';
+$_IMAGE['skin']['rename']   = 'rename.png';
+$_IMAGE['skin']['top']      = 'top.png';
+$_IMAGE['skin']['list']     = 'list.png';
+$_IMAGE['skin']['search']   = 'search.png';
+$_IMAGE['skin']['recent']   = 'recentchanges.png';
+$_IMAGE['skin']['backup']   = 'backup.png';
+$_IMAGE['skin']['help']     = 'help.png';
+$_IMAGE['skin']['rss']      = 'rss.png';
+$_IMAGE['skin']['rss10']    = & $_IMAGE['skin']['rss'];
+$_IMAGE['skin']['rss20']    = 'rss20.png';
+$_IMAGE['skin']['rdf']      = 'rdf.png';
+
+function _toolbar($key, $x = 20, $y = 20){
+	$lang  = & $GLOBALS['_LANG']['skin'];
+	$link  = & $GLOBALS['_LINK'];
+	$image = & $GLOBALS['_IMAGE']['skin'];
+	if (! isset($lang[$key]) ) { echo 'LANG NOT FOUND';  return FALSE; }
+	if (! isset($link[$key]) ) { echo 'LINK NOT FOUND';  return FALSE; }
+	if (! isset($image[$key])) { echo 'IMAGE NOT FOUND'; return FALSE; }
+
+	echo '<a href="' . $link[$key] . '">' .
+		'<img src="' . IMAGE_DIR . $image[$key] . '" width="' . $x . '" height="' . $y . '" ' .
+			'alt="' . $lang[$key] . '" title="' . $lang[$key] . '" />' .
+		'</a>';
+	return TRUE;
+}
+?>
+ <?php _toolbar('top') ?>
+
+<?php if ($is_page) { ?>
+ &nbsp;
+ <?php if ($rw) { ?>
+	<?php _toolbar('edit') ?>
+	<?php if ($is_read && $function_freeze) { ?>
+		<?php if (! $is_freeze) { _toolbar('freeze'); } else { _toolbar('unfreeze'); } ?>
+	<?php } ?>
+ <?php } ?>
+ <?php _toolbar('diff') ?>
+<?php if ($do_backup) { ?>
+	<?php _toolbar('backup') ?>
+<?php } ?>
+ <?php if ($rw && (bool)ini_get('file_uploads')) { ?>
+	<?php _toolbar('upload') ?>
+ <?php } ?>
+ <?php if ($rw) { ?>
+	<?php _toolbar('copy') ?>
+	<?php _toolbar('rename') ?>
+ <?php } ?>
+ <?php _toolbar('reload') ?>
+<?php } ?>
+ &nbsp;
+ <?php if ($rw) { ?>
+	<?php _toolbar('new') ?>
+ <?php } ?>
+ <?php _toolbar('list')   ?>
+ <?php _toolbar('search') ?>
+ <?php _toolbar('recent') ?>
+ &nbsp; <?php _toolbar('help') ?>
+ &nbsp; <?php _toolbar('rss10', 36, 14) ?>
+ <br/>
+<?php } // PKWK_SKIN_SHOW_TOOLBAR ?>
+
+<!-- Copyright etc -->
  Site admin: <a href="<?php echo $modifierlink ?>"><?php echo $modifier ?></a><p />
  <?php echo S_COPYRIGHT ?>.
  Powered by PHP <?php echo PHP_VERSION ?><br />
  HTML convert time: <?php echo $taketime ?> sec.
-</div>
+
+</div><!-- class="footer" -->
 
 <?php if ($menu && ($sidebar != 'top' && $sidebar != 'bottom')) { ?>
 </div><!-- class="main" -->
