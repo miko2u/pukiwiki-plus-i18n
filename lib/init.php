@@ -1,12 +1,12 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: init.php,v 1.23.1 2005/01/03 07:56:58 miko Exp $
+// $Id: init.php,v 1.25.1 2005/01/31 15:04:21 miko Exp $
 //
 // Init PukiWiki here
 
 // PukiWiki version / Copyright / Licence
 
-define('S_VERSION', '1.4.5_rc1');
+define('S_VERSION', '1.4.5');
 define('S_COPYRIGHT',
 	'<strong>PukiWiki ' . S_VERSION . '</strong>' .
 	' Copyright &copy; 2001-2005' .
@@ -261,7 +261,7 @@ if (isset($_SERVER['QUERY_STRING']) && $_SERVER['QUERY_STRING']) {
 } else if (isset($_SERVER['argv']) && ! empty($_SERVER['argv'])) {
 	$arg = & $_SERVER['argv'][0];
 }
-if (strlen($arg) > PKWK_QUERY_STRING_MAX) {
+if (PKWK_QUERY_STRING_MAX && strlen($arg) > PKWK_QUERY_STRING_MAX) {
 	// Something nasty attack?
 	pkwk_common_headers();
 	sleep(1);	// Fake processing, and/or process other threads

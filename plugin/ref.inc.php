@@ -2,16 +2,16 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: ref.inc.php,v 1.47.2 2004/12/25 00:39:45 miko Exp $
+// $Id: ref.inc.php,v 1.48.2 2005/01/28 11:58:56 miko Exp $
 //
+// Image refernce plugin
 // Include an attached image-file as an inline-image
 
 // File icon image
-if (! defined('FILE_ICON')) {
+if (! defined('FILE_ICON'))
 	define('FILE_ICON',
 	'<img src="' . IMAGE_URI . 'file.png" width="20" height="20"' .
 	' alt="file" style="border-width:0px" />');
-}
 
 /////////////////////////////////////////////////
 // Default settings
@@ -200,7 +200,7 @@ function plugin_ref_body($args)
 					// Because of race condition NOW
 					$params['_error'] = htmlspecialchars('The same file name "' .
 						$name . '" at both page: "' .  $page . '" and "' .  $_arg .
-						'". Try ref(pagename/filname) to specify one of them');
+						'". Try ref(pagename/filename) to specify one of them');
 				} else {
 					// Because of possibility of race condition, in the future
 					$params['_error'] = 'The style ref(filename,pagename) is ambiguous ' .

@@ -1,8 +1,8 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: vote.inc.php,v 1.21.2 2005/01/06 13:44:00 miko Exp $
+// $Id: vote.inc.php,v 1.22.2 2005/01/23 09:43:06 miko Exp $
 //
-// Vote plugin
+// Vote box plugin
 
 // expired 3days
 define(PLUGIN_VOTE_COOKIE_EXPIRED,60*60*24*3);
@@ -12,6 +12,8 @@ function plugin_vote_action()
 	global $vars, $script, $cols,$rows;
 	global $_title_collided, $_msg_collided, $_title_updated;
 	global $_vote_plugin_votes;
+
+	if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
 
 	$postdata_old  = get_source($vars['refer']);
 
@@ -89,7 +91,7 @@ EOD;
 
 function plugin_vote_convert()
 {
-	global $script, $vars,  $digest;
+	global $script, $vars, $digest;
 	global $_vote_plugin_choice, $_vote_plugin_votes;
 	static $number = array();
 
@@ -101,12 +103,20 @@ function plugin_vote_convert()
 
 	if (! func_num_args()) return '#vote(): No arguments<br/>' . "\n";
 
+	if (PKWK_READONLY) {
+		$_script = '';
+		$_submit = 'hidden';
+	} else {
+		$_script = $script;
+		$_submit = 'submit';
+	}
+
 	$args     = func_get_args();
 	$s_page   = htmlspecialchars($page);
 	$s_digest = htmlspecialchars($digest);
 
 	$body = <<<EOD
-<form action="$script" method="post">
+<form action="$_script" method="post">
  <table cellspacing="0" cellpadding="2" class="style_table_vote" summary="vote">
   <tr>
    <td align="left" class="vote_label" style="padding-left:1em;padding-right:1em"><strong>$_vote_plugin_choice</strong>
@@ -139,7 +149,7 @@ EOD;
   <tr>
    <td align="left"  class="$cls" style="padding-left:1em;padding-right:1em;">$link</td>
    <td align="right" class="$cls">$cnt&nbsp;&nbsp;
-    <input type="submit" name="vote_$e_arg" value="$_vote_plugin_votes" class="submit" />
+    <input type="$_submit" name="vote_$e_arg" value="$_vote_plugin_votes" class="submit" />
    </td>
   </tr>
 
