@@ -23,6 +23,7 @@ var pukiwiki_msg_inline3 = "本文を入力してください。[ { }内 ]";
 var pukiwiki_msg_link = "リンクを設定する文字を入力してください。";
 var pukiwiki_msg_url = "リンク先のURLを入力してください。";
 var pukiwiki_msg_elem = "処理をする対象を選択してください。";
+var pukiwiki_msg_attach = "ファイル添付リンク";
 
 // Init.
 var pukiwiki_WinIE=(document.all&&!window.opera&&navigator.platform=="Win32");
@@ -57,6 +58,9 @@ if (pukiwiki_adv == "on") pukiwiki_adv_tag = '<span style="cursor:hand;">'+
 
 var pukiwiki_helper_img = 
 '<img src="image/plus/buttons.gif" width="103" height="16" border="0" usemap="#map_button" tabindex="-1" />&nbsp;'+
+'<span style="cursor:hand;">'+
+'<img src="image/plus/attachref.png" width="18" height="16" border="0" title="'+pukiwiki_msg_attach+'" alt="&amp;attachref;" onClick="javascript:pukiwiki_ins(\'&attachref();\'); return false;" '+'/'+'>';
+'<'+'/'+'span>&nbsp;'+
 pukiwiki_adv_tag +
 '<img src="image/plus/colors.gif" width="64" height="16" border="0" usemap="#map_color" tabindex="-1" />&nbsp;'+
 '<span style="cursor:hand;">'+
