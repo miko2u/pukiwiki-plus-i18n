@@ -6,7 +6,7 @@
 
 // Allow search via GET method 'index.php?plugin=search&word=keyword'
 // NOTE: Also allows DoS to your site more easily by SPAMbot or worm or ...
-define('PLUGIN_SEARCH_DISABLE_GET_ACCESS', 1); // 1, 0
+define('PLUGIN_SEARCH_DISABLE_GET_ACCESS', 0); // 1, 0
 
 define('PLUGIN_SEARCH_MAX_LENGTH', 80);
 
@@ -41,8 +41,20 @@ function plugin_search_action()
 		$body = do_search($vars['word'], $type);
 	}
 
+	if (PLUGIN_SEARCH_DISABLE_GET_ACCESS) {
 	$body .= <<<EOD
-<form action="$script?cmd=search" method="get">
+<form action="$script?cmd=search" method="post">
+ <div>
+  <input type="text"  name="word" value="$s_word" size="20" />
+  <input type="radio" name="type" value="AND" $and_check />$_btn_and
+  <input type="radio" name="type" value="OR"  $or_check  />$_btn_or
+  &nbsp;<input type="submit" value="$_btn_search" />
+ </div>
+</form>
+EOD;
+	} else {
+	$body .= <<<EOD
+<form action="$script" method="get">
  <div>
   <input type="hidden" name="cmd" value="search" />
   <input type="text"  name="word" value="$s_word" size="20" />
@@ -52,6 +64,7 @@ function plugin_search_action()
  </div>
 </form>
 EOD;
+	}
 
 	return array('msg'=>$msg, 'body'=>$body);
 }

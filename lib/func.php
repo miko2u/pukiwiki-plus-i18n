@@ -202,7 +202,7 @@ function do_search($word, $type = 'AND', $non_format = FALSE, $non_fuzzy = FALSE
 
 		$b_match = FALSE;
 //miko modified
-		if (!$search_fuzzy) {
+		if (!$search_fuzzy || $non_fuzzy) {
 			foreach ($keys as $key) {
 				$tmp     = preg_grep('/' . $key . '/', $source);
 				$b_match = ! empty($tmp);
@@ -226,6 +226,7 @@ function do_search($word, $type = 'AND', $non_format = FALSE, $non_fuzzy = FALSE
 				$_keyword = mb_ereg_replace('[ッー・゛゜、。]', '', $_keyword);
 				$b_match = mb_ereg(mb_ereg_quote($_keyword), $_source);
 			}
+			if ($b_match) $pages[$page] = get_filetime($page);
 		}
 //miko modified
 	}
