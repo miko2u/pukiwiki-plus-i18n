@@ -1,5 +1,5 @@
 <?php
-// $Id: versionlist.inc.php,v 1.15.1 2005/01/29 02:12:52 miko Exp $
+// $Id: versionlist.inc.php,v 1.15.2 2005/03/09 02:12:52 miko Exp $
 /*
  * PukiWiki versionlist plugin
  *

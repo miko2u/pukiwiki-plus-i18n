@@ -1,0 +1,12 @@
+#: vote.inc.php:19,117
+msgid "Vote"
+msgstr "投票"
+
+#: vote.inc.php:116
+msgid "Selection"
+msgstr "選択肢"
+
+#: vote.inc.php:29
+msgid "Continuation vote cannot be performed."
+msgstr "連続投票はできません"
+

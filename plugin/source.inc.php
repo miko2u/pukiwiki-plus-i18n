@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: source.inc.php,v 1.14 2005/01/29 02:07:58 henoheno Exp $
+// $Id: source.inc.php,v 1.14.1 2005/03/09 03:07:58 miko Exp $
 //
 // Source plugin
 
@@ -15,11 +15,14 @@ function plugin_source_action()
 	$vars['refer'] = $page;
 
 	if (! is_page($page) || ! check_readable($page, false, false))
-		return array('msg' => $_source_messages['msg_notfound'],
-			'body' => $_source_messages['err_notfound']);
+		return array(
+			'msg' => _(' $1 was not found.'),
+			'body' => _('cannot display the page source.')
+		);
 
-	return array('msg' => $_source_messages['msg_title'],
-		'body' => '<pre id="source">' .
-		htmlspecialchars(join('', get_source($page))) . '</pre>');
+	return array(
+		'msg' => _('Source of  $1'),
+		'body' => '<pre id="source">' . htmlspecialchars(join('', get_source($page))) . '</pre>'
+	);
 }
 ?>

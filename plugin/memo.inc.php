@@ -1,5 +1,6 @@
 <?php
-// $Id: memo.inc.php,v 1.14 2005/01/23 08:01:29 henoheno Exp $
+// PukiWiki - Yet another WikiWikiWeb clone
+// $Id: memo.inc.php,v 1.14.1 2005/01/23 08:01:29 miko Exp $
 //
 // Memo box plugin
 
@@ -69,7 +70,6 @@ EOD;
 function plugin_memo_convert()
 {
 	global $script, $vars, $digest;
-	global $_btn_memo_update;
 	static $numbers = array();
 
 	if (! isset($numbers[$vars['page']])) $numbers[$vars['page']] = 0;
@@ -86,7 +86,7 @@ function plugin_memo_convert()
 		$_submit = '';	
 	} else {
 		$_script = & $script;
-		$_submit = '<input type="submit" name="memo"    value="' . $_btn_memo_update . '" />';
+		$_submit = '<input type="submit" name="memo"    value="' . _('update') . '" />';
 	}
 
 	$s_page   = htmlspecialchars($vars['page']);

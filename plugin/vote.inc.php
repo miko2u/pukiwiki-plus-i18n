@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: vote.inc.php,v 1.22.2 2005/01/23 09:43:06 miko Exp $
+// $Id: vote.inc.php,v 1.22.3 2005/03/09 02:43:06 miko Exp $
 //
 // Vote box plugin
 
@@ -11,7 +11,7 @@ function plugin_vote_action()
 {
 	global $vars, $script, $cols,$rows;
 	global $_title_collided, $_msg_collided, $_title_updated;
-	global $_vote_plugin_votes;
+	$s_votes  = _('Vote');
 
 	if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
 
@@ -25,8 +25,8 @@ function plugin_vote_action()
 	$votedkey = 'vote_'.$vars['refer'].'_'.$vars['vote_no'];
 	if (isset($_COOKIE[$votedkey])) {
 		return array(
-			'msg'  => 'Error in vote',
-			'body' => '連続投票はできません',
+			'msg'  => _('Error in vote'),
+			'body' => _('Continuation vote cannot be performed.'),
 		);
 	}
 	$_COOKIE[$votedkey] = 1;
@@ -51,7 +51,7 @@ function plugin_vote_action()
 				$cnt = $matches[2];
 			}
 			$e_arg = encode($arg);
-			if (! empty($vars['vote_' . $e_arg]) && $vars['vote_' . $e_arg] == $_vote_plugin_votes)
+			if (! empty($vars['vote_' . $e_arg]) && $vars['vote_' . $e_arg] == $s_votes)
 				++$cnt;
 
 			$votes[] = $arg . '[' . $cnt . ']';
@@ -92,7 +92,6 @@ EOD;
 function plugin_vote_convert()
 {
 	global $script, $vars, $digest;
-	global $_vote_plugin_choice, $_vote_plugin_votes;
 	static $number = array();
 
 	$page = isset($vars['page']) ? $vars['page'] : '';
@@ -114,18 +113,20 @@ function plugin_vote_convert()
 	$args     = func_get_args();
 	$s_page   = htmlspecialchars($page);
 	$s_digest = htmlspecialchars($digest);
+	$s_choice = _('Selection');
+	$s_votes  = _('Vote');
 
 	$body = <<<EOD
 <form action="$_script" method="post">
  <table cellspacing="0" cellpadding="2" class="style_table_vote" summary="vote">
   <tr>
-   <td align="left" class="vote_label" style="padding-left:1em;padding-right:1em"><strong>$_vote_plugin_choice</strong>
+   <td align="left" class="vote_label" style="padding-left:1em;padding-right:1em"><strong>$s_choice</strong>
     <input type="hidden" name="plugin"  value="vote" />
     <input type="hidden" name="refer"   value="$s_page" />
     <input type="hidden" name="vote_no" value="$vote_no" />
     <input type="hidden" name="digest"  value="$s_digest" />
    </td>
-   <td align="center" class="vote_label"><strong>$_vote_plugin_votes</strong></td>
+   <td align="center" class="vote_label"><strong>$s_votes</strong></td>
   </tr>
 
 EOD;
@@ -149,7 +150,7 @@ EOD;
   <tr>
    <td align="left"  class="$cls" style="padding-left:1em;padding-right:1em;">$link</td>
    <td align="right" class="$cls">$cnt&nbsp;&nbsp;
-    <input type="$_submit" name="vote_$e_arg" value="$_vote_plugin_votes" class="submit" />
+    <input type="$_submit" name="vote_$e_arg" value="$s_votes" class="submit" />
    </td>
   </tr>
 

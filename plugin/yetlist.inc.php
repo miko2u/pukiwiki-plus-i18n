@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: yetlist.inc.php,v 1.21 2005/02/28 02:59:37 miko Exp $
+// $Id: yetlist.inc.php,v 1.21.1 2005/03/09 02:59:37 miko Exp $
 //
 // Yet list plugin - Show a dangling link list (not yet created)
 

@@ -1,0 +1,19 @@
+#: article.inc.php:
+msgid "Name: "
+msgstr "お名前"
+
+#: article.inc.php:
+msgid "Submit"
+msgstr "記事の投稿"
+
+#: article.inc.php:
+msgid "Subject: "
+msgstr "題名: "
+
+#: article.inc.php:
+msgid "Author: "
+msgstr "投稿者: "
+
+#: article.inc.php:
+msgid "Page: "
+msgstr "投稿先: "

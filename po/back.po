@@ -1,0 +1,4 @@
+#: back.inc.php:xx
+msgid "Back"
+msgstr "戻る"
+

@@ -1,0 +1,4 @@
+#: memo.inc.php:89
+msgid "update"
+msgstr "メモ更新"
+

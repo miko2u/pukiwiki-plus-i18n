@@ -1,0 +1,12 @@
+#: source.inc.php:19
+msgid " $1 was not found."
+msgstr "$1が見つかりません"
+
+#: source.inc.php:20
+msgid "cannot display the page source."
+msgstr "ページのソースを表示できません。"
+
+#: source.inc.php:24
+#﻿msgid "Source of  $1"
+#msgstr "$1のソース"
+

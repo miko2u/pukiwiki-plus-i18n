@@ -118,8 +118,8 @@ EOD;
 
 			$mailbody = $post['msg'];
 			$mailbody .= "\n\n" . '---' . "\n";
-			$mailbody .= $_msg_article_mail_sender . $post['name'] . ' (' . $now . ')' . "\n";
-			$mailbody .= $_msg_article_mail_page . $post['refer'] . "\n";
+			$mailbody .= _('Author: ') . $post['name'] . ' (' . $now . ')' . "\n";
+			$mailbody .= _('Page: ') . $post['refer'] . "\n";
 			$mailbody .= '¡¡ URL: ' . $script . '?' . rawurlencode($post['refer']) . "\n";
 			$mailbody = mb_convert_encoding($mailbody, 'JIS');
 
