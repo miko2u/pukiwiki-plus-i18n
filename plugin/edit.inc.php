@@ -8,9 +8,10 @@
 
 function plugin_edit_action()
 {
-	global $vars, $_title_edit, $load_template_func;
+	// global $vars, $_title_edit, $load_template_func;
+	global $vars, $load_template_func;
 
-	if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
+	if (PKWK_READONLY) die_message( _('PKWK_READONLY prohibits editing') );
 
 	$page = isset($vars['page']) ? $vars['page'] : '';
 
@@ -37,14 +38,14 @@ function plugin_edit_action()
 	}
 	if ($postdata == '') $postdata = auto_template($page);
 
-	return array('msg'=>$_title_edit, 'body'=>edit_form($page, $postdata));
+	return array('msg'=> _('Edit of  $1'), 'body'=>edit_form($page, $postdata));
 }
 
 // Preview
 function plugin_edit_preview()
 {
 	global $vars;
-	global $_title_preview, $_msg_preview, $_msg_preview_delete;
+	// global $_title_preview, $_msg_preview, $_msg_preview_delete;
 
 	$page = isset($vars['page']) ? $vars['page'] : '';
 
@@ -69,9 +70,11 @@ function plugin_edit_preview()
 		}
 	}
 
-	$body = "$_msg_preview<br />\n";
+	$body = _('To confirm the changes, click the button at the bottom of the page') . "<br />\n";
 	if ($postdata == '')
-		$body .= "<strong>$_msg_preview_delete</strong>";
+		$body .= "<strong>" .
+			 _('(The contents of the page are empty. Updating deletes this page.)') .
+			 "</strong>";
 	$body .= "<br />\n";
 
 	if ($postdata) {
@@ -82,7 +85,7 @@ function plugin_edit_preview()
 	}
 	$body .= edit_form($page, $vars['msg'], $vars['digest'], FALSE);
 
-	return array('msg'=>$_title_preview, 'body'=>$body);
+	return array('msg'=> _('Preview of  $1'), 'body'=>$body);
 }
 
 // Inline: Show edit (or unfreeze text) link
@@ -122,7 +125,7 @@ function plugin_edit_inline()
 function plugin_edit_write()
 {
 	global $vars;
-	global $_title_collided, $_msg_collided_auto, $_msg_collided, $_title_deleted;
+	// global $_title_collided, $_msg_collided_auto, $_msg_collided, $_title_deleted;
 
 	$page = isset($vars['page']) ? $vars['page'] : '';
 	$retvars = array();
@@ -155,8 +158,20 @@ function plugin_edit_write()
 	if (! isset($vars['digest']) || $vars['digest'] != $oldpagemd5) {
 		$vars['digest'] = $oldpagemd5;
 
-		$retvars['msg'] = $_title_collided;
+		$retvars['msg'] = _('On updating  $1, a collision has occurred.');
+
 		list($postdata_input, $auto) = do_update_diff($oldpagesrc, $postdata_input, $vars['original']);
+
+		$_msg_collided_auto =
+		_('It seems that someone has already updated this page while you were editing it.<br />') .
+		_('The collision has been corrected automatically, but there may still be some problems with the page.<br />') .
+		_('To confirm the changes to the page, press [Update].<br />');
+
+		$_msg_collided =
+		_('It seems that someone has already updated this page while you were editing it.<br />') .
+		_(' + is placed at the beginning of a line that was newly added.<br />') .
+		_(' ! is placed at the beginning of a line that has possibly been updated.<br />') .
+		_(' Edit those lines, and submit again.');
 
 		$retvars['body'] = ($auto ? $_msg_collided_auto : $_msg_collided)."\n";
 
@@ -189,6 +204,8 @@ function plugin_edit_write()
 			}
 			exit;
 		}
+
+		$_title_deleted = _(' $1 was deleted');
 
 		$retvars['msg'] = $_title_deleted;
 		$retvars['body'] = str_replace('$1', htmlspecialchars($page), $_title_deleted);
