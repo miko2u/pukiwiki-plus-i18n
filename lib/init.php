@@ -99,11 +99,11 @@ if (!($_REQUEST['plugin'] != 'attach' && $_REQUEST['pcmd'] != 'open')) {
 /////////////////////////////////////////////////
 // INI_FILE: Require LANG_FILE
 
-define('LANG_FILE_HINT_EX', DATA_HOME . LANG . '.' . LANG_ENCODING . '.lng.php');
 define('LANG_FILE_HINT',    DATA_HOME . LANG . '.lng.php');	// For encoding hint
+define('LANG_FILE_HINT_EX', DATA_HOME . LANG . '.' . LANG_ENCODING . '.lng.php');
 define('LANG_FILE',         DATA_HOME . UI_LANG . '.lng.php');	// For UI resource
 $die = '';
-foreach (array('LANG_FILE_HINT_EX', 'LANG_FILE_HINT', 'LANG_FILE') as $langfile) {
+foreach (array('LANG_FILE_HINT', 'LANG_FILE_HINT_EX', 'LANG_FILE') as $langfile) {
 	if (! file_exists(constant($langfile)) || ! is_readable(constant($langfile))) {
 		$die .= 'File is not found or not readable. (' . $langfile . ')' . "\n";
 	} else {
