@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: attach.inc.php,v 1.71.4 2005/01/30 12:02:37 miko Exp $
+// $Id: attach.inc.php,v 1.73.4 2005/02/27 07:44:53 miko Exp $
 //
 // File attach plugin
 
@@ -377,7 +377,7 @@ EOD;
   <span class="small">
    $msg_maxsize
   </span><br />
-  {$_attach_messages['msg_file']}: <input type="file" name="attach_file" />
+  <label for="_p_attach_file">{$_attach_messages['msg_file']}:</label> <input type="file" name="attach_file" id="_p_attach_file" />
   $pass
   <input type="submit" value="{$_attach_messages['btn_upload']}" />
  </div>
@@ -495,27 +495,31 @@ class AttachFile
 
 		if ($this->age) {
 			$msg_freezed = '';
-			$msg_delete  = '<input type="radio" name="pcmd" value="delete" />' .
+			$msg_delete  = '<input type="radio" name="pcmd" id="_p_attach_delete" value="delete" />' .
+				'<label for="_p_attach_delete">' .
 				$_attach_messages['msg_delete'] .
-				$_attach_messages['msg_require'] . '<br />';
+				$_attach_messages['msg_require'] . '</label><br />';
 			$msg_freeze  = '';
 		} else {
 			if ($this->status['freeze']) {
 				$msg_freezed = "<dd>{$_attach_messages['msg_isfreeze']}</dd>";
 				$msg_delete  = '';
-				$msg_freeze  = '<input type="radio" name="pcmd" value="unfreeze" />' .
+				$msg_freeze  = '<input type="radio" name="pcmd" id="_p_attach_unfreeze" value="unfreeze" />' .
+					'<label for="_p_attach_unfreeze">' .
 					$_attach_messages['msg_unfreeze'] .
-					$_attach_messages['msg_require'] . '<br />';
+					$_attach_messages['msg_require'] . '</label><br />';
 			} else {
 				$msg_freezed = '';
-				$msg_delete = '<input type="radio" name="pcmd" value="delete" />' .
+				$msg_delete = '<input type="radio" name="pcmd" id="_p_attach_delete" value="delete" />' .
+					'<label for="_p_attach_delete">' .
 					$_attach_messages['msg_delete'];
 				if (PLUGIN_ATTACH_DELETE_ADMIN_ONLY || $this->age)
 					$msg_delete .= $_attach_messages['msg_require'];
-				$msg_delete .= '<br />';
-				$msg_freeze  = '<input type="radio" name="pcmd" value="freeze" />' .
+				$msg_delete .= '</label><br />';
+				$msg_freeze  = '<input type="radio" name="pcmd" id="_p_attach_freeze" value="freeze" />' .
+					'<label for="_p_attach_freeze">' .
 					$_attach_messages['msg_freeze'] .
-					$_attach_messages['msg_require'] . '<br />';
+					$_attach_messages['msg_require'] . '</label><br />';
 			}
 		}
 		$info = $this->toString(TRUE, FALSE);
@@ -561,7 +565,8 @@ $s_err
   <input type="hidden" name="age" value="{$this->age}" />
   $msg_delete
   $msg_freeze
-  {$_attach_messages['msg_password']}: <input type="password" name="pass" size="8" />
+  <label for="_p_attach_password">{$_attach_messages['msg_password']}:</label>
+  <input type="password" name="pass" size="8" id="_p_attach_password" />
   <input type="submit" value="{$_attach_messages['btn_submit']}" />
  </div>
 </form>
