@@ -10,7 +10,7 @@
 //   している必要があります
 
 // Encoding hint
-$_LANG['encode_hint']['ja'] = 'ぷ';
+$_LANG['encode_hint']['ja_JP'] = 'ぷ';
 
 ///////////////////////////////////////
 // Page titles

@@ -33,25 +33,8 @@ define('PKWK_QUERY_STRING_MAX', 640); // Bytes, 0 = OFF
 /////////////////////////////////////////////////
 // Language / Encoding settings
 
-if (! defined('DEFAULT_LANG')) define('DEFAULT_LANG', 'ja');
-// $language_prepared = array("ja","en","ko","zh-TW");
-$language_prepared = array("ja","ko","en");
+if (! defined('DEFAULT_LANG')) define('DEFAULT_LANG', 'ja_JP');
 $language_considering_setting_level = 1;
-$language = set_ui_language();
-
-// LANG - Internal content encoding ('en', 'ja', or ...)
-define('LANG', $language);
-// LANG_ENCODING - content encoding ('', 'UTF-8', or ...)
-define('LANG_ENCODING', 'UTF-8');
-
-// UI_LANG - Content Language for buttons, menus,  etc
-define('UI_LANG', LANG); // 'en' for Internationalized wikisite
-
-// LOCALE Name specified by GETTEXT().
-define('DOMAIN', 'pukiwiki');
-// LOCALE Name specified by SETLOCALE().
-if (! defined('PO_LANG'))
-	define('PO_LANG', 'ja_JP'); // 'en_US', 'ja_JP'
 
 /////////////////////////////////////////////////
 // Directory settings I (ended with '/', permission '777')
@@ -88,24 +71,6 @@ define('IMAGE_DIR', 'image/');
 define('ROOT_URI', '');
 define('SKIN_URI', ROOT_URI . SKIN_DIR);
 define('IMAGE_URI', ROOT_URI . IMAGE_DIR);
-
-/////////////////////////////////////////////////
-// Local time setting
-
-switch (LANG) { // or specifiy one
-case 'ja':
-	define('ZONE', 'JST');
-	define('ZONETIME', 9 * 3600); // JST = GMT + 9
-	break;
-case 'ko':
-	define('ZONE', 'KST');
-	define('ZONETIME', 9 * 3600); // KST = GMT + 9
-	break;
-default  :
-	define('ZONE', 'GMT');
-	define('ZONETIME', 0);
-	break;
-}
 
 /////////////////////////////////////////////////
 // Title of your Wikisite (Define this)

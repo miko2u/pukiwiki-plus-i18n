@@ -50,43 +50,10 @@ if (! file_exists(INI_FILE) || ! is_readable(INI_FILE)) {
 }
 if ($die) die_message(nl2br("\n\n" . $die));
 
-/////////////////////////////////////////////////
-// INI_FILE: LANG に基づくエンコーディング設定
-
-switch (LANG){
-case 'en':
-	// Internal content encoding = Output content charset (for skin)
-	define('CONTENT_CHARSET', 'iso-8859-1'); // 'UTF-8', 'iso-8859-1', 'EUC-JP' or ...
-	// mb_language (for mbstring extension)
-	define('MB_LANGUAGE',   'English');	// 'uni'(means UTF-8), 'English', or 'Japanese'
-	// Internal content encoding (for mbstring extension)
-	define('SOURCE_ENCODING', 'ASCII');	// 'UTF-8', 'ASCII', or 'EUC-JP'
-	break;
-case 'ja': // EUC-JP or UTF-8
-	if (LANG_ENCODING == 'UTF-8') {
-		define('CONTENT_CHARSET', 'UTF-8');
-		define('MB_LANGUAGE',  'Japanese');
-		define('SOURCE_ENCODING', 'UTF-8');
-	} else {
-		define('CONTENT_CHARSET', 'EUC-JP');
-		define('MB_LANGUAGE',   'Japanese');
-		define('SOURCE_ENCODING', 'EUC-JP');
-	}
-	break;
-case 'ko': // UTF-8
-	define('CONTENT_CHARSET', 'UTF-8');
-	define('MB_LANGUAGE',    'Korean');
-	define('SOURCE_ENCODING', 'UTF-8');
-	break;
-default:
-	die_message('No such language "' . LANG . '"');
-}
-
-mb_language(MB_LANGUAGE);
-mb_internal_encoding(SOURCE_ENCODING);
-ini_set('mbstring.http_input', 'pass');
-mb_http_output('pass');
-mb_detect_order('auto');
+/// FIXME
+set_ui_language();
+set_timezone();
+set_mb_proc();
 
 // for SESSION Variables
 if (!($_REQUEST['plugin'] != 'attach' && $_REQUEST['pcmd'] != 'open')) {
@@ -100,11 +67,11 @@ if (!($_REQUEST['plugin'] != 'attach' && $_REQUEST['pcmd'] != 'open')) {
 // INI_FILE: Require LANG_FILE
 
 if(defined('LANG_ENCODING') && LANG_ENCODING != '') {
-define('LANG_FILE_HINT',    DATA_HOME . LANG . '.' . LANG_ENCODING . '.lng.php');
-define('LANG_FILE',         DATA_HOME . UI_LANG . '.' . LANG_ENCODING . '.lng.php');    // For UI resource
+	define('LANG_FILE_HINT',    LANG_DIR . LANG . '.' . LANG_ENCODING . '.lng.php');
+	define('LANG_FILE',         LANG_DIR . UI_LANG . '.' . LANG_ENCODING . '.lng.php');    // For UI resource
 } else {
-define('LANG_FILE_HINT',    DATA_HOME . LANG . '.lng.php');     // For encoding hint
-define('LANG_FILE',         DATA_HOME . UI_LANG . '.lng.php');  // For UI resource
+	define('LANG_FILE_HINT',    LANG_DIR . LANG . '.lng.php');     // For encoding hint
+	define('LANG_FILE',         LANG_DIR . UI_LANG . '.lng.php');  // For UI resource
 }
 $die = '';
 foreach (array('LANG_FILE_HINT', 'LANG_FILE') as $langfile) {

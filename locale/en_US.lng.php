@@ -9,7 +9,7 @@
 // NOTE: Encoding of this file, must equal to encoding setting
 
 // Encoding hint
-$_LANG['encode_hint']['en'] = '';
+$_LANG['encode_hint']['en_US'] = '';
 
 ///////////////////////////////////////
 // Page titles
