@@ -59,7 +59,7 @@ if (pukiwiki_adv == "on") pukiwiki_adv_tag = '<span style="cursor:hand;">'+
 var pukiwiki_helper_img = 
 '<img src="image/plus/buttons.gif" width="103" height="16" border="0" usemap="#map_button" tabindex="-1" />&nbsp;'+
 '<span style="cursor:hand;">'+
-'<img src="image/plus/attachref.png" width="18" height="16" border="0" title="'+pukiwiki_msg_attach+'" alt="&amp;attachref;" onClick="javascript:pukiwiki_ins(\'&attachref();\'); return false;" '+'/'+'>';
+'<img src="image/plus/attachref.png" width="18" height="16" border="0" title="'+pukiwiki_msg_attach+'" alt="&amp;attachref;" onClick="javascript:pukiwiki_ins(\'&attachref();\'); return false;" '+'/'+'>'+
 '<'+'/'+'span>&nbsp;'+
 pukiwiki_adv_tag +
 '<img src="image/plus/colors.gif" width="64" height="16" border="0" usemap="#map_color" tabindex="-1" />&nbsp;'+
