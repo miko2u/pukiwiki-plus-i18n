@@ -1,10 +1,12 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: edit.inc.php,v 1.19.30 2005/01/23 05:22:25 miko Exp $
+// $Id: edit.inc.php,v 1.19.32 2005/03/10 17:41:09 miko Exp $
 //
-
 // Edit plugin
 // cmd=edit
+
+// Remove #freeze written by hand
+define('PLUGIN_EDIT_FREEZE_REGEX', '/^(?:#freeze(?!\w)\s*)+/im');
 
 function plugin_edit_action()
 {
@@ -58,7 +60,7 @@ function plugin_edit_preview()
 	}
 
 	// 手書きの#freezeを削除
-	$vars['msg'] = preg_replace('/^#freeze\s*$/im', '' ,$vars['msg']);
+	$vars['msg'] = preg_replace(PLUGIN_EDIT_FREEZE_REGEX, '' ,$vars['msg']);
 	$postdata = $vars['msg'];
 
 	if (isset($vars['add']) && $vars['add']) {
