@@ -3,7 +3,7 @@
  * Language judgment (Œ¾Œê”»’è)
  *
  * @copyright   Copyright &copy; 2005, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: lang.php,v 0.3 2005/03/07 00:05:00 upk Exp $
+ * @version     $Id: lang.php,v 0.4 2005/03/07 00:08:00 upk Exp $
  *
  */
 
@@ -74,7 +74,7 @@ class accept_language
 		"sjis"		=> "ja_JP",
 		"ujis"		=> "ja_JP",
 		"euc_jp"	=> "ja_JP",
-		"x-euc"		=> "ja_JP,
+		"x-euc"		=> "ja_JP",
 		"x-sjis"	=> "ja_JP",
 		"ms_kanji"	=> "ja_JP",
 		"euc-kr"	=> "ko_KR", // 410
