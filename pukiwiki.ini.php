@@ -33,8 +33,14 @@ define('PKWK_QUERY_STRING_MAX', 640); // Bytes, 0 = OFF
 /////////////////////////////////////////////////
 // Language / Encoding settings
 
+if (! defined('DEFAULT_LANG')) define('DEFAULT_LANG', 'ja');
+// $language_prepared = array("ja","en","ko","zh-TW");
+$language_prepared = array("ja","ko","en");
+$language_considering_setting_level = 1;
+$language = set_ui_language();
+
 // LANG - Internal content encoding ('en', 'ja', or ...)
-define('LANG', 'ja');
+define('LANG', $language);
 // LANG_ENCODING - content encoding ('', 'UTF-8', or ...)
 define('LANG_ENCODING', 'UTF-8');
 
@@ -46,7 +52,6 @@ define('DOMAIN', 'pukiwiki');
 // LOCALE Name specified by SETLOCALE().
 if (! defined('PO_LANG'))
 	define('PO_LANG', 'ja_JP'); // 'en_US', 'ja_JP'
-
 
 /////////////////////////////////////////////////
 // Directory settings I (ended with '/', permission '777')
