@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: color.inc.php,v 1.18.1 2004/12/22 14:12:05 miko Exp $
+// $Id: color.inc.php,v 1.19 2004/12/22 14:34:24 henoheno Exp $
 //
 // Text color plugin
 
@@ -33,8 +33,7 @@ function plugin_color_inline()
 			return '&color():Invalid color: ' . htmlspecialchars($col) . ';';
 	}
 
-//	if (PLUGIN_COLOR_ALLOW_CSS === TRUE && $html_transitional === FALSE) {
-	if (PLUGIN_COLOR_ALLOW_CSS === TRUE) { // Why html_transitional?
+	if (PLUGIN_COLOR_ALLOW_CSS === TRUE || $html_transitional === FALSE) {
 		$delimiter = '';
 		if ($color != '' && $bgcolor != '') $delimiter = '; ';
 		if ($color   != '') $color   = 'color:' . $color;
