@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: navibar.php,v 0.1.1 2004/10/17 15:33:43 miko Exp $
+// $Id: navibar.php,v 0.1.2 2004/12/19 15:33:43 miko Exp $
 //
 function plugin_navibar_convert()
 {
@@ -95,7 +95,7 @@ function _navigator($key, $val = '')
 
 	$link = $_LINK;
 	$lang = $_LANG['skin'];
-	$image = $_IMAGE['skin'];
+	$image = isset($_IMAGE['skin']) ? $_IMAGE['skin'] : array();
 
 	if (!isset($link[$key])) { return '<!--LINK NOT FOUND-->'; }
 	if (!isset($lang[$key])) { return '<!--LANG NOT FOUND-->'; }
