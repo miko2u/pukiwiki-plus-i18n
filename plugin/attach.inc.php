@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-//  $Id: attach.inc.php,v 1.66.1 2004/12/02 11:34:25 miko Exp $
+//  $Id: attach.inc.php,v 1.66.3 2004/12/19 23:34:25 miko Exp $
 //
 
 /*
@@ -12,11 +12,11 @@
  modified by PANDA <panda@arino.jp> http://home.arino.jp/
 */
 
-// Max file size for upload on PHP (PHP default: 2MB)
-ini_set('upload_max_filesize', '2M');
+// Max file size for upload on PHP (PHP default: 4MB)
+ini_set('upload_max_filesize', '4M');
 
 // Max file size for upload on script of PukiWikiX_FILESIZE
-define('MAX_FILESIZE', (1024 * 1024)); // default: 1MB
+define('MAX_FILESIZE', (2048 * 1024)); // default: 2MB
 
 // 管理者だけが添付ファイルをアップロードできるようにする
 define('ATTACH_UPLOAD_ADMIN_ONLY', FALSE); // FALSE or TRUE
@@ -497,6 +497,17 @@ class AttachFile
 		}
 		$info = $this->toString(TRUE, FALSE);
 
+		$size = @getimagesize($this->filename);
+		if ($size[2] > 0 && $size[2] < 3) {
+			if ($size[0] < 200) { $w = $size[0]; $h = $size[1]; }
+			else { $w = 200; $h = $size[1] * (200 / ($size[0]!=0?$size[0]:1) ); }
+			$_attach_setimage  = '<div class="img_margin" style="float:right;"><img src="';
+			$_attach_setimage .= "$script?plugin=ref&amp;src={$s_file}&amp;page={$r_page}";
+			$_attach_setimage .= '" width="' . $w .'" height="' . $h . '" /></div>';
+		} else {
+			$_attach_setimage = '';
+		}
+
 		$retval = array('msg'=>sprintf($_attach_messages['msg_info'], htmlspecialchars($this->file)));
 		$retval['body'] = <<< EOD
 <p class="small">
@@ -505,16 +516,19 @@ class AttachFile
 </p>
 <dl>
  <dt>$info</dt>
- <dd>{$_attach_messages['msg_page']}:$s_page</dd>
  <dd>{$_attach_messages['msg_filename']}:{$this->filename}</dd>
- <dd>{$_attach_messages['msg_md5hash']}:{$this->md5hash}</dd>
+</dl>
+{$_attach_setimage}
+<dl>
+ <dd>{$_attach_messages['msg_page']}:$s_page</dd>
  <dd>{$_attach_messages['msg_filesize']}:{$this->size_str} ({$this->size} bytes)</dd>
  <dd>Content-type:{$this->type}</dd>
  <dd>{$_attach_messages['msg_date']}:{$this->time_str}</dd>
  <dd>{$_attach_messages['msg_dlcount']}:{$this->status['count'][$this->age]}</dd>
+ <dd>{$_attach_messages['msg_md5hash']}:{$this->md5hash}</dd>
  $msg_freezed
 </dl>
-<hr />
+<div style="clear:right"><hr /></div>
 $s_err
 <form action="$script" method="post">
  <div>
