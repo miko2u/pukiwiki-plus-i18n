@@ -1,9 +1,16 @@
 <?php
-/////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
+// $Id: pukiwiki.skin.php,v 1.30 2004/12/11 13:56:40 henoheno Exp $
 //
-// $Id: pukiwiki.skin.php,v 1.25 2004/11/23 14:44:18 henoheno Exp $
-//
+// PukiWiki default skin
+
+// SKIN_DEFAULT_DISABLE_TOPICPATH
+//   1 = Show reload URL
+//   0 = Show topicpath
+if (! defined('SKIN_DEFAULT_DISABLE_TOPICPATH'))
+	define('SKIN_DEFAULT_DISABLE_TOPICPATH', 1);
+
+// ----
 
 // Prohibit direct access
 if (! defined('UI_LANG')) exit;
@@ -41,6 +48,7 @@ switch(UI_LANG){
 }
 
 // Output header
+pkwk_headers_sent();
 header('Cache-control: no-cache');
 header('Pragma: no-cache');
 header('Content-Type: text/html; charset=' . CONTENT_CHARSET);
@@ -81,7 +89,13 @@ if ($html_transitional) { ?>
  <h1 class="title"><?php echo $page ?></h1>
 
 <?php if ($is_page) { ?>
- <a href="<?php echo $link['reload'] ?>"><span class="small"><?php echo $link['reload'] ?></span></a>
+ <?php if(SKIN_DEFAULT_DISABLE_TOPICPATH) { ?>
+   <a href="<?php echo $link['reload'] ?>"><span class="small"><?php echo $link['reload'] ?></span></a>
+ <?php } else { ?>
+   <span class="small">
+   <?php require_once(PLUGIN_DIR . 'topicpath.inc.php'); echo plugin_topicpath_inline(); ?>
+   </span>
+ <?php } ?>
 <?php } ?>
 
 </div>
@@ -106,7 +120,7 @@ function _navigator($key, $value = '', $javascript = ''){
 
 <?php if ($is_page) { ?>
  [ <?php _navigator('edit')   ?>
- <?php if ($is_read and $function_freeze) { ?>
+ <?php if ($is_read && $function_freeze) { ?>
  |  <?php (! $is_freeze) ? _navigator('freeze') : _navigator('unfreeze') ?>
  <?php } ?>
  | <?php _navigator('diff') ?>
@@ -142,13 +156,11 @@ function _navigator($key, $value = '', $javascript = ''){
 
 <?php echo $hr ?>
 
-<?php if (arg_check('read') and exist_plugin_convert('menu')) { ?>
+<?php if (arg_check('read') && exist_plugin_convert('menu')) { ?>
 <table border="0" style="width:100%">
  <tr>
   <td class="menubar">
-   <div id="menubar">
-    <?php echo do_plugin_convert('menu') ?>
-   </div>
+   <div id="menubar"><?php echo do_plugin_convert('menu') ?></div>
   </td>
   <td valign="top">
    <div id="body"><?php echo $body ?></div>
@@ -160,9 +172,7 @@ function _navigator($key, $value = '', $javascript = ''){
 <?php } ?>
 
 <?php if ($notes) { ?>
-<div id="note">
-<?php echo $notes ?>
-</div>
+<div id="note"><?php echo $notes ?></div>
 <?php } ?>
 
 <?php if ($attaches) { ?>
@@ -196,7 +206,7 @@ function _toolbar($key, $x = 20, $y = 20){
 <?php if ($is_page) { ?>
  &nbsp;
  <?php _toolbar('edit') ?>
- <?php if ($is_read and $function_freeze) { ?>
+ <?php if ($is_read && $function_freeze) { ?>
   <?php if (! $is_freeze) { _toolbar('freeze'); } else { _toolbar('unfreeze'); } ?>
  <?php } ?>
  <?php _toolbar('diff') ?>
@@ -220,15 +230,11 @@ function _toolbar($key, $x = 20, $y = 20){
 </div>
 
 <?php if ($lastmodified) { ?>
-<div id="lastmodified">
- Last-modified: <?php echo $lastmodified ?>
-</div>
+<div id="lastmodified">Last-modified: <?php echo $lastmodified ?></div>
 <?php } ?>
 
 <?php if ($related) { ?>
-<div id="related">
- Link: <?php echo $related ?>
-</div>
+<div id="related">Link: <?php echo $related ?></div>
 <?php } ?>
 
 <div id="footer">

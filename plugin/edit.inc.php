@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: edit.inc.php,v 1.19.6 2004/10/11 12:05:12 miko Exp $
+// $Id: edit.inc.php,v 1.19.7 2004/10/11 12:05:12 miko Exp $
 //
 
 // Edit plugin
@@ -39,38 +39,6 @@ function plugin_edit_action()
 	}
 
 	return array('msg'=>$_title_edit, 'body'=>edit_form($page, $postdata));
-}
-
-function plugin_edit_inline()
-{
-	static $usage = '&edit(pagename#anchor[[,noicon],nolabel])[{label}];';
-
-	global $script, $vars;
-	global $_symbol_paraedit, $fixed_heading_edited;
-
-	if (!$fixed_heading_edited || is_freeze($vars['page'])) {
-		return '';
-	}
-
-	$args = func_get_args();
-
-	$s_label = array_pop($args);
-	if ($s_label == '')
-	{
-		$s_label = $_symbol_paraedit;
-	}
-
-	list($page,$id) = array_pad($args,2,'');
-	if (!is_page($page))
-	{
-		$page = $vars['page'];
-	}
-	if ($id != '')
-	{
-		$id = '&amp;id='.rawurlencode($id);
-	}
-	$r_page = rawurlencode($page);
-	return "<a class=\"anchor_super\" href=\"$script?cmd=edit&amp;page=$r_page$id\">$s_label</a>";
 }
 
 // Preview
@@ -116,6 +84,39 @@ function plugin_edit_preview()
 	$body .= edit_form($page, $vars['msg'], $vars['digest'], FALSE);
 
 	return array('msg'=>$_title_preview, 'body'=>$body);
+}
+
+// Inline: Show edit (or unfreeze text) link
+function plugin_edit_inline()
+{
+	static $usage = '&edit(pagename#anchor[[,noicon],nolabel])[{label}];';
+
+	global $script, $vars, $fixed_heading_edited;
+	global $_symbol_paraedit;
+
+	if (!$fixed_heading_edited || is_freeze($vars['page'])) {
+		return '';
+	}
+
+	$args = func_get_args();
+
+	$s_label = array_pop($args);
+	if ($s_label == '')
+	{
+		$s_label = $_symbol_paraedit;
+	}
+
+	list($page,$id) = array_pad($args,2,'');
+	if (!is_page($page))
+	{
+		$page = $vars['page'];
+	}
+	if ($id != '')
+	{
+		$id = '&amp;id='.rawurlencode($id);
+	}
+	$r_page = rawurlencode($page);
+	return "<a class=\"anchor_super\" href=\"$script?cmd=edit&amp;page=$r_page$id\">$s_label</a>";
 }
 
 // Write, add, or insert new comment
