@@ -220,7 +220,6 @@ EOD;
 	fputs($fp, $html);
 	flock($fp, LOCK_UN);
 	fclose($fp);
-	touch($rsscache, $timestamp + LOCALZONE);
 
 	exit;
 }
