@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: file.php,v 1.9.2 2004/12/11 15:44:45 miko Exp $
+// $Id: file.php,v 1.9.3 2004/12/29 15:44:45 miko Exp $
 //
 
 // ソースを取得
@@ -192,7 +192,7 @@ function put_recentdeleted($page)
 // 最終更新ページの更新
 function put_lastmodified()
 {
-	global $maxshow, $whatsnew, $non_list, $autolink, $autoglossary;
+	global $maxshow, $whatsnew, $non_list, $autolink, $autoalias, $autoglossary;
 
 	$pages = get_existpages();
 	$recent_pages = array();
@@ -256,6 +256,37 @@ function put_lastmodified()
 		fclose($fp);
 	}
 
+	// for autoalias
+	if ($autoalias) {
+		$linkpages = array();
+		$pattern = <<<EOD
+^-\s*               # list
+(
+\[\[                # open bracket
+((?:(?!\]\]).)+)>   # alias name
+((?:(?!\]\]).)+)    # alias link
+\]\]                # close bracket
+)
+EOD;
+		foreach (get_source($autoalias) as $line) {
+			$match = array();
+			if (preg_match("/$pattern/x",$line,$match))
+				$linkpages[] = trim($match[2]);
+		}
+		list($pattern, $pattern_a, $forceignorelist) = get_autoalias_pattern($linkpages);
+		$fp = fopen(CACHE_DIR . 'autoalias.dat', 'w') or
+		die_message('Cannot write autoalias file ' . CACHE_DIR . '/autoalias.dat' . '<br />Maybe permission is not writable');
+		set_file_buffer($fp, 0);
+		flock($fp, LOCK_EX);
+		rewind($fp);
+		fputs($fp, $pattern   . "\n");
+		fputs($fp, $pattern_a . "\n");
+		fputs($fp, join("\t", $forceignorelist) . "\n");
+		flock($fp, LOCK_UN);
+		fclose($fp);
+	}
+
+	// for autoglossary
 	if ($autoglossary) {
 		list($pattern, $pattern_a, $forceignorelist) = get_glossary_pattern();
 

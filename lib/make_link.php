@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: make_link.php,v 1.6.3 2004/11/23 09:39:42 miko Exp $
+// $Id: make_link.php,v 1.6.4 2004/12/29 15:39:42 miko Exp $
 //
 
 // リンクを付加する
@@ -63,6 +63,8 @@ class InlineConverter
 				'wikiname',      // WikiName
 				'glossary_a',	 // AutoGlossary(アルファベット)
 				'autolink_a',    // AutoLink(アルファベット)
+				'autoalias',     // AutoAlias
+				'autoalias_a',   // AutoAlias(アルファベット)
 			);
 		}
 
@@ -717,6 +719,86 @@ class Link_autolink_a extends Link_autolink
 	function get_pattern()
 	{
 		return isset($this->auto_a) ? '(' . $this->auto_a . ')' : FALSE;
+	}
+}
+
+// AutoAlias
+class Link_autoalias extends Link
+{
+	var $forceignorepages = array();
+	var $auto;
+	var $auto_a; // alphabet only
+
+	function Link_autoalias($start)
+	{
+		global $autolink;
+		global $autoalias;
+
+		parent::Link($start);
+
+		if (!$autolink or !file_exists(CACHE_DIR.'autoalias.dat') or $this->page==$autoalias)
+		{
+			return;
+		}
+		@list($auto,$auto_a,$forceignorepages) = file(CACHE_DIR.'autoalias.dat');
+		$this->auto = $auto;
+		$this->auto_a = $auto_a;
+		$this->forceignorepages = explode("\t",trim($forceignorepages));
+	}
+	function get_pattern()
+	{
+		return isset($this->auto) ? "({$this->auto})" : FALSE;
+	}
+	function get_count()
+	{
+		return 1;
+	}
+	function set($arr,$page)
+	{
+		global $WikiName;
+
+		list($name) = $this->splice($arr);
+		// 無視リストに含まれている、あるいは存在しないページを捨てる
+		if (in_array($name,$this->forceignorepages))
+		{
+			return FALSE;
+		}
+		return parent::setParam($page,$name,'','pagename',$name);
+	}
+	function toString()
+	{
+		global $autoalias;
+
+		// AutoAliasNameの一覧取得
+		$linkpages = array();
+		$pattern = <<<EOD
+^-\s*               # list
+(
+\[\[                # open bracket
+((?:(?!\]\]).)+)>   # alias name
+((?:(?!\]\]).)+)    # alias link
+\]\]                # close bracket
+)
+EOD;
+		foreach (get_source($autoalias) as $line) {
+			$match = array();
+			if(preg_match("/$pattern/x",$line,$match)) {
+				if($this->name==trim($match[2])) {
+					return make_link($match[1]);
+				}
+			}
+		}
+	}
+}
+class Link_autoalias_a extends Link_autoalias
+{
+	function Link_autoalias_a($start)
+	{
+		parent::Link_autoalias($start);
+	}
+	function get_pattern()
+	{
+		return isset($this->auto_a) ? "({$this->auto_a})" : FALSE;
 	}
 }
 

@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: func.php,v 1.20.4 2004/12/25 00:14:52 miko Exp $
+// $Id: func.php,v 1.20.5 2004/12/29 15:14:52 miko Exp $
 //
 
 // 文字列がInterWikiNameかどうか
@@ -514,6 +514,39 @@ function get_glossary_pattern()
 
 	$auto_pages_a = array_values(preg_grep('/^[A-Z]+$/i', $auto_pages));
 	$auto_pages   = array_values(array_diff($auto_pages, $auto_pages_a));
+
+	$result   = get_autolink_pattern_sub($auto_pages,   0, count($auto_pages),   0);
+	$result_a = get_autolink_pattern_sub($auto_pages_a, 0, count($auto_pages_a), 0);
+
+	return array($result, $result_a, $forceignorepages);
+}
+
+// AutoAliasのパターンを生成する
+function get_autoalias_pattern(& $pages)
+{
+	global $WikiName, $autoalias, $nowikiname;
+
+	$config = &new Config('AutoLink');
+	$config->read();
+	$ignorepages      = $config->get('IgnoreList');
+	$forceignorepages = $config->get('ForceIgnoreList');
+	unset($config);
+	$auto_pages = array_merge($ignorepages, $forceignorepages);
+
+	foreach ($pages as $page) {
+		if (preg_match("/^$WikiName$/", $page) ?
+		    $nowikiname : mb_strlen($page) >= $autoalias)
+			$auto_pages[] = $page;
+	}
+
+	if (empty($auto_pages))
+		return $nowikiname ? '(?!)' : $WikiName;
+
+	$auto_pages = array_unique($auto_pages);
+	sort($auto_pages, SORT_STRING);
+
+	$auto_pages_a = array_values(preg_grep('/^[A-Z]+$/i', $auto_pages));
+	$auto_pages   = array_values(array_diff($auto_pages,  $auto_pages_a));
 
 	$result   = get_autolink_pattern_sub($auto_pages,   0, count($auto_pages),   0);
 	$result_a = get_autolink_pattern_sub($auto_pages_a, 0, count($auto_pages_a), 0);
