@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: ja.lng.php,v 1.5.5 2004/12/22 12:41:35 miko Exp $
+// $Id: ja.lng.php,v 1.6.5 2005/01/15 02:51:44 miko Exp $
 //
 // PukiWiki message file (japanese)
 
@@ -217,7 +217,6 @@ $_msg_deleted          = '$1 は削除されています。';
 
 ///////////////////////////////////////
 // calendar_viewer.inc.php
-$_err_calendar_viewer_param  = '引数指定してね';
 $_err_calendar_viewer_param2 = '第2引数が変だよ';
 $_msg_calendar_viewer_right  = '次の%d件&gt;&gt;';
 $_msg_calendar_viewer_left   = '&lt;&lt;前の%d件';

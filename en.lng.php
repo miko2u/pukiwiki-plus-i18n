@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: en.lng.php,v 1.5.1 2004/12/05 10:16:18 miko Exp $
+// $Id: en.lng.php,v 1.6.1 2005/01/15 02:51:44 miko Exp $
 //
 // PukiWiki message file (english)
 
@@ -211,7 +211,6 @@ $_msg_deleted          = ' $1 has been deleted.';
 
 ///////////////////////////////////////
 // calendar_viewer.inc.php
-$_err_calendar_viewer_param    = 'Parameter is required.';
 $_err_calendar_viewer_param2   = 'Wrong second parameter.';
 $_msg_calendar_viewer_right    = 'Next %d&gt;&gt;';
 $_msg_calendar_viewer_left     = '&lt;&lt; Prev %d';
