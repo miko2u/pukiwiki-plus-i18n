@@ -58,6 +58,10 @@ $language_considering_setting_level = 1;
 //if (! defined('DEFAULT_TZ_NAME'))
 //	define('DEFAULT_TZ_NAME', 'Asia/Tokyo');
 
+// The view on public holiday applies to installation features.
+// 祝日の表示は、設置場所に準ずる (0:設置者視点, 1:閲覧者視点)
+$public_holiday_guest_view = 0;
+
 /////////////////////////////////////////////////
 // Directory settings I (ended with '/', permission '777')
 

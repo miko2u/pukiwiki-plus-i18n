@@ -3,13 +3,14 @@
  * Language judgment (言語判定)
  *
  * @copyright   Copyright &copy; 2005, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: lang.php,v 0.13 2005/03/22 02:22:00 upk Exp $
+ * @version     $Id: lang.php,v 0.14 2005/03/22 22:20:00 upk Exp $
  *
  */
 
 // CORRESPONDENCE LANGUAGE : 対応言語
 // == CASE SENSITIVE ==    : 大文字小文字を区別
-$language_prepared = array('ja_JP', 'ko_KR', 'en_US', 'zh_TW');
+// $language_prepared = array('ja_JP', 'ko_KR', 'en_US', 'zh_TW');
+$language_prepared = array('ja_JP', 'ko_KR', 'en_US');
 $language = '';
 
 /*
@@ -20,6 +21,7 @@ function set_language()
 {
 	global $language_considering_setting_level;
 	global $language;
+	global $public_holiday_guest_view;
 
 	$language = get_language($language_considering_setting_level);
 
@@ -28,10 +30,13 @@ function set_language()
 
 	// PUBLIC HOLIDAY
 	// Installation person's calendar is adopted.
-	// 設置者のカレンダーを採用
-	$_c = split('_', DEFAULT_LANG);
-	// $_c = split('_', $language);
-	define("COUNTRY", $_c[1]);
+	if ( $public_holiday_guest_view ) {
+		$_c = split('_', $language);
+	} else {
+		// 設置者のカレンダーを採用
+		$_c = split('_', DEFAULT_LANG);
+	}
+	define('COUNTRY', $_c[1]);
 	unset($_c);
 
 	// FIXME:
