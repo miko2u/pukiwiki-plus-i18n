@@ -14,25 +14,25 @@
 function plugin_bugtrack_init()
 {
 	$messages = array(
-		'_bugtrack_plugin_priority_list' => array('緊急', '重要', '普通', '低'),
-		'_bugtrack_plugin_state_list'    => array('提案', '着手', 'CVS待ち', '完了', '保留', '却下'),
-		'_bugtrack_plugin_state_sort'    => array('着手', 'CVS待ち', '保留', '完了', '提案', '却下'),
+		'_bugtrack_plugin_priority_list' => array(_('Emergency'), _('Importance'), _('Normal'), _('Low')),
+		'_bugtrack_plugin_state_list'    => array(_('Proposal'(, _('Start'), _('CVS Waiting'), _('Completion'), _('Reservation'), _('Rejection')),
+		'_bugtrack_plugin_state_sort'    => array(_('Start'), _('CVS Waiting'), _('Reservation'), _('Completion'), _('Proposal'), _('Rejection')),
 		'_bugtrack_plugin_state_bgcolor' => array('#ccccff', '#ffcc99', '#ccddcc', '#ccffcc', '#ffccff', '#cccccc', '#ff3333'),
 
 		'_bugtrack_plugin_title'    => '$1 Bugtrack Plugin',
-		'_bugtrack_plugin_base'     => 'ページ',
-		'_bugtrack_plugin_summary'  => 'サマリ',
-		'_bugtrack_plugin_priority' => '優先順位',
-		'_bugtrack_plugin_state'    => '状態',
-		'_bugtrack_plugin_name'     => '投稿者',
-		'_bugtrack_plugin_date'     => '投稿日',
-		'_bugtrack_plugin_body'     => 'メッセージ',
-		'_bugtrack_plugin_category' => 'カテゴリー',
-		'_bugtrack_plugin_pagename' => 'ページ名',
-		'_bugtrack_plugin_pagename_comment' => '<small>空欄のままだと自動的にページ名が振られます。</small>',
-		'_bugtrack_plugin_version_comment'  => '<small>空欄でも構いません</small>',
-		'_bugtrack_plugin_version'  => 'バージョン',
-		'_bugtrack_plugin_submit'   => '追加'
+		'_bugtrack_plugin_base'     => _('Page'),
+		'_bugtrack_plugin_summary'  => _('Summary'),
+		'_bugtrack_plugin_priority' => _('Priority'),
+		'_bugtrack_plugin_state'    => _('State'),
+		'_bugtrack_plugin_name'     => _('Name'),
+		'_bugtrack_plugin_date'     => _('Date'),
+		'_bugtrack_plugin_body'     => _('Message'),
+		'_bugtrack_plugin_category' => _('Category'),
+		'_bugtrack_plugin_pagename' => _('Page Name'),
+		'_bugtrack_plugin_pagename_comment' => _('<small>Page name is automatically given for an empty column.</small>'),
+		'_bugtrack_plugin_version_comment'  => _('<small>It is acceptable also in an empty column.</small>'),
+		'_bugtrack_plugin_version'  => _('Version'),
+		'_bugtrack_plugin_submit'   => _('Submit')
 		);
 	set_plugin_messages($messages);
 }
