@@ -3,7 +3,7 @@
  * Language judgment (¸À¸ìÈ½Äê)
  *
  * @copyright   Copyright &copy; 2005, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: lang.php,v 0.14 2005/03/22 22:20:00 upk Exp $
+ * @version     $Id: lang.php,v 0.15 2005/04/02 23:49:00 upk Exp $
  *
  */
 
@@ -125,6 +125,8 @@ function get_language($level = 0)
  */
 function get_content_charset($lang)
 {
+	return "UTF-8";
+/*
 	$content_charset = array(
 		'en'	=> 'iso-8859-1',
 		'de'	=> 'iso-8859-15',
@@ -136,6 +138,7 @@ function get_content_charset($lang)
 		'default' => 'UTF-8', // default
 	);
 	return _lang_keyset($lang,$content_charset);
+*/
 }
 
 /*
