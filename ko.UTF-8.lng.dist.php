@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $PWId: en.lng.php,v 1.6 2005/01/15 02:51:44 henoheno Exp $
+// $PWId: en.lng.php,v 1.6.1 2005/01/15 02:51:44 miko Exp $
 //
 // PukiWiki message file (Korean)
 

@@ -1,10 +1,10 @@
-﻿<?php
+<?php
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
 // $Id: ja.lng.php,v 1.6.5 2005/01/15 02:51:44 miko Exp $
 //
-// PukiWiki message file (japanese)
+// PukiWiki message file (japanese UTF-8)
 
 // ※このファイルの文字コードは、エンコーディングの設定と一致
 //   している必要があります
