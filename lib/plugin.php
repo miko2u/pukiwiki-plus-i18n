@@ -107,7 +107,7 @@ function do_plugin_convert($name, $args = '')
 	}
 
 	if (count($multiline_arg)) {
-		$aryargs[] = $here[0];
+		$aryargs[] = $multiline_arg[0];
 	}
 
 	$_digest = $digest;
