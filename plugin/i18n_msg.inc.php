@@ -1,9 +1,9 @@
 <?php
 /**
- * 言語を判定しメッセージを表示
+ * ｸﾀｸ�､ｽﾄ熙ｷ･皈ﾃ･ｻ｡ｼ･ｸ､ｽｼｨ
  *
  * @copyright   Copyright &copy; 2005, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: i18n_msg.inc.php,v 0.2 2005/03/08 23:09:00 upk Exp $
+ * @version     $Id: i18n_msg.inc.php,v 0.3 2005/03/09 02:13:00 upk Exp $
  *
  */
 

@@ -1,9 +1,9 @@
 <?php
 /**
- * Language judgment (尵岅敾掕)
+ * Language judgment (咐胳冉年)
  *
  * @copyright   Copyright &copy; 2005, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: lang.php,v 0.5 2005/03/08 23:19:00 upk Exp $
+ * @version     $Id: lang.php,v 0.6 2005/03/09 02:12:00 upk Exp $
  *
  */
 
@@ -30,7 +30,7 @@ function get_language($level = 0)
 	$obj_lng = new accept_language();
 	$i = 0;
 
-	// 庤巜掕偺偨傔堦墳丄彫暥帤曄姺
+	// 缄回年のため办炳、井矢机恃垂
 	$tmp_language_prepared = array();
 	foreach($language_prepared as $_language_prepared) {
 		$tmp_language_prepared[] = strtolower( $_language_prepared );
@@ -38,25 +38,25 @@ function get_language($level = 0)
 
 	foreach($lng_func as $_func) {
 		$i++;
-		// 巜掕娭悢偺幚峴
+		// 回年簇眶の悸乖
 		$_x = $obj_lng->$_func();
 		if (! is_array($_x)) {
-			// 巜掕儗儀儖偱傕専弌晄擻帪偼廔椆
+			// 回年レベルでも浮叫稍墙箕は姜位
 			if ($level == $i) return DEFAULT_LANG;
 		}
 		$_x2 = array();
 		foreach($_x as $_lang) {
-			// 娐嫬曄悢拞偺掕媊傪堦棩丄彫暥帤曄姺
+			// 茨董恃眶面の年盗を办围、井矢机恃垂
 			$tmp_lang = strtolower( $_lang[0] );
-			// 姰慡堦抳偺応崌
+			// 窗链办米の眷圭
 			if (in_array($tmp_lang, $tmp_language_prepared)) return $tmp_lang;
-			// 尵岅_崙偺掕媊帪偵師僼僃乕僘梡張棟
+			// 咐胳_柜の年盗箕に肌フェ〖ズ脱借妄
 			$_x1 = split("-", $tmp_lang);
 			if ( count($_x1) == 1) continue;
-			// 尵岅柤偺傒奿擺
+			// 咐胳叹のみ呈羌
 			$_x2[] = $_x1[0];
 		}
-		// 尵岅_崙傪暘棧偟丄尵岅偑掕媊偝傟偰偄傞偐傪専嵏
+		// 咐胳_柜を尸违し、咐胳が年盗されているかを浮汉
 		foreach($_x2 as $_lang) {
 			if (in_array($_lang, $tmp_language_prepared)) return $_lang;
 		}
@@ -222,7 +222,7 @@ class accept_language
 	/*
 	 * get_accept_language
 	 *
-	 * HTTP_ACCEPT_LANGUAGE 偺暥帤楍傪暘夝偡傞丅
+	 * HTTP_ACCEPT_LANGUAGE の矢机误を尸豺する。
 	 * @static
 	 * @return	array
 	 */
@@ -236,8 +236,8 @@ class accept_language
 
 	/*
 	 * get_user_agent_mozilla
-	 * USER-AGENT 偐傜嵟嬤偺 Mozilla 偺応崌
-	 * 愝掕偝傟偰偄傞locale暥帤楍傪庢摼偡傞
+	 * USER-AGENT から呵夺の Mozilla の眷圭
+	 * 肋年されているlocale矢机误を艰评する
 	 * @static
 	 * @return	array
 	 */
@@ -271,8 +271,8 @@ class accept_language
 	/*
 	 * get_accept_charset
 	 *
-	 * HTTP_ACCEPT_CHARSET 偱愝掕偝傟傞棙梡壜擻側
-	 * 暥帤僐乕僪偐傜尵岅傪尒橍偟敾掕偡傞
+	 * HTTP_ACCEPT_CHARSET で肋年される网脱材墙な
+	 * 矢机コ〖ドから咐胳を斧婿し冉年する
 	 * @return	array
 	 */
 	function get_accept_charset()
@@ -293,7 +293,7 @@ class accept_language
 
 	/*
 	 * get_remote_addr
-	 * IP傾僪儗僗偐傜崙傪摿掕偟丄尒橍偟尵岅傪敾掕偡傞
+	 * IPアドレスから柜を泼年し、斧婿し咐胳を冉年する
 	 * @return	array
 	 */
 	function get_remote_addr()
@@ -312,18 +312,18 @@ class accept_language
 	/*
 	 * split_str
 	 *
-	 * x1,x2;q=0.6,x3;q=0.4 偺傛偆側彂幃傪暘夝偡傞
+	 * x1,x2;q=0.6,x3;q=0.4 のような今及を尸豺する
 	 * @static
 	 * @return array
-	 * $rc[0] = (x1,1),(x2,0.6),(x3,0.4) 偑擖傞丅
-	 * 抣弴偵惍楍偟偰栠偡丅
+	 * $rc[0] = (x1,1),(x2,0.6),(x3,0.4) が掐る。
+	 * 猛界に腊误して提す。
 	 */
 	function split_str($env, $sort = TRUE)
 	{
 		$rc = array();
 		foreach( split(",",$env) as $x ) {
 			$x1 = split(";", $x);
-			// "",1 偺 "" 偼丄DUMMY
+			// "",1 の "" は、DUMMY
 			$q = (count($x1) == 1) ? array("",1) : split("=",$x1[1]);
 			$rc[] = array( $x1[0], $q[1]);
 		}
