@@ -39,7 +39,7 @@ define('PAINT_FORMAT_NOMSG',"\x08NAME\x08 \x08NOW\x08");
 function plugin_paint_init()
 {
 	$messages = array(
-		'_paint_messages' = array(
+		'_paint_messages' => array(
 			'field_name'    => _('Name'),
 			'field_filename'=> _('Filename'),
 			'field_comment' => _('Comment'),
