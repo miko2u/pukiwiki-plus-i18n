@@ -83,6 +83,10 @@ case 'ja':
 	define('ZONE', 'JST');
 	define('ZONETIME', 9 * 3600); // JST = GMT + 9
 	break;
+case 'kr':
+	define('ZONE', 'KST');
+	define('ZONETIME', 9 * 3600); // KST = GMT + 9
+	break;
 default  :
 	define('ZONE', 'GMT');
 	define('ZONETIME', 0);

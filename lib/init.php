@@ -73,7 +73,7 @@ case 'ja': // EUC-JP or UTF-8
 		define('SOURCE_ENCODING', 'EUC-JP');
 	}
 	break;
-case 'ko': // UTF-8
+case 'kr': // UTF-8
 	define('CONTENT_CHARSET', 'UTF-8');
 	define('MB_LANGUAGE',    'Korean');
 	define('SOURCE_ENCODING', 'UTF-8');
