@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: orangebox.skin.php,v 1.18 2004/11/02 14:02:10 arii/miko Exp $
+// $Id: orangebox.skin.php,v 1.18.1 2004/11/02 14:02:10 arii/miko Exp $
 //
 
 // Prohibit direct access
@@ -60,7 +60,14 @@ if ($html_transitional) { ?>
 <?php if (! $is_read)  { ?> <meta name="robots" content="NOINDEX,NOFOLLOW" /><?php } ?>
 <?php if (PKWK_JAVASCRIPT && isset($javascript)) { ?> <meta http-equiv="Content-Script-Type" content="text/javascript" /><?php } ?>
 
+<?php global $newtitle, $newbase; ?>
+<?php if ($title == $defaultpage) { ?>
+ <title><?php echo "$page_title" ?></title>
+<?php } elseif ($newtitle != '' && $is_read) { ?>
+ <title><?php echo "$newtitle - $page_title" ?></title>
+<?php } else { ?>
  <title><?php echo "$title - $page_title" ?></title>
+<?php } ?>
  <link rel="stylesheet" href="skin/orangebox.css" type="text/css" media="screen,print" charset="Shift_JIS" />
  <link rel="alternate" type="application/rss+xml" title="RSS" href="<?php echo $link['rss'] ?>" />
 
