@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $PWId: kr.UTF-8.lng.php,v 1.6.1 2005/01/15 02:51:44 miko Exp $
+// $PWId: ko.UTF-8.lng.php,v 1.6.1 2005/01/15 02:51:44 miko Exp $
 //
 // PukiWiki message file (Korean)
 
@@ -14,7 +14,7 @@
 // 번역한 결과를 참고해서 했기때문에 오역의 가능성이 있습니다.
 
 // Encoding hint
-$_LANG['encode_hint']['kr'] = '&#44032;';
+$_LANG['encode_hint']['ko'] = '&#44032;';
 
 ///////////////////////////////////////
 // Page titles

@@ -35,7 +35,8 @@ define('PKWK_QUERY_STRING_MAX', 640); // Bytes, 0 = OFF
 
 // LANG - Internal content encoding ('en', 'ja', or ...)
 define('LANG', 'ja');
-define('LANG_ENCODING', 'EUC-JP');
+// LANG_ENCODING - content encoding ('', 'UTF-8', or ...)
+define('LANG_ENCODING', 'UTF-8');
 
 // UI_LANG - Content Language for buttons, menus,  etc
 define('UI_LANG', LANG); // 'en' for Internationalized wikisite
@@ -83,7 +84,7 @@ case 'ja':
 	define('ZONE', 'JST');
 	define('ZONETIME', 9 * 3600); // JST = GMT + 9
 	break;
-case 'kr':
+case 'ko':
 	define('ZONE', 'KST');
 	define('ZONETIME', 9 * 3600); // KST = GMT + 9
 	break;
