@@ -32,9 +32,31 @@ define('PKWK_QUERY_STRING_MAX', 640); // Bytes, 0 = OFF
 
 /////////////////////////////////////////////////
 // Language / Encoding settings
+// <language>_<territory> = <ISO 639>_<ISO 3166>
+// ja_JP, ko_KR, en_US, zh_TW ...
+if (! defined('DEFAULT_LANG'))
+	define('DEFAULT_LANG', 'ja_JP');
 
-if (! defined('DEFAULT_LANG')) define('DEFAULT_LANG', 'ja_JP');
+// Effective making function switch (2 Then, it becomes a judgment of 1 and 2.)
+// 0) Invalidity
+// 1) Judgment with HTTP_ACCEPT_LANGUAGE
+// 2) Considering judgment to HTTP_USER_AGENT
+// 3) Considering judgment to HTTP_ACCEPT_CHARSET
+// 4) Considering judgment to REMOTE_ADDR
+// 機能有効化スイッチ (2 なら、1と2の判定となる)
+// 0) 無効
+// 1) HTTP_ACCEPT_LANGUAGE での判定
+// 2) HTTP_USER_AGENT までの見做し判定
+// 3) HTTP_ACCEPT_CHARSET までの見做し判定
+// 4) REMOTE_ADDR までの見做し判定
 $language_considering_setting_level = 1;
+
+// Please define it when two or more TimeZone such as en_US exists.
+// Please refer to lib/timezone.php for the defined character string.
+// en_US など、複数のタイムゾーンが存在する場合に定義して下さい。
+// 定義する文字列は、lib/timezone.php を参照して下さい。
+//if (! defined('DEFAULT_TZ_NAME'))
+//	define('DEFAULT_TZ_NAME', 'Asia/Tokyo');
 
 /////////////////////////////////////////////////
 // Directory settings I (ended with '/', permission '777')

@@ -3,7 +3,7 @@
  * TimeZone
  *
  * @copyright   Copyright &copy; 2005, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: timezone.php,v 0.2 2005/03/19 23:08:00 upk Exp $
+ * @version     $Id: timezone.php,v 0.3 2005/03/20 04:12:00 upk Exp $
  *
  */
 
@@ -27,6 +27,13 @@ function set_timezone()
 
 	$obj = new timezone();
 	$obj->set_country($l[2]);
+
+	if ($language == DEFAULT_LANG) {
+		if (defined('DEFAULT_TZ_NAME')) {
+			$obj->set_tz_name(DEFAULT_TZ_NAME);
+		}
+	}
+
 	$zone = $obj->get_zone();
 	$zonetime = $obj->get_zonetime(0); // FIXME: DST
 
@@ -41,6 +48,7 @@ class timezone
 {
   var $country;
   var $tz_country;
+  var $tz_name;
   var $tz = array(
     // Key - TimeZone => 0: OFFSET, 1:HOUR, 2:MINUTE, 3:ISO3166
     //                   4: ABBREV, 5:DAYLIGHT, 6:RULE(DST)
@@ -761,13 +769,18 @@ class timezone
 		}
 	}
 
+	function set_tz_name($tz_name)
+	{
+		if (! is_array($this->tz[$tz_name])) return;
+		$this->tz_name = $tz_name;
+		$this->tz_country = array();
+		$this->tz_country[$tz_name] = $this->tz[$tz_name];
+	}
+
 	function get_zone()
 	{
-		// [3]JP -> [4]JST
-		foreach($this->tz as $_key => $_tz) {
-			if ($_tz[3] == $this->country) {
-				if (! empty($_tz[4])) return $_tz[4];
-			}
+		foreach($this->tz_country as $_key => $_tz) {
+			if (! empty($_tz[4])) return $_tz[4];
 		}
 		return "";
 	}
