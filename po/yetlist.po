@@ -1,0 +1,8 @@
+#: yetlist.inc.php:12
+msgid "List of pages which have not yet been created."
+msgstr "未作成のページ一覧"
+
+#: yetlist.inc.php:30
+msgid "All pages have been created."
+msgstr "未作成のページはありません。"
+

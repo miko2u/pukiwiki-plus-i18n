@@ -1,0 +1,3 @@
+#: versionlist.inc.php:12
+msgid "version list"
+msgstr "構成ファイルのバージョン一覧"

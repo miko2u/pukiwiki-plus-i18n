@@ -1,16 +1,15 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: yetlist.inc.php,v 1.21 2005/01/29 02:59:37 henoheno Exp $
+// $Id: yetlist.inc.php,v 1.21 2005/02/28 02:59:37 miko Exp $
 //
 // Yet list plugin - Show a dangling link list (not yet created)
 
 function plugin_yetlist_action()
 {
 	global $script;
-	global $_title_yetlist,$_err_notexist;
 
 	$retval = array(
-		'msg' => $_title_yetlist,
+		'msg' => _('List of pages which have not yet been created.'),
 		'body' => ''
 	);
 
@@ -28,7 +27,7 @@ function plugin_yetlist_action()
 
 	if (count($refer) == 0)
 	{
-		$retval['body'] = $_err_notexist;
+		$retval['body'] = _('All pages have been created.');
 		return $retval;
 	}
 

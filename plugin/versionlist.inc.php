@@ -9,12 +9,10 @@
 
 function plugin_versionlist_action()
 {
-	global $_title_versionlist;
-
 	if (PKWK_SAFE_MODE) die_message('PKWK_SAFE_MODE prohibits this');
 
 	return array(
-		'msg' => $_title_versionlist,
+		'msg' => _('version list'),
 		'body' => plugin_versionlist_convert()
 	);
 }
