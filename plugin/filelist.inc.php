@@ -1,10 +1,8 @@
 <?php
-/////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
-//
 // $Id: filelist.inc.php,v 1.2.1 2004/07/31 03:09:20 upk/miko Exp $
 //
-// ファイル名一覧の表示
+// Filelist plugin: redirect to list plugin
 // cmd=filelist
 
 function plugin_filelist_init()
