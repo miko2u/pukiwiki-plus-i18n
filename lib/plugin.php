@@ -56,6 +56,9 @@ function do_plugin_init($name)
 
 	if (isset($checked[$name])) return $checked[$name];
 
+	bindtextdomain($name, LANG_DIR);
+	bind_textdomain_codeset($name, SOURCE_ENCODING);
+
 	$func = 'plugin_' . $name . '_init';
 	if (function_exists($func)) {
 		// TRUE or FALSE or NULL (return nothing)
