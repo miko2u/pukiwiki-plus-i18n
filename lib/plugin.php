@@ -94,9 +94,9 @@ function do_plugin_convert($name, $args = '')
 	if(do_plugin_init($name) === FALSE)
 		return '[Plugin init failed: ' . $name . ']';
 
-	$here = array();
+	$multiline_arg = array();
 	if (($pos = strpos($args, "\r")) !== FALSE) {
-		$here[] = substr($args, $pos + 1);
+		$multiline_arg[] = substr($args, $pos + 1);
 		$args = substr($args, 0, $pos);
 	}
 
@@ -106,7 +106,7 @@ function do_plugin_convert($name, $args = '')
 		$aryargs = array();
 	}
 
-	if (count($here)) {
+	if (count($multiline_arg)) {
 		$aryargs[] = $here[0];
 	}
 
