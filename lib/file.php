@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: file.php,v 1.8.1 2004/12/02 11:42:37 miko Exp $
+// $Id: file.php,v 1.9.2 2004/12/11 15:44:45 miko Exp $
 //
 
 // ソースを取得
@@ -39,10 +39,13 @@ function page_write($page, $postdata, $notimestamp = FALSE)
 	// ファイルの書き込み
 	file_write(DATA_DIR, $page, $postdata, $notimestamp);
 
-	// TrackBack Ping の送信
-	// 「追加」行を抽出
-	$lines = join("\n", preg_replace('/^\+/', '', preg_grep('/^\+/', explode("\n", $diffdata))));
-	tb_send($page, $lines);
+	if ($trackback) {
+		// TrackBack Ping
+		$_diff = explode("\n", $diffdata);
+		$plus  = join("\n", preg_replace('/^\+/', '', preg_grep('/^\+/', $_diff)));
+		$minus = join("\n", preg_replace('/^-/',  '', preg_grep('/^-/',  $_diff)));
+		tb_send($page, $plus, $minus); 
+	} 
 
 	links_update($page);
 }

@@ -2,11 +2,11 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: init.php,v 1.19.1 2004/11/23 02:01:29 miko Exp $
+// $Id: init.php,v 1.20.1 2004/12/19 02:01:29 miko Exp $
 //
 
 /////////////////////////////////////////////////
-// PukiWiki version / Copyright / Licence
+// PukiWiki version / Copyright / License
 
 define('S_VERSION', '1.4.4');
 define('S_COPYRIGHT',
