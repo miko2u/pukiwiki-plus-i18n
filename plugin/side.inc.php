@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: side.inc.php,v 1.6.3 2004/12/11 16:37:37 miko Exp $
+// $Id: side.inc.php,v 1.6.5 2004/12/13 14:37:37 miko Exp $
 //
 
 // サブメニューを使用する
@@ -15,6 +15,13 @@ function plugin_side_convert()
 {
 	global $vars, $sidebar;
 	static $side = NULL;
+	static $sidehtml = NULL;
+
+//miko patched
+	// Cached MenuHTML
+	if ($sidehtml !== NULL)
+		return preg_replace('/<ul class="list[^>]*>/','<ul class="menu">', $sidehtml);
+//miko patched
 
 	if (func_num_args()) {
 		$args = func_get_args();

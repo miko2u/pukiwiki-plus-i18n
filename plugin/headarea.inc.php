@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: headarea.inc.php,v 1.6.2 2004/09/04 05:42:37 miko Exp $
+// $Id: headarea.inc.php,v 1.6.5 2004/12/13 14:37:37 miko Exp $
 //
 
 // サブメニューを使用する
@@ -15,6 +15,13 @@ function plugin_headarea_convert()
 {
 	global $vars, $headarea, $use_open_uri_in_new_window;
 	static $head = NULL;
+	static $headhtml = NULL;
+
+//miko patched
+	// Cached MenuHTML
+	if ($headhtml !== NULL)
+		return preg_replace('/<ul class="list[^>]*>/','<ul class="head">', $headhtml);
+//miko patched
 
 	if (func_num_args()) {
 		$args = func_get_args();

@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: default.skin.php,v 1.34.14 2004/12/11 16:23:43 miko Exp $
+// $Id: default.skin.php,v 1.34.15 2004/12/13 16:23:43 miko Exp $
 //
 if (!defined('DATA_DIR')) { exit; }
 
@@ -55,7 +55,7 @@ if ($html_transitional) { ?>
 </head>
 <body onload="init()">
 
-<?php if (exist_plugin_convert('headarea') && str_replace("\n",'',do_plugin_convert('headarea')) != '') { ?>
+<?php if (exist_plugin_convert('headarea') && do_plugin_convert('headarea') != '') { ?>
 <div id="header">
 <h1 style="display:none;"><?php echo(($newtitle!='' && $is_read)?$newtitle:$page) ?></h1>
 <?php echo do_plugin_convert('headarea') ?>
@@ -80,14 +80,14 @@ if ($html_transitional) { ?>
 <div id="contents">
 <table class="contents" width="100%" border="0" cellspacing="0" cellpadding="0">
  <tr>
-<?php if (arg_check('read') && exist_plugin_convert('menu') && do_plugin_convert('menu') == '') { ?>
+<?php if (arg_check('read') && exist_plugin_convert('menu') && do_plugin_convert('menu') != '') { ?>
   <td class="ltable" valign="top"><div id="menubar"><?php echo do_plugin_convert('menu') ?></div></td>
 <?php } ?>
   <td class="ctable" valign="top">
    <?php if ($is_page and exist_plugin_convert('topicpath')) { echo do_plugin_convert('topicpath'); } ?>
    <div id="body"><?php echo $body ?></div>
   </td>
-<?php if (arg_check('read') && exist_plugin_convert('side') && do_plugin_convert('side') == '') { ?>
+<?php if (arg_check('read') && exist_plugin_convert('side') && do_plugin_convert('side') != '') { ?>
   <td class="rtable" valign="top"><div id="sidebar"><?php echo do_plugin_convert('side') ?></div></td>
 <?php } ?>
  </tr>
@@ -109,7 +109,7 @@ if ($html_transitional) { ?>
 
 
 <?php echo $hr ?>
-<?php if (exist_plugin_convert('footarea') && str_replace("\n",'',do_plugin_convert('footarea')) != '') { ?>
+<?php if (exist_plugin_convert('footarea') && do_plugin_convert('footarea') != '') { ?>
 <div id="footer">
 <?php echo do_plugin_convert('footarea') ?>
 </div>

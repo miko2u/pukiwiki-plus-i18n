@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: footarea.inc.php,v 1.6.2 2004/09/04 05:42:37 miko Exp $
+// $Id: footarea.inc.php,v 1.6.5 2004/12/13 14:37:37 miko Exp $
 //
 
 // サブメニューを使用する
@@ -15,6 +15,13 @@ function plugin_footarea_convert()
 {
 	global $vars, $footarea, $use_open_uri_in_new_window;
 	static $foot = NULL;
+	static $foothtml = NULL;
+
+//miko patched
+	// Cached MenuHTML
+	if ($foothtml !== NULL)
+		return preg_replace('/<ul class="list[^>]*>/','<ul class="foot">', $foothtml);
+//miko patched
 
 	if (func_num_args()) {
 		$args = func_get_args();
