@@ -3,12 +3,12 @@
  * Language judgment (¸À¸ìÈ½Äê)
  *
  * @copyright   Copyright &copy; 2005, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: lang.php,v 0.6 2005/03/09 02:12:00 upk Exp $
+ * @version     $Id: lang.php,v 0.7 2005/03/14 01:08:00 upk Exp $
  *
  */
 
 // CORRESPONDENCE LANGUAGE
-// case sencitve???
+// == CASE SENSITIVE ==
 // $language_prepared = array('ja_JP', 'ko_KR', 'en_US', 'zh_TW');
 $language_prepared = array('ja_JP', 'ko_KR', 'en_US');
 $language = '';
