@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: make_link.php,v 1.8.4 2004/12/31 09:33:59 miko Exp $
+// $Id: make_link.php,v 1.17.4 2005/02/05 03:40:13 miko Exp $
 //
 // Hyperlink-related functions
 
