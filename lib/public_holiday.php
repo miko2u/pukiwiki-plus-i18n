@@ -1,10 +1,10 @@
 <?php
-// $Id: public_holiday.php,v 1.5 2005/11/15 22:30:00 upk Exp $
+// $Id: public_holiday.php,v 1.6 2005/12/15 22:21:00 upk Exp $
 /*
  * public_holiday.php
  * License: GPL
  * Author: Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * Last-Update: 2005-11-15
+ * Last-Update: 2005-12-15
  *
  * A SETUP OF A PUBLIC HOLIDAY
  *
@@ -415,10 +415,12 @@ function ph_SubstituteHoliday($y,$m,$d) {
   if ($offset == 0) return 0;
 
   $x = mkdate($y,$m,$d,$offset);
-  $rc = ph_SpecificDay($x['y'],$x['m'],$x['d']);
-  if ($rc['rc'] != 0) return $d;
+  $rc1 = ph_SpecificDay($x['y'],$x['m'],$x['d']);
+  $rc3 = ph_Calculation($x['y'],$x['m'],$x['d']);
+  if ($rc1['rc'] == 0 and $rc3['rc'] == 0) return 0; // It ends, if it is a weekday.
 
-  return 0;
+  return $d;
+
 }
 
 // ONLY JAPAN.
