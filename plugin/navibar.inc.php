@@ -57,10 +57,10 @@ function plugin_navibar_convert()
 				$tbcount = tb_count($vars['page']);
 				if ($tbcount > 0) {
 					$body .= _navigator($name, 'Trackback(' . $tbcount . ')');
-				} else if (!$is_read) {
-					$body .= _navigator($name);
-				} else {
+				} else if ($is_read) {
 					$body .= 'no Trackback';
+				} else if ($vars['cmd'] == 'list') {
+					$body .= _navigator($name, 'Trackback list');
 				}
 			}
 			break;
