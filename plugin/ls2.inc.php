@@ -1,7 +1,7 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: ls2.inc.php,v 1.23 2004/12/05 11:37:37 henoheno Exp $
+// $Id: ls2.inc.php,v 1.23.1 2005/03/09 07:37:37 miko Exp $
 //
 // List plugin 2
 
@@ -31,7 +31,7 @@ define('PLUGIN_LS2_LIST_COMPACT', FALSE);
 
 function plugin_ls2_action()
 {
-	global $vars, $_ls2_msg_title;
+	global $vars;
 
 	$params = array();
 	foreach (array('title', 'include', 'reverse') as $key)
@@ -41,12 +41,12 @@ function plugin_ls2_action()
 	$body = plugin_ls2_show_lists($prefix, $params);
 
 	return array('body'=>$body,
-		'msg'=>str_replace('$1', htmlspecialchars($prefix), $_ls2_msg_title));
+		'msg'=>str_replace('$1', htmlspecialchars($prefix), _("List of pages which begin with ' $1'")));
 }
 
 function plugin_ls2_convert()
 {
-	global $script, $vars, $_ls2_msg_title;
+	global $script, $vars;
 
 	$params = array(
 		'link'    => FALSE,
@@ -69,7 +69,7 @@ function plugin_ls2_convert()
 	array_walk($args, 'plugin_ls2_check_arg', & $params);
 
 	$title = (! empty($params['_args'])) ? join(',', $params['_args']) :   // Manual
-		str_replace('$1', htmlspecialchars($prefix), $_ls2_msg_title); // Auto
+		str_replace('$1', htmlspecialchars($prefix), _("List of pages which begin with ' $1'")); // Auto
 
 	if (! $params['link'])
 		return plugin_ls2_show_lists($prefix, $params);
@@ -102,7 +102,7 @@ function plugin_ls2_show_lists($prefix, & $params)
 	foreach ($pages as $page) $params["page_$page"] = 0;
 
 	if (empty($pages)) {
-		return str_replace('$1', htmlspecialchars($prefix), $_ls2_err_nopages);
+		return str_replace('$1', htmlspecialchars($prefix), '<p>' . _("There is no child page in ' $1'") . '</p>');
 	} else {
 		$params['result'] = $params['saved'] = array();
 		foreach ($pages as $page)

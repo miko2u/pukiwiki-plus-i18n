@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: search.inc.php,v 1.6.1 2005/01/16 14:10:46 miko Exp $
+// $Id: search.inc.php,v 1.7.3 2005/03/09 07:14:30 miko Exp $
 //
 // Search plugin
 
@@ -27,7 +27,10 @@ function plugin_search_convert()
 
 function plugin_search_action()
 {
-	global $post, $vars, $_title_result, $_title_search, $_msg_searching;
+	global $post, $vars;
+	$_title_search  = _('Search for word(s)');
+	$_title_result  = _('Search result of  $1');
+	$_msg_searching = _('Key words are case-insenstive, and are searched for in all pages.');
 
 	if (PLUGIN_SEARCH_DISABLE_GET_ACCESS) {
 		$s_word = isset($post['word']) ? htmlspecialchars($post['word']) : '';
@@ -60,7 +63,10 @@ function plugin_search_action()
 
 function plugin_search_search_form($s_word = '', $type = '')
 {
-	global $script, $_btn_and, $_btn_or, $_btn_search;
+	global $script;
+	$_btn_search    = _('Search');
+	$_btn_and       = _('AND');
+	$_btn_or        = _('OR');
 
 	$and_check = $or_check = '';
 	if ($type == 'OR') {
@@ -69,14 +75,16 @@ function plugin_search_search_form($s_word = '', $type = '')
 		$and_check = ' checked="checked"';
 	}
 
-	if (PLUGIN_SEARCH_DISABLE_GET_ACCESS) {
+	if (! PLUGIN_SEARCH_DISABLE_GET_ACCESS) {
 	return <<<EOD
 <form action="$script" method="get">
  <div>
   <input type="hidden" name="cmd" value="search" />
   <input type="text"  name="word" value="$s_word" size="20" />
-  <input type="radio" name="type" value="AND" $and_check />$_btn_and
-  <input type="radio" name="type" value="OR"  $or_check  />$_btn_or
+  <input type="radio" name="type" id="_p_search_AND" value="AND" $and_check />
+  <label for="_p_search_AND">$_btn_and</label>
+  <input type="radio" name="type" id="_p_search_OR" value="OR"  $or_check />
+  <label for="_p_search_OR">$_btn_or</label>
   &nbsp;<input type="submit" value="$_btn_search" />
  </div>
 </form>
@@ -86,8 +94,10 @@ EOD;
 <form action="$script?cmd=search" method="post">
  <div>
   <input type="text"  name="word" value="$s_word" size="20" />
-  <input type="radio" name="type" value="AND" $and_check />$_btn_and
-  <input type="radio" name="type" value="OR"  $or_check  />$_btn_or
+  <input type="radio" name="type" id="_p_search_AND" value="AND" $and_check />
+  <label for="_p_search_AND">$_btn_and</label>
+  <input type="radio" name="type" id="_p_search_OR" value="OR"  $or_check />
+  <label for="_p_search_OR">$_btn_or</label>
   &nbsp;<input type="submit" value="$_btn_search" />
  </div>
 </form>

@@ -9,7 +9,19 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8-bit\n"
 
-#: memo.inc.php:89
-msgid "update"
-msgstr "メモ更新"
+#: navi.inc.php:xx
+msgid "Prev"
+msgstr "Prev"
+
+#: navi.inc.php:xx
+msgid "Next"
+msgstr "Next"
+
+#: navi.inc.php:xx
+msgid "Up"
+msgstr "Up"
+
+#: navi.inc.php:xx
+msgid "Home"
+msgstr "Home"
 

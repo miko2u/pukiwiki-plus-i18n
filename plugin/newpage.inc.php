@@ -1,11 +1,11 @@
 <?php
-// $Id: newpage.inc.php,v 1.14 2005/01/23 08:05:38 henoheno Exp $
+// $Id: newpage.inc.php,v 1.14.1 2005/03/09 05:05:38 miko Exp $
 //
 // Newpage plugin
 
 function plugin_newpage_convert()
 {
-	global $script, $vars, $_btn_edit, $_msg_newpage, $BracketName;
+	global $script, $vars, $_btn_edit, $BracketName;
 
 	if (PKWK_READONLY) return ''; // Show nothing
 
@@ -15,12 +15,13 @@ function plugin_newpage_convert()
 
 	$s_page    = htmlspecialchars(isset($vars['refer']) ? $vars['refer'] : $vars['page']);
 	$s_newpage = htmlspecialchars($newpage);
+	$m_newpage = _('New page');
 	$ret = <<<EOD
 <form action="$script" method="post">
  <div>
   <input type="hidden" name="plugin" value="newpage" />
   <input type="hidden" name="refer"  value="$s_page" />
-  $_msg_newpage:
+  $m_newpage:
   <input type="text"   name="page"   value="$s_newpage" size="30" />
   <input type="submit" value="$_btn_edit" />
  </div>
@@ -32,12 +33,12 @@ EOD;
 
 function plugin_newpage_action()
 {
-	global $vars, $_btn_edit, $_msg_newpage;
+	global $vars, $_btn_edit;
 
 	if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
 
 	if ($vars['page'] == '') {
-		$retvars['msg']  = $_msg_newpage;
+		$retvars['msg']  = _('New page');
 		$retvars['body'] = plugin_newpage_convert();
 		return $retvars;
 	} else {

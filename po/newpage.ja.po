@@ -9,7 +9,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8-bit\n"
 
-#: memo.inc.php:89
-msgid "update"
-msgstr "メモ更新"
+#: newpage.inc.php:18,24
+msgid "New page"
+msgstr "ページ新規作成"
 
