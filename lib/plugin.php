@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: plugin.php,v 1.7.2 2005/02/05 06:47:10 miko Exp $
+// $Id: plugin.php,v 1.7.3 2005/03/07 13:47:10 miko Exp $
 //
 // Plugin related functions
 

@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: convert_html.php,v 1.7.9 2005/01/21 13:17:16 miko Exp $
+// $Id: convert_html.php,v 1.7.10 2005/03/07 13:17:16 miko Exp $
 //
 // function 'convert_html()', wiki text parser
 // and related classes-and-functions
@@ -889,7 +889,7 @@ class Body extends Element
 				continue;
 			}
 
-			// Here Document for Block-type Plugin(OBSOLETE)
+//			// Here Document for Block-type Plugin(OBSOLETE)
 //			if (preg_match('/^(#[^\(]\w+)(\((.*)\))?(PRE:)?({+)$/',$line, $matches))
 //			{
 //				$name = $matches[1];
@@ -905,7 +905,25 @@ class Body extends Element
 //						$line .= preg_replace("/[\r\n]*$/",'',$nextline) . "\r";
 //					}
 //				}
-//		    } else
+//			} // Matsuda's Version (Here Documents)
+//			else if (preg_match('/^(#[^\(]*)(\((.*)\))?<<(PRE:)?([A-Z0-9_]+)$/',$line, $matches))
+//			{
+//				$name = $matches[1];
+//				$args = $matches[3];
+//				$here = $matches[5];
+//				$line = $name . "(" . $args . "\r";
+//				while (count($lines))
+//				{
+//					$nextline = array_shift($lines);
+//					if (preg_match("/^$here/",$nextline)) {
+//						$line .= ")";
+//						break;
+//					} else {
+//						$line .= preg_replace("/[\r\n]*$/",'',$nextline) . "\r";
+//					}
+//				}
+//			}
+
 			// multiline block plugin
 			if (preg_match('/#[^{]*(\{{2,})\s*$/', $line, $matches)) {
 				$stop_len = strlen($matches[1]);
