@@ -3,7 +3,7 @@
  * Œ¾Œê”»’è
  *
  * @copyright   Copyright &copy; 2005, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: lang.php,v 0.1 2005/03/06 23:58:00 upk Exp $
+ * @version     $Id: lang.php,v 0.2 2005/03/07 01:15:00 upk Exp $
  *
  */
 
@@ -51,7 +51,7 @@ function set_ui_language()
 		}
 		// Œ¾Œê_‘‚ğ•ª—£‚µAŒ¾Œê‚ª’è‹`‚³‚ê‚Ä‚¢‚é‚©‚ğŒŸ¸
 		foreach($_x2 as $_lang) {
-			if (in_array($_x2, $tmp_language_prepared)) return $_x2;
+			if (in_array($_lang, $tmp_language_prepared)) return $_lang;
 		}
 	}
 	return DEFAULT_LANG;
