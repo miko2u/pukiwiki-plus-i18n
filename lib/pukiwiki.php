@@ -61,7 +61,6 @@ require(LIB_DIR . 'trackback.php');
 require(LIB_DIR . 'auth.php');
 require(LIB_DIR . 'proxy.php');
 require(LIB_DIR . 'mail.php');
-require(LIB_DIR . 'public_holiday.php');
 require(LIB_DIR . 'lang.php');
 require(LIB_DIR . 'timezone.php');
 

@@ -55,6 +55,7 @@ if (!($_REQUEST['plugin'] != 'attach' && $_REQUEST['pcmd'] != 'open')) {
 // I18N
 set_language();
 set_time();
+require(LIB_DIR . 'public_holiday.php');
 
 /////////////////////////////////////////////////
 // INI_FILE: Require LANG_FILE

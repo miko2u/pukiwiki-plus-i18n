@@ -3,7 +3,7 @@
  * Language judgment (言語判定)
  *
  * @copyright   Copyright &copy; 2005, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: lang.php,v 0.10 2005/03/21 15:21:00 upk Exp $
+ * @version     $Id: lang.php,v 0.12 2005/03/21 19:04:00 upk Exp $
  *
  */
 
@@ -20,13 +20,20 @@ $language = '';
 function set_language()
 {
 	global $language_considering_setting_level;
-	global $language_prepared;
 	global $language;
 
 	$language = get_language($language_considering_setting_level);
 
 	// LANG - Internal content encoding ('en', 'ja', or ...)
 	define('LANG', $language);
+
+	// PUBLIC HOLIDAY
+	// Installation person's calendar is adopted.
+	// 設置者のカレンダーを採用
+	$_c = split('_', DEFAULT_LANG);
+	// $_c = split('_', $language);
+	define("COUNTRY", $_c[1]);
+	unset($_c);
 
 	// FIXME:
 	// UI_LANG - Content Language for buttons, menus,  etc
