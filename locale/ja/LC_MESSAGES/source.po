@@ -1,0 +1,23 @@
+#
+#
+#
+msgid ""
+msgstr ""
+"Last-Translator: Miko.Hoshina(E.Satoh) <miko@cafeterrace.com>\n"
+"Language-Team: Japanese \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8-bit\n"
+
+#: source.inc.php:19
+msgid " $1 was not found."
+msgstr "$1が見つかりません"
+
+#: source.inc.php:20
+msgid "cannot display the page source."
+msgstr "ページのソースを表示できません。"
+
+#: source.inc.php:24
+#﻿msgid "Source of  $1"
+#msgstr "$1のソース"
+
