@@ -1,9 +1,8 @@
 <?php
-/////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
+// $Id: auth.php,v 1.6.1 2004/12/31 10:51:47 miko Exp $
 //
-// $Id: auth.php,v 1.5.1 2004/12/25 00:11:27 miko Exp $
-//
+// Basic authentication related functions
 
 // 編集不可能なページを編集しようとしたとき
 function check_editable($page, $auth_flag = TRUE, $exit_flag = TRUE)
@@ -17,10 +16,9 @@ function check_editable($page, $auth_flag = TRUE, $exit_flag = TRUE)
 
 	$body = $title = str_replace('$1', htmlspecialchars(strip_bracket($page)), $_title_cannotedit);
 
-	if (is_freeze($page)) {
-		$body .= "(<a href=\"$script?cmd=unfreeze&amp;page=".
-			rawurlencode($page)."\">$_msg_unfreeze</a>)";
-	}
+	if (is_freeze($page))
+		$body .= '(<a href="' . $script . '?cmd=unfreeze&amp;page=' .
+			rawurlencode($page) . '">' . $_msg_unfreeze . '</a>)';
 
 	$page = str_replace('$1', make_search($page), $_title_cannotedit);
 
@@ -39,9 +37,7 @@ function edit_auth($page, $auth_flag = TRUE, $exit_flag = TRUE)
 {
 	global $edit_auth, $edit_auth_pages, $_title_cannotedit;
 
-	// 編集認証フラグをチェック
-	return $edit_auth ?
-		basic_auth($page, $auth_flag, $exit_flag, $edit_auth_pages, $_title_cannotedit) : TRUE;
+	return $edit_auth ? basic_auth($page, $auth_flag, $exit_flag, $edit_auth_pages, $_title_cannotedit) : TRUE;
 }
 
 // 閲覧認証
@@ -49,12 +45,10 @@ function read_auth($page, $auth_flag = TRUE, $exit_flag = TRUE)
 {
 	global $read_auth, $read_auth_pages, $_title_cannotread;
 
-	// 閲覧認証フラグをチェック
-	return $read_auth ?
-		basic_auth($page, $auth_flag, $exit_flag, $read_auth_pages, $_title_cannotread) : TRUE;
+	return $read_auth ? basic_auth($page, $auth_flag, $exit_flag, $read_auth_pages, $_title_cannotread) : TRUE;
 }
 
-// Basic認証
+// Basic authentication
 function basic_auth($page, $auth_flag, $exit_flag, $auth_pages, $title_cannot)
 {
 	global $auth_users, $auth_method_type;
@@ -77,7 +71,7 @@ function basic_auth($page, $auth_flag, $exit_flag, $auth_pages, $title_cannot)
 			$user_list = array_merge($user_list, explode(',', $val));
 	}
 
-	if (count($user_list) == 0) return TRUE; // 制限なし
+	if (empty($user_list)) return TRUE; // No limit
 
 	// PHP_AUTH* 変数が未定義の場合
 	$matches = array();
@@ -87,7 +81,8 @@ function basic_auth($page, $auth_flag, $exit_flag, $auth_pages, $title_cannot)
 		&& preg_match('/^Basic (.*)$/', $_SERVER['HTTP_AUTHORIZATION'], $matches))
 	{
 		// HTTP_AUTHORIZATION 変数を使用した Basic 認証
-		list($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']) = explode(':', base64_decode($matches[1]));
+		list($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']) =
+			explode(':', base64_decode($matches[1]));
 	}
 
 	// ユーザリストに含まれるいずれかのユーザと認証されればOK
@@ -102,7 +97,8 @@ function basic_auth($page, $auth_flag, $exit_flag, $auth_pages, $title_cannot)
 			header('HTTP/1.0 401 Unauthorized');
 		}
 		if ($exit_flag) {
-			$body = $title = str_replace('$1', htmlspecialchars(strip_bracket($page)), $title_cannot);
+			$body = $title = str_replace('$1',
+				htmlspecialchars(strip_bracket($page)), $title_cannot);
 			$page = str_replace('$1', make_search($page), $title_cannot);
 			catbody($title, $page, $body);
 			exit;
