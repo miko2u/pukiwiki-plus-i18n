@@ -1,18 +1,16 @@
 <?php
-/////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
+// $Id: init.php,v 1.23.1 2005/01/03 07:56:58 miko Exp $
 //
-// $Id: init.php,v 1.20.1 2004/12/19 02:01:29 miko Exp $
-//
+// Init PukiWiki here
 
-/////////////////////////////////////////////////
-// PukiWiki version / Copyright / License
+// PukiWiki version / Copyright / Licence
 
-define('S_VERSION', '1.4.4');
+define('S_VERSION', '1.4.5_rc1');
 define('S_COPYRIGHT',
 	'<strong>PukiWiki ' . S_VERSION . '</strong>' .
-	' Copyright &copy; 2001-2004' .
-	' <a href="http://pukiwiki.org">PukiWiki Developers Team</a>.' .
+	' Copyright &copy; 2001-2005' .
+	' <a href="http://pukiwiki.org/">PukiWiki Developers Team</a>.' .
 	' License is <a href="http://www.gnu.org/licenses/gpl.html">GPL</a>.<br />' .
 	' Based on "PukiWiki" 1.3 by <a href="http://factage.com/yu-ji/">yu-ji</a>'
 );
@@ -46,7 +44,7 @@ define('MUTIME', getmicrotime());
 define('INI_FILE',  DATA_HOME . 'pukiwiki.ini.php');
 $die = '';
 if (! file_exists(INI_FILE) || ! is_readable(INI_FILE)) {
-	$die = "${die}File is not found. (INI_FILE)\n";
+	$die .= 'File is not found. (INI_FILE)' . "\n";
 } else {
 	require(INI_FILE);
 }
@@ -80,8 +78,8 @@ mb_internal_encoding(SOURCE_ENCODING);
 ini_set('mbstring.http_input', 'pass');
 mb_http_output('pass');
 mb_detect_order('auto');
- 
-// セッション関連
+
+// for SESSION Variables
 if (!($_REQUEST['plugin'] != 'attach' && $_REQUEST['pcmd'] != 'open')) {
 	if (ini_get('session.auto_start') != 1) {
 		session_name('pukiwiki');
@@ -97,7 +95,7 @@ define('LANG_FILE',      DATA_HOME . UI_LANG . '.lng.php');	// For UI resource
 $die = '';
 foreach (array('LANG_FILE_HINT', 'LANG_FILE') as $langfile) {
 	if (! file_exists(constant($langfile)) || ! is_readable(constant($langfile))) {
-		$die = "${die}File is not found or not readable. ($langfile)\n";
+		$die .= 'File is not found or not readable. (' . $langfile . ')' . "\n";
 	} else {
 		require_once(constant($langfile));
 	}
@@ -163,27 +161,27 @@ unset($user_agent);	// Unset after reading UA_INI_FILE
 $die = '';
 foreach(array('DATA_DIR', 'DIFF_DIR', 'BACKUP_DIR', 'CACHE_DIR') as $dir){
 	if (! is_writable(constant($dir)))
-		$die = "${die}Directory is not found or not writable ($dir)\n";
+		$die .= 'Directory is not found or not writable (' . $dir . ')' . "\n";
 }
 
 // 設定ファイルの変数チェック
 $temp = '';
 foreach(array('rss_max', 'page_title', 'note_hr', 'related_link', 'show_passage',
 	'rule_related_str', 'load_template_func') as $var){
-	if (! isset(${$var})) $temp .= "\$$var\n";
+	if (! isset(${$var})) $temp .= '$' . $var . "\n";
 }
 if ($temp) {
 	if ($die) $die .= "\n";	// A breath
-	$die .= "Variable(s) not found: (Maybe the old *.ini.php?)\n" . $temp;
+	$die .= 'Variable(s) not found: (Maybe the old *.ini.php?)' . "\n" . $temp;
 }
 
 $temp = '';
 foreach(array('LANG', 'PLUGIN_DIR') as $def){
-	if (! defined($def)) $temp .= "$def\n";
+	if (! defined($def)) $temp .= $def . "\n";
 }
 if ($temp) {
 	if ($die) $die .= "\n";	// A breath
-	$die .= "Define(s) not found: (Maybe the old *.ini.php?)\n" . $temp;
+	$die .= 'Define(s) not found: (Maybe the old *.ini.php?)' . "\n" . $temp;
 }
 
 if($die) die_message(nl2br("\n\n" . $die));
@@ -201,7 +199,7 @@ foreach(array($defaultpage, $whatsnew, $interwiki) as $page){
 
 // Prohibit $_GET attack
 foreach (array('msg', 'pass') as $key) {
-	if (isset($_GET[$key])) die_message("Sorry, already reserved: $key=");
+	if (isset($_GET[$key])) die_message('Sorry, already reserved: ' . $key . '=');
 }
 
 // Expire risk
@@ -209,9 +207,9 @@ unset($HTTP_GET_VARS, $HTTP_POST_VARS);	//, 'SERVER', 'ENV', 'SESSION', ...
 unset($_REQUEST);	// Considered harmful
 
 // Remove null character etc.
-$_GET     = input_filter($_GET);
-$_POST    = input_filter($_POST);
-$_COOKIE  = input_filter($_COOKIE);
+$_GET    = input_filter($_GET);
+$_POST   = input_filter($_POST);
+$_COOKIE = input_filter($_COOKIE);
 $_SESSION = input_filter($_SESSION);
 
 // 文字コード変換 ($_POST)
@@ -259,9 +257,16 @@ if (isset($_GET['encode_hint']) && $_GET['encode_hint'] != '')
 // ページ名かInterWikiNameであるとみなす
 $arg = '';
 if (isset($_SERVER['QUERY_STRING']) && $_SERVER['QUERY_STRING']) {
-	$arg = $_SERVER['QUERY_STRING'];
-} else if (isset($_SERVER['argv']) && count($_SERVER['argv'])) {
-	$arg = $_SERVER['argv'][0];
+	$arg = & $_SERVER['QUERY_STRING'];
+} else if (isset($_SERVER['argv']) && ! empty($_SERVER['argv'])) {
+	$arg = & $_SERVER['argv'][0];
+}
+if (strlen($arg) > PKWK_QUERY_STRING_MAX) {
+	// Something nasty attack?
+	pkwk_common_headers();
+	sleep(1);	// Fake processing, and/or process other threads
+	echo('Query string too long');
+	exit;
 }
 $arg = input_filter($arg); // \0 除去
 
@@ -366,7 +371,7 @@ $WikiName = '(?:[A-Z][a-z]+){2,}(?!\w)';
 $BracketName = '(?!\s):?[^\r\n\t\f\[\]<>#&":]+:?(?<!\s)';
 
 // InterWiki
-$InterWikiName = "(\[\[)?((?:(?!\s|:|\]\]).)+):(.+)(?(1)\]\])";
+$InterWikiName = '(\[\[)?((?:(?!\s|:|\]\]).)+):(.+)(?(1)\]\])';
 
 // 注釈
 $NotePattern = '/\(\(((?:(?>(?:(?!\(\()(?!\)\)(?:[^\)]|$)).)+)|(?R))*)\)\)/ex';
@@ -391,7 +396,7 @@ $entity_pattern = trim(join('', file(CACHE_DIR . 'entities.dat')));
 
 $line_rules = array_merge(array(
 	'&amp;(#[0-9]+|#x[0-9a-f]+|' . $entity_pattern . ');' => '&$1;',
-	"\r"          => "<br />\n",	/* 行末にチルダは改行 */
+	"\r"          => '<br />' . "\n",	/* 行末にチルダは改行 */
 	'#related$'   => '<del>#related</del>',
 	'^#contents$' => '<del>#contents</del>'
 ), $line_rules);

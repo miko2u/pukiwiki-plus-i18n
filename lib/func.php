@@ -1,58 +1,52 @@
 <?php
-/////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
+// $Id: func.php,v 1.23.5 2005/01/02 06:38:18 miko Exp $
 //
-// $Id: func.php,v 1.20.5 2004/12/29 15:14:52 miko Exp $
-//
+// General functions
 
-// 文字列がInterWikiNameかどうか
 function is_interwiki($str)
 {
 	global $InterWikiName;
-
-	return preg_match("/^$InterWikiName$/", $str);
+	return preg_match('/^' . $InterWikiName . '$/', $str);
 }
 
-// 文字列がページ名かどうか
 function is_pagename($str)
 {
 	global $BracketName;
 
 	$is_pagename = (! is_interwiki($str) &&
-		  preg_match("/^(?!\/)$BracketName$(?<!\/$)/", $str) &&
-		! preg_match('/(^|\/)\.{1,2}(\/|$)/', $str));
+		  preg_match('/^(?!\/)' . $BracketName . '$(?<!\/$)/', $str) &&
+		! preg_match('#(^|/)\.{1,2}(/|$)#', $str));
 
-	$pattern = '';
 	if (defined('SOURCE_ENCODING')) {
 		switch(SOURCE_ENCODING){
-		case 'UTF-8':
-			$pattern = '/^(?:[\x00-\x7F]|(?:[\xC0-\xDF][\x80-\xBF])|(?:[\xE0-\xEF][\x80-\xBF][\x80-\xBF]))+$/';
+		case 'UTF-8': $pattern =
+			'/^(?:[\x00-\x7F]|(?:[\xC0-\xDF][\x80-\xBF])|(?:[\xE0-\xEF][\x80-\xBF][\x80-\xBF]))+$/';
 			break;
-		case 'EUC-JP':
-			$pattern = '/^(?:[\x00-\x7F]|(?:[\x8E\xA1-\xFE][\xA1-\xFE])|(?:\x8F[\xA1-\xFE][\xA1-\xFE]))+$/';
+		case 'EUC-JP': $pattern =
+			'/^(?:[\x00-\x7F]|(?:[\x8E\xA1-\xFE][\xA1-\xFE])|(?:\x8F[\xA1-\xFE][\xA1-\xFE]))+$/';
 			break;
 		}
+		if (isset($pattern) && $pattern != '')
+			$is_pagename = ($is_pagename && preg_match($pattern, $str));
 	}
-	if($pattern !== '') $is_pagename = ($is_pagename && preg_match($pattern, $str));
 
 	return $is_pagename;
 }
 
-// 文字列がURLかどうか
 function is_url($str, $only_http = FALSE)
 {
 	$scheme = $only_http ? 'https?' : 'https?|ftp|news';
 	return preg_match('/^(' . $scheme . ')(:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]*)$/', $str);
 }
 
-// ページが存在するか
-function is_page($page, $reload = FALSE)
+// If the page exists
+function is_page($page, $clearcache = FALSE)
 {
-	if ($reload) clearstatcache();
+	if ($clearcache) clearstatcache();
 	return file_exists(get_filename($page));
 }
 
-// ページが編集可能か
 function is_editable($page)
 {
 	global $cantedit;
@@ -69,24 +63,23 @@ function is_editable($page)
 	return $is_editable[$page];
 }
 
-// ページが凍結されているか
-function is_freeze($page, $force = FALSE)
+// FIXME: Dont use get_source() to check the 1st line of the page!
+function is_freeze($page, $clearcache = FALSE)
 {
 	global $function_freeze;
 	static $is_freeze = array();
 
-	if ($force === TRUE) $is_freeze = array();
-
+	if ($clearcache === TRUE) $is_freeze = array();
 	if (isset($is_freeze[$page])) return $is_freeze[$page];
+
 	if (! $function_freeze || ! is_page($page)) {
 		$is_freeze[$page] = FALSE;
 		return FALSE;
+	} else {
+		list($lines) = array_pad(get_source($page), 1, '');
+		$is_freeze[$page] = (rtrim($lines) == '#freeze');
+		return $is_freeze[$page];
 	}
-
-	list($lines) = get_source($page);
-	$is_freeze[$page] = (rtrim($lines) == '#freeze'); 
-
-	return $is_freeze[$page]; 
 }
 
 // 自動テンプレート
@@ -99,23 +92,24 @@ function auto_template($page)
 	$body = '';
 	$matches = array();
 	foreach ($auto_template_rules as $rule => $template) {
+		$rule_pattrn = '/' . $rule . '/';
 
-		if (! preg_match("/$rule/", $page, $matches)) continue;
+		if (! preg_match($rule_pattrn, $page, $matches)) continue;
 
-		$template_page = preg_replace("/$rule/", $template, $page);
+		$template_page = preg_replace($rule_pattrn, $template, $page);
 		if (! is_page($template_page)) continue;
 
 		$body = join('', get_source($template_page));
 
-		// 見出しの固有ID部を削除
+		// Remove fixed-heading anchors
 		$body = preg_replace('/^(\*{1,3}.*)\[#[A-Za-z][\w-]+\](.*)$/m', '$1$2', $body);
 
-		// #freezeを削除
+		// Remove '#freeze'
 		$body = preg_replace('/^#freeze\s*$/m', '', $body);
 
 		$count = count($matches);
 		for ($i = 0; $i < $count; $i++)
-			$body = str_replace("\$$i", $matches[$i], $body);
+			$body = str_replace('$' . $i, $matches[$i], $body);
 
 		break;
 	}
@@ -126,21 +120,22 @@ function auto_template($page)
 function get_search_words($words, $special = FALSE)
 {
 	$retval = array();
+
 	// Perlメモ - 正しくパターンマッチさせる
 	// http://www.din.or.jp/~ohzaki/perl.htm#JP_Match
+
 	$eucpre = $eucpost = '';
 	if (SOURCE_ENCODING == 'EUC-JP') {
 		$eucpre = '(?<!\x8F)';
 		// # JIS X 0208 が 0文字以上続いて # ASCII, SS2, SS3 または終端
 		$eucpost = '(?=(?:[\xA1-\xFE][\xA1-\xFE])*(?:[\x00-\x7F\x8E\x8F]|\z))';
 	}
-	$quote_func = create_function('$str', 'return preg_quote($str, "/");');
+	$quote_func = create_function('$str', 'return preg_quote($str, \'/\');');
 
-	// LANG=='ja'で、mb_convert_kanaが使える場合はmb_convert_kanaを使用
+	// LANG == 'ja'で、mb_convert_kanaが使える場合はmb_convert_kanaを使用
 	$convert_kana = create_function('$str, $option',
 		(LANG == 'ja' && function_exists('mb_convert_kana')) ?
-			'return mb_convert_kana($str, $option);' : 'return $str;'
-	);
+			'return mb_convert_kana($str, $option);' : 'return $str;');
 
 	foreach ($words as $word) {
 		// 英数字は半角,カタカナは全角,ひらがなはカタカナに
@@ -171,13 +166,12 @@ function get_search_words($words, $special = FALSE)
 	return $retval;
 }
 
-
-// 検索
+// 'Search' main function
 function do_search($word, $type = 'AND', $non_format = FALSE, $non_fuzzy = FALSE)
 {
 	global $script, $whatsnew, $non_list, $search_non_list;
 	global $_msg_andresult, $_msg_orresult, $_msg_notfoundresult;
-	global $search_auth, $search_fuzzy;
+ 	global $search_auth, $search_fuzzy;
 
 	static $fuzzypattern = array(
 		'ヴァ' => 'バ',	'ヴィ' => 'ビ',	'ヴェ' => 'ベ',	'ヴォ' => 'ボ',
@@ -210,8 +204,8 @@ function do_search($word, $type = 'AND', $non_format = FALSE, $non_fuzzy = FALSE
 //miko modified
 		if (!$search_fuzzy) {
 			foreach ($keys as $key) {
-				$tmp     = preg_grep("/$key/", $source);
-				$b_match = (! empty($tmp));
+				$tmp     = preg_grep('/' . $key . '/', $source);
+				$b_match = ! empty($tmp);
 				if ($b_match xor $b_type) break;
 			}
 			if ($b_match) $pages[$page] = get_filetime($page);
@@ -219,7 +213,6 @@ function do_search($word, $type = 'AND', $non_format = FALSE, $non_fuzzy = FALSE
 			$fuzzy_from = array_keys($fuzzypattern);
 			$fuzzy_to = array_values($fuzzypattern);
 			$words = preg_split('/\s+/', $word, -1, PREG_SPLIT_NO_EMPTY);
-
 			$_source = mb_strtolower(mb_convert_kana(join("\n",$source), 'KVCas'));
 			for ($i=0; $i<count($fuzzy_from); $i++) {
 				$_source = mb_ereg_replace($fuzzy_from[$i], $fuzzy_to[$i], $_source);
@@ -244,7 +237,7 @@ function do_search($word, $type = 'AND', $non_format = FALSE, $non_fuzzy = FALSE
 		return str_replace('$1', $s_word, $_msg_notfoundresult);
 
 	ksort($pages);
-	$retval = "<ul>\n";
+	$retval = '<ul>' . "\n";
 	foreach ($pages as $page=>$time) {
 		$r_page  = rawurlencode($page);
 		$s_page  = htmlspecialchars($page);
@@ -271,7 +264,9 @@ function arg_check($str)
 // ページ名のエンコード
 function encode($key)
 {
-	return ($key == '') ? '' : strtoupper(join('', unpack('H*0', $key)));
+	return ($key == '') ? '' : strtoupper(bin2hex($key));
+	// Equal to strtoupper(join('', unpack('H*0', $key)));
+	// But PHP 4.3.10 says 'Warning: unpack(): Type H: outside of string in ...'
 }
 
 // ページ名のデコード
@@ -568,7 +563,7 @@ function get_autolink_pattern(& $pages)
 	$auto_pages = array_merge($ignorepages, $forceignorepages);
 
 	foreach ($pages as $page) {
-		if (preg_match("/^$WikiName$/", $page) ?
+		if (preg_match('/^' . $WikiName . '$/', $page) ?
 		    $nowikiname : strlen($page) >= $autolink)
 			$auto_pages[] = $page;
 	}
@@ -723,13 +718,13 @@ function csv_explode($separator, $string)
 	return $retval;
 }
 
-// 配列をCSV形式の文字列に
+// Implode an array with CSV data format (escape double quotes)
 function csv_implode($glue, $pieces)
 {
 	$_glue = ($glue != '') ? '\\' . $glue{0} : '';
 	$arr = array();
 	foreach ($pieces as $str) {
-		if (ereg("[$_glue\"\n\r]", $str))
+		if (ereg('[' . $_glue . '"' . "\n\r" . ']', $str))
 			$str = '"' . str_replace('"', '""', $str) . '"';
 		$arr[] = $str;
 	}
@@ -753,8 +748,8 @@ function pkwk_login($pass = '')
 
 // is_a --  Returns TRUE if the object is of this class or has this class as one of its parents
 // (PHP 4 >= 4.2.0)
-if (! function_exists('is_a'))
-{
+if (! function_exists('is_a')) {
+
 	function is_a($class, $match)
 	{
 		if (empty($class)) return FALSE; 
@@ -770,8 +765,8 @@ if (! function_exists('is_a'))
 
 // array_fill -- Fill an array with values
 // (PHP 4 >= 4.2.0)
-if (! function_exists('array_fill'))
-{
+if (! function_exists('array_fill')) {
+
 	function array_fill($start_index, $num, $value)
 	{
 		$ret = array();
@@ -782,8 +777,8 @@ if (! function_exists('array_fill'))
 
 // md5_file -- Calculates the md5 hash of a given filename
 // (PHP 4 >= 4.2.0)
-if (! function_exists('md5_file'))
-{
+if (! function_exists('md5_file')) {
+
 	function md5_file($filename)
 	{
 		if (! file_exists($filename)) return FALSE;

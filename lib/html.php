@@ -1,25 +1,25 @@
 <?php
-/////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
+// $Id: html.php,v 1.21.13 2004/12/31 09:10:45 miko Exp $
 //
-// $Id: html.php,v 1.20.13 2004/12/25 00:38:21 miko Exp $
-//
+// HTML-publishing related functions
 
-// 本文を出力
-function catbody($title,$page,$body)
+// Show page-content
+function catbody($title, $page, $body)
 {
 	global $script, $vars, $arg, $defaultpage, $whatsnew, $help_page, $hr;
 	global $related_link, $cantedit, $function_freeze, $search_word_color, $_msg_word;
-	global $foot_explain, $note_hr, $head_tags, $menubar, $sidebar;
+	global $foot_explain, $note_hr, $head_tags;
 	global $trackback, $trackback_javascript, $referer, $javascript;
-	global $skin_file;
 	global $_LANG, $_LINK, $_IMAGE;
 
+	global $skin_file, $menubar, $sidebar;
+
 	global $html_transitional; // FALSE:XHTML1.1 TRUE:XHTML1.0 Transitional
-	global $page_title;        // ホームページのタイトル
-	global $do_backup;         // バックアップを行うかどうか
-	global $modifier;          // 編集者のホームページ
-	global $modifierlink;      // 編集者の名前
+	global $page_title;        // Title of this site
+	global $do_backup;         // Do backup or not
+	global $modifier;          // Site administrator's  web page
+	global $modifierlink;      // Site administrator's name
 
 	if (!defined('SKIN_FILE') || ! file_exists(SKIN_FILE) || ! is_readable(SKIN_FILE)) {
 		if (! file_exists($skin_file) || ! is_readable($skin_file)) {
@@ -59,7 +59,7 @@ function catbody($title,$page,$body)
 	$_LINK['rss']      = "$script?cmd=rss";
 	$_LINK['rss10']    = "$script?cmd=rss&amp;ver=1.0"; // Same as 'rdf'
 	$_LINK['rss20']    = "$script?cmd=rss&amp;ver=2.0";
-	$_LINK['mixirss']  = "$script?cmd=mixirss";			// Same as 'rdf' for mixi
+	$_LINK['mixirss']  = "$script?cmd=mixirss";         // Same as 'rdf' for mixi
 	$_LINK['search']   = "$script?cmd=search";
 	$_LINK['side']     = "$script?$sidebar";
 	$_LINK['source']   = "$script?plugin=source&amp;refer=$r_page";
@@ -88,70 +88,65 @@ function catbody($title,$page,$body)
 	$link_rss       = & $_LINK['rss'];
 	$link_rss10     = & $_LINK['rss10'];		// New!
 	$link_rss20     = & $_LINK['rss20'];		// New!
-	$link_mixirss   = & $_LINK['mixirss'];
 	$link_freeze    = & $_LINK['freeze'];
 	$link_unfreeze  = & $_LINK['unfreeze'];
 	$link_upload    = & $_LINK['upload'];
 	$link_template  = & $_LINK['copy'];
 	$link_refer     = & $_LINK['refer'];	// New!
 	$link_rename    = & $_LINK['rename'];
+
+	$link_mixirss   = & $_LINK['mixirss'];	// Plus!
+	$link_menu      = & $_LINK['menu'];     // Plus!
 	$link_read      = & $_LINK['read'];     // Plus!
 	$link_reload    = & $_LINK['reload'];   // Plus!
-	$link_menu      = & $_LINK['menu'];     // Plus!
 	$link_side      = & $_LINK['side'];     // Plus!
 	$link_source    = & $_LINK['source'];   // Plus!
 
-	// ページの表示時TRUE(バックアップの表示、RecentChangesの表示を除く)
+	// Init flags
 	$is_page = (is_pagename($_page) && ! arg_check('backup') && $_page != $whatsnew);
-
-	// ページの読み出し時TRUE
 	$is_read = (arg_check('read') && is_page($_page));
-
-	// ページが凍結されているときTRUE
 	$is_freeze = is_freeze($_page);
 
-	// ページの最終更新時刻(文字列)
+	// Last modification date (string) of the page
 	$lastmodified = $is_read ?  get_date('D, d M Y H:i:s T', get_filetime($_page)) .
 		' ' . get_pg_passage($_page, FALSE) : '';
 
-	// 関連するページのリスト
+	// List of related pages
 	$related = ($is_read && $related_link) ? make_related($_page) : '';
 
-	// 添付ファイルのリスト
+	// List of attached files of the page
 	$attaches = ($is_read && exist_plugin_action('attach')) ? attach_filelist() : '';
 
-	// 注釈のリスト
+	// List of footnotes
 	ksort($foot_explain, SORT_NUMERIC);
 	$notes = ! empty($foot_explain) ? $note_hr . join("\n", $foot_explain) : '';
 
-	// <head>内に追加するタグ
+	// Tags will be inserted into <head></head>
 	$head_tag = ! empty($head_tags) ? join("\n", $head_tags) ."\n" : '';
 
 	// 1.3.x compat
-	// ページの最終更新時刻(UNIX timestamp)
+	// Last modification date (UNIX timestamp) of the page
 	$fmt = $is_read ? get_filetime($_page) + LOCALZONE : 0;
 
-	//単語検索
+	// Search words
 	if ($search_word_color && isset($vars['word'])) {
 		$body = '<div class="small">' . $_msg_word . htmlspecialchars($vars['word']) .
-			"</div>$hr\n$body";
+			'</div>' . $hr . "\n" . $body;
 		$words = array_flip(array_splice(
 			preg_split('/\s+/', $vars['word'], -1, PREG_SPLIT_NO_EMPTY),
 			0, 10));
 		$keys = array();
-		foreach ($words as $word=>$id) {
-			$keys[$word] = strlen($word);
-		}
+		foreach ($words as $word=>$id) $keys[$word] = strlen($word);
 		arsort($keys, SORT_NUMERIC);
 		$keys = get_search_words(array_keys($keys), TRUE);
 		$id = 0;
-		foreach ($keys as $key=>$pattern)
-		{
+		foreach ($keys as $key=>$pattern) {
 			$s_key    = htmlspecialchars($key);
-			$pattern  = "/<[^>]*>|($pattern)|&[^;]+;/";
+			$pattern  = '/<[^>]*>|(' . $pattern . ')|&[^;]+;/';
 			$callback = create_function(
 				'$arr',
-				'return (count($arr) > 1) ? "<strong class=\"word' . $id++ . '\">{$arr[1]}</strong>" : $arr[0];'
+				'return (count($arr) > 1) ? \'<strong class="word' .
+					$id++ . '">\' . $arr[1] . \'</strong>\' : $arr[0];'
 			);
 			$body  = preg_replace_callback($pattern, $callback, $body);
 			$notes = preg_replace_callback($pattern, $callback, $notes);
@@ -164,30 +159,12 @@ function catbody($title,$page,$body)
 	require(SKIN_FILE);
 }
 
-// インライン要素のパース (obsolete)
-function inline($line, $remove = FALSE)
-{
-	global $NotePattern;
-
-	$line = htmlspecialchars($line);
-	if ($remove) 
-		$line = preg_replace($NotePattern, '', $line);
-
-	return $line;
-}
-
-// インライン要素のパース (リンク、見出し一覧) (obsolete)
-function inline2($str)
-{
-	return make_link($str);
-}
-
-// 編集フォームの表示
+// Show 'edit' form
 function edit_form($page, $postdata, $digest = 0, $b_template = TRUE)
 {
 	global $script, $vars, $rows, $cols, $hr, $function_freeze;
 	global $_btn_addtop, $_btn_preview, $_btn_repreview, $_btn_update, $_btn_cancel,
-		$_btn_freeze, $_msg_help, $_btn_notchangetimestamp;
+		$_msg_help, $_btn_notchangetimestamp;
 	global $whatsnew, $_btn_template, $_btn_load, $non_list, $load_template_func;
 
 	$refer = $template = $addtag = $add_top = '';
@@ -199,17 +176,20 @@ function edit_form($page, $postdata, $digest = 0, $b_template = TRUE)
 
 	if(isset($vars['add'])) {
 		$addtag  = '<input type="hidden" name="add" value="true" />';
-		$add_top = "<input type=\"checkbox\" name=\"add_top\" value=\"true\"$checked_top /><span class=\"small\">$_btn_addtop</span>";
+		$add_top = '<input type="checkbox" name="add_top" value="true"' .
+			$checked_top . ' /><span class="small">' .
+			$_btn_addtop . '</span>';
 	}
 
 	if($load_template_func && $b_template) {
-		$_pages = get_existpages();
 		$pages  = array();
-		foreach($_pages as $_page) {
-			if ($_page == $whatsnew || preg_match("/$non_list/", $_page))
+		$non_list_pattern = '#' . $non_list . '#';
+		foreach(get_existpages() as $_page) {
+			if ($_page == $whatsnew || preg_match($non_list_pattern, $_page))
 				continue;
 			$s_page = htmlspecialchars($_page);
-			$pages[$_page] = "   <option value=\"$s_page\">$s_page</option>";
+			$pages[$_page] = '   <option value="' . $s_page . '">' .
+				$s_page . '</option>';
 		}
 		ksort($pages);
 		$s_pages  = join("\n", $pages);
@@ -223,7 +203,7 @@ $s_pages
 EOD;
 
 		if (isset($vars['refer']) && $vars['refer'] != '')
-			$refer = '[[' . strip_bracket($vars['refer']) ."]]\n\n";
+			$refer = '[[' . strip_bracket($vars['refer']) . ']]' . "\n\n";
 	}
 
 	$r_page      = rawurlencode($page);
@@ -232,10 +212,10 @@ EOD;
 	$s_postdata  = htmlspecialchars($refer . $postdata);
 	$s_original  = isset($vars['original']) ? htmlspecialchars($vars['original']) : $s_postdata;
 	$s_id        = isset($vars['id']) ? htmlspecialchars($vars['id']) : '';
-	$b_preview   = isset($vars['preview']); // プレビュー中TRUE
+	$b_preview   = isset($vars['preview']); // TRUE when preview
 	$btn_preview = $b_preview ? $_btn_repreview : $_btn_preview;
-	$refpage = htmlspecialchars($vars['refpage']);
 
+	$refpage = htmlspecialchars($vars['refpage']);
 	$add_assistant = edit_form_assistant();
 
 	$body = <<<EOD
@@ -265,21 +245,22 @@ EOD;
 	if (isset($vars['help'])) {
 		$body .= $hr . catrule();
 	} else {
-		$body .=
-		"<ul><li><a href=\"$script?cmd=edit&amp;help=true&amp;page=$r_page\">$_msg_help</a></li></ul>";
+		$body .= '<ul><li><a href="' .
+			$script . '?cmd=edit&amp;help=true&amp;page=' . $r_page .
+			'">' . $_msg_help . '</a></li></ul>';
 	}
 
 	return $body;
 }
-
-// 入力アシスタント
+// Input Assistant
 function edit_form_assistant()
 {
 	global $html_transitional;
-	$html_transitional = TRUE;
+	static $assist_loaded = 0;	// for non-reentry
 
-	static $assist_loaded = 0;
+	$html_transitional = TRUE;
 	if (!$assist_loaded) {
+		$assist_loaded++;
 		$map = <<<EOD
 <map id="map_button" name="map_button">
 <area shape="rect" coords="0,0,22,16" title="URL" alt="URL" href="#" onclick="javascript:pukiwiki_linkPrompt('url'); return false;" />
@@ -307,7 +288,6 @@ function edit_form_assistant()
 <area shape="rect" coords="56,8,64,16" title="White" alt="White" href="#" onclick="javascript:pukiwiki_tag('White'); return false;" />
 </map>
 EOD;
-		$assist_loaded++;
 	}
 	return <<<EOD
 $map
@@ -315,10 +295,10 @@ $map
 EOD;
 }
 
-// 関連するページ
+// Related pages
 function make_related($page, $tag = '')
 {
-	global $script, $vars, $related, $rule_related_str, $related_str, $non_list;
+	global $script, $vars, $rule_related_str, $related_str, $non_list;
 	global $_ul_left_margin, $_ul_margin, $_list_pad_str;
 
 	$links = links_get_related($page);
@@ -330,23 +310,27 @@ function make_related($page, $tag = '')
 	}
 
 	$_links = array();
+	$non_list_pattern = '#' . $non_list . '#';
 	foreach ($links as $page=>$lastmod) {
-		if (preg_match("/$non_list/", $page)) continue;
+		if (preg_match($non_list_pattern, $page)) continue;
 
 		$r_page   = rawurlencode($page);
 		$s_page   = htmlspecialchars($page);
 		$passage  = get_passage($lastmod);
 		$_links[] = $tag ?
-			"<a href=\"$script?$r_page\" title=\"$s_page $passage\">$s_page</a>" :
-			"<a href=\"$script?$r_page\">$s_page</a>$passage";
+			'<a href="' . $script . '?' . $r_page . '" title="' .
+			$s_page . ' ' . $passage . '">' . $s_page . '</a>' :
+			'<a href="' . $script . '?' . $r_page . '">' .
+			$s_page . '</a>' . $passage;
 	}
+	if (empty($_links)) return ''; // Nothing
 
-	if (empty($_links)) return '';
-
-	if ($tag == 'p') { // 行頭から
+	if ($tag == 'p') { // From the line-head
 		$margin = $_ul_left_margin + $_ul_margin;
 		$style  = sprintf($_list_pad_str, 1, $margin, $margin);
-		$retval =  "\n<ul$style>\n<li>" . join($rule_related_str, $_links) . "</li>\n</ul>\n";
+		$retval =  "\n" . '<ul' . $style . '>' . "\n" .
+			'<li>' . join($rule_related_str, $_links) . '</li>' . "\n" .
+			'</ul>' . "\n";
 	} else if ($tag) {
 		$retval = join($rule_related_str, $_links);
 	} else {
@@ -356,14 +340,15 @@ function make_related($page, $tag = '')
 	return $retval;
 }
 
-// ユーザ定義ルール(ソースは置換せずコンバート)
+// User-defined rules (convert without replacing source)
 function make_line_rules($str)
 {
 	global $line_rules;
 	static $pattern, $replace;
 
 	if (! isset($pattern)) {
-		$pattern = array_map(create_function('$a', 'return "/$a/";'), array_keys($line_rules));
+		$pattern = array_map(create_function('$a',
+			'return \'/\' . $a . \'/\';'), array_keys($line_rules));
 		$replace = array_values($line_rules);
 		unset($line_rules);
 	}
@@ -371,7 +356,6 @@ function make_line_rules($str)
 	return preg_replace($pattern, $replace, $str);
 }
 
-// HTMLタグを取り除く
 function strip_htmltag($str)
 {
 	global $_symbol_noexists;
@@ -384,27 +368,28 @@ function strip_htmltag($str)
 	return preg_replace('/<[^>]+>/', '', $str);
 }
 
-// ページ名からページ名を検索するリンクを作成
+// Make a search-link of the page name, by the page name, for the page name
 function make_search($page)
 {
-	global $script, $WikiName;
+	global $script;
 
 	$s_page = htmlspecialchars($page);
 	$r_page = rawurlencode($page);
 
 	//WikiWikiWeb like...
 	//if(preg_match("/^$WikiName$/", $page))
-	//	$name = preg_replace("/([A-Z][a-z]+)/", "$1 ", $name);
+	//	$name = preg_replace('/([A-Z][a-z]+)/', '$1 ', $name);
 
-	return "<a href=\"$script?cmd=search&amp;word=$r_page\">$s_page</a> ";
+	return '<a href="' . $script . '?cmd=search&amp;word=' . $r_page .
+		'">' . $s_page . '</a> ';
 }
 
-// 見出しを生成 (注釈やHTMLタグを除去)
+// Make heading (remove footnotes and HTML tags)
 function make_heading(& $str, $strip = TRUE)
 {
 	global $NotePattern;
 
-	// 見出しの固有ID部を削除
+	// Cut fixed-anchors
 	$id = '';
 	$matches = array();
 	if (preg_match('/^(\*{0,3})(.*?)\[#([A-Za-z][\w-]+)\](.*?)$/m', $str, $matches)) {
@@ -414,6 +399,7 @@ function make_heading(& $str, $strip = TRUE)
 		$str = preg_replace('/^\*{0,3}/', '', $str);
 	}
 
+	// Cut footnotes and tags
 	if ($strip === TRUE)
 		$str = strip_htmltag(make_link(preg_replace($NotePattern, '', $str)));
 
@@ -447,23 +433,27 @@ function anchor_explode($page, $strict_editable = FALSE)
 // there're blank lines or something out of php blocks
 function pkwk_headers_sent()
 {
+	if (PKWK_OPTIMISE) return;
+
+	$file = $line = '';
 	if (version_compare(PHP_VERSION, '4.3.0', '>=')) {
 		if (headers_sent($file, $line))
-			die('Headers already sent at ' .
-				htmlspecialchars($file) .
-				' line ' . $line . '.');
+		    die('Headers already sent at ' .
+		    	htmlspecialchars($file) .
+			' line ' . $line . '.');
 	} else {
-		if (headers_sent()) {
+		if (headers_sent())
 			die('Headers already sent.');
-		}
 	}
 }
+
 function pkwk_common_headers()
-{ 
+{
 	if (! PKWK_OPTIMISE) pkwk_headers_sent();
 
-	$matches = array(); 
-	if(ini_get('zlib.output_compression') && preg_match('/\b(gzip|deflate)\b/i', $_SERVER['HTTP_ACCEPT_ENCODING'], $matches)) {
+	$matches = array();
+	if(ini_get('zlib.output_compression') &&
+	    preg_match('/\b(gzip|deflate)\b/i', $_SERVER['HTTP_ACCEPT_ENCODING'], $matches)) {
 		header('Content-Encoding: ' . $matches[1]);
 		header('Vary: Accept-Encoding');
 	}
