@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: auth.php,v 1.7.2 2005/02/25 19:32:38 miko Exp $
+// $Id: auth.php,v 1.8.1 2005/02/26 12:10:14 miko Exp $
 //
 // Basic authentication related functions
 
