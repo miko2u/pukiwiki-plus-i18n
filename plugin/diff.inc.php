@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: diff.inc.php,v 1.13 2004/10/31 05:21:47 henoheno Exp $
+// $Id: diff.inc.php,v 1.13.1 2005/03/09 05:21:47 miko Exp $
 //
 
 //ページの差分を表示する
@@ -25,8 +25,16 @@ function plugin_diff_action()
 function plugin_diff_view($page)
 {
 	global $script, $hr;
-	global $_msg_notfound, $_msg_goto, $_msg_deleted, $_msg_addline, $_msg_delline, $_title_diff;
-	global $_title_diff_delete;
+//	global $_msg_notfound, $_msg_goto, $_msg_deleted, $_msg_addline, $_msg_delline;
+//	global $_title_diff, $_title_diff_delete;
+
+	$_msg_notfound       = _('The page was not found.');
+	$_msg_addline        = _('The added line is <span class="diff_added">THIS COLOR</span>.');
+	$_msg_delline        = _('The deleted line is <span class="diff_removed">THIS COLOR</span>.');
+	$_msg_goto           = _('Go to $1.');
+	$_msg_deleted        = _(' $1 has been deleted.');
+	$_title_diff         = _('Diff of  $1');
+	$_title_diff_delete  = _('Deleting diff of  $1');
 
 	$r_page = rawurlencode($page);
 	$s_page = htmlspecialchars($page);

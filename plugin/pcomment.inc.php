@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: pcomment.inc.php,v 1.38 2005/01/30 01:13:11 henoheno Exp $
+// $Id: pcomment.inc.php,v 1.40.1 2005/03/09 17:58:38 miko Exp $
 //
 // pcomment plugin - Insetring comment into specified (another) page
 
@@ -77,7 +77,16 @@ function plugin_pcomment_action()
 function plugin_pcomment_convert()
 {
 	global $script, $vars;
-	global $_pcmt_messages;
+//	global $_pcmt_messages;
+	$_pcmt_messages = array(
+		'btn_name'       => _('Name: '),
+		'btn_comment'    => _('Post Comment'),
+		'msg_comment'    => _('Comment: '),
+		'msg_recent'     => _('Show recent %d comments.'),
+		'msg_all'        => _('Go to the comment page.'),
+		'msg_none'       => _('No comment.'),
+		'err_pagename'   => _('[[%s]] : not a valid page name.'),
+	);
 
 	// 戻り値
 	$ret = '';
@@ -186,15 +195,19 @@ EOD;
 function pcmt_insert()
 {
 	global $script, $vars, $now;
-	global $_title_updated, $_no_name, $_pcmt_messages;
+	global $_no_name;
+//	global $_title_updated, $_no_name, $_pcmt_messages;
 
+	$refer = isset($vars['refer']) ? $vars['refer'] : '';
 	$page = isset($vars['page']) ? $vars['page'] : '';
+	$page = get_fullname($page, $refer);
+
 	if (! is_pagename($page))
-		return array('msg'=>'invalid page name.', 'body'=>'cannot add comment.' , 'collided'=>TRUE);
+		return array('msg'=>_('invalid page name.'), 'body'=>_('cannot add comment.'), 'collided'=>TRUE);
 
 	check_editable($page, true, true);
 
-	$ret = array('msg' => $_title_updated, 'collided' => FALSE);
+	$ret = array('msg' => _(' $1 was updated'), 'collided' => FALSE);
 
 	//コメントフォーマットを適用
 	$msg = str_replace('$msg', rtrim($vars['msg']), PCMT_MSG_FORMAT);
@@ -215,7 +228,6 @@ function pcmt_insert()
 	}
 	$msg = rtrim($msg);
 
-	$refer = isset($vars['refer']) ? $vars['refer'] : '';
 	if (! is_page($page)) {
 		$postdata = '[[' . htmlspecialchars(strip_bracket($refer)) . "]]\n\n-$msg\n";
 	} else {
@@ -225,8 +237,9 @@ function pcmt_insert()
 		// 更新の衝突を検出
 		$digest = isset($vars['digest']) ? $vars['digest'] : '';
 		if (md5(join('', $postdata)) != $digest) {
-			$ret['msg']  = $_pcmt_messages['title_collided'];
-			$ret['body'] = $_pcmt_messages['msg_collided'];
+			$ret['msg']  = _('On updating  $1, there was a collision.');
+			$ret['body'] = _('It seems that someone has already updated this page while you were editing it.<br />' .
+			                 'The comment was added to the page, but there may be a problem.<br />');
 		}
 
 		// 初期値
@@ -243,12 +256,14 @@ function pcmt_insert()
 		$dir = isset($vars['dir']) ? $vars['dir'] : '';
 
 		//リプライ先のコメントを検索
+		$b_reply = FALSE;
 		if ($reply_hash != '') {
 			while ($pos < count($postdata)) {
 				$matches = array();
 				if (preg_match('/^(\-{1,2})(?!\-)(.*)$/', $postdata[$pos++], $matches)
 					&& md5($matches[2]) == $reply_hash)
 				{
+					$b_reply = TRUE;
 					$level = strlen($matches[1]) + 1; //挿入するレベル
 
 					// コメントの末尾を検索
@@ -261,18 +276,10 @@ function pcmt_insert()
 					break;
 				}
 			}
-		} else {
-			$pos = ($dir == 0) ? $start_pos : count($postdata);
 		}
 
-		if ($dir == '0') {
-			if ($pos == count($postdata)) {
-				$pos = $start_pos; //先頭
-			}
-		} else {
-			if ($pos == 0) {
-				$pos = count($postdata); //末尾
-			}
+		if($b_reply==FALSE) {
+			$pos = ($dir == '0') ? $start_pos : count($postdata);
 		}
 
 		//コメントを挿入
@@ -342,10 +349,10 @@ function pcmt_check_arg($val, $key, &$params)
 
 function pcmt_get_comments($page, $count, $dir, $reply)
 {
-	global $_msg_pcomment_restrict;
+//	global $_msg_pcomment_restrict;
 
 	if (! check_readable($page, false, false))
-		return array(str_replace('$1', $page, $_msg_pcomment_restrict));
+		return array(str_replace('$1', $page, _('Due to the blocking, no comments could be read from  $1 at all.')));
 
 	$reply = (! PKWK_READONLY && $reply); // Suprress radio-buttons
 

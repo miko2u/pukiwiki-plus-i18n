@@ -1,5 +1,5 @@
 <?php
-// $Id: template.inc.php,v 1.20 2005/01/23 08:25:16 henoheno Exp $
+// $Id: template.inc.php,v 1.21.1 2005/03/09 08:06:48 miko Exp $
 //
 // Load template plugin
 
@@ -8,10 +8,21 @@ define('MAX_LEN', 60);
 function plugin_template_action()
 {
 	global $script, $vars;
-	global $_title_edit;
-	global $_msg_template_start, $_msg_template_end, $_msg_template_page, $_msg_template_refer;
-	global $_btn_template_create, $_title_template;
-	global $_err_template_already, $_err_template_invalid, $_msg_template_force;
+//	global $_title_edit;
+//	global $_msg_template_start, $_msg_template_end, $_msg_template_page, $_msg_template_refer;
+//	global $_btn_template_create, $_title_template;
+//	global $_err_template_already, $_err_template_invalid, $_msg_template_force;
+
+	$_title_edit           = _('Edit of  $1');
+	$_msg_template_start   = _('Start:<br />');
+	$_msg_template_end     = _('End:<br />');
+	$_msg_template_page    = _('$1/copy');
+	$_msg_template_refer   = _('Page:');
+	$_msg_template_force   = _('Edit with a page name which already exists');
+	$_err_template_already = _(' $1 already exists.');
+	$_err_template_invalid = _(' $1 is not a valid page name.');
+	$_btn_template_create  = _('Create');
+	$_title_template       = _('create a new page, using  $1 as a template.');
 
 	if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
 	if (! isset($vars['refer']) || ! is_page($vars['refer']))
@@ -70,7 +81,8 @@ function plugin_template_action()
   <input type="hidden" name="refer"  value="$s_refer" />
   $_msg_template_start <select name="begin" size="10">$begin_select</select><br /><br />
   $_msg_template_end   <select name="end"   size="10">$end_select</select><br /><br />
-  $_msg_template_refer <input type="text" name="page" value="$s_page" />
+  <label for="_p_template_refer">$_msg_template_refer</label>
+  <input type="text" name="page" id="_p_template_refer" value="$s_page" />
   <input type="submit" name="submit" value="$_btn_template_create" /> $tag
  </div>
 </form>

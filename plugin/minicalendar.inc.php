@@ -7,14 +7,17 @@
 function plugin_minicalendar_convert()
 {
 	global $script,$vars,$post,$get,$weeklabels,$WikiName,$BracketName;
-	global $_minicalendar_plugin_edit, $_minicalendar_plugin_empty;
-	
+//	global $_minicalendar_plugin_edit, $_minicalendar_plugin_empty;
+
+	$_minicalendar_plugin_edit  = _('[edit]');
+	$_minicalendar_plugin_empty = _('%s is empty.');
+
 	$today_view = TRUE;
 	$today_args = 'viewex';
-	
+
 	$date_str = get_date('Ym');
 	$base = strip_bracket($vars['page']);
-	
+
 	if (func_num_args() > 0) {
 		$args = func_get_args();
 		foreach ($args as $arg) {

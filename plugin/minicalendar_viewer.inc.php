@@ -3,7 +3,7 @@
  * PukiWiki minicalendar_viewerプラグイン
  *
  *
- *$Id: minicalendar_viewer.inc.php,v 1.9.11 2004/12/15 17:18:50 miko Exp $
+ *$Id: minicalendar_viewer.inc.php,v 1.9.12 2004/12/15 17:18:50 miko Exp $
   calendarrecentプラグインを元に作成
  */
 /**
@@ -46,10 +46,16 @@ define('MINICALENDAR_VIEWER_TRACKBACK',TRUE);
 function plugin_minicalendar_viewer_convert()
 {
   global $WikiName,$BracketName,$vars,$get,$post,$hr,$script;
-  global $_err_calendar_viewer_param,$_err_calendar_viewer_param2;
-  global $_msg_calendar_viewer_right,$_msg_calendar_viewer_left;
-  global $_msg_calendar_viewer_restrict;
-  global $_symbol_paraedit,$trackback;
+  global $_symbol_paraedit, $trackback;
+//global $_err_calendar_viewer_param,$_err_calendar_viewer_param2;
+//global $_msg_calendar_viewer_right,$_msg_calendar_viewer_left;
+//global $_msg_calendar_viewer_restrict;
+
+  $_err_calendar_viewer_param    = _('Wrong parameter.');
+  $_err_calendar_viewer_param2   = _('Wrong second parameter.');
+  $_msg_calendar_viewer_right    = _('Next %d&gt;&gt;');
+  $_msg_calendar_viewer_left     = _('&lt;&lt; Prev %d');
+  $_msg_calendar_viewer_restrict = _('Due to the blocking, the calendar_viewer cannot refer to $1.');
 
   //*デフォルト値をセット
   //基準となるページ名

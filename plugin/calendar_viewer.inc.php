@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: calendar_viewer.inc.php,v 1.31 2005/01/26 13:09:58 henoheno Exp $
+// $Id: calendar_viewer.inc.php,v 1.31.1 2005/03/09 13:09:58 miko Exp $
 //
 // Calendar viewer plugin - List pages that calendar/calnedar2 plugin created
 // (Based on calendar and recent plugin)
@@ -37,8 +37,13 @@ define('PLUGIN_CALENDAR_VIEWER_USAGE',
 function plugin_calendar_viewer_convert()
 {
 	global $vars, $get, $post, $script;
-	global $_msg_calendar_viewer_right, $_msg_calendar_viewer_left;
-	global $_msg_calendar_viewer_restrict, $_err_calendar_viewer_param2;
+//	global $_msg_calendar_viewer_right, $_msg_calendar_viewer_left;
+//	global $_msg_calendar_viewer_restrict, $_err_calendar_viewer_param2;
+
+	$_err_calendar_viewer_param2   = _('Wrong second parameter.');
+	$_msg_calendar_viewer_right    = _('Next %d&gt;&gt;');
+	$_msg_calendar_viewer_left     = _('&lt;&lt; Prev %d');
+	$_msg_calendar_viewer_restrict = _('Due to the blocking, the calendar_viewer cannot refer to $1.');
 
 	static $viewed = array();
 

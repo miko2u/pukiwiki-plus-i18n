@@ -1,10 +1,12 @@
 <?php
-// $Id: calendar2.inc.php,v 1.22.2 2005/01/26 13:20:26 miko Exp $
+// $Id: calendar2.inc.php,v 1.22.3 2005/03/09 13:20:26 miko Exp $
 // *引数にoffと書くことで今日の日記を表示しないようにした。
 function plugin_calendar2_convert()
 {
 	global $script,$vars,$post,$get,$weeklabels,$WikiName,$BracketName;
-	global $_calendar2_plugin_edit, $_calendar2_plugin_empty;
+//	global $_calendar2_plugin_edit, $_calendar2_plugin_empty;
+	$_calendar2_plugin_edit  = _('[edit]');
+	$_calendar2_plugin_empty = _('%s is empty.');
 
 	$today_view = TRUE;
 

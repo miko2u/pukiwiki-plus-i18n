@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: include.inc.php,v 1.21.2 2004/12/30 13:26:43 miko Exp $
+// $Id: include.inc.php,v 1.21.3 2005/03/09 13:26:43 miko Exp $
 //
 // Include-once plugin
 
@@ -52,9 +52,11 @@ define('PLUGIN_INCLUDE_USAGE', '#include(): Usage: (a-page-name-you-want-to-incl
 
 function plugin_include_convert()
 {
-	global $script, $vars, $get, $post, $menubar, $_msg_include_restrict;
+	global $script, $vars, $get, $post, $menubar;
 	static $included = array();
 	static $count = 1;
+
+	$_msg_include_restrict = _('Due to the blocking, $1 cannot be include(d).');
 
 	if (func_num_args() == 0) return PLUGIN_INCLUDE_USAGE . '<br />' . "\n";;
 
