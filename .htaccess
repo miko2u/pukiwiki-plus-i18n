@@ -1,0 +1,4 @@
+<FilesMatch \.(ini\.php|dist\.php|lng|txt|gz|tgz)$>
+	Order allow,deny
+	Deny from all
+</FilesMatch>
