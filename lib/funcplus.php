@@ -59,6 +59,10 @@ function open_uri_in_new_window($anchor, $which)
 		$frame = (is_inside_uri($anchor) ? $open_uri_in_new_window_opisi:$open_uri_in_new_window_oposi);
 		$symbol = (is_inside_uri($anchor) ? $_symbol_innanchor:$_symbol_extanchor);
 		$aclass = (is_inside_uri($anchor) ? 'class="inn" ':'class="ext" ');
+	} elseif ($which == 'link_url_interwiki') {
+		$frame = (is_inside_uri($anchor) ? $open_uri_in_new_window_opisi:$open_uri_in_new_window_oposi);
+		$symbol = (is_inside_uri($anchor) ? $_symbol_innanchor:$_symbol_extanchor);
+		$aclass = (is_inside_uri($anchor) ? 'class="inn" ':'class="ext" ');
 	} elseif ($which == 'link_url') {
 		$frame = (is_inside_uri($anchor) ? $open_uri_in_new_window_opis:$open_uri_in_new_window_opos);
 		$symbol = (is_inside_uri($anchor) ? $_symbol_innanchor:$_symbol_extanchor);
