@@ -98,12 +98,13 @@ EOD;
 					$line = array_shift($source);
 					if (preg_match('/^(\*{1,3})(.*)\[#([A-Za-z][\w-]+)\](.*)$/m', $line, $matches)) {
 						$anchortitle = strip_htmltag(convert_html($matches[2]));
-						$anchortitle = '<![CDATA[' . mb_convert_encoding($anchortitle, 'UTF-8', SOURCE_ENCODING) . ']]>';
+						$anchortitle = preg_replace("/[\r\n]/",' ',$anchortitle);
+						$anchortitle = '<![CDATA[' . mb_convert_encoding($anchortitle, 'UTF-8', SOURCE_ENCODING) . '(' . $title . ')' . ']]>';
 						$sharp = '#';
 						$rdf_hx .= '    <rdf:li rdf:resource="' . $self . '?' . $r_page . $sharp . $matches[3] . '" />' . "\n";
 						$itemhx .= <<<EOD
 <item rdf:about="$self?$r_page{$sharp}{$matches[3]}">
- <title>{$anchortitle}({$title})</title>
+ <title>{$anchortitle}</title>
  <link>$self?$r_page{$sharp}{$matches[3]}</link>
  <dc:date>$date</dc:date>
  <dc:identifier>$self?$r_page{$sharp}{$matches[3]}</dc:identifier>
@@ -113,12 +114,13 @@ $trackback_ping
 EOD;
 					} else if (preg_match('/^(\-{1,3})(.*)$/m', $line, $matches)) {
 						$anchortitle = strip_htmltag(convert_html($matches[2]));
-						$anchortitle = '<![CDATA[' . mb_convert_encoding($anchortitle, 'UTF-8', SOURCE_ENCODING) . ']]>';
+						$anchortitle = preg_replace("/[\r\n]/",' ',$anchortitle);
+						$anchortitle = '<![CDATA[' . mb_convert_encoding($anchortitle, 'UTF-8', SOURCE_ENCODING) . '(' . $title . ')' . ']]>';
 						$sharp = '#';
 						$rdf_lx .= '    <rdf:li rdf:resource="' . $self . '?' . $r_page . '" />' . "\n";
 						$itemlx .= <<<EOD
 <item rdf:about="$self?$r_page">
- <title>{$anchortitle}({$title})</title>
+ <title>{$anchortitle}</title>
  <link>$self?$r_page</link>
  <dc:date>$date</dc:date>
  <dc:identifier>$self?$r_page</dc:identifier>
