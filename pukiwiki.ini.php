@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: pukiwiki.ini.php,v 1.111 2005/02/07 13:22:40 henoheno Exp $
+// $Id: pukiwiki.ini.php,v 1.112.12 2005/03/05 14:20:11 miko Exp $
 //
 // PukiWiki main setting file
 
@@ -394,6 +394,10 @@ $preformat_ltrim = 1;
 /////////////////////////////////////////////////
 // Convert linebreaks into <br/>
 $line_break = 0;
+
+/////////////////////////////////////////////////
+// Use date-time rules (See rules.ini.php)
+$usedatetime = 1;
 
 /////////////////////////////////////////////////
 // 見出しごとの編集を可能にする 
