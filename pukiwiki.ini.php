@@ -111,6 +111,9 @@ $whatsnew     = 'RecentChanges'; // Modified page list
 $whatsdeleted = 'RecentDeleted'; // Removeed page list
 $interwiki    = 'InterWikiName'; // Set InterWiki definition here
 $menubar      = 'MenuBar';       // Menu
+$sidebar      = 'SideBar';       // Side
+$headarea     = ':Header';
+$footarea     = ':Footer';
 
 /////////////////////////////////////////////////
 // Change default Document Type Definition
