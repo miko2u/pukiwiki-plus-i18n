@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: search.inc.php,v 1.6.1 2005/01/16 14:10:46 miko Exp $
+// $Id: search.inc.php,v 1.7.2 2005/02/27 07:14:30 miko Exp $
 //
 // Search plugin
 
@@ -69,14 +69,16 @@ function plugin_search_search_form($s_word = '', $type = '')
 		$and_check = ' checked="checked"';
 	}
 
-	if (PLUGIN_SEARCH_DISABLE_GET_ACCESS) {
+	if (! PLUGIN_SEARCH_DISABLE_GET_ACCESS) {
 	return <<<EOD
 <form action="$script" method="get">
  <div>
   <input type="hidden" name="cmd" value="search" />
   <input type="text"  name="word" value="$s_word" size="20" />
-  <input type="radio" name="type" value="AND" $and_check />$_btn_and
-  <input type="radio" name="type" value="OR"  $or_check  />$_btn_or
+  <input type="radio" name="type" id="_p_search_AND" value="AND" $and_check />
+  <label for="_p_search_AND">$_btn_and</label>
+  <input type="radio" name="type" id="_p_search_OR" value="OR"  $or_check />
+  <label for="_p_search_OR">$_btn_or</label>
   &nbsp;<input type="submit" value="$_btn_search" />
  </div>
 </form>
@@ -86,8 +88,10 @@ EOD;
 <form action="$script?cmd=search" method="post">
  <div>
   <input type="text"  name="word" value="$s_word" size="20" />
-  <input type="radio" name="type" value="AND" $and_check />$_btn_and
-  <input type="radio" name="type" value="OR"  $or_check  />$_btn_or
+  <input type="radio" name="type" id="_p_search_AND" value="AND" $and_check />
+  <label for="_p_search_AND">$_btn_and</label>
+  <input type="radio" name="type" id="_p_search_OR" value="OR"  $or_check />
+  <label for="_p_search_OR">$_btn_or</label>
   &nbsp;<input type="submit" value="$_btn_search" />
  </div>
 </form>
