@@ -3,7 +3,7 @@
  * Language judgment (言語判定)
  *
  * @copyright   Copyright &copy; 2005, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: lang.php,v 0.9 2005/03/19 23:08:00 upk Exp $
+ * @version     $Id: lang.php,v 0.10 2005/03/21 15:21:00 upk Exp $
  *
  */
 
@@ -13,7 +13,11 @@
 $language_prepared = array('ja_JP', 'ko_KR', 'en_US');
 $language = '';
 
-function set_ui_language()
+/*
+ * set_language
+ *
+ */
+function set_language()
 {
 	global $language_considering_setting_level;
 	global $language_prepared;
@@ -38,8 +42,34 @@ function set_ui_language()
 	if (! defined('PO_LANG')) {
 		define('PO_LANG', $language); // 'en_US', 'ja_JP'
 	}
+
+	// PHP mbstring process.
+	set_mbstring($language);
 }
 
+/*
+ * set_mbstring
+ *
+ */
+function set_mbstring($lang)
+{
+       	// Internal content encoding = Output content charset (for skin)
+	define('CONTENT_CHARSET', get_content_charset($lang) ); // 'UTF-8', 'iso-8859-1', 'EUC-JP' or ...
+	// Internal content encoding (for mbstring extension)
+	define('SOURCE_ENCODING', get_source_encoding($lang) );  // 'UTF-8', 'ASCII', or 'EUC-JP'
+
+	mb_language( get_mb_language($lang) );
+
+	mb_internal_encoding(SOURCE_ENCODING);
+	ini_set('mbstring.http_input', 'pass');
+	mb_http_output('pass');
+	mb_detect_order('auto');
+}
+
+/*
+ * get_language
+ *
+ */
 function get_language($level = 0)
 {
 	global $language_prepared;
@@ -78,21 +108,10 @@ function get_language($level = 0)
 	return DEFAULT_LANG;
 }
 
-function set_mb_proc($lang)
-{
-       	// Internal content encoding = Output content charset (for skin)
-	define('CONTENT_CHARSET', get_content_charset($lang) ); // 'UTF-8', 'iso-8859-1', 'EUC-JP' or ...
-	// Internal content encoding (for mbstring extension)
-	define('SOURCE_ENCODING', get_source_encoding($lang) );  // 'UTF-8', 'ASCII', or 'EUC-JP'
-
-	mb_language( get_mb_language($lang) );
-
-	mb_internal_encoding(SOURCE_ENCODING);
-	ini_set('mbstring.http_input', 'pass');
-	mb_http_output('pass');
-	mb_detect_order('auto');
-}
-
+/*
+ * get_content_charset
+ * @return      string
+ */
 function get_content_charset($lang)
 {
 	$content_charset = array(
@@ -108,6 +127,10 @@ function get_content_charset($lang)
 	return _lang_keyset($lang,$content_charset);
 }
 
+/*
+ * get_source_encoding
+ * @return      string
+ */
 function get_source_encoding($lang)
 {
 	$source_encoding = array(
@@ -117,6 +140,10 @@ function get_source_encoding($lang)
 	return _lang_keyset($lang,$source_encoding);
 }
 
+/*
+ * get_mb_language
+ * @return      string
+ */
 function get_mb_language($lang)
 {
 	$mb_language = array(
@@ -132,6 +159,10 @@ function get_mb_language($lang)
 	return _lang_keyset($lang,$mb_language);
 }
 
+/*
+ * _lang_keyset
+ * @return      string
+ */
 function _lang_keyset($lang,$key)
 {
 	if ( array_key_exists($lang, $key) ) return $key[ $lang ];	// ja_JP 指定のキーは存在するか？

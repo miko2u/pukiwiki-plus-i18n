@@ -3,18 +3,37 @@
  * TimeZone
  *
  * @copyright   Copyright &copy; 2005, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: timezone.php,v 0.3 2005/03/20 04:12:00 upk Exp $
+ * @version     $Id: timezone.php,v 0.4 2005/03/21 04:15:29 upk Exp $
  *
  */
 
-function set_timezone()
+/*
+ * set_time
+ *
+ */
+function set_time()
 {
 	global $language;
 
-	if (empty($language)) {
+	define('LOCALZONE', date('Z'));
+	define('UTIME', time() - LOCALZONE);
+	define('MUTIME', getmicrotime());
+
+	list($zone, $zonetime) = set_timezone( $language );
+	define('ZONE', $zone);
+	define('ZONETIME', $zonetime);
+}
+
+/*
+ * set_timezone
+ *
+ */
+function set_timezone($lang='')
+{
+	if (empty($lang)) {
 		return array('UTC', 0);
 	}
-	$l = accept_language::split_locale_str( $language );
+	$l = accept_language::split_locale_str( $lang );
 
 	// When the name of a country is uncertain (‘–¼‚ª•s–¾‚Èê‡)
 	if (empty($l[2])) {
@@ -28,7 +47,7 @@ function set_timezone()
 	$obj = new timezone();
 	$obj->set_country($l[2]);
 
-	if ($language == DEFAULT_LANG) {
+	if ($lang == DEFAULT_LANG) {
 		if (defined('DEFAULT_TZ_NAME')) {
 			$obj->set_tz_name(DEFAULT_TZ_NAME);
 		}
@@ -44,6 +63,11 @@ function set_timezone()
 	return array($zone, $zonetime);
 }
 
+/**
+ * timezone
+ * @abstract
+ *
+ */
 class timezone
 {
   var $country;

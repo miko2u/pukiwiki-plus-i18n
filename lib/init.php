@@ -32,13 +32,6 @@ $related      = array();	// Related pages
 $head_tags    = array();	// XHTML tags in <head></head>
 
 /////////////////////////////////////////////////
-// Time settings
-
-define('LOCALZONE', date('Z'));
-define('UTIME', time() - LOCALZONE);
-define('MUTIME', getmicrotime());
-
-/////////////////////////////////////////////////
 // Require INI_FILE
 
 define('INI_FILE',  DATA_HOME . 'pukiwiki.ini.php');
@@ -50,13 +43,6 @@ if (! file_exists(INI_FILE) || ! is_readable(INI_FILE)) {
 }
 if ($die) die_message(nl2br("\n\n" . $die));
 
-/// FIXME
-set_ui_language();
-list($zone, $zonetime) = set_timezone();
-define('ZONE', $zone);
-define('ZONETIME', $zonetime);
-set_mb_proc();
-
 // for SESSION Variables
 if (!($_REQUEST['plugin'] != 'attach' && $_REQUEST['pcmd'] != 'open')) {
 	if (ini_get('session.auto_start') != 1) {
@@ -64,6 +50,11 @@ if (!($_REQUEST['plugin'] != 'attach' && $_REQUEST['pcmd'] != 'open')) {
 		session_start();
 	}
 }
+
+/////////////////////////////////////////////////
+// I18N
+set_language();
+set_time();
 
 /////////////////////////////////////////////////
 // INI_FILE: Require LANG_FILE
