@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: pukiwiki.ini.php,v 1.112.12 2005/03/05 14:20:11 miko Exp $
+// $Id: pukiwiki.ini.php,v 1.113.12 2005/03/13 17:29:01 miko Exp $
 //
 // PukiWiki main setting file
 
@@ -162,6 +162,11 @@ $autoglossary = 2;
 /////////////////////////////////////////////////
 // Enable Freeze / Unfreeze feature
 $function_freeze = 1;
+
+/////////////////////////////////////////////////
+// Enable 'Do not change timestamp' at edit
+// (1:Enable, 2:Enable only administrator, 0:Disable)
+$notimeupdate = 1;
 
 /////////////////////////////////////////////////
 // Wikisite admin password

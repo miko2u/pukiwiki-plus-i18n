@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: edit.inc.php,v 1.19.32 2005/03/10 17:41:09 miko Exp $
+// $Id: edit.inc.php,v 1.19.33 2005/03/13 17:29:02 miko Exp $
 //
 // Edit plugin
 // cmd=edit
@@ -123,8 +123,9 @@ function plugin_edit_inline()
 // Write, add, or insert new comment
 function plugin_edit_write()
 {
-	global $vars;
+	global $vars, $notimeupdate;
 	global $_title_collided, $_msg_collided_auto, $_msg_collided, $_title_deleted;
+	global $_msg_invalidpass;
 
 	$page = isset($vars['page']) ? $vars['page'] : '';
 	$retvars = array();
@@ -171,30 +172,36 @@ function plugin_edit_write()
 		$retvars['body'] .= edit_form($page, $postdata_input, $oldpagemd5, FALSE);
 	}
 	else {
-		$notimestamp = (isset($vars['notimestamp']) && $vars['notimestamp'] != '');
-		page_write($page, $postdata, $notimestamp);
-
 		if ($postdata) {
-			pkwk_headers_sent();
-			if ($vars['refpage'] != '') {
-				if ($vars['id'] != '') {
-					header('Location: ' . get_script_uri() . '?' . rawurlencode($vars['refpage'])) . '#' . rawurlencode($vars['id']);
-				} else {
-					header('Location: ' . get_script_uri() . '?' . rawurlencode($vars['refpage']));
-				}
+			$notimestamp = ($notimeupdate != 0) && (isset($vars['notimestamp']) && $vars['notimestamp'] != '');
+			if($notimestamp && ($notimeupdate == 2) && !pkwk_login($vars['pass'])) {
+				// enable only administrator & password error
+				$retvars['body']  = "<p><strong>$_msg_invalidpass</strong></p>\n";
+				$retvars['body'] .= edit_form($page, $vars['msg'], $vars['digest'], FALSE);
 			} else {
-				if ($vars['id'] != '') {
-					header('Location: ' . get_script_uri() . '?' . rawurlencode($page)) . '#' . rawurlencode($vars['id']);
+				page_write($page, $postdata, $notimestamp);
+				pkwk_headers_sent();
+				if ($vars['refpage'] != '') {
+					if ($vars['id'] != '') {
+						header('Location: ' . get_script_uri() . '?' . rawurlencode($vars['refpage'])) . '#' . rawurlencode($vars['id']);
+					} else {
+						header('Location: ' . get_script_uri() . '?' . rawurlencode($vars['refpage']));
+					}
 				} else {
-					header('Location: ' . get_script_uri() . '?' . rawurlencode($page));
+					if ($vars['id'] != '') {
+						header('Location: ' . get_script_uri() . '?' . rawurlencode($page)) . '#' . rawurlencode($vars['id']);
+					} else {
+						header('Location: ' . get_script_uri() . '?' . rawurlencode($page));
+					}
 				}
+				exit;
 			}
-			exit;
+		} else {
+			page_write($page, $postdata);
+			$retvars['msg'] = $_title_deleted;
+			$retvars['body'] = str_replace('$1', htmlspecialchars($page), $_title_deleted);
+			tb_delete($page);
 		}
-
-		$retvars['msg'] = $_title_deleted;
-		$retvars['body'] = str_replace('$1', htmlspecialchars($page), $_title_deleted);
-		tb_delete($page);
 	}
 
 	return $retvars;
