@@ -3,12 +3,13 @@
  * 言語を判定しメッセージを表示
  *
  * @copyright   Copyright &copy; 2005, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: i18n_msg.inc.php,v 0.1 2005/03/06 23:45:00 upk Exp $
+ * @version     $Id: i18n_msg.inc.php,v 0.2 2005/03/08 23:09:00 upk Exp $
  *
  */
 
 function plugin_i18n_msg_convert()
 {
+	global $language_considering_setting_level;
 	global $language;
 
 	switch ( func_num_args() ) {
@@ -20,14 +21,13 @@ function plugin_i18n_msg_convert()
 		list($lang,$lines) = func_get_args();
 	}
 
-	if ($lang != $language) return "";
+	// FIXME: level 4
+	$env = ($language_considering_setting_level == 0) ? get_language(4) : $language;
+	if ($lang != $env) return "";
 
-	$lines = explode("\r", $lines);
-	$rc = "";
-	foreach($lines as $_lines) {
-		$rc .= preg_replace(array("'<p>'si","'</p>'si"), array("",""), make_line_rules( convert_html($_lines) ));
-	}
-	return $rc;
+	$lines = preg_replace(array("[\\r|\\n]","[\\r]"), array("\n","\n"), $lines);
+	return preg_replace(array("'<p>'si","'</p>'si"), array("",""), convert_html($lines) );
+
 }
 
 ?>

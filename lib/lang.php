@@ -3,7 +3,7 @@
  * Language judgment (言語判定)
  *
  * @copyright   Copyright &copy; 2005, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: lang.php,v 0.4 2005/03/07 00:08:00 upk Exp $
+ * @version     $Id: lang.php,v 0.5 2005/03/08 23:19:00 upk Exp $
  *
  */
 
@@ -11,8 +11,14 @@ function set_ui_language()
 {
 	global $language_considering_setting_level;
 	global $language_prepared;
+	return get_language($language_considering_setting_level);
+}
 
-	if ($language_considering_setting_level == 0) return DEFAULT_LANG;
+function get_language($level = 0)
+{
+	global $language_prepared;
+
+	if ($level == 0) return DEFAULT_LANG;
 
 	$lng_func = array(
 		"get_accept_language",		// 1
@@ -36,7 +42,7 @@ function set_ui_language()
 		$_x = $obj_lng->$_func();
 		if (! is_array($_x)) {
 			// 指定レベルでも検出不能時は終了
-			if ($language_considering_setting_level == $i) return DEFAULT_LANG;
+			if ($level == $i) return DEFAULT_LANG;
 		}
 		$_x2 = array();
 		foreach($_x as $_lang) {
