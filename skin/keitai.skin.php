@@ -72,7 +72,7 @@ if ($pagecount > 1) {
 	if ($pageno > 0) {
 		$headnavi[] = '<a href="' . $_LINK['read'] . '&amp;p=' . $prev . '"' . $accesskey . '="7">7.Prev</a>';
 	}
-	$navi[] = "$next/$pagecount ";
+	$headnavi[] = "$next/$pagecount ";
 	if ($pageno < $lastpage) {
 		$headnavi[] = '<a href="' . $_LINK['read'] . '&amp;p=' . $next . '"' . $accesskey . '="8">8.Next</a>';
 	}
