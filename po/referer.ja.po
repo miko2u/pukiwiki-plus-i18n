@@ -16,10 +16,30 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8-bit\n"
 
-#: ../plugin/deleted.inc.php:15
-msgid "The list of deleted pages"
-msgstr "削除ページの一覧"
+#: ../plugin/referer.inc.php:15 ../plugin/referer.inc.php:19
+msgid "Referer"
+msgstr "リンク元の表示"
 
-#: ../plugin/deleted.inc.php:16
-msgid "The list of deleted pages (with filename)"
-msgstr "削除ページファイルの一覧"
+#: ../plugin/referer.inc.php:16
+msgid "LastUpdate"
+msgstr "最終更新日時"
+
+#: ../plugin/referer.inc.php:17
+msgid "First Register"
+msgstr "初回登録日時"
+
+#: ../plugin/referer.inc.php:18
+msgid "RefCounter"
+msgstr "カウンタ"
+
+#: ../plugin/referer.inc.php:20
+msgid "F j, Y, g:i A"
+msgstr "Y年n月j日 H:i"
+
+#: ../plugin/referer.inc.php:21
+msgid "&uArr;"
+msgstr "↑"
+
+#: ../plugin/referer.inc.php:22
+msgid "&dArr;"
+msgstr "↓"

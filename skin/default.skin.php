@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: default.skin.php,v 1.34.17 2005/02/24 14:23:43 miko Exp $
+// $Id: default.skin.php,v 1.34.18 2005/03/10 14:23:43 miko Exp $
 //
 if (!defined('DATA_DIR')) { exit; }
 
@@ -148,7 +148,7 @@ if (isset($pkwk_dtd)) {
  <td id="footerctable"><div id="sigunature">
   Modified by <a href="<?php echo $modifierlink ?>"><?php echo $modifier ?></a>.
   <br />
-  Powered by PukiWiki 1.4.4/PukiWiki Plus! u5/PHP <?php echo PHP_VERSION ?>.
+  Powered by PukiWiki Plus! 1.4.5-u2/PHP <?php echo PHP_VERSION ?>.
   HTML convert time to <?php echo $taketime ?> sec.
  </div></td>
  <td id="footerrtable"><div id="validxhtml">

@@ -16,10 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8-bit\n"
 
-#: ../plugin/deleted.inc.php:15
-msgid "The list of deleted pages"
-msgstr "削除ページの一覧"
-
-#: ../plugin/deleted.inc.php:16
-msgid "The list of deleted pages (with filename)"
-msgstr "削除ページファイルの一覧"
+#: ../plugin/recent.inc.php:26
+#, php-format
+msgid "recent(%d)"
+msgstr "最新の%d件"

@@ -167,8 +167,17 @@ EOD;
 function plugin_tb_mode_view($tb_id)
 {
 	global $script, $page_title;
-	global $_tb_title, $_tb_header, $_tb_entry, $_tb_refer, $_tb_date;
-	global $_tb_header_Excerpt, $_tb_header_Weblog, $_tb_header_Tracked;
+//	global $_tb_title, $_tb_header, $_tb_entry, $_tb_refer, $_tb_date;
+//	global $_tb_header_Excerpt, $_tb_header_Weblog, $_tb_header_Tracked;
+
+	$_tb_title  = _('TrackBack: Discussion on TrackBack in %s');
+	$_tb_header = _('Continuing the discussion...');
+	$_tb_entry  = _('TrackBack URL for this entry:');
+	$_tb_refer  = _(' Listed below are links to weblogs that reference %s from %s.');
+	$_tb_header_Excerpt = _('Summary:');
+	$_tb_header_Weblog  = _('Weblog:');
+	$_tb_header_Tracked = _('Tracked:');
+	$_tb_date   = _('F j, Y, g:i A');
 
 	$page = tb_id2page($tb_id);
 	if ($page === FALSE) return FALSE;

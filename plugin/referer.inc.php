@@ -1,5 +1,5 @@
 <?php
-// $Id: referer.inc.php,v 1.10 2005/01/23 05:20:02 henoheno Exp $
+// $Id: referer.inc.php,v 1.10.1 2005/03/10 05:20:02 miko Exp $
 /*
  * PukiWiki Referer プラグイン(リンク元表示プラグイン)
  * (C) 2003, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
@@ -7,6 +7,23 @@
 */
 
 define('CONFIG_REFERER', 'plugin/referer/config');
+
+function plugin_referer_init()
+{
+	$messages = array(
+		'_referer_msg' => array(
+			'msg_H0_Refer'       => _('Referer'),
+			'msg_Hed_LastUpdate' => _('LastUpdate'),
+			'msg_Hed_1stDate'    => _('First Register'),
+			'msg_Hed_RefCounter' => _('RefCounter'),
+			'msg_Hed_Referer'    => _('Referer'),
+			'msg_Fmt_Date'       => _('F j, Y, g:i A'),
+			'msg_Chr_uarr'       => _('&uArr;'),
+			'msg_Chr_darr'       => _('&dArr;'),
+		),
+	);
+	set_plugin_messages($messages);
+}
 
 function plugin_referer_action()
 {

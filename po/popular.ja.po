@@ -16,10 +16,12 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8-bit\n"
 
-#: ../plugin/deleted.inc.php:15
-msgid "The list of deleted pages"
-msgstr "削除ページの一覧"
+#: ../plugin/popular.inc.php:33
+#, php-format
+msgid "popular(%d)"
+msgstr "人気の%d件"
 
-#: ../plugin/deleted.inc.php:16
-msgid "The list of deleted pages (with filename)"
-msgstr "削除ページファイルの一覧"
+#: ../plugin/popular.inc.php:34
+#, php-format
+msgid "today's(%d)"
+msgstr "今日の%d件"

@@ -1,7 +1,7 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
 //
-// $Id: paint.inc.php,v 1.18 2005/01/29 02:49:41 henoheno Exp $
+// $Id: paint.inc.php,v 1.18.1 2005/03/10 02:49:41 miko Exp $
 //
 // Paint plugin
 
@@ -35,6 +35,24 @@ define('PAINT_NOW_FORMAT','&new{$now};');
 define('PAINT_FORMAT',"\x08MSG\x08 -- \x08NAME\x08 \x08NOW\x08");
 //メッセージがない場合
 define('PAINT_FORMAT_NOMSG',"\x08NAME\x08 \x08NOW\x08");
+
+function plugin_paint_init()
+{
+	$messages = array(
+		'_paint_messages' = array(
+			'field_name'    => _('Name'),
+			'field_filename'=> _('Filename'),
+			'field_comment' => _('Comment'),
+			'btn_submit'    => _('paint'),
+			'msg_max'       => _('(Max %d x %d)'),
+			'msg_title'     => _('Paint and Attach to  $1'),
+			'msg_title_collided' => _('On updating  $1, there was a collision.'),
+			'msg_collided'  => _('It seems that someone has already updated this page while you were editing it.<br />
+		 The picture and the comment were added to this page, but there may be a problem.<br />')
+		),
+	);
+	set_plugin_messages($messages);
+}
 
 function plugin_paint_action()
 {

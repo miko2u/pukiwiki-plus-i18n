@@ -12,7 +12,7 @@
  *  2002.06.17: plugin_recent_init()を設定
  *  2002.07.02: <ul>による出力に変更し構造化
  *
- * $Id: recent.inc.php,v 1.13 2004/09/04 14:26:52 henoheno Exp $
+ * $Id: recent.inc.php,v 1.13.1 2005/03/10 14:26:52 miko Exp $
  */
 
 // RecentChangesのキャッシュ
@@ -21,7 +21,10 @@ define('PLUGIN_RECENT_CACHE', CACHE_DIR . 'recent.dat');
 function plugin_recent_convert()
 {
 	global $script, $vars, $date_format;
-	global $_recent_plugin_frame;
+//	global $_recent_plugin_frame;
+
+	$_recent_plugin_frame_s = _('recent(%d)');
+	$_recent_plugin_frame   = sprintf('<h5>%s</h5><div>%%s</div>', $_recent_plugin_frame_s);
 
 	if (! file_exists(PLUGIN_RECENT_CACHE)) return '';
 

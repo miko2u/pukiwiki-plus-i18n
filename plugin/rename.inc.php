@@ -1,12 +1,45 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: rename.inc.php,v 1.27 2005/02/27 07:57:26 henoheno Exp $
+// $Id: rename.inc.php,v 1.27.1 2005/03/10 07:57:26 miko Exp $
 //
 // Rename plugin: Rename page-name and related data
 //
 // Usage: http://path/to/pukiwikiphp?plugin=rename[&refer=page_name]
 
 define('PLUGIN_RENAME_LOGPAGE', ':RenameLog');
+
+function plugin_rename_init()
+{
+	$messages = array(
+		'_rename_messages' => array(
+			'err'            => _('<p>error:%s</p>'),
+			'err_nomatch'    => _('no matching page(s)'),
+			'err_notvalid'   => _('the new name is invalid.'),
+			'err_adminpass'  => _('Incorrect administrator password.'),
+			'err_notpage'    => _('%s is not a valid pagename.'),
+			'err_norename'   => _('cannot rename %s.'),
+			'err_already'    => _('already exists :%s.'),
+			'err_already_below' => _('The following files already exist.'),
+			'msg_title'      => _('Rename page'),
+			'msg_page'       => _('specify source page name'),
+			'msg_regex'      => _('rename with regular expressions.'),
+			'msg_related'    => _('related pages'),
+			'msg_do_related' => _('A related page is also renamed.'),
+			'msg_rename'     => _('rename %s'),
+			'msg_oldname'    => _('current page name'),
+			'msg_newname'    => _('new page name'),
+			'msg_adminpass'  => _('Administrator password'),
+			'msg_arrow'      => _('->'),
+			'msg_exist_none' => _('page is not processed when it already exists.'),
+			'msg_exist_overwrite' => _('page is overwritten when it already exists.'),
+			'msg_confirm'    => _('The following files will be renamed.'),
+			'msg_result'     => _('The following files have been overwritten.'),
+			'btn_submit'     => _('Submit'),
+			'btn_next'       => _('Next')
+		),
+	);
+	set_plugin_messages($messages);
+}
 
 function plugin_rename_action()
 {

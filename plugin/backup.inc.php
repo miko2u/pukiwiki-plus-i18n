@@ -2,16 +2,32 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: backup.inc.php,v 1.19.6 2004/11/01 12:20:34 miko Exp $
+// $Id: backup.inc.php,v 1.19.7 2005/03/10 12:20:34 miko Exp $
 //
 // バックアップ
 function plugin_backup_action()
 {
 	global $script, $vars, $do_backup, $hr;
-	global $_msg_backuplist, $_msg_diff, $_msg_nowdiff, $_msg_source, $_msg_backup;
-	global $_msg_visualdiff, $_msg_view, $_msg_goto, $_msg_deleted;
-	global $_title_backupdiff, $_title_backupnowdiff, $_title_backupsource;
-	global $_title_backup, $_title_pagebackuplist, $_title_backuplist;
+//	global $_msg_backuplist, $_msg_diff, $_msg_nowdiff, $_msg_source, $_msg_backup;
+//	global $_msg_visualdiff, $_msg_view, $_msg_goto, $_msg_deleted;
+//	global $_title_backupdiff, $_title_backupnowdiff, $_title_backupsource;
+//	global $_title_backup, $_title_pagebackuplist, $_title_backuplist;
+
+$_title_backuplist     = _('Backup list');
+$_msg_diff             = _('diff');
+$_msg_nowdiff          = _('diff current');
+$_msg_source           = _('source');
+$_msg_backup           = _('backup');
+$_msg_visualdiff       = _('diff for visual');
+$_msg_view             = _('View the $1.');
+$_msg_goto             = _('Go to $1.');
+$_msg_deleted          = _(' $1 has been deleted.');
+$_title_backupdiff     = _('Backup diff of $1(No. $2)');
+$_title_backupnowdiff  = _('Backup diff of $1 vs current(No. $2)');
+$_title_backupsource   = _('Backup source of $1(No. $2)');
+$_title_backup         = _('Backup of $1(No. $2)');
+$_title_pagebackuplist = _('Backup list of $1');
+$_title_backuplist     = _('Backup list');
 
 	if (! $do_backup) return;
 
@@ -116,8 +132,15 @@ if ($action != 'visualdiff') {
 function plugin_backup_delete($page)
 {
 	global $script, $vars;
-	global $_title_backup_delete, $_title_pagebackuplist, $_msg_backup_deleted;
-	global $_msg_backup_adminpass, $_btn_delete, $_msg_invalidpass;
+//	global $_title_backup_delete, $_title_pagebackuplist, $_msg_backup_deleted;
+//	global $_msg_backup_adminpass, $_btn_delete, $_msg_invalidpass;
+
+$_title_backup_delete  = _('Deleting backup of $1');
+$_title_backuplist     = _('Backup list');
+$_msg_backup_deleted   = _('Backup of $1 has been deleted.');
+$_msg_backup_adminpass = _('Please input the password for deleting.');
+$_btn_delete    = _('Delete');
+$_msg_invalidpass = _('Invalid password.');
 
 	if (! _backup_file_exists($page))
 		return array('msg'=>$_title_pagebackuplist, 'body'=>get_backup_list($page)); // Say "is not found"
@@ -165,7 +188,10 @@ function plugin_backup_visualdiff($str)
 
 function plugin_backup_diff($str)
 {
-	global $_msg_addline, $_msg_delline,$hr;
+//	global $_msg_addline, $_msg_delline;
+	global $hr;
+	$_msg_addline = _('The added line is <span class="diff_added">THIS COLOR</span>.');
+	$_msg_delline = _('The deleted line is <span class="diff_removed">THIS COLOR</span>.');
 
 	$str = htmlspecialchars($str);
 	$str = preg_replace('/^(\-)(.*)$/m', '<span class="diff_removed"> $2</span>', $str);
@@ -187,8 +213,15 @@ EOD;
 function get_backup_list($page)
 {
 	global $script;
-	global $_msg_backuplist, $_msg_diff, $_msg_nowdiff, $_msg_source, $_msg_nobackup;
-	global $_title_backup_delete;
+//	global $_msg_backuplist, $_msg_diff, $_msg_nowdiff, $_msg_source, $_msg_nobackup;
+//	global $_title_backup_delete;
+
+$_msg_backuplist       = _('List of Backups');
+$_msg_nobackup         = _('There are no backup(s) of $1.');
+$_msg_diff             = _('diff');
+$_msg_nowdiff          = _('diff current');
+$_msg_source           = _('source');
+$_title_backup_delete  = _('Deleting backup of $1');
 
 	$r_page = rawurlencode($page);
 	$s_page = htmlspecialchars($page);
@@ -246,8 +279,6 @@ function get_backup_list_all($withfilename = FALSE)
 function plugin_backup_convert()
 {
 	global $script, $vars;
-	global $_msg_backuplist, $_msg_diff, $_msg_nowdiff, $_msg_source, $_msg_nobackup;
-	global $_title_backup_delete;
 
         // Get arguments
 	$with_label = TRUE;

@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: popular.inc.php,v 1.13 2005/01/16 13:12:45 henoheno Exp $
+// $Id: popular.inc.php,v 1.13.1 2005/03/10 13:12:45 miko Exp $
 //
 // Popular pages plugin: Show an access ranking of this wiki
 // -- like recent plugin, using counter plugin's count --
@@ -28,7 +28,12 @@ define('PLUGIN_POPULAR_DEFAULT', 10);
 function plugin_popular_convert()
 {
 	global $vars, $whatsnew, $non_list;
-	global $_popular_plugin_frame, $_popular_plugin_today_frame;
+//	global $_popular_plugin_frame, $_popular_plugin_today_frame;
+
+	$_popular_plugin_frame_s       = _('popular(%d)');
+	$_popular_plugin_today_frame_s = _('today\'s(%d)');
+	$_popular_plugin_frame         = sprintf('<h5>%s</h5><div>%%s</div>', $_popular_plugin_frame_s);
+	$_popular_plugin_today_frame   = sprintf('<h5>%s</h5><div>%%s</div>', $_popular_plugin_today_frame_s);
 
 	$max    = PLUGIN_POPULAR_DEFAULT;
 	$except = '';

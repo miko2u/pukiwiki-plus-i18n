@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: attach.inc.php,v 1.71.4 2005/01/30 12:02:37 miko Exp $
+// $Id: attach.inc.php,v 1.73.5 2005/03/10 07:44:53 miko Exp $
 //
 // File attach plugin
 
@@ -39,6 +39,52 @@ define('PLUGIN_ATTACH_FILE_ICON', '<img src="' . IMAGE_DIR .  'file.png"' .
 
 // mime-typeを記述したページ
 define('PLUGIN_ATTACH_CONFIG_PAGE_MIME', 'plugin/attach/mime-type');
+
+function plugin_attach_init()
+{
+	$messages = array(
+		'_attach_messages' => array(
+			'msg_uploaded' => _('Uploaded the file to $1'),
+			'msg_deleted'  => _('Deleted the file in $1'),
+			'msg_freezed'  => _('The file has been frozen.'),
+			'msg_unfreezed'=> _('The file has been unfrozen'),
+			'msg_upload'   => _('Upload to $1'),
+			'msg_info'     => _('File information'),
+			'msg_confirm'  => _('<p>Delete %s.</p>'),
+			'msg_list'     => _('List of attached file(s)'),
+			'msg_listpage' => _('List of attached file(s) in $1'),
+			'msg_listall'  => _('Attached file list of all pages'),
+			'msg_file'     => _('Attach file'),
+			'msg_maxsize'  => _('Maximum file size is %s.'),
+			'msg_count'    => _(' <span class="small">%s download</span>'),
+			'msg_password' => _('password'),
+			'msg_adminpass'=> _('Administrator password'),
+			'msg_delete'   => _('Delete file.'),
+			'msg_freeze'   => _('Freeze file.'),
+			'msg_unfreeze' => _('Unfreeze file.'),
+			'msg_isfreeze' => _('File is frozen.'),
+			'msg_require'  => _('(require administrator password)'),
+			'msg_filesize' => _('size'),
+			'msg_date'     => _('date'),
+			'msg_dlcount'  => _('access count'),
+			'msg_md5hash'  => _('MD5 hash'),
+			'msg_page'     => _('Page'),
+			'msg_filename' => _('Stored filename'),
+			'err_noparm'   => _('Cannot upload/delete file in $1'),
+			'err_exceed'   => _('File size too large to $1'),
+			'err_exists'   => _('File already exists in $1'),
+			'err_notfound' => _('Could not find the file in $1'),
+			'err_noexist'  => _('File does not exist.'),
+			'err_delete'   => _('Cannot delete file in  $1'),
+			'err_password' => _('Wrong password.'),
+			'err_adminpass'=> _('Wrong administrator password'),
+			'btn_upload'   => _('Upload'),
+			'btn_info'     => _('Information'),
+			'btn_submit'   => _('Submit')
+		),
+	);
+	set_plugin_messages($messages);
+}
 
 //-------- convert
 function plugin_attach_convert()
@@ -377,7 +423,7 @@ EOD;
   <span class="small">
    $msg_maxsize
   </span><br />
-  {$_attach_messages['msg_file']}: <input type="file" name="attach_file" />
+  <label for="_p_attach_file">{$_attach_messages['msg_file']}:</label> <input type="file" name="attach_file" id="_p_attach_file" />
   $pass
   <input type="submit" value="{$_attach_messages['btn_upload']}" />
  </div>
@@ -495,27 +541,31 @@ class AttachFile
 
 		if ($this->age) {
 			$msg_freezed = '';
-			$msg_delete  = '<input type="radio" name="pcmd" value="delete" />' .
+			$msg_delete  = '<input type="radio" name="pcmd" id="_p_attach_delete" value="delete" />' .
+				'<label for="_p_attach_delete">' .
 				$_attach_messages['msg_delete'] .
-				$_attach_messages['msg_require'] . '<br />';
+				$_attach_messages['msg_require'] . '</label><br />';
 			$msg_freeze  = '';
 		} else {
 			if ($this->status['freeze']) {
 				$msg_freezed = "<dd>{$_attach_messages['msg_isfreeze']}</dd>";
 				$msg_delete  = '';
-				$msg_freeze  = '<input type="radio" name="pcmd" value="unfreeze" />' .
+				$msg_freeze  = '<input type="radio" name="pcmd" id="_p_attach_unfreeze" value="unfreeze" />' .
+					'<label for="_p_attach_unfreeze">' .
 					$_attach_messages['msg_unfreeze'] .
-					$_attach_messages['msg_require'] . '<br />';
+					$_attach_messages['msg_require'] . '</label><br />';
 			} else {
 				$msg_freezed = '';
-				$msg_delete = '<input type="radio" name="pcmd" value="delete" />' .
+				$msg_delete = '<input type="radio" name="pcmd" id="_p_attach_delete" value="delete" />' .
+					'<label for="_p_attach_delete">' .
 					$_attach_messages['msg_delete'];
 				if (PLUGIN_ATTACH_DELETE_ADMIN_ONLY || $this->age)
 					$msg_delete .= $_attach_messages['msg_require'];
-				$msg_delete .= '<br />';
-				$msg_freeze  = '<input type="radio" name="pcmd" value="freeze" />' .
+				$msg_delete .= '</label><br />';
+				$msg_freeze  = '<input type="radio" name="pcmd" id="_p_attach_freeze" value="freeze" />' .
+					'<label for="_p_attach_freeze">' .
 					$_attach_messages['msg_freeze'] .
-					$_attach_messages['msg_require'] . '<br />';
+					$_attach_messages['msg_require'] . '</label><br />';
 			}
 		}
 		$info = $this->toString(TRUE, FALSE);
@@ -561,7 +611,8 @@ $s_err
   <input type="hidden" name="age" value="{$this->age}" />
   $msg_delete
   $msg_freeze
-  {$_attach_messages['msg_password']}: <input type="password" name="pass" size="8" />
+  <label for="_p_attach_password">{$_attach_messages['msg_password']}:</label>
+  <input type="password" name="pass" size="8" id="_p_attach_password" />
   <input type="submit" value="{$_attach_messages['btn_submit']}" />
  </div>
 </form>

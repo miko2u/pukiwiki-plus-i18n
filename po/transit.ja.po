@@ -16,10 +16,14 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8-bit\n"
 
-#: ../plugin/deleted.inc.php:15
-msgid "The list of deleted pages"
-msgstr "削除ページの一覧"
+#: ../plugin/transit.inc.php:22
+msgid "From: "
+msgstr "【最寄り駅】"
 
-#: ../plugin/deleted.inc.php:16
-msgid "The list of deleted pages (with filename)"
-msgstr "削除ページファイルの一覧"
+#: ../plugin/transit.inc.php:23
+msgid "Search"
+msgstr "検索"
+
+#: ../plugin/transit.inc.php:24
+msgid " to "
+msgstr " ～ "
