@@ -16,12 +16,10 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8-bit\n"
 
-#: ../plugin/add.inc.php:19
-msgid "Add to $1"
-msgstr "$1 への追加"
+#: ../plugin/list.inc.php:11
+msgid "List of pages"
+msgstr "ページの一覧"
 
-#: ../plugin/add.inc.php:21
-msgid ""
-"Two and the contents of an input are added for a new-line to the contents of "
-"a page of present addition."
-msgstr "ページへの追加は、現在のページ内容に改行が二つと入力内容が追加されます。"
+#: ../plugin/list.inc.php:12
+msgid "List of page files"
+msgstr "ページファイルの一覧"

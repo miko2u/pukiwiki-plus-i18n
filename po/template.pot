@@ -1,0 +1,57 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2005-03-10 11:40+0900\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../plugin/template.inc.php:16
+msgid "Edit of  $1"
+msgstr ""
+
+#: ../plugin/template.inc.php:17
+msgid "Start:<br />"
+msgstr ""
+
+#: ../plugin/template.inc.php:18
+msgid "End:<br />"
+msgstr ""
+
+#: ../plugin/template.inc.php:19
+msgid "$1/copy"
+msgstr ""
+
+#: ../plugin/template.inc.php:20
+msgid "Page:"
+msgstr ""
+
+#: ../plugin/template.inc.php:21
+msgid "Edit with a page name which already exists"
+msgstr ""
+
+#: ../plugin/template.inc.php:22
+msgid " $1 already exists."
+msgstr ""
+
+#: ../plugin/template.inc.php:23
+msgid " $1 is not a valid page name."
+msgstr ""
+
+#: ../plugin/template.inc.php:24
+msgid "Create"
+msgstr ""
+
+#: ../plugin/template.inc.php:25
+msgid "create a new page, using  $1 as a template."
+msgstr ""

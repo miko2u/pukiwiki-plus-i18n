@@ -2,8 +2,8 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: addline.inc.php,v 0.13 2003/10/08 23:15:10 sha Exp $
-//
+// $Id: addline.inc.php,v 0.13.1 2005/03/09 23:15:10 miko Exp $
+// Original is sha(0.13)
 /* 
 *プラグイン addline
  その場に、固定の文字列を追加する。
@@ -34,10 +34,10 @@ function plugin_addline_init()
 {
 	$messages = array(
 		'_addline_messages' => array(
-			'btn_submit'    => 'add',
-			'title_collided' => '$1 で【更新の衝突】が起きました',
-			'msg_collided'  => 'あなたが文字列を追加している間に、他の人が同じページを更新してしまったようです。<br />
-文字列が違う位置に挿入されているかもしれません。<br />'
+			'btn_submit' => _('add'),
+			'title_collided' => _('On updating  $1, a collision has occurred.'),
+			'msg_collided' => _('It seems that someone has already updated the page you were editing.<br />
+ The string was added, alhough it may be inserted in the wrong position.<br />')
 		),
 	);
 	set_plugin_messages($messages);

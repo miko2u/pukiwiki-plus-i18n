@@ -1,5 +1,5 @@
 <?php
-// $Id: article.inc.php,v 1.22 2005/01/23 07:01:56 henoheno Exp $
+// $Id: article.inc.php,v 1.22.1 2005/03/09 07:01:56 miko Exp $
  /*
 
  PukiWiki BBS風プラグイン
@@ -142,8 +142,12 @@ EOD;
 function plugin_article_convert()
 {
 	global $script, $vars, $digest;
-	global $_btn_article, $_btn_name, $_btn_subject;
+//	global $_btn_article, $_btn_name, $_btn_subject;
 	static $numbers = array();
+
+	$_btn_name    = _('Name: ');
+	$_btn_article = _('Submit');
+	$_btn_subject = _('Subject: ');
 
 	if (PKWK_READONLY) return ''; // Show nothing
 

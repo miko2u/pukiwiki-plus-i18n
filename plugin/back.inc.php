@@ -4,7 +4,7 @@
  * (C) 2003-2004 PukiWiki Developer Team
  * (C) 2002 Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  *
- * $Id: back.inc.php,v 1.7 2004/12/02 12:46:05 henoheno Exp $
+ * $Id: back.inc.php,v 1.7.1 2004/03/09 12:46:05 miko Exp $
  */
 
 // Allow specifying back link by page name and anchor, or
@@ -18,7 +18,9 @@ define('PLUGIN_BACK_ALLOW_JAVASCRIPT', TRUE); // TRUE(Compat), FALSE, PKWK_ALLOW
 define('PLUGIN_BACK_USAGE', '#back([text],[center|left|right][,0(no hr)[,Page-or-URI-to-back]])');
 function plugin_back_convert()
 {
-	global $_msg_back_word, $script;
+	global $script;
+
+	$_msg_back_word = _('Back');
 
 	if (func_num_args() > 4) return PLUGIN_BACK_USAGE;
 	list($word, $align, $hr, $href) = array_pad(func_get_args(), 4, '');

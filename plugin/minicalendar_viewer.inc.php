@@ -55,7 +55,7 @@ function plugin_minicalendar_viewer_convert()
   $_err_calendar_viewer_param2   = _('Wrong second parameter.');
   $_msg_calendar_viewer_right    = _('Next %d&gt;&gt;');
   $_msg_calendar_viewer_left     = _('&lt;&lt; Prev %d');
-  $_msg_calendar_viewer_restrict = _('Due to the blocking, the calendar_viewer cannot refer to $1.');
+  $_msg_calendar_viewer_restrict = _('Due to the blocking, the minicalendar_viewer cannot refer to $1.');
 
   //*デフォルト値をセット
   //基準となるページ名

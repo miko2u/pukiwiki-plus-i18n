@@ -16,12 +16,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8-bit\n"
 
-#: ../plugin/add.inc.php:19
-msgid "Add to $1"
-msgstr "$1 への追加"
+#: ../plugin/calendar2.inc.php:8
+msgid "[edit]"
+msgstr "[この日記を編集]"
 
-#: ../plugin/add.inc.php:21
-msgid ""
-"Two and the contents of an input are added for a new-line to the contents of "
-"a page of present addition."
-msgstr "ページへの追加は、現在のページ内容に改行が二つと入力内容が追加されます。"
+#: ../plugin/calendar2.inc.php:9
+#, php-format
+msgid "%s is empty."
+msgstr "%sは空です。"
