@@ -1,13 +1,14 @@
 #!/bin/sh
 
 LOCALE=..
-LANG=ja
+LANG=ja_JP
 
 msgfmt -o $LOCALE/$LANG/LC_MESSAGES/pukiwiki.mo $LOCALE/$LANG/LC_MESSAGES/pukiwiki.po
 msgfmt -o $LOCALE/$LANG/LC_MESSAGES/add.mo $LOCALE/$LANG/LC_MESSAGES/add.po
 msgfmt -o $LOCALE/$LANG/LC_MESSAGES/addline.mo $LOCALE/$LANG/LC_MESSAGES/addline.po
 msgfmt -o $LOCALE/$LANG/LC_MESSAGES/article.mo $LOCALE/$LANG/LC_MESSAGES/article.po
 msgfmt -o $LOCALE/$LANG/LC_MESSAGES/attach.mo $LOCALE/$LANG/LC_MESSAGES/attach.po
+msgfmt -o $LOCALE/$LANG/LC_MESSAGES/attachref.mo $LOCALE/$LANG/LC_MESSAGES/attachref.po
 msgfmt -o $LOCALE/$LANG/LC_MESSAGES/back.mo $LOCALE/$LANG/LC_MESSAGES/back.po
 msgfmt -o $LOCALE/$LANG/LC_MESSAGES/backup.mo $LOCALE/$LANG/LC_MESSAGES/backup.po
 msgfmt -o $LOCALE/$LANG/LC_MESSAGES/calendar2.mo $LOCALE/$LANG/LC_MESSAGES/calendar2.po

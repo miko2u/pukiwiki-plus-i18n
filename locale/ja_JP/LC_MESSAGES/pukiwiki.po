@@ -1,22 +1,23 @@
-# PukiWiki Plus! - Yet Another WikiWikiWeb Clone
-# Copyright (C) 2005 PukiWiki Plus! Developer Team
-# License is GPL2
-# Author: Miko.Hoshina(E.Satoh) <miko@cafeterrace.com>, 2005.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PukiWiki Plus! 1.4.5-u2\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-03-10 10:15+0900\n"
-"PO-Revision-Date: 2005-03-10 10:15+0900\n"
-"Last-Translator: Miko.Hoshina(E.Satoh) <miko@cafeterrace.com>\n"
-"Language-Team: Japanese \n"
+"POT-Creation-Date: 2005-03-15 18:14+0900\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8-bit\n"
+"Content-Transfer-Encoding: 8bit\n"
 
 #: fuzzy.php:12 resource.php:17 ../../lib/fuzzy.php:12
-#: ../../lib/resource.php:21
+#: ../../lib/resource.php:21 ../../lib/resource.php:22
 msgid ""
 "In the page <strong> $2</strong>, <strong> $3</strong> pages that contain "
 "all the terms $1 were found."
@@ -25,7 +26,7 @@ msgstr ""
 "ページ見つかりました。"
 
 #: fuzzy.php:13 resource.php:18 ../../lib/fuzzy.php:13
-#: ../../lib/resource.php:22
+#: ../../lib/resource.php:22 ../../lib/resource.php:23
 msgid ""
 "In the page <strong> $2</strong>, <strong> $3</strong> pages that contain at "
 "least one of the terms $1 were found."
@@ -34,47 +35,49 @@ msgstr ""
 "strong> ページ見つかりました。"
 
 #: fuzzy.php:14 resource.php:19 ../../lib/fuzzy.php:14
-#: ../../lib/resource.php:23
+#: ../../lib/resource.php:23 ../../lib/resource.php:24
 msgid "No page which contains $1 has been found."
 msgstr "$1 を含むページは見つかりませんでした。"
 
-#: resource.php:11 ../../lib/resource.php:14
+#: resource.php:11 ../../lib/resource.php:14 ../../lib/resource.php:15
 msgid "PukiWikiAuth"
 msgstr "PukiWikiAuth"
 
-#: resource.php:12 ../../lib/resource.php:15
+#: resource.php:12 ../../lib/resource.php:15 ../../lib/resource.php:16
+#: ../../lib/resource.php:69
 msgid "Freeze"
 msgstr "凍結"
 
-#: resource.php:13 ../../lib/resource.php:16
+#: resource.php:13 ../../lib/resource.php:16 ../../lib/resource.php:17
+#: ../../lib/resource.php:84
 msgid "Unfreeze"
 msgstr "凍結解除"
 
-#: resource.php:14 ../../lib/resource.php:17
+#: resource.php:14 ../../lib/resource.php:17 ../../lib/resource.php:18
 msgid "Symbols"
 msgstr "記号"
 
-#: resource.php:15 ../../lib/resource.php:18
+#: resource.php:15 ../../lib/resource.php:18 ../../lib/resource.php:19
 msgid "Others"
 msgstr "日本語"
 
-#: resource.php:20 ../../lib/resource.php:24
+#: resource.php:20 ../../lib/resource.php:24 ../../lib/resource.php:25
 msgid "These search terms have been highlighted:"
 msgstr "これらのキーワードがハイライトされています："
 
-#: resource.php:21 ../../lib/resource.php:25
+#: resource.php:21 ../../lib/resource.php:25 ../../lib/resource.php:26
 msgid "View Text Formatting Rules"
 msgstr "テキスト整形のルールを表示する"
 
-#: resource.php:24 ../../lib/resource.php:28
+#: resource.php:24 ../../lib/resource.php:28 ../../lib/resource.php:29
 msgid "Invalid password."
 msgstr "パスワードが間違っています。"
 
-#: resource.php:25 ../../lib/resource.php:29
+#: resource.php:25 ../../lib/resource.php:29 ../../lib/resource.php:30
 msgid "$1 is not a valid $2."
 msgstr "$1 は有効な $2 ではありません。"
 
-#: resource.php:26 ../../lib/resource.php:30
+#: resource.php:26 ../../lib/resource.php:30 ../../lib/resource.php:31
 msgid ""
 "It seems that someone has already updated the page you were editing.<br /"
 ">The string was added, alhough it may be inserted in the wrong position.<br /"
@@ -84,102 +87,170 @@ msgstr ""
 "うです。<br />コメントを追加しましたが、違う位置に挿入されているかもしれませ"
 "ん。<br />"
 
-#: resource.php:31 ../../lib/resource.php:35
+#: resource.php:31 ../../lib/resource.php:35 ../../lib/resource.php:36
 msgid "Preview"
 msgstr "プレビュー"
 
-#: resource.php:32 ../../lib/resource.php:36
+#: resource.php:32 ../../lib/resource.php:36 ../../lib/resource.php:37
 msgid "Preview again"
 msgstr "再度プレビュー"
 
-#: resource.php:33 ../../lib/resource.php:37
+#: resource.php:33 ../../lib/resource.php:37 ../../lib/resource.php:38
 msgid "Update"
 msgstr "ページの更新"
 
-#: resource.php:34 ../../lib/resource.php:38
+#: resource.php:34 ../../lib/resource.php:38 ../../lib/resource.php:39
 msgid "Cancel"
 msgstr "キャンセル"
 
-#: resource.php:35 ../../lib/resource.php:39
+#: resource.php:35 ../../lib/resource.php:39 ../../lib/resource.php:40
+#: ../../lib/resource.php:63
 msgid "Add"
 msgstr "追加"
 
-#: resource.php:36 ../../lib/resource.php:40
+#: resource.php:36 ../../lib/resource.php:40 ../../lib/resource.php:41
+#: ../../lib/resource.php:81
 msgid "Search"
 msgstr "検索"
 
-#: resource.php:37 ../../lib/resource.php:41
+#: resource.php:37 ../../lib/resource.php:41 ../../lib/resource.php:42
 msgid "Load"
 msgstr "読込"
 
-#: resource.php:38 ../../lib/resource.php:42
+#: resource.php:38 ../../lib/resource.php:42 ../../lib/resource.php:43
+#: ../../lib/resource.php:67
 msgid "Edit"
 msgstr "編集"
 
-#: resource.php:39 ../../lib/resource.php:43
+#: resource.php:39 ../../lib/resource.php:43 ../../lib/resource.php:44
 msgid "Delete"
 msgstr "削除"
 
-#: resource.php:42 ../../lib/resource.php:46
+#: resource.php:42 ../../lib/resource.php:46 ../../lib/resource.php:47
 msgid "Do not change timestamp"
 msgstr "タイムスタンプを変更しない"
 
-#: resource.php:43 ../../lib/resource.php:47
+#: resource.php:43 ../../lib/resource.php:47 ../../lib/resource.php:48
 msgid "Add to top of page"
 msgstr "ページの上に追加"
 
-#: resource.php:44 ../../lib/resource.php:48
+#: resource.php:44 ../../lib/resource.php:48 ../../lib/resource.php:49
 msgid "Use page as template"
 msgstr "雛形とするページ"
 
-#: resource.php:45 ../../lib/resource.php:49
+#: resource.php:45 ../../lib/resource.php:49 ../../lib/resource.php:50
 msgid "AND"
 msgstr "AND検索"
 
-#: resource.php:46 ../../lib/resource.php:50
+#: resource.php:46 ../../lib/resource.php:50 ../../lib/resource.php:51
 msgid "OR"
 msgstr "OR検索"
 
-#: resource.php:51 ../../lib/resource.php:55
+#: resource.php:51 ../../lib/resource.php:55 ../../lib/resource.php:56
 msgid "$1 is not editable"
 msgstr "$1 は編集できません"
 
-#: resource.php:52 ../../lib/resource.php:56
+#: resource.php:52 ../../lib/resource.php:56 ../../lib/resource.php:57
 msgid "$1 is not readable"
 msgstr "$1 は閲覧できません"
 
-#: resource.php:53 ../../lib/resource.php:57
+#: resource.php:53 ../../lib/resource.php:57 ../../lib/resource.php:58
 msgid "On updating $1, a collision has occurred."
 msgstr "$1 で【更新の衝突】が起きました"
 
-#: resource.php:54 ../../lib/resource.php:58
+#: resource.php:54 ../../lib/resource.php:58 ../../lib/resource.php:59
 msgid "$1 was updated"
 msgstr "$1 を更新しました"
 
-#: ../../lib/resource.php:11
+#: ../../lib/resource.php:11 ../../lib/resource.php:10
 msgid "Sun"
 msgstr "日"
 
-#: ../../lib/resource.php:11
+#: ../../lib/resource.php:11 ../../lib/resource.php:10
 msgid "Mon"
 msgstr "月"
 
-#: ../../lib/resource.php:11
+#: ../../lib/resource.php:11 ../../lib/resource.php:10
 msgid "Tue"
 msgstr "火"
 
-#: ../../lib/resource.php:11
+#: ../../lib/resource.php:11 ../../lib/resource.php:10
 msgid "Wed"
 msgstr "水"
 
-#: ../../lib/resource.php:11
+#: ../../lib/resource.php:11 ../../lib/resource.php:10
 msgid "Thu"
 msgstr "木"
 
-#: ../../lib/resource.php:11
+#: ../../lib/resource.php:11 ../../lib/resource.php:10
 msgid "Fri"
 msgstr "金"
 
-#: ../../lib/resource.php:11
+#: ../../lib/resource.php:11 ../../lib/resource.php:10
 msgid "Sat"
 msgstr "土"
+
+#: ../../lib/resource.php:64
+msgid "Backup"
+msgstr "バックアップ"
+
+#: ../../lib/resource.php:65
+msgid "Copy"
+msgstr "コピー"
+
+#: ../../lib/resource.php:66
+msgid "Diff"
+msgstr "差分"
+
+#: ../../lib/resource.php:68
+msgid "List of page files"
+msgstr "ファイル名一覧"
+
+#: ../../lib/resource.php:70
+msgid "Help"
+msgstr "ヘルプ"
+
+#: ../../lib/resource.php:71
+msgid "List of pages"
+msgstr "一覧"
+
+#: ../../lib/resource.php:72
+msgid "New"
+msgstr "新規"
+
+#: ../../lib/resource.php:73
+msgid "RDF of recent changes"
+msgstr "最終更新のRDF"
+
+#: ../../lib/resource.php:74
+msgid "Recent changes"
+msgstr "最終更新"
+
+#: ../../lib/resource.php:75
+msgid "Referer"
+msgstr "リンク元"
+
+#: ../../lib/resource.php:76
+msgid "Reload"
+msgstr "リロード"
+
+#: ../../lib/resource.php:77
+msgid "Rename"
+msgstr "名前変更"
+
+#: ../../lib/resource.php:78 ../../lib/resource.php:79
+#: ../../lib/resource.php:80
+msgid "RSS of recent changes"
+msgstr "最終更新のRSS"
+
+#: ../../lib/resource.php:82
+msgid "Front page"
+msgstr "ホーム"
+
+#: ../../lib/resource.php:83
+msgid "Trackback"
+msgstr "Trackback"
+
+#: ../../lib/resource.php:85
+msgid "Upload"
+msgstr "添付"

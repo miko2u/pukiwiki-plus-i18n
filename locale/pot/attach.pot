@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-03-10 18:35+0900\n"
+"POT-Creation-Date: 2005-03-15 17:04+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -104,69 +104,69 @@ msgid "size"
 msgstr ""
 
 #: ../../plugin/attach.inc.php:68
-msgid "date"
+msgid "type"
 msgstr ""
 
 #: ../../plugin/attach.inc.php:69
-msgid "access count"
+msgid "date"
 msgstr ""
 
 #: ../../plugin/attach.inc.php:70
-msgid "MD5 hash"
+msgid "access count"
 msgstr ""
 
 #: ../../plugin/attach.inc.php:71
-msgid "Page"
+msgid "MD5 hash"
 msgstr ""
 
 #: ../../plugin/attach.inc.php:72
-msgid "Stored filename"
+msgid "Page"
 msgstr ""
 
 #: ../../plugin/attach.inc.php:73
-msgid "Cannot upload/delete file in $1"
+msgid "Stored filename"
 msgstr ""
 
 #: ../../plugin/attach.inc.php:74
-msgid "File size too large to $1"
+msgid "Cannot upload/delete file in $1"
 msgstr ""
 
 #: ../../plugin/attach.inc.php:75
-msgid "File already exists in $1"
+msgid "File size too large to $1"
 msgstr ""
 
 #: ../../plugin/attach.inc.php:76
-msgid "Could not find the file in $1"
+msgid "File already exists in $1"
 msgstr ""
 
 #: ../../plugin/attach.inc.php:77
-msgid "File does not exist."
+msgid "Could not find the file in $1"
 msgstr ""
 
 #: ../../plugin/attach.inc.php:78
-msgid "Cannot delete file in  $1"
+msgid "File does not exist."
 msgstr ""
 
 #: ../../plugin/attach.inc.php:79
-msgid "Wrong password."
+msgid "Cannot delete file in  $1"
 msgstr ""
 
 #: ../../plugin/attach.inc.php:80
-msgid "Wrong administrator password"
+msgid "Wrong password."
 msgstr ""
 
 #: ../../plugin/attach.inc.php:81
-msgid "Upload"
+msgid "Wrong administrator password"
 msgstr ""
 
 #: ../../plugin/attach.inc.php:82
-msgid "Information"
+msgid "Upload"
 msgstr ""
 
 #: ../../plugin/attach.inc.php:83
-msgid "Submit"
+msgid "Information"
 msgstr ""
 
-#: ../../plugin/attach.inc.php:732 ../../plugin/attach.inc.php:785
-msgid "$1 is not readable"
+#: ../../plugin/attach.inc.php:84
+msgid "Submit"
 msgstr ""
