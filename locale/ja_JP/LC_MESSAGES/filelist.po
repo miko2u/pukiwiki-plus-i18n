@@ -1,0 +1,32 @@
+# PukiWiki Plus! - Yet Another WikiWikiWeb Clone
+# Copyright (C) 2005 PukiWiki Plus! Developer Team
+# License is GPL2
+# Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>, 2005.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PukiWiki Plus! 1.4.5-u2\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2005-04-01 00:58+0900\n"
+"PO-Revision-Date: 2005-04-01 01:00+0900\n"
+"Last-Translator: Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>\n"
+"Language-Team: Japanese <ja@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../plugin/filelist.inc.php:14
+msgid "Please input the password for the Administrator."
+msgstr "管理者用のパスワードを入力してください。"
+
+#: ../../plugin/filelist.inc.php:15
+msgid "Exec"
+msgstr "実行"
+
+#: ../../plugin/filelist.inc.php:16
+msgid "The password is wrong."
+msgstr "パスワードが間違っています。"
+
+#: ../../plugin/filelist.inc.php:17
+msgid "Page list"
+msgstr "ページファイルの一覧"
