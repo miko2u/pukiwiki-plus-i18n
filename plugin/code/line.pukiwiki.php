@@ -16,7 +16,7 @@ $switchHash['<'] = MULTILINE;        // 引用
 $switchHash['>'] = MULTILINE;        // 引用
 // 複数行の終端記号
 $multilineEOL = Array(
-'#','*',',','|',' ','-','+',':','>','<',"\n");
+'#','*',',','|',' ','-','+',':','>','<','/',"\n");
 // 空白のみの行対策
 $code_identifire = array(
 	 ' ' => Array(
@@ -97,6 +97,7 @@ $code_keyword = Array(
 "#code" => 2,
 "&amazon" => 2,
 "&aname" => 2,
+"&br" => 2,
 "&color" => 2,
 "&counter" => 2,
 "&new" => 2,

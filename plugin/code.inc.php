@@ -1,11 +1,11 @@
 <?php
 /**
  * コードハイライト機能をPukiWikiに追加する
- * Time-stamp: 04/12/15 01:52:55
+ * Time-stamp: <04/12/15 12:47:15 sasaki>
  *
  * GPL
  *
- * Ver. 0.4.3 pr6
+ * Ver. 0.4.3_1
  */
 
 define("PLUGIN_CODE_LANGUAGE", 'pre');  // 標準言語
@@ -508,14 +508,12 @@ class CodeHighlight {
 					
 				case SPECIAL_IDENTIFIRE:
 					// 特殊文字から始まる識別子
-					$pattern = '/'.preg_quote($code).'[A-Za-z0-9_]+/';
-					// 出来る限り長く識別子を得る
-					$str_pos--; // エラー処理したくないからpreg_matchで必ず見つかるようにする
+					// 次の文字が英字か判定
+					if (!ctype_alpha($line[$str_pos])) break;
 					$result = substr($line, $str_pos);
-					preg_match($pattern, $result, $matches);
+					preg_match("/[A-Za-z0-9_\-]+/", $result, $matches);
 					$str_pos += strlen($matches[0]);
-					$result = $matches[0];
-					
+					$result = $code.$matches[0];
 					// htmlに追加
 					if($capital)
 						$index = $code_keyword[strtolower($result)];// 大文字小文字を区別しない
@@ -771,14 +769,12 @@ class CodeHighlight {
 				
 			case SPECIAL_IDENTIFIRE:
 				// 特殊文字から始まる識別子
-				$pattern = '/'.preg_quote($code).'[A-Za-z0-9_]+/';
-				// 出来る限り長く識別子を得る
-				$str_pos--; // エラー処理したくないからpreg_matchで必ず見つかるようにする
+				// 次の文字が英字か判定
+				if (!ctype_alpha($string[$str_pos])) break;
 				$result = substr($string, $str_pos);
-				preg_match($pattern, $result, $matches);
+				preg_match("/[A-Za-z0-9_\-]+/", $result, $matches);
 				$str_pos += strlen($matches[0]);
-				$result = $matches[0];
-				
+				$result = $code.$matches[0];
 				// htmlに追加
 				if($capital)
 					$index = $code_keyword[strtolower($result)];// 大文字小文字を区別しない
@@ -789,11 +785,10 @@ class CodeHighlight {
 					$html .= '<span class="'.CODE_HEADER.$code_css[$index-1].'">'.$result.'</span>';
 				else
 					$html .= $result;
-				
 				// 次の検索用に読み込み
 				if ($str_len == $str_pos) $code = false; else $code = $string[$str_pos++]; // getc
 				continue 2;
-				
+
 			case ESCAPE_IDENTIFIRE:
 				// エスケープする必要がある特殊文字を記号として利用し且この文字から始まる識別子 TeX
 				if($string[$str_pos] == "\\" && $string[$str_pos+1] == "\n") {
@@ -806,13 +801,13 @@ class CodeHighlight {
 					if ($str_len == $str_pos) $code = false; else $code = $string[$str_pos++]; // getc
 					continue 2;					
 				}
-				$pattern = '/'.preg_quote($code).'[A-Za-z0-9_]+/';
+				// 次の文字が英字か判定
+				if (!ctype_alpha($string[$str_pos])) break;
 				// 出来る限り長く識別子を得る
-				$str_pos--; // エラー処理したくないからpreg_matchで必ず見つかるようにする
 				$result = substr($string, $str_pos);
-				preg_match($pattern, $result, $matches);
+				preg_match("/[A-Za-z0-9_\-]+/", $result, $matches);
 				$str_pos += strlen($matches[0]);
-				$result = $matches[0];
+				$result = $code.$matches[0];
 				
 				// htmlに追加
 				if($capital)

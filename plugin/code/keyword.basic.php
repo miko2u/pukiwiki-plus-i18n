@@ -19,7 +19,7 @@ $code_comment = Array(
 		"/^rem\s.*\n/i",
 		),
 	"R" => Array(
-		"/^iem\s.*\n/i",
+		"/^rem\s.*\n/i",
 		),
 );
 
