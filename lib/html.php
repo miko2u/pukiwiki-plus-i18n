@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: html.php,v 1.18.12 2004/12/02 13:05:02 miko Exp $
+// $Id: html.php,v 1.18.13 2004/12/13 20:05:02 miko Exp $
 //
 
 // 本文を出力
@@ -10,7 +10,7 @@ function catbody($title,$page,$body)
 {
 	global $script, $vars, $arg, $defaultpage, $whatsnew, $help_page, $hr;
 	global $related_link, $cantedit, $function_freeze, $search_word_color, $_msg_word;
-	global $foot_explain, $note_hr, $head_tags;
+	global $foot_explain, $note_hr, $head_tags, $menubar, $sidebar;
 	global $trackback, $trackback_javascript, $referer, $javascript;
 	global $skin_file;
 	global $_LANG, $_LINK, $_IMAGE;
