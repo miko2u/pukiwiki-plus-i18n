@@ -27,8 +27,8 @@ define("PLUGIN_CODE_TABLE",     TRUE);
 define("WIDTHOFTAB", "    ");
 
 define("PLUGIN_CODE_USAGE", 
-       //'<p class="error">Plugin code: Usage:<br />#code(Lang){{<br />src<br />}}</p>');
-	   '<p class="error">Plugin code: Usage:<br />#code(Lang)<< EOF<br />src<br />EOF</p>');
+	   '<p class="error">Plugin code: Usage:<br />#code(Lang){{<br />src<br />}}</p>');
+//	   '<p class="error">Plugin code: Usage:<br />#code(Lang)<< EOF<br />src<br />EOF</p>');
 
 // for PukiWiki 1.4.5 or later
 global $javascript; $javascript = TRUE;
