@@ -2,8 +2,8 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: attachref.inc.php,v 0.14.1 2003/10/08 04:10:29 sha/miko Exp $
-//
+// $Id: attachref.inc.php,v 0.14.3 2003/10/08 04:10:29 miko Exp $
+// Original is sha
 
 /*
 *プラグイン attachref
@@ -28,30 +28,25 @@
 
 */
 // max file size for upload on PHP(PHP default 2MB)
-ini_set('upload_max_filesize','2M');
+ini_set('upload_max_filesize','4M');
 
 // max file size for upload on script of PukiWiki(default 1MB)
-define('MAX_FILESIZE',1000000);
+define('MAX_FILESIZE',(2048 * 1024));
 
 // 管理者だけが添付ファイルをアップロードできるようにする
 define('ATTACHREF_UPLOAD_ADMIN_ONLY',FALSE); // FALSE or TRUE
-// アップロード/削除時にパスワードを要求する(ADMIN_ONLYが優先)
+
+// アップロード/削除時にパスワードを要求する(ATTACHREF_UPLOAD_ADMIN_ONLYが優先)
 define('ATTACHREF_PASSWORD_REQUIRE',FALSE); // FALSE or TRUE
-
-
-// upload dir(must set end of /) attach.inc.phpと合わせる
-define('ATTACHREF_UPLOAD_DIR','./attach/');
-
 
 function plugin_attachref_init()
 {
 	$messages = array(
 		'_attachref_messages' => array(
-			'btn_submit'    => '[添付]',
-			'msg_title'     => 'Attach and Ref to $1',
-			'msg_title_collided' => '$1 で【更新の衝突】が起きました',
-			'msg_collided'  => 'あなたがファイルを添付している間に、他の人が同じページを更新してしまったようです。<br />
-ファイルが違う位置に挿入されているかもしれません。<br />'
+			'btn_submit'    => _('[Upload]'),
+			'msg_title'     => _('Attach and Ref to $1'),
+			'msg_title_collided' => _('On updating $1, a collision has occurred.'),
+			'msg_collided'  => _('It seems that someone has already updated the page you were editing.<br />The attach file was added, alhough it may be inserted in the wrong position.<br />'),
 		),
 	);
 	set_plugin_messages($messages);
@@ -164,7 +159,7 @@ function plugin_attachref_action()
 
 		//すでに存在した場合、 ファイル名に'_0','_1',...を付けて回避(姑息)
 		$count = '_0';
-		while (file_exists(ATTACHREF_UPLOAD_DIR.encode($vars['refer']).'_'.encode($attachname)))
+		while (file_exists(UPLOAD_DIR .encode($vars['refer']).'_'.encode($attachname)))
 		{
 			$attachname = preg_replace('/^[^\.]+/',$filename.$count++,$file['name']);
 		}

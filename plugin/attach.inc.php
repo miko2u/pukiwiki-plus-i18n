@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: attach.inc.php,v 1.73.6 2005/03/10 07:44:53 miko Exp $
+// $Id: attach.inc.php,v 1.73.7 2005/03/15 07:44:53 miko Exp $
 //
 // File attach plugin
 
@@ -65,6 +65,7 @@ function plugin_attach_init()
 			'msg_isfreeze' => _('File is frozen.'),
 			'msg_require'  => _('(require administrator password)'),
 			'msg_filesize' => _('size'),
+			'msg_type'     => _('type'),
 			'msg_date'     => _('date'),
 			'msg_dlcount'  => _('access count'),
 			'msg_md5hash'  => _('MD5 hash'),
@@ -405,7 +406,7 @@ EOD;
 	}
 	$html = '';
 	if ($listview) {
-		$html .= "<h3>{$s_page}へのファイルの添付</h3>";
+		$html .= '<h3>' . str_replace('$1', $s_page, $_attach_messages['msg_upload']) . '</h3>';
 		$navi = <<<EOD
   <span class="small">
    [<a href="$script?plugin=attach&amp;pcmd=list">{$_attach_messages['msg_listall']}</a>]
@@ -434,7 +435,7 @@ EOD;
 		$body = ($refer == '' || isset($obj->pages[$page])) ?
 			$obj->toRender($page, FALSE) :
 			$_attach_messages['err_noexist'];
-		$html .= "<h3>{$s_page}の添付ファイル一覧</h3>" . $body;
+		$html .= "<h3>" . str_replace('$1', $s_page, $_attach_messages['msg_listpage']) . "</h3>" . $body;
 	}
 	return $html;
 }
@@ -726,10 +727,10 @@ class AttachFiles
 	// ファイル一覧を取得
 	function toString($flat)
 	{
-//		global $_title_cannotread;
+		global $_title;
 
 		if (! check_readable($this->page, FALSE, FALSE)) {
-			return str_replace('$1', make_pagelink($this->page), _('$1 is not readable'));
+			return str_replace('$1', make_pagelink($this->page), $_title['cannotread']);
 		} else if ($flat) {
 			return $this->to_flat();
 		}
@@ -779,10 +780,11 @@ class AttachFiles
 	// ファイル一覧をテーブルで取得
 	function toRender($flat)
 	{
-//		global $_title_cannotread;
+		global $_attach_messages;
+		global $_title;
 
 		if (! check_readable($this->page, FALSE, FALSE)) {
-			return str_replace('$1', make_pagelink($this->page), _('$1 is not readable'));
+			return str_replace('$1', make_pagelink($this->page), $_title['cannotread']);
 		} else if ($flat) {
 			return $this->to_flat();
 		}
@@ -809,10 +811,10 @@ class AttachFiles
 			     .  '<td class="' . $cssstyle . '">' . "{$this->files[$file][0]->time_str}</td></tr>\n";
 		}
 		return '<table width="100%" class="attach_table">' . "\n" .
-		       '<tr><th class="attach_th">ファイル</th>' .
-			   '<th class="attach_th">サイズ</th>' .
-		       '<th class="attach_th">タイプ</th>' .
-		       '<th class="attach_th">日時</th></tr>' . "\n$ret</table>\n";
+		       '<tr><th class="attach_th">' . $_attach_messages['msg_file'] . '</th>' .
+			   '<th class="attach_th">' . $_attach_messages['msg_filesize'] . '</th>' .
+		       '<th class="attach_th">' . $_attach_messages['msg_type'] . '</th>' .
+		       '<th class="attach_th">' . $_attach_messages['msg_date'] . '</th></tr>' . "\n$ret</table>\n";
 	}
 }
 

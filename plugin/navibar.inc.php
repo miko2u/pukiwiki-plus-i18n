@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: navibar.php,v 0.1.2 2004/12/19 15:33:43 miko Exp $
+// $Id: navibar.php,v 0.1.4 2005/03/15 15:33:43 miko Exp $
 //
 function plugin_navibar_convert()
 {
@@ -20,6 +20,7 @@ function plugin_navibar_convert()
 	$num = func_num_args();
 	$args = $num ? func_get_args() : array();
 	$body = '';
+	$line = '';
 
 	while(!empty($args)) {
 		$name = array_shift($args);
@@ -70,7 +71,10 @@ function plugin_navibar_convert()
 			}
 			break;
 		case '|':
-			$body .= " ]\n\n[ ";
+			if ( trim($body) != '' ) {
+				$line .= '[ ' . $body . ' ]' . "\n\n";
+				$body = '';
+			}
 			break;
 		case 'new':
 		case 'edit':
@@ -86,7 +90,11 @@ function plugin_navibar_convert()
 		$body .= ' ';
 	}
 
-	return '<div id="navigator">'. "[ " . $body . " ]" . '</div>';
+	if ( trim($body) != '' ) {
+		$line .= '[ ' . $body . ' ]' . "\n\n";
+		$body = '';
+	}
+	return '<div id="navigator">'. $line . '</div>';
 }
 
 function _navigator($key, $val = '')

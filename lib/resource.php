@@ -59,4 +59,30 @@ $_title = array(
 	'updated' => _('$1 was updated'),
 );
 
+$_LANG['skin'] = array(
+	'add'       => _('Add'),
+	'backup'    => _('Backup'),
+	'copy'      => _('Copy'),
+	'diff'      => _('Diff'),
+	'edit'      => _('Edit'),
+	'filelist'  => _('List of page files'),
+	'freeze'    => _('Freeze'),
+	'help'      => _('Help'),
+	'list'      => _('List of pages'),
+	'new'       => _('New'),
+	'rdf'       => _('RDF of recent changes'),
+	'recent'    => _('Recent changes'),
+	'refer'     => _('Referer'),
+	'reload'    => _('Reload'),
+	'rename'    => _('Rename'),
+	'rss'       => _('RSS of recent changes'),
+	'rss10'     => _('RSS of recent changes'),
+	'rss20'     => _('RSS of recent changes'),
+	'search'    => _('Search'),
+	'top'       => _('Front page'),
+	'trackback' => _('Trackback'),
+	'unfreeze'  => _('Unfreeze'),
+	'upload'    => _('Upload'),
+);
+
 ?>
