@@ -23,7 +23,7 @@ function plugin_mixirss_action()
 	case '':  $version = '1.0';  break; // mixi Default
 	case '1': $version = '1.0';  break;
 	case '2': $version = '2.0';  break;
-	case '0,91': /* FALLTHROUGH */
+	case '0.91': /* FALLTHROUGH */
 	case '1.0' : /* FALLTHROUGH */
 	case '2.0' : break;
 	default: die('Invalid RSS version!!');
@@ -31,7 +31,20 @@ function plugin_mixirss_action()
 
 	$recent = CACHE_DIR . 'recent.dat';
 	if (! file_exists($recent)) die('recent.dat is not found');
+	$time_recent = get_filetime($recent);
 
+	$rsscache = CACHE_DIR . 'rsscache' . $version . '.dat';
+	if (file_exists($rsscache)) {
+		$time_rsscache = get_filetime($rsscache);
+	} else {
+		$time_rsscache = 0;
+	}
+
+	// if caching rss file, return cache.
+	if ($time_recent <= $time_rsscache)
+		return implode('', @file($rsscache));
+
+	// Official Main routine ...
 	$page_title_utf8 = mb_convert_encoding($page_title, 'UTF-8', SOURCE_ENCODING);
 	$self  = get_script_uri();
 
@@ -72,6 +85,7 @@ EOD;
 					"$self?tb_id=$tb_id" . '</trackback:ping>';
 			}
 			if (plugin_mixirss_isValidDate(substr($page,-10)) && check_readable($page,false,false)) {
+				// for Calendar/MiniCalendar
 				$source = get_source($page);
 				$rdf_hx = '';
 				$rdf_lx = '';
@@ -80,8 +94,7 @@ EOD;
 				while(!empty($source)) {
 					$line = array_shift($source);
 					if (preg_match('/^(\*{1,3})(.*)\[#([A-Za-z][\w-]+)\](.*)$/m', $line, $matches)) {
-						$anchortitle = convert_html($matches[2]);
-						$anchortitle = preg_replace('#<([^>]*)>#','',$anchortitle);
+						$anchortitle = strip_htmltag(convert_html($matches[2]));
 						$anchortitle = '<![CDATA[' . mb_convert_encoding($anchortitle, 'UTF-8', SOURCE_ENCODING) . ']]>';
 						$sharp = '#';
 						$rdf_hx .= '    <rdf:li rdf:resource="' . $self . '?' . $r_page . $sharp . $matches[3] . '" />' . "\n";
@@ -96,8 +109,7 @@ $trackback_ping
 
 EOD;
 					} else if (preg_match('/^(\-{1,3})(.*)$/m', $line, $matches)) {
-						$anchortitle = convert_html($matches[2]);
-						$anchortitle = preg_replace('#<([^>]*)>#','',$anchortitle);
+						$anchortitle = strip_htmltag(convert_html($matches[2]));
 						$anchortitle = '<![CDATA[' . mb_convert_encoding($anchortitle, 'UTF-8', SOURCE_ENCODING) . ']]>';
 						$sharp = '#';
 						$rdf_lx .= '    <rdf:li rdf:resource="' . $self . '?' . $r_page . '" />' . "\n";
@@ -121,11 +133,17 @@ EOD;
 					$items .= $itemlx;
 				}
 			} else {
-			$rdf_li .= '    <rdf:li rdf:resource="' . $self . '?' . $r_page . '" />' . "\n";
-			$items .= <<<EOD
+//miko added
+				$description = strip_htmltag(convert_html(get_source($page)));
+				$description = mb_strimwidth(preg_replace("/[\r\n]/",' ',$description),0,DESCRIPTION_LENGTH,'...');
+				$description = '<description><![CDATA[' . mb_convert_encoding($description,'UTF-8',SOURCE_ENCODING) . ']]></description>';
+//miko added
+				$rdf_li .= '    <rdf:li rdf:resource="' . $self . '?' . $r_page . '" />' . "\n";
+				$items .= <<<EOD
 <item rdf:about="$self?$r_page">
  <title>$title</title>
  <link>$self?$r_page</link>
+ $description
  <dc:date>$date</dc:date>
  <dc:identifier>$self?$r_page</dc:identifier>
 $trackback_ping
@@ -143,14 +161,15 @@ EOD;
 	print '<?xml version="1.0" encoding="UTF-8"?>' . "\n\n";
 
 	$r_whatsnew = rawurlencode($whatsnew);
+	$html = '';
 	switch ($version) {
 	case '0.91':
-		print '<!DOCTYPE rss PUBLIC "-//Netscape Communications//DTD RSS 0.91//EN"' .
+		$html .= '<!DOCTYPE rss PUBLIC "-//Netscape Communications//DTD RSS 0.91//EN"' .
 		' "http://my.netscape.com/publish/formats/rss-0.91.dtd">' . "\n";
 		 /* FALLTHROUGH */
 
 	case '2.0':
-		print <<<EOD
+		$html .= <<<EOD
 <rss version="$version">
  <channel>
   <title>$page_title_utf8</title>
@@ -167,7 +186,7 @@ EOD;
 	case '1.0':
 		$xmlns_trackback = $trackback ?
 			'  xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/"' : '';
-		print <<<EOD
+		$html .= <<<EOD
 <rdf:RDF
   xmlns:dc="http://purl.org/dc/elements/1.1/"
 $xmlns_trackback
@@ -190,6 +209,17 @@ $items
 EOD;
 		break;
 	}
+	print $html;
+
+	// Write Cache-file
+	$fp = fopen($rsscache, 'w');
+	flock($fp, LOCK_EX);
+	rewind($fp);
+	fputs($fp, $html);
+	flock($fp, LOCK_UN);
+	fclose($fp);
+	touch($rsscache, $timestamp + LOCALZONE);
+
 	exit;
 }
 
