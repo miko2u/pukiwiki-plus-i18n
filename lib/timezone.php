@@ -3,7 +3,7 @@
  * TimeZone
  *
  * @copyright   Copyright &copy; 2005, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: timezone.php,v 0.5 2005/03/29 21:14:00 upk Exp $
+ * @version     $Id: timezone.php,v 0.6 2005/03/30 00:38:00 upk Exp $
  *
  */
 
@@ -45,17 +45,18 @@ function set_timezone($lang='')
 	}
 
 	$obj = new timezone();
-	$obj->set_datetime(UTIME);
-	$obj->set_country($l[2]);
+	$obj->set_datetime(UTIME); // Setting at judgment time. (判定時刻の設定)
+	$obj->set_country($l[2]); // The acquisition country is specified. (取得国を指定)
 
+	// With the installation country in case of the same
+	// 設置者の国と同一の場合
 	if ($lang == DEFAULT_LANG) {
 		if (defined('DEFAULT_TZ_NAME')) {
 			$obj->set_tz_name(DEFAULT_TZ_NAME);
 		}
 	}
 
-	$zonetime = $obj->get_zonetime();
-	$zone = $obj->get_zone($obj->offset);
+	list($zone, $zonetime) = $obj->get_zonetime();
 
 	if ($zonetime == 0 || empty($zone)) {
 		return array('UTC', 0);
@@ -634,8 +635,8 @@ class timezone
   );
 
   var $dst = array(
-    //    0            1      2    3   4           5 6   7   8
-    //    Rule         Start  End  MM, Week,       H,M   +M, S/D
+    //    0            1      2    3   4           5  6   7   8
+    //    Rule         Start  End  MM, Week,       H, i  +M, S/D
     array('AN',        1996, 9999,  5, 'lastSun',  2, 0,  0, ''),
     array('AN',        2001, 9999, 10, 'lastSun',  2, 0, 60, ''),
     array('AQ',        1990, 1992,  5,  'Sun>=1',  2, 0,  0, ''), // s
@@ -788,9 +789,12 @@ class timezone
     array('Zion',      2005, 9999, 10,         1,  1, 0,  0, 'S'),
   );
 
+	// set_country または set_tz_name を予め実行し、タイムゾーン情報を抽出しておく
+
 	/*
 	 * set_country
-	 * 
+	 * The TimeZone Information of the Country that specified it is extracted.
+	 * 指定した国のタイムゾーン情報を抽出
 	 */
 	function set_country($x='')
 	{
@@ -803,7 +807,8 @@ class timezone
 
 	/*
 	 * set_tz_name
-	 *
+	 * The TimeZone Information is extracted.
+	 * 指定したタイムゾーン情報を抽出
 	 */
 	function set_tz_name($tz_name)
 	{
@@ -815,7 +820,8 @@ class timezone
 
 	/*
 	 * set_datetime
-	 *
+	 * Time is set.
+	 * 時間を設定する
 	 */
 	function set_datetime($utime=0)
 	{
@@ -825,25 +831,23 @@ class timezone
 	}
 
 	/*
-	 * get_zone
-	 * @return	string
-	 */
-	function get_zone($dst=0)
-	{
-		// Execute the processing of set_country or set_tz_name beforehand.
-		$idx = ($dst == 0) ? 4 : 5;
-		foreach($this->tz_country as $_key => $_tz) {
-			if (! empty($_tz[$idx])) return $_tz[$idx];
-		}
-		return "";
-	}
-
-	/*
 	 * get_zonetime
-	 * GMTに対するオフセット秒の取得
+	 * ゾーン情報の取得
 	 * @return	integer
 	 */
 	function get_zonetime()
+	{
+		$zonetime = $this->get_offsettime();
+		$zone = $this->get_zonename($this->offset);
+		return array($zone, $zonetime);
+	}
+
+	/*
+	 * get_offsettime
+	 * GMTに対するオフセット秒の取得
+	 * @return	integer
+	 */
+	function get_offsettime()
 	{
 		// Execute the processing of set_country or set_tz_name beforehand.
 		$this->offset = 0;
@@ -861,13 +865,18 @@ class timezone
 	}
 
 	/*
-	 * get_zoneinfo
-	 *
+	 * get_zonename
+	 * ゾーン名の取得
+	 * @return	string
 	 */
-	function get_zoneinfo($name)
+	function get_zonename($dst=0)
 	{
-		if (empty($this->tz[$name])) return array();
-		return $this->tz[$name];
+		// Execute the processing of set_country or set_tz_name beforehand.
+		$idx = ($dst == 0) ? 4 : 5;
+		foreach($this->tz_country as $_key => $_tz) {
+			if (! empty($_tz[$idx])) return $_tz[$idx];
+		}
+		return "";
 	}
 
 	/*
