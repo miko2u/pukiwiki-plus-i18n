@@ -81,7 +81,7 @@ function is_freeze($page, $clearcache = FALSE)
 		$buffer = fgets($fp, 8);
 		flock($fp, LOCK_UN);
 		fclose($fp);
-		$is_freeze[$page] = ($buffer != FALSE && rtrim($buffer) == '#freeze');
+		$is_freeze[$page] = ($buffer != FALSE && rtrim($buffer, "\r\n") == '#freeze');
 		return $is_freeze[$page];
 	}
 }
@@ -278,7 +278,8 @@ function encode($key)
 // ページ名のデコード
 function decode($key)
 {
-	return ($key == '') ? '' : substr(pack('H*', '20202020' . $key), 4);
+	// Warning: pack(): Type H: illegal hex digit ...
+	return preg_match('/^[0-9a-f]+$/i', $key) ? pack('H*', $key) : $key;
 }
 
 // [[ ]] を取り除く
@@ -331,7 +332,7 @@ function page_list($pages, $cmd = 'read', $withfilename = FALSE)
 		if($pagereading_enable) {
 			if(mb_ereg('^([A-Za-z])', mb_convert_kana($page, 'a'), $matches)) {
 				$head = $matches[1];
-			} elseif(mb_ereg('^([ァ-ヶ])', $readings[$page], $matches)) { // here
+			} elseif(isset($readings[$page]) && mb_ereg('^([ァ-ヶ])', $readings[$page], $matches)) { // here
 				$head = $matches[1];
 			} elseif (mb_ereg('^[ -~]|[^ぁ-ん亜-熙]', $page)) { // and here
 				$head = $symbol;
@@ -741,7 +742,7 @@ function pkwk_login($pass = '')
 {
 	global $adminpass;
 
-	if ($pass != '' && md5($pass) == $adminpass) {
+	if (! PKWK_READONLY && $pass != '' && md5($pass) == $adminpass) {
 		return TRUE;
 	} else {
 		sleep(2);	// Blocking brute force attack
