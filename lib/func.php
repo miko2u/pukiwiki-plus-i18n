@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: func.php,v 1.31.6 2005/02/20 12:50:06 miko Exp $
+// $Id: func.php,v 1.31.7 2005/03/10 12:50:06 miko Exp $
 //
 // General functions
 
@@ -174,8 +174,11 @@ function get_search_words($words, $special = FALSE)
 function do_search($word, $type = 'AND', $non_format = FALSE)
 {
 	global $script, $whatsnew, $non_list, $search_non_list;
-	global $_msg_andresult, $_msg_orresult, $_msg_notfoundresult;
  	global $search_auth;
+//	global $_msg_andresult, $_msg_orresult, $_msg_notfoundresult;
+	$_msg_andresult   = _('In the page <strong> $2</strong>, <strong> $3</strong> pages that contain all the terms $1 were found.');
+	$_msg_orresult    = _('In the page <strong> $2</strong>, <strong> $3</strong> pages that contain at least one of the terms $1 were found.');
+	$_msg_notfoundresult = _('No page which contains $1 has been found.');
 
 	$retval = array();
 
@@ -270,8 +273,11 @@ function strip_bracket($str)
 function page_list($pages, $cmd = 'read', $withfilename = FALSE)
 {
 	global $script, $list_index;
-	global $_msg_symbol, $_msg_other;
+//	global $_msg_symbol, $_msg_other;
 	global $pagereading_enable;
+
+	$_msg_symbol = _('Symbols');
+	$_msg_other  = _('Others');
 
 	// ソートキーを決定する。 ' ' < '[a-zA-Z]' < 'zz'という前提。
 	$symbol = ' ';

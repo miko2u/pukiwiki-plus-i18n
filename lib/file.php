@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: file.php,v 1.13.3 2005/01/29 13:29:34 miko Exp $
+// $Id: file.php,v 1.13.5 2005/03/10 13:29:34 miko Exp $
 //
 // File related functions
 
@@ -86,7 +86,7 @@ function make_str_rules($str)
 // Output to a file
 function file_write($dir, $page, $str, $notimestamp = FALSE)
 {
-	global $update_exec, $_msg_invalidiwn;
+	global $update_exec;
 	global $notify, $notify_diff_only, $notify_to, $notify_subject, $notify_header;
 	global $notify_exclude;
 	global $smtp_server, $smtp_auth;
@@ -96,7 +96,7 @@ function file_write($dir, $page, $str, $notimestamp = FALSE)
 
 	if (! is_pagename($page))
 		die_message(str_replace('$1', htmlspecialchars($page),
-		            str_replace('$2', 'WikiName', $_msg_invalidiwn)));
+		            str_replace('$2', 'WikiName', _('$1 is not a valid $2.'))));
 
 	$page      = strip_bracket($page);
 	$timestamp = FALSE;

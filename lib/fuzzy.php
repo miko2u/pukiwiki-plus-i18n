@@ -1,16 +1,23 @@
 <?php
+// PukiWiki - Yet another WikiWikiWeb clone.
+// $Id: fuzzy.php,v 0.2.1 2005/03/10 13:26:37 miko Exp $
+//
 // 'Search' main function
 function do_search_fuzzy($word, $type = 'AND', $non_format = FALSE, $non_fuzzy = FALSE)
 {
 	global $script, $whatsnew, $non_list, $search_non_list;
-	global $_msg_andresult, $_msg_orresult, $_msg_notfoundresult;
+//	global $_msg_andresult, $_msg_orresult, $_msg_notfoundresult;
  	global $search_auth, $search_fuzzy;
 
+	$_msg_andresult   = _('In the page <strong> $2</strong>, <strong> $3</strong> pages that contain all the terms $1 were found.');
+	$_msg_orresult    = _('In the page <strong> $2</strong>, <strong> $3</strong> pages that contain at least one of the terms $1 were found.');
+	$_msg_notfoundresult = _('No page which contains $1 has been found.');
+
 	static $fuzzypattern = array(
-		'ƒ”ƒ@' => 'ƒo',	'ƒ”ƒB' => 'ƒr',	'ƒ”ƒF' => 'ƒx',	'ƒ”ƒH' => 'ƒ{',
-		'ƒ”' => 'ƒu',	'ƒ' => 'ƒC',	'ƒ‘' => 'ƒG',	'ƒ•' => 'ƒJ',
-		'ƒ@' => 'ƒA',	'ƒB' => 'ƒC',	'ƒD' => 'ƒE',	'ƒF' => 'ƒG',
-		'ƒH' => 'ƒI',	'ƒƒ' => 'ƒ„',	'ƒ…' => 'ƒ†',	'ƒ‡' => 'ƒˆ');
+		'¥ô¥¡' => '¥Ğ',	'¥ô¥£' => '¥Ó',	'¥ô¥§' => '¥Ù',	'¥ô¥©' => '¥Ü',
+		'¥ô' => '¥Ö',	'¥ğ' => '¥¤',	'¥ñ' => '¥¨',	'¥õ' => '¥«',
+		'¥¡' => '¥¢',	'¥£' => '¥¤',	'¥¥' => '¥¦',	'¥§' => '¥¨',
+		'¥©' => '¥ª',	'¥ã' => '¥ä',	'¥å' => '¥æ',	'¥ç' => '¥è');
 
 	$retval = array();
 
@@ -25,14 +32,14 @@ function do_search_fuzzy($word, $type = 'AND', $non_format = FALSE, $non_fuzzy =
 		if ($page == $whatsnew || (! $search_non_list && preg_match($non_list_pattern, $page)))
 			continue;
 
-		// ŒŸõ‘ÎÛƒy[ƒW‚Ì§ŒÀ‚ğ‚©‚¯‚é‚©‚Ç‚¤‚© (ƒy[ƒW–¼‚Í§ŒÀŠO)
+		// ¸¡º÷ÂĞ¾İ¥Ú¡¼¥¸¤ÎÀ©¸Â¤ò¤«¤±¤ë¤«¤É¤¦¤« (¥Ú¡¼¥¸Ì¾¤ÏÀ©¸Â³°)
 		if ($search_auth && ! check_readable($page, false, false)) {
-			$source = get_source(); // ŒŸõ‘ÎÛƒy[ƒW“à—e‚ğ‹ó‚ÉB
+			$source = get_source(); // ¸¡º÷ÂĞ¾İ¥Ú¡¼¥¸ÆâÍÆ¤ò¶õ¤Ë¡£
 		} else {
 			$source = get_source($page);
 		}
 		if (! $non_format)
-			array_unshift($source, $page); // ƒy[ƒW–¼‚àŒŸõ‘ÎÛ‚É
+			array_unshift($source, $page); // ¥Ú¡¼¥¸Ì¾¤â¸¡º÷ÂĞ¾İ¤Ë
 
 		$b_match = FALSE;
 //miko modified
@@ -51,13 +58,13 @@ function do_search_fuzzy($word, $type = 'AND', $non_format = FALSE, $non_fuzzy =
 			for ($i=0; $i<count($fuzzy_from); $i++) {
 				$_source = mb_ereg_replace($fuzzy_from[$i], $fuzzy_to[$i], $_source);
 			}
-			$_source = mb_ereg_replace('[ƒb[EJKAB]', '', $_source);
+			$_source = mb_ereg_replace('[¥Ã¡¼¡¦¡«¡¬¡¢¡£]', '', $_source);
 			foreach ($keys as $key) {
 				$_keyword = mb_strtolower(mb_convert_kana($word, 'KVCas'));
 				for ($i=0; $i<count($fuzzy_from); $i++) {
 					$_keyword = mb_ereg_replace($fuzzy_from[$i], $fuzzy_to[$i], $_keyword);
 				}
-				$_keyword = mb_ereg_replace('[ƒb[EJKAB]', '', $_keyword);
+				$_keyword = mb_ereg_replace('[¥Ã¡¼¡¦¡«¡¬¡¢¡£]', '', $_keyword);
 				$b_match = mb_ereg(mb_ereg_quote($_keyword), $_source);
 			}
 			if ($b_match) $pages[$page] = get_filetime($page);

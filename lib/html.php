@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: html.php,v 1.27.13 2005/01/26 13:26:37 miko Exp $
+// $Id: html.php,v 1.27.15 2005/03/10 13:26:37 miko Exp $
 //
 // HTML-publishing related functions
 
@@ -8,7 +8,7 @@
 function catbody($title, $page, $body)
 {
 	global $script, $vars, $arg, $defaultpage, $whatsnew, $help_page, $hr;
-	global $related_link, $cantedit, $function_freeze, $search_word_color, $_msg_word;
+	global $related_link, $cantedit, $function_freeze, $search_word_color; //, $_msg_word;
 	global $foot_explain, $note_hr, $head_tags;
 	global $trackback, $trackback_javascript, $referer, $javascript;
 	global $_LANG, $_LINK, $_IMAGE;
@@ -20,6 +20,8 @@ function catbody($title, $page, $body)
 	global $modifierlink; // Site administrator's name
 
 	global $skin_file, $menubar, $sidebar;
+
+	$_msg_word = _('These search terms have been highlighted:');
 
 	if (!defined('SKIN_FILE') || ! file_exists(SKIN_FILE) || ! is_readable(SKIN_FILE)) {
 		if (! file_exists($skin_file) || ! is_readable($skin_file)) {
@@ -163,9 +165,20 @@ function catbody($title, $page, $body)
 function edit_form($page, $postdata, $digest = 0, $b_template = TRUE)
 {
 	global $script, $vars, $rows, $cols, $hr, $function_freeze;
-	global $_btn_addtop, $_btn_preview, $_btn_repreview, $_btn_update, $_btn_cancel,
-		$_msg_help, $_btn_notchangetimestamp;
-	global $whatsnew, $_btn_template, $_btn_load, $non_list, $load_template_func;
+	global $whatsnew, $non_list, $load_template_func;
+//	global $_btn_addtop, $_btn_preview, $_btn_repreview, $_btn_update, $_btn_cancel,
+//		$_msg_help, $_btn_notchangetimestamp;
+//	global $whatsnew, $_btn_template, $_btn_load, $non_list, $load_template_func;
+
+$_btn_preview   = _('Preview');
+$_btn_repreview = _('Preview again');
+$_btn_update    = _('Update');
+$_btn_cancel    = _('Cancel');
+$_btn_notchangetimestamp = _('Do not change timestamp');
+$_btn_addtop    = _('Add to top of page');
+$_btn_template  = _('Use page as template');
+$_btn_load      = _('Load');
+$_msg_help        = _('View Text Formatting Rules');
 
 	$refer = $template = $addtag = $add_top = '';
 
