@@ -1,15 +1,16 @@
 <?php
-/////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
-//
-// $Id: edit.inc.php,v 1.19.7 2004/10/11 12:05:12 miko Exp $
+// $Id: edit.inc.php,v 1.19.30 2005/01/23 05:22:25 miko Exp $
 //
 
 // Edit plugin
 // cmd=edit
+
 function plugin_edit_action()
 {
 	global $vars, $_title_edit, $load_template_func;
+
+	if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
 
 	$page = isset($vars['page']) ? $vars['page'] : '';
 
@@ -34,9 +35,7 @@ function plugin_edit_action()
 			$postdata = $vars['original'];
 		}
 	}
-	if ($postdata == '') {
-		$postdata = auto_template($page);
-	}
+	if ($postdata == '') $postdata = auto_template($page);
 
 	return array('msg'=>$_title_edit, 'body'=>edit_form($page, $postdata));
 }
@@ -54,7 +53,7 @@ function plugin_edit_preview()
 
 		$vars['msg'] = join('', get_source($vars['template_page']));
 
-		// 見出しの固有ID部を削除
+		// Cut fixed anchors
 		$vars['msg'] = preg_replace('/^(\*{1,3}.*)\[#[A-Za-z][\w-]+\](.*)$/m', '$1$2', $vars['msg']);
 	}
 

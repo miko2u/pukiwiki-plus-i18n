@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: func.php,v 1.26.6 2005/01/10 04:18:46 miko Exp $
+// $Id: func.php,v 1.30.6 2005/01/27 12:50:43 miko Exp $
 //
 // General functions
 
