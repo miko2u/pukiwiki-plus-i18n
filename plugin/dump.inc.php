@@ -53,7 +53,7 @@ function plugin_dump_action()
 
 	if ($pass !== NULL) {
 		if (! pkwk_login($pass)) {
-			$body = "<p><strong>パスワードが違います。</strong></p>\n";
+			$body = "<p><strong>" . _("The password is different.") . "</strong></p>\n";
 		} else {
 			switch($act){
 			case PLUGIN_DUMP_DUMP:
@@ -62,9 +62,9 @@ function plugin_dump_action()
 			case PLUGIN_DUMP_RESTORE:
 				$retcode = plugin_dump_upload();
 				if ($retcode['code'] == TRUE) {
-					$msg = 'アップロードが完了しました';
+					$msg = _("Up-loading was completed.");
 				} else {
-					$msg = 'アップロードに失敗しました';
+					$msg = _("It failed in up-loading.");
 				}
 				$body .= $retcode['msg'];
 				return array('msg' => $msg, 'body' => $body);
@@ -106,7 +106,7 @@ function plugin_dump_download()
 	$filecount = 0;
 	$tar = new tarlib();
 	$tar->create(CACHE_DIR, $arc_kind) or
-		die_message('テンポラリファイルの生成に失敗しました。');
+		die_message( _("It failed in the generation of a temporary file.") );
 
 	if ($bk_wiki)   $filecount += $tar->add_dir(DATA_DIR,   $_STORAGE['DATA_DIR']['add_filter'],   $namedecode);
 	if ($bk_attach) $filecount += $tar->add_dir(UPLOAD_DIR, $_STORAGE['UPLOAD_DIR']['add_filter'], $namedecode);
@@ -116,7 +116,7 @@ function plugin_dump_download()
 
 	if ($filecount === 0) {
 		@unlink($tar->filename);
-		return '<p><strong>ファイルがみつかりませんでした。</strong></p>';
+		return '<p><strong>' . _("The file was not found.") . '</strong></p>';
 	} else {
 		// ダウンロード
 		download_tarfile($tar->filename, $arc_kind);
@@ -157,7 +157,7 @@ function plugin_dump_upload()
 	if(! move_uploaded_file($_FILES['upload_file']['tmp_name'], $uploadfile) ||
 	   ! $tar->open($uploadfile, $arc_kind)) {
 		@unlink($uploadfile);
-		die_message('ファイルがみつかりませんでした。');
+		die_message( _("The file was not found.") );
 	}
 
 	$pattern = "(({$_STORAGE['DATA_DIR']['extract_filter']})|" .
@@ -166,10 +166,10 @@ function plugin_dump_upload()
 	$files = $tar->extract($pattern);
 	if (empty($files)) {
 		@unlink($uploadfile);
-		return array('code' => FALSE, 'msg' => '<p>展開できるファイルがありませんでした。</p>');
+		return array('code' => FALSE, 'msg' => '<p>' . _("There was no file that was able to be developed.") . '</p>');
 	}
 
-	$msg  = '<p><strong>展開したファイル一覧</strong><ul>';
+	$msg  = '<p><strong>' . _("Progressing file list") . '</strong><ul>';
 	foreach($files as $name) {
 		$msg .= "<li>$name</li>\n";
 	}
@@ -212,32 +212,47 @@ function plugin_dump_disp_form()
 	$act_up   = PLUGIN_DUMP_RESTORE;
 	$maxsize  = PLUGIN_DUMP_MAX_FILESIZE;
 
+	$_dump_h3_data = _("Download of data");
+	$_dump_arc     = _("Form of archive");
+	$_dump_form    = _("form");
+	$_dump_backdir = _("Backup directory");
+	$_dump_option  = _("Options");
+	$_dump_namedecode  = _("Virtual of page name encode is converted into the file name with the directory.") .
+		_("(The restoration that uses this data cannot be done.") .
+		_("Moreover, a part of character is substituted for '_'.)<br />");
+	$_dump_admin   = _("Administrator password");
+	$_dump_h3_store = _(" Restoration of data");
+	$_dump_caution = _("[IMPORTANCE]");
+	$_dump_write   = _("Attention: Please note that the data file of the same name is overwrited.");
+	$_dump_upload  = _("The size of the maximum file that can be up-loaded is up to $maxsize KByte.<br />");
+	$_dump_file = _("File");
+
 	$data = <<<EOD
 <span class="small">
 </span>
-<h3>データのダウンロード</h3>
+<h3>$_dump_h3_data</h3>
 <form action="$script" method="post">
  <div>
   <input type="hidden" name="cmd"  value="dump" />
   <input type="hidden" name="page" value="$defaultpage" />
   <input type="hidden" name="act"  value="$act_down" />
 
-<p><strong>アーカイブの形式</strong>
+<p><strong>$_dump_arc</strong>
 <br />
-  <input type="radio" name="pcmd" value="tgz" checked="checked" /> 〜.tar.gz 形式<br />
-  <input type="radio" name="pcmd" value="tar" /> 〜.tar 形式
+  <input type="radio" name="pcmd" value="tgz" checked="checked" /> .tar.gz $_dump_form<br />
+  <input type="radio" name="pcmd" value="tar" /> .tar $_dump_form
 </p>
-<p><strong>バックアップディレクトリ</strong>
+<p><strong>$_dump_backdir</strong>
 <br />
   <input type="checkbox" name="bk_wiki" checked="checked" /> wiki<br />
   <input type="checkbox" name="bk_attach" /> attach<br />
   <input type="checkbox" name="bk_backup" /> backup
 </p>
-<p><strong>オプション</strong>
+<p><strong>$_dump_option</strong>
 <br />
-  <input type="checkbox" name="namedecode" /> エンコードされているページ名をディレクトリ階層つきのファイルにデコード (※リストアに使うことはできなくなります。また、一部の文字は '_' に置換されます)<br />
+  <input type="checkbox" name="namedecode" />$_dump_namedecode
 </p>
-<p><strong>管理者パスワード</strong>
+<p><strong>$_dump_admin</strong>
   <input type="password" name="pass" size="12" />
   <input type="submit"   name="ok"   value="OK" />
 </p>
@@ -247,19 +262,19 @@ EOD;
 
 	if(PLUGIN_DUMP_ALLOW_RESTORE) {
 		$data .= <<<EOD
-<h3>データのリストア (*.tar, *.tar.gz)</h3>
+<h3>$_dump_h3_store (*.tar, *.tar.gz)</h3>
 <form enctype="multipart/form-data" action="$script" method="post">
  <div>
   <input type="hidden" name="cmd"  value="dump" />
   <input type="hidden" name="page" value="$defaultpage" />
   <input type="hidden" name="act"  value="$act_up" />
-<p><strong>[重要] 同じ名前のデータファイルは上書きされますので、十分ご注意ください。</strong></p>
+<p><strong>$_dump_caution $_dump_write</strong></p>
 <p><span class="small">
-アップロード可能な最大ファイルサイズは、$maxsize KByte までです。<br />
+$_dump_upload
 </span>
-  ファイル: <input type="file" name="upload_file" size="40" />
+  $_dump_file: <input type="file" name="upload_file" size="40" />
 </p>
-<p><strong>管理者パスワード</strong>
+<p><strong>$_dump_admin</strong>
   <input type="password" name="pass" size="12" />
   <input type="submit"   name="ok"   value="OK" />
 </p>

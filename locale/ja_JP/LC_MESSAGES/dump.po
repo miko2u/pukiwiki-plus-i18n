@@ -1,0 +1,101 @@
+# PukiWiki Plus! - Yet Another WikiWikiWeb Clone
+# Copyright (C) 2005 PukiWiki Plus! Developer Team
+# License is GPL2
+# Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>, 2005.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PukiWiki Plus! 1.4.5-u2\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2005-04-02 21:12+0900\n"
+"PO-Revision-Date: 2005-04-02 21:13+0900\n"
+"Last-Translator: Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>\n"
+"Language-Team: Japanese <ja@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../plugin/dump.inc.php:56
+msgid "The password is different."
+msgstr "パスワードが違います。"
+
+#: ../../plugin/dump.inc.php:65
+msgid "Up-loading was completed."
+msgstr "アップロードが完了しました"
+
+#: ../../plugin/dump.inc.php:67
+msgid "It failed in up-loading."
+msgstr "アップロードに失敗しました"
+
+#: ../../plugin/dump.inc.php:109
+msgid "It failed in the generation of a temporary file."
+msgstr "テンポラリファイルの生成に失敗しました。"
+
+#: ../../plugin/dump.inc.php:119 ../../plugin/dump.inc.php:160
+msgid "The file was not found."
+msgstr "ファイルがみつかりませんでした。"
+
+#: ../../plugin/dump.inc.php:169
+msgid "There was no file that was able to be developed."
+msgstr "展開できるファイルがありませんでした。"
+
+#: ../../plugin/dump.inc.php:172
+msgid "Progressing file list"
+msgstr "展開したファイル一覧"
+
+#: ../../plugin/dump.inc.php:215
+msgid "Download of data"
+msgstr "データのダウンロード"
+
+#: ../../plugin/dump.inc.php:216
+msgid "Form of archive"
+msgstr "アーカイブの形式"
+
+#: ../../plugin/dump.inc.php:217
+msgid "form"
+msgstr "形式"
+
+#: ../../plugin/dump.inc.php:218
+msgid "Backup directory"
+msgstr "バックアップディレクトリ"
+
+#: ../../plugin/dump.inc.php:219
+msgid "Options"
+msgstr "オプション"
+
+#: ../../plugin/dump.inc.php:220
+msgid ""
+"Virtual of page name encode is converted into the file name with the "
+"directory."
+msgstr ""
+" エンコードされているページ名をディレクトリ階層つきのファイルにデコード"
+
+#: ../../plugin/dump.inc.php:221
+msgid "(The restoration that uses this data cannot be done."
+msgstr " (※リストアに使うことはできなくなります。"
+
+#: ../../plugin/dump.inc.php:222
+msgid "Moreover, a part of character is substituted for '_'.)<br />"
+msgstr "また、一部の文字は '_' に置換されます)<br />"
+
+#: ../../plugin/dump.inc.php:223
+msgid "Administrator password"
+msgstr "管理者パスワード"
+
+#: ../../plugin/dump.inc.php:224
+msgid " Restoration of data"
+msgstr " データのリストア"
+
+#: ../../plugin/dump.inc.php:225
+msgid "[IMPORTANCE]"
+msgstr "[重要]"
+
+#: ../../plugin/dump.inc.php:226
+msgid ""
+"Attention: Please note that the data file of the same name is overwrited."
+msgstr ""
+" 同じ名前のデータファイルは上書きされますので、十分ご注意ください。"
+
+#: ../../plugin/dump.inc.php:228
+msgid "File"
+msgstr "ファイル"
