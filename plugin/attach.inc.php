@@ -281,7 +281,7 @@ function attach_showform()
 
 	$page = isset($vars['page']) ? $vars['page'] : '';
 	$vars['refer'] = $page;
-	$body = attach_form($page);
+	$body = attach_form($page, TRUE);
 
 	return array('msg'=>$_attach_messages['msg_upload'], 'body'=>$body);
 }
@@ -327,7 +327,7 @@ function attach_mime_content_type($filename)
 }
 
 // アップロードフォームの出力
-function attach_form($page)
+function attach_form($page, $listview = FALSE)
 {
 	global $script, $vars, $_attach_messages;
 
@@ -351,7 +351,16 @@ EOD;
 		$title = $_attach_messages[ATTACH_UPLOAD_ADMIN_ONLY ? 'msg_adminpass' : 'msg_password'];
 		$pass = '<br />' . $title . ': <input type="password" name="pass" size="8" />';
 	}
-	return <<<EOD
+	$html = '';
+	if ($listview) {
+		$html .= "<h3>{$s_page}へのファイルの添付</h3>";
+	$navi = <<<EOD
+  <span class="small">
+   [<a href="$script?plugin=attach&amp;pcmd=list">{$_attach_messages['msg_listall']}</a>]
+  </span><br />
+EOD;
+	}
+	$html .= <<<EOD
 <form enctype="multipart/form-data" action="$script" method="post">
  <div>
   <input type="hidden" name="plugin" value="attach" />
@@ -368,6 +377,14 @@ EOD;
  </div>
 </form>
 EOD;
+	if ($listview) {
+		$obj = & new AttachPages($page);
+		$body = ($refer == '' || isset($obj->pages[$page])) ?
+			$obj->toRender($page, FALSE) :
+			$_attach_messages['err_noexist'];
+		$html .= "<h3>{$s_page}の添付ファイル一覧</h3>" . $body;
+	}
+	return $html;
 }
 
 //-------- クラス
@@ -709,6 +726,41 @@ class AttachFiles
 
 		return $ret;
 	}
+
+	// ファイル一覧をテーブルで取得
+	function toRender($flat)
+	{
+		global $_title_cannotread;
+
+		if (! check_readable($this->page, FALSE, FALSE)) {
+			return str_replace('$1', make_pagelink($this->page), $_title_cannotread);
+		} else if ($flat) {
+			return $this->to_flat();
+		}
+
+		$ret = '';
+		$files = array_keys($this->files);
+		sort($files);
+
+		foreach ($files as $file) {
+			$_files = array();
+			foreach (array_keys($this->files[$file]) as $age) {
+				$_files[$age] = $this->files[$file][$age]->toString(FALSE, TRUE);
+			}
+			if (! isset($_files[0])) {
+				$_files[0] = htmlspecialchars($file);
+			}
+			ksort($_files);
+			$_file = $_files[0];
+			unset($_files[0]);
+			$ret .= " <li>$_file\n";
+			if (count($_files)) {
+				$ret .= "<ul>\n<li>" . join("</li>\n<li>", $_files) . "</li>\n</ul>\n";
+			}
+			$ret .= " </li>\n";
+		}
+		return "\n<ul>\n$ret</ul>\n";
+	}
 }
 
 // ページコンテナ
@@ -762,6 +814,29 @@ class AttachPages
 		foreach ($pages as $page) {
 			if (preg_match("/$non_list/", $page)) continue;
 			$ret .= '<li>' . $this->pages[$page]->toString($flat) . "</li>\n";
+		}
+		return "\n<ul>\n" . $ret . "</ul>\n";
+	}
+
+	function toRender($page = '', $pattern = 0)
+	{
+		global $non_list;
+
+		if ($page != '') {
+			if (! isset($this->pages[$page])) {
+				return '';
+			} else {
+				return $this->pages[$page]->toRender($pattern);
+			}
+		}
+		$ret = '';
+
+		$pages = array_keys($this->pages);
+		sort($pages);
+
+		foreach ($pages as $page) {
+			if (preg_match("/$non_list/", $page)) continue;
+			$ret .= '<li>' . $this->pages[$page]->toRender($pattern) . "</li>\n";
 		}
 		return "\n<ul>\n" . $ret . "</ul>\n";
 	}
