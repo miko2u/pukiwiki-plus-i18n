@@ -35,6 +35,7 @@ define('PKWK_QUERY_STRING_MAX', 640); // Bytes, 0 = OFF
 
 // LANG - Internal content encoding ('en', 'ja', or ...)
 define('LANG', 'ja');
+define('LANG_ENCODING', 'EUC-JP');
 
 // UI_LANG - Content Language for buttons, menus,  etc
 define('UI_LANG', LANG); // 'en' for Internationalized wikisite

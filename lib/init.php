@@ -62,19 +62,20 @@ case 'en':
 	// Internal content encoding (for mbstring extension)
 	define('SOURCE_ENCODING', 'ASCII');	// 'UTF-8', 'ASCII', or 'EUC-JP'
 	break;
-case 'ja': // EUC-JP
-	define('CONTENT_CHARSET', 'EUC-JP');
-	define('MB_LANGUAGE',   'Japanese');
-	define('SOURCE_ENCODING', 'EUC-JP');
+case 'ja': // EUC-JP or UTF-8
+	if (LANG_ENCODING == 'UTF-8') {
+		define('CONTENT_CHARSET', 'UTF-8');
+		define('MB_LANGUAGE',  'Japanese');
+		define('SOURCE_ENCODING', 'UTF-8');
+	} else {
+		define('CONTENT_CHARSET', 'EUC-JP');
+		define('MB_LANGUAGE',   'Japanese');
+		define('SOURCE_ENCODING', 'EUC-JP');
+	}
 	break;
-case 'ko.utf8': // UTF-8
+case 'ko': // UTF-8
 	define('CONTENT_CHARSET', 'UTF-8');
 	define('MB_LANGUAGE',    'Korean');
-	define('SOURCE_ENCODING', 'UTF-8');
-	break;
-case 'ja.utf8': // UTF-8
-	define('CONTENT_CHARSET', 'UTF-8');
-	define('MB_LANGUAGE',  'Japanese');
 	define('SOURCE_ENCODING', 'UTF-8');
 	break;
 default:
@@ -98,10 +99,11 @@ if (!($_REQUEST['plugin'] != 'attach' && $_REQUEST['pcmd'] != 'open')) {
 /////////////////////////////////////////////////
 // INI_FILE: Require LANG_FILE
 
-define('LANG_FILE_HINT', DATA_HOME . LANG . '.lng.php');	// For encoding hint
-define('LANG_FILE',      DATA_HOME . UI_LANG . '.lng.php');	// For UI resource
+define('LANG_FILE_HINT_EX', DATA_HOME . LANG . '.' . LANG_ENCODING . '.lng.php');
+define('LANG_FILE_HINT',    DATA_HOME . LANG . '.lng.php');	// For encoding hint
+define('LANG_FILE',         DATA_HOME . UI_LANG . '.lng.php');	// For UI resource
 $die = '';
-foreach (array('LANG_FILE_HINT', 'LANG_FILE') as $langfile) {
+foreach (array('LANG_FILE_HINT_EX', 'LANG_FILE_HINT', 'LANG_FILE') as $langfile) {
 	if (! file_exists(constant($langfile)) || ! is_readable(constant($langfile))) {
 		$die .= 'File is not found or not readable. (' . $langfile . ')' . "\n";
 	} else {

@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: default.skin.php,v 1.34.17 2004/12/22 11:23:43 miko Exp $
+// $Id: default.skin.php,v 1.34.17 2005/02/24 14:23:43 miko Exp $
 //
 if (!defined('DATA_DIR')) { exit; }
 
