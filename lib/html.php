@@ -235,7 +235,7 @@ $template
   <input type="submit" name="write"   value="$_btn_update" accesskey="s" />
   $add_top
   <input type="checkbox" name="notimestamp" id="_edit_form_notimestamp" value="true"$checked_time />
-  <label for="_edit_form_notimestamp"><span style="small">$_btn_notchangetimestamp</span></label> &nbsp;
+  <label for="_edit_form_notimestamp"><span class="small">$_btn_notchangetimestamp</span></label> &nbsp;
   <input type="submit" name="cancel"  value="$_btn_cancel" accesskey="c" />
   <textarea name="original" rows="1" cols="1" style="display:none">$s_original</textarea>
  </div>
