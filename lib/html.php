@@ -50,7 +50,7 @@ function catbody($title,$page,$body)
 	$_LINK['list']     = "$script?cmd=list";
 	$_LINK['menu']     = "$script?$menubar";
 	$_LINK['new']      = "$script?plugin=newpage&amp;refer=$r_page";
-	$_LINK['read']     = "$script?plugin=read&amp;page=$r_page";
+	$_LINK['read']     = "$script?cmd=read&amp;page=$r_page";
 	$_LINK['rdf']      = "$script?cmd=rss&amp;ver=1.0";
 	$_LINK['recent']   = "$script?" . rawurlencode($whatsnew);
 	$_LINK['refer']    = "$script?plugin=referer&amp;page=$r_page";
