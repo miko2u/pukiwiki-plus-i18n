@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: ref.inc.php,v 1.46.2 2004/12/02 11:34:25 miko Exp $
+// $Id: ref.inc.php,v 1.47.2 2004/12/25 00:39:45 miko Exp $
 //
 // Include an attached image-file as an inline-image
 
@@ -434,17 +434,10 @@ function plugin_ref_action()
 	$size = filesize($ref);
 
 	// Output
-	pkwk_headers_sent();
+	pkwk_common_headers();
 	header('Content-Disposition: inline; filename="' . $filename . '"');
 	header('Content-Length: ' . $size);
 	header('Content-Type: '   . $type);
-
-	$matches = array();
-	if (ini_get('zlib.output_compression') &&
-	   preg_match('/\b(gzip|deflate)\b/i', $_SERVER['HTTP_ACCEPT_ENCODING'], $matches)) {
-		header('Content-Encoding: ' . $matches[1]);
-		header('Vary: Accept-Encoding');
-	}
 
 	@readfile($ref);
 

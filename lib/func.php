@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: func.php,v 1.19.4 2004/12/16 13:09:48 miko Exp $
+// $Id: func.php,v 1.20.4 2004/12/25 00:14:52 miko Exp $
 //
 
 // 文字列がInterWikiNameかどうか
@@ -230,7 +230,7 @@ function do_search($word, $type = 'AND', $non_format = FALSE, $non_fuzzy = FALSE
 				for ($i=0; $i<count($fuzzy_from); $i++) {
 					$_keyword = mb_ereg_replace($fuzzy_from[$i], $fuzzy_to[$i], $_keyword);
 				}
-				$_keyword = mb_ereg_replace('[ッー・゛゜◆��', '', $_keyword);
+				$_keyword = mb_ereg_replace('[ッー・゛゜、。]', '', $_keyword);
 				$b_match = mb_ereg(mb_ereg_quote($_keyword), $_source);
 			}
 		}
@@ -400,19 +400,18 @@ function die_message($msg)
 {
 	global $skin_file;
 	$title = $page = 'Runtime error';
-
 	$body = <<<EOD
 <h3>Runtime error</h3>
 <strong>Error message : $msg</strong>
 EOD;
 
+	pkwk_common_headers();
 	if(defined('SKIN_FILE') && file_exists(SKIN_FILE) && is_readable(SKIN_FILE)) {
 		catbody($title, $page, $body);
 	} elseif ($skin_file != '' && file_exists($skin_file) && is_readable($skin_file)) {
 		define(SKIN_FILE, $skin_file);
 		catbody($title, $page, $body);
 	} else {
-		pkwk_headers_sent();
 		header('Content-Type: text/html; charset=euc-jp');
 		print <<<EOD
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -427,7 +426,7 @@ EOD;
 </html>
 EOD;
 	}
-	die();
+	exit;
 }
 
 // 現在時刻をマイクロ秒で取得

@@ -2,14 +2,19 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: default.ini.php,v 1.15.2 2004/10/11 15:27:32 miko Exp $
+// $Id: default.ini.php,v 1.16.2 2004/12/24 15:30:29 miko Exp $
 //
 // PukiWiki setting file (user agent:default)
 
 /////////////////////////////////////////////////
-// スキンファイルの場所
-//define('SKIN_FILE', DATA_HOME . SKIN_DIR . 'pukiwiki.skin.php');
-define('SKIN_FILE_DEFAULT', DATA_HOME . SKIN_DIR . 'default.skin.php');
+// Skin file
+if (defined('TDIARY_THEME')) { 
+//	define('SKIN_FILE', DATA_HOME . SKIN_DIR . 'tdiary.skin.php');
+	define('SKIN_FILE_DEFAULT', DATA_HOME . SKIN_DIR . 'tdiary.skin.php'); 
+} else {
+//	define('SKIN_FILE', DATA_HOME . SKIN_DIR . 'pukiwiki.skin.php');
+	define('SKIN_FILE_DEFAULT', DATA_HOME . SKIN_DIR . 'default.skin.php');
+}
 $skin_file = SKIN_FILE_DEFAULT;
 
 /////////////////////////////////////////////////
