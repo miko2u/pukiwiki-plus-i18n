@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: qrcode.inc.php,v 0.6.1 2004/08/02 13:17:36 miko Exp $
+// $Id: qrcode.inc.php,v 0.6.3 2004/12/21 13:57:36 miko Exp $
 //
 /*
 *内容
@@ -45,6 +45,11 @@ define('QRCODE_ENCODING','SJIS');
 function plugin_qrcode_inline()
 {
 	global $script;
+
+	if (!plugin_qrcode_issupported()) {
+		return FALSE;
+	}
+
 	if (func_num_args() == 5) {
 		list($s,$e,$v,$n,$d) = func_get_args();
 	}
@@ -67,11 +72,11 @@ function plugin_qrcode_inline()
 	// thx, nanashi and customized
 	$s = intval($s);
 	if ( $s <= 0 ) { $s = 0; }
-	$v = intval($v);
+	$v = isset($v) ? intval($v):0;
 	if ( $v <= 0 && $v > QRCODE_MAX_VERSION ) { $v = 0; }
-	$n = intval($n);
+	$n = isset($n) ? intval($n):0;
 	if ( $n <= 0 && $n > QRCODE_MAX_SPLIT ) { $n = 0; }
-	$e = htmlspecialchars($e);
+	$e = htmlspecialchars(isset($e)?$e:'');
 
 	// if no string, no display.
 	if (empty($d)) return FALSE;
@@ -125,6 +130,9 @@ function plugin_qrcode_action()
 {
 	global $vars;
 
+	if (!plugin_qrcode_issupported()) {
+		return FALSE;
+	}
 	if (empty($vars['d'])) {
 		return FALSE;
 	}
@@ -140,6 +148,19 @@ function plugin_qrcode_action()
 	/* Thanks nanashi */
 	echo QRcode($qr);
 	die();
+}
+
+// 画像をサポートしているか？
+function plugin_qrcode_issupported()
+{
+	$issupported = TRUE;
+	if (!function_exists("gd_info")) {
+		$gdinfo = gd_info();
+		if (isset($gdinfo['PNG Support']) && $gdinfo['PNG Support'] === TRUE) {
+			$issupported = FALSE;
+		}
+	}
+	return $issupported;
 }
 
 // 実際にQRコードの画像の中身を作成する
@@ -577,8 +598,8 @@ function QRcode($qr)
 	    while($k<$max_modules_1side){
 	        $l=0;
 	        while($l<$max_modules_1side){
-	            $hor_master=$hor_master.chr($matrix_content[$l][$k]);
-	            $ver_master=$ver_master.chr($matrix_content[$k][$l]);
+	            $hor_master=$hor_master.chr(isset($matrix_content[$l][$k])?$matrix_content[$l][$k]:0);
+	            $ver_master=$ver_master.chr(isset($matrix_content[$k][$l])?$matrix_content[$k][$l]:0);
 	            $l++;
 	        }
 	        $k++;
@@ -689,7 +710,7 @@ function QRcode($qr)
 		$jj=0;
 		while ($j<$mxe)
 		{
-			if ($matrix_content[$ii][$jj] & $mask_content)
+			if (isset($matrix_content[$ii][$jj]) && ($matrix_content[$ii][$jj] & $mask_content))
 			{
 				ImageSetPixel($base_image,$i,$j,$col[1]); 
 			}
