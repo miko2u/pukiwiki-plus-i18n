@@ -3,7 +3,6 @@
 # License is GPL2
 # Author: Miko.Hoshina(E.Satoh) <miko@cafeterrace.com>, 2005.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PukiWiki Plus! 1.4.5-u2\n"
