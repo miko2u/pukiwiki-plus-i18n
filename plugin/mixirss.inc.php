@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: mixirss.inc.php,v 1.12.1 2004/12/21 01:20:02 miko Exp $
+// $Id: mixirss.inc.php,v 1.13.1 2004/12/25 00:39:45 miko Exp $
 //
 // Publishing RSS feed of RecentChanges
 // Usage: mixirss.inc.php?ver=[0.91|1.0(default)|2.0]
@@ -175,7 +175,7 @@ EOD;
 	}
 
 	// Feeding start
-	if (function_exists('pkwk_headers_sent')) { pkwk_headers_sent(); }
+	if (function_exists('pkwk_common_headers')) { pkwk_common_headers(); }
 	header('Content-type: application/xml');
 	print '<?xml version="1.0" encoding="UTF-8"?>' . "\n\n";
 
