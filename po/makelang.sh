@@ -3,6 +3,10 @@ msgfmt -o ../locale/ja/LC_MESSAGES/pukiwiki.mo pukiwiki.ja.po
 msgfmt -o ../locale/ja/LC_MESSAGES/add.mo add.ja.po
 msgfmt -o ../locale/ja/LC_MESSAGES/article.mo article.ja.po
 msgfmt -o ../locale/ja/LC_MESSAGES/back.mo back.ja.po
+msgfmt -o ../locale/ja/LC_MESSAGES/comment.mo comment.ja.po
+msgfmt -o ../locale/ja/LC_MESSAGES/deleted.mo deleted.ja.po
+msgfmt -o ../locale/ja/LC_MESSAGES/freeze.mo freeze.ja.po
+msgfmt -o ../locale/ja/LC_MESSAGES/interwiki.mo interwiki.ja.po
 msgfmt -o ../locale/ja/LC_MESSAGES/ls2.mo ls2.ja.po
 msgfmt -o ../locale/ja/LC_MESSAGES/navi.mo navi.ja.po
 msgfmt -o ../locale/ja/LC_MESSAGES/newpage.mo newpage.ja.po

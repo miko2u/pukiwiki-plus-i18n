@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: comment.inc.php,v 1.26.4 2005/01/23 07:01:56 miko Exp $
+// $Id: comment.inc.php,v 1.28.5 2005/03/09 08:23:10 miko Exp $
 //
 // Comment plugin
 
@@ -15,8 +15,11 @@ define('PLUGIN_COMMENT_FORMAT_NOW',  '&new{$now};');
 define('PLUGIN_COMMENT_FORMAT_STRING', "\x08MSG\x08 -- \x08NAME\x08 \x08NOW\x08");
 function plugin_comment_action()
 {
-	global $script, $vars, $now, $_title_updated, $_no_name;
-	global $_msg_comment_collided, $_title_comment_collided;
+	global $script, $vars, $now;
+	global $_title_updated, $_no_name;
+	$_title_comment_collided = _('On updating  $1, a collision has occurred.');
+	$_msg_comment_collided   = _('It seems that someone has already updated the page you were editing.<br />' .
+	                             ' The comment was added, alhough it may be inserted in the wrong position.<br />');
 
 	if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
 	if (! isset($vars['msg']) || $vars['msg'] == '')
@@ -34,15 +37,20 @@ function plugin_comment_action()
 
 	$_msg  = str_replace('$msg', $vars['msg'], PLUGIN_COMMENT_FORMAT_MSG);
 
-	$_name = (! isset($vars['name']) || $vars['name'] == '') ? $_no_name : $vars['name'];
-	$_name = ($_name == '') ? '' : str_replace('$name', $_name, PLUGIN_COMMENT_FORMAT_NAME);
+	if(isset($vars['name']) || ($vars['nodate'] != '1')) {
+		$_name = (! isset($vars['name']) || $vars['name'] == '') ? $_no_name : $vars['name'];
+		$_name = ($_name == '') ? '' : str_replace('$name', $_name, PLUGIN_COMMENT_FORMAT_NAME);
 
-	$_now  = ($vars['nodate'] == '1') ? '' : str_replace('$now', $now, PLUGIN_COMMENT_FORMAT_NOW);
+		$_now  = ($vars['nodate'] == '1') ? '' : str_replace('$now', $now, PLUGIN_COMMENT_FORMAT_NOW);
 
-	$comment = str_replace("\x08MSG\x08",  $_msg,  PLUGIN_COMMENT_FORMAT_STRING);
-	$comment = str_replace("\x08NAME\x08", $_name, $comment);
-	$comment = str_replace("\x08NOW\x08",  $_now,  $comment);
-	$comment = $head . $comment;
+		$comment = str_replace("\x08MSG\x08",  $_msg,  PLUGIN_COMMENT_FORMAT_STRING);
+		$comment = str_replace("\x08NAME\x08", $_name, $comment);
+		$comment = str_replace("\x08NOW\x08",  $_now,  $comment);
+		$comment = $head . $comment;
+	}
+	else {
+		$comment = $_msg;
+	}
 
 	$postdata = '';
 	$postdata_old  = get_source($vars['refer']);
@@ -83,8 +91,11 @@ function plugin_comment_action()
 function plugin_comment_convert()
 {
 	global $script, $vars, $digest, $refpage;
-	global $_btn_comment, $_btn_name, $_msg_comment, $_msg_comment_help;
 	static $numbers = array();
+
+	$_btn_name    = _('Name: ');
+	$_btn_comment = _('Post Comment');
+	$_msg_comment = _('Comment: ');
 
 	if (PKWK_READONLY) return ''; // Show nothing
 	if (! isset($numbers[$vars['page']])) $numbers[$vars['page']] = 0;
@@ -93,10 +104,11 @@ function plugin_comment_convert()
 	$options = func_num_args() ? func_get_args() : array();
 
 	if (in_array('noname', $options)) {
-		$nametags = $_msg_comment;
+		$nametags = '<label for="_p_comment_comment_' . $comment_no . '">' . $_msg_comment . '</label>';
 	} else {
-		$nametags = $_btn_name .
-			'<input type="text" name="name" size="' . PLUGIN_COMMENT_SIZE_NAME . "\" /><br />\n";
+		$nametags = '<label for="_p_comment_name_' . $comment_no . '">' . $_btn_name . '</label>' .
+			'<input type="text" name="name" id="_p_comment_name_' . $comment_no .
+			'" size="' . PLUGIN_COMMENT_SIZE_NAME . '" />' . "\n";
 	}
 
 	$helptags = edit_form_assistant();
@@ -118,7 +130,7 @@ function plugin_comment_convert()
   <input type="hidden" name="above"  value="$above" />
   <input type="hidden" name="digest" value="$digest" />
   $nametags
-  <input type="text"   name="msg" size="$comment_cols" />
+  <input type="text"   name="msg" id="_p_comment_comment_{$comment_no}" size="$comment_cols" />
   <input type="submit" name="comment" value="$_btn_comment" />
   $helptags
  </div>

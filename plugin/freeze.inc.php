@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: freeze.inc.php,v 1.9 2004/12/16 13:32:19 henoheno Exp $
+// $Id: freeze.inc.php,v 1.9.1 2005/03/09 07:32:19 miko Exp $
 //
 // Freeze(Lock) plugin
 
@@ -10,8 +10,13 @@ function plugin_freeze_convert() { return ''; }
 function plugin_freeze_action()
 {
 	global $script, $vars, $function_freeze;
-	global $_title_isfreezed, $_title_freezed, $_title_freeze;
-	global $_msg_invalidpass, $_msg_freezing, $_btn_freeze;
+
+	$_title_isfreezed = _(' $1 has already been frozen');
+	$_title_freezed   = _(' $1 has been frozen.');
+	$_title_freeze    = _('Freeze  $1');
+	$_msg_invalidpass = _('Invalid password.');
+	$_msg_freezing    = _('Please input the password for freezing.');
+	$_btn_freeze      = _('Freeze');
 
 	$page = isset($vars['page']) ? $vars['page'] : '';
 	if (! $function_freeze || ! is_page($page))

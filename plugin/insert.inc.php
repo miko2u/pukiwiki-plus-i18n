@@ -1,5 +1,5 @@
 <?php
-// $Id: insert.inc.php,v 1.13 2005/01/23 07:35:55 henoheno Exp $
+// $Id: insert.inc.php,v 1.13.1 2005/03/09 07:35:55 miko Exp $
 //
 // Text inserting box plugin
 
@@ -69,8 +69,9 @@ EOD;
 function plugin_insert_convert()
 {
 	global $script, $vars, $digest;
-	global $_btn_insert;
 	static $numbers = array();
+
+	$_btn_insert = _('add');
 
 	if (PKWK_READONLY) return ''; // Show nothing
 
