@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: ja.lng.php,v 1.5.4 2004/12/05 10:16:18 miko Exp $
+// $Id: ja.lng.php,v 1.5.5 2004/12/22 12:41:35 miko Exp $
 //
 // PukiWiki message file (japanese)
 
@@ -124,7 +124,7 @@ $_LANG['skin']['rename']    = '名前変更';	// Rename a page (and related)
 $_LANG['skin']['rss']       = '最終更新のRSS';	// RSS of RecentChanges
 $_LANG['skin']['rss10']     = & $_LANG['skin']['rss']; 
 $_LANG['skin']['rss20']     = & $_LANG['skin']['rss']; 
-$_LANG['skin']['rssplus']   = & $_LANG['skin']['rss']; 
+$_LANG['skin']['mixirss']   = & $_LANG['skin']['rss']; 
 $_LANG['skin']['search']    = '単語検索';
 $_LANG['skin']['top']       = 'ホーム';	// Top page
 $_LANG['skin']['trackback'] = 'Trackback';	// Show list of trackback
