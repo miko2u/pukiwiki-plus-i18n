@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: pukiwiki.ini.php,v 1.111 2005/02/07 13:22:40 henoheno Exp $
+// $Id: pukiwiki.ini.php,v 1.113.12 2005/03/13 17:29:01 miko Exp $
 //
 // PukiWiki main setting file
 
@@ -95,6 +95,9 @@ $whatsnew     = 'RecentChanges'; // Modified page list
 $whatsdeleted = 'RecentDeleted'; // Removeed page list
 $interwiki    = 'InterWikiName'; // Set InterWiki definition here
 $menubar      = 'MenuBar';       // Menu
+$sidebar      = 'SideBar';       // Side
+$headarea     = ':Header';
+$footarea     = ':Footer';
 
 /////////////////////////////////////////////////
 // Change default Document Type Definition
@@ -146,6 +149,11 @@ $autoglossary = 2;
 /////////////////////////////////////////////////
 // Enable Freeze / Unfreeze feature
 $function_freeze = 1;
+
+/////////////////////////////////////////////////
+// Enable 'Do not change timestamp' at edit
+// (1:Enable, 2:Enable only administrator, 0:Disable)
+$notimeupdate = 1;
 
 /////////////////////////////////////////////////
 // Wikisite admin password
@@ -378,6 +386,10 @@ $preformat_ltrim = 1;
 /////////////////////////////////////////////////
 // Convert linebreaks into <br/>
 $line_break = 0;
+
+/////////////////////////////////////////////////
+// Use date-time rules (See rules.ini.php)
+$usedatetime = 1;
 
 /////////////////////////////////////////////////
 // 見出しごとの編集を可能にする 
