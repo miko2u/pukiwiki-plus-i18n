@@ -137,15 +137,15 @@ EOD;
 			} else {
 //miko added
 				$description = strip_htmltag(convert_html(get_source($page)));
-				$description = mb_strimwidth(preg_replace("/[\r\n]/",' ',$description),0,DESCRIPTION_LENGTH,'...');
-				$description = '<description><![CDATA[' . mb_convert_encoding($description,'UTF-8',SOURCE_ENCODING) . ']]></description>';
+				$description = mb_strimwidth(preg_replace("/[\r\n]/",' ',$description),0,MIXIRSS_DESCRIPTION_LENGTH,'...');
+				$description = ' <description><![CDATA[' . mb_convert_encoding($description,'UTF-8',SOURCE_ENCODING) . ']]></description>';
 //miko added
 				$rdf_li .= '    <rdf:li rdf:resource="' . $self . '?' . $r_page . '" />' . "\n";
 				$items .= <<<EOD
 <item rdf:about="$self?$r_page">
  <title>$title</title>
  <link>$self?$r_page</link>
- $description
+$description
  <dc:date>$date</dc:date>
  <dc:identifier>$self?$r_page</dc:identifier>
 $trackback_ping
