@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: plugin.php,v 1.7.2 2005/02/05 06:47:10 miko Exp $
+// $Id: plugin.php,v 1.7.4 2005/02/27 06:47:10 miko Exp $
 //
 // Plugin related functions
 
@@ -75,7 +75,9 @@ function do_plugin_action($name)
 	if(do_plugin_init($name) === FALSE)
 		die_message('Plugin init failed: ' . $name);
 
+	bindtextdomain($name, LANG_DIR);
 	$retvar = call_user_func('plugin_' . $name . '_action');
+	textdomain(DOMAIN);
 
 	// Insert a hidden field, supports idenrtifying text enconding
 	if (PKWK_ENCODING_HINT != '')
@@ -111,7 +113,9 @@ function do_plugin_convert($name, $args = '')
 	}
 
 	$_digest = $digest;
+	bindtextdomain($name, LANG_DIR);
 	$retvar  = call_user_func_array('plugin_' . $name . '_convert', $aryargs);
+	textdomain(DOMAIN);
 	$digest  = $_digest; // Revert
 
 	if ($retvar === FALSE) {
@@ -145,7 +149,9 @@ function do_plugin_inline($name, $args, & $body)
 	$aryargs[] = & $body; // func_num_args() != 0
 
 	$_digest = $digest;
+	bindtextdomain($name, LANG_DIR);
 	$retvar  = call_user_func_array('plugin_' . $name . '_inline', $aryargs);
+	textdomain(DOMAIN);
 	$digest  = $_digest; // Revert
 
 	if($retvar === FALSE) {

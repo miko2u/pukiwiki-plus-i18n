@@ -41,6 +41,13 @@ define('LANG_ENCODING', 'UTF-8');
 // UI_LANG - Content Language for buttons, menus,  etc
 define('UI_LANG', LANG); // 'en' for Internationalized wikisite
 
+// LOCALE Name specified by GETTEXT().
+define('DOMAIN', 'pukiwiki');
+// LOCALE Name specified by SETLOCALE().
+if (! defined('PO_LANG'))
+	define('PO_LANG', 'ja_JP'); // 'en_US', 'ja_JP'
+
+
 /////////////////////////////////////////////////
 // Directory settings I (ended with '/', permission '777')
 
@@ -55,6 +62,7 @@ define('UPLOAD_DIR',    DATA_HOME . 'attach/'   ); // Attached files and logs
 define('COUNTER_DIR',   DATA_HOME . 'counter/'  ); // Counter plugin's counts
 define('TRACKBACK_DIR', DATA_HOME . 'trackback/'); // TrackBack logs
 define('PLUGIN_DIR',    DATA_HOME . 'plugin/'   ); // Plugin directory
+define('LANG_DIR',      DATA_HOME . 'locale/'   ); // Language file
 
 /////////////////////////////////////////////////
 // Directory settings II (ended with '/')

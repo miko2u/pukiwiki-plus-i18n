@@ -66,6 +66,14 @@ require(LIB_DIR . 'public_holiday.php');
 if (! extension_loaded('mbstring')) {
 	require(LIB_DIR . 'mbstring.php');
 }
+if (! extension_loaded('gettext')) {
+	require(LIB_DIR . 'gettext.php');
+} else {
+	function N_($message) { return $message; }
+	if (! function_exists('bind_textdomain_codeset')) {
+		function bind_textdomain_codeset($domain, $codeset) { return; }
+	}
+}
 
 // 初期化: 設定ファイルの読み込み
 require(LIB_DIR . 'init.php');
@@ -75,6 +83,12 @@ require(LIB_DIR . 'init.php');
 
 $base    = $defaultpage;
 $retvars = array();
+
+putenv('LC_ALL=' . PO_LANG);
+setlocale(LC_ALL, PO_LANG);
+bindtextdomain(DOMAIN, LANG_DIR);
+bind_textdomain_codeset(DOMAIN, SOURCE_ENCODING);
+textdomain(DOMAIN);
 
 if (isset($vars['plugin'])) {
 	// Plug-in action
