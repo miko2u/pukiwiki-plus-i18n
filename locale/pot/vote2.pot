@@ -1,0 +1,94 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2005-04-02 17:25+0900\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../plugin/vote2.inc.php:21
+msgid "Error in vote2"
+msgstr ""
+
+#: ../../plugin/vote2.inc.php:22
+msgid "The page of $1 doesn't exist."
+msgstr ""
+
+#: ../../plugin/vote2.inc.php:23
+msgid "It is not possible to vote continuously."
+msgstr ""
+
+#: ../../plugin/vote2.inc.php:24
+msgid ""
+"Vote failure: In $1, there was the address of the vote or the item was not "
+"corresponding."
+msgstr ""
+
+#: ../../plugin/vote2.inc.php:25
+msgid ""
+"An indispensable argument has not been passed or there is an error in the "
+"argument."
+msgstr ""
+
+#: ../../plugin/vote2.inc.php:27
+msgid ""
+"Other people seem to have updated the content of the same page while you are "
+"voting."
+msgstr ""
+
+#: ../../plugin/vote2.inc.php:29
+msgid ""
+"Therefore, there is a possibility of making a mistake in the position for "
+"which it votes."
+msgstr ""
+
+#: ../../plugin/vote2.inc.php:31
+msgid "Your update was invalidated. Start ..be previous page.. reload."
+msgstr ""
+
+#: ../../plugin/vote2.inc.php:98 ../../plugin/vote2.inc.php:347
+#: ../../plugin/vote2.inc.php:456
+msgid "Selection"
+msgstr ""
+
+#: ../../plugin/vote2.inc.php:99 ../../plugin/vote2.inc.php:348
+#: ../../plugin/vote2.inc.php:457
+msgid "Vote"
+msgstr ""
+
+#: ../../plugin/vote2.inc.php:341 ../../plugin/vote2.inc.php:450
+msgid "On updating $1, a collision has occurred."
+msgstr ""
+
+#: ../../plugin/vote2.inc.php:342 ../../plugin/vote2.inc.php:451
+msgid "$1 was updated"
+msgstr ""
+
+#: ../../plugin/vote2.inc.php:343 ../../plugin/vote2.inc.php:452
+msgid ""
+"It seems that someone has already updated this page while you were editing "
+"it.<br />"
+msgstr ""
+
+#: ../../plugin/vote2.inc.php:344 ../../plugin/vote2.inc.php:453
+msgid " + is placed at the beginning of a line that was newly added.<br />"
+msgstr ""
+
+#: ../../plugin/vote2.inc.php:345 ../../plugin/vote2.inc.php:454
+msgid ""
+" ! is placed at the beginning of a line that has possibly been updated.<br />"
+msgstr ""
+
+#: ../../plugin/vote2.inc.php:346 ../../plugin/vote2.inc.php:455
+msgid " Edit those lines, and submit again."
+msgstr ""

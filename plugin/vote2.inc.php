@@ -18,14 +18,18 @@ function plugin_vote2_init()
 			'arg_nonumber'    => 'nonumber',
 			'arg_nolabel'     => 'nolabel',
 			'arg_notitle'     => 'notitle',
-			'title_error' => 'Error in vote2',
-			'no_page_error' => '$1 のページは存在しません',
-			'attack_error' => '連続投票はできません',
-			'update_failed' => '投票失敗：$1において投票先が無いか項目が合致しませんでした。',
-			'body_error' => 'あるべき引数が渡されていないか、引数にエラーがあります。',
-			'msg_collided'  => '<h3>あなたが投票している間に、他の人が同じページの内容を更新してしまったようです。<br />従って、投票する位置を間違える可能性があります。<br /><br />
-あなたの更新を無効にしました。前のページをリロードしてやり直してください。</h3>'
-
+			'title_error'   => _("Error in vote2"),
+			'no_page_error' => _("The page of $1 doesn't exist."),
+			'attack_error'  => _("It is not possible to vote continuously."),
+			'update_failed' => _("Vote failure: In $1, there was the address of the vote or the item was not corresponding."),
+			'body_error'    => _("An indispensable argument has not been passed or there is an error in the argument."),
+			'msg_collided'  => '<h3>' .
+					   _("Other people seem to have updated the content of the same page while you are voting.") .
+					   '<br />' .
+					   _("Therefore, there is a possibility of making a mistake in the position for which it votes.") .
+					   '<br /><br />' .
+					   _("Your update was invalidated. Start ..be previous page.. reload.") .
+					   '</h3>'
 		),
 	);
 	set_plugin_messages($messages);
@@ -91,8 +95,8 @@ function plugin_vote2_inline()
 //	global $_vote_plugin_choice, $_vote_plugin_votes;
 	static $numbers = array();
 	static $notitle = FALSE;
-$_vote_plugin_choice = _('Selection');
-$_vote_plugin_votes  = _('Vote');
+$_vote_plugin_choice = _("Selection");
+$_vote_plugin_votes  = _("Vote");
 	$str_notimestamp = $_vote2_messages['arg_notimestamp'];
 	$str_nonumber    = $_vote2_messages['arg_nonumber'];
 	$str_nolabel     = $_vote2_messages['arg_nolabel'];
@@ -334,14 +338,14 @@ function plugin_vote2_action_inline($vote_no)
 	global $get,$vars,$script,$cols,$rows, $_vote2_messages;
 //	global $_title_collided,$_msg_collided,$_title_updated;
 //	global $_vote_plugin_choice, $_vote_plugin_votes;
-$_title_collided   = _('On updating $1, a collision has occurred.');
-$_title_updated    = _('$1 was updated');
-$_msg_collided = _('It seems that someone has already updated this page while you were editing it.<br />
- + is placed at the beginning of a line that was newly added.<br />
- ! is placed at the beginning of a line that has possibly been updated.<br />
- Edit those lines, and submit again.');
-$_vote_plugin_choice = _('Selection');
-$_vote_plugin_votes  = _('Vote');
+$_title_collided   = _("On updating $1, a collision has occurred.");
+$_title_updated    = _("$1 was updated");
+$_msg_collided = _("It seems that someone has already updated this page while you were editing it.<br />") .
+		 _(" + is placed at the beginning of a line that was newly added.<br />") .
+		 _(" ! is placed at the beginning of a line that has possibly been updated.<br />") .
+		 _(" Edit those lines, and submit again.");
+$_vote_plugin_choice = _("Selection");
+$_vote_plugin_votes  = _("Vote");
 	$str_notimestamp = $_vote2_messages['arg_notimestamp'];
 	$str_nonumber    = $_vote2_messages['arg_nonumber'];
 	$str_nolabel     = $_vote2_messages['arg_nolabel'];
@@ -443,14 +447,14 @@ function plugin_vote2_action_block($vote_no)
 	global $post,$vars,$script,$cols,$rows, $_vote2_messages;
 //	global $_title_collided,$_msg_collided,$_title_updated;
 //	global $_vote_plugin_choice, $_vote_plugin_votes;
-$_title_collided   = _('On updating $1, a collision has occurred.');
-$_title_updated    = _('$1 was updated');
-$_msg_collided = _('It seems that someone has already updated this page while you were editing it.<br />
- + is placed at the beginning of a line that was newly added.<br />
- ! is placed at the beginning of a line that has possibly been updated.<br />
- Edit those lines, and submit again.');
-$_vote_plugin_choice = _('Selection');
-$_vote_plugin_votes  = _('Vote');
+$_title_collided   = _("On updating $1, a collision has occurred.");
+$_title_updated    = _("$1 was updated");
+$_msg_collided = _("It seems that someone has already updated this page while you were editing it.<br />") .
+		 _(" + is placed at the beginning of a line that was newly added.<br />") .
+		 _(" ! is placed at the beginning of a line that has possibly been updated.<br />") .
+		 _(" Edit those lines, and submit again.");
+$_vote_plugin_choice = _("Selection");
+$_vote_plugin_votes  = _("Vote");
 	$str_notimestamp = $_vote2_messages['arg_notimestamp'];
 	$str_nonumber    = $_vote2_messages['arg_nonumber'];
 	$str_nolabel     = $_vote2_messages['arg_nolabel'];
