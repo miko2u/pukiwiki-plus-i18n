@@ -31,18 +31,20 @@ function plugin_mixirss_action()
 
 	$recent = CACHE_DIR . 'recent.dat';
 	if (! file_exists($recent)) die('recent.dat is not found');
-	$time_recent = get_filetime($recent);
+	$time_recent = filemtime($recent) - LOCALZONE;
 
 	$rsscache = CACHE_DIR . 'rsscache' . $version . '.dat';
 	if (file_exists($rsscache)) {
-		$time_rsscache = get_filetime($rsscache);
+		$time_rsscache = filemtime($rsscache) - LOCALZONE;
 	} else {
 		$time_rsscache = 0;
 	}
 
 	// if caching rss file, return cache.
-	if ($time_recent <= $time_rsscache)
-		return implode('', @file($rsscache));
+	if ($time_recent <= $time_rsscache) {
+		print implode('', file($rsscache));
+		die;
+	}
 
 	// Official Main routine ...
 	$page_title_utf8 = mb_convert_encoding($page_title, 'UTF-8', SOURCE_ENCODING);
