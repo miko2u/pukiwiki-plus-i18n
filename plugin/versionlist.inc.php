@@ -1,16 +1,17 @@
 <?php
+// $Id: versionlist.inc.php,v 1.15.1 2005/01/29 02:12:52 miko Exp $
 /*
- * PukiWiki versionlistプラグイン
+ * PukiWiki versionlist plugin
  *
  * CopyRight 2002 S.YOSHIMURA GPL2
  * http://masui.net/pukiwiki/ yosimura@excellence.ac.jp
- *
- * $Id: versionlist.inc.php,v 1.13.1 2004/08/01 01:22:37 miko Exp $
  */
 
 function plugin_versionlist_action()
 {
 	global $_title_versionlist;
+
+	if (PKWK_SAFE_MODE) die_message('PKWK_SAFE_MODE prohibits this');
 
 	return array(
 		'msg' => $_title_versionlist,
@@ -20,6 +21,8 @@ function plugin_versionlist_action()
 
 function plugin_versionlist_convert()
 {
+	if (PKWK_SAFE_MODE) return ''; // Show nothi
+
 	/* 探索ディレクトリ設定 */
 	$SCRIPT_DIR = array('./');
 	if (LIB_DIR   != './') array_push($SCRIPT_DIR, LIB_DIR);
