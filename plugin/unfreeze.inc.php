@@ -1,13 +1,11 @@
 <?php
-/////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
+// $Id: unfreeze.inc.php,v 1.10 2004/12/18 01:24:21 henoheno Exp $
 //
-// $Id: unfreeze.inc.php,v 1.7.1 2004/07/31 03:09:20 miko Exp $
-//
-// 凍結解除
+// Unfreeze(Unlock) plugin
 
-// 凍結解除時にページの編集フォームを表示するか
-define('UNFREEZE_EDIT', TRUE);
+// Show edit form when unfreezed
+define('PLUGIN_UNFREEZE_EDIT', TRUE);
 
 function plugin_unfreeze_action()
 {
@@ -16,41 +14,42 @@ function plugin_unfreeze_action()
 	global $_msg_invalidpass, $_msg_unfreezing, $_btn_unfreeze;
 
 	$page = isset($vars['page']) ? $vars['page'] : '';
-
-	if (!$function_freeze or !is_page($page))
+	if (! $function_freeze || ! is_page($page))
 		return array('msg' => '', 'body' => '');
 
 	$pass = isset($vars['pass']) ? $vars['pass'] : NULL;
+	$msg = $body = '';
+	if (! is_freeze($page)) {
+		// Unfreezed already
+		$msg  = & $_title_isunfreezed;
+		$body = str_replace('$1', htmlspecialchars(strip_bracket($page)),
+			$_title_isunfreezed);
 
-	if (!is_freeze($page)) {
-		return array(
-			'msg'  => $_title_isunfreezed,
-			'body' => str_replace('$1', htmlspecialchars(strip_bracket($page)), $_title_isunfreezed)
-		);
 	} else if ($pass !== NULL && pkwk_login($pass)) {
+		// Unfreeze
 		$postdata = get_source($page);
 		array_shift($postdata);
 		$postdata = join('', $postdata);
-
 		file_write(DATA_DIR, $page, $postdata, TRUE);
 
-		if (UNFREEZE_EDIT) {
-			$vars['cmd'] = 'edit';
-			return array(
-				'msg'  => $_title_unfreezed,
-				'body' => edit_form($page, $postdata)
-			);
+		// Update 
+		is_freeze($page, TRUE);
+		if (PLUGIN_UNFREEZE_EDIT) {
+			$vars['cmd'] = 'read'; // To show 'Freeze' link
+			$msg  = & $_title_unfreezed;
+			$body = edit_form($page, $postdata);
 		} else {
 			$vars['cmd'] = 'read';
-			return array('msg' => $_title_unfreezed, 'body' => '');
+			$msg  = & $_title_unfreezed;
+			$body = '';
 		}
-	}
 
-	// 凍結解除フォームを表示
-	$s_page = htmlspecialchars($page);
-
-	$body = ($pass === NULL) ? '' : "<p><strong>$_msg_invalidpass</strong></p>\n";
-	$body .= <<<EOD
+	} else {
+		// Show unfreeze form
+		$msg    = & $_title_unfreeze;
+		$s_page = htmlspecialchars($page);
+		$body   = ($pass === NULL) ? '' : "<p><strong>$_msg_invalidpass</strong></p>\n";
+		$body  .= <<<EOD
 <p>$_msg_unfreezing</p>
 <form action="$script" method="post">
  <div>
@@ -61,7 +60,8 @@ function plugin_unfreeze_action()
  </div>
 </form>
 EOD;
+	}
 
-	return array('msg' => $_title_unfreeze, 'body' => $body);
+	return array('msg'=>$msg, 'body'=>$body);
 }
 ?>
