@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: file.php,v 1.9.3 2004/12/29 15:44:45 miko Exp $
+// $Id: file.php,v 1.10.3 2004/12/30 14:45:01 miko Exp $
 //
 
 // ソースを取得
@@ -144,13 +144,17 @@ function file_write($dir, $page, $str, $notimestamp = FALSE)
 	}
 
 	if ($notify && $dir == DIFF_DIR) {
-		if ($notify_diff_only) // 差分だけを送信する
-			$str = preg_replace('/^[^-+].*\n/m', '', $str);
-		if ($smtp_auth)
-			pop_before_smtp();
+		if ($notify_diff_only) $str = preg_replace('/^[^-+].*\n/m', '', $str);
+		$str .= "\n" .
+			str_repeat('-', 30) . "\n" .
+			'URI: ' . get_script_uri() . '?' . rawurlencode($page) . "\n" .
+			'REMOTE_ADDR: ' . $_SERVER['REMOTE_ADDR'] . "\n";
+
  		$subject = str_replace('$page', $page, $notify_subject);
 		ini_set('SMTP', $smtp_server);
- 		mb_language(LANG);
+		mb_language(LANG);
+
+		if ($smtp_auth) pop_before_smtp();
  		mb_send_mail($notify_to, $subject, $str, $notify_header);
 	}
 }

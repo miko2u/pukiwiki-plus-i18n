@@ -2,18 +2,25 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: pukiwiki.ini.php,v 1.99.12 2004/12/29 11:29:47 miko Exp $
+// $Id: pukiwiki.ini.php,v 1.102.12 2005/01/02 08:51:29 miko Exp $
 //
 // PukiWiki setting file
 
-/////////////////////////////////////////////////
-// Init 
+// If you end testing this PukiWiki, set PKWK_OPTIMISE 'TRUE'.
+// If you feel in trouble about this PukiWiki, set this 'FALSE'.
+if (! defined('PKWK_OPTIMISE'))
+	define('PKWK_OPTIMISE', FALSE); // FALSE or TRUE
 
+/////////////////////////////////////////////////
+// Security settings
+
+// Safe mode prohibits some unsafe functions
 if (! defined('PKWK_SAFE_MODE')) 
 	define('PKWK_SAFE_MODE', FALSE);        // FALSE or TRUE 
 
-if (! defined('PKWK_OPTIMISE')) 
-	define('PKWK_OPTIMISE', FALSE); // FALSE or TRUE 
+// Max length of GET method (prohibits some worm attack ASAP)
+// Beware: (page-name-length + attach-file-length) <= PKWK_QUERY_STRING_MAX
+define('PKWK_QUERY_STRING_MAX', 512);
 
 ///////////////////////////////////////////////// 
 // 初期設定 (文字エンコード、言語)
