@@ -184,7 +184,11 @@ EOD;
 		} else {
 			$aryargs = array(rawurldecode($r_base), $page_YM, $today_args);
 			if (exist_plugin('minicalendar_viewer')) {
+				bindtextdomain('minicalendar_viewer', LANG_DIR);
+				bind_textdomain_codeset('minicalendar_viewer', SOURCE_ENCODING);
+				textdomain('minicalendar_viewer');
 				$str .= call_user_func_array('plugin_minicalendar_viewer_convert',$aryargs);
+				textdomain('minicalendar');
 			}
 		}
 		$ret .= "  </td>\n  <td valign=\"top\">$str</td>\n </tr>\n</table>\n";
@@ -281,7 +285,11 @@ EOD;
 		} else {
 			$aryargs = array(rawurldecode($r_base), $page_YM, $today_args);
 			if (exist_plugin('minicalendar_viewer')) {
+                                bindtextdomain('minicalendar_viewer', LANG_DIR);
+                                bind_textdomain_codeset('minicalendar_viewer', SOURCE_ENCODING);
+                                textdomain('minicalendar_viewer');
 				$str .= call_user_func_array('plugin_minicalendar_viewer_convert',$aryargs);
+				textdomain('minicalendar');
 			}
 		}
 		$ret .= "$str\n";

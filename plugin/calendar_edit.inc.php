@@ -22,6 +22,9 @@ function plugin_calendar_edit_convert()
 	}
 
 	$args = func_num_args() ? func_get_args() : array();
+	bindtextdomain('calendar', LANG_DIR);
+	bind_textdomain_codeset('calendar', SOURCE_ENCODING);
+	textdomain('calendar');
 	return call_user_func_array('plugin_calendar_convert',$args);
 }
 ?>
