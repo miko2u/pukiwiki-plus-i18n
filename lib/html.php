@@ -21,7 +21,7 @@ function catbody($title,$page,$body)
 	global $modifier;          // 編集者のホームページ
 	global $modifierlink;      // 編集者の名前
 
-	if (! file_exists(SKIN_FILE) || ! is_readable(SKIN_FILE)) {
+	if (!defined('SKIN_FILE') || ! file_exists(SKIN_FILE) || ! is_readable(SKIN_FILE)) {
 		if (! file_exists($skin_file) || ! is_readable($skin_file)) {
 			die_message(SKIN_FILE.'(skin file) is not found.');
 		} else {

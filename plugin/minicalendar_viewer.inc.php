@@ -302,7 +302,8 @@ function plugin_minicalendar_viewer_convert()
     }else{
       $left_YM = "";
     }
-
+    $prev_YMX = '';
+    $next_YMX = '';
   }
   //リンク作成
   $s_date_sep = htmlspecialchars($date_sep);
