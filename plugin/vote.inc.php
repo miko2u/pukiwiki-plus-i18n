@@ -1,10 +1,11 @@
 <?php
-/////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
+// $Id: vote.inc.php,v 1.21.2 2005/01/06 13:44:00 miko Exp $
 //
-// $Id: vote.inc.php,v 1.18.2 2004/10/10 07:36:33 miko Exp $
-//
-define(VOTE_COOKIE_EXPIRED,60*60*24*3);
+// Vote plugin
+
+// expired 3days
+define(PLUGIN_VOTE_COOKIE_EXPIRED,60*60*24*3);
 
 function plugin_vote_action()
 {
@@ -13,6 +14,7 @@ function plugin_vote_action()
 	global $_vote_plugin_votes;
 
 	$postdata_old  = get_source($vars['refer']);
+
 	$vote_no = 0;
 	$title = $body = $postdata = $postdata_input = $vote_str = '';
 	$matches = array();
@@ -21,44 +23,39 @@ function plugin_vote_action()
 	$votedkey = 'vote_'.$vars['refer'].'_'.$vars['vote_no'];
 	if (isset($_COOKIE[$votedkey])) {
 		return array(
-			'msg'  => "Error in vote",
-			'body' => "連続投票はできません",
+			'msg'  => 'Error in vote',
+			'body' => '連続投票はできません',
 		);
 	}
 	$_COOKIE[$votedkey] = 1;
 	preg_match('!(.*/)!', $_SERVER['REQUEST_URI'], $matches);
-	setcookie($votedkey,1,time()+VOTE_COOKIE_EXPIRED,$matches[0]);
+	setcookie($votedkey, 1, time()+PLUGIN_VOTE_COOKIE_EXPIRED, $matches[0]);
 //added by miko
 
 	foreach($postdata_old as $line) {
 
-		if (preg_match("/^#vote\((.*)\)(.*)$/i", $line, $matches)) {
-			$args  = explode(',', $matches[1]);
-			$lefts = isset($matches[2]) ? $matches[2] : '';
-		} else {
+		if (! preg_match('/^#vote(?:\((.*)\)(.*))?$/i', $line, $matches) ||
+		    $vote_no++ != $vars['vote_no']) {
 			$postdata .= $line;
 			continue;
 		}
-
-		if ($vote_no++ != $vars['vote_no']) {
-			$postdata .= $line;
-			continue;
-		}
+		$args  = explode(',', $matches[1]);
+		$lefts = isset($matches[2]) ? $matches[2] : '';
 
 		foreach($args as $arg) {
 			$cnt = 0;
-			if (preg_match("/^(.+)\[(\d+)\]$/", $arg, $matches)) {
+			if (preg_match('/^(.+)\[(\d+)\]$/', $arg, $matches)) {
 				$arg = $matches[1];
 				$cnt = $matches[2];
 			}
 			$e_arg = encode($arg);
-			if (! empty($vars["vote_$e_arg"]) && $vars["vote_$e_arg"] == $_vote_plugin_votes)
+			if (! empty($vars['vote_' . $e_arg]) && $vars['vote_' . $e_arg] == $_vote_plugin_votes)
 				++$cnt;
 
 			$votes[] = $arg . '[' . $cnt . ']';
 		}
 
-		$vote_str       = '#vote(' . @join(',', $votes) . ")$lefts\n";
+		$vote_str       = '#vote(' . @join(',', $votes) . ')' . $lefts . "\n";
 		$postdata_input = $vote_str;
 		$postdata      .= $vote_str;
 	}
@@ -102,7 +99,7 @@ function plugin_vote_convert()
 	if (! isset($number[$page])) $number[$page] = 0; // Init
 	$vote_no = $number[$page]++;
 
-	if (! func_num_args()) return '#vote(): No arguments';
+	if (! func_num_args()) return '#vote(): No arguments<br/>' . "\n";
 
 	$args     = func_get_args();
 	$s_page   = htmlspecialchars($page);
@@ -128,7 +125,7 @@ EOD;
 	foreach($args as $arg) {
 		$cnt = 0;
 
-		if (preg_match("/^(.+)\[(\d+)\]$/", $arg, $matches)) {
+		if (preg_match('/^(.+)\[(\d+)\]$/', $arg, $matches)) {
 			$arg = $matches[1];
 			$cnt = $matches[2];
 		}
