@@ -4,7 +4,7 @@
 //
 // Hyperlink-related functions
 
-// リンクを付加する
+// Hyperlink decoration
 function make_link($string, $page = '')
 {
 	global $vars;
@@ -17,7 +17,7 @@ function make_link($string, $page = '')
 	return $clone->convert($string, ($page != '') ? $page : $vars['page']);
 }
 
-//インライン要素を置換する
+// Converters of inline element
 class InlineConverter
 {
 	var $converters; // as array()
@@ -50,11 +50,11 @@ class InlineConverter
 	{
 		if ($converters === NULL) {
 			$converters = array(
-				'plugin',        // インラインプラグイン
-				'note',          // 注釈
-				'url',           // URL
-				'url_interwiki', // URL (interwiki definition)
-				'mailto',        // mailto:
+				'plugin',        // Inline plugins
+				'note',          // Footnotes
+				'url',           // URLs
+				'url_interwiki', // URLs (interwiki definition)
+				'mailto',        // mailto: URL schemes
 				'interwikiname', // InterWikiName
 				'glossary',	     // AutoGlossary
 				'autolink',      // AutoLink
@@ -110,7 +110,7 @@ class InlineConverter
 		$this->result[] = ($obj !== NULL && $obj->set($arr, $this->page) !== FALSE) ?
 			$obj->toString() : make_line_rules(htmlspecialchars($arr[0]));
 
-		return "\x08"; //処理済みの部分にマークを入れる
+		return "\x08"; // Add a mark into latest processed part
 	}
 
 	function get_objects($string, $page)
@@ -138,11 +138,11 @@ class InlineConverter
 	}
 }
 
-//インライン要素集合のベースクラス
+// Base class of inline elements
 class Link
 {
-	var $start;   // 括弧の先頭番号(0オリジン)
-	var $text;    // マッチした文字列全体
+	var $start;   // Origin number of parentheses (0 origin)
+	var $text;    // Matched string
 
 	var $type;
 	var $page;
@@ -150,26 +150,25 @@ class Link
 	var $body;
 	var $alias;
 
-	// constructor
+	// Constructor
 	function Link($start)
 	{
 		$this->start = $start;
 	}
 
-	// マッチに使用するパターンを返す
+	// Return a regex pattern to match
 	function get_pattern() {}
 
-	// 使用している括弧の数を返す ((?:...)を除く)
+	// Return number of parentheses (except (?:...) )
 	function get_count() {}
 
-	// マッチしたパターンを設定する
+	// Set pattern that matches
 	function set($arr,$page) {}
 
-	// 文字列に変換する
+	// Convert String(s)
 	function toString() {}
 
-	// Private
-	// マッチした配列から、自分に必要な部分だけを取り出す
+	// Private: Get needed parts from a matched array()
 	function splice($arr) {
 		$count = $this->get_count() + 1;
 		$arr   = array_pad(array_splice($arr, $this->start, $count), $count, '');
@@ -177,7 +176,7 @@ class Link
 		return $arr;
 	}
 
-	// 基本パラメータを設定する
+	// Set basic parameters
 	function setParam($page, $name, $body, $type = '', $alias = '')
 	{
 		static $converter = NULL;
@@ -204,7 +203,7 @@ class Link
 	}
 }
 
-// インラインプラグイン
+// Inline plugins
 class Link_plugin extends Link
 {
 	var $pattern;
@@ -248,7 +247,7 @@ EOD;
 	{
 		list($all, $this->plain, $name, $this->param, $body) = $this->splice($arr);
 
-		// 本来のプラグイン名およびパラメータを取得しなおす PHP4.1.2 (?R)対策
+		// Re-get true plugin name and patameters (for PHP 4.1.2)
 		$matches = array();
 		if (preg_match('/^' . $this->pattern . '/x', $all, $matches)
 			&& $matches[1] != $this->plain) 
@@ -260,21 +259,21 @@ EOD;
 	function toString()
 	{
 		$body = ($this->body == '') ? '' : make_link($this->body);
+		$str = FALSE;
 
-		// プラグイン呼び出し
+		// Try to call the plugin
 		if (exist_plugin_inline($this->name)) {
 			$str = do_plugin_inline($this->name, $this->param, $body);
-			if ($str !== FALSE) //成功
-				return $str;
+			if ($str !== FALSE)	return $str;
 		}
 
-		// プラグインが存在しないか、変換に失敗
+		// No such plugin, or Failed
 		$body = (($body == '') ? '' : '{' . $body . '}') . ';';
 		return make_line_rules(htmlspecialchars('&' . $this->plain) . $body);
 	}
 }
 
-// 注釈
+// Footnotes
 class Link_note extends Link
 {
 	function Link_note($start)
@@ -298,22 +297,24 @@ EOD;
 
 	function set($arr, $page)
 	{
-		global $foot_explain, $script;
+		global $foot_explain, $script, $vars;
 		static $note_id = 0;
 
 		list(, $body) = $this->splice($arr);
 
 		$id   = ++$note_id;
 		$note = make_link($body);
+		$page = isset($vars['page']) ? rawurlencode($vars['page']) : '';
 
-		$foot_explain[$id] = <<<EOD
-<a id="notefoot_$id" href="$script#notetext_$id" class="note_super">*$id</a>
-<span class="small">$note</span>
-<br />
-EOD;
-		$name = '<a id="notetext_' . $id . '" href="' .
-			$script . '#notefoot_' . $id .
-			'" class="note_super">*' . $id . '</a>';
+		// Footnote
+		$foot_explain[$id] = '<a id="notefoot_' . $id . '" href="' .
+			$script . '?' . $page . '#notetext_' . $id .
+			'" class="note_super">*' . $id . '</a>' . "\n" .
+			'<span class="small">' . $note . '</span><br />';
+
+		$name = '<a id="notetext_' . $id . '" href="' . $script . '?' . $page .
+			'#notefoot_' . $id . '" class="note_super" title="' .
+			htmlspecialchars(strip_tags($note)) . '">*' . $id . '</a>';
 
 		return parent::setParam($page, $name, $body);
 	}
@@ -324,7 +325,7 @@ EOD;
 	}
 }
 
-// url
+// URLs
 class Link_url extends Link
 {
 	function Link_url($start)
@@ -361,12 +362,18 @@ EOD;
 
 	function toString()
 	{
+		if (FALSE) {
+			$rel = '';
+		} else {
+			$rel = ' rel="nofollow"';
+		}
+
 //		return '<a href="' . $this->name . '">' . $this->alias . '</a>';
-		return open_uri_in_new_window('<a href="' . $this->name . '">' . $this->alias . '</a>', get_class($this));
+		return open_uri_in_new_window('<a href="' . $this->name . '"' . $rel . '>' . $this->alias . '</a>', get_class($this));
 	}
 }
 
-// url (InterWiki definition type)
+// URLs (InterWiki definition on "InterWikiName")
 class Link_url_interwiki extends Link
 {
 	function Link_url_interwiki($start)
@@ -400,8 +407,14 @@ EOD;
 
 	function toString()
 	{
+		if (FALSE) {
+			$rel = '';
+		} else {
+			$rel = ' rel="nofollow"';
+		}
+
 //		return '<a href="' . $this->name . '">' . $this->alias . '</a>';
-		return open_uri_in_new_window('<a href="' . $this->name . '">' . $this->alias . '</a>', get_class($this));
+		return open_uri_in_new_window('<a href="' . $this->name . '"' . $rel . '>' . $this->alias . '</a>', get_class($this));
 	}
 }
 
@@ -441,11 +454,11 @@ EOD;
 	
 	function toString()
 	{
-		return '<a href="mailto:' . $this->name . '">' . $this->alias . '</a>';
+		return '<a href="mailto:' . $this->name . '" rel="nofollow">' . $this->alias . '</a>';
 	}
 }
 
-//InterWikiName
+// InterWikiName-rendered URLs
 class Link_interwikiname extends Link
 {
 	var $url    = '';
@@ -511,14 +524,20 @@ EOD;
 
 	function toString()
 	{
+		if (FALSE) {
+			$rel = '';
+		} else {
+			$rel = ' rel="nofollow"';
+		}
+
+		return open_uri_in_new_window('<a href="' . $this->url . $this->anchor .
+			'" title="' . $this->name . '"' . $rel . '>' . $this->alias . '</a>', get_class($this));
 //		return '<a href="' . $this->url . $this->anchor .
 //			'" title="' . $this->name . '">' . $this->alias . '</a>';
-		return open_uri_in_new_window('<a href="' . $this->url . $this->anchor .
-			'" title="' . $this->name . '">' . $this->alias . '</a>', get_class($this));
 	}
 }
 
-// BracketName
+// BracketNames
 class Link_bracketname extends Link
 {
 	var $anchor, $refer;
@@ -534,17 +553,17 @@ class Link_bracketname extends Link
 
 		$s2 = $this->start + 2;
 		return <<<EOD
-\[\[                     # open bracket
-(?:((?:(?!\]\]).)+)>)?   # (1) alias
-(\[\[)?                  # (2) open bracket
+\[\[                     # Open bracket
+(?:((?:(?!\]\]).)+)>)?   # (1) Alias
+(\[\[)?                  # (2) Open bracket
 (                        # (3) PageName
  (?:$WikiName)
  |
  (?:$BracketName)
 )?
-(\#(?:[a-zA-Z][\w-]*)?)? # (4) anchor
-(?($s2)\]\])             # close bracket if (2)
-\]\]                     # close bracket
+(\#(?:[a-zA-Z][\w-]*)?)? # (4) Anchor
+(?($s2)\]\])             # Close bracket if (2)
+\]\]                     # Close bracket
 EOD;
 	}
 
@@ -558,13 +577,10 @@ EOD;
 		global $WikiName;
 
 		list(, $alias, , $name, $this->anchor) = $this->splice($arr);
-
 		if ($name == '' && $this->anchor == '') return FALSE;
 
 		if ($name == '' || ! preg_match('/^' . $WikiName . '$/', $name)) {
-
 			if ($alias == '') $alias = $name . $this->anchor;
-
 			if ($name != '') {
 				$name = get_fullname($name, $page);
 				if (! is_pagename($name)) return FALSE;
@@ -601,7 +617,7 @@ EOD;
 	}
 }
 
-// WikiName
+// WikiNames
 class Link_wikiname extends Link
 {
 	function Link_wikiname($start)
@@ -638,7 +654,7 @@ class Link_wikiname extends Link
 	}
 }
 
-// AutoLink
+// AutoLinks
 class Link_autolink extends Link
 {
 	var $forceignorepages = array();
@@ -899,7 +915,7 @@ EOD;
         }
 }
 
-// ページ名のリンクを作成
+// Make hyperlink for the page
 function make_pagelink($page, $alias = '', $anchor = '', $refer = '')
 {
 	global $script, $vars, $link_compact, $related, $_symbol_noexists;
@@ -917,12 +933,17 @@ function make_pagelink($page, $alias = '', $anchor = '', $refer = '')
 		$related[$page] = get_filetime($page);
 
 	if (is_page($page)) {
+		// Hyperlinks
 		$passage = get_pg_passage($page, FALSE);
 		$title   = $link_compact ? '' : ' title="' . $s_page . $passage . '"';
 		return '<a href="' . $script . '?' . $r_page . $anchor . '"' . $title . '>' .
 			$s_alias . '</a>';
 //		return open_uri_in_new_window('<a href="' . $script . '?' . $r_page . $anchor . '"' . $title . '>' . $s_alias . '</a>', 'make_pagelink');
+	} else if (PKWK_READONLY) {
+		// Without hyperlink (= Suppress dangling link)
+		return $s_alias;
 	} else {
+		// Dangling links
 		$retval = $s_alias . '<a href="' .
 			$script . '?cmd=edit&amp;page=' . $r_page . $r_refer . '">' .
 			$_symbol_noexists . '</a>';
@@ -970,7 +991,7 @@ function get_fullname($name, $refer)
 	return $name;
 }
 
-// InterWikiNameを展開
+// Render an InterWiki into a URL
 function get_interwiki_url($name, $param)
 {
 	global $WikiName, $interwiki;
@@ -989,15 +1010,15 @@ function get_interwiki_url($name, $param)
 
 	list($url, $opt) = $interwikinames[$name];
 
-	// 文字エンコーディング
+	// Encoding
 	switch ($opt) {
 
 	case '':
-	case 'std': // 内部文字エンコーディングのままURLエンコード
+	case 'std': // As-Is (Internal encoding of this PukiWiki will be used)
 		$param = rawurlencode($param);
 		break;
 
-	case 'asis':
+	case 'asis': // As-Is
 	case 'raw':
 		// $param = htmlspecialchars($param);
 		break;
@@ -1013,13 +1034,13 @@ function get_interwiki_url($name, $param)
 		break;
 
 	default:
-		// エイリアスの変換
+		// Alias conversion
 		if (isset($encode_aliases[$opt])) $opt = $encode_aliases[$opt];
-		// 指定された文字コードへエンコードしてURLエンコード
+		// Encoding conversion into specified encode, and URLencode
 		$param = rawurlencode(mb_convert_encoding($param, $opt, 'auto'));
 	}
 
-	// パラメータを置換
+	// Replace parameters
 	if (strpos($url, '$1') !== FALSE) {
 		$url = str_replace('$1', $param, $url);
 	} else {
