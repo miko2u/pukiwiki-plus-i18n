@@ -736,7 +736,7 @@ class Link_autoalias extends Link
 
 		parent::Link($start);
 
-		if (!$autolink or !file_exists(CACHE_DIR.'autoalias.dat') or $this->page==$autoalias)
+		if (!$autolink or !file_exists(CACHE_DIR.'autoalias.dat') or $this->page == 'AutoAliasName')
 		{
 			return;
 		}
@@ -780,7 +780,7 @@ class Link_autoalias extends Link
 \]\]                # close bracket
 )
 EOD;
-		foreach (get_source($autoalias) as $line) {
+		foreach (get_source('AutoAliasName') as $line) {
 			$match = array();
 			if(preg_match("/$pattern/x",$line,$match)) {
 				if($this->name==trim($match[2])) {
