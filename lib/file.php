@@ -268,7 +268,7 @@ function put_lastmodified()
 \]\]                # close bracket
 )
 EOD;
-		foreach (get_source($autoalias) as $line) {
+		foreach (get_source('AutoAliasName') as $line) {
 			$match = array();
 			if (preg_match("/$pattern/x",$line,$match))
 				$linkpages[] = trim($match[2]);
