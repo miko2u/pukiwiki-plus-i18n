@@ -11,10 +11,10 @@ function plugin_filelist_init()
 
 	$messages = array(
 		'_filelist_msg' => array(
-			'msg_input_pass'	=> '管理者用のパスワードを入力してください。',
-			'btn_exec'		=> '実行',
-			'msg_no_pass'		=> 'パスワードが間違っています。',
-			'msg_H0_filelist'	=> 'ページファイルの一覧',
+			'msg_input_pass'	=> _('Please input the password for the Administrator.'),
+			'btn_exec'		=> _('Exec'),
+			'msg_no_pass'		=> _('The password is wrong.'),
+			'msg_H0_filelist'	=> _('Page list'),
 		)
 	);
 	set_plugin_messages($messages);
