@@ -116,7 +116,15 @@ function catbody($title, $page, $body)
 	$related = ($is_read && $related_link) ? make_related($_page) : '';
 
 	// List of attached files of the page
-	$attaches = ($is_read && exist_plugin_action('attach')) ? attach_filelist() : '';
+	// $attaches = ($is_read && exist_plugin_action('attach')) ? attach_filelist() : '';
+	if ($is_read && exist_plugin_action('attach')) {
+		bindtextdomain('attach', LANG_DIR);
+		bind_textdomain_codeset('attach', SOURCE_ENCODING);
+		textdomain('attach');
+		plugin_attach_init();
+		$attaches = attach_filelist();
+		textdomain(DOMAIN);
+	}
 
 	// List of footnotes
 	ksort($foot_explain, SORT_NUMERIC);
