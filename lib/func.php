@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: func.php,v 1.32.6 2005/03/05 14:31:12 miko Exp $
+// $Id: func.php,v 1.32.39 2005/03/05 14:31:12 miko Exp $
 //
 // General functions
 
@@ -86,7 +86,7 @@ function is_freeze($page, $clearcache = FALSE)
 	}
 }
 
-// 自動テンプレート
+// Auto template
 function auto_template($page)
 {
 	global $auto_template_func, $auto_template_rules;
@@ -120,53 +120,58 @@ function auto_template($page)
 	return $body;
 }
 
-// 検索語を展開する
-function get_search_words($words, $special = FALSE)
+// Expand search words
+function get_search_words($words, $do_escape = FALSE)
 {
 	$retval = array();
 
-	// Perlメモ - 正しくパターンマッチさせる
-	// http://www.din.or.jp/~ohzaki/perl.htm#JP_Match
+	$pre = $post = '';
 
-	$eucpre = $eucpost = '';
 	if (SOURCE_ENCODING == 'EUC-JP') {
-		$eucpre = '(?<!\x8F)';
-		// # JIS X 0208 が 0文字以上続いて # ASCII, SS2, SS3 または終端
-		$eucpost = '(?=(?:[\xA1-\xFE][\xA1-\xFE])*(?:[\x00-\x7F\x8E\x8F]|\z))';
+		// Perl memo - Correct pattern-matching with EUC-JP
+		// http://www.din.or.jp/~ohzaki/perl.htm#JP_Match (Japanese)
+		$pre = '(?<!\x8F)';
+		$post = '(?=(?:[\xA1-\xFE][\xA1-\xFE])*' . // JIS X 0208
+				'(?:[\x00-\x7F\x8E\x8F]|\z))';     // ASCII, SS2, SS3, or the last
 	}
+	// function: just preg_quote()
 	$quote_func = create_function('$str', 'return preg_quote($str, \'/\');');
 
-	// LANG == 'ja'で、mb_convert_kanaが使える場合はmb_convert_kanaを使用
+	// function: mb_convert_kana() or nothing
 	$convert_kana = create_function('$str, $option',
 		(LANG == 'ja' && function_exists('mb_convert_kana')) ?
 			'return mb_convert_kana($str, $option);' : 'return $str;');
 
 	foreach ($words as $word) {
-		// 英数字は半角,カタカナは全角,ひらがなはカタカナに
+		// 'a': Zenkaku-Alphabet to Hankaku-Alphabet 
+		// 'K': Hankaku-Katakana to Zenkaku-Katakana 
+		// 'C': Zenkaku-Hiragana to Zenkaku-Katakana 
+		// 'V': Merge 'A character and A voiced sound symbol' to 'A character with the symbol' 
 		$word_zk = $convert_kana($word, 'aKCV');
+		$len     = mb_strlen($word_zk);
 		$chars = array();
-		for ($pos = 0; $pos < mb_strlen($word_zk); $pos++) {
+		for ($pos = 0; $pos < $len; $pos++) {
 			$char = mb_substr($word_zk, $pos, 1);
-			// $special : htmlspecialchars()を通すか
-			$arr = array($quote_func($special ? htmlspecialchars($char) : $char));
+			$arr = array($quote_func($do_escape ? htmlspecialchars($char) : $char));
 			if (strlen($char) == 1) {
-				// 英数字
+				// Single-byte characters
 				foreach (array(strtoupper($char), strtolower($char)) as $_char) {
 					if ($char != '&')
 						$arr[] = $quote_func($_char);
 					$ord = ord($_char);
-					$arr[] = sprintf('&#(?:%d|x%x);', $ord, $ord); // 実体参照
-					$arr[] = $quote_func($convert_kana($_char, 'A')); // 全角
+					$arr[] = sprintf('&#(?:%d|x%x);', $ord, $ord); // Entity references
+					$arr[] = $quote_func($convert_kana($_char, 'A')); // Zenkaku-Alphabet
 				}
 			} else {
-				// マルチバイト文字
-				$arr[] = $quote_func($convert_kana($char, 'c')); // ひらがな
-				$arr[] = $quote_func($convert_kana($char, 'k')); // 半角カタカナ
+				// Multi-byte characters
+				$arr[] = $quote_func($convert_kana($char, 'c')); // Zenkaku-Katakana to Zenkaku-Hiragana
+				$arr[] = $quote_func($convert_kana($char, 'k')); // Zenkaku-Katakana to Hankaku-Katakana
 			}
 			$chars[] = '(?:' . join('|', array_unique($arr)) . ')';
 		}
-		$retval[$word] = $eucpre.join('', $chars) . $eucpost;
+		$retval[$word] = $pre . join('', $chars) . $post;
 	}
+
 	return $retval;
 }
 
@@ -198,7 +203,7 @@ function do_search($word, $type = 'AND', $non_format = FALSE, $non_fuzzy = FALSE
 
 		// 検索対象ページの制限をかけるかどうか (ページ名は制限外)
 		if ($search_auth && ! check_readable($page, false, false)) {
-			$source = get_source(); // 検索対象ページ内容を空に。
+			$source = get_source(); // Empty
 		} else {
 			$source = get_source($page);
 		}
@@ -260,14 +265,14 @@ function do_search($word, $type = 'AND', $non_format = FALSE, $non_fuzzy = FALSE
 	return $retval;
 }
 
-// プログラムへの引数のチェック
+// Argument check for program
 function arg_check($str)
 {
 	global $vars;
 	return isset($vars['cmd']) && (strpos($vars['cmd'], $str) === 0);
 }
 
-// ページ名のエンコード
+// Encode page-name
 function encode($key)
 {
 	return ($key == '') ? '' : strtoupper(bin2hex($key));
@@ -275,14 +280,24 @@ function encode($key)
 	// But PHP 4.3.10 says 'Warning: unpack(): Type H: outside of string in ...'
 }
 
-// ページ名のデコード
+// Decode page name
 function decode($key)
 {
+	return hex2bin($key);
 	// Warning: pack(): Type H: illegal hex digit ...
 	return preg_match('/^[0-9a-f]+$/i', $key) ? pack('H*', $key) : $key;
 }
 
-// [[ ]] を取り除く
+// Inversion of bin2hex()
+function hex2bin($hex_string)
+{
+	// preg_match : Avoid warning : pack(): Type H: illegal hex digit ...
+	// (string)   : Always treat as string (not int etc). See BugTrack2/31
+	return preg_match('/^[0-9a-f]+$/i', $hex_string) ?
+		pack('H*', (string)$hex_string) : $hex_string;
+}
+
+// Remove [[ ]] (brackets)
 function strip_bracket($str)
 {
 	$match = array();
@@ -293,7 +308,7 @@ function strip_bracket($str)
 	}
 }
 
-// ページ一覧の作成
+// Create list of pages
 function page_list($pages, $cmd = 'read', $withfilename = FALSE)
 {
 	global $script, $list_index;
@@ -431,14 +446,14 @@ EOD;
 	exit;
 }
 
-// 現在時刻をマイクロ秒で取得
+// Have the time (as microtime)
 function getmicrotime()
 {
 	list($usec, $sec) = explode(' ', microtime());
 	return ((float)$sec + (float)$usec);
 }
 
-// 日時を得る
+// Get the date
 function get_date($format, $timestamp = NULL)
 {
 	$format = preg_replace('/(?<!\\\)T/',
@@ -449,7 +464,7 @@ function get_date($format, $timestamp = NULL)
 	return date($format, $time);
 }
 
-// 日時文字列を作る
+// Format date string
 function format_date($val, $paren = FALSE)
 {
 	global $date_format, $time_format, $weeklabels;
@@ -463,7 +478,7 @@ function format_date($val, $paren = FALSE)
 	return $paren ? '(' . $date . ')' : $date;
 }
 
-// 経過時刻文字列を作る
+// Get short string of the passage, 'N seconds/minutes/hours/days/years ago'
 function get_passage($time, $paren = TRUE)
 {
 	static $units = array('m'=>60, 'h'=>24, 'd'=>1);
@@ -542,23 +557,23 @@ function get_autoalias_pattern(& $pages)
 			$auto_pages[] = $page;
 	}
 
-	if (empty($auto_pages))
-		return $nowikiname ? array('(?!)','PukiWiki','') : $WikiName;
+	if (empty($auto_pages)) {
+		$result = $result_a = $nowikiname ? '(?!)' : $WikiName;
+	} else {
+		$auto_pages = array_unique($auto_pages);
+		sort($auto_pages, SORT_STRING);
 
-	$auto_pages = array_unique($auto_pages);
-	sort($auto_pages, SORT_STRING);
+		$auto_pages_a = array_values(preg_grep('/^[A-Z]+$/i', $auto_pages));
+		$auto_pages   = array_values(array_diff($auto_pages,  $auto_pages_a));
 
-	$auto_pages_a = array_values(preg_grep('/^[A-Z]+$/i', $auto_pages));
-	$auto_pages   = array_values(array_diff($auto_pages,  $auto_pages_a));
-
-	$result   = get_autolink_pattern_sub($auto_pages,   0, count($auto_pages),   0);
-	$result_a = get_autolink_pattern_sub($auto_pages_a, 0, count($auto_pages_a), 0);
+		$result   = get_autolink_pattern_sub($auto_pages,   0, count($auto_pages),   0);
+		$result_a = get_autolink_pattern_sub($auto_pages_a, 0, count($auto_pages_a), 0);
+	}
 
 	return array($result, $result_a, $forceignorepages);
 }
 
-// AutoLinkのパターンを生成する
-// thx for hirofummy
+// Generate AutoLink patterns (thx to hirofummy)
 function get_autolink_pattern(& $pages)
 {
 	global $WikiName, $autolink, $nowikiname;
@@ -576,18 +591,18 @@ function get_autolink_pattern(& $pages)
 			$auto_pages[] = $page;
 	}
 
-	if (empty($auto_pages))
-		return $nowikiname ? '(?!)' : $WikiName;
+	if (empty($auto_pages)) {
+		$result = $result_a = $nowikiname ? '(?!)' : $WikiName;
+	} else {
+		$auto_pages = array_unique($auto_pages);
+		sort($auto_pages, SORT_STRING);
 
-	$auto_pages = array_unique($auto_pages);
-	sort($auto_pages, SORT_STRING);
+		$auto_pages_a = array_values(preg_grep('/^[A-Z]+$/i', $auto_pages));
+		$auto_pages   = array_values(array_diff($auto_pages,  $auto_pages_a));
 
-	$auto_pages_a = array_values(preg_grep('/^[A-Z]+$/i', $auto_pages));
-	$auto_pages   = array_values(array_diff($auto_pages,  $auto_pages_a));
-
-	$result   = get_autolink_pattern_sub($auto_pages,   0, count($auto_pages),   0);
-	$result_a = get_autolink_pattern_sub($auto_pages_a, 0, count($auto_pages_a), 0);
-
+		$result   = get_autolink_pattern_sub($auto_pages,   0, count($auto_pages),   0);
+		$result_a = get_autolink_pattern_sub($auto_pages_a, 0, count($auto_pages_a), 0);
+	}
 	return array($result, $result_a, $forceignorepages);
 }
 
@@ -796,6 +811,22 @@ if (! function_exists('md5_file')) {
 		$data = fread($fd, filesize($filename));
 		fclose($fd);
 		return md5($data);
+	}
+}
+
+// sha1 -- Compute SHA-1 hash 
+// (PHP 4 >= 4.3.0, PHP5) 
+if (! function_exists('sha1')) {
+	if (extension_loaded('mhash')) {
+		function sha1($str, $raw_output = FALSE)
+		{
+			if ($raw_output) {
+				// PHP 5.0.0 or lator only :) 
+				return mhash(MHASH_SHA1, $str);
+			} else {
+				return bin2hex(mhash(MHASH_SHA1, $str));
+			}
+		}
 	}
 }
 ?>
