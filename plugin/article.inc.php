@@ -172,7 +172,7 @@ function plugin_article_convert()
 	$article_cols = PLUGIN_ARTICLE_COLS;
 	$string = <<<EOD
 <form action="$script" method="post">
- <div>
+ <div class="articleform" onmouseup="pukiwiki_pos()" onkeyup="pukiwiki_pos()">
   <input type="hidden" name="article_no" value="$article_no" />
   <input type="hidden" name="plugin" value="article" />
   <input type="hidden" name="digest" value="$s_digest" />
