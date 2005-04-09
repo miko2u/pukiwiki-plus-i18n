@@ -35,9 +35,10 @@ $image = & $_IMAGE['skin'];
 $rw    = ! PKWK_READONLY;
 
 // Decide charset for CSS
-$css_charset = 'iso-8859-1';
+// $css_charset = 'iso-8859-1';
+$css_charset = 'utf-8';
 switch(UI_LANG){
-	case 'ja': $css_charset = 'Shift_JIS'; break;
+	case 'ja_JP': $css_charset = 'Shift_JIS'; break;
 }
 
 // Output HTTP headers
