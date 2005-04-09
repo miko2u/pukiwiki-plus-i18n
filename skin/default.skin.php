@@ -6,6 +6,13 @@
 //
 if (!defined('DATA_DIR')) { exit; }
 
+// Decide charset for CSS
+// $css_charset = 'iso-8859-1';
+$css_charset = 'utf-8';
+switch(UI_LANG){
+	case 'ja_JP': $css_charset = 'Shift_JIS'; break;
+}
+
 // Output header
 pkwk_common_headers();
 header('Cache-control: no-cache');
@@ -37,8 +44,8 @@ if (isset($pkwk_dtd)) {
 <?php } else { ?>
  <title><?php echo "$title - $page_title" ?></title>
 <?php } ?>
- <link rel="stylesheet" href="<?php echo SKIN_URI ?>default.css" type="text/css" media="screen" charset="Shift_JIS" />
- <link rel="stylesheet" href="<?php echo SKIN_URI ?>print.css" type="text/css" media="print" charset="Shift_JIS" />
+ <link rel="stylesheet" href="<?php echo SKIN_URI ?>default.css" type="text/css" media="screen" charset="$css_charset" />
+ <link rel="stylesheet" href="<?php echo SKIN_URI ?>print.css" type="text/css" media="print" charset="$css_charset" />
  <link rel="alternate" href="<?php echo $_LINK['mixirss'] ?>" type="application/rss+xml" title="RSS" />
  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
  <script type="text/javascript" src="<?php echo SKIN_URI ?>default.js"></script>
