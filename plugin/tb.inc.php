@@ -161,8 +161,7 @@ EOD;
 function plugin_tb_mode_view($tb_id)
 {
 	global $script, $page_title;
-//	global $_tb_title, $_tb_header, $_tb_entry, $_tb_refer, $_tb_date;
-//	global $_tb_header_Excerpt, $_tb_header_Weblog, $_tb_header_Tracked;
+	global $language;
 
 	$_tb_title  = _('TrackBack: Discussion on TrackBack in %s');
 	$_tb_header = _('Continuing the discussion...');
@@ -208,7 +207,7 @@ EOD;
 	$msg = <<<EOD
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="$language" lang="$language">
 <head>
  <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
  <title>$tb_title</title>
@@ -235,7 +234,7 @@ EOD;
 	//header('Content-type: application/xhtml+xml; charset=UTF-8');
 	header('Content-type: text/html; charset=UTF-8'); // Works well
 
-	echo mb_convert_encoding($msg, 'UTF-8', SOURCE_ENCODING);
+	('UTF-8' == SOURCE_ENCODING) ? echo $msg : echo mb_convert_encoding($msg, 'UTF-8', SOURCE_ENCODING);
 	exit;
 }
 ?>
