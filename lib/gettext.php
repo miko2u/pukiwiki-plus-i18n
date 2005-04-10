@@ -3,7 +3,7 @@
  * GETTEXT EMULATION FUNCTION
  *
  * @copyright   Copyright &copy; 2004-2005, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: gettext.php,v 0.7 2005/04/04 01:06:00 upk Exp $
+ * @version     $Id: gettext.php,v 0.8 2005/04/10 18:41:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License
  * @link        http://jo1upk.blogdns.net/saito/
  *
@@ -154,7 +154,13 @@ function bind_textdomain_codeset($domain, $codeset)
 function _($message)
 {
 	global $po_msg, $po_charset, $po_codeset, $po_domain, $po_category;
-	if (!isset($po_msg[$po_domain][$po_category][$message])) return $message;
+
+	$msg = $message;
+	$msg = str_replace('\"','__DUMMY__', $msg);
+	$msg = str_replace('"','\"', $msg);
+	$msg = str_replace('__DUMMY__', '\"', $msg);
+
+	if (!isset($po_msg[$po_domain][$po_category][$msg])) return $message;
 	if (!isset($po_codeset[$po_domain])) {
 		$_enc = (defined('SOURCE_ENCODING')) ? SOURCE_ENCODING : 'EUC-JP';
 		$po_codeset[$po_domain] = strtoupper($_enc);
@@ -163,11 +169,13 @@ function _($message)
 	$charset = (empty($po_charset[$po_domain][$po_category])) ? 'auto' : $po_charset[$po_domain][$po_category];
 
 	if ($po_charset[$po_domain][$po_category] != $po_codeset[$po_domain]) {
-		return mb_convert_encoding($po_msg[$po_domain][$po_category][$message], $po_codeset[$po_domain], $charset);
+		// return mb_convert_encoding($po_msg[$po_domain][$po_category][$msg], $po_codeset[$po_domain], $charset);
+		return mb_convert_encoding( str_replace('\"','"', $po_msg[$po_domain][$po_category][$msg]), $po_codeset[$po_domain], $charset);
 	}
 
 	// Since a character code is coincidence, it is conversion needlessness.
-	return $po_msg[$po_domain][$po_category][$message]; 
+	// return $po_msg[$po_domain][$po_category][$msg]; 
+	return str_replace('\"','"', $po_msg[$po_domain][$po_category][$msg]);
 }
 function gettext($message) { return _($message); }	// Alias
 function N_($message) { return $message; }		// gettext_noop($message)
