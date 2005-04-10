@@ -234,7 +234,7 @@ EOD;
 	//header('Content-type: application/xhtml+xml; charset=UTF-8');
 	header('Content-type: text/html; charset=UTF-8'); // Works well
 
-	('UTF-8' == SOURCE_ENCODING) ? echo $msg : echo mb_convert_encoding($msg, 'UTF-8', SOURCE_ENCODING);
+	('UTF-8' == SOURCE_ENCODING) ? echo $msg; : echo mb_convert_encoding($msg, 'UTF-8', SOURCE_ENCODING);
 	exit;
 }
 ?>
