@@ -1,13 +1,13 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: popular.inc.php,v 1.13.1 2005/03/10 13:12:45 miko Exp $
+// $Id: popular.inc.php,v 1.14.1 2005/04/09 03:18:06 miko Exp $
 //
 // Popular pages plugin: Show an access ranking of this wiki
 // -- like recent plugin, using counter plugin's count --
 
 /*
- * (C) 2003-2005 PukiWiki Developer Team
- * (C) 2002, Kazunori Mizushima <kazunori@uc.netyou.jp>
+ * (C) 2003-2005 PukiWiki Developers Team
+ * (C) 2002 Kazunori Mizushima <kazunori@uc.netyou.jp>
  *
  * 通算および今日に別けて一覧を作ることができます。
  *
@@ -34,7 +34,6 @@ function plugin_popular_convert()
 	$_popular_plugin_today_frame_s = _('today\'s(%d)');
 	$_popular_plugin_frame         = sprintf('<h5>%s</h5><div>%%s</div>', $_popular_plugin_frame_s);
 	$_popular_plugin_today_frame   = sprintf('<h5>%s</h5><div>%%s</div>', $_popular_plugin_today_frame_s);
-
 	$max    = PLUGIN_POPULAR_DEFAULT;
 	$except = '';
 

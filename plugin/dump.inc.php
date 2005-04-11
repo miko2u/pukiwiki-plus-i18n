@@ -1,5 +1,5 @@
 <?php
-// $Id: dump.inc.php,v 1.34 2005/01/23 07:24:11 henoheno Exp $
+// $Id: dump.inc.php,v 1.36.1 2005/03/27 12:16:50 upk Exp $
 //
 // Remote dump / restore plugin
 // Originated as tarfile.inc.php by teanan / Interfair Laboratory 2004.
@@ -219,7 +219,7 @@ function plugin_dump_disp_form()
 	$_dump_option  = _("Options");
 	$_dump_namedecode  = _("Virtual of page name encode is converted into the file name with the directory.") .
 		_("(The restoration that uses this data cannot be done.") .
-		_("Moreover, a part of character is substituted for '_'.)<br />");
+		_("Moreover, a part of character is substituted for '_'.)");
 	$_dump_admin   = _("Administrator password");
 	$_dump_h3_store = _(" Restoration of data");
 	$_dump_caution = _("[IMPORTANCE]");
@@ -239,21 +239,27 @@ function plugin_dump_disp_form()
 
 <p><strong>$_dump_arc</strong>
 <br />
-  <input type="radio" name="pcmd" value="tgz" checked="checked" /> .tar.gz $_dump_form<br />
-  <input type="radio" name="pcmd" value="tar" /> .tar $_dump_form
+  <input type="radio" name="pcmd" id="_p_dump_tgz" value="tgz" checked="checked" />
+  <label for="_p_dump_tgz"> .tar.gz $_dump_form</label><br />
+  <input type="radio" name="pcmd" id="_p_dump_tar" value="tar" />
+  <label for="_p_dump_tar"> .tar $_dump_form</label>
 </p>
 <p><strong>$_dump_backdir</strong>
 <br />
-  <input type="checkbox" name="bk_wiki" checked="checked" /> wiki<br />
-  <input type="checkbox" name="bk_attach" /> attach<br />
-  <input type="checkbox" name="bk_backup" /> backup
+  <input type="checkbox" name="bk_wiki" id="_p_dump_d_wiki" checked="checked" />
+  <label for="_p_dump_d_wiki">wiki</label><br />
+  <input type="checkbox" name="bk_attach" id="_p_dump_d_attach" />
+  <label for="_p_dump_d_attach">attach</label><br />
+  <input type="checkbox" name="bk_backup" id="_p_dump_d_backup" />
+  <label for="_p_dump_d_backup">backup</label><br />
 </p>
 <p><strong>$_dump_option</strong>
 <br />
-  <input type="checkbox" name="namedecode" />$_dump_namedecode
+  <input type="checkbox" name="namedecode" id="_p_dump_namedecode" />
+  <label for="_p_dump_namedecode">$_dump_namedecode</label><br />
 </p>
-<p><strong>$_dump_admin</strong>
-  <input type="password" name="pass" size="12" />
+<p><label for="_p_dump_adminpass_dump"><strong>$_dump_admin</strong></label>
+  <input type="password" name="pass" id="_p_dump_adminpass_dump" size="12" />
   <input type="submit"   name="ok"   value="OK" />
 </p>
  </div>
@@ -272,10 +278,11 @@ EOD;
 <p><span class="small">
 $_dump_upload
 </span>
-  $_dump_file: <input type="file" name="upload_file" size="40" />
+  <label for="_p_dump_upload_file">$_dump_file:</label>
+  <input type="file" name="upload_file" id="_p_dump_upload_file" size="40" />
 </p>
-<p><strong>$_dump_admin</strong>
-  <input type="password" name="pass" size="12" />
+<p><label for="_p_dump_adminpass_restore"><strong>$_dump_admin</strong></label>
+  <input type="password" name="pass" id="_p_dump_adminpass_restore" size="12" />
   <input type="submit"   name="ok"   value="OK" />
 </p>
  </div>
@@ -445,7 +452,7 @@ class tarlib
 
 			// ファイルサイズを取得
 			$size = filesize($name);
-			if ($size == FALSE) {
+			if ($size === FALSE) {
 				@unlink($this->filename);
 				die_message($name . ' is not found or not readable.');
 			}

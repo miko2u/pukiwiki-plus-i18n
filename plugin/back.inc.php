@@ -1,11 +1,9 @@
 <?php
-/*
- * back plugin
- * (C) 2003-2004 PukiWiki Developer Team
- * (C) 2002 Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- *
- * $Id: back.inc.php,v 1.7.1 2004/03/09 12:46:05 miko Exp $
- */
+// $Id: back.inc.php,v 1.8.1 2005/04/09 03:18:06 miko Exp $
+//
+// back plugin
+// (C) 2003-2004 PukiWiki Developers Team
+// (C) 2002 Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
 
 // Allow specifying back link by page name and anchor, or
 // by relative or site-abusolute path
@@ -21,7 +19,6 @@ function plugin_back_convert()
 	global $script;
 
 	$_msg_back_word = _('Back');
-
 	if (func_num_args() > 4) return PLUGIN_BACK_USAGE;
 	list($word, $align, $hr, $href) = array_pad(func_get_args(), 4, '');
 
