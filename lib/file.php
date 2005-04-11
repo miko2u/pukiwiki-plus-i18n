@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: file.php,v 1.13.5 2005/03/10 13:29:34 miko Exp $
+// $Id: file.php,v 1.14.5 2005/04/05 14:40:43 miko Exp $
 //
 // File related functions
 
@@ -48,8 +48,8 @@ function page_write($page, $postdata, $notimestamp = FALSE)
 		$_diff = explode("\n", $diffdata);
 		$plus  = join("\n", preg_replace('/^\+/', '', preg_grep('/^\+/', $_diff)));
 		$minus = join("\n", preg_replace('/^-/',  '', preg_grep('/^-/',  $_diff)));
-		tb_send($page, $plus, $minus); 
-	} 
+		tb_send($page, $plus, $minus);
+	}
 
 	links_update($page);
 }
@@ -127,7 +127,9 @@ function file_write($dir, $page, $str, $notimestamp = FALSE)
 		flock($fp, LOCK_UN);
 		fclose($fp);
 		if ($timestamp) 
-			touch($file, $timestamp + LOCALZONE);
+			touch($file, $timestamp + LOCALZONE) or
+				die('Touch failed for: ' . htmlspecialchars(basename($file)));
+				// With safe_mode, touch() always check UID
 	}
 
 	// Clear is_page() cache
@@ -158,7 +160,7 @@ function file_write($dir, $page, $str, $notimestamp = FALSE)
 
  		$subject = str_replace('$page', $page, $notify_subject);
 		ini_set('SMTP', $smtp_server);
-		mb_language(LANG);
+ 		mb_language(LANG);
 
 		if ($smtp_auth) pop_before_smtp();
  		mb_send_mail($notify_to, $subject, $str, $notify_header);

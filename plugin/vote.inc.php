@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: vote.inc.php,v 1.22.4 2005/03/10 02:43:06 miko Exp $
+// $Id: vote.inc.php,v 1.23.4 2005/04/02 06:33:39 miko Exp $
 //
 // Vote box plugin
 
@@ -106,7 +106,7 @@ function plugin_vote_convert()
 	if (! isset($number[$page])) $number[$page] = 0; // Init
 	$vote_no = $number[$page]++;
 
-	if (! func_num_args()) return '#vote(): No arguments<br/>' . "\n";
+	if (! func_num_args()) return '#vote(): No arguments<br />' . "\n";
 
 	if (PKWK_READONLY) {
 		$_script = '';
