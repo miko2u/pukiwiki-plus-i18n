@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: make_link.php,v 1.17.4 2005/02/05 03:40:13 miko Exp $
+// $Id: make_link.php,v 1.18.4 2005/04/02 03:04:14 miko Exp $
 //
 // Hyperlink-related functions
 
@@ -163,9 +163,8 @@ class Link
 	function get_count() {}
 
 	// Set pattern that matches
-	function set($arr,$page) {}
+	function set($arr, $page) {}
 
-	// Convert String(s)
 	function toString() {}
 
 	// Private: Get needed parts from a matched array()
@@ -262,14 +261,16 @@ EOD;
 		$str = FALSE;
 
 		// Try to call the plugin
-		if (exist_plugin_inline($this->name)) {
+		if (exist_plugin_inline($this->name))
 			$str = do_plugin_inline($this->name, $this->param, $body);
-			if ($str !== FALSE)	return $str;
-		}
 
-		// No such plugin, or Failed
-		$body = (($body == '') ? '' : '{' . $body . '}') . ';';
-		return make_line_rules(htmlspecialchars('&' . $this->plain) . $body);
+		if ($str !== FALSE) {
+			return $str; // Succeed
+		} else {
+			// No such plugin, or Failed
+			$body = (($body == '') ? '' : '{' . $body . '}') . ';';
+			return make_line_rules(htmlspecialchars('&' . $this->plain) . $body);
+		}
 	}
 }
 
@@ -297,10 +298,14 @@ EOD;
 
 	function set($arr, $page)
 	{
-		global $foot_explain, $script, $vars;
+		global $foot_explain, $vars;
 		static $note_id = 0;
 
 		list(, $body) = $this->splice($arr);
+
+		$script = '';
+		if (! PKWK_ALLOW_RELATIVE_FOOTNOTE_ANCHOR)
+			$script = get_script_uri() . '?' . $page;
 
 		$id   = ++$note_id;
 		$note = make_link($body);
@@ -308,11 +313,12 @@ EOD;
 
 		// Footnote
 		$foot_explain[$id] = '<a id="notefoot_' . $id . '" href="' .
-			$script . '?' . $page . '#notetext_' . $id .
-			'" class="note_super">*' . $id . '</a>' . "\n" .
+			$script . '#notetext_' . $id . '" class="note_super">*' .
+			$id . '</a>' . "\n" .
 			'<span class="small">' . $note . '</span><br />';
 
-		$name = '<a id="notetext_' . $id . '" href="' . $script . '?' . $page .
+		// A hyperlink, content-body to footnote
+		$name = '<a id="notetext_' . $id . '" href="' . $script .
 			'#notefoot_' . $id . '" class="note_super" title="' .
 			htmlspecialchars(strip_tags($note)) . '">*' . $id . '</a>';
 
@@ -407,18 +413,13 @@ EOD;
 
 	function toString()
 	{
-		if (FALSE) {
-			$rel = '';
-		} else {
-			$rel = ' rel="nofollow"';
-		}
-
-//		return '<a href="' . $this->name . '">' . $this->alias . '</a>';
+		$rel = ( FALSE ? '': ' rel="nofollow"');
+//		return '<a href="' . $this->name . '" rel="nofollow">' . $this->alias . '</a>';
 		return open_uri_in_new_window('<a href="' . $this->name . '"' . $rel . '>' . $this->alias . '</a>', get_class($this));
 	}
 }
 
-//mailto:
+// mailto: URL schemes
 class Link_mailto extends Link
 {
 	var $is_image, $image;
@@ -524,16 +525,11 @@ EOD;
 
 	function toString()
 	{
-		if (FALSE) {
-			$rel = '';
-		} else {
-			$rel = ' rel="nofollow"';
-		}
-
+		$rel = ( FALSE ? '': ' rel="nofollow"');
+//		return '<a href="' . $this->url . $this->anchor . '" title="' .
+//			$this->name . '" rel="nofollow">' . $this->alias . '</a>';
 		return open_uri_in_new_window('<a href="' . $this->url . $this->anchor .
 			'" title="' . $this->name . '"' . $rel . '>' . $this->alias . '</a>', get_class($this));
-//		return '<a href="' . $this->url . $this->anchor .
-//			'" title="' . $this->name . '">' . $this->alias . '</a>';
 	}
 }
 
@@ -592,28 +588,12 @@ EOD;
 
 	function toString()
 	{
-//miko
-		global $fancyurl;
-		if ($fancyurl) {
-			$link_result =  make_pagelink(
-				$this->name,
-				$this->alias,
-				$this->anchor,
-				$this->page
-			);
-			$link_result = preg_replace("/href=\"([^\?]+)\?([^\"]+)\" title=/", "href=\"".get_fancy_uri()."/$2\" title=", $link_result);
-			return $link_result;
-		} else {
-//miko
 		return make_pagelink(
 			$this->name,
 			$this->alias,
 			$this->anchor,
 			$this->page
 		);
-//miko
-		}
-//miko
 	}
 }
 
@@ -692,7 +672,7 @@ class Link_autolink extends Link
 
 		list($name) = $this->splice($arr);
 
-		// 無視リストに含まれている、あるいは存在しないページを捨てる
+		// Ignore pages listed, or Expire ones not found
 		if (in_array($name, $this->forceignorepages) || ! is_page($name))
 			return FALSE;
 
@@ -701,30 +681,7 @@ class Link_autolink extends Link
 
 	function toString()
 	{
-		global $autolink;
-		if (!$autolink) return $this->name;
-//miko
-		global $fancyurl;
-		if ($fancyurl) {
-			$link_result =  make_pagelink(
-				$this->name,
-				$this->alias,
-				'',
-				$this->page
-			);
-			$link_result = preg_replace("/href=\"([^\?]+)\?([^\"]+)\" title=/", "href=\"".get_fancy_uri()."/$2\" title=", $link_result);
-			return $link_result;
-		} else {
-//miko
-		return make_pagelink(
-			$this->name,
-			$this->alias,
-			'',
-			$this->page
-		);
-//miko
-		}
-//miko
+		return make_pagelink($this->name, $this->alias, '', $this->page);
 	}
 }
 
@@ -954,7 +911,7 @@ function make_pagelink($page, $alias = '', $anchor = '', $refer = '')
 	}
 }
 
-// Resolve relative/(Unix-like)absolute path of the page
+// Resolve relative / (Unix-like)absolute path of the page
 function get_fullname($name, $refer)
 {
 	global $defaultpage;
@@ -1000,10 +957,11 @@ function get_interwiki_url($name, $param)
 
 	if (! isset($interwikinames)) {
 		$interwikinames = $matches = array();
-		foreach (get_source($interwiki) as $line) {
-			if (preg_match('/\[((?:(?:https?|ftp|news):\/\/|\.\.?\/)[!~*\'();\/?:\@&=+\$,%#\w.-]*)\s([^\]]+)\]\s?([^\s]*)/', $line, $matches))
+		foreach (get_source($interwiki) as $line)
+			if (preg_match('/\[(' . '(?:(?:https?|ftp|news):\/\/|\.\.?\/)' .
+			    '[!~*\'();\/?:\@&=+\$,%#\w.-]*)\s([^\]]+)\]\s?([^\s]*)/',
+			    $line, $matches))
 				$interwikinames[$matches[2]] = array($matches[1], $matches[3]);
-		}
 	}
 
 	if (! isset($interwikinames[$name])) return FALSE;
