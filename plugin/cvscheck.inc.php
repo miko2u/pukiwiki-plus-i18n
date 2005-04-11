@@ -229,7 +229,7 @@ function plugin_cvscheck_diff($alocal,$acvs)
 			if ( $lver == '' or $lver == $cver) continue;
 			$lver = ( $lver == '' ) ? $_cvscheck_messages['title_not_found'] : $lver;
 			$s = preg_replace('/^\//','',$sites[$site]) . $file;
-if ($lver > $cver) {
+if (floatval($lver) >= floatval($cver)) {
 			$outs[] = "|[[$s&nbsp;:$url/$s]]|COLOR(green)\{$lver}|[[$cver:$curl/$s?rev=$cver]]|\n";
 } else {
 			$outs[] = "|[[$s&nbsp;:$url/$s]]|COLOR(red)\{$lver}|[[$cver:$curl/$s?rev=$cver]]|\n";
