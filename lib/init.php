@@ -1,12 +1,12 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: init.php,v 1.26.3 2005/02/24 14:24:50 miko Exp $
+// $Id: init.php,v 1.29.3 2005/04/10 18:41:10 miko Exp $
 //
 // Init PukiWiki here
 
 // PukiWiki version / Copyright / Licence
 
-define('S_VERSION', '1.4.5_1');
+define('S_VERSION', '1.4.6_alpha');
 define('S_COPYRIGHT',
 	'<strong>PukiWiki ' . S_VERSION . '</strong>' .
 	' Copyright &copy; 2001-2005' .
@@ -344,6 +344,10 @@ require(DATA_HOME . 'rules.ini.php');
 // 現在時刻
 $now = format_date(UTIME);
 
+// 日時置換ルールを$line_rulesに加える
+if ($usedatetime) $line_rules += $datetime_rules;
+unset($datetime_rules);
+
 // フェイスマークを$line_rulesに加える
 if ($usefacemark) $line_rules += $facemark_rules;
 unset($facemark_rules);
@@ -355,8 +359,6 @@ $entity_pattern = trim(join('', file(CACHE_DIR . 'entities.dat')));
 $line_rules = array_merge(array(
 	'&amp;(#[0-9]+|#x[0-9a-f]+|' . $entity_pattern . ');' => '&$1;',
 	"\r"          => '<br />' . "\n",	/* 行末にチルダは改行 */
-	'#related$'   => '<del>#related</del>',
-	'^#contents$' => '<del>#contents</del>'
 ), $line_rules);
 
 ?>
