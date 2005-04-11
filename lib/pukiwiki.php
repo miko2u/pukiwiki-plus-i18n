@@ -53,7 +53,6 @@ require(LIB_DIR . 'proxy.php');
 require(LIB_DIR . 'mail.php');
 require(LIB_DIR . 'lang.php');
 require(LIB_DIR . 'timezone.php');
-require(LIB_DIR . 'public_holiday.php');
 
 if (! extension_loaded('mbstring')) {
 	require(LIB_DIR . 'mbstring.php');
