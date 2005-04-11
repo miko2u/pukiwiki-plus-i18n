@@ -1,32 +1,46 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: plugin.php,v 1.7.4 2005/02/27 06:47:10 miko Exp $
+// $Id: plugin.php,v 1.9.4 2005/04/10 01:01:17 miko Exp $
 //
 // Plugin related functions
 
-// プラグイン用に未定義のグローバル変数を設定
+define('PKWK_PLUGIN_CALL_TIME_LIMIT', 512);
+
+// Set global variables for plugins
 function set_plugin_messages($messages)
 {
-	foreach ($messages as $name=>$val) {
-		if (! isset($GLOBALS[$name])) $GLOBALS[$name] = $val;
-	}
+	foreach ($messages as $name=>$val)
+		if (! isset($GLOBALS[$name]))
+			$GLOBALS[$name] = $val;
 }
 
 // Check plugin '$name' is here
 function exist_plugin($name)
 {
-	static $exists = array();
+	global $vars;
+	static $exist = array(), $count = array();
 
 	$name = strtolower($name);
-	if(isset($exists[$name])) return $exists[$name];
+	if(isset($exist[$name])) {
+		if (++$count[$name] > PKWK_PLUGIN_CALL_TIME_LIMIT)
+			die('Alert: plugin "' . htmlspecialchars($name) .
+			'" was called over ' . PKWK_PLUGIN_CALL_TIME_LIMIT .
+			' times. SPAM or someting?<br />' . "\n" .
+			'<a href="' . get_script_uri() . '?cmd=edit&amp;page='.
+			rawurlencode($vars['page']) . '">Try to edit this page</a><br />' . "\n" .
+			'<a href="' . get_script_uri() . '">Return to frontpage</a>');
+		return $exist[$name];
+	}
 
 	if (preg_match('/^\w{1,64}$/', $name) &&
 	    file_exists(PLUGIN_DIR . $name . '.inc.php')) {
-		$exists[$name] = TRUE;
+	    	$exist[$name] = TRUE;
+	    	$count[$name] = 1;
 		require_once(PLUGIN_DIR . $name . '.inc.php');
 		return TRUE;
 	} else {
-		$exists[$name] = FALSE;
+	    	$exist[$name] = FALSE;
+	    	$count[$name] = 1;
 		return FALSE;
 	}
 }
@@ -58,7 +72,6 @@ function do_plugin_init($name)
 
 	bindtextdomain($name, LANG_DIR);
 	bind_textdomain_codeset($name, SOURCE_ENCODING);
-
 	$func = 'plugin_' . $name . '_init';
 	if (function_exists($func)) {
 		// TRUE or FALSE or NULL (return nothing)
@@ -101,9 +114,9 @@ function do_plugin_convert($name, $args = '')
 	if(do_plugin_init($name) === FALSE)
 		return '[Plugin init failed: ' . $name . ']';
 
-	$here = array();
+	$multiline_arg = array();
 	if (($pos = strpos($args, "\r")) !== FALSE) {
-		$here[] = substr($args, $pos + 1);
+		$multiline_arg[] = substr($args, $pos + 1);
 		$args = substr($args, 0, $pos);
 	}
 
@@ -113,8 +126,8 @@ function do_plugin_convert($name, $args = '')
 		$aryargs = array();
 	}
 
-	if (count($here)) {
-		$aryargs[] = $here[0];
+	if (count($multiline_arg)) {
+		$aryargs[] = $multiline_arg[0];
 	}
 
 	$_digest = $digest;
