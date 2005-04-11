@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: default.ini.php,v 1.16.2 2004/12/24 15:30:29 miko Exp $
+// $Id: default.ini.php,v 1.18.2 2005/04/02 03:04:14 miko Exp $
 //
 // PukiWiki setting file (user agent:default)
 
@@ -70,6 +70,14 @@ $rule_related_str = "</li>\n<li>";
 $hr = '<hr class="full_hr" />';
 
 /////////////////////////////////////////////////
+// 脚注機能関連
+
+// 脚注のアンカーを相対パスで表示する (0 = 絶対パス)
+//  * 相対パスの場合、以前のバージョンのOperaで問題になることがあります
+//  * 絶対パスの場合、calendar_viewerなどで問題になることがあります
+// (詳しくは: BugTrack/698)
+define('PKWK_ALLOW_RELATIVE_FOOTNOTE_ANCHOR', 1);
+
 // 文末の注釈の直前に表示するタグ
 $note_hr = '<hr class="note_hr" />';
 
@@ -110,8 +118,6 @@ $line_rules = array(
 	'%%(?!%)((?:(?!%%).)*)%%'	=> '<del>$1</del>',
 	"'''(?!')((?:(?!''').)*)'''"	=> '<em>$1</em>',
 	"''(?!')((?:(?!'').)*)''"	=> '<strong>$1</strong>',
-	'&amp;br;'	=> '<br />',
-	'&amp;hr;'      => '<hr class="short_line" />',
 );
 
 /////////////////////////////////////////////////
