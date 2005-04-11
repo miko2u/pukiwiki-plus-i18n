@@ -344,12 +344,15 @@ require(DATA_HOME . 'rules.ini.php');
 // 現在時刻
 $now = format_date(UTIME);
 
+// 文字列置換ルールの初期化
+$line_rules = array();
+
 // 日時置換ルールを$line_rulesに加える
-if ($usedatetime) $line_rules .= $datetime_rules;
+if ($usedatetime) $line_rules = array_merge($datetime_rules,$line_rules);
 unset($datetime_rules);
 
 // フェイスマークを$line_rulesに加える
-if ($usefacemark) $line_rules .= $facemark_rules;
+if ($usefacemark) $line_rules = array_merge($facemark_rules,$line_rules);
 unset($facemark_rules);
 
 // 実体参照パターンおよびシステムで使用するパターンを$line_rulesに加える
