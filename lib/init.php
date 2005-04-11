@@ -345,11 +345,11 @@ require(DATA_HOME . 'rules.ini.php');
 $now = format_date(UTIME);
 
 // 日時置換ルールを$line_rulesに加える
-if ($usedatetime) $line_rules += $datetime_rules;
+if ($usedatetime) $line_rules .= $datetime_rules;
 unset($datetime_rules);
 
 // フェイスマークを$line_rulesに加える
-if ($usefacemark) $line_rules += $facemark_rules;
+if ($usefacemark) $line_rules .= $facemark_rules;
 unset($facemark_rules);
 
 // 実体参照パターンおよびシステムで使用するパターンを$line_rulesに加える
