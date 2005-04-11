@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: html.php,v 1.27.15 2005/03/10 13:26:37 miko Exp $
+// $Id: html.php,v 1.30.15 2005/03/13 17:29:02 miko Exp $
 //
 // HTML-publishing related functions
 
@@ -169,6 +169,7 @@ function edit_form($page, $postdata, $digest = 0, $b_template = TRUE)
 {
 	global $script, $vars, $rows, $cols, $hr, $function_freeze;
 	global $whatsnew, $non_list, $load_template_func;
+	global $notimeupdate;
 	global $_button, $_string;
 
 	$refer = $template = $addtag = $add_top = '';
@@ -218,7 +219,21 @@ EOD;
 	$s_id        = isset($vars['id']) ? htmlspecialchars($vars['id']) : '';
 	$b_preview   = isset($vars['preview']); // TRUE when preview
 	$btn_preview = $b_preview ? $_button['repreview'] : $_button['preview'];
-
+	$add_notimestamp = '';
+	if ( $notimeupdate != 0 ) {
+		// enable 'do not change timestamp'
+		 $add_notimestamp = <<<EOD
+  <input type="checkbox" name="notimestamp" id="_edit_form_notimestamp" value="true"$checked_time />
+  <label for="_edit_form_notimestamp"><span class="small">{$_button['notchangetimestamp']}</span></label>
+EOD;
+		if ( $notimeupdate == 2 ) {
+			// enable only administrator
+			$add_notimestamp .= <<<EOD
+  <input type="password" name="pass" size="12" />
+EOD;
+		}
+		$add_notimestamp .= '&nbsp;';
+	}
 	$refpage = htmlspecialchars($vars['refpage']);
 	$add_assistant = edit_form_assistant();
 
@@ -238,8 +253,7 @@ $template
   <input type="submit" name="preview" value="$btn_preview" accesskey="p" />
   <input type="submit" name="write"   value="{$_button['update']}" accesskey="s" />
   $add_top
-  <input type="checkbox" name="notimestamp" value="true"$checked_time />
-  <span style="small">{$_button['notchangetimestamp']}</span> &nbsp;
+  $add_notimestamp
   <input type="submit" name="cancel"  value="{$_button['cancel']}" accesskey="c" />
   <textarea name="original" rows="1" cols="1" style="display:none">$s_original</textarea>
  </div>

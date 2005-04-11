@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: lookup.inc.php,v 1.16 2005/01/30 10:55:53 henoheno Exp $
+// $Id: lookup.inc.php,v 1.19 2005/02/27 09:36:31 henoheno Exp $
 //
 // InterWiki lookup plugin
 
@@ -8,6 +8,7 @@ define('PLUGIN_LOOKUP_USAGE', '#lookup(interwikiname[,button_name[,default]])');
 function plugin_lookup_convert()
 {
 	global $script, $vars;
+	static $id = 0;
 
 	$num = func_num_args();
 	if ($num == 0 || $num > 3) return PLUGIN_LOOKUP_USAGE;
@@ -18,6 +19,7 @@ function plugin_lookup_convert()
 	$button    = ($button != '') ? htmlspecialchars($button) : 'lookup';
 	$default   = ($num > 2) ? htmlspecialchars(trim($args[2])) : '';
 	$s_page    = htmlspecialchars($vars['page']);
+	++$id;
 
 	$ret = <<<EOD
 <form action="$script" method="post">
@@ -25,8 +27,8 @@ function plugin_lookup_convert()
   <input type="hidden" name="plugin" value="lookup" />
   <input type="hidden" name="refer"  value="$s_page" />
   <input type="hidden" name="inter"  value="$interwiki" />
-  $interwiki:
-  <input type="text" name="page" size="30" value="$default" />
+  <label for="_p_lookup_$id">$interwiki:</label>
+  <input type="text" name="page" id="_p_lookup_$id" size="30" value="$default" />
   <input type="submit" value="$button" />
  </div>
 </form>
