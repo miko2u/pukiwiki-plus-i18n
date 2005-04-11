@@ -1,22 +1,21 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
+// $Id: pukiwiki.php,v 1.8.4 2005/04/10 08:06:03 miko Exp $
 //
 // PukiWiki 1.4.*
-//  Copyright (C) 2002 by PukiWiki Developers Team
+//  Copyright (C) 2002-2005 by PukiWiki Developers Team
 //  http://pukiwiki.org/
 //
 // PukiWiki 1.3.*
-//  Copyright (C) 2002 by PukiWiki Developers Team
+//  Copyright (C) 2002-2004 by PukiWiki Developers Team
 //  http://pukiwiki.org/
 //
 // PukiWiki 1.3 (Base)
-//  Copyright (C) 2001,2002 by sng.
-//  <sng@factage.com>
+//  Copyright (C) 2001-2002 by yu-ji <sng@factage.com>
 //  http://factage.com/sng/pukiwiki/
 //
 // Special thanks
-//  YukiWiki by Hiroshi Yuki
-//  <hyuki@hyuki.com>
+//  YukiWiki by Hiroshi Yuki <hyuki@hyuki.com>
 //  http://www.hyuki.com/yukiwiki/
 //
 // This program is free software; you can redistribute it and/or modify
@@ -28,22 +27,13 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
-//
-// $Id: pukiwiki.php,v 1.4.4 2004/10/14 12:58:30 miko Exp $
-/////////////////////////////////////////////////
-
-/////////////////////////////////////////////////
-// ¥Ç¡¼¥¿¤ò³ÊÇ¼¤¹¤ë¥Ç¥£¥ì¥¯¥È¥ê¤äÀßÄê¥Õ¥¡¥¤¥ë¤òÃÖ¤¯¥Ç¥£¥ì¥¯¥È¥ê
 
 if (! defined('DATA_HOME')) define('DATA_HOME', '');
 
 /////////////////////////////////////////////////
-// ¥µ¥Ö¥ë¡¼¥Á¥ó¤Î³ÊÇ¼Àè¥Ç¥£¥ì¥¯¥È¥ê (Â¾¤Î *.php¥Õ¥¡¥¤¥ë)
+// Include subroutines
 
 if (! defined('LIB_DIR')) define('LIB_DIR', '');
-
-/////////////////////////////////////////////////
-// Include subroutines
 
 require(LIB_DIR . 'func.php');
 require(LIB_DIR . 'file.php');
@@ -67,88 +57,90 @@ if (! extension_loaded('mbstring')) {
 	require(LIB_DIR . 'mbstring.php');
 }
 
-// ½é´ü²½: ÀßÄê¥Õ¥¡¥¤¥ë¤ÎÆÉ¤ß¹þ¤ß
+// Load *.ini.php files and init PukiWiki
 require(LIB_DIR . 'init.php');
 
 /////////////////////////////////////////////////
 // Main
 
-$base    = $defaultpage;
 $retvars = array();
+$is_cmd = FALSE;
+if (isset($vars['cmd'])) {
+	$is_cmd  = TRUE;
+	$plugin = & $vars['cmd'];
+} else if (isset($vars['plugin'])) {
+	$plugin = & $vars['plugin'];
+} else {
+	$plugin = '';
+}
+if ($plugin != '') {
+	if (exist_plugin_action($plugin)) {
+		// Found and exec
+		$retvars = do_plugin_action($plugin);
+		if ($retvars === FALSE) exit; // Done
 
-if (isset($vars['plugin'])) {
-	// Plug-in action
-	if (! exist_plugin_action($vars['plugin'])) {
-		$s_plugin = htmlspecialchars($vars['plugin']);
-		$msg      = "plugin=$s_plugin is not implemented.";
-		$retvars  = array('msg'=>$msg,'body'=>$msg);
-	} else {
-		$retvars  = do_plugin_action($vars['plugin']);
-		if ($retvars !== FALSE)
+		if ($is_cmd) {
+			$base = isset($vars['page'])  ? $vars['page']  : '';
+		} else {
 			$base = isset($vars['refer']) ? $vars['refer'] : '';
-	}
-
-} else if (isset($vars['cmd'])) {
-	// Command action
-	if (! exist_plugin_action($vars['cmd'])) {
-		$s_cmd   = htmlspecialchars($vars['cmd']);
-		$msg     = "cmd=$s_cmd is not implemented.";
-		$retvars = array('msg'=>$msg,'body'=>$msg);
+		}
 	} else {
-		$retvars = do_plugin_action($vars['cmd']);
-		$base    = $vars['page'];
+		// Not found
+		$msg = 'plugin=' . htmlspecialchars($plugin) .
+			' is not implemented.';
+		$retvars = array('msg'=>$msg,'body'=>$msg);
+		$base    = & $defaultpage;
 	}
 }
 
-if ($retvars !== FALSE) {
-	$title = htmlspecialchars(strip_bracket($base));
-	$page  = make_search($base);
+$title = htmlspecialchars(strip_bracket($base));
+$page  = make_search($base);
+if (isset($retvars['msg']) && $retvars['msg'] != '') {
+	$title = str_replace('$1', $title, $retvars['msg']);
+	$page  = str_replace('$1', $page,  $retvars['msg']);
+}
 
-	if (isset($retvars['msg']) && $retvars['msg'] != '') {
-		$title = str_replace('$1', $title, $retvars['msg']);
-		$page  = str_replace('$1', $page,  $retvars['msg']);
+if (isset($retvars['body']) && $retvars['body'] != '') {
+	$body = & $retvars['body'];
+} else {
+	if ($base == '' || ! is_page($base)) {
+		$base  = & $defaultpage;
+		$title = htmlspecialchars(strip_bracket($base));
+		$page  = make_search($base);
 	}
 
-	if (isset($retvars['body']) && $retvars['body'] != '') {
-		$body = $retvars['body'];
-	} else {
-		if ($base == '' || ! is_page($base)) {
-			$base  = $defaultpage;
-			$title = htmlspecialchars(strip_bracket($base));
-			$page  = make_search($base);
-		}
+	$vars['cmd']  = 'read';
+	$vars['page'] = & $base;
 
-		$vars['cmd']  = 'read';
-		$vars['page'] = $base;
-//		$body = convert_html(get_source($base));
+//	$body  = convert_html(get_source($base));
 //miko
-		global $fixed_heading_edited;
-		$source = get_source($base);
-		// ¸«½Ð¤·ÊÔ½¸¤òÆ°Åª¤Ë¹Ô¤¦¤¿¤á¤Î½èÍý
-		// convert_html ¤ÏºÆÆþ¶Ø»ß¤Î¤¿¤áµ¼»÷¥×¥é¥°¥¤¥ó¤È¤¹¤ë
-		// (½¾Íè¤È°ã¤¤¡¢ËÜÊ¸¥½¡¼¥¹¤·¤«¸«¤Ê¤¤)
-		$lines = $source;
-		while (! empty($lines)) {
-			$line = array_shift($lines);
-			if (preg_match("/^\#(partedit)(?:\((.*)\))?/", $line, $matches)) {
-				if ( !isset($matches[2]) || $matches[2] == '') {
-					$fixed_heading_edited = ($fixed_heading_edited ? 0:1);
-				} else if ( $matches[2] == 'on') {
-					$fixed_heading_edited = 1;
-				} else if ( $matches[2] == 'off') {
-					$fixed_heading_edited = 0;
-				}
+	global $fixed_heading_edited;
+	$source = get_source($base);
+	// Œ©o‚µ•ÒW‚ð“®“I‚És‚¤‚½‚ß‚Ìˆ—
+	// convert_html ‚ÍÄ“ü‹ÖŽ~‚Ì‚½‚ß‹[Ž—ƒvƒ‰ƒOƒCƒ“‚Æ‚·‚é
+	// (]—ˆ‚Æˆá‚¢A–{•¶ƒ\[ƒX‚µ‚©Œ©‚È‚¢)
+	$lines = $source;
+	while (! empty($lines)) {
+		$line = array_shift($lines);
+		if (preg_match("/^\#(partedit)(?:\((.*)\))?/", $line, $matches)) {
+			if ( !isset($matches[2]) || $matches[2] == '') {
+				$fixed_heading_edited = ($fixed_heading_edited ? 0:1);
+			} else if ( $matches[2] == 'on') {
+				$fixed_heading_edited = 1;
+			} else if ( $matches[2] == 'off') {
+				$fixed_heading_edited = 0;
 			}
 		}
-
-		$body = convert_html($source);
-//miko
-		$body .= tb_get_rdf($vars['page']);
-		ref_save($vars['page']);
 	}
 
-	// Output
-	catbody($title, $page, $body);
+	$body = convert_html($source);
+//miko
+
+	if ($trackback) $body .= tb_get_rdf($base); // Add TrackBack-Ping URI
+	if ($referer) ref_save($base);
 }
-// End
+
+// Output
+catbody($title, $page, $body);
+exit;
 ?>
