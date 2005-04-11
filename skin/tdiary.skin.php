@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: tdiary.skin.php,v 1.18 2005/02/05 07:19:05 henoheno Exp $
+// $Id: tdiary.skin.php,v 1.20 2005/04/02 06:36:07 henoheno Exp $
 //
 // tDiary-wrapper skin
 
@@ -40,7 +40,7 @@ if ($theme == '' || $theme == 'TDIARY_THEME') {
 	$theme_css = SKIN_DIR . 'theme/' . $theme . '/' . $theme . '.css';
 	if (! file_exists($theme_css)) {
 		echo 'tDiary theme wrapper: ';
-		echo 'Theme not found: ' . htmlspecialchars($theme_css) . '<br/>';
+		echo 'Theme not found: ' . htmlspecialchars($theme_css) . '<br />';
 		echo 'You can get tdiary-theme from: ';
 		echo 'http://sourceforge.net/projects/tdiary/';
 		exit;
@@ -437,7 +437,7 @@ function _navigator($key, $value = '', $javascript = ''){
 
 <?php if ($trackback) { ?> &nbsp;
    <?php _navigator('trackback', $lang['trackback'] . '(' . tb_count($_page) . ')',
- 	($trackback_javascript == 1) ? 'onClick="OpenTrackback(this.href); return false"' : '') ?>
+ 	($trackback_javascript == 1) ? 'onclick="OpenTrackback(this.href); return false"' : '') ?>
 <?php } ?>
 <?php if ($referer)   { ?> &nbsp;
    <?php _navigator('refer') ?>
@@ -535,7 +535,7 @@ default:
 <?php if ($notes != '') { ?>
 <div class="comment"><!-- Design for tDiary "Comments" -->
 	<div class="caption">&nbsp;</div>
-	<div class="commentbody"><br/>
+	<div class="commentbody"><br />
 		<?php
 		$notes = preg_replace('#<span class="small">(.*?)</span>#', '<p>$1</p>', $notes);
 		echo preg_replace('#<a (id="notefoot_[^>]*)>(.*?)</a>#',
@@ -688,7 +688,7 @@ function _toolbar($key, $x = 20, $y = 20){
  <?php _toolbar('recent') ?>
  &nbsp; <?php _toolbar('help') ?>
  &nbsp; <?php _toolbar('rss10', 36, 14) ?>
- <br/>
+ <br />
 <?php } // PKWK_SKIN_SHOW_TOOLBAR ?>
 
 <!-- Copyright etc -->

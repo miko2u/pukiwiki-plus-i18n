@@ -1,9 +1,9 @@
 <?php
-// $Id: tb.inc.php,v 1.17 2005/01/23 03:15:40 henoheno Exp $
+// $Id: tb.inc.php,v 1.19.1 2005/04/10 08:10:05 miko Exp $
 /*
  * PukiWiki/TrackBack: TrackBack Ping receiver and viewer
- * (C) 2003-2004 PukiWiki Developer Team
- * (C) 2003, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * (C) 2003-2004 PukiWiki Developers Team
+ * (C) 2003 Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * License: GPL
  *
  * plugin_tb_action()    action
@@ -135,6 +135,7 @@ EOD;
 	$excerpt = strip_htmltag(convert_html(get_source($page)));
 	$excerpt = preg_replace("/&$entity_pattern;/", '', $excerpt);
 	$excerpt = mb_strimwidth(preg_replace("/[\r\n]/", ' ', $excerpt), 0, 255, '...');
+	$lang    = $language;
 
 	$rc = <<<EOD
 <?xml version="1.0" encoding="utf-8" ?>
@@ -145,7 +146,7 @@ EOD;
    <title>$title</title>
    <link>$link</link>
    <description>$excerpt</description>
-   <language>$language</language>$items
+   <language>$lang</language>$items
   </channel>
  </rss>
 </response>
