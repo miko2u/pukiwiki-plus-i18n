@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: pukiwiki.ini.php,v 1.113.12 2005/03/13 17:29:01 miko Exp $
+// $Id: pukiwiki.ini.php,v 1.117.13 2005/04/02 06:34:50 miko Exp $
 //
 // PukiWiki main setting file
 
@@ -99,8 +99,8 @@ define('SKIN_URI', ROOT_URI . SKIN_DIR);
 define('IMAGE_URI', ROOT_URI . IMAGE_DIR);
 
 /////////////////////////////////////////////////
-// Title of your Wikisite (Define this)
-// and also RSS feed's channel name
+// Title of your Wikisite (Name this)
+// Also used as RSS feed's channel name etc
 $page_title = 'PukiWiki Plus!';
 
 // Specify PukiWiki URL (default: auto)
@@ -139,7 +139,7 @@ $footarea     = ':Footer';
 
 /////////////////////////////////////////////////
 
-// PKWK_ALLOW_JAVASCRIPT - Allow using JavaScript
+// PKWK_ALLOW_JAVASCRIPT - Allow / Prohibit using JavaScript
 define('PKWK_ALLOW_JAVASCRIPT', 1);
 
 /////////////////////////////////////////////////
@@ -148,7 +148,7 @@ define('PKWK_ALLOW_JAVASCRIPT', 1);
 // Enable Trackback
 $trackback = 1;
 
-// Show trackbacks with an another window
+// Show trackbacks with an another window (using JavaScript)
 $trackback_javascript = 0;
 
 /////////////////////////////////////////////////
@@ -162,7 +162,7 @@ $nowikiname = 1;
 /////////////////////////////////////////////////
 // AutoLink feature
 
-// AutoLink minimum bytes (0 = Disable)
+// AutoLink minimum length of page name
 // Pukiwiki Plus! Recommended "5"
 $autolink = 5;
 
@@ -182,7 +182,7 @@ $function_freeze = 1;
 $notimeupdate = 1;
 
 /////////////////////////////////////////////////
-// Wikisite admin password
+// Admin password for this Wikisite
 
 // CHANGE THIS
 $adminpass = '1a1dc91c907325c69271ddf0c944bc72'; // md5('pass')
@@ -250,7 +250,7 @@ $edit_auth = 0;
 $edit_auth_pages = array(
 	'#Barの公開日記#'	=> 'bar',
 	'#ひきこもるほげ#'	=> 'hoge',
-	'#(ネタバレ|ねたばれ)#'	=> 'foo',
+	'#(ネタバレ|ねたばれ)#'	=> 'foo,bar,hoge',
 );
 
 /////////////////////////////////////////////////
@@ -278,7 +278,7 @@ $maxshow_deleted = 60;
 $cantedit = array( $whatsnew, $whatsdeleted );
 
 /////////////////////////////////////////////////
-// HTTP: Send Last-Modified header
+// HTTP: Output Last-Modified header
 $lastmod = 0;
 
 /////////////////////////////////////////////////
@@ -308,7 +308,7 @@ $maxage = 360; // Stock latest N backups
 // NOTE: $cycle x $maxage / 24 = Minimum days to lost your data
 //          1   x   360   / 24 = 15
 
-// Spilitter of backup data (NOTE: Too dangerous to change)
+// Splitter of backup data (NOTE: Too dangerous to change)
 define('PKWK_SPLITTER', '>>>>>>>>>>');
 
 /////////////////////////////////////////////////
@@ -317,7 +317,7 @@ $update_exec = '';
 //$update_exec = '/usr/bin/mknmz --media-type=text/pukiwiki -O /var/lib/namazu/index/ -L ja -c -K /var/www/wiki/';
 
 /////////////////////////////////////////////////
-// Proxy setting (for TrackBack etc)
+// HTTP proxy setting (for TrackBack etc)
 
 // Use HTTP proxy server to get remote data
 $use_proxy = 0;
@@ -352,6 +352,7 @@ $notify_diff_only = 1;
 // SMTP server (Windows only. Usually specified at php.ini)
 $smtp_server = 'localhost';
 
+// Mail recipient (To:) and sender (From:)
 $notify_to   = 'to@example.com';	// To:
 $notify_from = 'from@example.com';	// From:
 
@@ -410,7 +411,7 @@ $fixed_heading_anchor = 1;
 $preformat_ltrim = 1;
 
 /////////////////////////////////////////////////
-// Convert linebreaks into <br/>
+// Convert linebreaks into <br />
 $line_break = 0;
 
 /////////////////////////////////////////////////

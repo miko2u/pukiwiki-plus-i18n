@@ -1,10 +1,12 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: edit.inc.php,v 1.19.30 2005/01/23 05:22:25 miko Exp $
+// $Id: edit.inc.php,v 1.19.33.1 2005/03/13 17:29:02 miko Exp $
 //
-
 // Edit plugin
 // cmd=edit
+
+// Remove #freeze written by hand
+define('PLUGIN_EDIT_FREEZE_REGEX', '/^(?:#freeze(?!\w)\s*)+/im');
 
 function plugin_edit_action()
 {
@@ -59,7 +61,7 @@ function plugin_edit_preview()
 	}
 
 	// 手書きの#freezeを削除
-	$vars['msg'] = preg_replace('/^#freeze\s*$/im', '' ,$vars['msg']);
+	$vars['msg'] = preg_replace(PLUGIN_EDIT_FREEZE_REGEX, '' ,$vars['msg']);
 	$postdata = $vars['msg'];
 
 	if (isset($vars['add']) && $vars['add']) {
@@ -125,7 +127,8 @@ function plugin_edit_inline()
 function plugin_edit_write()
 {
 	global $vars;
-	// global $_title_collided, $_msg_collided_auto, $_msg_collided, $_title_deleted;
+//	global $_title_collided, $_msg_collided_auto, $_msg_collided, $_title_deleted;
+//	global $_msg_invalidpass;
 
 	$page = isset($vars['page']) ? $vars['page'] : '';
 	$retvars = array();
@@ -159,7 +162,6 @@ function plugin_edit_write()
 		$vars['digest'] = $oldpagemd5;
 
 		$retvars['msg'] = _('On updating  $1, a collision has occurred.');
-
 		list($postdata_input, $auto) = do_update_diff($oldpagesrc, $postdata_input, $vars['original']);
 
 		$_msg_collided_auto =
@@ -173,6 +175,8 @@ function plugin_edit_write()
 		_(' ! is placed at the beginning of a line that has possibly been updated.<br />') .
 		_(' Edit those lines, and submit again.');
 
+		$_msg_invalidpass = _('Invalid password.');
+
 		$retvars['body'] = ($auto ? $_msg_collided_auto : $_msg_collided)."\n";
 
 		if (TRUE) {
@@ -184,32 +188,38 @@ function plugin_edit_write()
 		$retvars['body'] .= edit_form($page, $postdata_input, $oldpagemd5, FALSE);
 	}
 	else {
-		$notimestamp = (isset($vars['notimestamp']) && $vars['notimestamp'] != '');
-		page_write($page, $postdata, $notimestamp);
-
 		if ($postdata) {
-			pkwk_headers_sent();
-			if ($vars['refpage'] != '') {
-				if ($vars['id'] != '') {
-					header('Location: ' . get_script_uri() . '?' . rawurlencode($vars['refpage'])) . '#' . rawurlencode($vars['id']);
-				} else {
-					header('Location: ' . get_script_uri() . '?' . rawurlencode($vars['refpage']));
-				}
+			$notimestamp = ($notimeupdate != 0) && (isset($vars['notimestamp']) && $vars['notimestamp'] != '');
+			if($notimestamp && ($notimeupdate == 2) && !pkwk_login($vars['pass'])) {
+				// enable only administrator & password error
+				$retvars['body']  = "<p><strong>$_msg_invalidpass</strong></p>\n";
+				$retvars['body'] .= edit_form($page, $vars['msg'], $vars['digest'], FALSE);
 			} else {
-				if ($vars['id'] != '') {
-					header('Location: ' . get_script_uri() . '?' . rawurlencode($page)) . '#' . rawurlencode($vars['id']);
+				page_write($page, $postdata, $notimestamp);
+				pkwk_headers_sent();
+				if ($vars['refpage'] != '') {
+					if ($vars['id'] != '') {
+						header('Location: ' . get_script_uri() . '?' . rawurlencode($vars['refpage'])) . '#' . rawurlencode($vars['id']);
+					} else {
+						header('Location: ' . get_script_uri() . '?' . rawurlencode($vars['refpage']));
+					}
 				} else {
-					header('Location: ' . get_script_uri() . '?' . rawurlencode($page));
+					if ($vars['id'] != '') {
+						header('Location: ' . get_script_uri() . '?' . rawurlencode($page)) . '#' . rawurlencode($vars['id']);
+					} else {
+						header('Location: ' . get_script_uri() . '?' . rawurlencode($page));
+					}
 				}
+				exit;
 			}
-			exit;
+		} else {
+			$_title_deleted = _(' $1 was deleted');
+
+			page_write($page, $postdata);
+			$retvars['msg'] = $_title_deleted;
+			$retvars['body'] = str_replace('$1', htmlspecialchars($page), $_title_deleted);
+			tb_delete($page);
 		}
-
-		$_title_deleted = _(' $1 was deleted');
-
-		$retvars['msg'] = $_title_deleted;
-		$retvars['body'] = str_replace('$1', htmlspecialchars($page), $_title_deleted);
-		tb_delete($page);
 	}
 
 	return $retvars;
