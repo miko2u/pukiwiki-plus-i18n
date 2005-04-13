@@ -1,4 +1,16 @@
 /**
+ * http://sarissa.sourceforge.net/doc/overview-summary-sarissa_ieemu_xpath.js.html
+ */
+function SarissaNodeList(i){
+	this.length = i;
+};
+SarissaNodeList.prototype = new Array(0);
+SarissaNodeList.prototype.constructor = Array;
+SarissaNodeList.prototype.item = function(i) {
+    return (i < 0 || i >= this.length)?null:this[i];
+};
+SarissaNodeList.prototype.expr = "";
+/**
  * XML Load用クラス for IE+MSXML/Gecko (xmlloader.js)
  * Script Version: 0.1.0
  * 
@@ -48,7 +60,27 @@ function XmlLoader(_loadHandler, _errorHandler)
 				} else {
 					setTimeout(function(){ loadHandler(xmldoc); }, this._geckoWaitTime);
 				}
-			}
+			};
+			// for IE Emulation
+		    xmldoc.selectNodes = function(sExpr, contextNode) {
+		        var nsresolver = this.createNSResolver(this.documentElement);
+	            var oResult = this.evaluate(sExpr,(contextNode?contextNode:this), nsresolver, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+		        var nodeList = new SarissaNodeList(oResult.snapshotLength);
+		        nodeList.expr = sExpr;
+		        for(var i=0;i<nodeList.length;i++)
+		            nodeList[i] = oResult.snapshotItem(i);
+		        return nodeList;
+		    };
+			xmldoc.selectSingleNode = function(sExpr, contextNode) {
+				var ctx = contextNode ? contextNode:null;
+				sExpr = "("+sExpr+")[1]";
+				var nodeList = this.selectNodes(sExpr, ctx);
+				if(nodeList.length > 0)
+					return nodeList.item(0);
+				else
+					return null;
+			};
+			xmldoc.setProperty  = function(x,y){};
 		}
 		else if(window.ActiveXObject && document.getElementById)
 		{
@@ -105,6 +137,26 @@ function XmlLoader(_loadHandler, _errorHandler)
 					setTimeout(function(){ loadHandler(xmldoc); }, this._geckoWaitTime);
 				}
 			}
+			// for IE Emulation
+		    xmldoc.selectNodes = function(sExpr, contextNode){
+		        var nsresolver = this.createNSResolver(this.documentElement);
+	            var oResult = this.evaluate(sExpr,(contextNode?contextNode:this), nsresolver, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+		        var nodeList = new SarissaNodeList(oResult.snapshotLength);
+		        nodeList.expr = sExpr;
+		        for(var i=0;i<nodeList.length;i++)
+		            nodeList[i] = oResult.snapshotItem(i);
+		        return nodeList;
+		    };
+			xmldoc.selectSingleNode = function(sExpr, contextNode) {
+				var ctx = contextNode ? contextNode:null;
+				sExpr = "("+sExpr+")[1]";
+				var nodeList = this.selectNodes(sExpr, ctx);
+				if(nodeList.length > 0)
+					return nodeList.item(0);
+				else
+					return null;
+			};
+			xmldoc.setProperty  = function(x,y){};
 		}
 		else if(window.ActiveXObject && document.getElementById)
 		{
