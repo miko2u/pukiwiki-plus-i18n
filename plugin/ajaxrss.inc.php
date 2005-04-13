@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: ajaxrss.inc.php,v 0.1 2005/04/11 03:18:06 miko Exp $
+// $Id: ajaxrss.inc.php,v 0.2 2005/04/11 03:18:06 miko Exp $
 //
 // Warning: this plugin is experimental.
 function plugin_ajaxrss_action()
@@ -8,10 +8,22 @@ function plugin_ajaxrss_action()
 	global $get;
 
 	if ($get['t'] == 'js') {
-		print plugin_ajaxrss_output_js();
+		$output = plugin_ajaxrss_output_js();
+
+		// Feeding start
+		pkwk_common_headers();
+//		header('Content-type: text/javascript');
+		print $output;
 	} else {
-		print plugin_ajaxrss_output_xml();
+		$output = plugin_ajaxrss_output_xml();
+
+		// Feeding start
+		pkwk_common_headers();
+		header('Content-type: application/xml');
+		print '<?xml version="1.0" encoding="UTF-8"?>' . "\n\n";
+		print $output;
 	}
+
 	exit;
 }
 
@@ -41,8 +53,7 @@ EOD;
 		}
 	}
 
-	$rssxml = '<' . '?xml version="1.0" encoding="utf-8" ?' . '>' .
-	          '<!DOCTYPE rss PUBLIC "-//Netscape Communications//DTD RSS 0.91//EN"' .
+	$rssxml = '<!DOCTYPE rss PUBLIC "-//Netscape Communications//DTD RSS 0.91//EN"' .
 	' "http://my.netscape.com/publish/formats/rss-0.91.dtd">' . "\n";
 
 	$rssxml .= <<<EOD
