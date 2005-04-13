@@ -10,33 +10,12 @@ function plugin_ajaxrss_action()
 	if ($get['t'] == 'js') {
 		print plugin_ajaxrss_output_js();
 	} else {
-		print plugin_ajaxrss_create_xml();
+		print plugin_ajaxrss_output_xml();
 	}
 	exit;
 }
 
 function plugin_ajaxrss_output_xml()
-{
-	$xml = '<' . '?xml version="1.0" encoding="utf-8" ?' . '>';
-	$xml .= <<<EOD
-<rss version="0.91">
-	<channel>
-		<title>RSS Feed</title>
-		<link>http://web.paulownia.jp/rss/</link>
-		<description>技術系RSSフィード</description>
-		<language>ja-jp</language>
-		<item>
-			<title>@IT RSS 2.0</title>
-			<link>http://www.atmarkit.co.jp/rss/rss.xml</link>
-			<description>@IT新着記事15本、RSS 2.0版</description>
-		</item>
-	</channel>
-</rss>
-EOD;
-	return $xml;
-}
-
-function plugin_ajaxrss_create_xml()
 {
 	global $page_title;
 
@@ -62,7 +41,8 @@ EOD;
 		}
 	}
 
-	$rssxml = '<!DOCTYPE rss PUBLIC "-//Netscape Communications//DTD RSS 0.91//EN"' .
+	$rssxml = '<' . '?xml version="1.0" encoding="utf-8" ?' . '>' .
+	          '<!DOCTYPE rss PUBLIC "-//Netscape Communications//DTD RSS 0.91//EN"' .
 	' "http://my.netscape.com/publish/formats/rss-0.91.dtd">' . "\n";
 
 	$rssxml .= <<<EOD
