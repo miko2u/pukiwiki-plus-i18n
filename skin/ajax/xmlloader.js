@@ -1,16 +1,4 @@
 /**
- * http://sarissa.sourceforge.net/doc/overview-summary-sarissa_ieemu_xpath.js.html
- */
-function SarissaNodeList(i){
-	this.length = i;
-};
-SarissaNodeList.prototype = new Array(0);
-SarissaNodeList.prototype.constructor = Array;
-SarissaNodeList.prototype.item = function(i) {
-    return (i < 0 || i >= this.length)?null:this[i];
-};
-SarissaNodeList.prototype.expr = "";
-/**
  * XML Load用クラス for IE+MSXML/Gecko (xmlloader.js)
  * Script Version: 0.1.0
  * 
@@ -65,7 +53,7 @@ function XmlLoader(_loadHandler, _errorHandler)
 		    xmldoc.selectNodes = function(sExpr, contextNode) {
 		        var nsresolver = this.createNSResolver(this.documentElement);
 	            var oResult = this.evaluate(sExpr,(contextNode?contextNode:this), nsresolver, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
-		        var nodeList = new SarissaNodeList(oResult.snapshotLength);
+		        var nodeList = new ElementNodeList(oResult.snapshotLength);
 		        nodeList.expr = sExpr;
 		        for(var i=0;i<nodeList.length;i++)
 		            nodeList[i] = oResult.snapshotItem(i);
@@ -141,7 +129,7 @@ function XmlLoader(_loadHandler, _errorHandler)
 		    xmldoc.selectNodes = function(sExpr, contextNode){
 		        var nsresolver = this.createNSResolver(this.documentElement);
 	            var oResult = this.evaluate(sExpr,(contextNode?contextNode:this), nsresolver, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
-		        var nodeList = new SarissaNodeList(oResult.snapshotLength);
+		        var nodeList = new ElementNodeList(oResult.snapshotLength);
 		        nodeList.expr = sExpr;
 		        for(var i=0;i<nodeList.length;i++)
 		            nodeList[i] = oResult.snapshotItem(i);

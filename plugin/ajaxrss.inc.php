@@ -138,6 +138,7 @@ function plugin_ajaxrss_convert()
 //	list($url) = func_get_args();
 	if ($ajaxcount == 0) {
 		global $head_tags;
+		$head_tags[] = ' <script type="text/javascript" charset="utf-8" src="' . SKIN_URI . 'ajax/msxml.js"></script>';
 		$head_tags[] = ' <script type="text/javascript" charset="utf-8" src="' . SKIN_URI . 'ajax/xmlloader.js"></script>';
 		$head_tags[] = ' <script type="text/javascript" charset="utf-8" src="' . SKIN_URI . 'ajax/rss.js"></script>';
 	}

@@ -1,23 +1,3 @@
-/*
- * MSXML Emulation
- */
-if(document.implementation && document.implementation.createDocument)
-{
-	Element.prototype.selectSingleNode = function(sExpr) {
-		var doc = this.ownerDocument;
-		if(doc.selectSingleNode)
-			return doc.selectSingleNode(sExpr, this);
-		else
-			throw "Method selectNodes is only supported by XML Elements";
-	};
-	Element.prototype.selectSingleNode = function(sExpr) {
-	    var doc = this.ownerDocument;
-	    if(doc.selectSingleNode)
-	        return doc.selectSingleNode(sExpr, this);
-	    else
-	        throw "Method selectNodes is only supported by XML Elements";
-	};
-}
 /**
  * RSSをHTML出力するクラス
  */
