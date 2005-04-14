@@ -14,6 +14,14 @@ function plugin_ajaxrss_action()
 		pkwk_common_headers();
 //		header('Content-type: text/javascript');
 		print $output;
+	} else if ($get['t'] == 'url') {
+		$output = plugin_ajaxrss_output_url(decode($get['q']));
+
+		// Feeding start
+		pkwk_common_headers();
+		header('Content-type: application/xml');
+		print '<?xml version="1.0" encoding="UTF-8"?>' . "\n\n";
+		print $output;
 	} else {
 		$output = plugin_ajaxrss_output_xml();
 
@@ -27,6 +35,14 @@ function plugin_ajaxrss_action()
 	exit;
 }
 
+function plugin_ajaxrss_output_url($url)
+{
+	if (!is_url($url,TRUE)) return '';
+	$ret = http_request($url);
+	if ($ret['rc'] != 200) return '';
+	return $ret['data'];
+}
+
 function plugin_ajaxrss_output_xml()
 {
 	global $page_title;
@@ -34,6 +50,7 @@ function plugin_ajaxrss_output_xml()
 	$lang = LANG;
 	$page_title_utf8 = mb_convert_encoding($page_title, 'UTF-8', SOURCE_ENCODING);
 	$self = get_script_uri();
+	$version = '0.91';
 
 	$items = '';
 	foreach (get_source('RSS') as $line) {
@@ -41,7 +58,7 @@ function plugin_ajaxrss_output_xml()
 		    '[!~*\'();\/?:\@&=+\$,%#\w.-]*)\s([^\]]+)\]\s?([^\s]*)/',
 		    $line, $matches)) {
 			$title = $matches[2];
-			$link = $matches[1];
+			$link = $self . '?cmd=ajaxrss&amp;t=url&amp;q=' . encode($matches[1]);
 			$desc = $matches[3];
 			$items .= <<<EOD
 <item>
