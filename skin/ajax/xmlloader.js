@@ -161,6 +161,7 @@ function XmlLoader(_loadHandler, _errorHandler)
 			// for IE Emulation
 		    xmldoc.selectNodes = function(sExpr, contextNode){
 				var nsdoc = this;
+alert("debug C" + this._useCustomResolver);
 				var nsresolver = (this._useCustomResolver != 0)
 		        ? function(prefix) {
 					var s = nsdoc._useCustomNameSpaces[prefix];
