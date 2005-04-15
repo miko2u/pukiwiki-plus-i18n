@@ -38,7 +38,7 @@ function XmlLoader(_loadHandler, _errorHandler)
 		{
 			// DOM Core Level2(DOMImplementation)
 			xmldoc = document.implementation.createDocument("", "", null);
-			xmldoc._useCustomResolver = false;
+			xmldoc._useCustomResolver = 0;
 			xmldoc._useCustomNameSpaces = Array();
 			xmldoc.onload = function()
 			{
@@ -54,7 +54,7 @@ function XmlLoader(_loadHandler, _errorHandler)
 			// for IE Emulation
 		    xmldoc.selectNodes = function(sExpr, contextNode) {
 				var nsdoc = this;
-				var nsresolver = this._useCustomResolver
+				var nsresolver = (this._useCustomResolver != 0)
 		        ? function(prefix) {
 					var s = nsdoc._useCustomNameSpaces[prefix];
 					if(s) return s;
@@ -79,7 +79,7 @@ function XmlLoader(_loadHandler, _errorHandler)
 			};
 			xmldoc.setProperty = function(sName, sPropValue) {
 				if (sName=='SelectionNamespaces') {
-					this._useCustomResolver = true;
+					this._useCustomResolver = 1;
 					var namespaces = sPropValue.indexOf(" ")>-1?sPropValue.split(" "):new Array(sPropValue);
 					this._useCustomNameSpaces = new Array(namespaces.length);
 					for(var i=0; i<namespaces.length; i++) {
@@ -102,7 +102,7 @@ function XmlLoader(_loadHandler, _errorHandler)
 		else if(window.ActiveXObject && document.getElementById)
 		{
 			xmldoc = new ActiveXObject('Microsoft.XMLDOM');
-			xmldoc._useCustomResolver = false;
+			xmldoc._useCustomResolver = 0;
 			xmldoc._useCustomNameSpaces = Array();
 			xmldoc.onreadystatechange = function()
 			{
@@ -144,7 +144,7 @@ function XmlLoader(_loadHandler, _errorHandler)
 		{
 			// DOM Core Level2(DOMImplementation)
 			xmldoc = document.implementation.createDocument("", "", null);
-			xmldoc._useCustomResolver = false;
+			xmldoc._useCustomResolver = 0;
 			xmldoc._useCustomNameSpaces = Array();
 			xmldoc.async = false;
 			xmldoc.onload = function()
@@ -161,7 +161,7 @@ function XmlLoader(_loadHandler, _errorHandler)
 			// for IE Emulation
 		    xmldoc.selectNodes = function(sExpr, contextNode){
 				var nsdoc = this;
-				var nsresolver = this._useCustomResolver
+				var nsresolver = (this._useCustomResolver != 0)
 		        ? function(prefix) {
 					var s = nsdoc._useCustomNameSpaces[prefix];
 					if(s) return s;
@@ -186,7 +186,7 @@ function XmlLoader(_loadHandler, _errorHandler)
 			};
 			xmldoc.setProperty = function(sName, sPropValue) {
 				if (sName=='SelectionNamespaces') {
-					this._useCustomResolver = true;
+					this._useCustomResolver = 1;
 					var namespaces = sPropValue.indexOf(" ")>-1?sPropValue.split(" "):new Array(sPropValue);
 					this._useCustomNameSpaces = new Array(namespaces.length);
 					for(var i=0; i<namespaces.length; i++) {
@@ -209,7 +209,7 @@ function XmlLoader(_loadHandler, _errorHandler)
 		else if(window.ActiveXObject && document.getElementById)
 		{
 			xmldoc = new ActiveXObject('Microsoft.XMLDOM');
-			xmldoc._useCustomResolver = false;
+			xmldoc._useCustomResolver = 0;
 			xmldoc._useCustomNameSpaces = Array();
 			xmldoc.async = false;
 			xmldoc.onreadystatechange = function()
