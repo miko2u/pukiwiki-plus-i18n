@@ -20,7 +20,9 @@ function plugin_ajaxrss_action()
 		// Feeding start
 		pkwk_common_headers();
 		header('Content-type: application/xml');
-		print '<?xml version="1.0" encoding="UTF-8"?>' . "\n\n";
+		if (!preg_match('/\<\?xml/', $output, $matches)) {
+			print '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
+		}
 		print $output;
 	} else {
 		$output = plugin_ajaxrss_output_xml();
@@ -28,7 +30,9 @@ function plugin_ajaxrss_action()
 		// Feeding start
 		pkwk_common_headers();
 		header('Content-type: application/xml');
-		print '<?xml version="1.0" encoding="UTF-8"?>' . "\n\n";
+		if (!preg_match('/\<\?xml/', $output, $matches)) {
+			print '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
+		}
 		print $output;
 	}
 
