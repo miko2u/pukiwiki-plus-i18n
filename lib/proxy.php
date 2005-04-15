@@ -1,5 +1,5 @@
 <?php
-// $Id: proxy.php,v 1.5 2005/04/10 09:09:13 henoheno Exp $
+// $Id: proxy.php,v 1.5.1 2005/04/15 09:09:13 miko Exp $
 //
 // HTTP Proxy related functions
 
@@ -13,7 +13,7 @@ define('PKWK_CIDR_NETWORK_REGEX', '/^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})(?:\/([
  * http_request($url)
  *     Get / Send data via HTTP request
  * $url     : URI started with http:// (http://user:pass@host:port/path?query)
- * $method  : GET, POST, or HEAD
+ * $method  : GET, POST, PROPFIND, or HEAD
  * $headers : Additional HTTP headers, ended with "\r\n"
  * $post    : An array of data to send via POST method ('key'=>'value')
  * $redirect_max : Max number of HTTP redirect
@@ -73,6 +73,25 @@ function http_request($url, $method = 'GET', $headers = '', $post = array(),
 		$query .= 'Content-Length: ' . strlen($data) . "\r\n";
 		$query .= "\r\n";
 		$query .= $data;
+//@miko_patched
+//@for use propfind, use "Depth:infinity, noroot"
+	} elseif (strtoupper($method) == 'PROPFIND') {
+		// 'text/xml', especially for svn
+		$data = join('', $post);
+
+		if (preg_match('/^[a-zA-Z0-9_-]+$/', $content_charset)) {
+			// Legacy but simple
+			$query .= 'Content-Type: text/xml' . "\r\n";
+		} else {
+			// With charset (NOTE: Some implementation may hate this)
+			$query .= 'Content-Type: text/xml' .
+				'; charset=' . strtolower($content_charset) . "\r\n";
+		}
+
+		$query .= 'Content-Length: ' . strlen($data) . "\r\n";
+		$query .= "\r\n";
+		$query .= $data;
+//@miko_patched
 	} else {
 		$query .= "\r\n";
 	}
