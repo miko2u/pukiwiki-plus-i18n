@@ -80,7 +80,7 @@ function XmlLoader(_loadHandler, _errorHandler)
 			xmldoc.setProperty = function(sName, sPropValue) {
 				if (sName=='SelectionNamespaces') {
 					this._useCustomResolver = true;
-					var namespaces = sPropValue.indexOf(" ")>-1?sNsSet.split(" "):new Array(sPropValue);
+					var namespaces = sPropValue.indexOf(" ")>-1?sPropValue.split(" "):new Array(sPropValue);
 					this._useCustomNameSpaces = new Array(namespaces.length);
 					for(var i=0; i<namespaces.length; i++) {
 						var ns = namespaces[i];
@@ -187,7 +187,7 @@ function XmlLoader(_loadHandler, _errorHandler)
 			xmldoc.setProperty = function(sName, sPropValue) {
 				if (sName=='SelectionNamespaces') {
 					this._useCustomResolver = true;
-					var namespaces = sPropValue.indexOf(" ")>-1?sNsSet.split(" "):new Array(sPropValue);
+					var namespaces = sPropValue.indexOf(" ")>-1?sPropValue.split(" "):new Array(sPropValue);
 					this._useCustomNameSpaces = new Array(namespaces.length);
 					for(var i=0; i<namespaces.length; i++) {
 						var ns = namespaces[i];
