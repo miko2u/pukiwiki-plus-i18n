@@ -39,7 +39,7 @@ function XmlLoader(_loadHandler, _errorHandler)
 			// DOM Core Level2(DOMImplementation)
 			xmldoc = document.implementation.createDocument("", "", null);
 			xmldoc._useCustomResolver = 0;
-			xmldoc._useCustomNameSpaces = Array();
+			xmldoc._useCustomNameSpaces = new Array();
 			xmldoc.onload = function()
 			{
 				if(xmldoc.documentElement==null) {
@@ -102,8 +102,8 @@ function XmlLoader(_loadHandler, _errorHandler)
 		else if(window.ActiveXObject && document.getElementById)
 		{
 			xmldoc = new ActiveXObject('Microsoft.XMLDOM');
-			xmldoc._useCustomResolver = 0;
-			xmldoc._useCustomNameSpaces = Array();
+//			xmldoc._useCustomResolver = 0;
+//			xmldoc._useCustomNameSpaces = new Array();
 			xmldoc.onreadystatechange = function()
 			{
 				if(xmldoc.readyState==4) {
@@ -145,7 +145,7 @@ function XmlLoader(_loadHandler, _errorHandler)
 			// DOM Core Level2(DOMImplementation)
 			xmldoc = document.implementation.createDocument("", "", null);
 			xmldoc._useCustomResolver = 0;
-			xmldoc._useCustomNameSpaces = Array();
+			xmldoc._useCustomNameSpaces = new Array();
 			xmldoc.async = false;
 			xmldoc.onload = function()
 			{
@@ -161,7 +161,6 @@ function XmlLoader(_loadHandler, _errorHandler)
 			// for IE Emulation
 		    xmldoc.selectNodes = function(sExpr, contextNode){
 				var nsdoc = this;
-alert("debug C" + this._useCustomResolver);
 				var nsresolver = (this._useCustomResolver != 0)
 		        ? function(prefix) {
 					var s = nsdoc._useCustomNameSpaces[prefix];
@@ -210,8 +209,8 @@ alert("debug C" + this._useCustomResolver);
 		else if(window.ActiveXObject && document.getElementById)
 		{
 			xmldoc = new ActiveXObject('Microsoft.XMLDOM');
-			xmldoc._useCustomResolver = 0;
-			xmldoc._useCustomNameSpaces = Array();
+//			xmldoc._useCustomResolver = 0;
+//			xmldoc._useCustomNameSpaces = new Array();
 			xmldoc.async = false;
 			xmldoc.onreadystatechange = function()
 			{
