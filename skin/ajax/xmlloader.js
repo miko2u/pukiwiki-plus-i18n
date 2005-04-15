@@ -38,6 +38,8 @@ function XmlLoader(_loadHandler, _errorHandler)
 		{
 			// DOM Core Level2(DOMImplementation)
 			xmldoc = document.implementation.createDocument("", "", null);
+			xmldoc._useCustomResolver = false;
+			xmldoc._useCustomNameSpaces = Array();
 			xmldoc.onload = function()
 			{
 				if(xmldoc.documentElement==null) {
@@ -51,7 +53,14 @@ function XmlLoader(_loadHandler, _errorHandler)
 			};
 			// for IE Emulation
 		    xmldoc.selectNodes = function(sExpr, contextNode) {
-		        var nsresolver = this.createNSResolver(this.documentElement);
+				var nsdoc = this;
+				var nsresolver = this._useCustomResolver
+		        ? function(prefix) {
+					var s = nsdoc._useCustomNameSpaces[prefix];
+					if(s) return s;
+					else throw "No namespace URI found for prefix: '" + prefix + "'";
+				  }
+				: this.createNSResolver(this.documentElement);
 	            var oResult = this.evaluate(sExpr,(contextNode?contextNode:this), nsresolver, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
 		        var nodeList = new ElementNodeList(oResult.snapshotLength);
 		        nodeList.expr = sExpr;
@@ -68,11 +77,33 @@ function XmlLoader(_loadHandler, _errorHandler)
 				else
 					return null;
 			};
-			xmldoc.setProperty  = function(x,y){};
+			xmldoc.setProperty = function(sName, sPropValue) {
+				if (sName=='SelectionNamespaces') {
+					this._useCustomResolver = true;
+					var namespaces = sPropValue.indexOf(" ")>-1?sNsSet.split(" "):new Array(sPropValue);
+					this._useCustomNameSpaces = new Array(namespaces.length);
+					for(var i=0; i<namespaces.length; i++) {
+						var ns = namespaces[i];
+						var colonPos = ns.indexOf(":");
+						var assignPos = ns.indexOf("=");
+						if(colonPos == 5 && assignPos > colonPos+2) {
+							var prefix = ns.substring(colonPos+1, assignPos);
+							var uri = ns.substring(assignPos+2, ns.length-1);
+							this._useCustomNameSpaces[prefix] = uri;
+						} else {
+							throw "Bad format on namespace declaration(s) given";
+							return false;
+						}
+			        }
+				}
+				return true;
+			};
 		}
 		else if(window.ActiveXObject && document.getElementById)
 		{
 			xmldoc = new ActiveXObject('Microsoft.XMLDOM');
+			xmldoc._useCustomResolver = false;
+			xmldoc._useCustomNameSpaces = Array();
 			xmldoc.onreadystatechange = function()
 			{
 				if(xmldoc.readyState==4) {
@@ -113,6 +144,8 @@ function XmlLoader(_loadHandler, _errorHandler)
 		{
 			// DOM Core Level2(DOMImplementation)
 			xmldoc = document.implementation.createDocument("", "", null);
+			xmldoc._useCustomResolver = false;
+			xmldoc._useCustomNameSpaces = Array();
 			xmldoc.async = false;
 			xmldoc.onload = function()
 			{
@@ -127,7 +160,14 @@ function XmlLoader(_loadHandler, _errorHandler)
 			}
 			// for IE Emulation
 		    xmldoc.selectNodes = function(sExpr, contextNode){
-		        var nsresolver = this.createNSResolver(this.documentElement);
+				var nsdoc = this;
+				var nsresolver = this._useCustomResolver
+		        ? function(prefix) {
+					var s = nsdoc._useCustomNameSpaces[prefix];
+					if(s) return s;
+					else throw "No namespace URI found for prefix: '" + prefix + "'";
+				  }
+				: this.createNSResolver(this.documentElement);
 	            var oResult = this.evaluate(sExpr,(contextNode?contextNode:this), nsresolver, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
 		        var nodeList = new ElementNodeList(oResult.snapshotLength);
 		        nodeList.expr = sExpr;
@@ -144,11 +184,33 @@ function XmlLoader(_loadHandler, _errorHandler)
 				else
 					return null;
 			};
-			xmldoc.setProperty  = function(x,y){};
+			xmldoc.setProperty = function(sName, sPropValue) {
+				if (sName=='SelectionNamespaces') {
+					this._useCustomResolver = true;
+					var namespaces = sPropValue.indexOf(" ")>-1?sNsSet.split(" "):new Array(sPropValue);
+					this._useCustomNameSpaces = new Array(namespaces.length);
+					for(var i=0; i<namespaces.length; i++) {
+						var ns = namespaces[i];
+						var colonPos = ns.indexOf(":");
+						var assignPos = ns.indexOf("=");
+						if(colonPos == 5 && assignPos > colonPos+2) {
+							var prefix = ns.substring(colonPos+1, assignPos);
+							var uri = ns.substring(assignPos+2, ns.length-1);
+							this._useCustomNameSpaces[prefix] = uri;
+						} else {
+							throw "Bad format on namespace declaration(s) given";
+							return false;
+						}
+			        }
+				}
+				return true;
+			};
 		}
 		else if(window.ActiveXObject && document.getElementById)
 		{
 			xmldoc = new ActiveXObject('Microsoft.XMLDOM');
+			xmldoc._useCustomResolver = false;
+			xmldoc._useCustomNameSpaces = Array();
 			xmldoc.async = false;
 			xmldoc.onreadystatechange = function()
 			{
