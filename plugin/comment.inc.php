@@ -18,10 +18,10 @@ function plugin_comment_action()
 	global $script, $vars, $now;
 	global $_no_name;
 //	global $_title_updated, $_no_name;
-	$_title_updated = _('$1 was updated');
-	$_title_comment_collided = _('On updating  $1, a collision has occurred.');
-	$_msg_comment_collided   = _('It seems that someone has already updated the page you were editing.<br />' .
-	                             ' The comment was added, alhough it may be inserted in the wrong position.<br />');
+	$_title_updated = _("$1 was updated");
+	$_title_comment_collided = _("On updating  $1, a collision has occurred.");
+	$_msg_comment_collided   = _("It seems that someone has already updated the page you were editing.<br />") .
+	                           _("The comment was added, alhough it may be inserted in the wrong position.<br />");
 
 	if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
 	if (! isset($vars['msg']) || $vars['msg'] == '')
@@ -95,9 +95,9 @@ function plugin_comment_convert()
 	global $script, $vars, $digest, $refpage;
 	static $numbers = array();
 
-	$_btn_name    = _('Name: ');
-	$_btn_comment = _('Post Comment');
-	$_msg_comment = _('Comment: ');
+	$_btn_name    = _("Name: ");
+	$_btn_comment = _("Post Comment");
+	$_msg_comment = _("Comment: ");
 
 	if (PKWK_READONLY) return ''; // Show nothing
 	if (! isset($numbers[$vars['page']])) $numbers[$vars['page']] = 0;

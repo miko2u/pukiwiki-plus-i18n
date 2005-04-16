@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-03-10 18:35+0900\n"
+"POT-Creation-Date: 2005-04-16 18:10+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -31,8 +31,8 @@ msgstr ""
 
 #: ../../plugin/comment.inc.php:24
 msgid ""
-" The comment was added, alhough it may be inserted in the wrong position."
-"<br />"
+"The comment was added, alhough it may be inserted in the wrong position.<br /"
+">"
 msgstr ""
 
 #: ../../plugin/comment.inc.php:98
