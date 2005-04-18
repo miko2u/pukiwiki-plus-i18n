@@ -102,8 +102,6 @@ function XmlLoader(_loadHandler, _errorHandler)
 		else if(window.ActiveXObject && document.getElementById)
 		{
 			xmldoc = new ActiveXObject('Microsoft.XMLDOM');
-//			xmldoc._useCustomResolver = 0;
-//			xmldoc._useCustomNameSpaces = new Array();
 			xmldoc.onreadystatechange = function()
 			{
 				if(xmldoc.readyState==4) {
@@ -209,8 +207,6 @@ function XmlLoader(_loadHandler, _errorHandler)
 		else if(window.ActiveXObject && document.getElementById)
 		{
 			xmldoc = new ActiveXObject('Microsoft.XMLDOM');
-//			xmldoc._useCustomResolver = 0;
-//			xmldoc._useCustomNameSpaces = new Array();
 			xmldoc.async = false;
 			xmldoc.onreadystatechange = function()
 			{
