@@ -33,7 +33,7 @@ function build_directory_list($roots, $option) {
 			$list["directory"][] = $root;
 
 			$warnings[] = 
-				"<font color=\"red\">" . _("#$root doesn't have the corresponding page. ") . "</font>" .
+				"<font color=\"red\">" . sprintf( _("#%s doesn't have the corresponding page. "),$root) . "</font>" .
 				"(<a href=\"$script?" . rawurlencode($root) . "\">" . _("making") . "</a>)<br>\n";
 		}
 	}

@@ -2,18 +2,23 @@
 # Copyright (C) 2005 PukiWiki Plus! Developer Team
 # License is GPL2
 # Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>, 2005.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: PukiWiki Plus! 1.4.5-u2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-04-08 01:13+0900\n"
+"POT-Creation-Date: 2005-04-19 01:52+0900\n"
 "PO-Revision-Date: 2005-04-07 17:24+0900\n"
 "Last-Translator: Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>\n"
-"Language-Team: Japanese <LL@li.org>\n"
+"Language-Team: Japanese <ja@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#: ../../plugin/newpage_subdir.inc.php:36
+#, php-format
+msgid "#%s doesn't have the corresponding page. "
+msgstr "#%s は該当するページがありません。"
 
 #: ../../plugin/newpage_subdir.inc.php:37
 msgid "making"
@@ -37,8 +42,8 @@ msgid ""
 "\t　The field that adds a new page below the directory specified for "
 "[directory] is made.<br />\n"
 msgstr ""
-"\t　directoryに指定されたディレクトリ以下に新しいページを追加する"
-"フィールドを作成する。<br>\n"
+"\t　directoryに指定されたディレクトリ以下に新しいページを追加するフィールドを"
+"作成する。<br>\n"
 
 #: ../../plugin/newpage_subdir.inc.php:86
 msgid "\t　The order of the parameter is arbitrary.<br />"
@@ -60,8 +65,8 @@ msgid ""
 "　-d Directory Only.\tIt limits it only to the one with the child page. (The "
 "directory specified specifying it is an exception. )<br />\n"
 msgstr ""
-"　-d 子ページをもっているものだけに限定する"
-"（明示的に指定されたディレクトリは例外）<br>\n"
+"　-d 子ページをもっているものだけに限定する（明示的に指定されたディレクトリは"
+"例外）<br>\n"
 
 #: ../../plugin/newpage_subdir.inc.php:91
 msgid "　-h Help.\t\tThis Description is displayed. <br />\n"
