@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: mixirss.inc.php,v 1.13.1 2004/12/25 00:39:45 miko Exp $
+// $Id: mixirss.inc.php,v 1.13.2 2005/04/18 01:39:45 miko Exp $
 //
 // Publishing RSS feed of RecentChanges
 // Usage: mixirss.inc.php?ver=[0.91|1.0(default)|2.0]
@@ -151,7 +151,7 @@ $trackback_ping
 
 EOD;
 				}
-			} else {
+			} else if (check_readable($page,false,false)) {
 //miko added
 				$description = strip_htmltag(convert_html(get_source($page)));
 				$description = mb_strimwidth(preg_replace("/[\r\n]/",' ',$description),0,MIXIRSS_DESCRIPTION_LENGTH,'...');
