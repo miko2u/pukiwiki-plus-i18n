@@ -241,7 +241,6 @@ EOD;
 	$add_assistant = edit_form_assistant();
 
 	$body = <<<EOD
-<div id="realview"></div>
 <form action="$script" method="post">
  <div class="edit_form" onmouseup="pukiwiki_pos()" onkeyup="pukiwiki_pos()">
 $template
@@ -262,6 +261,7 @@ $template
   <textarea name="original" rows="1" cols="1" style="display:none">$s_original</textarea>
  </div>
 </form>
+<div id="realview"></div>
 EOD;
 
 	global $head_tags;
