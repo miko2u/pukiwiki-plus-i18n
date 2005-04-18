@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: edit.inc.php,v 1.19.33.1 2005/03/13 17:29:02 miko Exp $
+// $Id: edit.inc.php,v 1.19.33.2 2005/03/13 17:29:02 miko Exp $
 //
 // Edit plugin
 // cmd=edit
@@ -15,8 +15,11 @@ function plugin_edit_action()
 
 	if (PKWK_READONLY) die_message( _('PKWK_READONLY prohibits editing') );
 
-	$page = isset($vars['page']) ? $vars['page'] : '';
+	if (isset($vars['realview'])) {
+		return plugin_edit_realview();
+	}
 
+	$page = isset($vars['page']) ? $vars['page'] : '';
 	check_editable($page, true, true);
 
 	if (isset($vars['preview']) || ($load_template_func && isset($vars['template']))) {
@@ -41,6 +44,27 @@ function plugin_edit_action()
 	if ($postdata == '') $postdata = auto_template($page);
 
 	return array('msg'=> _('Edit of  $1'), 'body'=>edit_form($page, $postdata));
+}
+
+// Preview by Ajax
+function plugin_edit_realview()
+{
+	global $vars;
+
+	$vars['msg'] = preg_replace(PLUGIN_EDIT_FREEZE_REGEX, '' ,$vars['msg']);
+	$postdata = $vars['msg'];
+
+	if ($postdata) {
+		$postdata = make_str_rules($postdata);
+		$postdata = explode("\n", $postdata);
+		$postdata = drop_submit(convert_html($postdata));
+	}
+	print $postdata;
+
+	$longtaketime = getmicrotime() - MUTIME;
+	$taketime     = sprintf('%01.03f', $longtaketime);
+	print '<span class="small1">(Time:' . $taketime . ')</span>';
+	exit;
 }
 
 // Preview

@@ -171,6 +171,9 @@ function edit_form($page, $postdata, $digest = 0, $b_template = TRUE)
 	global $whatsnew, $non_list, $load_template_func;
 	global $notimeupdate;
 	global $_button, $_string;
+	global $ajax;
+
+	if ($ajax) $rows = $rows / 2;
 
 	$refer = $template = $addtag = $add_top = '';
 
@@ -238,6 +241,7 @@ EOD;
 	$add_assistant = edit_form_assistant();
 
 	$body = <<<EOD
+<div id="realview"></div>
 <form action="$script" method="post">
  <div class="edit_form" onmouseup="pukiwiki_pos()" onkeyup="pukiwiki_pos()">
 $template
@@ -246,7 +250,7 @@ $template
   <input type="hidden" name="page"   value="$s_page" />
   <input type="hidden" name="digest" value="$s_digest" />
   <input type="hidden" name="id"     value="$s_id" />
-  <textarea name="msg" rows="$rows" cols="$cols">$s_postdata</textarea>
+  <textarea name="msg" rows="$rows" cols="$cols" onselect="pukiwiki_apv(this.value)" onfocus="pukiwiki_apv(this.value)" onkeyup="pukiwiki_apv(this.value)" onchange="pukiwiki_apv(this.value)">$s_postdata</textarea>
   <br />
   $add_assistant
   <br />
@@ -259,6 +263,11 @@ $template
  </div>
 </form>
 EOD;
+
+	global $head_tags;
+	$head_tags[] = ' <script type="text/javascript" charset="utf-8" src="' . SKIN_URI . 'ajax/msxml.js"></script>';
+	$head_tags[] = ' <script type="text/javascript" charset="utf-8" src="' . SKIN_URI . 'ajax/textloader.js"></script>';
+	$head_tags[] = ' <script type="text/javascript" charset="utf-8" src="' . SKIN_URI . 'ajax/realedit.js"></script>';
 
 	if (isset($vars['help'])) {
 		$body .= $hr . catrule();

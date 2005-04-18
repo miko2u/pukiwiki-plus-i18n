@@ -68,6 +68,7 @@ function TextLoader(_loadHandler, _errorHandler)
 				xmlhttp.send(null);
 		    } else {
 				xmlhttp.open("POST", url);
+				xmlhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 				xmlhttp.send(postdata);
 		    }
 		}

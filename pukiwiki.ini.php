@@ -142,6 +142,9 @@ $footarea     = ':Footer';
 // PKWK_ALLOW_JAVASCRIPT - Allow / Prohibit using JavaScript
 define('PKWK_ALLOW_JAVASCRIPT', 1);
 
+// Javascript Async Library Extenstion
+$ajax = 1;
+
 /////////////////////////////////////////////////
 // TrackBack feature
 
