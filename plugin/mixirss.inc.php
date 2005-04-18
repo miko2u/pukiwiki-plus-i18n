@@ -151,7 +151,7 @@ $trackback_ping
 
 EOD;
 				}
-			} else {
+			} else if (check_readable($page,false,false)) {
 //miko added
 				$description = strip_htmltag(convert_html(get_source($page)));
 				$description = mb_strimwidth(preg_replace("/[\r\n]/",' ',$description),0,MIXIRSS_DESCRIPTION_LENGTH,'...');
