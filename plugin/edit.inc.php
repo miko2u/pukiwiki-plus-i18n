@@ -59,6 +59,10 @@ function plugin_edit_realview()
 		$postdata = explode("\n", $postdata);
 		$postdata = drop_submit(convert_html($postdata));
 	}
+	// Feeding start
+	pkwk_common_headers();
+	header('Content-type: text/xml');
+	print '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
 	print $postdata;
 
 	$longtaketime = getmicrotime() - MUTIME;
