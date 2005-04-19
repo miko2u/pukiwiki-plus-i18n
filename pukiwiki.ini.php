@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: pukiwiki.ini.php,v 1.117.13 2005/04/02 06:34:50 miko Exp $
+// $Id: pukiwiki.ini.php,v 1.119.13 2005/04/05 16:34:50 miko Exp $
 //
 // PukiWiki main setting file
 
@@ -188,7 +188,7 @@ $notimeupdate = 1;
 // Admin password for this Wikisite
 
 // CHANGE THIS
-$adminpass = '1a1dc91c907325c69271ddf0c944bc72'; // md5('pass')
+$adminpass = '{x-php-md5}1a1dc91c907325c69271ddf0c944bc72'; // md5('pass')
 
 /////////////////////////////////////////////////
 // Page-reading feature settings
@@ -223,17 +223,16 @@ $pagereading_config_dict = ':config/PageReading/dict';
 /////////////////////////////////////////////////
 // User definition
 $auth_users = array(
-	'foo'	=> md5('foo_passwd'),
-	'bar'	=> md5('bar_passwd'),
-	'hoge'	=> md5('hoge_passwd'),
+	'foo'	=> 'foo_passwd', // Cleartext
+	'bar'	=> '{x-php-md5}f53ae779077e987718cc285b14dfbe86', // md5('bar_passwd')
+	'hoge'	=> '{SMD5}OzJo/boHwM4q5R+g7LCOx2xGMkFKRVEx', // SMD5 'hoge_passwd'
 );
 
 /////////////////////////////////////////////////
 // Authentication method
 
-// 'pagename' : by Page name
-// 'contents' : by Page contents
-$auth_method_type = 'contents';
+$auth_method_type = 'contents'; // By Page contents
+//$auth_method_type = 'pagename'; // By Page name
 
 /////////////////////////////////////////////////
 // Read auth (0:Disable, 1:Enable)
