@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: func.php,v 1.32.40 2005/04/16 05:37:13 miko Exp $
+// $Id: func.php,v 1.40.1 2005/04/16 05:37:13 miko Exp $
 //
 // General functions
 
@@ -82,6 +82,7 @@ function is_freeze($page, $clearcache = FALSE)
 		$buffer = fgets($fp, 9);
 		flock($fp, LOCK_UN) or die('is_freeze(): flock() failed');
 		fclose($fp) or die('is_freeze(): fclose() failed: ' . htmlspecialchars($page));
+
 		$is_freeze[$page] = ($buffer != FALSE && rtrim($buffer, "\r\n") == '#freeze');
 		return $is_freeze[$page];
 	}
@@ -127,14 +128,14 @@ function get_search_words($words, $do_escape = FALSE)
 	$retval = array();
 
 	$pre = $post = '';
-
 	if (SOURCE_ENCODING == 'EUC-JP') {
 		// Perl memo - Correct pattern-matching with EUC-JP
 		// http://www.din.or.jp/~ohzaki/perl.htm#JP_Match (Japanese)
-		$pre = '(?<!\x8F)';
-		$post = '(?=(?:[\xA1-\xFE][\xA1-\xFE])*' . // JIS X 0208
-				'(?:[\x00-\x7F\x8E\x8F]|\z))';     // ASCII, SS2, SS3, or the last
+		$pre  = '(?<!\x8F)';
+		$post =	'(?=(?:[\xA1-\xFE][\xA1-\xFE])*' . // JIS X 0208
+			'(?:[\x00-\x7F\x8E\x8F]|\z))';     // ASCII, SS2, SS3, or the last
 	}
+
 	// function: just preg_quote()
 	$quote_func = create_function('$str', 'return preg_quote($str, \'/\');');
 
@@ -144,23 +145,22 @@ function get_search_words($words, $do_escape = FALSE)
 			'return mb_convert_kana($str, $option);' : 'return $str;');
 
 	foreach ($words as $word) {
-		// 'a': Zenkaku-Alphabet to Hankaku-Alphabet 
-		// 'K': Hankaku-Katakana to Zenkaku-Katakana 
-		// 'C': Zenkaku-Hiragana to Zenkaku-Katakana 
-		// 'V': Merge 'A character and A voiced sound symbol' to 'A character with the symbol' 
+		// 'a': Zenkaku-Alphabet to Hankaku-Alphabet
+		// 'K': Hankaku-Katakana to Zenkaku-Katakana
+		// 'C': Zenkaku-Hiragana to Zenkaku-Katakana
+		// 'V': Merge 'A character and A voiced sound symbol' to 'A character with the symbol'
 		$word_zk = $convert_kana($word, 'aKCV');
 		$len     = mb_strlen($word_zk);
-		$chars = array();
+		$chars   = array();
 		for ($pos = 0; $pos < $len; $pos++) {
 			$char = mb_substr($word_zk, $pos, 1);
 			$arr = array($quote_func($do_escape ? htmlspecialchars($char) : $char));
 			if (strlen($char) == 1) {
 				// Single-byte characters
 				foreach (array(strtoupper($char), strtolower($char)) as $_char) {
-					if ($char != '&')
-						$arr[] = $quote_func($_char);
+					if ($char != '&') $arr[] = $quote_func($_char);
 					$ord = ord($_char);
-					$arr[] = sprintf('&#(?:%d|x%x);', $ord, $ord); // Entity references
+					$arr[] = sprintf('&#(?:%d|x%x);', $ord, $ord);    // Entity references
 					$arr[] = $quote_func($convert_kana($_char, 'A')); // Zenkaku-Alphabet
 				}
 			} else {
@@ -177,7 +177,7 @@ function get_search_words($words, $do_escape = FALSE)
 }
 
 // 'Search' main function
-function do_search($word, $type = 'AND', $non_format = FALSE, $non_fuzzy = FALSE)
+function do_search($word, $type = 'AND', $non_format = FALSE)
 {
 	global $script, $whatsnew, $non_list, $search_non_list;
 	global $_msg_andresult, $_msg_orresult, $_msg_notfoundresult;
@@ -285,8 +285,6 @@ function encode($key)
 function decode($key)
 {
 	return hex2bin($key);
-	// Warning: pack(): Type H: illegal hex digit ...
-	return preg_match('/^[0-9a-f]+$/i', $key) ? pack('H*', $key) : $key;
 }
 
 // Inversion of bin2hex()
@@ -348,7 +346,7 @@ function page_list($pages, $cmd = 'read', $withfilename = FALSE)
 		if($pagereading_enable) {
 			if(mb_ereg('^([A-Za-z])', mb_convert_kana($page, 'a'), $matches)) {
 				$head = $matches[1];
-			} elseif(isset($readings[$page]) && mb_ereg('^([ァ-ヶ])', $readings[$page], $matches)) { // here
+			} elseif (isset($readings[$page]) && mb_ereg('^([ァ-ヶ])', $readings[$page], $matches)) { // here
 				$head = $matches[1];
 			} elseif (mb_ereg('^[ -~]|[^ぁ-ん亜-熙]', $page)) { // and here
 				$head = $symbol;
@@ -586,11 +584,10 @@ function get_autolink_pattern(& $pages)
 	unset($config);
 	$auto_pages = array_merge($ignorepages, $forceignorepages);
 
-	foreach ($pages as $page) {
+	foreach ($pages as $page)
 		if (preg_match('/^' . $WikiName . '$/', $page) ?
 		    $nowikiname : strlen($page) >= $autolink)
 			$auto_pages[] = $page;
-	}
 
 	if (empty($auto_pages)) {
 		$result = $result_a = $nowikiname ? '(?!)' : $WikiName;
@@ -616,12 +613,11 @@ function get_autolink_pattern_sub(& $pages, $start, $end, $pos)
 	$x = (mb_strlen($pages[$start]) <= $pos);
 	if ($x) ++$start;
 
-	for ($i = $start; $i < $end; $i = $j)
-	{
+	for ($i = $start; $i < $end; $i = $j) {
 		$char = mb_substr($pages[$i], $pos, 1);
-		for ($j = $i; $j < $end; $j++) {
+		for ($j = $i; $j < $end; $j++)
 			if (mb_substr($pages[$j], $pos, 1) != $char) break;
-		}
+
 		if ($i != $start) $result .= '|';
 		if ($i >= ($j - 1)) {
 			$result .= str_replace(' ', '\\ ', preg_quote(mb_substr($pages[$i], $pos), '/'));
@@ -637,7 +633,7 @@ function get_autolink_pattern_sub(& $pages, $start, $end, $pos)
 	return $result;
 }
 
-// pukiwiki.phpスクリプトのabsolute-uriを生成
+// Get absolute-URI of this script
 function get_script_uri($init_uri = '')
 {
 	global $script_directory_index;
@@ -693,16 +689,15 @@ function get_script_uri($init_uri = '')
 	return $script;
 }
 
-/*
-変数内のnull(\0)バイトを削除する
-PHPはfopen("hoge.php\0.txt")で"hoge.php"を開いてしまうなどの問題あり
-
-http://ns1.php.gr.jp/pipermail/php-users/2003-January/012742.html
-[PHP-users 12736] null byte attack
-
-2003-05-16: magic quotes gpcの復元処理を統合
-2003-05-21: 連想配列のキーはbinary safe
-*/
+// Remove null(\0) bytes from variables
+//
+// NOTE: PHP had vulnerabilities that opens "hoge.php" via fopen("hoge.php\0.txt") etc.
+// [PHP-users 12736] null byte attack
+// http://ns1.php.gr.jp/pipermail/php-users/2003-January/012742.html
+//
+// 2003-05-16: magic quotes gpcの復元処理を統合
+// 2003-05-21: 連想配列のキーはbinary safe
+//
 function input_filter($param)
 {
 	static $magic_quotes_gpc = NULL;
@@ -723,7 +718,7 @@ function sanitize($param) {
 	return input_filter($param);
 }
 
-// CSV形式の文字列を配列に
+// Explode Comma-Separated Values to an array
 function csv_explode($separator, $string)
 {
 	$retval = $matches = array();
@@ -754,19 +749,6 @@ function csv_implode($glue, $pieces)
 	}
 	return join($glue, $arr);
 }
-
-function pkwk_login($pass = '')
-{
-	global $adminpass;
-
-	if (! PKWK_READONLY && $pass != '' && md5($pass) == $adminpass) {
-		return TRUE;
-	} else {
-		sleep(2);	// Blocking brute force attack
-		return FALSE;
-	}
-}
-
 
 //// Compat ////
 
@@ -815,14 +797,14 @@ if (! function_exists('md5_file')) {
 	}
 }
 
-// sha1 -- Compute SHA-1 hash 
-// (PHP 4 >= 4.3.0, PHP5) 
+// sha1 -- Compute SHA-1 hash
+// (PHP 4 >= 4.3.0, PHP5)
 if (! function_exists('sha1')) {
 	if (extension_loaded('mhash')) {
 		function sha1($str, $raw_output = FALSE)
 		{
 			if ($raw_output) {
-				// PHP 5.0.0 or lator only :) 
+				// PHP 5.0.0 or lator only :)
 				return mhash(MHASH_SHA1, $str);
 			} else {
 				return bin2hex(mhash(MHASH_SHA1, $str));
