@@ -173,7 +173,7 @@ function edit_form($page, $postdata, $digest = 0, $b_template = TRUE)
 	global $_button, $_string;
 	global $ajax;
 
-	if ($ajax) $rows = $rows / 2;
+	if ($ajax) $rows = $rows / 3;
 
 	$refer = $template = $addtag = $add_top = '';
 
@@ -241,6 +241,8 @@ EOD;
 	$add_assistant = edit_form_assistant();
 
 	$body = <<<EOD
+<div id="realview_outer" style="z-index:10;margin:1px;padding:0px 20px;height:200px;overflow:auto;"><div id="realview"></div></div>
+<hr>
 <form action="$script" method="post">
  <div class="edit_form" onmouseup="pukiwiki_pos()" onkeyup="pukiwiki_pos()">
 $template
@@ -253,7 +255,6 @@ $template
   <br />
   $add_assistant
   <br />
-  <input type="submit" name="preview" value="$btn_preview" accesskey="p" />
   <input type="submit" name="write"   value="{$_button['update']}" accesskey="s" />
   $add_top
   $add_notimestamp
@@ -261,20 +262,23 @@ $template
   <textarea name="original" rows="1" cols="1" style="display:none">$s_original</textarea>
  </div>
 </form>
-<div id="realview"></div>
 EOD;
 
-	global $head_tags;
-	$head_tags[] = ' <script type="text/javascript" charset="utf-8" src="' . SKIN_URI . 'ajax/msxml.js"></script>';
-	$head_tags[] = ' <script type="text/javascript" charset="utf-8" src="' . SKIN_URI . 'ajax/textloader.js"></script>';
-	$head_tags[] = ' <script type="text/javascript" charset="utf-8" src="' . SKIN_URI . 'ajax/realedit.js"></script>';
+//  <input type="submit" name="preview" value="$btn_preview" accesskey="p" />
 
-	if (isset($vars['help'])) {
-		$body .= $hr . catrule();
-	} else {
-		$body .= '<ul><li><a href="' .
-			$script . '?cmd=edit&amp;help=true&amp;page=' . $r_page .
-			'">' . $_string['help'] . '</a></li></ul>';
+//	if (isset($vars['help'])) {
+//		$body .= $hr . catrule();
+//	} else {
+//		$body .= '<ul><li><a href="' .
+//			$script . '?cmd=edit&amp;help=true&amp;page=' . $r_page .
+//			'">' . $_string['help'] . '</a></li></ul>';
+//	}
+
+	if ($ajax) {
+		global $head_tags;
+		$head_tags[] = ' <script type="text/javascript" charset="utf-8" src="' . SKIN_URI . 'ajax/msxml.js"></script>';
+		$head_tags[] = ' <script type="text/javascript" charset="utf-8" src="' . SKIN_URI . 'ajax/textloader.js"></script>';
+		$head_tags[] = ' <script type="text/javascript" charset="utf-8" src="' . SKIN_URI . 'ajax/realedit.js"></script>';
 	}
 
 	return $body;
