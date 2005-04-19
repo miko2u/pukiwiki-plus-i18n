@@ -37,7 +37,7 @@ function plugin_edit_action()
 		$postdata = plugin_edit_parts($vars['id'],$source);
 		if ($postdata === FALSE)
 		{
-			unset($vars['id']); // ¤Ê¤«¤Ã¤¿¤³¤È¤Ë :)
+			unset($vars['id']); // ãªã‹ã£ãŸã“ã¨ã« :)
 			$postdata = $vars['original'];
 		}
 	}
@@ -88,7 +88,7 @@ function plugin_edit_preview()
 		$vars['msg'] = preg_replace('/^(\*{1,3}.*)\[#[A-Za-z][\w-]+\](.*)$/m', '$1$2', $vars['msg']);
 	}
 
-	// ¼ê½ñ¤­¤Î#freeze¤òºï½ü
+	// æ‰‹æ›¸ãã®#freezeã‚’å‰Šé™¤
 	$vars['msg'] = preg_replace(PLUGIN_EDIT_FREEZE_REGEX, '' ,$vars['msg']);
 	$postdata = $vars['msg'];
 
@@ -161,7 +161,7 @@ function plugin_edit_write()
 	$page = isset($vars['page']) ? $vars['page'] : '';
 	$retvars = array();
 
-	// ¼ê½ñ¤­¤Î#freeze¤òºï½ü
+	// æ‰‹æ›¸ãã®#freezeã‚’å‰Šé™¤
 	$vars['msg'] = preg_replace('/^#freeze\s*$/im','',$vars['msg']);
 	$postdata = $postdata_input = $vars['msg'];
 
@@ -177,7 +177,7 @@ function plugin_edit_write()
 			if (plugin_edit_parts($vars['id'],$source,$vars['msg']) !== FALSE) {
 				$postdata = $postdata_input = join('',$source);
 			} else {
-				// $post['msg']¤À¤±¤¬¥Ú¡¼¥¸¤Ë½ñ¤­¹ş¤Ş¤ì¤Æ¤·¤Ş¤¦¤Î¤òËÉ¤°¡£
+				// $post['msg']ã ã‘ãŒãƒšãƒ¼ã‚¸ã«æ›¸ãè¾¼ã¾ã‚Œã¦ã—ã¾ã†ã®ã‚’é˜²ãã€‚
 				$postdata = $postdata_input = rtrim($vars['original'])."\n\n".$vars['msg'];
 			}
 		}
@@ -212,7 +212,7 @@ function plugin_edit_write()
 			$retvars['body'] .= $do_update_diff_table;
 		}
 
-		unset($vars['id']);	// ¹¹¿·¤¬¾×ÆÍ¤·¤¿¤éÁ´Ê¸ÊÔ½¸¤ËÀÚ¤êÂØ¤¨
+		unset($vars['id']);	// æ›´æ–°ãŒè¡çªã—ãŸã‚‰å…¨æ–‡ç·¨é›†ã«åˆ‡ã‚Šæ›¿ãˆ
 		$retvars['body'] .= edit_form($page, $postdata_input, $oldpagemd5, FALSE);
 	}
 	else {
@@ -262,7 +262,7 @@ function plugin_edit_cancel()
 	exit;
 }
 
-// ¥½¡¼¥¹¤Î°ìÉô¤òÃê½Ğ/ÃÖ´¹¤¹¤ë
+// ã‚½ãƒ¼ã‚¹ã®ä¸€éƒ¨ã‚’æŠ½å‡º/ç½®æ›ã™ã‚‹
 function plugin_edit_parts($id,&$source,$postdata='')
 {
 	$postdata = rtrim($postdata)."\n";
