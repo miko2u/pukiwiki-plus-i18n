@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: convert_html.php,v 1.8.10 2005/04/10 18:41:10 miko Exp $
+// $Id: convert_html.php,v 1.10 2005/04/21 17:55:20 miko Exp $
 //
 // function 'convert_html()', wiki text parser
 // and related classes-and-functions
@@ -493,7 +493,7 @@ class TableCell extends Element
 				$text = $matches[5];
 			}
 		}
-		if ($is_template && is_numeric($text)) {
+		if ($is_template && is_numeric($text))
 			$this->style['width'] = 'width:' . $text . 'px;';
 		} elseif ($is_template && is_numeric(substr($text,0,-1)) && substr($text,-1) == '%') {
 			$this->style['width'] = 'width:' . $text . ';';
@@ -1028,8 +1028,7 @@ class Body extends Element
 				'<a id="contents_' . $this->id . '"></a>' . "\n" .
 				$this->contents->toString() . "\n" .
 				'</div>' . "\n";
-		array_shift($arr);
-		return ($arr[1] != '') ? $contents . join('', $arr) : $contents;
+		return $contents;
 	}
 }
 

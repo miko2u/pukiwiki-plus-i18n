@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: html.php,v 1.30.13 2005/03/13 17:29:02 miko Exp $
+// $Id: html.php,v 1.31.13 2005/04/21 14:27:27 miko Exp $
 //
 // HTML-publishing related functions
 
@@ -160,7 +160,7 @@ function catbody($title, $page, $body)
 }
 
 // Show 'edit' form
-function edit_form($page, $postdata, $digest = 0, $b_template = TRUE)
+function edit_form($page, $postdata, $digest = FALSE, $b_template = TRUE)
 {
 	global $script, $vars, $rows, $cols, $hr, $function_freeze;
 	global $_btn_addtop, $_btn_preview, $_btn_repreview, $_btn_update, $_btn_cancel,
@@ -168,9 +168,10 @@ function edit_form($page, $postdata, $digest = 0, $b_template = TRUE)
 	global $whatsnew, $_btn_template, $_btn_load, $non_list, $load_template_func;
 	global $notimeupdate;
 
-	$refer = $template = $addtag = $add_top = '';
+	// Newly generate $digest or not
+	if ($digest === FALSE) $digest = md5(join('', get_source($page)));
 
-	if ($digest == 0) $digest = md5(join('', get_source($page)));
+	$refer = $template = $addtag = $add_top = '';
 
 	$checked_top  = isset($vars['add_top'])     ? ' checked="checked"' : '';
 	$checked_time = isset($vars['notimestamp']) ? ' checked="checked"' : '';
@@ -215,10 +216,11 @@ EOD;
 	$s_id        = isset($vars['id']) ? htmlspecialchars($vars['id']) : '';
 	$b_preview   = isset($vars['preview']); // TRUE when preview
 	$btn_preview = $b_preview ? $_btn_repreview : $_btn_preview;
+
 	$add_notimestamp = '';
 	if ( $notimeupdate != 0 ) {
 		// enable 'do not change timestamp'
-		 $add_notimestamp = <<<EOD
+		$add_notimestamp = <<<EOD
   <input type="checkbox" name="notimestamp" id="_edit_form_notimestamp" value="true"$checked_time />
   <label for="_edit_form_notimestamp"><span class="small">$_btn_notchangetimestamp</span></label>
 EOD;
