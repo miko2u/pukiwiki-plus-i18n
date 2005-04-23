@@ -493,7 +493,7 @@ class TableCell extends Element
 				$text = $matches[5];
 			}
 		}
-		if ($is_template && is_numeric($text))
+		if ($is_template && is_numeric($text)) {
 			$this->style['width'] = 'width:' . $text . 'px;';
 		} elseif ($is_template && is_numeric(substr($text,0,-1)) && substr($text,-1) == '%') {
 			$this->style['width'] = 'width:' . $text . ';';
