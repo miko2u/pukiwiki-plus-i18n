@@ -2,14 +2,19 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: default.ini.php,v 1.15.2 2004/10/11 15:27:32 miko Exp $
+// $Id: default.ini.php,v 1.18.2 2005/04/02 03:04:14 miko Exp $
 //
 // PukiWiki setting file (user agent:default)
 
 /////////////////////////////////////////////////
-// スキンファイルの場所
-//define('SKIN_FILE', DATA_HOME . SKIN_DIR . 'pukiwiki.skin.php');
-define('SKIN_FILE_DEFAULT', DATA_HOME . SKIN_DIR . 'default.skin.php');
+// Skin file
+if (defined('TDIARY_THEME')) { 
+//	define('SKIN_FILE', DATA_HOME . SKIN_DIR . 'tdiary.skin.php');
+	define('SKIN_FILE_DEFAULT', DATA_HOME . SKIN_DIR . 'tdiary.skin.php'); 
+} else {
+//	define('SKIN_FILE', DATA_HOME . SKIN_DIR . 'pukiwiki.skin.php');
+	define('SKIN_FILE_DEFAULT', DATA_HOME . SKIN_DIR . 'default.skin.php');
+}
 $skin_file = SKIN_FILE_DEFAULT;
 
 /////////////////////////////////////////////////
@@ -65,6 +70,14 @@ $rule_related_str = "</li>\n<li>";
 $hr = '<hr class="full_hr" />';
 
 /////////////////////////////////////////////////
+// 脚注機能関連
+
+// 脚注のアンカーを相対パスで表示する (0 = 絶対パス)
+//  * 相対パスの場合、以前のバージョンのOperaで問題になることがあります
+//  * 絶対パスの場合、calendar_viewerなどで問題になることがあります
+// (詳しくは: BugTrack/698)
+define('PKWK_ALLOW_RELATIVE_FOOTNOTE_ANCHOR', 1);
+
 // 文末の注釈の直前に表示するタグ
 $note_hr = '<hr class="note_hr" />';
 
@@ -99,14 +112,12 @@ $line_rules = array(
 	'SIZE\(([^\(\)]*)\){([^}]*)}'	=> '<span style="font-size:$1px">$2</span>',
 	'COLOR\(([^\(\)]*)\):((?:(?!COLOR\([^\)]+\)\:).)*)'	=> '<span style="color:$1">$2</span>',
 	'SIZE\(([^\(\)]*)\):((?:(?!SIZE\([^\)]+\)\:).)*)'	=> '<span class="size$1">$2</span>',
-        'SUP{([^}]*)}' => '<span style="font-size:60%;vertical-align:super;">$1</span>',
-        'SUB{([^}]*)}' => '<span style="font-size:60%;vertical-align:sub;">$1</span>',
+	'SUP{([^}]*)}' => '<span style="font-size:60%;vertical-align:super;">$1</span>',
+	'SUB{([^}]*)}' => '<span style="font-size:60%;vertical-align:sub;">$1</span>',
 	'%%%(?!%)((?:(?!%%%).)*)%%%'	=> '<ins>$1</ins>',
 	'%%(?!%)((?:(?!%%).)*)%%'	=> '<del>$1</del>',
 	"'''(?!')((?:(?!''').)*)'''"	=> '<em>$1</em>',
 	"''(?!')((?:(?!'').)*)''"	=> '<strong>$1</strong>',
-	'&amp;br;'	=> '<br />',
-	'&amp;hr;'      => '<hr class="short_line" />',
 );
 
 /////////////////////////////////////////////////

@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: pukiwiki.ini.php,v 1.119.13 2005/04/05 16:34:50 miko Exp $
+// $Id: pukiwiki.ini.php,v 1.119.14 2005/04/25 16:34:50 miko Exp $
 //
 // PukiWiki main setting file
 
@@ -43,23 +43,23 @@ if (! defined('DEFAULT_LANG'))
 // 2) Considering judgment to HTTP_USER_AGENT
 // 3) Considering judgment to HTTP_ACCEPT_CHARSET
 // 4) Considering judgment to REMOTE_ADDR
-// µ¡Ç½Í­¸ú²½¥¹¥¤¥Ã¥Á (2 ¤Ê¤é¡¢1¤È2¤ÎÈ½Äê¤È¤Ê¤ë)
-// 0) Ìµ¸ú
-// 1) HTTP_ACCEPT_LANGUAGE ¤Ç¤ÎÈ½Äê
-// 2) HTTP_USER_AGENT ¤Ş¤Ç¤Î¸«Ğö¤·È½Äê
-// 3) HTTP_ACCEPT_CHARSET ¤Ş¤Ç¤Î¸«Ğö¤·È½Äê
-// 4) REMOTE_ADDR ¤Ş¤Ç¤Î¸«Ğö¤·È½Äê
+// æ©Ÿèƒ½æœ‰åŠ¹åŒ–ã‚¹ã‚¤ãƒƒãƒ (2 ãªã‚‰ã€1ã¨2ã®åˆ¤å®šã¨ãªã‚‹)
+// 0) ç„¡åŠ¹
+// 1) HTTP_ACCEPT_LANGUAGE ã§ã®åˆ¤å®š
+// 2) HTTP_USER_AGENT ã¾ã§ã®è¦‹åšã—åˆ¤å®š
+// 3) HTTP_ACCEPT_CHARSET ã¾ã§ã®è¦‹åšã—åˆ¤å®š
+// 4) REMOTE_ADDR ã¾ã§ã®è¦‹åšã—åˆ¤å®š
 $language_considering_setting_level = 1;
 
 // Please define it when two or more TimeZone such as en_US exists.
 // Please refer to lib/timezone.php for the defined character string.
-// en_US ¤Ê¤É¡¢Ê£¿ô¤Î¥¿¥¤¥à¥¾¡¼¥ó¤¬Â¸ºß¤¹¤ë¾ì¹ç¤ËÄêµÁ¤·¤Æ²¼¤µ¤¤¡£
-// ÄêµÁ¤¹¤ëÊ¸»úÎó¤Ï¡¢lib/timezone.php ¤ò»²¾È¤·¤Æ²¼¤µ¤¤¡£
+// en_US ãªã©ã€è¤‡æ•°ã®ã‚¿ã‚¤ãƒ ã‚¾ãƒ¼ãƒ³ãŒå­˜åœ¨ã™ã‚‹å ´åˆã«å®šç¾©ã—ã¦ä¸‹ã•ã„ã€‚
+// å®šç¾©ã™ã‚‹æ–‡å­—åˆ—ã¯ã€lib/timezone.php ã‚’å‚ç…§ã—ã¦ä¸‹ã•ã„ã€‚
 //if (! defined('DEFAULT_TZ_NAME'))
 //	define('DEFAULT_TZ_NAME', 'Asia/Tokyo');
 
 // The view on public holiday applies to installation features.
-// ½ËÆü¤ÎÉ½¼¨¤Ï¡¢ÀßÃÖ¾ì½ê¤Ë½à¤º¤ë (0:ÀßÃÖ¼Ô»ëÅÀ, 1:±ÜÍ÷¼Ô»ëÅÀ)
+// ç¥æ—¥ã®è¡¨ç¤ºã¯ã€è¨­ç½®å ´æ‰€ã«æº–ãšã‚‹ (0:è¨­ç½®è€…è¦–ç‚¹, 1:é–²è¦§è€…è¦–ç‚¹)
 $public_holiday_guest_view = 0;
 
 /////////////////////////////////////////////////
@@ -240,8 +240,8 @@ $read_auth = 0;
 
 // Read auth regex
 $read_auth_pages = array(
-	'#¤Ò¤­¤³¤â¤ë¤Û¤²#'	=> 'hoge',
-	'#(¥Í¥¿¥Ğ¥ì|¤Í¤¿¤Ğ¤ì)#'	=> 'foo,bar,hoge',
+	'#ã²ãã“ã‚‚ã‚‹ã»ã’#'	=> 'hoge',
+	'#(ãƒã‚¿ãƒãƒ¬|ã­ãŸã°ã‚Œ)#'	=> 'foo,bar,hoge',
 );
 
 /////////////////////////////////////////////////
@@ -250,9 +250,9 @@ $edit_auth = 0;
 
 // Edit auth regex
 $edit_auth_pages = array(
-	'#Bar¤Î¸ø³«Æüµ­#'	=> 'bar',
-	'#¤Ò¤­¤³¤â¤ë¤Û¤²#'	=> 'hoge',
-	'#(¥Í¥¿¥Ğ¥ì|¤Í¤¿¤Ğ¤ì)#'	=> 'foo,bar,hoge',
+	'#Barã®å…¬é–‹æ—¥è¨˜#'	=> 'bar',
+	'#ã²ãã“ã‚‚ã‚‹ã»ã’#'	=> 'hoge',
+	'#(ãƒã‚¿ãƒãƒ¬|ã­ãŸã°ã‚Œ)#'	=> 'foo,bar,hoge',
 );
 
 /////////////////////////////////////////////////
@@ -421,28 +421,28 @@ $line_break = 0;
 $usedatetime = 1;
 
 /////////////////////////////////////////////////
-// ¸«½Ğ¤·¤´¤È¤ÎÊÔ½¸¤ò²ÄÇ½¤Ë¤¹¤ë 
+// è¦‹å‡ºã—ã”ã¨ã®ç·¨é›†ã‚’å¯èƒ½ã«ã™ã‚‹ 
 //
-// ¸«½Ğ¤·¹Ô¤Î¸ÇÍ­¤Î¥¢¥ó¥«¼«Æ°ÁŞÆş¤µ¤ì¤Æ¤¤¤ë¤È¤­
-// ¤Î¤ßÍ­¸ú¤Ç¤¹
+// è¦‹å‡ºã—è¡Œã®å›ºæœ‰ã®ã‚¢ãƒ³ã‚«è‡ªå‹•æŒ¿å…¥ã•ã‚Œã¦ã„ã‚‹ã¨ã
+// ã®ã¿æœ‰åŠ¹ã§ã™
 $fixed_heading_edited = 0;
 
 /////////////////////////////////////////////////
-// ¥Ú¡¼¥¸¤òÇ¤°Õ¤Î¥Õ¥ì¡¼¥à¤Ë³«¤¯»ş¤Ë»È¤¦ÀßÄê
+// ãƒšãƒ¼ã‚¸ã‚’ä»»æ„ã®ãƒ•ãƒ¬ãƒ¼ãƒ ã«é–‹ãæ™‚ã«ä½¿ã†è¨­å®š
 $use_open_uri_in_new_window  = 1;
 
-// Æ±°ì¥µ¡¼¥Ğ¡¼¤È¤·¤Æ¤ß¤Ê¤¹¥Û¥¹¥È¤ÎURI
+// åŒä¸€ã‚µãƒ¼ãƒãƒ¼ã¨ã—ã¦ã¿ãªã™ãƒ›ã‚¹ãƒˆã®URI
 $open_uri_in_new_window_servername = array(
       "http://localhost/",
       "http://localhost.localdomain/",
 );
-// URI¤Î¼ïÎà¤Ë¤è¤Ã¤Æ³«¤¯Æ°ºî¤òÀßÄê¡£
-// "_blank"¤ÇÊÌÁë¤ØÉ½¼¨¡¢false¤ò»ØÄê¤¹¤ë¤ÈÌµ¸ú
-$open_uri_in_new_window_opis  = "_blank";     // pukiwiki¤Î³°¤ÇÆ±°ì¥µ¡¼¥Ğ¡¼Æâ
-$open_uri_in_new_window_opisi = false;        // pukiwiki¤Î³°¤ÇÆ±°ì¥µ¡¼¥Ğ¡¼Æâ(InterWikiLink)
-$open_uri_in_new_window_opos  = "_blank";     // pukiwiki¤Î³°¤Ç³°Éô¥µ¡¼¥Ğ¡¼
-$open_uri_in_new_window_oposi = "_blank";     // pukiwiki¤Î³°¤Ç³°Éô¥µ¡¼¥Ğ¡¼(InterWikiLink)
-// (Ãí°Õ¡§¤¢¤¨¤Æ³ÈÄ¥¤·¤ä¤¹¤¤¤è¤¦¤Ë¤·¤Æ¤¤¤Ş¤¹¤¬¡¢"_blank"°Ê³°¤Ï»ØÄê¤·¤Ê¤¤¤Ç¤¯¤À¤µ¤¤)
+// URIã®ç¨®é¡ã«ã‚ˆã£ã¦é–‹ãå‹•ä½œã‚’è¨­å®šã€‚
+// "_blank"ã§åˆ¥çª“ã¸è¡¨ç¤ºã€falseã‚’æŒ‡å®šã™ã‚‹ã¨ç„¡åŠ¹
+$open_uri_in_new_window_opis  = "_blank";     // pukiwikiã®å¤–ã§åŒä¸€ã‚µãƒ¼ãƒãƒ¼å†…
+$open_uri_in_new_window_opisi = false;        // pukiwikiã®å¤–ã§åŒä¸€ã‚µãƒ¼ãƒãƒ¼å†…(InterWikiLink)
+$open_uri_in_new_window_opos  = "_blank";     // pukiwikiã®å¤–ã§å¤–éƒ¨ã‚µãƒ¼ãƒãƒ¼
+$open_uri_in_new_window_oposi = "_blank";     // pukiwikiã®å¤–ã§å¤–éƒ¨ã‚µãƒ¼ãƒãƒ¼(InterWikiLink)
+// (æ³¨æ„ï¼šã‚ãˆã¦æ‹¡å¼µã—ã‚„ã™ã„ã‚ˆã†ã«ã—ã¦ã„ã¾ã™ãŒã€"_blank"ä»¥å¤–ã¯æŒ‡å®šã—ãªã„ã§ãã ã•ã„)
 
 /////////////////////////////////////////////////
 // User-Agent settings
@@ -484,12 +484,13 @@ $agents = array(
 	array('pattern'=>'#\b(AVE-Front)/([0-9\.]+)#',	'profile'=>'keitai'), // The same?
 
 	// NTT-DoCoMo, i-mode (embeded Compact NetFront) and FOMA (embedded NetFront) phones
-	// Sample: "DoCoMo/1.0/F501i", "DoCoMo/1.0/N504i/c10/TB/serXXXX" // c°Ê¹ß¤Ï²ÄÊÑ
-	// Sample: "DoCoMo/2.0 MST_v_SH2101V(c100;TB;W22H12;serXXXX;iccxxxx)" // ()¤ÎÃæ¤Ï²ÄÊÑ
-	array('pattern'=>'#^(DoCoMo)/([0-9\.]+)#',	'profile'=>'keitai'),
+	// Sample: "DoCoMo/1.0/F501i", "DoCoMo/1.0/N504i/c10/TB/serXXXX" // cä»¥é™ã¯å¯å¤‰
+	// Sample: "DoCoMo/2.0 MST_v_SH2101V(c100;TB;W22H12;serXXXX;iccxxxx)" // ()ã®ä¸­ã¯å¯å¤‰
+	array('pattern'=>'#^(DoCoMo)/([0-1\.]+)#',	'profile'=>'keitai'),
+	array('pattern'=>'#^(DoCoMo)/([2-9\.]+)#',	'profile'=>'keitai-ng'),
 
 	// Vodafone's embedded browser
-	// Sample: "J-PHONE/2.0/J-T03"	// 2.0¤Ï"¥Ö¥é¥¦¥¶¤Î"¥Ğ¡¼¥¸¥ç¥ó
+	// Sample: "J-PHONE/2.0/J-T03"	// 2.0ã¯"ãƒ–ãƒ©ã‚¦ã‚¶ã®"ãƒãƒ¼ã‚¸ãƒ§ãƒ³
 	// Sample: "J-PHONE/4.0/J-SH51/SNxxxx SH/0001a Profile/MIDP-1.0 Configuration/CLDC-1.0 Ext-Profile/JSCL-1.1.0"
 	array('pattern'=>'#^(J-PHONE)/([0-9\.]+)#',	'profile'=>'keitai'),
 
@@ -542,7 +543,7 @@ $agents = array(
 	// Sample: "Mozilla/5.0 (Windows; U; Windows NT 5.0; ja-JP; rv:1.7) Gecko/20040803 Firefox/0.9.3"
 	array('pattern'=>'#\b(Firefox)/([0-9\.]+)\b#',	'profile'=>'default'),
 
-    	// Loose default: Including something Mozilla
+	// Loose default: Including something Mozilla
 	array('pattern'=>'#^([a-zA-z0-9 ]+)/([0-9\.]+)\b#',	'profile'=>'default'),
 
 	array('pattern'=>'#^#',	'profile'=>'default'),	// Sentinel
