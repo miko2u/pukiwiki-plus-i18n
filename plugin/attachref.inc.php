@@ -39,22 +39,9 @@ define('ATTACHREF_UPLOAD_ADMIN_ONLY',FALSE); // FALSE or TRUE
 // アップロード/削除時にパスワードを要求する(ATTACHREF_UPLOAD_ADMIN_ONLYが優先)
 define('ATTACHREF_PASSWORD_REQUIRE',FALSE); // FALSE or TRUE
 
-function plugin_attachref_init()
-{
-	$messages = array(
-		'_attachref_messages' => array(
-			'btn_submit'    => _("[Upload]"),
-			'msg_title'     => _("Attach and Ref to $1"),
-			'msg_title_collided' => _("On updating $1, a collision has occurred."),
-			'msg_collided'  => _("It seems that someone has already updated the page you were editing.<br />The attach file was added, alhough it may be inserted in the wrong position.<br />"),
-		),
-	);
-	set_plugin_messages($messages);
-}
 function plugin_attachref_inline()
 {
 	global $script,$vars,$digest;
-	global $_attachref_messages;
 	static $numbers = array();
 	static $no_flag = 0;
 	
@@ -71,7 +58,7 @@ function plugin_attachref_inline()
 
 	$args = func_get_args();
     $btn_text = array_pop($args);
-    $btn_text = $btn_text ? $btn_text : $_attachref_messages['btn_submit'];
+    $btn_text = $btn_text ? $btn_text : _("[Upload]");
         
     $options = array();
     foreach ( $args as $opt ){
@@ -141,12 +128,11 @@ EOD;
 function plugin_attachref_action()
 {
 	global $script,$vars;
-	global $_attachref_messages;
 	global $html_transitional;
 
 
 	//戻り値を初期化
-	$retval['msg'] = $_attachref_messages['msg_title'];
+	$retval['msg'] = _("Attach and Ref to $1");
 	$retval['body'] = '';
 	
 	if (array_key_exists('attach_file',$_FILES)
@@ -190,10 +176,9 @@ function plugin_attachref_action()
 function attachref_insert_ref($filename)
 {
 	global $script,$vars,$now,$do_backup;
-	global $_attachref_messages;
-	
-	$ret['msg'] = $_attachref_messages['msg_title'];
-	
+
+	$ret['msg'] = _("Attach and Ref to $1");
+
 	$args = split(",", $vars['attachref_opt']);
 	if ( count($args) ){
 	    $args[0] = './' . $filename;//array_shift,unshiftって要するにこれね
@@ -203,7 +188,7 @@ function attachref_insert_ref($filename)
 	    $s_args = './' . $filename;
 	}
 	$msg = "&attachref($s_args)";
-	
+
 	$refer = $vars['refer'];
 	$digest = $vars['digest'];
 	$postdata_old = get_source($refer);
@@ -240,8 +225,8 @@ function attachref_insert_ref($filename)
 	// 更新の衝突を検出
 	if ( $thedigest != $digest )
 	{
-		$ret['msg'] = $_attachref_messages['msg_title_collided'];
-		$ret['body'] = $_attachref_messages['msg_collided'];
+		$ret['msg'] = _("On updating $1, a collision has occurred.");
+		$ret['body'] = _("It seems that someone has already updated the page you were editing.<br />The attach file was added, alhough it may be inserted in the wrong position.<br />");
 	}
 /*
 	$postdata .= "<hr />$refer, " . join('/',array_keys($vars)) . ", " . join("/",array_values($vars)) . ", s_args=$s_args";
