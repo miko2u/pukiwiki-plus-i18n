@@ -15,10 +15,12 @@ $rw = ! PKWK_READONLY;
 
 // Output HTTP headers
 pkwk_headers_sent();
+echo '<?xml version="1.0" encoding="' . CONTENT_CHARSET . '" ?>' . "\n";
+echo '<!DOCTYPE html PUBLIC "-//i-mode group (ja)//DTD XHTML i-XHTML(Locale/Ver.=ja/1.0) 1.0//EN" "i-xhtml_4ja_10.dtd">' . "\n";
 
 if(FALSE) {
 	// Force Shift JIS encode for Japanese embedded browsers and devices
-	header('Content-Type: text/html; charset=UTF-8');
+	header('Content-Type: text/html; charset=Shift_JIS');
 	$title = mb_convert_encoding($title, 'SJIS', SOURCE_ENCODING);
 	$body  = mb_convert_encoding($body,  'SJIS', SOURCE_ENCODING);
 } else {
@@ -41,9 +43,11 @@ $body = preg_replace('#(<div[^>]+>)?(<a[^>]+>)?<img[^>]*alt="Edit"[^>]*>(?(2)</a
 $body = preg_replace('#<img([^>]*)title="keitai"[^>]*>#i', '<PWimg $1>', $body);
 
 // ALT option を持つ IMG タグ(画像)を文字列にリンクに置換
+// Problem: FOMAはPNGを見ることができない. サムネイル置換可能か？
 $body = preg_replace('#(<div[^>]+>)?(<a[^>]+>)?<img[^>]*alt="([^"]+)"[^>]*>(?(2)</a>)(?(1)</div>)#i', '$2[IMAGE:$3]$4', $body);
 
 // ALT option の無い IMG タグ(画像)を文字列にリンクに置換
+// Problem: FOMAはPNGを見ることができない. サムネイル置換可能か？
 $body = preg_replace('#(<div[^>]+>)?(<a[^>]+>)?<img[^>]+>(?(2)</a>)(?(1)</div>)#i', '$2[IMAGE]$4', $body);
 
 // ALT="keitai" を持つ IMG タグ(画像)を置換(*2)
