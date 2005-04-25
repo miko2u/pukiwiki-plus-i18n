@@ -43,10 +43,10 @@ function plugin_attachref_init()
 {
 	$messages = array(
 		'_attachref_messages' => array(
-			'btn_submit'    => _('[Upload]'),
-			'msg_title'     => _('Attach and Ref to $1'),
-			'msg_title_collided' => _('On updating $1, a collision has occurred.'),
-			'msg_collided'  => _('It seems that someone has already updated the page you were editing.<br />The attach file was added, alhough it may be inserted in the wrong position.<br />'),
+			'btn_submit'    => _("[Upload]"),
+			'msg_title'     => _("Attach and Ref to $1"),
+			'msg_title_collided' => _("On updating $1, a collision has occurred."),
+			'msg_collided'  => _("It seems that someone has already updated the page you were editing.<br />The attach file was added, alhough it may be inserted in the wrong position.<br />"),
 		),
 	);
 	set_plugin_messages($messages);
