@@ -486,7 +486,7 @@ $agents = array(
 	// NTT-DoCoMo, i-mode (embeded Compact NetFront) and FOMA (embedded NetFront) phones
 	// Sample: "DoCoMo/1.0/F501i", "DoCoMo/1.0/N504i/c10/TB/serXXXX" // c以降は可変
 	// Sample: "DoCoMo/2.0 MST_v_SH2101V(c100;TB;W22H12;serXXXX;iccxxxx)" // ()の中は可変
-	array('pattern'=>'#^(DoCoMo)/([0-1\.]+)#',	'profile'=>'keitai'),
+	array('pattern'=>'#^(DoCoMo)/([0-9\.]+)#',	'profile'=>'keitai'),
 
 	// Vodafone's embedded browser
 	// Sample: "J-PHONE/2.0/J-T03"	// 2.0は"ブラウザの"バージョン
