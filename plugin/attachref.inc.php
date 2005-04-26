@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: attachref.inc.php,v 0.14.5 2003/10/08 04:10:29 miko Exp $
+// $Id: attachref.inc.php,v 0.14.6 2003/10/08 04:10:29 miko Exp $
 // Original is sha
 //
 // Attach & ref plugin: Combined attach-ref
@@ -13,6 +13,7 @@ define('MAX_FILESIZE',(2048*1024));
 
 // 管理者だけが添付ファイルをアップロードできるようにする
 define('ATTACHREF_UPLOAD_ADMIN_ONLY',FALSE); // FALSE or TRUE
+
 // アップロード/削除時にパスワードを要求する(ADMIN_ONLYが優先)
 define('ATTACHREF_PASSWORD_REQUIRE',FALSE); // FALSE or TRUE
 
@@ -295,6 +296,7 @@ function attachref_insert_ref($filename)
 	    $s_args = './' . $filename;
 	}
 	$msg = "&attachref($s_args)";
+	$msg_block = "#attachref($s_args)";
 	
 	$refer = $vars['refer'];
 	$digest = $vars['digest'];
