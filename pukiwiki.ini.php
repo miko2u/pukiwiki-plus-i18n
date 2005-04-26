@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: pukiwiki.ini.php,v 1.119.14 2005/04/25 16:34:50 miko Exp $
+// $Id: pukiwiki.ini.php,v 1.119.15 2005/04/26 16:34:50 miko Exp $
 //
 // PukiWiki main setting file
 
@@ -487,7 +487,6 @@ $agents = array(
 	// Sample: "DoCoMo/1.0/F501i", "DoCoMo/1.0/N504i/c10/TB/serXXXX" // c以降は可変
 	// Sample: "DoCoMo/2.0 MST_v_SH2101V(c100;TB;W22H12;serXXXX;iccxxxx)" // ()の中は可変
 	array('pattern'=>'#^(DoCoMo)/([0-1\.]+)#',	'profile'=>'keitai'),
-	array('pattern'=>'#^(DoCoMo)/([2-9\.]+)#',	'profile'=>'keitai-ng'),
 
 	// Vodafone's embedded browser
 	// Sample: "J-PHONE/2.0/J-T03"	// 2.0は"ブラウザの"バージョン
