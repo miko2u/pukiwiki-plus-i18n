@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-04-01 01:34+0900\n"
+"POT-Creation-Date: 2005-04-28 18:47+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,94 +16,102 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../plugin/bugtrack.inc.php:17
+#: ../../plugin/bugtrack.inc.php:24
 msgid "Emergency"
 msgstr ""
 
-#: ../../plugin/bugtrack.inc.php:17
+#: ../../plugin/bugtrack.inc.php:24
 msgid "Importance"
 msgstr ""
 
-#: ../../plugin/bugtrack.inc.php:17
+#: ../../plugin/bugtrack.inc.php:24
 msgid "Normal"
 msgstr ""
 
-#: ../../plugin/bugtrack.inc.php:17
+#: ../../plugin/bugtrack.inc.php:24
 msgid "Low"
 msgstr ""
 
-#: ../../plugin/bugtrack.inc.php:18 ../../plugin/bugtrack.inc.php:19
+#: ../../plugin/bugtrack.inc.php:25 ../../plugin/bugtrack.inc.php:26
 msgid "Proposal"
 msgstr ""
 
-#: ../../plugin/bugtrack.inc.php:18 ../../plugin/bugtrack.inc.php:19
+#: ../../plugin/bugtrack.inc.php:25 ../../plugin/bugtrack.inc.php:26
 msgid "Start"
 msgstr ""
 
-#: ../../plugin/bugtrack.inc.php:18 ../../plugin/bugtrack.inc.php:19
+#: ../../plugin/bugtrack.inc.php:25 ../../plugin/bugtrack.inc.php:26
 msgid "CVS Waiting"
 msgstr ""
 
-#: ../../plugin/bugtrack.inc.php:18 ../../plugin/bugtrack.inc.php:19
+#: ../../plugin/bugtrack.inc.php:25 ../../plugin/bugtrack.inc.php:26
 msgid "Completion"
 msgstr ""
 
-#: ../../plugin/bugtrack.inc.php:18 ../../plugin/bugtrack.inc.php:19
+#: ../../plugin/bugtrack.inc.php:25 ../../plugin/bugtrack.inc.php:26
 msgid "Reservation"
 msgstr ""
 
-#: ../../plugin/bugtrack.inc.php:18 ../../plugin/bugtrack.inc.php:19
+#: ../../plugin/bugtrack.inc.php:25 ../../plugin/bugtrack.inc.php:26
 msgid "Rejection"
 msgstr ""
 
-#: ../../plugin/bugtrack.inc.php:23
+#: ../../plugin/bugtrack.inc.php:29
 msgid "Page"
 msgstr ""
 
-#: ../../plugin/bugtrack.inc.php:24
+#: ../../plugin/bugtrack.inc.php:30
 msgid "Summary"
 msgstr ""
 
-#: ../../plugin/bugtrack.inc.php:25
-msgid "Priority"
-msgstr ""
-
-#: ../../plugin/bugtrack.inc.php:26
-msgid "State"
-msgstr ""
-
-#: ../../plugin/bugtrack.inc.php:27
-msgid "Name"
-msgstr ""
-
-#: ../../plugin/bugtrack.inc.php:28
-msgid "Date"
-msgstr ""
-
-#: ../../plugin/bugtrack.inc.php:29
-msgid "Message"
-msgstr ""
-
-#: ../../plugin/bugtrack.inc.php:30
-msgid "Category"
-msgstr ""
-
 #: ../../plugin/bugtrack.inc.php:31
-msgid "Page Name"
+msgid "Fill in the summary here. "
 msgstr ""
 
 #: ../../plugin/bugtrack.inc.php:32
-msgid "<small>Page name is automatically given for an empty column.</small>"
+msgid "Priority"
 msgstr ""
 
 #: ../../plugin/bugtrack.inc.php:33
-msgid "<small>It is acceptable also in an empty column.</small>"
+msgid "State"
 msgstr ""
 
 #: ../../plugin/bugtrack.inc.php:34
-msgid "Version"
+msgid "Name"
 msgstr ""
 
 #: ../../plugin/bugtrack.inc.php:35
+msgid "Anonymous"
+msgstr ""
+
+#: ../../plugin/bugtrack.inc.php:36
+msgid "Date"
+msgstr ""
+
+#: ../../plugin/bugtrack.inc.php:37
+msgid "Message"
+msgstr ""
+
+#: ../../plugin/bugtrack.inc.php:38
+msgid "Category"
+msgstr ""
+
+#: ../../plugin/bugtrack.inc.php:39
+msgid "Page Name"
+msgstr ""
+
+#: ../../plugin/bugtrack.inc.php:40
+msgid "Page name is automatically given for an empty column."
+msgstr ""
+
+#: ../../plugin/bugtrack.inc.php:41
+msgid "It is acceptable also in an empty column."
+msgstr ""
+
+#: ../../plugin/bugtrack.inc.php:42
+msgid "Version"
+msgstr ""
+
+#: ../../plugin/bugtrack.inc.php:43
 msgid "Submit"
 msgstr ""
