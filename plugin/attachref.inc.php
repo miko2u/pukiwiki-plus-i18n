@@ -22,7 +22,7 @@ define('PLUGIN_ATTACHREF_WRAP_TABLE', FALSE); // TRUE, FALSE
 function plugin_attachref_init()
 {
 	$messages = array(
-		'_attachref_messages' => array(
+		'_attach_messages' => array(
 			// copy for attach.inc.php
 			'msg_upload'   => _('Upload to $1'),
 			'msg_maxsize'  => _('Maximum file size is %s.'),
@@ -30,6 +30,8 @@ function plugin_attachref_init()
 			'msg_password' => _('password'),
 			'msg_file'     => _('Attach file'),
 			'btn_upload'   => _('Upload'),
+		),
+		'_attachref_messages' => array(
 			// original attachref.inc.php
 			'btn_submit'    => _("[Upload]"),
 			'msg_title'     => _("Attach and Ref to $1"),
@@ -380,18 +382,18 @@ function attachref_insert_ref($filename)
 function attachref_showform()
 {
 	global $vars;
-	global $_attachref_messages;
+	global $_attach_messages;
 
 	$vars['page'] = $vars['refer'];
 	$body = ini_get('file_uploads') ? attachref_form($vars['page']) : 'file_uploads disabled.';
 
-	return array('msg'=>$_attachref_messages['msg_upload'],'body'=>$body);
+	return array('msg'=>$_attach_messages['msg_upload'],'body'=>$body);
 }
 //アップロードフォーム
 function attachref_form($page)
 {
 	global $script,$vars;
-	global $_attachref_messages;
+	global $_attach_messages;
 	
 	$s_page = htmlspecialchars($page);
 
@@ -406,12 +408,12 @@ function attachref_form($page)
 	}
 	
 	$maxsize = MAX_FILESIZE;
-	$msg_maxsize = sprintf($_attachref_messages['msg_maxsize'],number_format($maxsize/1000)."KB");
+	$msg_maxsize = sprintf($_attach_messages['msg_maxsize'],number_format($maxsize/1000)."KB");
 
 	$pass = '';
 	if (ATTACHREF_PASSWORD_REQUIRE or ATTACHREF_UPLOAD_ADMIN_ONLY)
 	{
-		$title = $_attachref_messages[ATTACHREF_UPLOAD_ADMIN_ONLY ? 'msg_adminpass' : 'msg_password'];
+		$title = $_attach_messages[ATTACHREF_UPLOAD_ADMIN_ONLY ? 'msg_adminpass' : 'msg_password'];
 		$pass = '<br />'.$title.': <input type="password" name="pass" size="8" />';
 	}
 	return <<<EOD
@@ -427,9 +429,9 @@ function attachref_form($page)
   <span class="small">
    $msg_maxsize
   </span><br />
-  {$_attachref_messages['msg_file']}: <input type="file" name="attach_file" />
+  {$_attach_messages['msg_file']}: <input type="file" name="attach_file" />
   $pass
-  <input type="submit" value="{$_attachref_messages['btn_upload']}" />
+  <input type="submit" value="{$_attach_messages['btn_upload']}" />
  </div>
 </form>
 EOD;
