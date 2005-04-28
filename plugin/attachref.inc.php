@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: attachref.inc.php,v 0.14.5 2005/04/25 04:10:29 miko Exp $
+// $Id: attachref.inc.php,v 0.14.7 2005/04/27 04:10:29 miko Exp $
 // Original is sha
 //
 
@@ -24,12 +24,12 @@ function plugin_attachref_init()
 	$messages = array(
 		'_attach_messages' => array(
 			// copy for attach.inc.php
-			'msg_upload'   => _('Upload to $1'),
-			'msg_maxsize'  => _('Maximum file size is %s.'),
-			'msg_adminpass'=> _('Administrator password'),
-			'msg_password' => _('password'),
-			'msg_file'     => _('Attach file'),
-			'btn_upload'   => _('Upload'),
+			'msg_upload'   => _("Upload to $1"),
+			'msg_maxsize'  => _("Maximum file size is %s."),
+			'msg_adminpass'=> _("Administrator password"),
+			'msg_password' => _("password"),
+			'msg_file'     => _("Attach file"),
+			'btn_upload'   => _("Upload"),
 		),
 		'_attachref_messages' => array(
 			// original attachref.inc.php
