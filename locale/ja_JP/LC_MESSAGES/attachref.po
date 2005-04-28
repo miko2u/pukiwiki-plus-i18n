@@ -16,7 +16,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: ../../plugin/attachref.inc.php:27
-#, fuzzy
 msgid "Upload to $1"
 msgstr "$1 への添付"
 
@@ -38,7 +37,6 @@ msgid "Attach file"
 msgstr "添付ファイル"
 
 #: ../../plugin/attachref.inc.php:32
-#, fuzzy
 msgid "Upload"
 msgstr "アップロード"
 
