@@ -39,8 +39,8 @@ function plugin_bugtrack_init()
 		'pagename' => _('Page Name'),
 		'pagename_comment' => _('<small>Page name is automatically given for an empty column.</small>'),
 		'version_comment'  => _('<small>It is acceptable also in an empty column.</small>'),
-		'version'  => _('Version'),,
-		'submit'   => _('Submit')
+		'version'  => _('Version'),
+		'submit'   => _('Submit'),
 		);
 }
 
