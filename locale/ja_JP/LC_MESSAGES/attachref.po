@@ -18,7 +18,7 @@ msgstr ""
 #: ../../plugin/attachref.inc.php:27
 #, fuzzy
 msgid "Upload to $1"
-msgstr "[添付]"
+msgstr "$1 への添付"
 
 #: ../../plugin/attachref.inc.php:28
 #, php-format
@@ -40,7 +40,7 @@ msgstr "添付ファイル"
 #: ../../plugin/attachref.inc.php:32
 #, fuzzy
 msgid "Upload"
-msgstr "[添付]"
+msgstr "アップロード"
 
 #: ../../plugin/attachref.inc.php:34
 msgid "[Upload]"
@@ -48,7 +48,7 @@ msgstr "[添付]"
 
 #: ../../plugin/attachref.inc.php:35
 msgid "Attach and Ref to $1"
-msgstr "Attach and Ref to $1"
+msgstr "$1 にアップロードしました"
 
 #: ../../plugin/attachref.inc.php:36
 msgid "On updating $1, a collision has occurred."
