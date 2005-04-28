@@ -11,6 +11,7 @@ msgfmt -o $LOCALE/$LANG/LC_MESSAGES/attach.mo $LOCALE/$LANG/LC_MESSAGES/attach.p
 msgfmt -o $LOCALE/$LANG/LC_MESSAGES/attachref.mo $LOCALE/$LANG/LC_MESSAGES/attachref.po
 msgfmt -o $LOCALE/$LANG/LC_MESSAGES/back.mo $LOCALE/$LANG/LC_MESSAGES/back.po
 msgfmt -o $LOCALE/$LANG/LC_MESSAGES/backup.mo $LOCALE/$LANG/LC_MESSAGES/backup.po
+msgfmt -o $LOCALE/$LANG/LC_MESSAGES/bugtrack.mo $LOCALE/$LANG/LC_MESSAGES/bugtrack.po
 msgfmt -o $LOCALE/$LANG/LC_MESSAGES/calendar2.mo $LOCALE/$LANG/LC_MESSAGES/calendar2.po
 msgfmt -o $LOCALE/$LANG/LC_MESSAGES/calendar_viewer.mo $LOCALE/$LANG/LC_MESSAGES/calendar_viewer.po
 msgfmt -o $LOCALE/$LANG/LC_MESSAGES/comment.mo $LOCALE/$LANG/LC_MESSAGES/comment.po
