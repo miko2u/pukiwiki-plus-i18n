@@ -163,6 +163,10 @@ $referer = 1;
 $nowikiname = 1;
 
 /////////////////////////////////////////////////
+// Symbol of not exists WikiName/BracketName
+$_symbol_noexists = '?';
+
+/////////////////////////////////////////////////
 // AutoLink feature
 
 // AutoLink minimum length of page name
