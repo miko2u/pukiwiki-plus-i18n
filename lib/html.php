@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: html.php,v 1.31.13 2005/04/21 14:27:27 miko Exp $
+// $Id: html.php,v 1.31.14 2005/04/21 14:27:27 miko Exp $
 //
 // HTML-publishing related functions
 
@@ -271,10 +271,14 @@ EOD;
 // Input Assistant
 function edit_form_assistant()
 {
-	global $html_transitional;
+	global $pkwk_dtd;
 	static $assist_loaded = 0;	// for non-reentry
 
-	$html_transitional = TRUE;
+	//miko: umm... support most browser, <map id="" name="" ... >
+	if (!isset($pkwk_dtd) || $pkwk_dtd >= PKWK_DTD_XHTML_1_1) {
+		$pkwk_dtd = PKWK_DTD_XHTML_1_0;
+	}
+
 	if (!$assist_loaded) {
 		$assist_loaded++;
 		$map = <<<EOD
