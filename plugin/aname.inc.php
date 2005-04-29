@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: aname.inc.php,v 1.17.1 2005/01/23 07:00:16 miko Exp $
+// $Id: aname.inc.php,v 1.17.2 2005/04/29 07:00:16 miko Exp $
 //
 // aname plugin - Set an anchor <a name="key"> to link
 
@@ -28,7 +28,7 @@ function plugin_aname_convert()
 	$attr_id = in_array('noid',  $args) ? '' : ' id="' . $id . '"';
 
 	// 携帯はxhtml対応してないものが多いため現実解
-	if ($html_transitional) {
+	if (isset($pkwk_dtd) && $pkwk_dtd < PKWK_DTD_XHTML_1_1) {
 		$attr_id = in_array('noid', $args) ? '' : ' id="' . $id . '" name="' . $id . '"';
 	} elseif (!defined('UA_PROFILE') || UA_PROFILE == 'default') {
 		$attr_id = in_array('noid', $args) ? '' : ' id="' . $id . '"';
@@ -36,8 +36,7 @@ function plugin_aname_convert()
 		$attr_id = in_array('noid', $args) ? '' : ' id="' . $id . '" name="' . $id . '"';
 	}
 
-//	return "<a class=\"$class\"$attr_id href=\"$url#$id\" title=\"$id\">$body</a>";
-//miko	XHTML1.1に対応するためには $attrid がないほうがいい
-	return "<a class=\"$class\" href=\"$url#$id\" title=\"$id\">$body</a>";
+	// 暫定対応： $attr_id は重複すると xhtml対応できなくなる可能性あり
+	return "<a class=\"$class\"$attr_id href=\"$url#$id\" title=\"$id\">$body</a>";
 }
 ?>
