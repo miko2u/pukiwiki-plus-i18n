@@ -280,21 +280,21 @@ function plugin_minicalendar_viewer_convert()
     $prev_YM = sprintf("%04d%s%02d",$prev_year,$date_sep,$prev_month);
     $prev_YMX = sprintf("%04d%02d",$prev_year,$prev_month);
 
-    if ($mode == "past" || $mode == "pastex"){
-      $right_YM = $prev_YM;
-      $right_YMX = $prev_YMX;
-      $right_text = $prev_YM."&gt;&gt;";
-      $left_YM = $next_YM;
-      $left_YMX = $next_YMX;
-      $left_text = "&lt;&lt;".$next_YM;
-    }else{
+//  if ($mode == "past" || $mode == "pastex"){
+//    $right_YM = $prev_YM;
+//    $right_YMX = $prev_YMX;
+//    $right_text = $prev_YM."&gt;&gt;";
+//    $left_YM = $next_YM;
+//    $left_YMX = $next_YMX;
+//    $left_text = "&lt;&lt;".$next_YM;
+//  }else{
       $left_YM = $prev_YM;
       $left_YMX = $prev_YMX;
       $left_text = "&lt;&lt;".$prev_YM;
       $right_YM = $next_YM;
       $right_YMX = $next_YMX;
       $right_text = $next_YM."&gt;&gt;";
-    }
+//  }
   }else{
     //n·ïÉ½¼¨»ş
     if ($limit_base >= count($pagelist)){
