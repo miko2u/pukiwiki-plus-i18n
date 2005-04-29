@@ -1,10 +1,13 @@
 <?php
-/////////////////////////////////////////////////
-// PukiWiki - Yet another WikiWikiWeb clone.
+// PukiWiki Plus! - Yet another WikiWikiWeb clone.
+// $Id: en.lng.php,v 1.9.1 2005/04/29 11:26:28 miko Exp $
+// Copyright (C)
+//   2005      Customized/Patched by Miko.Hoshina
+//   2002-2005 PukiWiki Developers Team
+//   2001      Originally written by yu-ji
+// License: GPL v2 or (at your option) any later version
 //
-// $Id: en.lng.php,v 1.7.1 2005/02/05 04:38:52 miko Exp $
-//
-// PukiWiki message file (english)
+// PukiWiki message file (English)
 
 // NOTE: Encoding of this file, must equal to encoding setting
 
@@ -119,8 +122,8 @@ $_LANG['skin']['refer']     = 'Referer';	// Show list of referer
 $_LANG['skin']['reload']    = 'Reload';
 $_LANG['skin']['rename']    = 'Rename';	// Rename a page (and related)
 $_LANG['skin']['rss']       = 'RSS of recent changes';
-$_LANG['skin']['rss10']     = & $_LANG['skin']['rss']; 
-$_LANG['skin']['rss20']     = & $_LANG['skin']['rss']; 
+$_LANG['skin']['rss10']     = & $_LANG['skin']['rss'];
+$_LANG['skin']['rss20']     = & $_LANG['skin']['rss'];
 $_LANG['skin']['search']    = 'Search';
 $_LANG['skin']['top']       = 'Front page';	// Top page
 $_LANG['skin']['trackback'] = 'Trackback';	// Show list of trackback

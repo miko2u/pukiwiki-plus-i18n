@@ -1,19 +1,35 @@
 <?php
-// PukiWiki - Yet another WikiWikiWeb clone.
-//
-// $Id: link.php,v 1.4.1 2005/01/29 13:51:44 miko Exp $
+// PukiWiki Plus! - Yet another WikiWikiWeb clone
+// $Id: link.php,v 1.7.1 2005/04/29 11:24:20 miko Exp $
+// Copyright (C)
+//   2005      Customized/Patched by Miko.Hoshina
+//   2003-2005 PukiWiki Developers Team
+// License: GPL v2 or (at your option) any later version
 //
 // Backlinks / AutoLinks related functions
 
-/*
- * CACHE_DIR/encode(ページ名).ref
- * 参照元ページ名<tab>AutoLinkによるリンクのみのとき1\n
- * 参照元ページ名<tab>AutoLinkによるリンクのみのとき1\n
- * ...
- *
- * CACHE_DIR/encode(ページ名).rel
- * 参照先ページ名<tab>参照先ページ名<tab>...
- */
+// ------------------------------------------------------------
+// DATA STRUCTURE of *.ref and *.rel files
+
+// CACHE_DIR/encode('foobar').ref
+// ---------------------------------
+// Page-name1<tab>0<\n>
+// Page-name2<tab>1<\n>
+// ...
+// Page-nameN<tab>0<\n>
+//
+//	0 = Added when link(s) to 'foobar' added clearly at this page
+//	1 = Added when the sentence 'foobar' found from the page
+//	    by AutoLink feature
+
+// CACHE_DIR/encode('foobar').rel
+// ---------------------------------
+// Page-name1<tab>Page-name2<tab> ... <tab>Page-nameN
+//
+//	List of page-names linked from 'foobar'
+
+// ------------------------------------------------------------
+
 
 // データベースから関連ページを得る
 function links_get_related_db($page)
@@ -176,7 +192,7 @@ function links_add($page, $add, $rel_auto)
 	if (PKWK_READONLY) return; // Do nothing
 
 	$rel_auto = array_flip($rel_auto);
-
+	
 	foreach ($add as $_page) {
 		$all_auto = isset($rel_auto[$_page]);
 		$is_page  = is_page($_page);

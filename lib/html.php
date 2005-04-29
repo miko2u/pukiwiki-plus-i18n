@@ -1,6 +1,11 @@
 <?php
-// PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: html.php,v 1.31.14 2005/04/21 14:27:27 miko Exp $
+// PukiWiki Plus! - Yet another WikiWikiWeb clone.
+// $Id: html.php,v 1.33.14 2005/04/29 11:24:20 miko Exp $
+// Copyright (C)
+//   2005      Customized/Patched by Miko.Hoshina
+//   2002-2005 PukiWiki Developers Team
+//   2001      Originally written by yu-ji
+// License: GPL v2 or (at your option) any later version
 //
 // HTML-publishing related functions
 

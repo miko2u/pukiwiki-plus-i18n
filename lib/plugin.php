@@ -1,10 +1,15 @@
 <?php
-// PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: plugin.php,v 1.9.3 2005/04/10 01:01:17 miko Exp $
+// PukiWiki Plus! - Yet another WikiWikiWeb clone.
+// $Id: plugin.php,v 1.12.3 2005/04/29 11:24:20 miko Exp $
+// Copyright (C)
+//   2005      Customized/Patched by Miko.Hoshina
+//   2002-2005 PukiWiki Developers Team
+//   2001      Originally written by yu-ji
+// License: GPL v2 or (at your option) any later version
 //
 // Plugin related functions
 
-define('PKWK_PLUGIN_CALL_TIME_LIMIT', 512);
+define('PKWK_PLUGIN_CALL_TIME_LIMIT', 768);
 
 // Set global variables for plugins
 function set_plugin_messages($messages)

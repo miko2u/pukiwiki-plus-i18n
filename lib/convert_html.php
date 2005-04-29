@@ -1,6 +1,10 @@
 <?php
-// PukiWiki - Yet another WikiWikiWeb clone
-// $Id: convert_html.php,v 1.10 2005/04/21 17:55:20 miko Exp $
+// PukiWiki Plus! - Yet another WikiWikiWeb clone
+// $Id: convert_html.php,v 1.11.5 2005/04/29 11:24:20 miko Exp $
+// Copyright (C)
+//   2005      Customized/Patched by Miko.Hoshina
+//   2003-2005 PukiWiki Developers Team
+// License: GPL v2 or (at your option) any later version
 //
 // function 'convert_html()', wiki text parser
 // and related classes-and-functions
@@ -888,41 +892,6 @@ class Body extends Element
 				$this->insert(new HRule($this, $line));
 				continue;
 			}
-
-//			// Here Document for Block-type Plugin(OBSOLETE)
-//			if (preg_match('/^(#[^\(]\w+)(\((.*)\))?(PRE:)?({+)$/',$line, $matches))
-//			{
-//				$name = $matches[1];
-//				$args = $matches[3];
-//				$here = str_repeat('}', substr_count($matches[5], '{'));
-//				$line = $name . "(" . $args . "\r";
-//				while (count($lines)) {
-//					$nextline = array_shift($lines);
-//					if (preg_match("/^$here/",$nextline)) {
-//						$line .= ")";
-//						break;
-//					} else {
-//						$line .= preg_replace("/[\r\n]*$/",'',$nextline) . "\r";
-//					}
-//				}
-//			} // Matsuda's Version (Here Documents)
-//			else if (preg_match('/^(#[^\(]*)(\((.*)\))?<<(PRE:)?([A-Z0-9_]+)$/',$line, $matches))
-//			{
-//				$name = $matches[1];
-//				$args = $matches[3];
-//				$here = $matches[5];
-//				$line = $name . "(" . $args . "\r";
-//				while (count($lines))
-//				{
-//					$nextline = array_shift($lines);
-//					if (preg_match("/^$here/",$nextline)) {
-//						$line .= ")";
-//						break;
-//					} else {
-//						$line .= preg_replace("/[\r\n]*$/",'',$nextline) . "\r";
-//					}
-//				}
-//			}
 
 			// multiline block plugin
 			if (preg_match('/#[^{]*(\{{2,})\s*$/', $line, $matches)) {

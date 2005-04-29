@@ -1,6 +1,10 @@
 <?php
-// PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: rules.ini.php,v 1.4.2 2005/03/05 14:20:11 miko Exp $
+// PukiWiki Plus! - Yet another WikiWikiWeb clone.
+// $Id: rules.ini.php,v 1.6.2 2005/04/29 11:27:10 miko Exp $
+// Copyright (C)
+//   2005      Customized/Patched by Miko.Hoshina
+/    2003-2005 PukiWiki Developers Team
+// License: GPL v2 or (at your option) any later version
 //
 // PukiWiki setting file
 if (!defined('DATA_HOME')) { exit; }

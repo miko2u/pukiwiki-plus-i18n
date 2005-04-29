@@ -1,6 +1,10 @@
 <?php
-// PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: make_link.php,v 1.18.4 2005/04/02 03:04:14 miko Exp $
+// PukiWiki Plus! - Yet another WikiWikiWeb clone.
+// $Id: make_link.php,v 1.20.4 2005/04/29 11:24:20 miko Exp $
+// Copyright (C)
+//   2005      Customized/Patched by Miko.Hoshina
+//   2003-2005 PukiWiki Developers Team
+// License: GPL v2 or (at your option) any later version
 //
 // Hyperlink-related functions
 

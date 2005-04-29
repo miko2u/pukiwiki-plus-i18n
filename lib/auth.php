@@ -1,6 +1,8 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: auth.php,v 1.12 2005/04/10 03:12:35 henoheno Exp $
+// $Id: auth.php,v 1.14 2005/04/29 11:24:20 henoheno Exp $
+// Copyright (C) 2003-2005 PukiWiki Developers Team
+// License: GPL v2 or (at your option) any later version
 //
 // Authentication related functions
 

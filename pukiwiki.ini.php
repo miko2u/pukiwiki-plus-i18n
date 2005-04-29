@@ -1,6 +1,11 @@
 <?php
-// PukiWiki - Yet another WikiWikiWeb clone
-// $Id: pukiwiki.ini.php,v 1.119.12 2005/04/05 13:40:31 miko Exp $
+// PukiWiki Plks! - Yet another WikiWikiWeb clone
+// $Id: pukiwiki.ini.php,v 1.121.13 2005/04/29 11:26:28 miko Exp $
+// Copyright (C)
+//   2005      Customized/Patched by Miko.Hoshina
+//   2002-2005 PukiWiki Developers Team
+//   2001      Originally written by yu-ji
+// License: GPL v2 or (at your option) any later version
 //
 // PukiWiki main setting file
 
@@ -218,8 +223,8 @@ $auth_users = array(
 /////////////////////////////////////////////////
 // Authentication method
 
-$auth_method_type = 'contents'; // By Page contents
-//$auth_method_type = 'pagename'; // By Page name
+$auth_method_type = 'contents';	// By Page contents
+//$auth_method_type = 'pagename';	// By Page name
 
 /////////////////////////////////////////////////
 // Read auth (0:Disable, 1:Enable)
@@ -247,12 +252,6 @@ $edit_auth_pages = array(
 // 0: Disabled (Search read-prohibited page contents)
 // 1: Enabled  (Search only permitted pages for the user)
 $search_auth = 0;
-
-/////////////////////////////////////////////////
-// Fuzzy Search (for Japanese Only)
-// 0: Disabled
-// 1: Enabled
-$search_fuzzy = 1;
 
 /////////////////////////////////////////////////
 // $whatsnew: Max number of RecentChanges

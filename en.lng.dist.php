@@ -1,10 +1,13 @@
 <?php
-/////////////////////////////////////////////////
-// PukiWiki - Yet another WikiWikiWeb clone.
+// PukiWiki Plus! - Yet another WikiWikiWeb clone.
+// $Id: en.lng.php,v 1.9.1 2005/04/29 11:26:28 miko Exp $
+// Copyright (C)
+//   2005      Customized/Patched by Miko.Hoshina
+//   2002-2005 PukiWiki Developers Team
+//   2001      Originally written by yu-ji
+// License: GPL v2 or (at your option) any later version
 //
-// $Id: en.lng.php,v 1.5.1 2004/12/05 10:16:18 miko Exp $
-//
-// PukiWiki message file (english)
+// PukiWiki message file (English)
 
 // NOTE: Encoding of this file, must equal to encoding setting
 
@@ -119,8 +122,8 @@ $_LANG['skin']['refer']     = 'Referer';	// Show list of referer
 $_LANG['skin']['reload']    = 'Reload';
 $_LANG['skin']['rename']    = 'Rename';	// Rename a page (and related)
 $_LANG['skin']['rss']       = 'RSS of recent changes';
-$_LANG['skin']['rss10']     = & $_LANG['skin']['rss']; 
-$_LANG['skin']['rss20']     = & $_LANG['skin']['rss']; 
+$_LANG['skin']['rss10']     = & $_LANG['skin']['rss'];
+$_LANG['skin']['rss20']     = & $_LANG['skin']['rss'];
 $_LANG['skin']['search']    = 'Search';
 $_LANG['skin']['top']       = 'Front page';	// Top page
 $_LANG['skin']['trackback'] = 'Trackback';	// Show list of trackback
@@ -211,7 +214,6 @@ $_msg_deleted          = ' $1 has been deleted.';
 
 ///////////////////////////////////////
 // calendar_viewer.inc.php
-$_err_calendar_viewer_param    = 'Parameter is required.';
 $_err_calendar_viewer_param2   = 'Wrong second parameter.';
 $_msg_calendar_viewer_right    = 'Next %d&gt;&gt;';
 $_msg_calendar_viewer_left     = '&lt;&lt; Prev %d';
@@ -289,7 +291,7 @@ $_navi_home = 'Home';
 
 ///////////////////////////////////////
 // newpage.inc.php
-$_msg_newpage = 'new page';
+$_msg_newpage = 'New page';
 
 ///////////////////////////////////////
 // paint.inc.php

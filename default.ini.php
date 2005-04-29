@@ -1,8 +1,10 @@
 <?php
-/////////////////////////////////////////////////
-// PukiWiki - Yet another WikiWikiWeb clone.
-//
-// $Id: default.ini.php,v 1.18.2 2005/04/02 03:04:14 miko Exp $
+// PukiWiki Plus! - Yet another WikiWikiWeb clone.
+// $Id: default.ini.php,v 1.20.2 2005/04/29 11:26:28 miko Exp $
+// Copyright (C)
+//   2005      Customized/Patched by Miko.Hoshina
+//   2003-2005 PukiWiki Developers Team
+// License: GPL v2 or (at your option) any later version
 //
 // PukiWiki setting file (user agent:default)
 
@@ -78,7 +80,7 @@ $hr = '<hr class="full_hr" />';
 // (詳しくは: BugTrack/698)
 define('PKWK_ALLOW_RELATIVE_FOOTNOTE_ANCHOR', 1);
 
-// 文末の注釈の直前に表示するタグ
+// 文末の脚注の直前に表示するタグ
 $note_hr = '<hr class="note_hr" />';
 
 /////////////////////////////////////////////////

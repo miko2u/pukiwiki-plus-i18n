@@ -1,6 +1,11 @@
 <?php
-// PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: init.php,v 1.29.1 2005/04/10 18:41:10 miko Exp $
+// PukiWiki Plus! - Yet another WikiWikiWeb clone.
+// $Id: init.php,v 1.31.1 2005/04/29 11:24:20 miko Exp $
+// Copyright (C)
+//   2005      Customized/Patched by Miko.Hoshina
+//   2002-2005 PukiWiki Developers Team
+//   2001      Originally written by yu-ji
+// License: GPL v2 or (at your option) any later version
 //
 // Init PukiWiki here
 
@@ -386,7 +391,7 @@ require(DATA_HOME . 'rules.ini.php');
 // 現在時刻
 $now = format_date(UTIME);
 
-// 日時置換ルールを$line_rulesに加える 
+// 日時置換ルールを$line_rulesに加える
 if ($usedatetime) $line_rules += $datetime_rules;
 unset($datetime_rules);
 

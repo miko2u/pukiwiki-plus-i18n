@@ -1,6 +1,11 @@
 <?php
-// PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: func.php,v 1.40.1 2005/04/16 05:37:13 miko Exp $
+// PukiWiki Plus! - Yet another WikiWikiWeb clone.
+// $Id: func.php,v 1.42.2 2005/04/29 11:24:20 miko Exp $
+// Copyright (C)
+//   2005      Customized/Patched by Miko.Hoshina
+//   2002-2005 PukiWiki Developers Team
+//   2001      Originally written by yu-ji
+// License: GPL v2 or (at your option) any later version
 //
 // General functions
 
@@ -181,13 +186,7 @@ function do_search($word, $type = 'AND', $non_format = FALSE)
 {
 	global $script, $whatsnew, $non_list, $search_non_list;
 	global $_msg_andresult, $_msg_orresult, $_msg_notfoundresult;
- 	global $search_auth, $search_fuzzy;
-
-	static $fuzzypattern = array(
-		'ヴァ' => 'バ',	'ヴィ' => 'ビ',	'ヴェ' => 'ベ',	'ヴォ' => 'ボ',
-		'ヴ' => 'ブ',	'ヰ' => 'イ',	'ヱ' => 'エ',	'ヵ' => 'カ',
-		'ァ' => 'ア',	'ィ' => 'イ',	'ゥ' => 'ウ',	'ェ' => 'エ',
-		'ォ' => 'オ',	'ャ' => 'ヤ',	'ュ' => 'ユ',	'ョ' => 'ヨ');
+	global $search_auth;
 
 	$retval = array();
 
@@ -212,34 +211,12 @@ function do_search($word, $type = 'AND', $non_format = FALSE)
 			array_unshift($source, $page); // ページ名も検索対象に
 
 		$b_match = FALSE;
-//miko modified
-		if (!$search_fuzzy || $non_fuzzy) {
-			foreach ($keys as $key) {
-				$tmp     = preg_grep('/' . $key . '/', $source);
-				$b_match = ! empty($tmp);
-				if ($b_match xor $b_type) break;
-			}
-			if ($b_match) $pages[$page] = get_filetime($page);
-		} else {
-			$fuzzy_from = array_keys($fuzzypattern);
-			$fuzzy_to = array_values($fuzzypattern);
-			$words = preg_split('/\s+/', $word, -1, PREG_SPLIT_NO_EMPTY);
-			$_source = mb_strtolower(mb_convert_kana(join("\n",$source), 'KVCas'));
-			for ($i=0; $i<count($fuzzy_from); $i++) {
-				$_source = mb_ereg_replace($fuzzy_from[$i], $fuzzy_to[$i], $_source);
-			}
-			$_source = mb_ereg_replace('[ッー・゛゜、。]', '', $_source);
-			foreach ($keys as $key) {
-				$_keyword = mb_strtolower(mb_convert_kana($word, 'KVCas'));
-				for ($i=0; $i<count($fuzzy_from); $i++) {
-					$_keyword = mb_ereg_replace($fuzzy_from[$i], $fuzzy_to[$i], $_keyword);
-				}
-				$_keyword = mb_ereg_replace('[ッー・゛゜、。]', '', $_keyword);
-				$b_match = mb_ereg(mb_ereg_quote($_keyword), $_source);
-			}
-			if ($b_match) $pages[$page] = get_filetime($page);
+		foreach ($keys as $key) {
+			$tmp     = preg_grep('/' . $key . '/', $source);
+			$b_match = ! empty($tmp);
+			if ($b_match xor $b_type) break;
 		}
-//miko modified
+		if ($b_match) $pages[$page] = get_filetime($page);
 	}
 	if ($non_format) return array_keys($pages);
 

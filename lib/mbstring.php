@@ -1,12 +1,15 @@
 <?php
-/////////////////////////////////////////////////
-// PukiWiki - Yet another WikiWikiWeb clone.
+// PukiWiki Plus! - Yet another WikiWikiWeb clone.
+// $Id: mbstring.php,v 1.4.1 2005/04/29 11:24:20 miko Exp $
+// Copyright (C)
+//   2005      Customized/Patched by Miko.Hoshina
+//   2003-2005 PukiWiki Developers Team
+// License: GPL v2 or (at your option) any later version
 //
-// $Id: mbstring.php,v 1.2.1 2004/10/13 14:46:59 miko Exp $
-//
+// mbstring-extension alternate functions
+// (will work with LANG == 'ja' and EUC-JP environment only)
 
 if (!defined('DATA_HOME')) { exit; }
-
 /*
  * mbstring extension がサーバー側に存在しない時の代替関数
  *

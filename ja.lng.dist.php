@@ -1,8 +1,11 @@
 <?php
-/////////////////////////////////////////////////
-// PukiWiki - Yet another WikiWikiWeb clone.
-//
-// $Id: ja.lng.php,v 1.5.4 2004/12/05 10:16:18 miko Exp $
+// PukiWiki Plus! - Yet another WikiWikiWeb clone.
+// $Id: ja.lng.php,v 1.8.5 2005/04/29 11:26:28 miko Exp $
+// Copyright (C)
+//   2005      Customized/Patched by Miko.Hoshina
+//   2002-2005 PukiWiki Developers Team
+//   2001      Originally written by yu-ji
+// License: GPL v2 or (at your option) any later version
 //
 // PukiWiki message file (japanese)
 
@@ -116,15 +119,15 @@ $_LANG['skin']['freeze']    = '凍結';
 $_LANG['skin']['help']      = 'ヘルプ';
 $_LANG['skin']['list']      = '一覧';	// List of pages
 $_LANG['skin']['new']       = '新規';
-$_LANG['skin']['rdf']       = '最終更新のRDF';  // RDF of RecentChanges
+$_LANG['skin']['rdf']       = '最終更新のRDF';	// RDF of RecentChanges
 $_LANG['skin']['recent']    = '最終更新';	// RecentChanges
 $_LANG['skin']['refer']     = 'リンク元';	// Show list of referer
 $_LANG['skin']['reload']    = 'リロード';
 $_LANG['skin']['rename']    = '名前変更';	// Rename a page (and related)
 $_LANG['skin']['rss']       = '最終更新のRSS';	// RSS of RecentChanges
-$_LANG['skin']['rss10']     = & $_LANG['skin']['rss']; 
-$_LANG['skin']['rss20']     = & $_LANG['skin']['rss']; 
-$_LANG['skin']['rssplus']   = & $_LANG['skin']['rss']; 
+$_LANG['skin']['rss10']     = & $_LANG['skin']['rss'];
+$_LANG['skin']['rss20']     = & $_LANG['skin']['rss'];
+$_LANG['skin']['mixirss']   = & $_LANG['skin']['rss']; 
 $_LANG['skin']['search']    = '単語検索';
 $_LANG['skin']['top']       = 'ホーム';	// Top page
 $_LANG['skin']['trackback'] = 'Trackback';	// Show list of trackback
@@ -217,7 +220,6 @@ $_msg_deleted          = '$1 は削除されています。';
 
 ///////////////////////////////////////
 // calendar_viewer.inc.php
-$_err_calendar_viewer_param  = '引数指定してね';
 $_err_calendar_viewer_param2 = '第2引数が変だよ';
 $_msg_calendar_viewer_right  = '次の%d件&gt;&gt;';
 $_msg_calendar_viewer_left   = '&lt;&lt;前の%d件';

@@ -1,8 +1,11 @@
 <?php
-/////////////////////////////////////////////////
-// PukiWiki - Yet another WikiWikiWeb clone.
-//
-// $Id: keitai.ini.php,v 1.17.2 2004/10/31 02:01:38 miko Exp $
+// PukiWiki Plus! - Yet another WikiWikiWeb clone.
+// $Id: keitai.ini.php,v 1.20.2 2005/04/29 11:26:28 miko Exp $
+// Copyright (C)
+//   2005      Customized/Patched by Miko.Hoshina
+//   2002-2005 PukiWiki Developers Team
+//   2001      Originally written by yu-ji
+// License: GPL v2 or (at your option) any later version
 //
 // PukiWiki setting file (Cell phones, PDAs and other thin clients)
 
@@ -170,8 +173,6 @@ $line_rules = array(
 	'%%(?!%)((?:(?!%%).)*)%%'	=> '<del>$1</del>',
 	"'''(?!')((?:(?!''').)*)'''"	=> '<em>$1</em>',
 	"''(?!')((?:(?!'').)*)''"	=> '<strong>$1</strong>',
-	'&amp;br;'	=> '<br>',
-	'&amp;hr;'	=> '<hr>',
 );
 
 
@@ -215,16 +216,18 @@ switch ($ua_name) {
 
 	// Face marks, Japanese style
 	'(\(\^\^\))'	=>	'&#63893;',	// smile
-	'(\(\^-\^)'	=>	'&#63893;',	// smile
-	'(\(\.\.;)'	=>	'&#63895;',	// oh
+	'(\(\^-\^)'	    =>	'&#63893;',	// smile
+	'(\(\^Q\^)'	    =>  '&#xE728;', // huh
+	'(\(\.\.;)'   	=>	'&#63895;',	// oh
+	'(\(\^_-)'	    =>  '&#xE729;',	// wink
 	'(\(\^_-\))'	=>	'&#xE729;',	// wink
-	'(\(--;)'	=>	'&#63894;',	// sad
+	'(\(--;)'	    =>	'&#63894;',	// sad
 	'(\(\^\^;\))'	=>	'&#xE722;',	// worried
-	'(\(\^\^;)'	=>	'&#xE722;',	// worried
-	'(\(T-T\))'	=>	'&#xE72E;',
-	'(\(T-T)'	=>	'&#xE72E;',
+	'(\(\^\^;)'     =>	'&#xE722;',	// worried
+	'(\(T-T\))' 	=>	'&#xE72E;',
+	'(\(T-T)'   	=>	'&#xE72E;',
 	'(\(\;_\;\))'	=>	'&#xE72E;',
-	'(\(\;_\;)'	=>	'&#xE72E;',
+	'(\(\;_\;)' 	=>	'&#xE72E;',
 
 	// Push buttons, 0-9 and sharp
 	'&amp;(pb1);'	=>	'&#63879;',
@@ -353,7 +356,6 @@ switch ($ua_name) {
 	'(\(T-T)'	=>	'<img localsrc="259">',
 	'(\(\;_\;\))'	=>	'<img localsrc="259">',
 	'(\(\;_\;)'	=>	'<img localsrc="259">',
-
 
 	// Push buttons, 0-9 and sharp
 	'&amp;(pb1);'	=>	'<img localsrc="180">',

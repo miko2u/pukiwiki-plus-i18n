@@ -1,6 +1,8 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: index.php,v 1.4 2004/09/20 00:48:34 henoheno Exp $
+// $Id: index.php,v 1.6 2005/04/29 11:26:28 henoheno Exp $
+// Copyright (C) 2004-2005 PukiWiki Developers Team
+// License: GPL v2 or (at your option) any later version
 
 /////////////////////////////////////////////////
 // Error reporting
