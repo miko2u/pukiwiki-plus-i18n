@@ -3,7 +3,7 @@
  * PukiWiki minicalendar_viewerプラグイン
  *
  *
- *$Id: minicalendar_viewer.inc.php,v 1.9.11 2004/12/15 17:18:50 miko Exp $
+ *$Id: minicalendar_viewer.inc.php,v 1.9.12 2004/12/15 17:18:50 miko Exp $
   calendarrecentプラグインを元に作成
  */
 /**
@@ -274,17 +274,21 @@ function plugin_minicalendar_viewer_convert()
     $prev_YM = sprintf("%04d%s%02d",$prev_year,$date_sep,$prev_month);
     $prev_YMX = sprintf("%04d%02d",$prev_year,$prev_month);
 
-    if ($mode == "past" || $mode == "pastex"){
-      $right_YM = $prev_YM;
-      $right_text = $prev_YM."&gt;&gt;";
-      $left_YM = $next_YM;
-      $left_text = "&lt;&lt;".$next_YM;
-    }else{
+//  if ($mode == "past" || $mode == "pastex"){
+//    $right_YM = $prev_YM;
+//    $right_YMX = $prev_YMX;
+//    $right_text = $prev_YM."&gt;&gt;";
+//    $left_YM = $next_YM;
+//    $left_YMX = $next_YMX;
+//    $left_text = "&lt;&lt;".$next_YM;
+//  }else{
       $left_YM = $prev_YM;
+      $left_YMX = $prev_YMX;
       $left_text = "&lt;&lt;".$prev_YM;
       $right_YM = $next_YM;
+      $right_YMX = $next_YMX;
       $right_text = $next_YM."&gt;&gt;";
-    }
+//  }
   }else{
     //n件表示時
     if ($limit_base >= count($pagelist)){
@@ -308,8 +312,8 @@ function plugin_minicalendar_viewer_convert()
   //リンク作成
   $s_date_sep = htmlspecialchars($date_sep);
   if ($left_YM != ""){
-    if ($prev_YMX != '') {
-      $left_link = "<a href=\"$script?plugin=minicalendar&amp;file=$enc_pagename&amp;date=$prev_YMX\">$left_text</a>";
+    if ($left_YMX != '') {
+      $left_link = "<a href=\"$script?plugin=minicalendar&amp;file=$enc_pagename&amp;date=$left_YMX\">$left_text</a>";
     } else {
       $left_link = "<a href=\"$script?plugin=minicalendar_viewer&amp;file=$enc_pagename&amp;date=$left_YM&amp;date_sep=$s_date_sep&amp;mode=$mode\">$left_text</a>";
     }
@@ -317,8 +321,8 @@ function plugin_minicalendar_viewer_convert()
     $left_link = "";
   }
   if ($right_YM != ""){
-    if ($next_YMX != '') {
-      $right_link = "<a href=\"$script?plugin=minicalendar&amp;file=$enc_pagename&amp;date=$next_YMX\">$right_text</a>";
+    if ($right_YMX != '') {
+      $right_link = "<a href=\"$script?plugin=minicalendar&amp;file=$enc_pagename&amp;date=$right_YMX\">$right_text</a>";
     } else {
       $right_link = "<a href=\"$script?plugin=minicalendar_viewer&amp;file=$enc_pagename&amp;date=$right_YM&amp;date_sep=$s_date_sep&amp;mode=$mode\">$right_text</a>";
     }
