@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: aname.inc.php,v 1.17.2 2005/04/29 07:00:16 miko Exp $
+// $Id: aname.inc.php,v 1.17.3 2005/04/29 07:00:16 miko Exp $
 //
 // aname plugin - Set an anchor <a name="key"> to link
 
@@ -36,7 +36,7 @@ function plugin_aname_convert()
 		$attr_id = in_array('noid', $args) ? '' : ' id="' . $id . '" name="' . $id . '"';
 	}
 
-	// 暫定対応： $attr_id は重複すると xhtml対応できなくなる可能性あり
+	// 暫定対応： $attr_id は id が重複すると xhtml対応できなくなる可能性あり
 	return "<a class=\"$class\"$attr_id href=\"$url#$id\" title=\"$id\">$body</a>";
 }
 ?>
