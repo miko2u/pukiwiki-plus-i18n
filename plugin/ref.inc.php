@@ -419,7 +419,7 @@ function plugin_ref_action()
 	}
 
 	// Care for Japanese-character-included file name
-	if (LANG == 'ja') {
+	if (LANG == 'ja_JP') {
 		switch(UA_NAME . '/' . UA_PROFILE){
 		case 'Opera/default':
 			// Care for using _auto-encode-detecting_ function
