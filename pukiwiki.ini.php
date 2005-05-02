@@ -235,8 +235,8 @@ $auth_users = array(
 /////////////////////////////////////////////////
 // Authentication method
 
-$auth_method_type = 'contents'; // By Page contents
-//$auth_method_type = 'pagename'; // By Page name
+//$auth_method_type = 'contents'; // By Page contents
+$auth_method_type = 'pagename'; // By Page name
 
 /////////////////////////////////////////////////
 // Read auth (0:Disable, 1:Enable)
