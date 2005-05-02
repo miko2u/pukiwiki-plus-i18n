@@ -13,7 +13,7 @@ function pukiwiki_apx(page)
 		outer.style.display = "inline";
 		msg.rows = msg.rows / 2;
 	}
-	pukiwiki_apv(page,msg.value);
+	pukiwiki_apv(page,msg);
 }
 
 function pukiwiki_apv(page,oSource)
