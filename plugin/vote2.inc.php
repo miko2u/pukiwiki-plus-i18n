@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: vote2.inc.php,v 0.12.2 2005/03/10 17:55:04 miko Exp $
+// $Id: vote2.inc.php,v 0.12.3 2005/03/10 17:55:04 miko Exp $
 // based on vote.inc.php v1.14
 //
 // v0.2はインラインのリンクにtitleを付けた。
@@ -91,7 +91,8 @@ function plugin_vote2_action()
 }
 function plugin_vote2_inline()
 {
-	global $script,$vars,$digest, $_vote2_messages, $_vote_plugin_votes;
+	global $script, $vars, $digest;
+	global $_vote2_messages;
 //	global $_vote_plugin_choice, $_vote_plugin_votes;
 	static $numbers = array();
 	static $notitle = FALSE;
@@ -208,9 +209,12 @@ function plugin_vote2_address($match, $vote_no, $page, $ndigest)
 function plugin_vote2_convert()
 {
 	global $script,$vars,$digest, $_vote2_messages;
-	global $_vote_plugin_choice, $_vote_plugin_votes, $digests;
+//	global $_vote_plugin_choice, $_vote_plugin_votes;
+	global $digests;
 	static $numbers = array();
 	static $notitle = FALSE;
+$_vote_plugin_choice = _("Selection");
+$_vote_plugin_votes  = _("Vote");
 	$str_notimestamp = $_vote2_messages['arg_notimestamp'];
 	$str_nonumber    = $_vote2_messages['arg_nonumber'];
 	$str_nolabel     = $_vote2_messages['arg_nolabel'];
