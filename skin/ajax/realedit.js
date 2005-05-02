@@ -10,7 +10,7 @@ function pukiwiki_apx(page)
 		msg.rows = msg.rows * 2;
 	} else {
 		ajax_apx = true;
-		outer.style.display = "inline";
+		outer.style.display = "block";
 		msg.rows = msg.rows / 2;
 	}
 	pukiwiki_apv(page,msg);
@@ -19,7 +19,13 @@ function pukiwiki_apx(page)
 function pukiwiki_apv(page,oSource)
 {
 	var source = oSource.value;
-	if (document.selection.createRange) {
+	if (oSource.setSelectionRange) {
+		sttlen=oSource.selectionStart;
+		endlen=oSource.value.length - oSource.selectionEnd;
+		sellen=oSource.selectionEnd-sttlen;
+		finlen = source.lastIndexOf("\n",sttlen);
+		source = source.substring(0,finlen) + "\n\n" + '&editmark;' + "\n\n" + source.substring(finlen);
+	} else if (document.selection.createRange) {
 		var sel = document.selection.createRange();
 		sellen = sel.text.length;
 		var end = oSource.createTextRange();
@@ -30,18 +36,15 @@ function pukiwiki_apv(page,oSource)
 		sttlen = all - endlen;
 		finlen = source.lastIndexOf("\n",sttlen);
 		source = source.substring(0,finlen) + "\n\n" + '&editmark;' + "\n\n" + source.substring(finlen);
-	} else if (oSource.setSelectionRange) {
-		sttlen=oSource.selectionStart;
-		endlen=oSource.value.length - d.selectionEnd;
-		sellen=oSource.selectionEnd-sttlen;
 	}
+
 	if (ajax_apx) {
 		preview_onload = function(htmldoc) {
 			var result = document.getElementById("realview");
 			result.innerHTML = htmldoc.responseText;
 			var innbox = document.getElementById("realview_outer");
 			var marker = document.getElementById("editmark");
-			innbox.scrollTop = marker.offsetTop - 16;
+			innbox.scrollTop = marker.offsetTop - 8;
 		};
 		var postdata = 'page=' + encodeURIComponent(page) + '&msg=' + encodeURIComponent(source);
 		var html = new TextLoader(preview_onload,null);
