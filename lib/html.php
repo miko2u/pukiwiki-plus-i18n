@@ -179,7 +179,7 @@ function edit_form($page, $postdata, $digest = FALSE, $b_template = TRUE)
 	$refer = $template = $addtag = $add_top = $add_ajax = '';
 
 	if ($ajax) {
-		$add_ajax = '<input type="checkbox" name="add_ajax" value="" onclick="pukiwiki_apx(this.checked)" /><span class="small">realview</span>'
+		$add_ajax = '<input type="button" name="add_ajax" value="realview" onclick="pukiwiki_apx(this.form.page.value)" />';
 	}
 
 	$checked_top  = isset($vars['add_top'])     ? ' checked="checked"' : '';
@@ -245,8 +245,7 @@ EOD;
 	$add_assistant = edit_form_assistant();
 
 	$body = <<<EOD
-<div id="realview_outer" style="z-index:10;margin:1px;padding:0px 20px;height:200px;overflow:auto;display:none"><div id="realview"></div></div>
-<hr>
+<div id="realview_outer" style="z-index:10;margin:1px;padding:0px 20px;height:200px;overflow:auto;display:none"><div id="realview"></div><br /></div>
 <form action="$script" method="post">
  <div class="edit_form" onmouseup="pukiwiki_pos()" onkeyup="pukiwiki_pos()">
 $template

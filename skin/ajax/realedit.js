@@ -1,16 +1,18 @@
 var ajax_apx = false;
 
-function pukiwiki_apx(page,checked)
+function pukiwiki_apx(page)
 {
-	var result = document.getElementById("realview");
-	if (checked) {
-		ajax_apx = checked;
-		result.style.display = "";
-	} else {
-		ajax_apx = checked;
-		result.style.display = "none";
-	}
+	var outer = document.getElementById("realview_outer");
 	var msg = document.getElementById("msg");
+	if (ajax_apx) {
+		ajax_apx = false;
+		outer.style.display = "none";
+		msg.rows = msg.rows * 2;
+	} else {
+		ajax_apx = true;
+		outer.style.display = "inline";
+		msg.rows = msg.rows / 2;
+	}
 	pukiwiki_apv(page,msg.value);
 }
 
