@@ -178,10 +178,6 @@ function edit_form($page, $postdata, $digest = FALSE, $b_template = TRUE)
 
 	$refer = $template = $addtag = $add_top = $add_ajax = '';
 
-	if ($ajax) {
-		$add_ajax = '<input type="button" name="add_ajax" value="realview" onclick="pukiwiki_apx(this.form.page.value)" />';
-	}
-
 	$checked_top  = isset($vars['add_top'])     ? ' checked="checked"' : '';
 	$checked_time = isset($vars['notimestamp']) ? ' checked="checked"' : '';
 
@@ -225,6 +221,10 @@ EOD;
 	$s_id        = isset($vars['id']) ? htmlspecialchars($vars['id']) : '';
 	$b_preview   = isset($vars['preview']); // TRUE when preview
 	$btn_preview = $b_preview ? $_button['repreview'] : $_button['preview'];
+
+	if ($ajax) {
+		$add_ajax = '<input type="button" name="add_ajax" value="'.$btn_preview.'" accesskey="p" onclick="pukiwiki_apx(this.form.page.value)" />';
+	}
 
 	$add_notimestamp = '';
 	if ( $notimeupdate != 0 ) {
