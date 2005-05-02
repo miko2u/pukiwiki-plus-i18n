@@ -173,10 +173,14 @@ function edit_form($page, $postdata, $digest = FALSE, $b_template = TRUE)
 	global $_button, $_string;
 	global $ajax;
 
-	if ($ajax) $rows = $rows / 3;
+//	if ($ajax) $rows = $rows / 3;
 	if ($digest === FALSE) $digest = md5(join('', get_source($page)));
 
-	$refer = $template = $addtag = $add_top = '';
+	$refer = $template = $addtag = $add_top = $add_ajax = '';
+
+	if ($ajax) {
+		$add_ajax = '<input type="checkbox" name="add_ajax" value="" onclick="pukiwiki_apx(this.checked)" /><span class="small">realview</span>'
+	}
 
 	$checked_top  = isset($vars['add_top'])     ? ' checked="checked"' : '';
 	$checked_time = isset($vars['notimestamp']) ? ' checked="checked"' : '';
@@ -241,7 +245,7 @@ EOD;
 	$add_assistant = edit_form_assistant();
 
 	$body = <<<EOD
-<div id="realview_outer" style="z-index:10;margin:1px;padding:0px 20px;height:200px;overflow:auto;"><div id="realview"></div></div>
+<div id="realview_outer" style="z-index:10;margin:1px;padding:0px 20px;height:200px;overflow:auto;display:none"><div id="realview"></div></div>
 <hr>
 <form action="$script" method="post">
  <div class="edit_form" onmouseup="pukiwiki_pos()" onkeyup="pukiwiki_pos()">
@@ -251,12 +255,13 @@ $template
   <input type="hidden" name="page"   value="$s_page" />
   <input type="hidden" name="digest" value="$s_digest" />
   <input type="hidden" name="id"     value="$s_id" />
-  <textarea name="msg" rows="$rows" cols="$cols" onselect="pukiwiki_apv(this.form.page.value,this.value)" onfocus="pukiwiki_apv(this.form.page.value,this.value)" onkeyup="pukiwiki_apv(this.form.page.value,this.value)" onchange="pukiwiki_apv(this.form.page.value,this.value)">$s_postdata</textarea>
+  <textarea id="msg" name="msg" rows="$rows" cols="$cols" onselect="pukiwiki_apv(this.form.page.value,this.value)" onfocus="pukiwiki_apv(this.form.page.value,this.value)" onkeyup="pukiwiki_apv(this.form.page.value,this.value)" onchange="pukiwiki_apv(this.form.page.value,this.value)">$s_postdata</textarea>
   <br />
   $add_assistant
   <br />
   <input type="submit" name="write"   value="{$_button['update']}" accesskey="s" />
   $add_top
+  $add_ajax
   $add_notimestamp
   <input type="submit" name="cancel"  value="{$_button['cancel']}" accesskey="c" />
   <textarea name="original" rows="1" cols="1" style="display:none">$s_original</textarea>
