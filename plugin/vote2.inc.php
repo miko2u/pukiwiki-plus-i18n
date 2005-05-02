@@ -30,9 +30,9 @@ function plugin_vote2_init()
 					   '<br /><br />' .
 					   _("Your update was invalidated. Start ..be previous page.. reload.") .
 					   '</h3>'
+		),
 		'_vote_plugin_choice' => _('Selection'),
 		'_vote_plugin_votes' => _('Vote'),
-		),
 	);
 	set_plugin_messages($messages);
 }
