@@ -1,9 +1,10 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: default.ini.php,v 1.20.2 2005/04/29 11:26:28 miko Exp $
+// $Id: default.ini.php,v 1.21.2 2005/04/30 11:35:43 miko Exp $
 // Copyright (C)
 //   2005      Customized/Patched by Miko.Hoshina
 //   2003-2005 PukiWiki Developers Team
+//   2001-2002 Originally written by yu-ji
 // License: GPL v2 or (at your option) any later version
 //
 // PukiWiki setting file (user agent:default)

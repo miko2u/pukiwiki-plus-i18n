@@ -1,9 +1,10 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: convert_html.php,v 1.11.5 2005/04/29 11:24:20 miko Exp $
+// $Id: convert_html.php,v 1.12.5 2005/04/30 05:21:00 miko Exp $
 // Copyright (C)
 //   2005      Customized/Patched by Miko.Hoshina
-//   2003-2005 PukiWiki Developers Team
+//   2002-2005 PukiWiki Developers Team
+//   2001-2002 Originally written by yu-ji
 // License: GPL v2 or (at your option) any later version
 //
 // function 'convert_html()', wiki text parser

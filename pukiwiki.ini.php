@@ -1,10 +1,10 @@
 <?php
 // PukiWiki Plks! - Yet another WikiWikiWeb clone
-// $Id: pukiwiki.ini.php,v 1.121.13 2005/04/29 11:26:28 miko Exp $
+// $Id: pukiwiki.ini.php,v 1.122.13 2005/04/30 11:35:43 miko Exp $
 // Copyright (C)
 //   2005      Customized/Patched by Miko.Hoshina
 //   2002-2005 PukiWiki Developers Team
-//   2001      Originally written by yu-ji
+//   2001-2002 Originally written by yu-ji
 // License: GPL v2 or (at your option) any later version
 //
 // PukiWiki main setting file

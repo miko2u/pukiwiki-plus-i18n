@@ -1,13 +1,15 @@
 <?php
-// PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: attach.inc.php,v 1.73.4 2005/02/27 07:44:53 miko Exp $
+// PukiWiki - Yet another WikiWikiWeb clone
+// $Id: attach.inc.php,v 1.74.4 2005/05/02 04:01:16 miko Exp $
+// Copyright (C)
+//   2005      Customized/Patched by Miko.Hoshina
+//   2003-2005 PukiWiki Developers Team
+//   2002-2003 PANDA <panda@arino.jp> http://home.arino.jp/
+//   2002      Y.MASUI <masui@hisec.co.jp> http://masui.net/pukiwiki/
+//   2001-2002 Originally written by yu-ji
+// License: GPL v2 or (at your option) any later version
 //
 // File attach plugin
-
-/*
- changed by Y.MASUI <masui@hisec.co.jp> http://masui.net/pukiwiki/
- modified by PANDA <panda@arino.jp> http://home.arino.jp/
-*/
 
 // Max file size for upload on PHP (PHP default: 2MB)
 ini_set('upload_max_filesize', '4M');
@@ -102,19 +104,19 @@ function plugin_attach_action()
 		return attach_upload($_FILES['attach_file'], $refer, $pass);
 	}
 	switch ($pcmd) {
-	case 'delete':  /*FALLTHROUGH*/ 
-	case 'freeze': 
-	case 'unfreeze': 
-		if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing'); 
-	} 
-	switch ($pcmd) { 
-		case 'info'     : return attach_info();
-		case 'delete'   : return attach_delete();
-		case 'open'     : return attach_open();
-		case 'list'     : return attach_list();
-		case 'freeze'   : return attach_freeze(TRUE);
-		case 'unfreeze' : return attach_freeze(FALSE);
-		case 'upload'   : return attach_showform();
+	case 'delete':	/*FALLTHROUGH*/
+	case 'freeze':
+	case 'unfreeze':
+		if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
+	}
+	switch ($pcmd) {
+	case 'info'     : return attach_info();
+	case 'delete'   : return attach_delete();
+	case 'open'     : return attach_open();
+	case 'list'     : return attach_list();
+	case 'freeze'   : return attach_freeze(TRUE);
+	case 'unfreeze' : return attach_freeze(FALSE);
+	case 'upload'   : return attach_showform();
 	}
 	if ($page == '' || ! is_page($page)) {
 		return attach_list();
@@ -150,16 +152,16 @@ function attach_upload($file, $page, $pass = NULL)
 
 	if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
 
-	// Check query-string 
-	$query = 'plugin=attach&amp;pcmd=info&amp;refer=' . rawurlencode($page) . 
-		'&amp;file=' . rawurlencode($file['name']); 
+	// Check query-string
+	$query = 'plugin=attach&amp;pcmd=info&amp;refer=' . rawurlencode($page) .
+		'&amp;file=' . rawurlencode($file['name']);
 
-	if (PKWK_QUERY_STRING_MAX && strlen($query) > PKWK_QUERY_STRING_MAX) { 
-		pkwk_common_headers(); 
-		echo('Query string (page name and/or file name) too long'); 
-		exit; 
-	} else if (! is_page($page)) { 
-		die_message("No such page");
+	if (PKWK_QUERY_STRING_MAX && strlen($query) > PKWK_QUERY_STRING_MAX) {
+		pkwk_common_headers();
+		echo('Query string (page name and/or file name) too long');
+		exit;
+	} else if (! is_page($page)) {
+		die_message('No such page');
 	} else if ($file['tmp_name'] == '' || ! is_uploaded_file($file['tmp_name'])) {
 		return array('result'=>FALSE);
 	} else if ($file['size'] > PLUGIN_ATTACH_MAX_FILESIZE) {
@@ -496,8 +498,7 @@ class AttachFile
 		if ($this->age) {
 			$msg_freezed = '';
 			$msg_delete  = '<input type="radio" name="pcmd" id="_p_attach_delete" value="delete" />' .
-				'<label for="_p_attach_delete">' .
-				$_attach_messages['msg_delete'] .
+				'<label for="_p_attach_delete">' .  $_attach_messages['msg_delete'] .
 				$_attach_messages['msg_require'] . '</label><br />';
 			$msg_freeze  = '';
 		} else {
@@ -505,20 +506,17 @@ class AttachFile
 				$msg_freezed = "<dd>{$_attach_messages['msg_isfreeze']}</dd>";
 				$msg_delete  = '';
 				$msg_freeze  = '<input type="radio" name="pcmd" id="_p_attach_unfreeze" value="unfreeze" />' .
-					'<label for="_p_attach_unfreeze">' .
-					$_attach_messages['msg_unfreeze'] .
+					'<label for="_p_attach_unfreeze">' .  $_attach_messages['msg_unfreeze'] .
 					$_attach_messages['msg_require'] . '</label><br />';
 			} else {
 				$msg_freezed = '';
 				$msg_delete = '<input type="radio" name="pcmd" id="_p_attach_delete" value="delete" />' .
-					'<label for="_p_attach_delete">' .
-					$_attach_messages['msg_delete'];
+					'<label for="_p_attach_delete">' . $_attach_messages['msg_delete'];
 				if (PLUGIN_ATTACH_DELETE_ADMIN_ONLY || $this->age)
 					$msg_delete .= $_attach_messages['msg_require'];
 				$msg_delete .= '</label><br />';
 				$msg_freeze  = '<input type="radio" name="pcmd" id="_p_attach_freeze" value="freeze" />' .
-					'<label for="_p_attach_freeze">' .
-					$_attach_messages['msg_freeze'] .
+					'<label for="_p_attach_freeze">' .  $_attach_messages['msg_freeze'] .
 					$_attach_messages['msg_require'] . '</label><br />';
 			}
 		}
@@ -566,7 +564,7 @@ $s_err
   $msg_delete
   $msg_freeze
   <label for="_p_attach_password">{$_attach_messages['msg_password']}:</label>
-  <input type="password" name="pass" size="8" id="_p_attach_password" />
+  <input type="password" name="pass" id="_p_attach_password" size="8" />
   <input type="submit" value="{$_attach_messages['btn_submit']}" />
  </div>
 </form>
