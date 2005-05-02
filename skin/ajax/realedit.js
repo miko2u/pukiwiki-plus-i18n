@@ -30,6 +30,10 @@ function pukiwiki_apv(page,oSource)
 		sttlen = all - endlen;
 		finlen = source.lastIndexOf("\n",sttlen);
 		source = source.substring(0,finlen) + "\n\n" + '&editmark;' + "\n\n" + source.substring(finlen);
+	} else if (oSource.setSelectionRange) {
+		sttlen=oSource.selectionStart;
+		endlen=oSource.value.length - d.selectionEnd;
+		sellen=oSource.selectionEnd-sttlen;
 	}
 	if (ajax_apx) {
 		preview_onload = function(htmldoc) {
