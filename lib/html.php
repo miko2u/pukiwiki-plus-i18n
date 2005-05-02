@@ -254,7 +254,7 @@ $template
   <input type="hidden" name="page"   value="$s_page" />
   <input type="hidden" name="digest" value="$s_digest" />
   <input type="hidden" name="id"     value="$s_id" />
-  <textarea id="msg" name="msg" rows="$rows" cols="$cols" onselect="pukiwiki_apv(this.form.page.value,this.value)" onfocus="pukiwiki_apv(this.form.page.value,this.value)" onkeyup="pukiwiki_apv(this.form.page.value,this.value)" onchange="pukiwiki_apv(this.form.page.value,this.value)">$s_postdata</textarea>
+  <textarea id="msg" name="msg" rows="$rows" cols="$cols" onselect="pukiwiki_apv(this.form.page.value,this)" onfocus="pukiwiki_apv(this.form.page.value,this)" onkeyup="pukiwiki_apv(this.form.page.value,this)" onchange="pukiwiki_apv(this.form.page.value,this)">$s_postdata</textarea>
   <br />
   $add_assistant
   <br />
