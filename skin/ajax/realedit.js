@@ -10,7 +10,9 @@ function pukiwiki_apx(page)
 		msg.rows = msg.rows * 2;
 	} else {
 		ajax_apx = true;
-		outer.style.display = "block";
+		outer.style.display = "inline";
+		outer.style.overflow = "scroll";
+		outer.style.width = "660px";
 		msg.rows = msg.rows / 2;
 	}
 	pukiwiki_apv(page,msg);
