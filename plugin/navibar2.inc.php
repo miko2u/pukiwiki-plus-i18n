@@ -56,7 +56,7 @@ function plugin_navibar2_convert()
 			}
 		}
 	}
-	for ($i=0;$i<$menubarcount;$i++) {
+	for ($i=0;$i<=$menubarcount;$i++) {
 		$menublkstr = join("\n",$menublk[$i]);
 		if ($menublkstr != '') {
 			$naviblk[$i] = <<<EOD
