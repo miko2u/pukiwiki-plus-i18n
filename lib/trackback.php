@@ -1,5 +1,5 @@
 <?php
-// $Id: trackback.php,v 1.17 2005/04/10 09:32:06 henoheno Exp $
+// $Id: trackback.php,v 1.17.1 2005/05/03 09:32:06 upk Exp $
 /*
  * PukiWiki/TrackBack
  * (C) 2003-2005 PukiWiki Developers Team
@@ -64,7 +64,14 @@ function tb_get_filename($page, $ext = '.txt')
 function tb_count($page, $ext = '.txt')
 {
 	$filename = tb_get_filename($page, $ext);
-	return file_exists($filename) ? count(file($filename)) : 0;
+	if (!file_exists($filename)) return 0;
+	if (!is_readable($filename)) return 0;
+	if (!($fp = fopen($filename,"r"))) return 0;
+	$i = 0;
+	while ($data = @fgets($fp, 4096)) $i++;
+	fclose($fp);
+	unset($data);
+	return $i;
 }
 
 // Send TrackBack ping(s) automatically
