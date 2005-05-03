@@ -636,6 +636,7 @@ function plugin_tracker_getlist($page,$refer,$config_name,$list,$order='',$limit
 //miko
 	static $tracker_count = 0;
 	if ($tracker_count == 0) {
+		global $head_tags;
 		$head_tags[] = ' <script type="text/javascript" charset="utf-8" src="' . SKIN_URI . 'sortabletable.js"></script>';
 	}
 	$tracker_count++;
@@ -927,7 +928,6 @@ class Tracker_list
 //miko
 		global $sortable_tracker;
 		if ($sortable_tracker) {
-			global $head_tags;
 			$trackerid = 'trackerlist' . $count;
 			$trackerso = join(',', array_fill(0, $cols, '"String"'));
 			$html = convert_html($source);
