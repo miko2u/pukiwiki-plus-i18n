@@ -589,6 +589,7 @@ div#note
 {
 	clear:both;
 	padding:0px;
+	font-size: 78%;
 }
 
 div#attach
@@ -596,7 +597,7 @@ div#attach
 	clear:both;
 	padding:0px;
 	margin:0px 1%;
-	font-size: 84%;
+	font-size: 78%;
 }
 div#attach img
 {
