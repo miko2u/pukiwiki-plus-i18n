@@ -18,15 +18,20 @@ blockquote
 	margin-left:32px;
 }
 
-body,td
+body
 {
 	color:#333322;
 	background-color:white;
 	margin-left:0%;
 	margin-right:0%;
 	font-family:"Trebuchet MS", arial, helvetica, Sans-Serif;
-/*	font-family: verdana, arial, sans-serif; */
-	font-size: 94%;
+}
+
+td
+{
+	margin-left:0%;
+	margin-right:0%;
+	font-size: 84%;
 }
 
 div#body a
@@ -89,7 +94,7 @@ h2
 {
 	font-family:"Trebuchet MS", arial, helvetica, Sans-Serif;
 /*	font-family: verdana, arial, helvetica, sans-serif; */
-	font-size:124%;
+	font-size:133%;
 	color:#000000;
 	background-color:transparent;
 	margin:.2em -10px .2em -18px;
@@ -104,7 +109,7 @@ h3
 {
 	font-family:"Trebuchet MS", arial, helvetica, Sans-Serif;
 /*	font-family: verdana, arial, helvetica, sans-serif; */
-	font-size:112%;
+	font-size:124%;
 	color:#000000;
 	background-color:transparent;
 	margin:.2em -10px .5em -14px;
@@ -119,7 +124,7 @@ h4, h5, h6
 {
 	font-family:"Trebuchet MS", arial, helvetica, Sans-Serif;
 /*	font-family: verdana, arial, helvetica, sans-serif; */
-        font-size:100%;
+        font-size:112%;
         color:#000000;
         background-color:transparent;
         margin:.2em -10px .5em -10px;
@@ -439,7 +444,7 @@ div#navigator
 	padding:4px 0px 0px 0px;
 	margin:0px 1%;
 	white-space: nowrap;
-	font-size:93%;
+	font-size:84%;
 }
 
 td.menubar
@@ -852,8 +857,8 @@ ul.recent_list li
 /* ref.inc.php */
 div.img_margin
 {
-	margin-left:32px;
-	margin-right:32px;
+	margin-left:6px;
+	margin-right:6px;
 }
 
 /* vote.inc.php */
@@ -967,7 +972,7 @@ div#cleartable
 div#topicpath
 {
 	color:black;
-	font-size:80%;
+/*	font-size:80%;	*/
 }
 
 div#footerltable
