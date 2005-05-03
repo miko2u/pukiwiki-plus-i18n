@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: tracker.inc.php,v 1.29.1 2005/03/09 08:31:05 miko Exp $
+// $Id: tracker.inc.php,v 1.29.2 2005/05/03 08:31:05 miko Exp $
 //
 // Issue tracker plugin (See Also bugtrack plugin)
 
@@ -633,6 +633,13 @@ function plugin_tracker_list_action()
 }
 function plugin_tracker_getlist($page,$refer,$config_name,$list,$order='',$limit=NULL)
 {
+//miko
+	static $tracker_count = 0;
+	if ($tracker_count == 0) {
+		$head_tags[] = ' <script type="text/javascript" charset="utf-8" src="' . SKIN_URI . 'sortabletable.js"></script>';
+	}
+	$tracker_count++;
+//miko
 	$config = new Config('plugin/tracker/'.$config_name);
 
 	if (!$config->read())
@@ -649,7 +656,7 @@ function plugin_tracker_getlist($page,$refer,$config_name,$list,$order='',$limit
 
 	$list = &new Tracker_list($page,$refer,$config,$list);
 	$list->sort($order);
-	return $list->toString($limit);
+	return $list->toString($limit,$tracker_count);
 }
 
 // 一覧クラス
@@ -867,10 +874,11 @@ class Tracker_list
 
 		return "[[$title$arrow>$script?plugin=tracker_list&refer=$r_page&config=$r_config&list=$r_list&order=$r_order]]";
 	}
-	function toString($limit=NULL)
+	function toString($limit=NULL,$count=0)
 	{
 		$source = '';
 		$body = array();
+		$cols = 0;
 
 		if ($limit !== NULL and count($this->rows) > $limit)
 		{
@@ -888,6 +896,9 @@ class Tracker_list
 		{
 			if (preg_match('/^\|(.+)\|[hHfFcC]$/',$line))
 			{
+				if (preg_match('/^\|(.+)\|[hH]$/',$line)) {
+					$cols += preg_match_all('/\[([^\[\]]+)\]/',$line,$matches);
+				}
 				$source .= preg_replace_callback('/\[([^\[\]]+)\]/',array(&$this,'replace_title'),$line);
 			}
 			else
@@ -913,6 +924,23 @@ class Tracker_list
 				$source .= preg_replace_callback('/\[([^\[\]]+)\]/',array(&$this,'replace_item'),$line);
 			}
 		}
+//miko
+		global $sortable_tracker;
+		if ($sortable_tracker) {
+			global $head_tags;
+			$trackerid = 'trackerlist' . $count;
+			$trackerso = join(',', array_fill(0, $cols, '"String"'));
+			$html = convert_html($source);
+			$html = preg_replace('/<table class="style_table"/', '<table id="' . $trackerid . '" class="style_table"', $html);
+			return $html . <<<EOD
+<script type="text/javascript">
+<!-- <![CDATA[
+var st = new SortableTable(document.getElementById('{$trackerid}'),[{$trackerso}]);
+//]]>-->
+</script>
+EOD;
+		}
+//miko
 		return convert_html($source);
 	}
 }
