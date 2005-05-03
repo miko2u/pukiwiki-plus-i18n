@@ -3,8 +3,8 @@
  * TimeZone
  *
  * @copyright   Copyright &copy; 2005, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: timezone.php,v 0.6 2005/03/30 00:38:00 upk Exp $
- *
+ * @version     $Id: timezone.php,v 0.7 2005/05/04 01:52:00 upk Exp $
+ * @license     http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
 /*
@@ -35,7 +35,7 @@ function set_timezone($lang='')
 	}
 	$l = accept_language::split_locale_str( $lang );
 
-	// When the name of a country is uncertain (¹ñÌ¾¤¬ÉÔÌÀ¤Ê¾ì¹ç)
+	// When the name of a country is uncertain (å›½åãŒä¸æ˜ãªå ´åˆ)
 	if (empty($l[2])) {
 		$obj_l2c = new lang2country();
 		$l[2] = $obj_l2c->get_lang2country($l[1]);
@@ -45,11 +45,11 @@ function set_timezone($lang='')
 	}
 
 	$obj = new timezone();
-	$obj->set_datetime(UTIME); // Setting at judgment time. (È½Äê»ş¹ï¤ÎÀßÄê)
-	$obj->set_country($l[2]); // The acquisition country is specified. (¼èÆÀ¹ñ¤ò»ØÄê)
+	$obj->set_datetime(UTIME); // Setting at judgment time. (åˆ¤å®šæ™‚åˆ»ã®è¨­å®š)
+	$obj->set_country($l[2]); // The acquisition country is specified. (å–å¾—å›½ã‚’æŒ‡å®š)
 
 	// With the installation country in case of the same
-	// ÀßÃÖ¼Ô¤Î¹ñ¤ÈÆ±°ì¤Î¾ì¹ç
+	// è¨­ç½®è€…ã®å›½ã¨åŒä¸€ã®å ´åˆ
 	if ($lang == DEFAULT_LANG) {
 		if (defined('DEFAULT_TZ_NAME')) {
 			$obj->set_tz_name(DEFAULT_TZ_NAME);
@@ -789,12 +789,12 @@ class timezone
     array('Zion',      2005, 9999, 10,         1,  1, 0,  0, 'S'),
   );
 
-	// set_country ¤Ş¤¿¤Ï set_tz_name ¤òÍ½¤á¼Â¹Ô¤·¡¢¥¿¥¤¥à¥¾¡¼¥ó¾ğÊó¤òÃê½Ğ¤·¤Æ¤ª¤¯
+	// set_country ã¾ãŸã¯ set_tz_name ã‚’äºˆã‚å®Ÿè¡Œã—ã€ã‚¿ã‚¤ãƒ ã‚¾ãƒ¼ãƒ³æƒ…å ±ã‚’æŠ½å‡ºã—ã¦ãŠã
 
 	/*
 	 * set_country
 	 * The TimeZone Information of the Country that specified it is extracted.
-	 * »ØÄê¤·¤¿¹ñ¤Î¥¿¥¤¥à¥¾¡¼¥ó¾ğÊó¤òÃê½Ğ
+	 * æŒ‡å®šã—ãŸå›½ã®ã‚¿ã‚¤ãƒ ã‚¾ãƒ¼ãƒ³æƒ…å ±ã‚’æŠ½å‡º
 	 */
 	function set_country($x='')
 	{
@@ -808,7 +808,7 @@ class timezone
 	/*
 	 * set_tz_name
 	 * The TimeZone Information is extracted.
-	 * »ØÄê¤·¤¿¥¿¥¤¥à¥¾¡¼¥ó¾ğÊó¤òÃê½Ğ
+	 * æŒ‡å®šã—ãŸã‚¿ã‚¤ãƒ ã‚¾ãƒ¼ãƒ³æƒ…å ±ã‚’æŠ½å‡º
 	 */
 	function set_tz_name($tz_name)
 	{
@@ -821,7 +821,7 @@ class timezone
 	/*
 	 * set_datetime
 	 * Time is set.
-	 * »ş´Ö¤òÀßÄê¤¹¤ë
+	 * æ™‚é–“ã‚’è¨­å®šã™ã‚‹
 	 */
 	function set_datetime($utime=0)
 	{
@@ -832,7 +832,7 @@ class timezone
 
 	/*
 	 * get_zonetime
-	 * ¥¾¡¼¥ó¾ğÊó¤Î¼èÆÀ
+	 * ã‚¾ãƒ¼ãƒ³æƒ…å ±ã®å–å¾—
 	 * @return	integer
 	 */
 	function get_zonetime()
@@ -844,7 +844,7 @@ class timezone
 
 	/*
 	 * get_offsettime
-	 * GMT¤ËÂĞ¤¹¤ë¥ª¥Õ¥»¥Ã¥ÈÉÃ¤Î¼èÆÀ
+	 * GMTã«å¯¾ã™ã‚‹ã‚ªãƒ•ã‚»ãƒƒãƒˆç§’ã®å–å¾—
 	 * @return	integer
 	 */
 	function get_offsettime()
@@ -866,7 +866,7 @@ class timezone
 
 	/*
 	 * get_zonename
-	 * ¥¾¡¼¥óÌ¾¤Î¼èÆÀ
+	 * ã‚¾ãƒ¼ãƒ³åã®å–å¾—
 	 * @return	string
 	 */
 	function get_zonename($dst=0)
@@ -882,26 +882,26 @@ class timezone
 	/*
 	 * calc_dst
 	 * Calculation at summer time correction time.
-	 * ²Æ»ş´ÖÊäÀµ»ş´Ö»»½Ğ
+	 * å¤æ™‚é–“è£œæ­£æ™‚é–“ç®—å‡º
 	 * @return	integer (Min)
 	 */
 	function calc_dst($rule_name)
 	{
-		if (! isset($this->y)) $this->set_datetime(); // Æü»şÌ¤ÀßÄê¤Î¾ì¹ç
+		if (! isset($this->y)) $this->set_datetime(); // æ—¥æ™‚æœªè¨­å®šã®å ´åˆ
 		$tbl = array();
 		$str_dst = "";
 		foreach($this->dst as $x) {
-			if ($x[0] != $rule_name) continue;	// Â¾¤Î¥ë¡¼¥ë¤Ï½ü¤¯
-			if ($x[1] > $this->y) continue;		// ÀèÆüÉÕ¤Ï½ü¤¯
+			if ($x[0] != $rule_name) continue;	// ä»–ã®ãƒ«ãƒ¼ãƒ«ã¯é™¤ã
+			if ($x[1] > $this->y) continue;		// å…ˆæ—¥ä»˜ã¯é™¤ã
 			if ($x[7] == 0) {
-				$idx_dst = 0;			// ÄÌ¾ï
-				$str_dst = $x[8];		// ÄÌ¾ï»ş¤ÎDSTÊ¸»úÎó(²áµîÄêµÁ¤Î¤ß¤Î¾ì¹ç¤ò¹ÍÎ¸)
+				$idx_dst = 0;			// é€šå¸¸
+				$str_dst = $x[8];		// é€šå¸¸æ™‚ã®DSTæ–‡å­—åˆ—(éå»å®šç¾©ã®ã¿ã®å ´åˆã‚’è€ƒæ…®)
 			} else {
 				$idx_dst = 1;			// DST
 			}
-			if ($x[2] < $this->y) continue;		// ²áµîÊ¬¤Ï½ü¤¯
+			if ($x[2] < $this->y) continue;		// éå»åˆ†ã¯é™¤ã
 
-			if (! empty($tbl[$idx_dst]) && $tbl[$idx_dst][1] != 9999) continue; // ÆüÉÕ¸ÇÄêÊ¬¤Î¤¿¤áÍ¥Àè
+			if (! empty($tbl[$idx_dst]) && $tbl[$idx_dst][1] != 9999) continue; // æ—¥ä»˜å›ºå®šåˆ†ã®ãŸã‚å„ªå…ˆ
 			$_day = $this->calc_week2day($this->y,$this->m,$x[4]);
 				// mktime(h,i,s,   m,d, y,dst);
 			$_udate = mktime($x[5],$x[6],0,$x[3],$_day,$this->y);
@@ -912,9 +912,9 @@ class timezone
 
 		// print_r($tbl);
 
-		if (! isset($tbl[0]) || ! isset($tbl[1])) return 0; // ³«»Ï½ªÎ»¤¬¤Ê¤¤
+		if (! isset($tbl[0]) || ! isset($tbl[1])) return 0; // é–‹å§‹çµ‚äº†ãŒãªã„
 
-		$idx_s  = ($tbl[0]['m'] < $tbl[1]['m']) ? 0 : 1; // ·î¤òÈæ³Ó
+		$idx_s  = ($tbl[0]['m'] < $tbl[1]['m']) ? 0 : 1; // æœˆã‚’æ¯”è¼ƒ
 		$idx_e  = ($idx_s == 1) ? 0 : 1;
 
 		$idx = ($tbl[$idx_s]['utime'] <= $this->utime && $this->utime < $tbl[$idx_e]['utime']) ? $idx_s : $idx_e;
@@ -925,9 +925,9 @@ class timezone
 	/*
 	 * calc_week2day
 	 * The date of a specified day of the week is calculated.
-	 * »ØÄêÍËÆü¤ÎÆüÉÕ¤ò»»½Ğ¤¹¤ë
-	 * - ºÇ¸å¤Î»ØÄêÍËÆü¤òµá¤á¤ë
-	 * - »ØÄêÆü¤ÎÄ¾¶á(Á°¸å)¤Î»ØÄêÍËÆü¤òµá¤á¤ë
+	 * æŒ‡å®šæ›œæ—¥ã®æ—¥ä»˜ã‚’ç®—å‡ºã™ã‚‹
+	 * - æœ€å¾Œã®æŒ‡å®šæ›œæ—¥ã‚’æ±‚ã‚ã‚‹
+	 * - æŒ‡å®šæ—¥ã®ç›´è¿‘(å‰å¾Œ)ã®æŒ‡å®šæ›œæ—¥ã‚’æ±‚ã‚ã‚‹
 	 *
 	 * @return	integer
 	 */
@@ -939,26 +939,26 @@ class timezone
 		$gl = "";
 
 		if (substr($key,0,4) == 'last') {
-			// ºÇ¸å¤Î»ØÄêÍËÆü¤ò»»½Ğ
-			$week = $wday[substr($key,4)]; // µá¤á¤¿¤¤ÍËÆü
+			// æœ€å¾Œã®æŒ‡å®šæ›œæ—¥ã‚’ç®—å‡º
+			$week = $wday[substr($key,4)]; // æ±‚ã‚ãŸã„æ›œæ—¥
 			// mktime(h,i,s,   m,d, y,dst);
-			$calc_week = date("w", mktime(0,0,0,$m+1,0,$y) ); // Åö·îËö
+			$calc_week = date("w", mktime(0,0,0,$m+1,0,$y) ); // å½“æœˆæœ«
 			$calc_day  = date("j", mktime(0,0,0,$m+1,0,$y) );
 		} else {
-			// »ØÄêÆü¤ÎÄ¾¶á(Á°¸å)¤Î»ØÄêÍËÆü¤ò»»½Ğ
-			$week = $wday[substr($key,0,3)]; // µá¤á¤¿¤¤ÍËÆü
+			// æŒ‡å®šæ—¥ã®ç›´è¿‘(å‰å¾Œ)ã®æŒ‡å®šæ›œæ—¥ã‚’ç®—å‡º
+			$week = $wday[substr($key,0,3)]; // æ±‚ã‚ãŸã„æ›œæ—¥
 			$gl = substr($key,3,1);
 			$calc_day = substr($key,5);
 			$calc_week = date("w", mktime(0,0,0,$m,$calc_day,$y) );
 		}
 
-		// »ØÄêÆü°Ê¹ß
+		// æŒ‡å®šæ—¥ä»¥é™
 		if ($gl == '>') {
 			$offset = $calc_week + $week - 1;
 			$offset = ($offset >= 7) ? $offset - 7 : $offset;
 			return ($calc_day + $offset);
 		}
-		// »ØÄêÆü°ÊÁ°
+		// æŒ‡å®šæ—¥ä»¥å‰
 		$offset = $calc_week - $week;
 		$offset = ($offset < 0) ? $offset + 7: $offset;
 		return ($calc_day - $offset);
