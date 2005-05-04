@@ -70,12 +70,16 @@ if ($html_transitional) { ?>
 <?php } ?>
 
 </div>
-<?php exist_plugin('navibar'); ?>
-<?php echo do_plugin_convert('navibar','top,list,search,recent,help,|,new,edit,upload,|,trackback'); ?>
+<?php
+ if (exist_plugin('navibar2')) {
+  echo do_plugin_convert('navibar2');
+ } else if (exist_plugin('navibar')) {
+  echo do_plugin_convert('navibar','top,list,search,recent,help,|,new,edit,upload,|,trackback');
+  echo $hr;
+ }
+?>
 
 <?php } ?>
-
-<?php echo $hr ?>
 
 <div id="contents">
 <table class="contents" width="100%" border="0" cellspacing="0" cellpadding="0">
