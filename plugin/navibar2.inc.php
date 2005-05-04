@@ -6,12 +6,14 @@
 //
 function plugin_navibar2_convert()
 {
+	global $hr;
+
 	$menubarcount = -1;
 	$page = 'Navigation';
 
 	if (!is_page($page)) {
 		exist_plugin('navibar');
-		return plugin_navibar_convert();
+		return do_plugin_convert('navibar','top,list,search,recent,help,|,new,edit,upload,|,trackback') . $hr;
 	}
 
 	foreach (get_source($page) as $line) {
