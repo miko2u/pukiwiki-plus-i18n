@@ -234,7 +234,8 @@ class Heading extends Element
 	function toString()
 	{
 		return $this->msg_top .  $this->wrap(parent::toString(),
-			'h' . $this->level, ' id="' . $this->id . '"');
+//			'h' . $this->level, ' id="' . $this->id . '"');
+			'h' . $this->level, ' id="h' . $this->level . '_' . $this->id . '"');
 	}
 }
 
