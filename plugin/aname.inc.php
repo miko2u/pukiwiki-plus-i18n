@@ -74,7 +74,7 @@ function plugin_aname_tag($args = array(), $convert = TRUE)
 
 	if ($body == '') {
 		if ($f_noid)  return plugin_aname_usage($convert, 'Meaningless(No link-title with \'noid\')');
-		if ($f_super) return plugin_aname_usage($convert, 'Meaningless(No link-title with \'super\')');
+//miko	if ($f_super) return plugin_aname_usage($convert, 'Meaningless(No link-title with \'super\')');
 		if ($f_full)  return plugin_aname_usage($convert, 'Meaningless(No link-title with \'full\')');
 	}
 
