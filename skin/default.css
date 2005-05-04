@@ -857,8 +857,8 @@ div.img_margin
 }
 div.img_nomargin
 {
-	margin-left:0px;
-	margin-right:0px;
+	margin-left:-16px;
+	margin-right:-16px;
 }
 
 /* vote.inc.php */
