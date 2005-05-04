@@ -855,6 +855,11 @@ div.img_margin
 	margin-left:32px;
 	margin-right:32px;
 }
+div.img_nomargin
+{
+	margin-left:0px;
+	margin-right:0px;
+}
 
 /* vote.inc.php */
 .style_table_vote
