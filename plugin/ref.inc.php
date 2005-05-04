@@ -100,6 +100,9 @@ EOD;
 	}
 
 	// divで包む
+	if ($params['nomargin']) {
+		return "<div class=\"img_nomargin\" style=\"$style\">{$params['_body']}</div>\n";
+	}
 	return "<div class=\"img_margin\" style=\"$style\">{$params['_body']}</div>\n";
 }
 
@@ -119,6 +122,7 @@ function plugin_ref_body($args)
 		'noicon' => FALSE, // アイコンを表示しない
 		'nolink' => FALSE, // 元ファイルへのリンクを張らない
 		'noimg'  => FALSE, // 画像を展開しない
+		'nomargin' => FALSE, // マージンはいらない
 		'zoom'   => FALSE, // 縦横比を保持する
 		'_size'  => FALSE, // サイズ指定あり
 		'_w'     => 0,       // 幅

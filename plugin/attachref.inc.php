@@ -113,7 +113,11 @@ EOD;
 				$style = "text-align:{$params['_align']}";
 			}
 			// div¤ÇÊñ¤à
-			$ret = "<div class=\"img_margin\" style=\"$style\">{$params['_body']}</div>\n";
+			if ($params['nomargin']) {
+				$ret = "<div class=\"img_nomargin\" style=\"$style\">{$params['_body']}</div>\n";
+			} else {
+				$ret = "<div class=\"img_margin\" style=\"$style\">{$params['_body']}</div>\n";
+			}
 			// ¢¬¤³¤³¤Þ¤Ç¤Ïplugin_ref_convert()¤ÎÈ´¿è
 			$dispattach = 0;
 		}
