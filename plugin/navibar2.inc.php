@@ -9,6 +9,11 @@ function plugin_navibar2_convert()
 	$menubarcount = -1;
 	$page = 'Navigation';
 
+	if (!is_page($page)) {
+		exist_plugin('navibar');
+		return plugin_navibar_convert();
+	}
+
 	foreach (get_source($page) as $line) {
 		if ($line == '') continue;
 
@@ -72,7 +77,7 @@ EOD;
 	$menublkstr = join("\n",$naviblk);
 
 	return <<<EOD
-<div id="navigator2"><table border="0" cellspacing="0" cellpadding="2"><tbody><tr>
+<div id="navigator2"><table border="0" cellspacing="0" cellpadding="0"><tbody><tr>
 {$menubarstr}
 </tr></tbody></table></div>
 {$menublkstr}
