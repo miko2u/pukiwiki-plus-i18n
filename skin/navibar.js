@@ -40,10 +40,9 @@ function startNaviMenu(NaviBarID, NaviMenuID, NaviMenuClass, NaviLinkID, MenuBlo
     strMenuItemClass = MenuItemClass; 
 
     // event handling
-  if(nIE4 || nOP6){
-        document.onmouseover = viewNaviMenuIEandOpera; 
-  }
-	if(nDOM){
+	if(nIE4 || nOP6) {
+		document.onmouseover = viewNaviMenuIEandOpera; 
+	} else if(nDOM) {
 		window.addEventListener("mouseover", viewNaviMenuN6, true);
 	}
 }
@@ -52,21 +51,23 @@ function startNaviMenu(NaviBarID, NaviMenuID, NaviMenuClass, NaviLinkID, MenuBlo
 function viewNaviMenuCommon(objEvent){
 
     objPosition = document.getElementById(strNaviBarID);
-    if( objEvent.className == strNaviMenuClass ){
+    if(objEvent.className == strNaviMenuClass) {
         closeNaviMenu();
         var strThisID = objEvent.id;
-        if( strThisID.indexOf(strNaviLinkID) >= 0 ){ 
-            strThisID = strThisID.replace(strNaviLinkID, strNaviMenuID)
+        if (strThisID.indexOf(strNaviLinkID) >= 0) {
+            strThisID = strThisID.replace(strNaviLinkID, strNaviMenuID);
         }
 
-        objItem = document.getElementById( strThisID );
-        objOpenedNaviMenu = document.getElementById( strThisID.replace(strNaviMenuID, strMenuBlockID) );
-
-        objOpenedNaviMenu.style.top  = objItem.offsetTop  + objPosition.offsetTop + objPosition.offsetHeight + "px";
-        objOpenedNaviMenu.style.left = objItem.offsetLeft + objPosition.offsetLeft + "px";
-        objOpenedNaviMenu.style.visibility = "visible";
-	
-    }else if( objOpenedNaviMenu != null ){
+        objItem = document.getElementById(strThisID);
+        if (objItem != null) {
+	        objOpenedNaviMenu = document.getElementById(strThisID.replace(strNaviMenuID, strMenuBlockID));
+	        if (objOpenedNaviMenu != null) {
+		        objOpenedNaviMenu.style.top  = objItem.offsetTop  + objPosition.offsetTop + objPosition.offsetHeight + "px";
+		        objOpenedNaviMenu.style.left = objItem.offsetLeft + objPosition.offsetLeft + "px";
+		        objOpenedNaviMenu.style.visibility = "visible";
+			}
+		}
+    } else if( objOpenedNaviMenu != null ) {
 
         if( nDOM ){
             if( objEvent.id.indexOf( strMenuBlockID ) >= 0 ){ return; }
