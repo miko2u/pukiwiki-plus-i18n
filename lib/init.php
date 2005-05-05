@@ -69,7 +69,7 @@ textdomain(DOMAIN);
 require(LIB_DIR . 'resource.php');
 // Init encoding hint
 // define('PKWK_ENCODING_HINT', isset($_LANG['encode_hint']) ? $_LANG['encode_hint'] : '');
-define('PKWK_ENCODING_HINT', (isset($_LANG['encode_hint']) && $_LANG['encode_hint'] != 'encode_hint') ? $_LANG['encode_hint'] : '&#x3077;');
+define('PKWK_ENCODING_HINT', (isset($_LANG['encode_hint']) && $_LANG['encode_hint'] != 'encode_hint') ? $_LANG['encode_hint'] : '');
 // unset($_LANG['encode_hint']);
 
 /////////////////////////////////////////////////

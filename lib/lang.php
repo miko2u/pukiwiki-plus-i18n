@@ -148,7 +148,7 @@ function get_content_charset($lang)
 function get_source_encoding($lang)
 {
 	$source_encoding = array(
-		'en'	=> 'ASCII',
+//		'en'	=> 'ASCII',
 		'default' => 'UTF-8', // default
 	);
 	return _lang_keyset($lang,$source_encoding);
