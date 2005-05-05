@@ -42,7 +42,8 @@ function startNaviMenu(NaviBarID, NaviMenuID, NaviMenuClass, NaviLinkID, MenuBlo
     // event handling
 	if(nIE4 || nOP6) {
 		document.onmouseover = viewNaviMenuIEandOpera; 
-	} else if(nDOM) {
+	}
+	if(nDOM) {
 		window.addEventListener("mouseover", viewNaviMenuN6, true);
 	}
 }
@@ -69,14 +70,14 @@ function viewNaviMenuCommon(objEvent){
 		}
     } else if( objOpenedNaviMenu != null ) {
 
-        if( nDOM ){
+        if( nDOM ) {
             if( objEvent.id.indexOf( strMenuBlockID ) >= 0 ){ return; }
             if( objEvent.className == strMenuItemClass ){ return; }
 
-        }else{
+        } else {
             if( objOpenedNaviMenu.contains(objEvent) == true
                 || objPosition.contains(objEvent) == true){ return; }
-        } 
+        }
     	closeNaviMenu();
     }
 
