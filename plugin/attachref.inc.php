@@ -241,7 +241,7 @@ function plugin_attachref_action()
 {
 	global $script,$vars;
 	global $_attachref_messages;
-	global $html_transitional;
+	global $pkwk_dtd;
 
 	//戻り値を初期化
 	$retval['msg'] = $_attachref_messages['msg_title'];
@@ -280,7 +280,8 @@ function plugin_attachref_action()
 	{
 		$retval = attachref_showform();
 		// XHTML 1.0 Transitional
-		$html_transitional = TRUE;
+		if (! isset($pkwk_dtd) || $pkwk_dtd == PKWK_DTD_XHTML_1_1)
+			$pkwk_dtd = PKWK_DTD_XHTML_1_0_TRANSITIONAL;
 	}
 	return $retval;
 }

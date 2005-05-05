@@ -163,10 +163,12 @@ if (isset($pkwk_dtd)) {
   HTML convert time to <?php echo $taketime ?> sec.
  </div></td>
  <td id="footerrtable"><div id="validxhtml">
-<?php if ($html_transitional) { ?>
-  <a href="http://validator.w3.org/check/referer"><img src="image/valid-xhtml10.png" width="88" height="31" alt="Valid XHTML 1.0" title="Valid XHTML 1.0" /></a>
-<?php } else { ?>
+<?php if (! isset($pkwk_dtd) || $pkwk_dtd == PKWK_DTD_XHTML_1_1) { ?>
   <a href="http://validator.w3.org/check/referer"><img src="image/valid-xhtml11.png" width="88" height="31" alt="Valid XHTML 1.1" title="Valid XHTML 1.1" /></a>
+<?php } else if ($pkwk_dtd >= PKWK_DTD_XHTML_1_0_FRAMESET) {  ?>
+  <a href="http://validator.w3.org/check/referer"><img src="image/valid-xhtml10.png" width="88" height="31" alt="Valid XHTML 1.0" title="Valid XHTML 1.0" /></a>
+<?php } else if ($pkwk_dtd >= PKWK_DTD_HTML_4_01_FRAMESET) {  ?>
+  <a href="http://validator.w3.org/check/referer"><img src="image/valid-html40.png" width="88" height="31" alt="Valid HTML 4.0" title="Valid XHTML 1.0" /></a>
 <?php } ?>
  </div></td>
 </tr>

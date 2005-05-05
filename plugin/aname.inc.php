@@ -13,7 +13,7 @@ function plugin_aname_inline()
 function plugin_aname_convert()
 {
 	global $script, $vars;
-	global $html_transitional;
+	global $pkwk_dtd;
 
 	if (func_num_args() < 1) return FALSE;
 

@@ -290,10 +290,17 @@ EOD;
 // Input Assistant
 function edit_form_assistant()
 {
-	global $html_transitional;
 	static $assist_loaded = 0;	// for non-reentry
 
-	$html_transitional = TRUE;
+	// if Mobile-Phone, do not use.
+	if (defined('UA_PROFILE') && UA_PROFILE != 'default')
+		return;
+
+	// XHTML 1.0 Transitional
+	global $pkwk_dtd;
+	if (! isset($pkwk_dtd) || $pkwk_dtd == PKWK_DTD_XHTML_1_1)
+		$pkwk_dtd = PKWK_DTD_XHTML_1_0_TRANSITIONAL;
+
 	if (!$assist_loaded) {
 		$assist_loaded++;
 		$map = <<<EOD
