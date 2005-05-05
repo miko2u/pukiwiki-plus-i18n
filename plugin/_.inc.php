@@ -3,10 +3,10 @@
  * PukiWiki ページ内で gettext を実現するプラグイン
  *
  * @copyright   Copyright &copy; 2005, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: multilang.inc.php,v 0.1 2005/05/06 00:11:00 upk Exp $
+ * @version     $Id: multilang.inc.php,v 0.2 2005/05/06 01:11:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License
  *
- * o :config/i18n/ja/text または :config/i18n/ja_JP/text でも良い
+ * o :config/i18n/text/ja または :config/i18n/text/ja_JP でも良い
  * o 原則的には、言語名が適切であるものの、zh_TW などもあり 言語_国 の形式も選択可能。
  *
  * o &_(ja){掲示板};
@@ -51,10 +51,9 @@ function plugin___inline()
 
 function _i18n_MsgGet($l_lang,$s_lang,$msg, $no = 0)
 {
-	// ex. :config/i18n/ja_JP/message
-	$ConfName = 'i18n/'.$l_lang.'/text';
+	$ConfName = 'i18n/text/'.$l_lang;
 	if (! is_page(':config/'.$ConfName)) {
-		$ConfName = 'i18n/'.$s_lang.'/text';
+		$ConfName = 'i18n/text/'.$s_lang;
 		if (! is_page(':config/'.$ConfName)) return $msg;
 	}
 
