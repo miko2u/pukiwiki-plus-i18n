@@ -87,9 +87,12 @@ function viewNaviMenuCommon(objEvent){
 	        objOpenedNaviMenu = document.getElementById(strThisID.replace(strNaviMenuID, strMenuBlockID));
 	        if (objOpenedNaviMenu != null) {
 				patchHeight = 0;
-				if (nSAF) { patchHeight = 17; }
+				if (nSAF) { patchHeight = 12; }
 		        objOpenedNaviMenu.style.top  = GetPositionTop(objItem) + objPosition.offsetHeight + patchHeight + "px";
 		        objOpenedNaviMenu.style.left = GetPositionLeft(objItem) + "px";
+		        if ( GetPositionLeft(objItem) + objItem.Width >= GetPositionLeft(objPosition) + objPosition.Width)  {
+					objOpenedNaviMenu.style.left = GetPositionLeft(objPosition) + objPosition.Width - objItem.Width;
+		        }
 		        objOpenedNaviMenu.style.visibility = "visible";
 			}
 		}
