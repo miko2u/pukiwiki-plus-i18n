@@ -86,7 +86,9 @@ function viewNaviMenuCommon(objEvent){
         if (objItem != null) {
 	        objOpenedNaviMenu = document.getElementById(strThisID.replace(strNaviMenuID, strMenuBlockID));
 	        if (objOpenedNaviMenu != null) {
-		        objOpenedNaviMenu.style.top  = GetPositionTop(objItem) + objPosition.offsetHeight + "px";
+				patchHeight = 0;
+				if (nSAF) { patchHeight = 17; }
+		        objOpenedNaviMenu.style.top  = GetPositionTop(objItem) + objPosition.offsetHeight + patchHeight + "px";
 		        objOpenedNaviMenu.style.left = GetPositionLeft(objItem) + "px";
 		        objOpenedNaviMenu.style.visibility = "visible";
 			}
