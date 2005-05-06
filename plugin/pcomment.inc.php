@@ -7,51 +7,51 @@
 /*
 
 *Usage
- #pcomment([¥Ú¡¼¥¸Ì¾][,É½¼¨¤¹¤ë¥³¥á¥ó¥È¿ô][,¥ª¥×¥·¥ç¥ó])
+ #pcomment([ãƒšãƒ¼ã‚¸å][,è¡¨ç¤ºã™ã‚‹ã‚³ãƒ¡ãƒ³ãƒˆæ•°][,ã‚ªãƒ—ã‚·ãƒ§ãƒ³])
 
-*¥Ñ¥é¥á¡¼¥¿
--¥Ú¡¼¥¸Ì¾~
- Åê¹Æ¤µ¤ì¤¿¥³¥á¥ó¥È¤òµ­Ï¿¤¹¤ë¥Ú¡¼¥¸¤ÎÌ¾Á°
--É½¼¨¤¹¤ë¥³¥á¥ó¥È¿ô~
- ²áµî¤Î¥³¥á¥ó¥È¤ò²¿·ïÉ½¼¨¤¹¤ë¤«(0¤ÇÁ´·ï)
+*ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿
+-ãƒšãƒ¼ã‚¸å~
+ æŠ•ç¨¿ã•ã‚ŒãŸã‚³ãƒ¡ãƒ³ãƒˆã‚’è¨˜éŒ²ã™ã‚‹ãƒšãƒ¼ã‚¸ã®åå‰
+-è¡¨ç¤ºã™ã‚‹ã‚³ãƒ¡ãƒ³ãƒˆæ•°~
+ éå»ã®ã‚³ãƒ¡ãƒ³ãƒˆã‚’ä½•ä»¶è¡¨ç¤ºã™ã‚‹ã‹(0ã§å…¨ä»¶)
 
-*¥ª¥×¥·¥ç¥ó
+*ã‚ªãƒ—ã‚·ãƒ§ãƒ³
 -above~
- ¥³¥á¥ó¥È¤ò¥Õ¥£¡¼¥ë¥É¤ÎÁ°¤ËÉ½¼¨(¿·¤·¤¤µ­»ö¤¬²¼)
+ ã‚³ãƒ¡ãƒ³ãƒˆã‚’ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®å‰ã«è¡¨ç¤º(æ–°ã—ã„è¨˜äº‹ãŒä¸‹)
 -below~
- ¥³¥á¥ó¥È¤ò¥Õ¥£¡¼¥ë¥É¤Î¸å¤ËÉ½¼¨(¿·¤·¤¤µ­»ö¤¬¾å)
+ ã‚³ãƒ¡ãƒ³ãƒˆã‚’ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®å¾Œã«è¡¨ç¤º(æ–°ã—ã„è¨˜äº‹ãŒä¸Š)
 -reply~
- 2¥ì¥Ù¥ë¤Ş¤Ç¤Î¥³¥á¥ó¥È¤Ë¥ê¥×¥é¥¤¤ò¤Ä¤±¤ëradio¥Ü¥¿¥ó¤òÉ½¼¨
+ 2ãƒ¬ãƒ™ãƒ«ã¾ã§ã®ã‚³ãƒ¡ãƒ³ãƒˆã«ãƒªãƒ—ãƒ©ã‚¤ã‚’ã¤ã‘ã‚‹radioãƒœã‚¿ãƒ³ã‚’è¡¨ç¤º
 
 */
 
-// ¥Ú¡¼¥¸Ì¾¤Î¥Ç¥Õ¥©¥ë¥È(%s¤Ë$vars['page']¤¬Æş¤ë)
-define('PCMT_PAGE', '[[¥³¥á¥ó¥È/%s]]');
+// ãƒšãƒ¼ã‚¸åã®ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆ(%sã«$vars['page']ãŒå…¥ã‚‹)
+define('PCMT_PAGE', '[[ã‚³ãƒ¡ãƒ³ãƒˆ/%s]]');
 
-// É½¼¨¤¹¤ë¥³¥á¥ó¥È¿ô¤Î¥Ç¥Õ¥©¥ë¥È
+// è¡¨ç¤ºã™ã‚‹ã‚³ãƒ¡ãƒ³ãƒˆæ•°ã®ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆ
 define('PCMT_NUM_COMMENTS', 10);
 
-// ¥³¥á¥ó¥È¤ÎÌ¾Á°¥Æ¥­¥¹¥È¥¨¥ê¥¢¤Î¥«¥é¥à¿ô
+// ã‚³ãƒ¡ãƒ³ãƒˆã®åå‰ãƒ†ã‚­ã‚¹ãƒˆã‚¨ãƒªã‚¢ã®ã‚«ãƒ©ãƒ æ•°
 define('PCMT_COLS_NAME', 15);
 
-// ¥³¥á¥ó¥È¤Î¥Æ¥­¥¹¥È¥¨¥ê¥¢¤Î¥«¥é¥à¿ô
+// ã‚³ãƒ¡ãƒ³ãƒˆã®ãƒ†ã‚­ã‚¹ãƒˆã‚¨ãƒªã‚¢ã®ã‚«ãƒ©ãƒ æ•°
 define('PCMT_COLS_COMMENT', 70);
 
-// ÁŞÆş¤¹¤ë°ÌÃÖ 1:ËöÈø 0:ÀèÆ¬
+// æŒ¿å…¥ã™ã‚‹ä½ç½® 1:æœ«å°¾ 0:å…ˆé ­
 define('PCMT_INSERT_INS', 1);
 
-// ¥³¥á¥ó¥È¤ÎÁŞÆş¥Õ¥©¡¼¥Ş¥Ã¥È
-// \x08¤Ï¡¢Åê¹Æ¤µ¤ì¤¿Ê¸»úÎóÃæ¤Ë¸½¤ì¤Ê¤¤Ê¸»ú¤Ç¤¢¤ì¤Ğ¤Ê¤ó¤Ç¤â¤¤¤¤¡£
+// ã‚³ãƒ¡ãƒ³ãƒˆã®æŒ¿å…¥ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆ
+// \x08ã¯ã€æŠ•ç¨¿ã•ã‚ŒãŸæ–‡å­—åˆ—ä¸­ã«ç¾ã‚Œãªã„æ–‡å­—ã§ã‚ã‚Œã°ãªã‚“ã§ã‚‚ã„ã„ã€‚
 define('PCMT_NAME_FORMAT',	'[[$name]]');
 define('PCMT_MSG_FORMAT',	'$msg');
 define('PCMT_NOW_FORMAT',	'&new{$now};');
 define('PCMT_FORMAT',	"\x08MSG\x08 -- \x08NAME\x08 \x08DATE\x08");
 
-// ¼«Æ°²áµî¥í¥°²½ 1¥Ú¡¼¥¸¤¢¤¿¤ê¤Î·ï¿ô¤ò»ØÄê 0¤ÇÌµ¸ú
+// è‡ªå‹•éå»ãƒ­ã‚°åŒ– 1ãƒšãƒ¼ã‚¸ã‚ãŸã‚Šã®ä»¶æ•°ã‚’æŒ‡å®š 0ã§ç„¡åŠ¹
 define('PCMT_AUTO_LOG', 0);
 
-// ¥³¥á¥ó¥È¥Ú¡¼¥¸¤Î¥¿¥¤¥à¥¹¥¿¥ó¥×¤ò¹¹¿·¤»¤º¡¢ÀßÃÖ¥Ú¡¼¥¸¤Î
-// ¥¿¥¤¥à¥¹¥¿¥ó¥×¤ò¹¹¿·¤¹¤ë
+// ã‚³ãƒ¡ãƒ³ãƒˆãƒšãƒ¼ã‚¸ã®ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—ã‚’æ›´æ–°ã›ãšã€è¨­ç½®ãƒšãƒ¼ã‚¸ã®
+// ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—ã‚’æ›´æ–°ã™ã‚‹
 define('PCMT_TIMESTAMP', 0);
 
 function plugin_pcomment_action()
@@ -88,10 +88,10 @@ function plugin_pcomment_convert()
 		'err_pagename'   => _('[[%s]] : not a valid page name.'),
 	);
 
-	// Ìá¤êÃÍ
+	// æˆ»ã‚Šå€¤
 	$ret = '';
 
-	// ¥Ñ¥é¥á¡¼¥¿ÊÑ´¹
+	// ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿å¤‰æ›
 	$params = array(
 		'noname'=>FALSE,
 		'nodate'=>FALSE,
@@ -102,7 +102,7 @@ function plugin_pcomment_convert()
 	);
 	array_walk(func_get_args(), 'pcmt_check_arg', & $params);
 
-	// Ê¸»úÎó¤ò¼èÆÀ
+	// æ–‡å­—åˆ—ã‚’å–å¾—
 	$vars_page = isset($vars['page']) ? $vars['page'] : '';
 	$page  = (isset($params['_args'][0]) && $params['_args'][0] != '') ? $params['_args'][0] :
 		sprintf(PCMT_PAGE, strip_bracket($vars_page));
@@ -114,21 +114,21 @@ function plugin_pcomment_convert()
 	if (!is_pagename($_page))
 		return sprintf($_pcmt_messages['err_pagename'], htmlspecialchars($_page));
 
-	// ¿·¤·¤¤¥³¥á¥ó¥È¤òÄÉ²Ã¤¹¤ëÊı¸ş¤ò·èÄê
+	// æ–°ã—ã„ã‚³ãƒ¡ãƒ³ãƒˆã‚’è¿½åŠ ã™ã‚‹æ–¹å‘ã‚’æ±ºå®š
 	$dir = PCMT_INSERT_INS;
 	if ($params['below']) {
-		$dir = 0;	// Î¾Êı»ØÄê¤µ¤ì¤¿¤é¡¢form¤Î²¼¤Ë (^^;
+		$dir = 0;	// ä¸¡æ–¹æŒ‡å®šã•ã‚ŒãŸã‚‰ã€formã®ä¸‹ã« (^^;
 	} elseif ($params['above']) {
 		$dir = 1;
 	}
 
-	// ¥³¥á¥ó¥È¤ò¼èÆÀ
+	// ã‚³ãƒ¡ãƒ³ãƒˆã‚’å–å¾—
 	list($comments, $digest) = pcmt_get_comments($_page, $count, $dir, $params['reply']);
 
 	if (PKWK_READONLY) {
 		$form_start = $form = $form_end = '';
 	} else {
-		// ¥Õ¥©¡¼¥à¤òÉ½¼¨
+		// ãƒ•ã‚©ãƒ¼ãƒ ã‚’è¡¨ç¤º
 		if ($params['noname']) {
 			$title = $_pcmt_messages['msg_comment'];
 			$name = '';
@@ -211,7 +211,7 @@ function pcmt_insert()
 
 	$ret = array('msg' => _(' $1 was updated'), 'collided' => FALSE);
 
-	//¥³¥á¥ó¥È¥Õ¥©¡¼¥Ş¥Ã¥È¤òÅ¬ÍÑ
+	//ã‚³ãƒ¡ãƒ³ãƒˆãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã‚’é©ç”¨
 	$msg = str_replace('$msg', rtrim($vars['msg']), PCMT_MSG_FORMAT);
 
 	$name = (! isset($vars['name']) || $vars['name'] == '') ? $_no_name : $vars['name'];
@@ -233,10 +233,10 @@ function pcmt_insert()
 	if (! is_page($page)) {
 		$postdata = '[[' . htmlspecialchars(strip_bracket($refer)) . "]]\n\n-$msg\n";
 	} else {
-		//¥Ú¡¼¥¸¤òÆÉ¤ß½Ğ¤¹
+		//ãƒšãƒ¼ã‚¸ã‚’èª­ã¿å‡ºã™
 		$postdata = get_source($page);
 
-		// ¹¹¿·¤Î¾×ÆÍ¤ò¸¡½Ğ
+		// æ›´æ–°ã®è¡çªã‚’æ¤œå‡º
 		$digest = isset($vars['digest']) ? $vars['digest'] : '';
 		if (md5(join('', $postdata)) != $digest) {
 			$ret['msg']  = _('On updating  $1, there was a collision.');
@@ -244,11 +244,11 @@ function pcmt_insert()
 			                 'The comment was added to the page, but there may be a problem.<br />');
 		}
 
-		// ½é´üÃÍ
+		// åˆæœŸå€¤
 		$level = 1;
 		$pos   = 0;
 
-		// ¥³¥á¥ó¥È¤Î³«»Ï°ÌÃÖ¤ò¸¡º÷
+		// ã‚³ãƒ¡ãƒ³ãƒˆã®é–‹å§‹ä½ç½®ã‚’æ¤œç´¢
 		while ($pos < count($postdata)) {
 			if (preg_match('/^\-/', $postdata[$pos])) break;
 			++$pos;
@@ -257,7 +257,7 @@ function pcmt_insert()
 
 		$dir = isset($vars['dir']) ? $vars['dir'] : '';
 
-		//¥ê¥×¥é¥¤Àè¤Î¥³¥á¥ó¥È¤ò¸¡º÷
+		//ãƒªãƒ—ãƒ©ã‚¤å…ˆã®ã‚³ãƒ¡ãƒ³ãƒˆã‚’æ¤œç´¢
 		$b_reply = FALSE;
 		if ($reply_hash != '') {
 			while ($pos < count($postdata)) {
@@ -266,9 +266,9 @@ function pcmt_insert()
 					&& md5($matches[2]) == $reply_hash)
 				{
 					$b_reply = TRUE;
-					$level = strlen($matches[1]) + 1; //ÁŞÆş¤¹¤ë¥ì¥Ù¥ë
+					$level = strlen($matches[1]) + 1; //æŒ¿å…¥ã™ã‚‹ãƒ¬ãƒ™ãƒ«
 
-					// ¥³¥á¥ó¥È¤ÎËöÈø¤ò¸¡º÷
+					// ã‚³ãƒ¡ãƒ³ãƒˆã®æœ«å°¾ã‚’æ¤œç´¢
 					while ($pos < count($postdata)) {
 						if (preg_match('/^(\-{1,3})(?!\-)/',$postdata[$pos],$matches)
 							&& strlen($matches[1]) < $level)
@@ -284,10 +284,10 @@ function pcmt_insert()
 			$pos = ($dir == '0') ? $start_pos : count($postdata);
 		}
 
-		//¥³¥á¥ó¥È¤òÁŞÆş
+		//ã‚³ãƒ¡ãƒ³ãƒˆã‚’æŒ¿å…¥
 		array_splice($postdata, $pos, 0, str_repeat('-', $level) . "$msg\n");
 
-		// ²áµî¥í¥°½èÍı
+		// éå»ãƒ­ã‚°å‡¦ç†
 		$count = isset($vars['count']) ? $vars['count'] : '';
 		pcmt_auto_log($page, $dir, $count, $postdata);
 
@@ -296,7 +296,7 @@ function pcmt_insert()
 	page_write($page, $postdata, PCMT_TIMESTAMP);
 
 	if (PCMT_TIMESTAMP) {
-		// ¿Æ¥Ú¡¼¥¸¤Î¥¿¥¤¥à¥¹¥¿¥ó¥×¤ò¹¹¿·¤¹¤ë
+		// è¦ªãƒšãƒ¼ã‚¸ã®ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—ã‚’æ›´æ–°ã™ã‚‹
 		if ($refer != '') touch(get_filename($refer));
 		put_lastmodified();
 	}
@@ -304,7 +304,7 @@ function pcmt_insert()
 	return $ret;
 }
 
-// ²áµî¥í¥°½èÍı
+// éå»ãƒ­ã‚°å‡¦ç†
 function pcmt_auto_log($page, $dir, $count, &$postdata)
 {
 	if (! PCMT_AUTO_LOG) return;
@@ -313,14 +313,14 @@ function pcmt_auto_log($page, $dir, $count, &$postdata)
 	if (count($keys) < (PCMT_AUTO_LOG + $count)) return;
 
 	if ($dir) {
-		// Á°¤«¤éPCMT_AUTO_LOG·ï
+		// å‰ã‹ã‚‰PCMT_AUTO_LOGä»¶
 		$old = array_splice($postdata, $keys[0], $keys[PCMT_AUTO_LOG] - $keys[0]);
 	} else {
-		// ¸å¤í¤«¤éPCMT_AUTO_LOG·ï
+		// å¾Œã‚ã‹ã‚‰PCMT_AUTO_LOGä»¶
 		$old = array_splice($postdata, $keys[count($keys) - PCMT_AUTO_LOG]);
 	}
 
-	// ¥Ú¡¼¥¸Ì¾¤ò·èÄê
+	// ãƒšãƒ¼ã‚¸åã‚’æ±ºå®š
 	$i = 0;
 	do {
 		++$i;
@@ -333,7 +333,7 @@ function pcmt_auto_log($page, $dir, $count, &$postdata)
 	pcmt_auto_log($page, $dir, $count, $postdata);
 }
 
-//¥ª¥×¥·¥ç¥ó¤ò²òÀÏ¤¹¤ë
+//ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã‚’è§£æã™ã‚‹
 function pcmt_check_arg($val, $key, &$params)
 {
 	if ($val != '') {
@@ -365,7 +365,7 @@ function pcmt_get_comments($page, $count, $dir, $reply)
 
 	$digest = md5(join('', $data));
 
-	//¥³¥á¥ó¥È¤ò»ØÄê¤µ¤ì¤¿·ï¿ô¤À¤±ÀÚ¤ê¼è¤ë
+	//ã‚³ãƒ¡ãƒ³ãƒˆã‚’æŒ‡å®šã•ã‚ŒãŸä»¶æ•°ã ã‘åˆ‡ã‚Šå–ã‚‹
 	$num  = $cnt     = 0;
 	$cmts = $matches = array();
 	if ($dir) $data = array_reverse($data);
@@ -388,11 +388,11 @@ function pcmt_get_comments($page, $count, $dir, $reply)
 	if ($dir) $data = array_reverse($data);
 	unset($cmts, $matches);
 
-	//¥³¥á¥ó¥È¤è¤êÁ°¤Î¥Ç¡¼¥¿¤ò¼è¤ê½ü¤¯¡£
+	//ã‚³ãƒ¡ãƒ³ãƒˆã‚ˆã‚Šå‰ã®ãƒ‡ãƒ¼ã‚¿ã‚’å–ã‚Šé™¤ãã€‚
 	while (! empty($data) && substr($data[0], 0, 1) != '-')
 		array_shift($data);
 
-	//htmlÊÑ´¹
+	//htmlå¤‰æ›
 	$comments = convert_html($data);
 	unset($data);
 
