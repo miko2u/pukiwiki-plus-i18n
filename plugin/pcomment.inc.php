@@ -137,10 +137,11 @@ function plugin_pcomment_convert()
 		$s_refer  = htmlspecialchars($vars_page);
 		$s_nodate = htmlspecialchars($params['nodate']);
 		$s_count  = htmlspecialchars($count);
+		$helptags = edit_form_assistant();
 
 		$form_start = '<form action="' . $script . '" method="post">' . "\n";
 		$form = <<<EOD
-  <div>
+  <div class="pcommentform" onmouseup="pukiwiki_pos()" onkeyup="pukiwiki_pos()">
   <input type="hidden" name="digest" value="$digest" />
   <input type="hidden" name="plugin" value="pcomment" />
   <input type="hidden" name="refer"  value="$s_refer" />
@@ -150,6 +151,7 @@ function plugin_pcomment_convert()
   <input type="hidden" name="count"  value="$count" />
   $radio $title $name $comment
   <input type="submit" value="{$_pcmt_messages['btn_comment']}" />
+  $helptags
   </div>
 EOD;
 		$form_end = '</form>' . "\n";
