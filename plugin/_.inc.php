@@ -1,12 +1,13 @@
 <?php
 /**
+ * Plug-in that achieves gettext in PukiWiki page
  * PukiWiki ページ内で gettext を実現するプラグイン
  *
  * @copyright   Copyright &copy; 2005, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: multilang.inc.php,v 0.2 2005/05/06 01:11:00 upk Exp $
+ * @version     $Id: _.inc.php,v 0.2 2005/05/08 00:32:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License
  *
- * o :config/i18n/text/ja または :config/i18n/text/ja_JP でも良い
+ * o :config/i18n/ja/text または :config/i18n/ja_JP/text でも良い
  * o 原則的には、言語名が適切であるものの、zh_TW などもあり 言語_国 の形式も選択可能。
  *
  * o &_(ja){掲示板};
@@ -42,18 +43,19 @@ function plugin___inline()
 	// 指定文字列が en 以外の場合は、ベース言語に変換後、他言語に変換する
 	$def_lang = accept_language::split_locale_str($parm_lang);
 	if ($def_lang !== 'en') {
-		$msg = _i18n_MsgGet($parm_lang, $def_lang[1], $msg, 1);
+		$msg = i18n_ConfMsgGet($parm_lang, $def_lang[1], $msg, 1);
 	}
 
 	// :config から、単語を検索
-	return _i18n_MsgGet($view_lang,$lang[1], $msg);
+	return i18n_ConfMsgGet($view_lang,$lang[1], $msg);
 }
 
-function _i18n_MsgGet($l_lang,$s_lang,$msg, $no = 0)
+function i18n_ConfMsgGet($l_lang,$s_lang,$msg, $no = 0)
 {
-	$ConfName = 'i18n/text/'.$l_lang;
+	// ex. :config/i18n/ja_JP/message
+	$ConfName = 'i18n/'.$l_lang.'/text';
 	if (! is_page(':config/'.$ConfName)) {
-		$ConfName = 'i18n/text/'.$s_lang;
+		$ConfName = 'i18n/'.$s_lang.'/text';
 		if (! is_page(':config/'.$ConfName)) return $msg;
 	}
 
