@@ -1,7 +1,9 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: keitai.skin.php,v 1.9 2005/05/01 02:43:27 henoheno Exp $
-// Copyright (C) 2003-2005 PukiWiki Developers Team
+// $Id: keitai.skin.php,v 1.9.11 2005/05/01 02:43:27 miko Exp $
+// Copyright (C)
+//   2005      Customized/Patched by Miko.Hoshina
+//   2003-2005 PukiWiki Developers Team
 // License: GPL v2 or (at your option) any later version
 //
 // Skin for Embedded devices
@@ -10,6 +12,7 @@
 // Prohibit direct access
 if (! defined('UI_LANG')) die('UI_LANG is not set');
 
+global $vars, $page_title;
 global $max_size, $accesskey, $menubar;
 $link = $_LINK;
 $rw = ! PKWK_READONLY;
@@ -29,6 +32,11 @@ if(TRUE) {
 $max_size = --$max_size * 1024;
 
 // Replace IMG tags (= images) with character strings
+// STEP1: Delete comment lines
+$body = preg_replace('#<!(?:--[^-]*-(?:[^-]+-)*?-(?:[^>-]*(?:-[^>-]+)*?)??)*(?:>|$(?!\n)|--.*$)#', '', $body);
+// STEP2: Delete <del> tag
+
+
 // With ALT option
 $body = preg_replace('#(<div[^>]+>)?(<a[^>]+>)?<img[^>]*alt="([^"]+)"[^>]*>(?(2)</a>)(?(1)</div>)#i', '[$3]', $body);
 // Without ALT option
@@ -40,34 +48,36 @@ $pagecount = ceil(strlen($body) / $max_size);
 $lastpage = $pagecount - 1;
 
 // Top navigation (text) bar
-$navi = array();
-$navi[] = '<a href="' . $link['top']  . '" ' . $accesskey . '="0">0.Top</a>';
+$headnavi = array();
+$footnavi = array();
 if ($rw) {
-	$navi[] = '<a href="' . $link['new']  . '" ' . $accesskey . '="1">1.New</a>';
-	$navi[] = '<a href="' . $link['edit'] . '" ' . $accesskey . '="2">2.Edit</a>';
+	$footnavi[] = '<a href="' . $link['new']  . '" ' . $accesskey . '="1">1.New</a>';
+	$footnavi[] = '<a href="' . $link['edit'] . '" ' . $accesskey . '="2">2.Edit</a>';
 	if ($is_read and $function_freeze) {
 		if (! $is_freeze) {
-			$navi[] = '<a href="' . $link['freeze']   . '" ' . $accesskey . '="3">3.Freeze</a>';
+			$footnavi[] = '<a href="' . $link['freeze']   . '" ' . $accesskey . '="3">3.Freeze</a>';
 		} else {
-			$navi[] = '<a href="' . $link['unfreeze'] . '" ' . $accesskey . '="3">3.Unfreeze</a>';
+			$footnavi[] = '<a href="' . $link['unfreeze'] . '" ' . $accesskey . '="3">3.Unfreeze</a>';
 		}
 	}
 }
-$navi[] = '<a href="' . $script . '?' . $menubar . '" ' . $accesskey . '="4">4.Menu</a>';
-$navi[] = '<a href="' . $link['recent'] . '" ' . $accesskey . '="5">5.Recent</a>';
+$footnavi[] = '<a href="' . $link['top']  . '" ' . $accesskey . '="0">0.Top</a>';
+$headnavi[] = '<a href="' . $script . '?' . $menubar . '" ' . $accesskey . '="4">4.Menu</a>';
+$headnavi[] = '<a href="' . $link['recent'] . '" ' . $accesskey . '="5">5.Recent</a>';
 
 // Previous / Next block
 if ($pagecount > 1) {
 	$prev = $pageno - 1;
 	$next = $pageno + 1;
 	if ($pageno > 0) {
-		$navi[] = '<a href="' . $script . '?cmd=read&amp;page=' . $r_page . '&amp;p=' . $prev . '" ' . $accesskey . '="7">7.Prev</a>';
+		$headnavi[] = '<a href="' . $script . '?cmd=read&amp;page=' . $r_page . '&amp;p=' . $prev . '" ' . $accesskey . '="7">7.Prev</a>';
 	}
 	$navi[] = $next . '/' . $pagecount . ' ';
 	if ($pageno < $lastpage) {
-		$navi[] = '<a href="' . $script . '?cmd=read&amp;page=' . $r_page . '&amp;p=' . $next . '" ' . $accesskey . '="8">8.Next</a>';
+		$headnavi[] = '<a href="' . $script . '?cmd=read&amp;page=' . $r_page . '&amp;p=' . $next . '" ' . $accesskey . '="8">8.Next</a>';
 	}
 }
+$headnavi[] = '<a href="' . $_LINK['reload'] . '"' . $accesskey . '="9">9.Reload</a>';
 
 $headnavi = join(' | ', $headnavi);
 $footnavi = join(' | ', $footnavi);
