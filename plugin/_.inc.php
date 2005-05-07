@@ -4,7 +4,7 @@
  * PukiWiki ページ内で gettext を実現するプラグイン
  *
  * @copyright   Copyright &copy; 2005, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: _.inc.php,v 0.2 2005/05/08 00:32:00 upk Exp $
+ * @version     $Id: _.inc.php,v 0.3 2005/05/08 04:02:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License
  *
  * o :config/i18n/ja/text または :config/i18n/ja_JP/text でも良い
@@ -23,6 +23,7 @@ function plugin___inline()
 {
 	global $language_considering_setting_level;
 	global $language;
+	global $i18n_temp_msg;
 
 	switch ( func_num_args() ) {
 	case 1:
@@ -35,19 +36,56 @@ function plugin___inline()
 	}
 
 	// FIXME: level 4
-	$view_lang = ($language_considering_setting_level == 0) ? get_language(4) : $language;
-	$lang = accept_language::split_locale_str($view_lang); // ja_JP なら ja に分割
+	$view_lang  = ($language_considering_setting_level == 0) ? get_language(4) : $language;
+	$view_lang_split = accept_language::split_locale_str($view_lang); // ja_JP なら ja に分割
 
 	if ($parm_lang == $view_lang || $parm_lang == $lang[1]) return $msg; // 指定言語と同じ
 
 	// 指定文字列が en 以外の場合は、ベース言語に変換後、他言語に変換する
-	$def_lang = accept_language::split_locale_str($parm_lang);
-	if ($def_lang !== 'en') {
-		$msg = i18n_ConfMsgGet($parm_lang, $def_lang[1], $msg, 1);
+	$parm_lang_split = accept_language::split_locale_str($parm_lang);
+
+	if (isset($i18n_temp_msg)) {
+		$temp_msg = i18n_TempMsg($parm_lang, $parm_lang_split, $view_lang, $view_lang_split, $msg);
+		if (!empty($temp_msg)) return $temp_msg;
+	}
+
+	if ($def_lang[1] !== 'en') {
+		$msg = i18n_ConfMsgGet($parm_lang, $parm_lang_aplit[1], $msg, 1);
 	}
 
 	// :config から、単語を検索
-	return i18n_ConfMsgGet($view_lang,$lang[1], $msg);
+	return i18n_ConfMsgGet($view_lang, $view_lang_split[1], $msg);
+}
+
+function i18n_TempMsg($parm_lang, $parm_lang_split, $view_lang, $view_lang_split, $msg)
+{
+	global $i18n_temp_msg;
+
+	if ($def_lang[1] !== 'en') {
+		$key = i18n_TempMsg_GetKey($parm_lang, $parm_lang_split[1], $msg);
+	} else {
+		$key = i18n_TempMsg_GetKey($view_lang, $view_lang_split[1], $msg);
+	}
+
+	if ($key === FALSE) return '';
+	if (!empty($i18n_temp_msg[$key][$view_lang]) ) return $i18n_temp_msg[$key][$view_lang];
+	if (!empty($i18n_temp_msg[$key][$view_lang_split[1]]) ) return $i18n_temp_msg[$key][$view_lang_split[1]];
+	return '';
+}
+
+function i18n_TempMsg_GetKey($l_lang, $s_lang, $msg)
+{
+	global $i18n_temp_msg;
+
+	// get no(key)
+	foreach($i18n_temp_msg as $tmp_no => $tmp_val) {
+		foreach($tmp_val as $tmp_lang => $tmp_msg) {
+			if ($tmp_lang == $l_lang || $tmp_lang == $s_lang) {
+				if ($tmp_msg == $msg) return $tmp_no;
+			}
+		}
+	}
+	return FALSE;
 }
 
 function i18n_ConfMsgGet($l_lang,$s_lang,$msg, $no = 0)
