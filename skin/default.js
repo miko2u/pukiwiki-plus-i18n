@@ -84,17 +84,17 @@ function pukiwiki_show_fontset_img()
 	
 	if (pukiwiki_adv == "on")
 	{
-		str = str + '<a href="#" onClick="javascript:pukiwiki_adv_swich(); return false;">' + pukiwiki_msg_to_easy_t + '<'+'/'+'a>';
+		str = str + '<a href="#" onClick="javascript:pukiwiki_adv_switch(); return false;">' + pukiwiki_msg_to_easy_t + '<'+'/'+'a>';
 	}
 	else
 	{
-		str = str + '<a href="#" onClick="javascript:pukiwiki_adv_swich(); return false;">' + pukiwiki_msg_to_adv_t + '<'+'/'+'a>';
+		str = str + '<a href="#" onClick="javascript:pukiwiki_adv_switch(); return false;">' + pukiwiki_msg_to_adv_t + '<'+'/'+'a>';
 	}
 	
 	document.write(str);
 }
 
-function pukiwiki_adv_swich()
+function pukiwiki_adv_switch()
 {
 	if (pukiwiki_adv == "on")
 	{
