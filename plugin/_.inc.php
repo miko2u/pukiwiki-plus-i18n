@@ -4,7 +4,7 @@
  * PukiWiki ページ内で gettext を実現するプラグイン
  *
  * @copyright   Copyright &copy; 2005, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: _.inc.php,v 0.4 2005/05/08 14:07:00 upk Exp $
+ * @version     $Id: _.inc.php,v 0.5 2005/05/08 14:30:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License
  *
  * o :config/i18n/ja/text または :config/i18n/ja_JP/text でも良い
@@ -61,7 +61,7 @@ function i18n_TempMsg($parm_lang_split, $view_lang_split, $msg)
 {
 	global $i18n_temp_msg;
 
-	if ($def_lang[1] !== 'en') {
+	if ($parm_lang_split[1] !== 'en') {
 		$key = i18n_TempMsg_GetKey($parm_lang_split, $msg);
 	} else {
 		$key = i18n_TempMsg_GetKey($view_lang_split, $msg);
