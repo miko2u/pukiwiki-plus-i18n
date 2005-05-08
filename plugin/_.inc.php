@@ -4,7 +4,7 @@
  * PukiWiki ページ内で gettext を実現するプラグイン
  *
  * @copyright   Copyright &copy; 2005, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: _.inc.php,v 0.3 2005/05/08 04:02:00 upk Exp $
+ * @version     $Id: _.inc.php,v 0.4 2005/05/08 14:07:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License
  *
  * o :config/i18n/ja/text または :config/i18n/ja_JP/text でも良い
@@ -45,42 +45,42 @@ function plugin___inline()
 	$parm_lang_split = accept_language::split_locale_str($parm_lang);
 
 	if (isset($i18n_temp_msg)) {
-		$temp_msg = i18n_TempMsg($parm_lang, $parm_lang_split, $view_lang, $view_lang_split, $msg);
+		$temp_msg = i18n_TempMsg($parm_lang_split, $view_lang_split, $msg);
 		if (!empty($temp_msg)) return $temp_msg;
 	}
 
-	if ($def_lang[1] !== 'en') {
-		$msg = i18n_ConfMsgGet($parm_lang, $parm_lang_aplit[1], $msg, 1);
+	if ($parm_lang_split[1] !== 'en') {
+		$msg = i18n_ConfMsgGet($parm_lang_split, $msg, 1);
 	}
 
 	// :config から、単語を検索
-	return i18n_ConfMsgGet($view_lang, $view_lang_split[1], $msg);
+	return i18n_ConfMsgGet($view_lang_split, $msg);
 }
 
-function i18n_TempMsg($parm_lang, $parm_lang_split, $view_lang, $view_lang_split, $msg)
+function i18n_TempMsg($parm_lang_split, $view_lang_split, $msg)
 {
 	global $i18n_temp_msg;
 
 	if ($def_lang[1] !== 'en') {
-		$key = i18n_TempMsg_GetKey($parm_lang, $parm_lang_split[1], $msg);
+		$key = i18n_TempMsg_GetKey($parm_lang_split, $msg);
 	} else {
-		$key = i18n_TempMsg_GetKey($view_lang, $view_lang_split[1], $msg);
+		$key = i18n_TempMsg_GetKey($view_lang_split, $msg);
 	}
 
 	if ($key === FALSE) return '';
-	if (!empty($i18n_temp_msg[$key][$view_lang]) ) return $i18n_temp_msg[$key][$view_lang];
+	if (!empty($i18n_temp_msg[$key][$view_lang_split[0]]) ) return $i18n_temp_msg[$key][$view_lang_split[0]];
 	if (!empty($i18n_temp_msg[$key][$view_lang_split[1]]) ) return $i18n_temp_msg[$key][$view_lang_split[1]];
 	return '';
 }
 
-function i18n_TempMsg_GetKey($l_lang, $s_lang, $msg)
+function i18n_TempMsg_GetKey($lang, $msg)
 {
 	global $i18n_temp_msg;
 
 	// get no(key)
 	foreach($i18n_temp_msg as $tmp_no => $tmp_val) {
 		foreach($tmp_val as $tmp_lang => $tmp_msg) {
-			if ($tmp_lang == $l_lang || $tmp_lang == $s_lang) {
+			if ($tmp_lang == $lang[0] || $tmp_lang == $lang[1]) {
 				if ($tmp_msg == $msg) return $tmp_no;
 			}
 		}
@@ -88,12 +88,12 @@ function i18n_TempMsg_GetKey($l_lang, $s_lang, $msg)
 	return FALSE;
 }
 
-function i18n_ConfMsgGet($l_lang,$s_lang,$msg, $no = 0)
+function i18n_ConfMsgGet($lang, $msg, $no = 0)
 {
 	// ex. :config/i18n/ja_JP/message
-	$ConfName = 'i18n/'.$l_lang.'/text';
+	$ConfName = 'i18n/'.$lang[0].'/text';
 	if (! is_page(':config/'.$ConfName)) {
-		$ConfName = 'i18n/'.$s_lang.'/text';
+		$ConfName = 'i18n/'.$lang[1].'/text';
 		if (! is_page(':config/'.$ConfName)) return $msg;
 	}
 
