@@ -4,7 +4,7 @@
  * PukiWiki ページ内で gettext を実現するプラグイン
  *
  * @copyright   Copyright &copy; 2005, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: _.inc.php,v 0.6 2005/05/08 14:38:00 upk Exp $
+ * @version     $Id: _.inc.php,v 0.7 2005/05/08 14:56:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License
  *
  * o :config/i18n/ja/text または :config/i18n/ja_JP/text でも良い
@@ -87,9 +87,9 @@ function i18n_TempMsg_GetKey($lang, $msg)
 function i18n_ConfMsgGet($lang, $msg, $no = 0)
 {
 	// ex. :config/i18n/ja_JP/message
-	$ConfName = 'i18n/'.$lang[0].'/text';
+	$ConfName = 'i18n/text/'.$lang[1];
 	if (! is_page(':config/'.$ConfName)) {
-		$ConfName = 'i18n/'.$lang[1].'/text';
+		$ConfName = 'i18n/text/'.$lang[0];
 		if (! is_page(':config/'.$ConfName)) return $msg;
 	}
 
