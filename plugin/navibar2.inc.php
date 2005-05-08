@@ -25,16 +25,15 @@ function plugin_navibar2_convert()
 		if ($head == '-') {
 			if ($level == 1) {
 				$line = substr($line,1);
-				if (preg_match('/\[(' . '(?:(?:https?|ftp|news):\/\/|\.\.?\/)' .
-					'[!~*\'();\/?:\@&=+\$,%#\w.-]*)\s([^\]]+)\]\s?([^\s]*)/', $line, $intermatch)) {
-					$interurl = $intermatch[1];
-					$intername = $intermatch[2];
-					$interparam = $intermatch[3];
-					if ($interurl !== FALSE && is_url($interurl)) {
-						$menubarcount++;
-						$menubar[$menubarcount] = ' <td class="navimenu" id="navimenutd' . $menubarcount . '">' .
-						                          '<a href="' . $interurl . '" class="navimenu" id="NaviMenuLink' . $menubarcount . '">' . $intername . '</a></td>';
-					}
+				list($rc,$interurl,$intername,$conv) = plugin_navibar2_convert_html($line);
+				if ($rc) {
+					$menubarcount++;
+					$rep = '<a href="' . $interurl;
+					$rep .= '" class="navimenu" id="NaviMenuLink' . $menubarcount . '">' . $intername;
+					$rep .= '</a>';
+					$menubar[$menubarcount] = ' <td class="navimenu" id="navimenutd' . $menubarcount . '">' .
+								  str_replace('__navibar2__', $rep, $conv) .
+								  '</td>';
 				} else {
 					$name = trim($line);
 					$interkey = plugin_navibar2_keyword($name);
@@ -46,14 +45,12 @@ function plugin_navibar2_convert()
 				}
 			} else if ($level == 2) {
 				$line = substr($line,2);
-				if (preg_match('/\[(' . '(?:(?:https?|ftp|news):\/\/|\.\.?\/)' .
-					'[!~*\'();\/?:\@&=+\$,%#\w.-]*)\s([^\]]+)\]\s?([^\s]*)/', $line, $intermatch)) {
-					$interurl = $intermatch[1];
-					$intername = $intermatch[2];
-					$interparam = $intermatch[3];
-					if ($interurl !== FALSE && is_url($interurl)) {
-						$menublk[$menubarcount][] = ' <div class="MenuItem"><a href="' . $interurl . '" class="MenuItem">' . $intername . '</a></div>';
-					}
+				list($rc,$interurl,$intername,$conv) = plugin_navibar2_convert_html($line);
+				if ($rc) {
+					$rep = '<a href="' . $interurl;
+					$rep .= '" class="MenuItem">' . $intername;
+					$rep .= '</a>';
+					$menublk[$menubarcount][] = ' <div class="MenuItem">' . str_replace('__navibar2__', $rep, $conv) . '</div>';
 				} else {
 					$interkey = plugin_navibar2_keyword(trim($line));
 					if (isset($interkey['url'])) {
@@ -90,6 +87,29 @@ startNaviMenu( "navigator2", "navimenutd", "navimenu", "NaviMenuLink", "navibloc
 //]]>-->
 </script>
 EOD;
+}
+
+function plugin_navibar2_convert_html($str)
+{
+	$conv = preg_replace(
+		array("'<p>'si","'</p>'si"),
+		array('',''),
+		convert_html( array($str) )
+	);
+
+	// $regs[0] - HIT Strings
+	// $regs[1] - URL String
+	// $regs[2] - LinkName
+	if ( preg_match("'<a href=\"(.*?)\"[^>]*>(.*?)</a>'si", $conv, $regs) ) {
+		return array( TRUE, $regs[1], $regs[2], str_replace($regs[0], '__navibar2__', $conv) );
+	}
+
+	if ( preg_match("'<a class=\"ext\" href=\"(.*?)\" .*?>(.*?)<img src=\"./image/plus/ext.png\".*?</a>'si", $conv, $regs) ) {
+		return array( TRUE, $regs[1], $regs[2], str_replace($regs[0], '__navibar2__', $conv) );
+	}
+
+	// rc, $interurl, $intername, $conv
+	return array( FALSE, '', '', $conv );
 }
 
 function plugin_navibar2_keyword($name)
