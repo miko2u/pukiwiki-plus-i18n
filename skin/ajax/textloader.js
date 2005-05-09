@@ -1,6 +1,6 @@
 /**
- * HTTP Load用クラス for IE+MSXML/Gecko (txtloader.js)
- * Script Version: 0.1.0 (c)2005 Miko.Hoshina
+ * HTTP load class for IE+MSXML/Gecko (textloader.js)
+ * Script Version: 0.1.1 (c)2005 Miko.Hoshina
  *
  * [constructor]
  * @param function _loadHandler

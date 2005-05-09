@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: default.skin.php,v 1.34.20 2005/05/06 14:23:43 miko Exp $
+// $Id: default.skin.php,v 1.34.21 2005/05/06 14:23:43 miko Exp $
 //
 if (!defined('DATA_DIR')) { exit; }
 
@@ -177,5 +177,6 @@ if (isset($pkwk_dtd)) {
 </div>
 <?php } ?>
 
+<script type="text/javascript" src="skin/assistloaded.js"></script>
 </body>
 </html>
