@@ -59,22 +59,22 @@ $lastpage = $pagecount - 1;
 // ナビゲーション
 $headnavi = array();
 $footnavi = array();
-$headnavi[] = '<a id="#pfinal" name="#pfinal" href="#pstart">' . _("[b]") . '</a>';
-$footnavi[] = '<a id="#pstart" name="#pstart" href="#pfinal">' . _("[u]") . '</a>';
+$headnavi[] = '<a id="pfinal" name="pfinal" href="#pstart">' . _("&darr;") . '</a>';
+$footnavi[] = '<a id="pstart" name="pstart" href="#pfinal">' . _("&uarr;") . '</a>';
 if ($rw) {
-	$footnavi[] = '<a href="' . $_LINK['new'] . '"' . $accesskey . '="1">1.New</a>';
-	$footnavi[] = '<a href="' . $_LINK['edit'] . '"' . $accesskey . '="2">2.Edit</a>';
+	$footnavi[] = '<a href="' . $_LINK['new'] . '"' . $accesskey . '="1">1.' . _('New') . '</a>';
+	$footnavi[] = '<a href="' . $_LINK['edit'] . '"' . $accesskey . '="2">2.' . _('Edit') . '</a>';
 	if ($is_read and $function_freeze) {
 		if (! $is_freeze) {
-			$footnavi[] = '<a href="' . $_LINK['freeze']   . '" ' . $accesskey . '="3">3.Freeze</a>';
+			$footnavi[] = '<a href="' . $_LINK['freeze']   . '" ' . $accesskey . '="3">3.' . _('Freeze') . '</a>';
 		} else {
-			$footnavi[] = '<a href="' . $_LINK['unfreeze'] . '" ' . $accesskey . '="3">3.Unfreeze</a>';
+			$footnavi[] = '<a href="' . $_LINK['unfreeze'] . '" ' . $accesskey . '="3">3.' . _('Unfreeze') . '</a>';
 		}
 	}
 }
-$footnavi[] = '<a href="' . $_LINK['top'] . '"' . $accesskey . '="0">0.Top</a>';
-$headnavi[] = '<a href="' . $_LINK['menu'] . '" ' . $accesskey . '="4">4.Menu</a>';
-$headnavi[] = '<a href="' . $_LINK['recent'] . '" ' . $accesskey . '="5">5.Recent</a>';
+$footnavi[] = '<a href="' . $_LINK['top'] . '"' . $accesskey . '="0">0.' . _('Top') . '</a>';
+$headnavi[] = '<a href="' . $_LINK['menu'] . '" ' . $accesskey . '="4">4.' . _('Menu') . '</a>';
+$headnavi[] = '<a href="' . $_LINK['recent'] . '" ' . $accesskey . '="5">5.' . _('Recent') . '</a>';
 
 // Previous / Next block
 if ($pagecount > 1) {
