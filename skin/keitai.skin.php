@@ -59,6 +59,8 @@ $lastpage = $pagecount - 1;
 // ナビゲーション
 $headnavi = array();
 $footnavi = array();
+$headnavi[] = '<a id="#pfinal" name="#pfinal" href="#pstart">' . _("[b]") . '</a>';
+$footnavi[] = '<a id="#pstart" name="#pstart" href="#pfinal">' . _("[u]") . '</a>';
 if ($rw) {
 	$footnavi[] = '<a href="' . $_LINK['new'] . '"' . $accesskey . '="1">1.New</a>';
 	$footnavi[] = '<a href="' . $_LINK['edit'] . '"' . $accesskey . '="2">2.Edit</a>';
@@ -88,8 +90,8 @@ if ($pagecount > 1) {
 }
 $headnavi[] = '<a href="' . $_LINK['reload'] . '"' . $accesskey . '="9">9.Reload</a>';
 
-$headnavi = join(' | ', $headnavi);
-$footnavi = join(' | ', $footnavi);
+$headnavi = join(' ', $headnavi);
+$footnavi = join(' ', $footnavi);
 $body = substr($body, $pageno * $max_size, $max_size);
 
 // Output
