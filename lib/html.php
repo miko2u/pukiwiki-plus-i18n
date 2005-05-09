@@ -536,7 +536,7 @@ function pkwk_output_dtd($pkwk_dtd = PKWK_DTD_XHTML_1_1)
 
 	// Output XML or not(IEPatch: for W3C standard rendering)
 //	if ($type == 'XHTML' && !(CONTENT_CHARSET == 'UTF-8' && UA_NAME == 'MSIE')) {
-//		echo '<?xml version="1.0" encoding="' . CONTENT_CHARSET . '" ?>' . "\n";
+//		echo '<?xml version="1.0" encoding="' . CONTENT_CHARSET . '" ?' . '>' . "\n";
 //	}
 
 	// Output doctype
