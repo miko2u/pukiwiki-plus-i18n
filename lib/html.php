@@ -531,10 +531,13 @@ function pkwk_output_dtd($pkwk_dtd = PKWK_DTD_XHTML_1_1)
 	default: die('DTD not specified or invalid DTD'); break;
 	}
 
+	// Output XML or not
+	if ($type == 'XHTML') echo '<?xml version="1.0" encoding="' . CONTENT_CHARSET . '" ?>' . "\n";
+
 	// Output XML or not(IEPatch: for W3C standard rendering)
-	if ($type == 'XHTML' && !(CONTENT_CHARSET == 'UTF-8' && UA_NAME == 'MSIE')) {
-		echo '<?xml version="1.0" encoding="' . CONTENT_CHARSET . '" ?>' . "\n";
-	}
+//	if ($type == 'XHTML' && !(CONTENT_CHARSET == 'UTF-8' && UA_NAME == 'MSIE')) {
+//		echo '<?xml version="1.0" encoding="' . CONTENT_CHARSET . '" ?>' . "\n";
+//	}
 
 	// Output doctype
 	echo '<!DOCTYPE html PUBLIC "-//W3C//DTD ' . $type . ' ' . $version . ($option != '' ? ' ' . $option : '') . '//EN" "' . $dtd . '">' . "\n";
