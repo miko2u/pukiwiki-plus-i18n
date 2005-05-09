@@ -28,10 +28,10 @@ if(TRUE) {
 // Make 1KByte spare (for header, etc)
 $max_size = --$max_size * 1024;
 
-// コメント行は無くす
+// Delete comment
 $body = preg_replace('#<!(?:--[^-]*-(?:[^-]+-)*?-(?:[^>-]*(?:-[^>-]+)*?)??)*(?:>|$(?!\n)|--.*$)#', '', $body);
 
-// <del>〜</del>を削除
+// Delete <del>〜</del> tag
 $body = preg_replace('#(<del>)([\w\W]*)(</del>)#i', '', $body);
 
 // 編集機能をもつ IMG タグ(画像)を絵文字に置換
@@ -49,18 +49,18 @@ $body = preg_replace('#(<div[^>]+>)?(<a[^>]+>)?<img[^>]+>(?(2)</a>)(?(1)</div>)#
 // ALT="keitai" を持つ IMG タグ(画像)を置換(*2)
 $body = preg_replace('#<PWimg#', '<img', $body);
 
-// ページ番号
+// Page Number
 $r_page = isset($vars['page']) ? $vars['page'] : '';
 $r_page = rawurlencode($r_page);
 $pageno = (isset($vars['p']) and is_numeric($vars['p'])) ? $vars['p'] : 0;
 $pagecount = ceil(strlen($body) / $max_size);
 $lastpage = $pagecount - 1;
 
-// ナビゲーション文字列
+// Navigatino resource string
 if (TRUE) {
 	$navistr = array(
-	  'start'    => '&#x25b2;',
-	  'final'    => '&#x25bc;',
+	  'start'    => '[u]',
+	  'final'    => '[b]',
 	  'new'      => 'New',
 	  'edit'     => 'Edit',
 	  'freeze'   => 'Freeze',
@@ -89,11 +89,11 @@ if (TRUE) {
 	);
 }
 
-// ナビゲーション
+// Navigation
 $headnavi = array();
 $footnavi = array();
-$headnavi[] = '<a id="pfinal" name="pfinal" href="#pstart">' . $navistr['final'] . '</a>';
-$footnavi[] = '<a id="pstart" name="pstart" href="#pfinal">' . $navistr['start'] . '</a>';
+$headnavi[] = '<a id="pstart" name="pstart" href="#pfinal">' . $navistr['final'] . '</a>';
+$footnavi[] = '<a id="pfinal" name="pfinal" href="#pstart">' . $navistr['start'] . '</a>';
 if ($rw) {
 	$footnavi[] = '<a href="' . $_LINK['new'] . '"' . $accesskey . '="1">1.' . $navistr['new'] . '</a>';
 	$footnavi[] = '<a href="' . $_LINK['edit'] . '"' . $accesskey . '="2">2.' . $navistr['edit'] . '</a>';
