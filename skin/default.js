@@ -178,14 +178,3 @@ else
 {
 	document.write ('<scr'+'ipt type="text/javascr'+'ipt" src="skin/other.js"></scr'+'ipt>');
 }
-
-// Add function in 'window.onload' event.
-void function()
-{
-	var $onoccur = window.onload;
-	window.onload = function()
-	{
-		if ($onoccur) $onoccur();
-		pukiwiki_initTexts();
-	}
-} ();

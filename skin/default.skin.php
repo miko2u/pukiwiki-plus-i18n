@@ -169,5 +169,6 @@ if ($html_transitional) { ?>
 </div>
 <?php } ?>
 
+<script type="text/javascript" src="skin/assistloaded.js"></script>
 </body>
 </html>
