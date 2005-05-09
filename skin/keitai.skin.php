@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: keitai.skin.php,v 1.8.11 2005/02/13 03:12:47 miko Exp $
+// $Id: keitai.skin.php,v 1.8.13 2005/05/09 03:12:47 miko Exp $
 //
 // Skin for Embedded devices
 
@@ -56,39 +56,72 @@ $pageno = (isset($vars['p']) and is_numeric($vars['p'])) ? $vars['p'] : 0;
 $pagecount = ceil(strlen($body) / $max_size);
 $lastpage = $pagecount - 1;
 
+// ナビゲーション文字列
+if (TRUE) {
+	$navistr = array(
+	  'start'    => '&#x25b2;',
+	  'final'    => '&#x25bc;',
+	  'new'      => 'New',
+	  'edit'     => 'Edit',
+	  'freeze'   => 'Freeze',
+	  'unfreeze' => 'Unfreeze',
+	  'top'      => 'Top',
+	  'menu'     => 'Menu',
+	  'recent'   => 'Recent',
+	  'prev'     => 'Prev',
+	  'next'     => 'Next',
+	  'reload'   => 'Reload',
+	);
+} else {
+	$navistr = array(
+	  'start'    => _('[u]'),
+	  'final'    => _('[b]'),
+	  'new'      => _('New'),
+	  'edit'     => _('Edit'),
+	  'freeze'   => _('Freeze'),
+	  'unfreeze' => _('Unfreeze'),
+	  'top'      => _('Top'),
+	  'menu'     => _('Menu'),
+	  'recent'   => _('Recent'),
+	  'prev'     => _('Prev'),
+	  'next'     => _('Next'),
+	  'reload'   => _('Reload'),
+	);
+}
+
 // ナビゲーション
 $headnavi = array();
 $footnavi = array();
-$headnavi[] = '<a id="pfinal" name="pfinal" href="#pstart">' . _("&darr;") . '</a>';
-$footnavi[] = '<a id="pstart" name="pstart" href="#pfinal">' . _("&uarr;") . '</a>';
+$headnavi[] = '<a id="pfinal" name="pfinal" href="#pstart">' . $navistr['final'] . '</a>';
+$footnavi[] = '<a id="pstart" name="pstart" href="#pfinal">' . $navistr['start'] . '</a>';
 if ($rw) {
-	$footnavi[] = '<a href="' . $_LINK['new'] . '"' . $accesskey . '="1">1.' . _('New') . '</a>';
-	$footnavi[] = '<a href="' . $_LINK['edit'] . '"' . $accesskey . '="2">2.' . _('Edit') . '</a>';
+	$footnavi[] = '<a href="' . $_LINK['new'] . '"' . $accesskey . '="1">1.' . $navistr['new'] . '</a>';
+	$footnavi[] = '<a href="' . $_LINK['edit'] . '"' . $accesskey . '="2">2.' . $navistr['edit'] . '</a>';
 	if ($is_read and $function_freeze) {
 		if (! $is_freeze) {
-			$footnavi[] = '<a href="' . $_LINK['freeze']   . '" ' . $accesskey . '="3">3.' . _('Freeze') . '</a>';
+			$footnavi[] = '<a href="' . $_LINK['freeze']   . '" ' . $accesskey . '="3">3.' . $navistr['freeze'] . '</a>';
 		} else {
-			$footnavi[] = '<a href="' . $_LINK['unfreeze'] . '" ' . $accesskey . '="3">3.' . _('Unfreeze') . '</a>';
+			$footnavi[] = '<a href="' . $_LINK['unfreeze'] . '" ' . $accesskey . '="3">3.' . $navistr['unfreeze'] . '</a>';
 		}
 	}
 }
-$footnavi[] = '<a href="' . $_LINK['top'] . '"' . $accesskey . '="0">0.' . _('Top') . '</a>';
-$headnavi[] = '<a href="' . $_LINK['menu'] . '" ' . $accesskey . '="4">4.' . _('Menu') . '</a>';
-$headnavi[] = '<a href="' . $_LINK['recent'] . '" ' . $accesskey . '="5">5.' . _('Recent') . '</a>';
+$footnavi[] = '<a href="' . $_LINK['top'] . '"' . $accesskey . '="0">0.' . $navistr['top'] . '</a>';
+$headnavi[] = '<a href="' . $_LINK['menu'] . '" ' . $accesskey . '="4">4.' . $navistr['menu'] . '</a>';
+$headnavi[] = '<a href="' . $_LINK['recent'] . '" ' . $accesskey . '="5">5.' . $navistr['recent'] . '</a>';
 
 // Previous / Next block
 if ($pagecount > 1) {
 	$prev = $pageno - 1;
 	$next = $pageno + 1;
 	if ($pageno > 0) {
-		$headnavi[] = '<a href="' . $_LINK['read'] . '&amp;p=' . $prev . '"' . $accesskey . '="7">7.Prev</a>';
+		$headnavi[] = '<a href="' . $_LINK['read'] . '&amp;p=' . $prev . '"' . $accesskey . '="7">7.' . $navistr['prev'] . '</a>';
 	}
 	$headnavi[] = $next . '/' . $pagecount . ' ';
 	if ($pageno < $lastpage) {
-		$headnavi[] = '<a href="' . $_LINK['read'] . '&amp;p=' . $next . '"' . $accesskey . '="8">8.Next</a>';
+		$headnavi[] = '<a href="' . $_LINK['read'] . '&amp;p=' . $next . '"' . $accesskey . '="8">8.' . $navistr['next'] . '</a>';
 	}
 }
-$headnavi[] = '<a href="' . $_LINK['reload'] . '"' . $accesskey . '="9">9.Reload</a>';
+$headnavi[] = '<a href="' . $_LINK['reload'] . '"' . $accesskey . '="9">9.' . $navistr['reload'] . '</a>';
 
 $headnavi = join(' ', $headnavi);
 $footnavi = join(' ', $footnavi);
