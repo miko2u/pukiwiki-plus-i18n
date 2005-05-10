@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: aname.inc.php,v 1.22.4 2005/05/04 03:28:32 miko Exp $
+// $Id: aname.inc.php,v 1.23.4 2005/05/07 07:26:25 miko Exp $
 // Copyright (C)
 //   2005      Customized/Patched by Miko.Hoshina
 //   2002-2005 PukiWiki Developers Team
@@ -36,6 +36,11 @@ function plugin_aname_convert()
 function plugin_aname_inline()
 {
 	$args = func_get_args(); // ONE or more
+
+	// strip_htmltag() is just for avoiding AutoLink insertion
+	$body = strip_htmltag(array_pop($args));
+	array_push($args, $body);
+
 	return plugin_aname_tag($args, FALSE);
 }
 
