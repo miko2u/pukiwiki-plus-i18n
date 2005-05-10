@@ -15,7 +15,9 @@ function plugin_navibar_convert()
 		return '#navibar: plugin called from wikipage. skipped.';
 	}
 
-	$is_read = (arg_check('read') && is_page($vars['page']));
+        $_page  = isset($vars['page']) ? $vars['page'] : '';
+        $is_read = (arg_check('read') && is_page($_page));
+        $is_freeze = is_freeze($_page);
 
 	$num = func_num_args();
 	$args = $num ? func_get_args() : array();
@@ -54,7 +56,7 @@ function plugin_navibar_convert()
 		case 'trackback':
 			if ($trackback) {
 				if ($body != '' && $oldname != '|') { $body .= ' | '; }
-				$tbcount = tb_count($vars['page']);
+				$tbcount = tb_count($_page);
 				if ($tbcount > 0) {
 					$body .= _navigator($name, 'Trackback(' . $tbcount . ')');
 				} else if ($is_read) {
