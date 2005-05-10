@@ -1,6 +1,6 @@
 <?php
-// PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: make_link.php,v 1.21.4 2005/04/30 05:21:00 miko Exp $
+// PukiWiki - Yet another WikiWikiWeb clone.
+// $Id: make_link.php,v 1.22.4 2005/05/06 12:13:01 miko Exp $
 // Copyright (C)
 //   2005      Customized/Patched by Miko.Hoshina
 //   2003-2005 PukiWiki Developers Team
@@ -173,7 +173,8 @@ class Link
 	function toString() {}
 
 	// Private: Get needed parts from a matched array()
-	function splice($arr) {
+	function splice($arr)
+	{
 		$count = $this->get_count() + 1;
 		$arr   = array_pad(array_splice($arr, $this->start, $count), $count, '');
 		$this->text = $arr[0];

@@ -1,6 +1,6 @@
 <?php
-// PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: html.php,v 1.34.14 2005/04/30 05:21:00 miko Exp $
+// PukiWiki - Yet another WikiWikiWeb clone.
+// $Id: html.php,v 1.35.14 2005/05/06 12:35:21 miko Exp $
 // Copyright (C)
 //   2005      Customized/Patched by Miko.Hoshina
 //   2002-2005 PukiWiki Developers Team
@@ -384,12 +384,15 @@ function make_line_rules($str)
 function strip_htmltag($str)
 {
 	global $_symbol_noexists;
+	static $noexists_pattern;
 
-	$noexists_pattern = '#<span class="noexists">([^<]*)<a[^>]+>' .
-		preg_quote($_symbol_noexists, '#') . '</a></span>#';
+	if (! isset($noexists_pattern))
+		$noexists_pattern = '#<span class="noexists">([^<]*)<a[^>]+>' .
+			preg_quote($_symbol_noexists, '#') . '</a></span>#';
 
 	$str = preg_replace($noexists_pattern, '$1', $str);
 	//$str = preg_replace('/<a[^>]+>\?<\/a>/', '', $str);
+
 	return preg_replace('/<[^>]+>/', '', $str);
 }
 
