@@ -67,7 +67,8 @@ function catbody($title, $page, $body)
 	$_LINK['mixirss']  = "$script?cmd=mixirss";         // Same as 'rdf' for mixi
 	$_LINK['search']   = "$script?cmd=search";
 	$_LINK['side']     = "$script?$sidebar";
-	$_LINK['source']   = "$script?plugin=source&amp;refer=$r_page";
+	$_LINK['source']   = "$script?plugin=source&amp;page=$r_page";
+	$_LINK['template'] = "$script?plugin=template&amp;refer=$r_page";
 	$_LINK['top']      = "$script?" . rawurlencode($defaultpage);
 	if ($trackback) {
 		$tb_id = tb_get_id($_page);
