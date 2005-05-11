@@ -51,14 +51,18 @@ function make_backup($page, $delete = FALSE)
 
 		$strout = '';
 		foreach($backups as $age=>$data) {
-			$strout .= PKWK_SPLITTER . ' ' . $data['time'] . "\n"; // Splitter format
+			// BugTrack/685 by UPK
+			//$strout .= PKWK_SPLITTER . ' ' . $data['time'] . "\n"; // Splitter format
+			$strout .= PKWK_SPLITTER . ' ' . $data['time'] . ' ' . $data['real'] . "\n"; // Splitter format
 			$strout .= join('', $data['data']);
 		}
 		$strout = preg_replace("/([^\n])\n*$/", "$1\n", $strout);
 
 		// Escape 'lines equal to PKWK_SPLITTER', by inserting a space
 		$body = preg_replace('/^(' . preg_quote(PKWK_SPLITTER) . "\s\d+)$/", '$1 ', get_source($page));
-		$body = PKWK_SPLITTER . ' ' . get_filetime($page) . "\n" . join('', $body);
+		// BugTrack/685 by UPK
+		// $body = PKWK_SPLITTER . ' ' . get_filetime($page) . "\n" . join('', $body);
+		$body = PKWK_SPLITTER . ' ' . get_filetime($page) . ' ' . UTIME. "\n" . join('', $body);
 		$body = preg_replace("/\n*$/", "\n", $body);
 
 		$fp = _backup_fopen($page, 'wb')
@@ -91,13 +95,21 @@ function get_backup($page, $age = 0)
 	$_age = 0;
 	$retvars = $match = array();
 	$regex_splitter = '/^' . preg_quote(PKWK_SPLITTER) . '\s(\d+)$/';
+	// BugTrack/685 by UPK
+	$regex_splitter_new = '/^' . preg_quote(PKWK_SPLITTER) . '\s(\d+)\s(\d+)$/';
 	foreach($lines as $line) {
-		if (preg_match($regex_splitter, $line, $match)) {
+		// BugTrack/685 by UPK
+		// if (preg_match($regex_splitter, $line, $match)) {
+		if (preg_match($regex_splitter, $line, $match) ||
+		    preg_match($regex_splitter_new, $line, $match)) {
 			++$_age;
 			if ($age > 0 && $_age > $age)
 				return $retvars[$age];
 
-			$retvars[$_age] = array('time'=>$match[1], 'data'=>array());
+			// BugTrack/685 by UPK
+			// $retvars[$_age] = array('time'=>$match[1], 'data'=>array());
+			$now = (isset($match[2])) ? $match[2] : $match[1];
+			$retvars[$_age] = array('time'=>$match[1], 'real'=>$now, 'data'=>array());
 		} else {
 			$retvars[$_age]['data'][] = $line;
 		}
