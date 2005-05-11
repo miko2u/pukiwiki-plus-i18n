@@ -154,7 +154,7 @@ function plugin_edit_inline()
 // Write, add, or insert new comment
 function plugin_edit_write()
 {
-	global $vars;
+	global $vars, $notimeupdate;
 //	global $_title_collided, $_msg_collided_auto, $_msg_collided, $_title_deleted;
 //	global $_msg_invalidpass;
 
