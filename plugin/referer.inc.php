@@ -2,11 +2,12 @@
 // $Id: referer.inc.php,v 1.10.1 2005/03/10 05:20:02 miko Exp $
 /*
  * PukiWiki Referer プラグイン(リンク元表示プラグイン)
- * (C) 2003, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * (C) 2003,2005, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * License: GPL
 */
 
 define('CONFIG_REFERER', 'plugin/referer/config');
+define('REFERE_TITLE_LENGTH',70);
 
 function plugin_referer_init()
 {
@@ -118,6 +119,7 @@ function plugin_referer_body($page, $sort)
 		// 非ASCIIキャラクタ(だけ)をURLエンコードしておく BugTrack/440
 		$e_url = htmlspecialchars(preg_replace('/([" \x80-\xff]+)/e', 'rawurlencode("$1")', $url));
 		$s_url = htmlspecialchars(mb_convert_encoding(rawurldecode($url), SOURCE_ENCODING, 'auto'));
+		$s_url = mb_strimwidth($s_url,0,REFERE_TITLE_LENGTH,'...');
 
 		$lpass = get_passage($ltime, FALSE); // 最終更新日時からの経過時間
 		$spass = get_passage($stime, FALSE); // 初回登録日時からの経過時間
