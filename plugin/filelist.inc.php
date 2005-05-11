@@ -25,7 +25,9 @@ function plugin_filelist_action()
 	global $vars;
 	global $adminpass;
 	if (!isset($vars['pass'])) return filelist_adm('');
-	if ($adminpass != md5($vars['pass'])) return filelist_adm('__nopass__');
+	// if ($adminpass != md5($vars['pass'])) return filelist_adm('__nopass__');
+	if ( pkwk_hash_compute($adminpass, $vars['pass']) != $adminpass )
+		return filelist_adm('__nopass__');
 	return do_plugin_action('list');
 }
 
