@@ -4,7 +4,7 @@
  * PukiWiki ページ内で gettext を実現するプラグイン
  *
  * @copyright   Copyright &copy; 2005, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: _.inc.php,v 0.8 2005/05/08 15:19:00 upk Exp $
+ * @version     $Id: _.inc.php,v 0.9 2005/05/14 00:54:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License
  *
  * o :config/i18n/text/ja/text or :config/i18n/text/ja_JP is acceptable.
@@ -37,6 +37,8 @@ function plugin___inline()
 	default:
 		list($parm_lang,$msg) = func_get_args();
 	}
+
+	$msg = strip_htmltag($msg);
 
 	// FIXME: level 4
 	$view_lang  = ($language_considering_setting_level == 0) ? get_language(4) : $language;
