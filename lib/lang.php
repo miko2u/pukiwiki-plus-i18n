@@ -3,13 +3,13 @@
  * Language judgment (言語判定)
  *
  * @copyright   Copyright &copy; 2005, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: lang.php,v 0.15 2005/04/02 23:49:00 upk Exp $
+ * @version     $Id: lang.php,v 0.17 2005/05/14 02:38:00 upk Exp $
  *
  */
 
 // CORRESPONDENCE LANGUAGE : 対応言語
 // == CASE SENSITIVE ==    : 大文字小文字を区別
-$language_prepared = array('ja_JP', 'ko_KR', 'en_US', 'zh_TW');
+$language_prepared = array('ja_JP', 'zh_TW', 'en_US', 'ko_KR');
 $language = '';
 
 /*
