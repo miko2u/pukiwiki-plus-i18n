@@ -14,7 +14,9 @@ function plugin_list_action()
 	// Redirected from filelist plugin?
 	$filelist = (array_key_exists('cmd',$vars) and $vars['cmd']=='filelist');
 
-	if ($filelist and $adminpass != md5($vars['pass'])) $filelist = false;
+	// if ($filelist and $adminpass != md5($vars['pass'])) $filelist = false;
+	if ( pkwk_hash_compute($adminpass, $vars['pass']) != $adminpass )
+		$filelist = false;
 
 	return array(
 		'msg'=>$filelist ? $_title_filelist : $_title_list,
