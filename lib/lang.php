@@ -1,16 +1,15 @@
 <?php
 /**
- * Language judgment (¸À¸ìÈ½Äê)
+ * Language judgment (è¨€èªåˆ¤å®š)
  *
  * @copyright   Copyright &copy; 2005, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @version     $Id: lang.php,v 0.15 2005/04/02 23:49:00 upk Exp $
  *
  */
 
-// CORRESPONDENCE LANGUAGE : ÂĞ±ş¸À¸ì
-// == CASE SENSITIVE ==    : ÂçÊ¸»ú¾®Ê¸»ú¤ò¶èÊÌ
-// $language_prepared = array('ja_JP', 'ko_KR', 'en_US', 'zh_TW');
-$language_prepared = array('ja_JP', 'ko_KR', 'en_US');
+// CORRESPONDENCE LANGUAGE : å¯¾å¿œè¨€èª
+// == CASE SENSITIVE ==    : å¤§æ–‡å­—å°æ–‡å­—ã‚’åŒºåˆ¥
+$language_prepared = array('ja_JP', 'ko_KR', 'en_US', 'zh_TW');
 $language = '';
 
 /*
@@ -33,7 +32,7 @@ function set_language()
 	if ( $public_holiday_guest_view ) {
 		$_c = split('_', $language);
 	} else {
-		// ÀßÃÖ¼Ô¤Î¥«¥ì¥ó¥À¡¼¤òºÎÍÑ
+		// è¨­ç½®è€…ã®ã‚«ãƒ¬ãƒ³ãƒ€ãƒ¼ã‚’æ¡ç”¨
 		$_c = split('_', DEFAULT_LANG);
 	}
 	define('COUNTRY', $_c[1]);
@@ -100,14 +99,14 @@ function get_language($level = 0)
 
 	for($i=0; $i < $level; $i++){
 		if ($i == $level) return DEFAULT_LANG;
-		// »ØÄê´Ø¿ô¤Î¼Â¹Ô
+		// æŒ‡å®šé–¢æ•°ã®å®Ÿè¡Œ
 		$_x = $obj_lng->$lng_func[$i]();
 		if (! is_array($_x)) continue;
 
 		foreach($_x as $_lang) {
-			// ´°Á´°ìÃ×¤Î¾ì¹ç (ex. ja_JP)
+			// å®Œå…¨ä¸€è‡´ã®å ´åˆ (ex. ja_JP)
 			if (in_array($_lang[0], $language_prepared)) return $_lang[0];
-			// ¸À¸ì¤Î¤ß¤Î¾ì¹ç¤ÎÂĞ±ş
+			// è¨€èªã®ã¿ã®å ´åˆã®å¯¾å¿œ
 			$_x1 = split('_', $_lang[0]);
 			if ( count($_x1) == 2) continue;
 			$c = $obj_l2c->get_lang2country($_x1[0]);
@@ -179,10 +178,10 @@ function get_mb_language($lang)
  */
 function _lang_keyset($lang,$key)
 {
-	if ( array_key_exists($lang, $key) ) return $key[ $lang ];	// ja_JP »ØÄê¤Î¥­¡¼¤ÏÂ¸ºß¤¹¤ë¤«¡©
-	$x = split('_', $lang);						// ja ¤« ja_JP ¤«¤ÎÈ½Äê
-	if ( count($x) == 1) return $key['default'];			// ja ¤Î¤ß¤Ê¤é½èÍı¤ò½ªÎ»
-	if ( array_key_exists($x[0], $key) ) return $key[ $x[0] ];	// ja_JP ¤ò ja ¤Ë¤·¤ÆºÆ¸¡º÷
+	if ( array_key_exists($lang, $key) ) return $key[ $lang ];	// ja_JP æŒ‡å®šã®ã‚­ãƒ¼ã¯å­˜åœ¨ã™ã‚‹ã‹ï¼Ÿ
+	$x = split('_', $lang);						// ja ã‹ ja_JP ã‹ã®åˆ¤å®š
+	if ( count($x) == 1) return $key['default'];			// ja ã®ã¿ãªã‚‰å‡¦ç†ã‚’çµ‚äº†
+	if ( array_key_exists($x[0], $key) ) return $key[ $x[0] ];	// ja_JP ã‚’ ja ã«ã—ã¦å†æ¤œç´¢
 	return $key['default'];
 }
 
@@ -198,7 +197,7 @@ function _lang_keyset($lang,$key)
 class accept_language
 {
 	// LANGUAGE_COUNTRY is guessed from CHARSET.
-	// CHARSET ¤«¤é¸À¸ì_¹ñ¤ò¿äÂ¬¤¹¤ë
+	// CHARSET ã‹ã‚‰è¨€èª_å›½ã‚’æ¨æ¸¬ã™ã‚‹
 	var $charset = array(
 		'shift_jis'	=> 'ja_JP', // 392
 		'sjis'		=> 'ja_JP',
@@ -228,7 +227,7 @@ class accept_language
 	);
 
 	// The LANGUAGE used is guessed from the COUNTRY.
-	// ¹ñ¤«¤é»ÈÍÑ¸À¸ì¤ò¿äÂ¬¤¹¤ë
+	// å›½ã‹ã‚‰ä½¿ç”¨è¨€èªã‚’æ¨æ¸¬ã™ã‚‹
 	var $flag = array(
 		'jp' => 'ja',
 		'kr' => 'ko',
@@ -348,7 +347,7 @@ class accept_language
 	/*
 	 * get_accept_language
 	 *
-	 * HTTP_ACCEPT_LANGUAGE ¤ÎÊ¸»úÎó¤òÊ¬²ò¤¹¤ë¡£
+	 * HTTP_ACCEPT_LANGUAGE ã®æ–‡å­—åˆ—ã‚’åˆ†è§£ã™ã‚‹ã€‚
 	 * @static
 	 * @return	array
 	 */
@@ -363,8 +362,8 @@ class accept_language
 
 	/*
 	 * get_user_agent_mozilla
-	 * USER-AGENT ¤«¤éºÇ¶á¤Î Mozilla ¤Î¾ì¹ç
-	 * ÀßÄê¤µ¤ì¤Æ¤¤¤ëlocaleÊ¸»úÎó¤ò¼èÆÀ¤¹¤ë
+	 * USER-AGENT ã‹ã‚‰æœ€è¿‘ã® Mozilla ã®å ´åˆ
+	 * è¨­å®šã•ã‚Œã¦ã„ã‚‹localeæ–‡å­—åˆ—ã‚’å–å¾—ã™ã‚‹
 	 * @static
 	 * @return	array
 	 */
@@ -392,8 +391,8 @@ class accept_language
 	/*
 	 * get_accept_charset
 	 *
-	 * HTTP_ACCEPT_CHARSET ¤ÇÀßÄê¤µ¤ì¤ëÍøÍÑ²ÄÇ½¤Ê
-	 * Ê¸»ú¥³¡¼¥É¤«¤é¸À¸ì¤ò¸«Ğö¤·È½Äê¤¹¤ë
+	 * HTTP_ACCEPT_CHARSET ã§è¨­å®šã•ã‚Œã‚‹åˆ©ç”¨å¯èƒ½ãª
+	 * æ–‡å­—ã‚³ãƒ¼ãƒ‰ã‹ã‚‰è¨€èªã‚’è¦‹åšã—åˆ¤å®šã™ã‚‹
 	 * @return	array
 	 */
 	function get_accept_charset()
@@ -402,11 +401,11 @@ class accept_language
 		$accept_charset = $_SERVER['HTTP_ACCEPT_CHARSET'];
 		// TEST:
 		// $accept_charset = "Shift_JIS,utf-8;q=0.7,*;q=0.7";
-		// ¼è¤ê°·¤¤Ê¸»ú¤¬¡¢CHARSETÎó¤Ê¤Î¤Ç¸À¸ì_¹ñÊÑ´¹¤ò¹Ô¤ï¤Ê¤¤(Âè2°ú¿ô)
+		// å–ã‚Šæ‰±ã„æ–‡å­—ãŒã€CHARSETåˆ—ãªã®ã§è¨€èª_å›½å¤‰æ›ã‚’è¡Œã‚ãªã„(ç¬¬2å¼•æ•°)
 		$tmp = accept_language::split_str($accept_charset,FALSE);
 		$rc = array();
 		foreach($tmp as $x) {
-			$chr = strtolower( $x[0] ); // Shift_JIS ¤Ê¤É¤Ï shift_jis ¤ËÊÑ´¹
+			$chr = strtolower( $x[0] ); // Shift_JIS ãªã©ã¯ shift_jis ã«å¤‰æ›
 			if (array_key_exists($chr,$this->charset)) {
 				$rc[] = array($this->charset[$chr],$x[1]);
 			}
@@ -416,7 +415,7 @@ class accept_language
 
 	/*
 	 * get_remote_addr
-	 * IP¥¢¥É¥ì¥¹¤«¤é¹ñ¤òÆÃÄê¤·¡¢¸«Ğö¤·¸À¸ì¤òÈ½Äê¤¹¤ë
+	 * IPã‚¢ãƒ‰ãƒ¬ã‚¹ã‹ã‚‰å›½ã‚’ç‰¹å®šã—ã€è¦‹åšã—è¨€èªã‚’åˆ¤å®šã™ã‚‹
 	 * @return	array
 	 */
 	function get_remote_addr()
@@ -435,18 +434,18 @@ class accept_language
 	/*
 	 * split_str
 	 *
-	 * x1,x2;q=0.6,x3;q=0.4 ¤Î¤è¤¦¤Ê½ñ¼°¤òÊ¬²ò¤¹¤ë
+	 * x1,x2;q=0.6,x3;q=0.4 ã®ã‚ˆã†ãªæ›¸å¼ã‚’åˆ†è§£ã™ã‚‹
 	 * @static
 	 * @return array
-	 * $rc[0] = (x1,1),(x2,0.6),(x3,0.4) ¤¬Æş¤ë¡£
-	 * ÃÍ½ç¤ËÀ°Îó¤·¤ÆÌá¤¹¡£
+	 * $rc[0] = (x1,1),(x2,0.6),(x3,0.4) ãŒå…¥ã‚‹ã€‚
+	 * å€¤é †ã«æ•´åˆ—ã—ã¦æˆ»ã™ã€‚
 	 */
 	function split_str($env, $conv=TRUE, $sort=TRUE)
 	{
 		$rc = array();
 		foreach( split(",",$env) as $x ) {
 			$x1 = split(";", $x);
-			// "",1 ¤Î "" ¤Ï¡¢DUMMY
+			// "",1 ã® "" ã¯ã€DUMMY
 			$q = (count($x1) == 1) ? array("",1) : split("=",$x1[1]);
 			if ($conv) {
 				$l = accept_language::split_locale_str($x1[0]);
@@ -464,8 +463,8 @@ class accept_language
 	/*
 	 * split_locale_str
 	 *
-	 * ¸À¸ì-¹ñ(¾ÊÎ¬²Ä)¤ÎÊ¸»úÎó¤ò°ìÎ§¡¢¸À¸ì(¾®Ê¸»ú)¡¢¹ñ(ÂçÊ¸»ú)¤ËÊÑ´¹
-	 * ¸À¸ì¤È¹ñ¤ÎÀÜÂ³Ê¸»ú¤Ï¡¢¥Ï¥¤¥Õ¥ó¤Ş¤¿¤Ï¥¢¥ó¥À¡¼¥¹¥³¥¢¤È¤¹¤ë
+	 * è¨€èª-å›½(çœç•¥å¯)ã®æ–‡å­—åˆ—ã‚’ä¸€å¾‹ã€è¨€èª(å°æ–‡å­—)ã€å›½(å¤§æ–‡å­—)ã«å¤‰æ›
+	 * è¨€èªã¨å›½ã®æ¥ç¶šæ–‡å­—ã¯ã€ãƒã‚¤ãƒ•ãƒ³ã¾ãŸã¯ã‚¢ãƒ³ãƒ€ãƒ¼ã‚¹ã‚³ã‚¢ã¨ã™ã‚‹
 	 * @static
 	 * @return string
 	 */
@@ -493,7 +492,7 @@ class accept_language
 class lang2country
 {
 	// The COUNTRY is guessed from the LANGUAGE.
-	// ¸À¸ì¤«¤é¹ñ¤ò¿äÂ¬¤¹¤ë
+	// è¨€èªã‹ã‚‰å›½ã‚’æ¨æ¸¬ã™ã‚‹
 	var $lang = array(
 		'ja' => 'JP',
 		'ko' => 'KR',
@@ -509,7 +508,7 @@ class lang2country
 	/*
 	 * get_lang2country
 	 *
-	 * ¸À¸ì¤«¤é¹ñ¤ò¿äÂ¬¤¹¤ë
+	 * è¨€èªã‹ã‚‰å›½ã‚’æ¨æ¸¬ã™ã‚‹
 	 * @return string
 	 */
 	function get_lang2country($x)
