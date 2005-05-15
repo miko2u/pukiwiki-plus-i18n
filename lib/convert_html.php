@@ -852,7 +852,10 @@ class Body extends Element
 			{
 				global $newtitle, $newbase;
 				if ($newbase == '') {
-					$newbase = trim($matches[2]);
+					// $newbase = trim($matches[2]);
+					$newbase = convert_html($matches[2]);
+					$newbase = strip_htmltag($newbase);
+					$newbase = trim($newbase);
 					$newtitle = htmlspecialchars($newbase);
 				}
 				continue;
