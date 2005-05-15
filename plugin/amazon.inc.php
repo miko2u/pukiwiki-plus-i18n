@@ -1,39 +1,39 @@
 <?php
 /////////////////////////////////////////////////
 //
-// Amazon ¥×¥é¥°¥¤¥ó Ver.2.3
+// Amazon ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ Ver.2.3
 //
 // $Id: amazon.inc.php,v 2.3.1 2004/07/01 00:00:00 raku/miko $
 //
-// Copyright: 2003-2004 By ´×¼Ë <raku@rakunet.org>
+// Copyright: 2003-2004 By é–‘èˆ <raku@rakunet.org>
 //
-// Thanks: To reimy, t, Ynak, WikiRoom, upk, ¿å¶¶´õ and PukiWiki Developers Team.
+// Thanks: To reimy, t, Ynak, WikiRoom, upk, æ°´æ©‹å¸Œ and PukiWiki Developers Team.
 //
-// ¥Õ¥¡¥¤¥ë¥µ¥¤¥º¤ò¹Í¤¨¡¢¾ÜºÙ¤Ï amazon.inc.txt ¤Ë°ÜÆ°
+// ãƒ•ã‚¡ã‚¤ãƒ«ã‚µã‚¤ã‚ºã‚’è€ƒãˆã€è©³ç´°ã¯ amazon.inc.txt ã«ç§»å‹•
 //
-///////////////////////////////////////////////// Í×ÊÑ¹¹²Õ½ê
-// ¥Æ¥¹¥È»ÈÍÑ¸å¤Ï¥¢¥Ş¥¾¥ó¥¢¥½¥·¥¨¥¤¥È¤È¤Ê¤ê¡¢rakujuku09-22 ¤ò¼«¥µ¥¤¥È¤Î¥¢¥½¥·¥¨¥¤¥È ID ¤ËÊÑ¹¹¤Î¤³¤È
+///////////////////////////////////////////////// è¦å¤‰æ›´ç®‡æ‰€
+// ãƒ†ã‚¹ãƒˆä½¿ç”¨å¾Œã¯ã‚¢ãƒã‚¾ãƒ³ã‚¢ã‚½ã‚·ã‚¨ã‚¤ãƒˆã¨ãªã‚Šã€rakujuku09-22 ã‚’è‡ªã‚µã‚¤ãƒˆã®ã‚¢ã‚½ã‚·ã‚¨ã‚¤ãƒˆ ID ã«å¤‰æ›´ã®ã“ã¨
 define('AMAZON_AID','mikoscafeterr-22');
-// ÇãÊª¤«¤´¤ò»È¤¦¤Ë¤Ï¡¢¤µ¤é¤Ë Web ¥µ¡¼¥Ó¥¹·ÀÌó¤ò·ë¤Ó¡¢¼«¥µ¥¤¥È¤Î Developer's Token ¤ËÊÑ¹¹¤¹¤ë¤³¤È
+// è²·ç‰©ã‹ã”ã‚’ä½¿ã†ã«ã¯ã€ã•ã‚‰ã« Web ã‚µãƒ¼ãƒ“ã‚¹å¥‘ç´„ã‚’çµã³ã€è‡ªã‚µã‚¤ãƒˆã® Developer's Token ã«å¤‰æ›´ã™ã‚‹ã“ã¨
 define('AMAZON_DT','D1C2RO8WE4EZPC');
-///////////////////////////////////////////////// ÊÑ¹¹¤·¤Æ¤â¤è¤¤²Õ½ê
-// expire ¼Ì±Æ/¥¿¥¤¥È¥ë/²Á³Ê¥­¥ã¥Ã¥·¥å¤ò²¿»ş´Ö¤Çºï½ü¤¹¤ë¤«¡£´ğËÜÅª¤Ë¥­¥ã¥Ã¥·¥å¤Ï 24 »ş´Ö
-define('AMAZON_EXPIRE_img', 365*24); // ¥¢¥½¥·¥¨¥¤¥È¤Î¸ÇÄê¥ê¥ó¥¯ºîÀ®¤Î»Ø¼¨¤Ë¤è¤ê¡¢¤³¤ì¤ÇÌäÂê¤Ê¤·
-define('AMAZON_EXPIRE_heavy', 365*24); // ´ğËÜÅª¤Ë¸ÇÄê¤Î¾ğÊó¡£²èÁü¤Ë½à¤¸¤ë
-define('AMAZON_EXPIRE_lite', 24); // ²Á³Ê¾ğÊóÅù¡£ÇãÊª¤«¤´¤¬¤¢¤ì¤Ğ 1 ¤Ë(Web ¥µ¡¼¥Ó¥¹µ¬Ìó)
-define('AMAZON_ALLOW_LNK', true); // true ¤Ë¤¹¤ë¤È¡¢¼Ì±Æ°Ê³°¤Ë¥ê¥ó¥¯ºîÀ®(AZ...link)¡¢¥¤¥á¡¼¥¸¥ê¥ó¥¯(AZ...gif)Åù¤¬²ÄÇ½
-define('AMAZON_ALLOW_CONT', true); // true ¤Ë¤¹¤ë¤È¡¢¾Ò²ğËÜÊ¸¼è¤ê¹ş¤ß¤¬²ÄÇ½
-define('USE_CARGO', true); // true ¤Ë¤¹¤ë¤ÈÇãÊª¤«¤´¤ò»ÈÍÑ²ÄÇ½
-define('AMAZON_SIM', ''); // '' ¤«¤é '/ref=nosim' ¤ËÊÑ¤¨¤ë¤ÈÄ¾ÀÜ¾¦ÉÊ¾Ò²ğ¥Ú¡¼¥¸¤Ë¥ê¥ó¥¯('' ¤¬¥¢¥Ş¥¾¥ó¿ä¾©)¡£ 
-// ¼Ì±Æ¤Ê¤·¤Î²èÁü/ÇãÊª¤«¤´¤Î¥¢¥¤¥³¥ó
+///////////////////////////////////////////////// å¤‰æ›´ã—ã¦ã‚‚ã‚ˆã„ç®‡æ‰€
+// expire å†™å½±/ã‚¿ã‚¤ãƒˆãƒ«/ä¾¡æ ¼ã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‚’ä½•æ™‚é–“ã§å‰Šé™¤ã™ã‚‹ã‹ã€‚åŸºæœ¬çš„ã«ã‚­ãƒ£ãƒƒã‚·ãƒ¥ã¯ 24 æ™‚é–“
+define('AMAZON_EXPIRE_img', 365*24); // ã‚¢ã‚½ã‚·ã‚¨ã‚¤ãƒˆã®å›ºå®šãƒªãƒ³ã‚¯ä½œæˆã®æŒ‡ç¤ºã«ã‚ˆã‚Šã€ã“ã‚Œã§å•é¡Œãªã—
+define('AMAZON_EXPIRE_heavy', 365*24); // åŸºæœ¬çš„ã«å›ºå®šã®æƒ…å ±ã€‚ç”»åƒã«æº–ã˜ã‚‹
+define('AMAZON_EXPIRE_lite', 24); // ä¾¡æ ¼æƒ…å ±ç­‰ã€‚è²·ç‰©ã‹ã”ãŒã‚ã‚Œã° 1 ã«(Web ã‚µãƒ¼ãƒ“ã‚¹è¦ç´„)
+define('AMAZON_ALLOW_LNK', true); // true ã«ã™ã‚‹ã¨ã€å†™å½±ä»¥å¤–ã«ãƒªãƒ³ã‚¯ä½œæˆ(AZ...link)ã€ã‚¤ãƒ¡ãƒ¼ã‚¸ãƒªãƒ³ã‚¯(AZ...gif)ç­‰ãŒå¯èƒ½
+define('AMAZON_ALLOW_CONT', true); // true ã«ã™ã‚‹ã¨ã€ç´¹ä»‹æœ¬æ–‡å–ã‚Šè¾¼ã¿ãŒå¯èƒ½
+define('USE_CARGO', true); // true ã«ã™ã‚‹ã¨è²·ç‰©ã‹ã”ã‚’ä½¿ç”¨å¯èƒ½
+define('AMAZON_SIM', ''); // '' ã‹ã‚‰ '/ref=nosim' ã«å¤‰ãˆã‚‹ã¨ç›´æ¥å•†å“ç´¹ä»‹ãƒšãƒ¼ã‚¸ã«ãƒªãƒ³ã‚¯('' ãŒã‚¢ãƒã‚¾ãƒ³æ¨å¥¨)ã€‚ 
+// å†™å½±ãªã—ã®ç”»åƒ/è²·ç‰©ã‹ã”ã®ã‚¢ã‚¤ã‚³ãƒ³
 define('AMAZON_NO_IMAGE','./image/noimage.gif');
 define('AMAZON_CARGO','./image/remote-buy-jp.gif');
-///////////////////////////////////////////////// ÊÑ¹¹¤·¤Æ¤Ï¤Ê¤é¤Ê¤¤²Õ½ê
+///////////////////////////////////////////////// å¤‰æ›´ã—ã¦ã¯ãªã‚‰ãªã„ç®‡æ‰€
 define('AMAZON_SHOP','http://www.amazon.co.jp/exec/obidos/ASIN/');
 define('AMAZON_LIB0','http://www.amazon.co.jp/exec/obidos/redirect-home?tag=' . AMAZON_AID);
 define('AMAZON_LIB','http://www.amazon.co.jp/exec/obidos/redirect?tag=' . AMAZON_AID . '&path=tg/browse/-/');
 define('AMAZON_IMAGE','http://images-jp.amazon.com/images/P/');
-// amazon ¾¦ÉÊ¾ğÊóÌä¹ç¤»¡£2004/3/21 °Ê¹ßÊÑ¹¹
+// amazon å•†å“æƒ…å ±å•åˆã›ã€‚2004/3/21 ä»¥é™å¤‰æ›´
 define('AMAZON_XML','http://xml.amazon.co.jp/onca/xml3?t=webservices-20&dev-t=' . AMAZON_DT . '&page=1&f=xml&locale=jp&');
 
 function plugin_amazon_init() {
@@ -85,7 +85,7 @@ function plugin_amazon_convert() {
   global $_amazon_msg;
 
   $aryargs = func_get_args();
-  if (func_num_args() == 0) { // ¥ì¥Ó¥å¡¼ºîÀ®
+  if (func_num_args() == 0) { // ãƒ¬ãƒ“ãƒ¥ãƒ¼ä½œæˆ
     $s_page = htmlspecialchars($vars['page']);
     if ($s_page == '') $s_page = $vars['refer'];
     $ret = <<<EOD
@@ -103,9 +103,9 @@ EOD;
   } elseif (func_num_args() > 4) return false;
 
   $align = strtolower(trim($aryargs[1]));
-  if ($align == 'clearl') return '<div style="clear:left;display:block;"></div>'; // ²ş¹ÔÁŞÆş
-  if ($align == 'clearr') return '<div style="clear:right;display:block;"></div>'; // ²ş¹ÔÁŞÆş
-  if ($align == 'clear') return '<div style="clear:both;"></div>'; // ²ş¹ÔÁŞÆş
+  if ($align == 'clearl') return '<div style="clear:left;display:block;"></div>'; // æ”¹è¡ŒæŒ¿å…¥
+  if ($align == 'clearr') return '<div style="clear:right;display:block;"></div>'; // æ”¹è¡ŒæŒ¿å…¥
+  if ($align == 'clear') return '<div style="clear:both;"></div>'; // æ”¹è¡ŒæŒ¿å…¥
   if ($align == '') $align = 'right';
   if (preg_match("/^(right|left|center)$/", $align) == false) return false;
 
@@ -227,7 +227,7 @@ function plugin_amazon_inline() {
   $asin = htmlspecialchars($aryargs[0]);
   if (AMAZON_ALLOW_LNK) {
     if ($item == "link") return amazon_getlink($asin);
-    elseif ($item == "key") return amazon_getkey($asin, $aryargs[2], $aryargs[3]); // &amazon(ID, key, Perl ¥¹¥¯¥ê¥×¥È, books);
+    elseif ($item == "key") return amazon_getkey($asin, $aryargs[2], $aryargs[3]); // &amazon(ID, key, Perl ã‚¹ã‚¯ãƒªãƒ—ãƒˆ, books);
     elseif ($item == "lib0") return amazon_getlib($asin, 0);
     elseif ($item == "lib") return amazon_getlib($asin, 1);
   }
@@ -249,7 +249,7 @@ function plugin_amazon_inline() {
   }
 }
 
-// ½ñÀÒ¥Ç¡¼¥¿¤òÊİÂ¸
+// æ›¸ç±ãƒ‡ãƒ¼ã‚¿ã‚’ä¿å­˜
 function amazon_review_save($page, $data) {
   $filename = DATA_DIR . encode($page) . ".txt";
 
@@ -263,7 +263,7 @@ function amazon_getlib($id, $type) {
 
   $id = trim($id);
   $tmpary = array();
-  if (! preg_match("/^([0-9]+)([a-z])?$/", $id, $tmpary)) return false; // a-z 1 Ê¸»ú¤Ï¥°¥é¥Õ¥£¥Ã¥¯¥Ñ¥¿¡¼¥ó
+  if (! preg_match("/^([0-9]+)([a-z])?$/", $id, $tmpary)) return false; // a-z 1 æ–‡å­—ã¯ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯ãƒ‘ã‚¿ãƒ¼ãƒ³
   $id0 = $tmpary[1];
   if ($type == 1) $imagelink = '<a href="' . AMAZON_LIB . $id0 . '"><img src="' . CACHE_DIR . "AZ" . $id . '.gif" ';
   else $imagelink = '<a href="' . AMAZON_LIB0 . '"><img src="' . CACHE_DIR . "AZ" . $id . '.gif" ';
@@ -272,11 +272,15 @@ function amazon_getlib($id, $type) {
 }
 
 function amazon_get_imagelink($asin, $ext, $imgfile, $title, $m_s) {
+  global $script;
+
   $imgfile = trim($imgfile);
   if (! preg_match("/^[0-9A-Za-z]+$/", $asin)) return false;
   if ($imgfile == '') {
     $img = new amazon_getimage($asin, $ext, $m_s);
     $imgfile = $img->file;
+    // UPK
+    $imgfile = $script.'?plugin=cache_ref&amp;src='.$imgfile;
   }
   $imagelink = '<a href="' . AMAZON_SHOP . $asin . "/" . AMAZON_AID . AMAZON_SIM . '">';
   $imagelink .= '<img src="' . $imgfile . '" alt="' . $title . '" /></a>';
@@ -296,7 +300,7 @@ function amazon_getkey ($id, $key, $media) {
   $filename = CACHE_DIR . "AZ" . $id . ".link";
   $body = amazon_getfile($filename);
   $key = htmlspecialchars($key);
-  //¥Ú¡¼¥¸¥¿¥¤¥È¥ë¡¢¶õÇò¤Ç¶èÀÚ¤ê¿ô¸ÄÊÂ¤Ù¤ë¡¢Ã±ÆÈ»ÈÍÑ
+  //ãƒšãƒ¼ã‚¸ã‚¿ã‚¤ãƒˆãƒ«ã€ç©ºç™½ã§åŒºåˆ‡ã‚Šæ•°å€‹ä¸¦ã¹ã‚‹ã€å˜ç‹¬ä½¿ç”¨
   $keys = ($key == '')? get_keys($vars['page']): split(' ', $key);
   srand();
   $key = $key0 = $keys[rand(0, count($keys) - 1)];
@@ -380,8 +384,8 @@ function get_keys($str) {
     elseif ($num >= 0xa1 and $num <= 0xfe) { // JIS X 0208
       $ku = $num - 0xa0;
       $ten = ord(substr($str, $i + 1)) - 0xa0;
-      if ($ku == 5 or ($ku == 1 and ($ten == 6 or $ten == 28))) $p0 = get_keys_1($stat, 2, $p0, $i, $str); // ÊÒ²¾Ì¾¡¢¡¼¡¢¡¦
-      elseif ($ku >= 16) $p0 = get_keys_1($stat, 3, $p0, $i, $str); // ´Á»ú
+      if ($ku == 5 or ($ku == 1 and ($ten == 6 or $ten == 28))) $p0 = get_keys_1($stat, 2, $p0, $i, $str); // ç‰‡ä»®åã€ãƒ¼ã€ãƒ»
+      elseif ($ku >= 16) $p0 = get_keys_1($stat, 3, $p0, $i, $str); // æ¼¢å­—
       else $p0 = get_keys_1($stat, 0, $p0, $i, $str);
       $i++;
     } else $p0 = get_keys_1($stat, 0, $p0, $i, $str);
@@ -415,8 +419,8 @@ class amazon_getinfo {
       $body = amazon_getfile($filename);
       $this->items['title'] = $this->amazon_get_item('/<ProductName>([^<]*)</');
       $this->items['manufact'] = $this->amazon_get_item('/<Manufacturer>([^<]*)</');
-      $this->items['pricel'] = $this->amazon_get_item('/<ListPrice>¡ï *([^<]*)</');
-      $this->items['price'] = $this->amazon_get_item('/<OurPrice>¡ï *([^<]*)</');
+      $this->items['pricel'] = $this->amazon_get_item('/<ListPrice>ï¿¥ *([^<]*)</');
+      $this->items['price'] = $this->amazon_get_item('/<OurPrice>ï¿¥ *([^<]*)</');
       $this->items['avail'] = $this->amazon_get_item('/<Availability>([^<]*)</');
     }
   }
@@ -472,16 +476,16 @@ class amazon_getimage {
   function amazon_getimage ($asin, $ext, $m_s) {
     global $use_proxy;
 
-    $filename = CACHE_DIR . "ASIN" . $asin . (($m_s == "s")? ".gif": ".jpg");
+    $filename = "ASIN" . $asin . (($m_s == "s")? ".gif": ".jpg");
     $fileext = ($m_s == "s")? "TZZZZZZZ.gif": "MZZZZZZZ.jpg";
     $get_it = 0;
-    if (!is_readable($filename)) $get_it = 1;
-    elseif (AMAZON_EXPIRE_img * 3600 < time() - filemtime($filename)) $get_it = 1;
+    if (!is_readable(CACHE_DIR.$filename)) $get_it = 1;
+    elseif (AMAZON_EXPIRE_img * 3600 < time() - filemtime(CACHE_DIR.$filename)) $get_it = 1;
     if ($get_it) {
       if ($use_proxy) $rc = http_request(AMAZON_IMAGE . "$asin.$ext.$fileext"); // Thanks to upk
       else $rc["data"] = amazon_getfile(AMAZON_IMAGE . "$asin.$ext.$fileext");
-      if ($this->amazon_getimagesize($rc["data"], $asin) <= 1) { // ÄÌ¾ï¤Ï 1 ¤¬ÊÖ¤ë (reimy)
-	// ¥­¥ã¥Ã¥·¥å¤ò NO_IMAGE ¤Î¥³¥Ô¡¼¤È¤¹¤ë
+      if ($this->amazon_getimagesize($rc["data"], $asin) <= 1) { // é€šå¸¸ã¯ 1 ãŒè¿”ã‚‹ (reimy)
+	// ã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‚’ NO_IMAGE ã®ã‚³ãƒ”ãƒ¼ã¨ã™ã‚‹
 	if ($ext == "09") {
 	  if ($use_proxy) $rc = http_request(AMAZON_IMAGE . "$asin.01.$fileext");
 	  else $rc["data"] = amazon_getfile(AMAZON_IMAGE . "$asin.01.$fileext");
@@ -491,7 +495,7 @@ class amazon_getimage {
 	  }
 	}
       }
-      if (! amazon_savefile($filename, $rc["data"])) return false;
+      if (! amazon_savefile(CACHE_DIR.$filename, $rc["data"])) return false;
     }
     $this->file = $filename;
   }
