@@ -24,7 +24,7 @@ if (isset($pkwk_dtd)) {
 	$meta_content_type = pkwk_output_dtd();
 }
 // Plus! not use $meta_content_type. because meta-content-type is most browser not used. umm...
-} ?>
+?>
 <head>
  <meta http-equiv="content-type" content="application/xhtml+xml; charset=<?php echo(CONTENT_CHARSET); ?>" />
  <meta http-equiv="content-style-type" content="text/css" />
