@@ -1,6 +1,9 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: keitai.skin.php,v 1.8.13 2005/05/09 03:12:47 miko Exp $
+// $Id: keitai.skin.php,v 1.9.13 2005/05/01 02:43:27 miko Exp $
+// Copyright (C)
+//   2005      PukiWiki Plus! Team
+//   2003-2005 PukiWiki Developers Team
 //
 // Skin for Embedded devices
 
@@ -31,22 +34,22 @@ $max_size = --$max_size * 1024;
 // Delete comment
 $body = preg_replace('#<!(?:--[^-]*-(?:[^-]+-)*?-(?:[^>-]*(?:-[^>-]+)*?)??)*(?:>|$(?!\n)|--.*$)#', '', $body);
 
-// Delete <del>¡Á</del> tag
+// Delete <del>ï½</del> tag
 $body = preg_replace('#(<del>)([\w\W]*)(</del>)#i', '', $body);
 
-// ÊÔ½¸µ¡Ç½¤ò¤â¤Ä IMG ¥¿¥°(²èÁü)¤ò³¨Ê¸»ú¤ËÃÖ´¹
+// ç·¨é›†æ©Ÿèƒ½ã‚’ã‚‚ã¤ IMG ã‚¿ã‚°(ç”»åƒ)ã‚’çµµæ–‡å­—ã«ç½®æ›
 $body = preg_replace('#(<div[^>]+>)?(<a[^>]+>)?<img[^>]*alt="Edit"[^>]*>(?(2)</a>)(?(1)</div>)#i', '&#63826;', $body);
 
-// ALT="keitai" ¤ò»ı¤Ä IMG ¥¿¥°(²èÁü)¤òÃÖ´¹(*1)
+// ALT="keitai" ã‚’æŒã¤ IMG ã‚¿ã‚°(ç”»åƒ)ã‚’ç½®æ›(*1)
 $body = preg_replace('#<img([^>]*)title="keitai"[^>]*>#i', '<PWimg $1>', $body);
 
-// ALT option ¤ò»ı¤Ä IMG ¥¿¥°(²èÁü)¤òÊ¸»úÎó¤ËÃÖ´¹
+// ALT option ã‚’æŒã¤ IMG ã‚¿ã‚°(ç”»åƒ)ã‚’æ–‡å­—åˆ—ã«ç½®æ›
 $body = preg_replace('#(<div[^>]+>)?(<a[^>]+>)?<img[^>]*alt="([^"]+)"[^>]*>(?(2)</a>)(?(1)</div>)#i', '[$3]', $body);
 
-// ALT option ¤ÎÌµ¤¤ IMG ¥¿¥°(²èÁü)¤òÊ¸»úÎó¤ËÃÖ´¹
+// ALT option ã®ç„¡ã„ IMG ã‚¿ã‚°(ç”»åƒ)ã‚’æ–‡å­—åˆ—ã«ç½®æ›
 $body = preg_replace('#(<div[^>]+>)?(<a[^>]+>)?<img[^>]+>(?(2)</a>)(?(1)</div>)#i', '[img]', $body);
 
-// ALT="keitai" ¤ò»ı¤Ä IMG ¥¿¥°(²èÁü)¤òÃÖ´¹(*2)
+// ALT="keitai" ã‚’æŒã¤ IMG ã‚¿ã‚°(ç”»åƒ)ã‚’ç½®æ›(*2)
 $body = preg_replace('#<PWimg#', '<img', $body);
 
 // Page Number

@@ -1,10 +1,15 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: plugin.php,v 1.9.4 2005/04/10 01:01:17 miko Exp $
+// $Id: plugin.php,v 1.13.5 2005/04/30 05:21:00 miko Exp $
+// Copyright (C)
+//   2005      PukiWiki Plus! Team
+//   2002-2005 PukiWiki Developers Team
+//   2001-2002 Originally written by yu-ji
+// License: GPL v2 or (at your option) any later version
 //
 // Plugin related functions
 
-define('PKWK_PLUGIN_CALL_TIME_LIMIT', 512);
+define('PKWK_PLUGIN_CALL_TIME_LIMIT', 768);
 
 // Set global variables for plugins
 function set_plugin_messages($messages)
@@ -31,6 +36,14 @@ function exist_plugin($name)
 			'<a href="' . get_script_uri() . '">Return to frontpage</a>');
 		return $exist[$name];
 	}
+
+//miko - Added exclude plugin spec.
+	if (in_array($name, $exclude_plugin)) {
+		$exist[$name] = FALSE;
+		$count[$name] = 1;
+		return FALSE;
+	}
+//miko
 
 	if (preg_match('/^\w{1,64}$/', $name) &&
 	    file_exists(PLUGIN_DIR . $name . '.inc.php')) {

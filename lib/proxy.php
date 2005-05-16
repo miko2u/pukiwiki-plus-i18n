@@ -1,7 +1,11 @@
 <?php
-// $Id: proxy.php,v 1.5.1 2005/04/15 09:09:13 miko Exp $
+// $Id: proxy.php,v 1.7.1 2005/04/29 11:24:20 miko Exp $
+// Copyright (C)
+//   2005      PukiWiki Plus! Team
+//   2003-2005 PukiWiki Developers Team
+// License: GPL v2 or (at your option) any later version
 //
-// HTTP Proxy related functions
+// HTTP-Proxy related functions
 
 // Max number of 'track' redirection message with 301 or 302 response
 define('PKWK_HTTP_REQUEST_URL_REDIRECT_MAX', 2);

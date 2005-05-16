@@ -1,11 +1,19 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: tdiary.skin.php,v 1.20 2005/04/02 06:36:07 henoheno Exp $
+// $Id: tdiary.skin.php,v 1.25 2005/05/14 14:30:42 henoheno Exp $
+// Copyright (C)
+//   2002-2005 PukiWiki Developers Team
+//   2001-2002 Originally written by yu-ji
+// License: GPL v2 or (at your option) any later version
 //
 // tDiary-wrapper skin
 
+// ------------------------------------------------------------
+// Settings (define before here, if you want)
+
 // Select theme
-if (! defined('TDIARY_THEME')) define('TDIARY_THEME', 'loose-leaf'); // Default
+if (! defined('TDIARY_THEME'))
+	define('TDIARY_THEME', 'loose-leaf'); // Default
 
 // Show link(s) at your choice, with <div class="calendar"> design
 // NOTE: Some theme become looking worse with this!
@@ -25,13 +33,19 @@ if (! defined('PKWK_SKIN_SHOW_NAVBAR'))
 if (! defined('PKWK_SKIN_SHOW_TOOLBAR'))
 	define('PKWK_SKIN_SHOW_TOOLBAR', 0); // 0, 1
 
-// --------
+// TDIARY_SIDEBAR_POSITION: See below
+
+// ------------------------------------------------------------
+// Code start
+
 // Prohibit direct access
 if (! defined('UI_LANG')) die('UI_LANG is not set');
 if (! isset($_LANG)) die('$_LANG is not set');
 if (! defined('PKWK_READONLY')) die('PKWK_READONLY is not set');
 
-// Check theme
+// ------------------------------------------------------------
+// Check tDiary theme
+
 $theme = TDIARY_THEME;
 if ($theme == '' || $theme == 'TDIARY_THEME') {
 	die('Theme is not specified. Set "TDIARY_THEME" correctly');
@@ -47,7 +61,10 @@ if ($theme == '' || $theme == 'TDIARY_THEME') {
 	 }
 }
 
-// Adjust DTD (between theme(=CSS) and MSIE bug)
+// ------------------------------------------------------------
+// tDiary theme: Exception
+
+// Adjust DTD (bug between these theme(=CSS) and MSIE)
 // NOTE:
 //    PukiWiki default: PKWK_DTD_XHTML_1_1
 //    tDiary's default: PKWK_DTD_HTML_4_01_STRICT
@@ -60,12 +77,14 @@ case 'christmas':
 // Adjust reverse-link default design manually
 $disable_backlink = FALSE;
 switch(TDIARY_THEME){
-case 'hatena':	/*FALLTHROUGH*/
-	$disable_backlink = TRUE;
+case 'hatena':
+	$disable_backlink = TRUE; // or very viewable title color
 	break;
 }
 
-// Select CSS color theme (testing)
+// ------------------------------------------------------------
+// tDiary theme: Select CSS color theme (Now testing:black only)
+
 $css_theme = '';
 switch(TDIARY_THEME){
 case 'alfa':
@@ -109,7 +128,9 @@ case 'smoking_black':
 	;
 }
 
-// Select title design (which is fancy, date and text?)
+// ------------------------------------------------------------
+// tDiary theme: Page title design (which is fancy, date and text?)
+
 $title_design_date = 1; // Default: Select the date desin, or 'the same design'
 switch(TDIARY_THEME){
 case '3minutes':
@@ -134,6 +155,7 @@ case 'midnight':
 case 'momonga':
 case 'nande-ya-nen':
 case 'narrow':
+case 'natrium':
 case 'nebula':
 case 'orange':
 case 'parabola':
@@ -147,31 +169,35 @@ case 'sky':
 case 'snow_man':
 case 'spring':
 case 'tag':
+case 'tdiarynet':
 case 'white-lingerie':
 case 'whiteout':
 case 'wood':
 	$title_design_date = 0; // Select text design	
 	break;
 
-// Show both :)
 case 'arrow':
 case 'fluxbox':
 case 'fluxbox2':
 case 'fluxbox3':
-	$title_design_date = 2;
+	$title_design_date = 2; // Show both :)
 	break;
 }
 
-// Sidebar: default position
+// ------------------------------------------------------------
+// tDiary 'Sidebar' position
+
+// Default position
 if (defined('TDIARY_SIDEBAR_POSITION')) {
 	$sidebar = TDIARY_SIDEBAR_POSITION;
 } else {
-	// Themes including sidebar CSS < (AllTheme / 2)
+	$sidebar = 'another'; // Default: Show as an another page below
+
+	// List of themes having sidebar CSS < (AllTheme / 2)
 	// $ grep div.sidebar */*.css | cut -d: -f1 | cut -d/ -f1 | sort | uniq
 	// $ wc -l *.txt
-	//     75 list-sidebar.txt
-	//    193 list-all.txt
-	$sidebar = 'another'; // Default: Show as an another page below
+	//     78 list-sidebar.txt
+	//    196 list-all.txt
 	switch(TDIARY_THEME){
 	case '3minutes':	/*FALLTHROUGH*/
 	case '3pink':
@@ -179,6 +205,7 @@ if (defined('TDIARY_SIDEBAR_POSITION')) {
 	case 'arrow':
 	case 'autumn':
 	case 'babypink':
+	case 'be_r5';
 	case 'bill':
 	case 'bistro_menu':
 	case 'bluely':
@@ -215,6 +242,7 @@ if (defined('TDIARY_SIDEBAR_POSITION')) {
 	case 'momonga':
 	case 'mono':
 	case 'moo':
+	case 'natrium':
 	case 'nippon':
 	case 'note':
 	case 'old-pavement':
@@ -241,6 +269,7 @@ if (defined('TDIARY_SIDEBAR_POSITION')) {
 	case 'smoking_white':
 	case 'spring':
 	case 'sunset':
+	case 'tdiarynet':
 	case 'teacup':
 	case 'thin':
 	case 'tile':
@@ -248,14 +277,14 @@ if (defined('TDIARY_SIDEBAR_POSITION')) {
 	case 'tinybox_green':
 	case 'wine':
 	case 'yukon':
-		$sidebar = 'bottom';	// This is the default position of tDiary's.
+		$sidebar = 'bottom'; // This is the default position of tDiary's.
 		break;
 	}
 
-	// Adjust sidebar's default position
+	// Manually adjust sidebar's default position
 	switch(TDIARY_THEME){
 
-	// Assuming sidebar is above of the body
+	// 'top': Assuming sidebar is above of the body
 	case 'autumn':	/*FALLTHROUGH*/
 	case 'cosmos':
 	case 'dice':	// Sidebar text (white) seems unreadable
@@ -269,7 +298,7 @@ if (defined('TDIARY_SIDEBAR_POSITION')) {
 		$sidebar = 'top';
 		break;
 
-	// Strict separation between sidebar and main contents needed
+	// 'strict': Strict separation between sidebar and main contents needed
 	case '3minutes':	/*FALLTHROUGH*/
 	case '3pink':
 	case 'aoikuruma':
@@ -304,7 +333,7 @@ if (defined('TDIARY_SIDEBAR_POSITION')) {
 		$sidebar = 'strict';
 		break;
 
-	// They have sidevar-design, but can not show it at the 'side' of the contents
+	// 'another': They have sidebar-design, but can not show it at the 'side' of the contents
 	case 'babypink':	/*FALLTHROUGH*/
 	case 'bubble':
 	case 'cherry':
@@ -319,15 +348,24 @@ if (defined('TDIARY_SIDEBAR_POSITION')) {
 		$sidebar = 'another'; // Show as an another page below
 		break;
 	}
+
+	// 'none': Show no sidebar
 }
 // Check menu (sidebar) is ready and $menubar is there
-$menu = (arg_check('read') && is_page($GLOBALS['menubar']) &&
-	exist_plugin_convert('menu'));
-if ($menu) {
-	$menu_body = preg_replace('#<h2 ([^>]*)>(.*?)</h2>#',
-		'<h3 $1><span class="sanchor"></span> $2</h3>',
-		do_plugin_convert('menu'));
+if ($sidebar == 'none') {
+	$menu = FALSE;
+} else {
+	$menu = (arg_check('read') && is_page($GLOBALS['menubar']) &&
+		exist_plugin_convert('menu'));
+	if ($menu) {
+		$menu_body = preg_replace('#<h2 ([^>]*)>(.*?)</h2>#',
+			'<h3 $1><span class="sanchor"></span> $2</h3>',
+			do_plugin_convert('menu'));
+	}
 }
+
+// ------------------------------------------------------------
+// Code continuing ...
 
 $lang  = & $_LANG['skin'];
 $link  = & $_LINK;
@@ -339,13 +377,16 @@ switch(UI_LANG){
 	case 'ja': $css_charset = 'Shift_JIS'; break;
 }
 
-// Output HTTP headers
+// ------------------------------------------------------------
+// Output
+
+// HTTP headers
 pkwk_common_headers();
 header('Cache-control: no-cache');
 header('Pragma: no-cache');
 header('Content-Type: text/html; charset=' . CONTENT_CHARSET);
 
-// Output HTML DTD, <html>, and receive content-type
+// HTML DTD, <html>, and receive content-type
 if (isset($pkwk_dtd)) {
 	$meta_content_type = pkwk_output_dtd($pkwk_dtd);
 } else {
@@ -361,11 +402,10 @@ if (isset($pkwk_dtd)) {
 
  <title><?php echo $title ?> - <?php echo $page_title ?></title>
 
- <link rel="stylesheet" href="skin/theme/base.css" type="text/css" media="all" />
- <link rel="stylesheet" href="skin/theme/<?php echo $theme ?>/<?php echo $theme ?>.css" type="text/css" media="all" />
- <link rel="stylesheet" href="skin/tdiary.css.php?charset=<?php echo $css_charset ?>&amp;color=<?php echo $css_theme ?>" type="text/css" media="screen" charset="<?php echo $css_charset ?>" />
- <link rel="stylesheet" href="skin/tdiary.css.php?charset=<?php echo $css_charset ?>&amp;color=<?php echo $css_theme ?>&amp;media=print" type="text/css" media="print" charset="<?php echo $css_charset ?>" />
-
+ <link rel="stylesheet" type="text/css" media="all" href="skin/theme/base.css" />
+ <link rel="stylesheet" type="text/css" media="all" href="skin/theme/<?php echo $theme ?>/<?php echo $theme ?>.css" />
+ <link rel="stylesheet" type="text/css" media="screen" href="skin/tdiary.css.php?charset=<?php echo $css_charset ?>&amp;color=<?php echo $css_theme ?>" charset="<?php echo $css_charset ?>" />
+ <link rel="stylesheet" type="text/css" media="print"  href="skin/tdiary.css.php?charset=<?php echo $css_charset ?>&amp;color=<?php echo $css_theme ?>&amp;media=print" charset="<?php echo $css_charset ?>" />
  <link rel="alternate" type="application/rss+xml" title="RSS" href="<?php echo $link['rss'] ?>" /><?php // RSS auto-discovery ?>
 
 <?php if (PKWK_ALLOW_JAVASCRIPT && $trackback_javascript) { ?> <script type="text/javascript" src="skin/trackback.js"></script><?php } ?>
