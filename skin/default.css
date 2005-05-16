@@ -1762,3 +1762,13 @@ div.naviblock a:hover {
 	background-color:#ffeecc;
 	text-decoration: none;
 }
+
+/* color plugin change sample */
+span.wikicolor {
+}
+span.wikicolor a {
+}
+span.wikicolor span.noexists {
+}
+span.wikicolor span.noexists a {
+}

@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: color.inc.php,v 1.21 2005/05/07 07:36:35 henoheno Exp $
+// $Id: color.inc.php,v 1.21.1 2005/05/16 07:36:35 miko Exp $
 //
 // Text color plugin
 
@@ -17,8 +17,7 @@ function plugin_color_inline()
 	global $pkwk_dtd;
 
 	$args = func_get_args();
-	$text = strip_htmltag(array_pop($args)); // htmlspecialchars(text)
-		// strip_htmltag() is just for avoiding AutoLink insertion
+	$text = array_pop($args); // htmlspecialchars(text)
 
 	list($color, $bgcolor) = array_pad($args, 2, '');
 	if ($color != '' && $bgcolor != '' && $text == '') {
@@ -40,7 +39,7 @@ function plugin_color_inline()
 		if ($color != '' && $bgcolor != '') $delimiter = '; ';
 		if ($color   != '') $color   = 'color:' . $color;
 		if ($bgcolor != '') $bgcolor = 'background-color:' . $bgcolor;
-		return '<span style="' . $color . $delimiter . $bgcolor . '">' .
+		return '<span class="wikicolor" style="' . $color . $delimiter . $bgcolor . '">' .
 			$text . '</span>';
 	} else {
 		if ($bgcolor != '') return '&color(): bgcolor (with CSS) not allowed;';
