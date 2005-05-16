@@ -17,8 +17,7 @@ function plugin_color_inline()
 	global $pkwk_dtd;
 
 	$args = func_get_args();
-	$text = strip_htmltag(array_pop($args)); // htmlspecialchars(text)
-		// strip_htmltag() is just for avoiding AutoLink insertion
+	$text = array_pop($args); // htmlspecialchars(text)
 
 	list($color, $bgcolor) = array_pad($args, 2, '');
 	if ($color != '' && $bgcolor != '' && $text == '') {
