@@ -11,7 +11,12 @@
  * @access  public
  * @author
  * @create
- * @version $Id: backup.php,v 1.6 2005/01/29 13:40:39 henoheno Exp $
+ * @version $Id: backup.php,v 1.9.1 2005/04/30 05:21:00 miko Exp $
+ * Copyright (C)
+ *   2005      PukiWiki Plus! Team
+ *   2002-2005 PukiWiki Developers Team
+ *   2001-2002 Originally written by yu-ji
+ * License: GPL v2 or (at your option) any later version
  **/
 
 /**

@@ -1,6 +1,11 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: file.php,v 1.21.5 2005/04/17 06:42:26 miko Exp $
+// $Id: file.php,v 1.25.5 2005/04/30 05:21:00 miko Exp $
+// Copyright (C)
+//   2005      PukiWiki Plus! Team
+//   2002-2005 PukiWiki Developers Team
+//   2001-2002 Originally written by yu-ji
+// License: GPL v2 or (at your option) any later version
 //
 // File related functions
 
@@ -115,10 +120,10 @@ function file_write($dir, $page, $str, $notimestamp = FALSE)
 		if ($notimestamp && file_exists($file))
 			$timestamp = filemtime($file) - LOCALZONE;
 
-		$fp = fopen($file, 'w') or
-			die_message('Cannot write page file or diff file or other ' .
-			htmlspecialchars($page) .
-			'<br />Maybe permission is not writable or filename is too long');
+		$fp = fopen($file, 'w') or die('fopen() failed: ' .
+			htmlspecialchars(basename($dir) . '/' . encode($page) . '.txt') .	
+			'<br />' . "\n" .
+			'Maybe permission is not writable or filename is too long');
 
 		set_file_buffer($fp, 0);
 		flock($fp, LOCK_EX);
@@ -140,16 +145,17 @@ function file_write($dir, $page, $str, $notimestamp = FALSE)
 	if ($update_exec && $dir == DATA_DIR)
 		system($update_exec . ' > /dev/null &');
 
-	// notify_exclude にアドレスが一致する場合はメールを送信しない
-	foreach ($notify_exclude as $exclude) {
-		$exclude = preg_quote($exclude);
-		if (substr($exclude, -1) == ".")
-			$exclude = $exclude . "*";
-		if (preg_match("/^" . $exclude . "/", $_SERVER["REMOTE_ADDR"]))
-			return;
-	}
-
 	if ($notify && $dir == DIFF_DIR) {
+//@plus-extension
+		// If write from notify_exclude, do not send notify mail.
+		foreach ($notify_exclude as $exclude) {
+			$exclude = preg_quote($exclude);
+			if (substr($exclude, -1) == ".")
+				$exclude = $exclude . "*";
+			if (preg_match("/^" . $exclude . "/", $_SERVER["REMOTE_ADDR"]))
+				return;
+		}
+//@plus-extension
 		if ($notify_diff_only) $str = preg_replace('/^[^-+].*\n/m', '', $str);
 		$str .= "\n" .
 			str_repeat('-', 30) . "\n" .

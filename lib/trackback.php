@@ -1,11 +1,14 @@
 <?php
-// $Id: trackback.php,v 1.17.1 2005/05/03 09:32:06 upk Exp $
+// $Id: trackback.php,v 1.19.1 2005/04/29 11:24:20 upk Exp $
+// Copyright (C)
+//   2005      PukiWiki Plus! Team
+//   2003-2005 PukiWiki Developers Team
+//   2003      Originally written by Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+// License: GPL v2 or (at your option) any later version
+//
+// PukiWiki/TrackBack
+
 /*
- * PukiWiki/TrackBack
- * (C) 2003-2005 PukiWiki Developers Team
- * (C) 2003, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * License: GPL
- *
  * NOTE:
  *     To get TrackBack ID correctly, specify URI clearly like:
  *     http://localhost/pukiwiki/pukiwiki.php?FrontPage
