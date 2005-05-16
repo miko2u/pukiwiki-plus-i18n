@@ -1,6 +1,11 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: html.php,v 1.31.15 2005/04/21 14:27:27 miko Exp $
+// $Id: html.php,v 1.35.16 2005/05/06 12:35:21 miko Exp $
+// Copyright (C)
+//   2005      PukiWiki Plus! Team
+//   2002-2005 PukiWiki Developers Team
+//   2001-2002 Originally written by yu-ji
+// License: GPL v2 or (at your option) any later version
 //
 // HTML-publishing related functions
 
@@ -174,7 +179,7 @@ function edit_form($page, $postdata, $digest = FALSE, $b_template = TRUE)
 	global $_button, $_string;
 	global $ajax;
 
-//	if ($ajax) $rows = $rows / 3;
+	// Newly generate $digest or not
 	if ($digest === FALSE) $digest = md5(join('', get_source($page)));
 
 	$refer = $template = $addtag = $add_top = $add_ajax = '';
@@ -291,6 +296,7 @@ EOD;
 // Input Assistant
 function edit_form_assistant()
 {
+	global $pkwk_dtd;
 	static $assist_loaded = 0;	// for non-reentry
 
 	// if Mobile-Phone, do not use.
@@ -298,10 +304,8 @@ function edit_form_assistant()
 		return;
 
 	// XHTML 1.0 Transitional
-	global $pkwk_dtd;
 	if (! isset($pkwk_dtd) || $pkwk_dtd == PKWK_DTD_XHTML_1_1)
 		$pkwk_dtd = PKWK_DTD_XHTML_1_0_TRANSITIONAL;
-
 	if (!$assist_loaded) {
 		$assist_loaded++;
 		$map = <<<EOD
@@ -402,12 +406,15 @@ function make_line_rules($str)
 function strip_htmltag($str)
 {
 	global $_symbol_noexists;
+	static $noexists_pattern;
 
-	$noexists_pattern = '#<span class="noexists">([^<]*)<a[^>]+>' .
-		preg_quote($_symbol_noexists, '#') . '</a></span>#';
+	if (! isset($noexists_pattern))
+		$noexists_pattern = '#<span class="noexists">([^<]*)<a[^>]+>' .
+			preg_quote($_symbol_noexists, '#') . '</a></span>#';
 
 	$str = preg_replace($noexists_pattern, '$1', $str);
 	//$str = preg_replace('/<a[^>]+>\?<\/a>/', '', $str);
+
 	return preg_replace('/<[^>]+>/', '', $str);
 }
 
