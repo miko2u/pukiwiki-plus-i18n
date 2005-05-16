@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: plugin.php,v 1.13.3 2005/04/30 05:21:00 miko Exp $
+// $Id: plugin.php,v 1.13.4 2005/04/30 05:21:00 miko Exp $
 // Copyright (C)
 //   2005      Customized/Patched by Miko.Hoshina
 //   2002-2005 PukiWiki Developers Team
@@ -23,6 +23,7 @@ function set_plugin_messages($messages)
 function exist_plugin($name)
 {
 	global $vars;
+	global $exclude_plugin;
 	static $exist = array(), $count = array();
 
 	$name = strtolower($name);
@@ -37,6 +38,14 @@ function exist_plugin($name)
 		return $exist[$name];
 	}
 
+//miko - Added exclude plugin spec.
+	if (in_array($name, $exclude_plugin)) {
+		$exist[$name] = FALSE;
+		$count[$name] = 1;
+		return FALSE;
+	}
+//miko
+
 	if (preg_match('/^\w{1,64}$/', $name) &&
 	    file_exists(PLUGIN_DIR . $name . '.inc.php')) {
 	    	$exist[$name] = TRUE;
@@ -44,8 +53,8 @@ function exist_plugin($name)
 		require_once(PLUGIN_DIR . $name . '.inc.php');
 		return TRUE;
 	} else {
-	    	$exist[$name] = FALSE;
-	    	$count[$name] = 1;
+		$exist[$name] = FALSE;
+		$count[$name] = 1;
 		return FALSE;
 	}
 }

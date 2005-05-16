@@ -254,6 +254,14 @@ $edit_auth_pages = array(
 $search_auth = 0;
 
 /////////////////////////////////////////////////
+// Exclude plugin for this site-policy.
+$exclude_plugin = array(
+	'server',
+	'version',
+	'versionlist',
+);
+
+/////////////////////////////////////////////////
 // $whatsnew: Max number of RecentChanges
 $maxshow = 60;
 
