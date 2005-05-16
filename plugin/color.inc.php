@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: color.inc.php,v 1.20 2005/01/08 04:13:19 henoheno Exp $
+// $Id: color.inc.php,v 1.21.1 2005/05/16 07:36:35 miko Exp $
 //
 // Text color plugin
 
@@ -11,12 +11,14 @@ define('PLUGIN_COLOR_ALLOW_CSS', TRUE); // TRUE, FALSE
 // ----
 define('PLUGIN_COLOR_USAGE', '&color(foreground[,background]){text};');
 define('PLUGIN_COLOR_REGEX', '/^(#[0-9a-f]{3}|#[0-9a-f]{6}|[a-z-]+)$/i');
+
 function plugin_color_inline()
 {
 	global $pkwk_dtd;
 
 	$args = func_get_args();
-	$text = array_pop($args); // htmlspecialchars(text)
+	$text = strip_htmltag(array_pop($args)); // htmlspecialchars(text)
+		// strip_htmltag() is just for avoiding AutoLink insertion
 
 	list($color, $bgcolor) = array_pad($args, 2, '');
 	if ($color != '' && $bgcolor != '' && $text == '') {
@@ -38,7 +40,7 @@ function plugin_color_inline()
 		if ($color != '' && $bgcolor != '') $delimiter = '; ';
 		if ($color   != '') $color   = 'color:' . $color;
 		if ($bgcolor != '') $bgcolor = 'background-color:' . $bgcolor;
-		return '<span style="' . $color . $delimiter . $bgcolor . '">' .
+		return '<span class="wikicolor" style="' . $color . $delimiter . $bgcolor . '">' .
 			$text . '</span>';
 	} else {
 		if ($bgcolor != '') return '&color(): bgcolor (with CSS) not allowed;';
