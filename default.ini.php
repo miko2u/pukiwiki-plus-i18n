@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: default.ini.php,v 1.18.2 2005/04/02 03:04:14 miko Exp $
+// $Id: default.ini.php,v 1.18.3 2005/05/16 03:04:14 miko Exp $
 //
 // PukiWiki setting file (user agent:default)
 
@@ -148,6 +148,7 @@ $facemark_rules = array(
 	'&amp;(worried);'=>' <img alt="[$1]" src="' . IMAGE_URI . 'face/worried.png" />',
 	'&amp;(sweat);'	=> ' <img alt="[$1]" src="' . IMAGE_URI . 'face/worried.png" />',
 	'&amp;(tear);'	=> ' <img alt="[$1]" src="' . IMAGE_URI . 'face/tear.png" />',
+	'&amp;(umm);'	=> ' <img alt="[$1]" src="' . IMAGE_URI . 'face/umm.png" />',
 	'&amp;(star);'	=> ' <img alt="[$1]" src="' . IMAGE_URI . 'face/star.gif" />',
 
 	// Face marks, Japanese style
@@ -164,6 +165,7 @@ $facemark_rules = array(
 	'(\(\T-T\))'	=> ' <img alt="$1" src="' . IMAGE_URI . 'face/tear.png" />',
 	'(\(\;_;)'	=> ' <img alt="$1" src="' . IMAGE_URI . 'face/tear.png" />',
 	'(\(\;_;\))'	=> ' <img alt="$1" src="' . IMAGE_URI . 'face/tear.png" />',
+	'(\(__;)'	=> ' <img alt="$1" src="' . IMAGE_URI . 'face/umm.png" />',
 
 	// Push buttons, 0-9 and sharp (Compatibility with cell phones)
 	'&amp;(pb1);'	=> '[1]',
