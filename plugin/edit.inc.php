@@ -45,7 +45,7 @@ function plugin_edit_action()
 // Preview
 function plugin_edit_preview()
 {
-	global $vars;
+	global $vars, $notimeupdate;
 	global $_title_preview, $_msg_preview, $_msg_preview_delete;
 
 	$page = isset($vars['page']) ? $vars['page'] : '';
@@ -101,7 +101,7 @@ function plugin_edit_inline()
 
 	$args = func_get_args();
 
-	$s_label = array_pop($args);
+	$s_label = strip_htmltag(array_pop($args)); // {label}
 	if ($s_label == '')
 	{
 		$s_label = $_symbol_paraedit;

@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: make_link.php,v 1.22.4 2005/05/06 12:13:01 miko Exp $
+// $Id: make_link.php,v 1.24.4 2005/05/15 07:45:54 miko Exp $
 // Copyright (C)
 //   2005      Customized/Patched by Miko.Hoshina
 //   2003-2005 PukiWiki Developers Team
@@ -61,14 +61,14 @@ class InlineConverter
 				'url_interwiki', // URLs (interwiki definition)
 				'mailto',        // mailto: URL schemes
 				'interwikiname', // InterWikiName
-				'glossary',	     // AutoGlossary
-				'autolink',      // AutoLink
+				'glossary',	     // AutoGlossary(cjk,other)
+				'autolink',      // AutoLink(cjk,other)
 				'bracketname',   // BracketName
 				'wikiname',      // WikiName
-				'glossary_a',	 // AutoGlossary(アルファベット)
-				'autolink_a',    // AutoLink(アルファベット)
-				'autoalias',     // AutoAlias
-				'autoalias_a',   // AutoAlias(アルファベット)
+				'glossary_a',	 // AutoGlossary(alphabet)
+				'autolink_a',    // AutoLink(alphabet)
+				'autoalias',     // AutoAlias(cjk,other)
+				'autoalias_a',   // AutoAlias(alphabet)
 			);
 		}
 
@@ -977,20 +977,18 @@ function get_interwiki_url($name, $param)
 	// Encoding
 	switch ($opt) {
 
-	case '':
-	case 'std': // As-Is (Internal encoding of this PukiWiki will be used)
+	case '':    /* FALLTHROUGH */
+	case 'std': // Simply URL-encode the string, whose base encoding is the internal-encoding
 		$param = rawurlencode($param);
 		break;
 
-	case 'asis': // As-Is
-	case 'raw':
-		// $param = htmlspecialchars($param);
+	case 'asis': /* FALLTHROUGH */
+	case 'raw' : // Truly as-is
 		break;
 
 	case 'yw': // YukiWiki
 		if (! preg_match('/' . $WikiName . '/', $param))
 			$param = '[[' . mb_convert_encoding($param, 'SJIS', SOURCE_ENCODING) . ']]';
-		// $param = htmlspecialchars($param);
 		break;
 
 	case 'moin': // MoinMoin
@@ -998,13 +996,14 @@ function get_interwiki_url($name, $param)
 		break;
 
 	default:
-		// Alias conversion
-		if (isset($encode_aliases[$opt])) $opt = $encode_aliases[$opt];
+		// Alias conversion of $opt
+		if (isset($encode_aliases[$opt])) $opt = & $encode_aliases[$opt];
+
 		// Encoding conversion into specified encode, and URLencode
-		$param = rawurlencode(mb_convert_encoding($param, $opt, 'auto'));
+		$param = rawurlencode(mb_convert_encoding($param, $opt, SOURCE_ENCODING));
 	}
 
-	// Replace parameters
+	// Replace or Add the parameter
 	if (strpos($url, '$1') !== FALSE) {
 		$url = str_replace('$1', $param, $url);
 	} else {

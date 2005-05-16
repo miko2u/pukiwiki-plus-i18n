@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: filelist.inc.php,v 1.3.1 2005/01/09 08:16:28 miko Exp $
+// $Id: filelist.inc.php,v 1.3.2 2005/01/09 08:16:28 miko Exp $
 //
 // Filelist plugin: redirect to list plugin
 // cmd=filelist
@@ -25,7 +25,9 @@ function plugin_filelist_action()
 	global $vars;
 	global $adminpass;
 	if (!isset($vars['pass'])) return filelist_adm('');
-	if ($adminpass != md5($vars['pass'])) return filelist_adm('__nopass__');
+	// if ($adminpass != md5($vars['pass'])) return filelist_adm('__nopass__');
+	if ( pkwk_hash_compute($adminpass, $vars['pass']) != $adminpass )
+		return filelist_adm('__nopass__');
 	return do_plugin_action('list');
 }
 
