@@ -2,28 +2,31 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: default.skin.php,v 1.34.18 2005/05/06 11:23:43 miko Exp $
+// $Id: default.skin.php,v 1.34.20 2005/05/06 11:23:43 miko Exp $
 //
 if (!defined('DATA_DIR')) { exit; }
 
+// Decide charset for CSS
+$css_charset = 'iso-8859-1';
+switch(UI_LANG){
+	case 'ja_JP': $css_charset = 'Shift_JIS'; break;
+}
 // Output header
+pkwk_common_headers();
 header('Cache-control: no-cache');
 header('Pragma: no-cache');
-header('Content-Type: text/html; charset=EUC-JP');
-if(ini_get('zlib.output_compression') && preg_match('/\bgzip\b/i', $_SERVER['HTTP_ACCEPT_ENCODING'])) {
-	header('Content-Encoding: gzip');
-	header('Vary: Accept-Encoding');
+header('Content-Type: text/html; charset=' . CONTENT_CHARSET);
+
+// Output HTML DTD, <html>, and receive content-type
+if (isset($pkwk_dtd)) {
+	$meta_content_type = pkwk_output_dtd($pkwk_dtd);
+} else {
+	$meta_content_type = pkwk_output_dtd();
 }
-echo '<?xml version="1.0" encoding="EUC-JP"?>';
-if ($html_transitional) { ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
-<?php } else { ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
-<?php } ?>
+// Plus! not use $meta_content_type. because meta-content-type is most browser not used. umm...
+} ?>
 <head>
- <meta http-equiv="content-type" content="application/xhtml+xml; charset=EUC-JP" />
+ <meta http-equiv="content-type" content="application/xhtml+xml; charset=<?php echo(CONTENT_CHARSET); ?>" />
  <meta http-equiv="content-style-type" content="text/css" />
  <meta http-equiv="content-script-type" content="text/javascript" />
 
@@ -158,10 +161,12 @@ if ($html_transitional) { ?>
   HTML convert time to <?php echo $taketime ?> sec.
  </div></td>
  <td id="footerrtable"><div id="validxhtml">
-<?php if ($html_transitional) { ?>
-  <a href="http://validator.w3.org/check/referer"><img src="image/valid-xhtml10.png" width="88" height="31" alt="Valid XHTML 1.0" title="Valid XHTML 1.0" /></a>
-<?php } else { ?>
+<?php if (! isset($pkwk_dtd) || $pkwk_dtd == PKWK_DTD_XHTML_1_1) { ?>
   <a href="http://validator.w3.org/check/referer"><img src="image/valid-xhtml11.png" width="88" height="31" alt="Valid XHTML 1.1" title="Valid XHTML 1.1" /></a>
+<?php } else if ($pkwk_dtd >= PKWK_DTD_XHTML_1_0_FRAMESET) {  ?>
+  <a href="http://validator.w3.org/check/referer"><img src="image/valid-xhtml10.png" width="88" height="31" alt="Valid XHTML 1.0" title="Valid XHTML 1.0" /></a>
+<?php } else if ($pkwk_dtd >= PKWK_DTD_HTML_4_01_FRAMESET) {  ?>
+  <a href="http://validator.w3.org/check/referer"><img src="image/valid-html40.png" width="88" height="31" alt="Valid HTML 4.0" title="Valid HTML 4.0" /></a>
 <?php } ?>
  </div></td>
 </tr>

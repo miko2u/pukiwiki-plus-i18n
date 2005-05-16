@@ -2,8 +2,8 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: orangebox.skin.php,v 1.18.1 2004/11/02 14:02:10 arii/miko Exp $
-//
+// $Id: orangebox.skin.php,v 1.18.2 2004/11/02 14:02:10 miko Exp $
+// Original is ari-
 
 // Prohibit direct access
 if (! defined('UI_LANG')) exit;
@@ -34,26 +34,22 @@ $image = $_IMAGE['skin'];
 // Decide charset for CSS
 $css_charset = 'iso-8859-1';
 switch(UI_LANG){
-	case 'ja': $css_charset = 'Shift_JIS'; break;
+	case 'ja_JP': $css_charset = 'Shift_JIS'; break;
 }
-
 // Output header
+pkwk_common_headers();
 header('Cache-control: no-cache');
 header('Pragma: no-cache');
 header('Content-Type: text/html; charset=' . CONTENT_CHARSET);
-if(ini_get('zlib.output_compression') && preg_match('/\bgzip\b/i', $_SERVER['HTTP_ACCEPT_ENCODING'])) {
-	header('Content-Encoding: gzip');
-	header('Vary: Accept-Encoding');
-}
-echo '<?xml version="1.0" encoding="' . CONTENT_CHARSET . '"?>';
 
-if ($html_transitional) { ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
-<?php } else { ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
-<?php } ?>
+// Output HTML DTD, <html>, and receive content-type
+if (isset($pkwk_dtd)) {
+	$meta_content_type = pkwk_output_dtd($pkwk_dtd);
+} else {
+	$meta_content_type = pkwk_output_dtd();
+}
+// Plus! not use $meta_content_type. because meta-content-type is most browser not used. umm...
+} ?>
 <head>
  <meta http-equiv="content-type" content="application/xhtml+xml; charset=<?php echo CONTENT_CHARSET ?>" />
  <meta http-equiv="content-style-type" content="text/css" />
