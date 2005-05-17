@@ -1,8 +1,11 @@
 <?php
-/////////////////////////////////////////////////
-// PukiWiki - Yet another WikiWikiWeb clone.
-//
-// $Id: default.ini.php,v 1.18.3 2005/05/16 03:04:14 miko Exp $
+// PukiWiki Plus! - Yet another WikiWikiWeb clone.
+// $Id: default.ini.php,v 1.23.3 2005/05/16 13:25:43 miko Exp $
+// Copyright (C)
+//   2005      PukiWiki Plus! Team
+//   2003-2005 PukiWiki Developers Team
+//   2001-2002 Originally written by yu-ji
+// License: GPL v2 or (at your option) any later version
 //
 // PukiWiki setting file (user agent:default)
 
@@ -58,11 +61,17 @@ $rows = 20;
 $top = $_msg_content_back_to_top;
 
 /////////////////////////////////////////////////
-// 関連ページ表示のページ名の区切り文字
-$related_str = "\n ";
+// 添付ファイルの一覧を常に表示する (負担がかかります)
+$attach_link = 1;
 
 /////////////////////////////////////////////////
-// 整形ルールでの関連ページ表示のページ名の区切り文字
+// 関連するページのリンク一覧を常に表示する(負担がかかります)
+$related_link = 1;
+
+// リンク一覧の区切り文字
+$related_str = "\n ";
+
+// (#relatedプラグインが表示する) リンク一覧の区切り文字
 $rule_related_str = "</li>\n<li>";
 
 /////////////////////////////////////////////////
@@ -78,12 +87,8 @@ $hr = '<hr class="full_hr" />';
 // (詳しくは: BugTrack/698)
 define('PKWK_ALLOW_RELATIVE_FOOTNOTE_ANCHOR', 1);
 
-// 文末の注釈の直前に表示するタグ
+// 文末の脚注の直前に表示するタグ
 $note_hr = '<hr class="note_hr" />';
-
-/////////////////////////////////////////////////
-// 関連するリンクを常に表示する(負担がかかります)
-$related_link = 1;
 
 /////////////////////////////////////////////////
 // WikiName,BracketNameに経過時間を付加する
@@ -91,6 +96,8 @@ $show_passage = 1;
 
 /////////////////////////////////////////////////
 // リンク表示をコンパクトにする
+// * ページに対するハイパーリンクからタイトルを外す
+// * Dangling linkのCSSを外す
 $link_compact = 0;
 
 /////////////////////////////////////////////////

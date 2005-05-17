@@ -1,8 +1,11 @@
 <?php
-/////////////////////////////////////////////////
-// PukiWiki - Yet another WikiWikiWeb clone.
-//
-// $Id: keitai.ini.php,v 1.18.2 2005/03/19 01:26:53 miko Exp $
+// PukiWiki Plus! - Yet another WikiWikiWeb clone.
+// $Id: keitai.ini.php,v 1.23.2 2005/05/16 13:25:43 miko Exp $
+// Copyright (C)
+//   2005      PukiWiki Plus! Team
+//   2002-2005 PukiWiki Developers Team
+//   2001-2002 Originally written by yu-ji
+// License: GPL v2 or (at your option) any later version
 //
 // PukiWiki setting file (Cell phones, PDAs and other thin clients)
 
@@ -42,11 +45,20 @@ $_list_pad_str   = '';
 $top = '';
 
 /////////////////////////////////////////////////
-// 関連ページ表示のページ名の区切り文字
-$related_str = "\n ";
+// 添付ファイルの一覧を常に表示する (負担がかかります)
+// ※keitaiスキンにはこの一覧を表示する機能がありません
+$attach_link = 0;
 
 /////////////////////////////////////////////////
-// 整形ルールでの関連ページ表示のページ名の区切り文字
+// 関連するページのリンク一覧を常に表示する(負担がかかります)
+// ※keitaiスキンにはこの一覧を表示する機能がありません
+$related_link = 0;
+
+// リンク一覧の区切り文字
+// ※上同
+$related_str = "\n ";
+
+// (#relatedプラグインが表示する) リンク一覧の区切り文字
 $rule_related_str = "</li>\n<li>";
 
 /////////////////////////////////////////////////
@@ -57,15 +69,13 @@ $hr = '<hr>';
 $note_hr = '<hr>';
 
 /////////////////////////////////////////////////
-// 関連するリンクを常に表示する(負担がかかります)
-$related_link = 0;
-
-/////////////////////////////////////////////////
 // WikiName,BracketNameに経過時間を付加する
 $show_passage = 0;
 
 /////////////////////////////////////////////////
 // リンク表示をコンパクトにする
+// * ページに対するハイパーリンクからタイトルを外す
+// * Dangling linkのCSSを外す
 $link_compact = 1;
 
 /////////////////////////////////////////////////
@@ -147,8 +157,7 @@ switch ($ua_name) {
 switch ("$ua_name/$ua_vers") {
 	// Restriction For imode:
 	//  http://www.nttdocomo.co.jp/mc-user/i/tag/s2.html
-//	case 'DoCoMo/2.0':	$max_size = min($max_size, 30); break;
-	case 'DoCoMo/2.0':	$max_size = min($max_size, 12); break;
+	case 'DoCoMo/2.0':	$max_size = min($max_size, 30); break;
 }
 
 
@@ -213,16 +222,18 @@ switch ($ua_name) {
 
 	// Face marks, Japanese style
 	'(\(\^\^\))'	=>	'&#63893;',	// smile
-	'(\(\^-\^)'	=>	'&#63893;',	// smile
-	'(\(\.\.;)'	=>	'&#63895;',	// oh
+	'(\(\^-\^)'	    =>	'&#63893;',	// smile
+	'(\(\^Q\^)'	    =>  '&#xE728;', // huh
+	'(\(\.\.;)'   	=>	'&#63895;',	// oh
+	'(\(\^_-)'	    =>  '&#xE729;',	// wink
 	'(\(\^_-\))'	=>	'&#xE729;',	// wink
-	'(\(--;)'	=>	'&#63894;',	// sad
+	'(\(--;)'	    =>	'&#63894;',	// sad
 	'(\(\^\^;\))'	=>	'&#xE722;',	// worried
-	'(\(\^\^;)'	=>	'&#xE722;',	// worried
-	'(\(T-T\))'	=>	'&#xE72E;',
-	'(\(T-T)'	=>	'&#xE72E;',
+	'(\(\^\^;)'     =>	'&#xE722;',	// worried
+	'(\(T-T\))' 	=>	'&#xE72E;',
+	'(\(T-T)'   	=>	'&#xE72E;',
 	'(\(\;_\;\))'	=>	'&#xE72E;',
-	'(\(\;_\;)'	=>	'&#xE72E;',
+	'(\(\;_\;)' 	=>	'&#xE72E;',
 
 	// Push buttons, 0-9 and sharp
 	'&amp;(pb1);'	=>	'&#63879;',
@@ -351,7 +362,6 @@ switch ($ua_name) {
 	'(\(T-T)'	=>	'<img localsrc="259">',
 	'(\(\;_\;\))'	=>	'<img localsrc="259">',
 	'(\(\;_\;)'	=>	'<img localsrc="259">',
-
 
 	// Push buttons, 0-9 and sharp
 	'&amp;(pb1);'	=>	'<img localsrc="180">',
