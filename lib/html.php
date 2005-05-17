@@ -251,7 +251,7 @@ EOD;
 	$add_assistant = edit_form_assistant();
 
 	$body = <<<EOD
-<div id="realview_outer" style="z-index:10;margin:1px;padding:0px 20px;height:200px;width:550px;overflow:scroll;display:none"><div id="realview"></div><br /></div>
+<div id="realview_outer"><div id="realview"></div><br /></div>
 <form action="$script" method="post">
  <div class="edit_form" onmouseup="pukiwiki_pos()" onkeyup="pukiwiki_pos()">
 $template
