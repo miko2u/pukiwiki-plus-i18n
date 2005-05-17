@@ -35,12 +35,17 @@ $max_size = --$max_size * 1024;
 // STEP1: Delete comment lines
 $body = preg_replace('#<!(?:--[^-]*-(?:[^-]+-)*?-(?:[^>-]*(?:-[^>-]+)*?)??)*(?:>|$(?!\n)|--.*$)#', '', $body);
 // STEP2: Delete <del> tag
-
-
+$body = preg_replace('#(<del>)([\w\W]*)(</del>)#i', '', $body);
+// STEP3: paraedit-symbol to pen-emoji(for DoCoMo)
+$body = preg_replace('#(<div[^>]+>)?(<a[^>]+>)?<img[^>]*alt="Edit"[^>]*>(?(2)</a>)(?(1)</div>)#i', '&#63826;', $body);
+// STEP4: <img ... title="keitai"> => change to <PWimg ...>
+$body = preg_replace('#<img([^>]*)title="keitai"[^>]*>#i', '<PWimg $1>', $body);
 // With ALT option
 $body = preg_replace('#(<div[^>]+>)?(<a[^>]+>)?<img[^>]*alt="([^"]+)"[^>]*>(?(2)</a>)(?(1)</div>)#i', '[$3]', $body);
 // Without ALT option
 $body = preg_replace('#(<div[^>]+>)?(<a[^>]+>)?<img[^>]+>(?(2)</a>)(?(1)</div>)#i', '[img]', $body);
+// STEP5: change to <PWimg ...> to <img
+$body = preg_replace('#<PWimg#', '<img', $body);
 
 // Page numbers, divided by this skin
 $pageno = (isset($vars['p']) and is_numeric($vars['p'])) ? $vars['p'] : 0;

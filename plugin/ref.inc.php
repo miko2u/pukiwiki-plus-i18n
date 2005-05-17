@@ -356,10 +356,14 @@ function plugin_ref_body($args)
 	}
 
 	if ($is_image) {
-		// DoCoMo¤Î¿ä¾©¤Ï128x128°ÊÆâ
+		// DoCoMo recommended picture size is 128x128
 		// http://www.nttdocomo.co.jp/p_s/imode/xhtml/s1.html#1_4_2
-		if ($rawwidth > 0 && $rawheight > 0 && $rawwidth<=240 && $rawheight<=240 && UA_PROFILE == 'keitai') {
-			$params['_body'] = "<img src=\"$url\" alt=\"$title\" title=\"keitai\" $info/>";
+		if (UA_PROFILE == 'keitai') {
+			if ($rawwidth > 0 && $rawheight > 0 && $rawwidth <= 128 && $rawheight <= 128) {
+				$params['_body'] = "<img src=\"$url\" alt=\"$title\" title=\"keitai\" $info/>";
+			} else {
+				$params['_body'] = "<a href=\"$url\" title=\"keitai\">[PHOTO:$title]<a>";
+			}
 		} else {
 			$params['_body'] = "<img src=\"$url\" alt=\"$title\" title=\"$title\" $info/>";
 			if (! $params['nolink'] && $url2)
