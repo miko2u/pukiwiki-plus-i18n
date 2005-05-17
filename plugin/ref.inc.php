@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: ref.inc.php,v 1.48.2 2005/01/28 11:58:56 miko Exp $
+// $Id: ref.inc.php,v 1.48.4 2005/05/17 11:58:56 miko Exp $
 //
 // Image refernce plugin
 // Include an attached image-file as an inline-image
@@ -35,6 +35,8 @@ define('PLUGIN_REF_DIRECT_ACCESS', FALSE); // FALSE or TRUE
 // - ブラウザによってはインラインイメージの表示や、「インライン
 //   イメージだけを表示」させた時などに不具合が出る場合があります
 
+// 携帯電話での小さい画像の表示
+define('PLUGIN_REF_SHOW_IMAGE_TO_MOBILEPHONE', FALSE); // FALSE, TRUE
 /////////////////////////////////////////////////
 
 // Image suffixes allowed
@@ -359,7 +361,7 @@ function plugin_ref_body($args)
 		// DoCoMo recommended picture size is 128x128
 		// http://www.nttdocomo.co.jp/p_s/imode/xhtml/s1.html#1_4_2
 		if (UA_PROFILE == 'keitai') {
-			if ($rawwidth > 0 && $rawheight > 0 && $rawwidth <= 128 && $rawheight <= 128) {
+			if ($rawwidth > 0 && $rawheight > 0 && $rawwidth <= 128 && $rawheight <= 128 && PLUGIN_REF_SHOW_IMAGE_TO_MOBILEPHONE) {
 				$params['_body'] = "<img src=\"$url\" alt=\"$title\" title=\"keitai\" $info/>";
 			} else {
 				$params['_body'] = "<a href=\"$url\" title=\"keitai\">[PHOTO:$title]<a>";
