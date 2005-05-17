@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: keitai.skin.php,v 1.9.13 2005/05/01 02:43:27 miko Exp $
+// $Id: keitai.skin.php,v 1.9.15 2005/05/01 02:43:27 miko Exp $
 // Copyright (C)
 //   2005      PukiWiki Plus! Team
 //   2003-2005 PukiWiki Developers Team
@@ -31,25 +31,20 @@ if(TRUE) {
 // Make 1KByte spare (for header, etc)
 $max_size = --$max_size * 1024;
 
-// Delete comment
+// Replace IMG tags (= images) with character strings
+// STEP1: Delete comment lines
 $body = preg_replace('#<!(?:--[^-]*-(?:[^-]+-)*?-(?:[^>-]*(?:-[^>-]+)*?)??)*(?:>|$(?!\n)|--.*$)#', '', $body);
-
-// Delete <del>～</del> tag
+// STEP2: Delete <del> tag
 $body = preg_replace('#(<del>)([\w\W]*)(</del>)#i', '', $body);
-
-// 編集機能をもつ IMG タグ(画像)を絵文字に置換
+// STEP3: paraedit-symbol to pen-emoji(for DoCoMo)
 $body = preg_replace('#(<div[^>]+>)?(<a[^>]+>)?<img[^>]*alt="Edit"[^>]*>(?(2)</a>)(?(1)</div>)#i', '&#63826;', $body);
-
-// ALT="keitai" を持つ IMG タグ(画像)を置換(*1)
+// STEP4: <img ... title="keitai"> => change to <PWimg ...>
 $body = preg_replace('#<img([^>]*)title="keitai"[^>]*>#i', '<PWimg $1>', $body);
-
-// ALT option を持つ IMG タグ(画像)を文字列に置換
+// With ALT option
 $body = preg_replace('#(<div[^>]+>)?(<a[^>]+>)?<img[^>]*alt="([^"]+)"[^>]*>(?(2)</a>)(?(1)</div>)#i', '[$3]', $body);
-
-// ALT option の無い IMG タグ(画像)を文字列に置換
+// Without ALT option
 $body = preg_replace('#(<div[^>]+>)?(<a[^>]+>)?<img[^>]+>(?(2)</a>)(?(1)</div>)#i', '[img]', $body);
-
-// ALT="keitai" を持つ IMG タグ(画像)を置換(*2)
+// STEP5: change to <PWimg ...> to <img
 $body = preg_replace('#<PWimg#', '<img', $body);
 
 // Page Number

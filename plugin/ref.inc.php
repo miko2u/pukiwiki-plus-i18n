@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: ref.inc.php,v 1.48.2 2005/01/28 11:58:56 miko Exp $
+// $Id: ref.inc.php,v 1.48.5 2005/05/17 11:58:56 miko Exp $
 //
 // Image refernce plugin
 // Include an attached image-file as an inline-image
@@ -35,6 +35,8 @@ define('PLUGIN_REF_DIRECT_ACCESS', FALSE); // FALSE or TRUE
 // - ブラウザによってはインラインイメージの表示や、「インライン
 //   イメージだけを表示」させた時などに不具合が出る場合があります
 
+// 携帯電話での小さい画像の表示
+define('PLUGIN_REF_SHOW_IMAGE_TO_MOBILEPHONE', FALSE); // FALSE, TRUE
 /////////////////////////////////////////////////
 
 // Image suffixes allowed
@@ -100,6 +102,9 @@ EOD;
 	}
 
 	// divで包む
+	if ($params['nomargin']) {
+		return "<div class=\"img_nomargin\" style=\"$style\">{$params['_body']}</div>\n";
+	}
 	return "<div class=\"img_margin\" style=\"$style\">{$params['_body']}</div>\n";
 }
 
@@ -119,6 +124,7 @@ function plugin_ref_body($args)
 		'noicon' => FALSE, // アイコンを表示しない
 		'nolink' => FALSE, // 元ファイルへのリンクを張らない
 		'noimg'  => FALSE, // 画像を展開しない
+		'nomargin' => FALSE, // マージンはいらない
 		'zoom'   => FALSE, // 縦横比を保持する
 		'_size'  => FALSE, // サイズ指定あり
 		'_w'     => 0,       // 幅
@@ -352,10 +358,14 @@ function plugin_ref_body($args)
 	}
 
 	if ($is_image) {
-		// DoCoMoの推奨は128x128以内
+		// DoCoMo recommended picture size is 128x128
 		// http://www.nttdocomo.co.jp/p_s/imode/xhtml/s1.html#1_4_2
-		if ($rawwidth > 0 && $rawheight > 0 && $rawwidth<=240 && $rawheight<=240 && UA_PROFILE == 'keitai') {
-			$params['_body'] = "<img src=\"$url\" alt=\"$title\" title=\"keitai\" $info/>";
+		if (UA_PROFILE == 'keitai') {
+			if ($rawwidth > 0 && $rawheight > 0 && $rawwidth <= 128 && $rawheight <= 128 && PLUGIN_REF_SHOW_IMAGE_TO_MOBILEPHONE) {
+				$params['_body'] = "<img src=\"$url\" alt=\"$title\" title=\"keitai\" $info/>";
+			} else {
+				$params['_body'] = "<a href=\"$url\" title=\"keitai\">[PHOTO:$title]<a>";
+			}
 		} else {
 			$params['_body'] = "<img src=\"$url\" alt=\"$title\" title=\"$title\" $info/>";
 			if (! $params['nolink'] && $url2)
