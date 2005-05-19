@@ -3,7 +3,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: print.css,v 1.4.2 2004/04/03 18:38:52 arino Exp $
+// $Id: print.css,v 1.4.3 2004/05/19 18:38:52 miko Exp $
 //
 */
 @import url("default.css");
@@ -35,6 +35,11 @@ td.rtable
 	display:none;
 }
 div#navigator
+{
+	display:none;
+}
+/* for plus! navibar2 */
+div#navigator2
 {
 	display:none;
 }
