@@ -38,6 +38,11 @@ div#navigator
 {
 	display:none;
 }
+/* for plus! navibar2 */
+div#navigator2
+{
+	display:none;
+}
 td.menubar
 {
 	display:none;
