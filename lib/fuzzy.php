@@ -9,10 +9,10 @@ function do_search_fuzzy($word, $type = 'AND', $non_format = FALSE, $non_fuzzy =
  	global $search_auth, $search_fuzzy;
 
 	static $fuzzypattern = array(
-		'¥ô¥¡' => '¥Ğ',	'¥ô¥£' => '¥Ó',	'¥ô¥§' => '¥Ù',	'¥ô¥©' => '¥Ü',
-		'¥ô' => '¥Ö',	'¥ğ' => '¥¤',	'¥ñ' => '¥¨',	'¥õ' => '¥«',
-		'¥¡' => '¥¢',	'¥£' => '¥¤',	'¥¥' => '¥¦',	'¥§' => '¥¨',
-		'¥©' => '¥ª',	'¥ã' => '¥ä',	'¥å' => '¥æ',	'¥ç' => '¥è');
+		'ãƒ´ã‚¡' => 'ãƒ',	'ãƒ´ã‚£' => 'ãƒ“',	'ãƒ´ã‚§' => 'ãƒ™',	'ãƒ´ã‚©' => 'ãƒœ',
+		'ãƒ´' => 'ãƒ–',	'ãƒ°' => 'ã‚¤',	'ãƒ±' => 'ã‚¨',	'ãƒµ' => 'ã‚«',
+		'ã‚¡' => 'ã‚¢',	'ã‚£' => 'ã‚¤',	'ã‚¥' => 'ã‚¦',	'ã‚§' => 'ã‚¨',
+		'ã‚©' => 'ã‚ª',	'ãƒ£' => 'ãƒ¤',	'ãƒ¥' => 'ãƒ¦',	'ãƒ§' => 'ãƒ¨');
 
 	$retval = array();
 
@@ -27,14 +27,14 @@ function do_search_fuzzy($word, $type = 'AND', $non_format = FALSE, $non_fuzzy =
 		if ($page == $whatsnew || (! $search_non_list && preg_match($non_list_pattern, $page)))
 			continue;
 
-		// ¸¡º÷ÂĞ¾İ¥Ú¡¼¥¸¤ÎÀ©¸Â¤ò¤«¤±¤ë¤«¤É¤¦¤« (¥Ú¡¼¥¸Ì¾¤ÏÀ©¸Â³°)
+		// æ¤œç´¢å¯¾è±¡ãƒšãƒ¼ã‚¸ã®åˆ¶é™ã‚’ã‹ã‘ã‚‹ã‹ã©ã†ã‹ (ãƒšãƒ¼ã‚¸åã¯åˆ¶é™å¤–)
 		if ($search_auth && ! check_readable($page, false, false)) {
-			$source = get_source(); // ¸¡º÷ÂĞ¾İ¥Ú¡¼¥¸ÆâÍÆ¤ò¶õ¤Ë¡£
+			$source = get_source(); // æ¤œç´¢å¯¾è±¡ãƒšãƒ¼ã‚¸å†…å®¹ã‚’ç©ºã«ã€‚
 		} else {
 			$source = get_source($page);
 		}
 		if (! $non_format)
-			array_unshift($source, $page); // ¥Ú¡¼¥¸Ì¾¤â¸¡º÷ÂĞ¾İ¤Ë
+			array_unshift($source, $page); // ãƒšãƒ¼ã‚¸åã‚‚æ¤œç´¢å¯¾è±¡ã«
 
 		$b_match = FALSE;
 //miko modified
@@ -53,13 +53,13 @@ function do_search_fuzzy($word, $type = 'AND', $non_format = FALSE, $non_fuzzy =
 			for ($i=0; $i<count($fuzzy_from); $i++) {
 				$_source = mb_ereg_replace($fuzzy_from[$i], $fuzzy_to[$i], $_source);
 			}
-			$_source = mb_ereg_replace('[¥Ã¡¼¡¦¡«¡¬¡¢¡£]', '', $_source);
+			$_source = mb_ereg_replace('[ãƒƒãƒ¼ãƒ»ã‚›ã‚œã€ã€‚]', '', $_source);
 			foreach ($keys as $key) {
 				$_keyword = mb_strtolower(mb_convert_kana($word, 'KVCas'));
 				for ($i=0; $i<count($fuzzy_from); $i++) {
 					$_keyword = mb_ereg_replace($fuzzy_from[$i], $fuzzy_to[$i], $_keyword);
 				}
-				$_keyword = mb_ereg_replace('[¥Ã¡¼¡¦¡«¡¬¡¢¡£]', '', $_keyword);
+				$_keyword = mb_ereg_replace('[ãƒƒãƒ¼ãƒ»ã‚›ã‚œã€ã€‚]', '', $_keyword);
 				$b_match = mb_ereg(mb_ereg_quote($_keyword), $_source);
 			}
 			if ($b_match) $pages[$page] = get_filetime($page);

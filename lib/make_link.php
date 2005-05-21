@@ -740,7 +740,7 @@ class Link_autoalias extends Link
 		global $WikiName;
 
 		list($name) = $this->splice($arr);
-		// Ìµ»ë¥ê¥¹¥È¤Ë´Ş¤Ş¤ì¤Æ¤¤¤ë¡¢¤¢¤ë¤¤¤ÏÂ¸ºß¤·¤Ê¤¤¥Ú¡¼¥¸¤ò¼Î¤Æ¤ë
+		// ç„¡è¦–ãƒªã‚¹ãƒˆã«å«ã¾ã‚Œã¦ã„ã‚‹ã€ã‚ã‚‹ã„ã¯å­˜åœ¨ã—ãªã„ãƒšãƒ¼ã‚¸ã‚’æ¨ã¦ã‚‹
 		if (in_array($name,$this->forceignorepages))
 		{
 			return FALSE;
@@ -751,7 +751,7 @@ class Link_autoalias extends Link
 	{
 		global $autoalias;
 
-		// AutoAliasName¤Î°ìÍ÷¼èÆÀ
+		// AutoAliasNameã®ä¸€è¦§å–å¾—
 		$linkpages = array();
 		$pattern = <<<EOD
 ^-\s*               # list
@@ -817,7 +817,7 @@ class Link_glossary extends Link
 	function set($arr,$page)
 	{
 		list($name) = $this->splice($arr);
-		// Ìµ»ë¥ê¥¹¥È¤Ë´Ş¤Ş¤ì¤Æ¤¤¤ë¡¢¤¢¤ë¤¤¤ÏÂ¸ºß¤·¤Ê¤¤¥Ú¡¼¥¸¤ò¼Î¤Æ¤ë
+		// ç„¡è¦–ãƒªã‚¹ãƒˆã«å«ã¾ã‚Œã¦ã„ã‚‹ã€ã‚ã‚‹ã„ã¯å­˜åœ¨ã—ãªã„ãƒšãƒ¼ã‚¸ã‚’æ¨ã¦ã‚‹
 		if (in_array($name,$this->forceignorepages))
 		{
 			return FALSE;
@@ -845,7 +845,7 @@ class Link_glossary_a extends Link_glossary
 	}
 }
 
-// ¥Ä¡¼¥ë¥Á¥Ã¥×¤ÎÅ¸³«
+// ãƒ„ãƒ¼ãƒ«ãƒãƒƒãƒ—ã®å±•é–‹
 function make_tooltips($term,$glossarypage='')
 {
 	global $script;

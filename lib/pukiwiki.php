@@ -125,9 +125,9 @@ if (isset($retvars['body']) && $retvars['body'] != '') {
 //miko
 	global $fixed_heading_edited;
 	$source = get_source($base);
-	// Œ©o‚µ•ÒW‚ğ“®“I‚És‚¤‚½‚ß‚Ìˆ—
-	// convert_html ‚ÍÄ“ü‹Ö~‚Ì‚½‚ß‹[—ƒvƒ‰ƒOƒCƒ“‚Æ‚·‚é
-	// (]—ˆ‚Æˆá‚¢A–{•¶ƒ\[ƒX‚µ‚©Œ©‚È‚¢)
+	// è¦‹å‡ºã—ç·¨é›†ã‚’å‹•çš„ã«è¡Œã†ãŸã‚ã®å‡¦ç†
+	// convert_html ã¯å†å…¥ç¦æ­¢ã®ãŸã‚æ“¬ä¼¼ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã¨ã™ã‚‹
+	// (å¾“æ¥ã¨é•ã„ã€æœ¬æ–‡ã‚½ãƒ¼ã‚¹ã—ã‹è¦‹ãªã„)
 	$lines = $source;
 	while (! empty($lines)) {
 		$line = array_shift($lines);

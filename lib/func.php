@@ -197,14 +197,14 @@ function do_search($word, $type = 'AND', $non_format = FALSE)
 		if ($page == $whatsnew || (! $search_non_list && preg_match($non_list_pattern, $page)))
 			continue;
 
-		// ¸¡º÷ÂĞ¾İ¥Ú¡¼¥¸¤ÎÀ©¸Â¤ò¤«¤±¤ë¤«¤É¤¦¤« (¥Ú¡¼¥¸Ì¾¤ÏÀ©¸Â³°)
+		// æ¤œç´¢å¯¾è±¡ãƒšãƒ¼ã‚¸ã®åˆ¶é™ã‚’ã‹ã‘ã‚‹ã‹ã©ã†ã‹ (ãƒšãƒ¼ã‚¸åã¯åˆ¶é™å¤–)
 		if ($search_auth && ! check_readable($page, false, false)) {
 			$source = get_source(); // Empty
 		} else {
 			$source = get_source($page);
 		}
 		if (! $non_format)
-			array_unshift($source, $page); // ¥Ú¡¼¥¸Ì¾¤â¸¡º÷ÂĞ¾İ¤Ë
+			array_unshift($source, $page); // ãƒšãƒ¼ã‚¸åã‚‚æ¤œç´¢å¯¾è±¡ã«
 
 		$b_match = FALSE;
 
@@ -288,7 +288,7 @@ function page_list($pages, $cmd = 'read', $withfilename = FALSE)
 	global $pagereading_enable;
 	global $_string;
 
-	// ¥½¡¼¥È¥­¡¼¤ò·èÄê¤¹¤ë¡£ ' ' < '[a-zA-Z]' < 'zz'¤È¤¤¤¦Á°Äó¡£
+	// ã‚½ãƒ¼ãƒˆã‚­ãƒ¼ã‚’æ±ºå®šã™ã‚‹ã€‚ ' ' < '[a-zA-Z]' < 'zz'ã¨ã„ã†å‰æã€‚
 	$symbol = ' ';
 	$other = 'zz';
 
@@ -320,9 +320,9 @@ function page_list($pages, $cmd = 'read', $withfilename = FALSE)
 		if($pagereading_enable) {
 			if(mb_ereg('^([A-Za-z])', mb_convert_kana($page, 'a'), $matches)) {
 				$head = $matches[1];
-			} elseif (isset($readings[$page]) && mb_ereg('^([¥¡-¥ö])', $readings[$page], $matches)) { // here
+			} elseif (isset($readings[$page]) && mb_ereg('^([ã‚¡-ãƒ¶])', $readings[$page], $matches)) { // here
 				$head = $matches[1];
-			} elseif (mb_ereg('^[ -~]|[^¤¡-¤ó°¡-ô¦]', $page)) { // and here
+			} elseif (mb_ereg('^[ -~]|[^ã-ã‚“äºœ-ç†™]', $page)) { // and here
 				$head = $symbol;
 			} else {
 				$head = $other;
@@ -485,7 +485,7 @@ function get_glossary_pattern()
 	unset($config);
 	$auto_pages = array_merge($ignorepages, $forceignorepages);
 
-	// ¤³¤³¤Ç¥­¡¼¥ï¡¼¥É¤òÄ´¤Ù¤ë
+	// ã“ã“ã§ã‚­ãƒ¼ãƒ¯ãƒ¼ãƒ‰ã‚’èª¿ã¹ã‚‹
 	$source = get_source('Glossary');
 	foreach ( $source as $line ){
 		if ( preg_match('/^[:|]([^|]+)\|([^|]+)\|?$/', $line, $match)) {
@@ -512,7 +512,7 @@ function get_glossary_pattern()
 	return array($result, $result_a, $forceignorepages);
 }
 
-// AutoAlias¤Î¥Ñ¥¿¡¼¥ó¤òÀ¸À®¤¹¤ë
+// AutoAliasã®ãƒ‘ã‚¿ãƒ¼ãƒ³ã‚’ç”Ÿæˆã™ã‚‹
 function get_autoalias_pattern(& $pages)
 {
 	global $WikiName, $autoalias, $nowikiname;
@@ -624,13 +624,13 @@ function get_script_uri($init_uri = '')
 		$script .= SERVER_NAME;	// host
 		$script .= (SERVER_PORT == 80 ? '' : ':' . SERVER_PORT);  // port
 
-		// SCRIPT_NAME ¤¬'/'¤Ç»Ï¤Ş¤Ã¤Æ¤¤¤Ê¤¤¾ì¹ç(cgi¤Ê¤É) REQUEST_URI¤ò»È¤Ã¤Æ¤ß¤ë
+		// SCRIPT_NAME ãŒ'/'ã§å§‹ã¾ã£ã¦ã„ãªã„å ´åˆ(cgiãªã©) REQUEST_URIã‚’ä½¿ã£ã¦ã¿ã‚‹
 		$path    = SCRIPT_NAME;
 		if ($path{0} != '/') {
 			if (! isset($_SERVER['REQUEST_URI']) || $_SERVER['REQUEST_URI']{0} != '/')
 				die_message($msg);
 
-			// REQUEST_URI¤ò¥Ñ¡¼¥¹¤·¡¢pathÉôÊ¬¤À¤±¤ò¼è¤ê½Ğ¤¹
+			// REQUEST_URIã‚’ãƒ‘ãƒ¼ã‚¹ã—ã€pathéƒ¨åˆ†ã ã‘ã‚’å–ã‚Šå‡ºã™
 			$parse_url = parse_url($script . $_SERVER['REQUEST_URI']);
 			if (! isset($parse_url['path']) || $parse_url['path']{0} != '/')
 				die_message($msg);
@@ -669,8 +669,8 @@ function get_script_uri($init_uri = '')
 // [PHP-users 12736] null byte attack
 // http://ns1.php.gr.jp/pipermail/php-users/2003-January/012742.html
 //
-// 2003-05-16: magic quotes gpc¤ÎÉü¸µ½èÍı¤òÅı¹ç
-// 2003-05-21: Ï¢ÁÛÇÛÎó¤Î¥­¡¼¤Ïbinary safe
+// 2003-05-16: magic quotes gpcã®å¾©å…ƒå‡¦ç†ã‚’çµ±åˆ
+// 2003-05-21: é€£æƒ³é…åˆ—ã®ã‚­ãƒ¼ã¯binary safe
 //
 function input_filter($param)
 {

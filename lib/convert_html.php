@@ -21,12 +21,12 @@ function convert_html($lines)
 	return $body->toString();
 }
 
-// ¥Ö¥í¥Ã¥¯Í×ÁÇ
+// ãƒ–ãƒ­ãƒƒã‚¯è¦ç´ 
 class Element
 {
-	var $parent;   // ¿ÆÍ×ÁÇ
-	var $last;     // ¼¡¤ËÍ×ÁÇ¤òÁŞÆş¤¹¤ëÀè
-	var $elements; // Í×ÁÇ¤ÎÇÛÎó
+	var $parent;   // è¦ªè¦ç´ 
+	var $last;     // æ¬¡ã«è¦ç´ ã‚’æŒ¿å…¥ã™ã‚‹å…ˆ
+	var $elements; // è¦ç´ ã®é…åˆ—
 
 	function Element()
 	{
@@ -91,7 +91,7 @@ class Element
 function & Factory_Inline($text)
 {
 	if (substr($text, 0, 1) == '~') {
-		// ¹ÔÆ¬ '~' ¡£¥Ñ¥é¥°¥é¥Õ³«»Ï
+		// è¡Œé ­ '~' ã€‚ãƒ‘ãƒ©ã‚°ãƒ©ãƒ•é–‹å§‹
 		return new Paragraph(' ' . substr($text, 1));
 	} else {
 		return new Inline($text);
@@ -138,7 +138,7 @@ function & Factory_Div(& $root, $text)
 	}
 }
 
-// ¥¤¥ó¥é¥¤¥óÍ×ÁÇ
+// ã‚¤ãƒ³ãƒ©ã‚¤ãƒ³è¦ç´ 
 class Inline extends Element
 {
 	function Inline($text)
@@ -273,7 +273,7 @@ class ListContainer extends Element
 	{
 		parent::Element();
 
-		//¥Ş¡¼¥¸¥ó¤ò¼èÆÀ
+		//ãƒãƒ¼ã‚¸ãƒ³ã‚’å–å¾—
 		$var_margin      = '_' . $tag . '_margin';
 		$var_left_margin = '_' . $tag . '_left_margin';
 
@@ -282,7 +282,7 @@ class ListContainer extends Element
 		$this->margin      = $$var_margin;
 		$this->left_margin = $$var_left_margin;
 
-		//½é´ü²½
+		//åˆæœŸåŒ–
 		$this->tag   = $tag;
 		$this->tag2  = $tag2;
 		$this->level = min(3, strspn($text, $head));
@@ -321,7 +321,7 @@ class ListContainer extends Element
 		if (! is_a($obj, get_class($this)))
 			return $this->last = & $this->last->insert($obj);
 
-		// ¹ÔÆ¬Ê¸»ú¤Î¤ß¤Î»ØÄê»ş¤ÏUL/OL¥Ö¥í¥Ã¥¯¤òÃ¦½Ğ
+		// è¡Œé ­æ–‡å­—ã®ã¿ã®æŒ‡å®šæ™‚ã¯UL/OLãƒ–ãƒ­ãƒƒã‚¯ã‚’è„±å‡º
 		// BugTrack/524
 		if (count($obj->elements) == 1 && empty($obj->elements[0]->elements))
 			return $this->last->parent; // up to ListElement.
@@ -499,7 +499,7 @@ class TableCell extends Element
 		}
 
 		if ($text != '' && $text{0} == '#') {
-			// ¥»¥ëÆâÍÆ¤¬'#'¤Ç»Ï¤Ş¤ë¤È¤­¤ÏDiv¥¯¥é¥¹¤òÄÌ¤·¤Æ¤ß¤ë
+			// ã‚»ãƒ«å†…å®¹ãŒ'#'ã§å§‹ã¾ã‚‹ã¨ãã¯Divã‚¯ãƒ©ã‚¹ã‚’é€šã—ã¦ã¿ã‚‹
 			$obj = & Factory_Div($this, $text);
 			if (is_a($obj, 'Paragraph'))
 				$obj = & $obj->elements[0];
@@ -575,7 +575,7 @@ class Table extends Element
 	{
 		static $parts = array('h'=>'thead', 'f'=>'tfoot', ''=>'tbody');
 
-		// rowspan¤òÀßÄê(²¼¤«¤é¾å¤Ø)
+		// rowspanã‚’è¨­å®š(ä¸‹ã‹ã‚‰ä¸Šã¸)
 		for ($ncol = 0; $ncol < $this->col; $ncol++) {
 			$rowspan = 1;
 			foreach (array_reverse(array_keys($this->elements)) as $nrow) {
@@ -585,13 +585,13 @@ class Table extends Element
 					continue;
 				}
 				$row[$ncol]->rowspan = $rowspan;
-				while (--$rowspan) // ¹Ô¼ïÊÌ¤ò·Ñ¾µ¤¹¤ë
+				while (--$rowspan) // è¡Œç¨®åˆ¥ã‚’ç¶™æ‰¿ã™ã‚‹
 					$this->types[$nrow + $rowspan] = $this->types[$nrow];
 				$rowspan = 1;
 			}
 		}
 
-		// colspan,style¤òÀßÄê
+		// colspan,styleã‚’è¨­å®š
 		$stylerow = NULL;
 		foreach (array_keys($this->elements) as $nrow) {
 			$row = & $this->elements[$nrow];
@@ -606,14 +606,14 @@ class Table extends Element
 				$row[$ncol]->colspan = $colspan;
 				if ($stylerow !== NULL) {
 					$row[$ncol]->setStyle($stylerow[$ncol]->style);
-					while (--$colspan) // Îó¥¹¥¿¥¤¥ë¤ò·Ñ¾µ¤¹¤ë
+					while (--$colspan) // åˆ—ã‚¹ã‚¿ã‚¤ãƒ«ã‚’ç¶™æ‰¿ã™ã‚‹
 						$row[$ncol - $colspan]->setStyle($stylerow[$ncol]->style);
 				}
 				$colspan = 1;
 			}
 		}
 
-		// ¥Æ¥­¥¹¥È²½
+		// ãƒ†ã‚­ã‚¹ãƒˆåŒ–
 		$string = '';
 		foreach ($parts as $type => $part)
 		{
@@ -1014,8 +1014,8 @@ class Contents_UList extends ListContainer
 {
 	function Contents_UList($text, $level, $id)
 	{
-		// ¥Æ¥­¥¹¥È¤Î¥ê¥Õ¥©¡¼¥à
-		// ¹ÔÆ¬\n¤ÇÀ°·ÁºÑ¤ß¤òÉ½¤¹ ... X(
+		// ãƒ†ã‚­ã‚¹ãƒˆã®ãƒªãƒ•ã‚©ãƒ¼ãƒ 
+		// è¡Œé ­\nã§æ•´å½¢æ¸ˆã¿ã‚’è¡¨ã™ ... X(
 		make_heading($text);
 		$text = "\n" . '<a href="#' . $id . '">' . $text . '</a>' . "\n";
 		parent::ListContainer('ul', 'li', '-', str_repeat('-', $level));

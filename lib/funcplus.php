@@ -5,7 +5,7 @@
 // $Id: funcplus.php,v 0.1.4 2004/10/13 13:17:36 miko Exp $
 //
 
-// ¥¤¥ó¥¯¥ë¡¼¥É¤ÇÍ¾·×¤Ê¤â¤Î¤Ï¥½¡¼¥¹¤«¤éºï½ü¤¹¤ë
+// ã‚¤ãƒ³ã‚¯ãƒ«ãƒ¼ãƒ‰ã§ä½™è¨ˆãªã‚‚ã®ã¯ã‚½ãƒ¼ã‚¹ã‹ã‚‰å‰Šé™¤ã™ã‚‹
 function convert_filter($str)
 {
 	global $filter_rules;
@@ -26,7 +26,7 @@ function get_fancy_uri()
         $script .= SERVER_NAME; // host
         $script .= (SERVER_PORT == 80 ? '' : ':' . SERVER_PORT); // port
 
-        // SCRIPT_NAME ¤¬'/'¤Ç»Ï¤Ş¤Ã¤Æ¤¤¤Ê¤¤¾ì¹ç(cgi¤Ê¤É) REQUEST_URI¤ò»È¤Ã¤Æ¤ß¤ë
+        // SCRIPT_NAME ãŒ'/'ã§å§‹ã¾ã£ã¦ã„ãªã„å ´åˆ(cgiãªã©) REQUEST_URIã‚’ä½¿ã£ã¦ã¿ã‚‹
         $path    = SCRIPT_NAME;
         $script .= $path;       // path
 
@@ -38,22 +38,22 @@ function mb_ereg_quote($str)
 	return mb_ereg_replace('([.\\+*?\[^\]\$(){}=!<>|:])', '\\\1', $str);
 }
 
-// ¥¿¥°¤ÎÄÉ²Ã
+// ã‚¿ã‚°ã®è¿½åŠ 
 function open_uri_in_new_window($anchor, $which)
 {
-	global $use_open_uri_in_new_window,		// ¤³¤Î´Ø¿ô¤ò»È¤¦¤«Èİ¤«
-	       $open_uri_in_new_window_opis,		// Æ±°ì¥µ¡¼¥Ğ¡¼(Farm?)
-	       $open_uri_in_new_window_opisi,		// Æ±°ì¥µ¡¼¥Ğ¡¼(Farm?)¤ÎInterWiki
-	       $open_uri_in_new_window_opos,		// ³°Éô¥µ¡¼¥Ğ¡¼
-	       $open_uri_in_new_window_oposi;		// ³°Éô¥µ¡¼¥Ğ¡¼¤ÎInterWiki
-	global $_symbol_extanchor, $_symbol_innanchor;	// ¿·µ¬¥¦¥£¥ó¥É¥¦¤ò³«¤¯¥¢¥¤¥³¥ó
+	global $use_open_uri_in_new_window,		// ã“ã®é–¢æ•°ã‚’ä½¿ã†ã‹å¦ã‹
+	       $open_uri_in_new_window_opis,		// åŒä¸€ã‚µãƒ¼ãƒãƒ¼(Farm?)
+	       $open_uri_in_new_window_opisi,		// åŒä¸€ã‚µãƒ¼ãƒãƒ¼(Farm?)ã®InterWiki
+	       $open_uri_in_new_window_opos,		// å¤–éƒ¨ã‚µãƒ¼ãƒãƒ¼
+	       $open_uri_in_new_window_oposi;		// å¤–éƒ¨ã‚µãƒ¼ãƒãƒ¼ã®InterWiki
+	global $_symbol_extanchor, $_symbol_innanchor;	// æ–°è¦ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚’é–‹ãã‚¢ã‚¤ã‚³ãƒ³
 	
-	// ¤³¤Î´Ø¿ô¤ò»È¤ï¤Ê¤¤ OR ¸Æ¤Ó½Ğ¤·¸µ¤¬ÉÔÀµ¤Ê¾ì¹ç¤Ï¥¹¥ë¡¼¤¹¤ë
+	// ã“ã®é–¢æ•°ã‚’ä½¿ã‚ãªã„ OR å‘¼ã³å‡ºã—å…ƒãŒä¸æ­£ãªå ´åˆã¯ã‚¹ãƒ«ãƒ¼ã™ã‚‹
 	if (!$use_open_uri_in_new_window || !$which || !$_symbol_extanchor || !$_symbol_innanchor) {
 		return $anchor;
 	}
 
-	// ³°Éô·Á¼°¤Î¥ê¥ó¥¯¤ò¤É¤¦¤¹¤ë¤«
+	// å¤–éƒ¨å½¢å¼ã®ãƒªãƒ³ã‚¯ã‚’ã©ã†ã™ã‚‹ã‹
 	$frame = '';
 	if ($which == 'link_interwikiname') {
 		$frame = (is_inside_uri($anchor) ? $open_uri_in_new_window_opisi:$open_uri_in_new_window_oposi);
@@ -72,7 +72,7 @@ function open_uri_in_new_window($anchor, $which)
 	if ($frame == '')
 		return $anchor;
 
-	// °ú¿ô $anchor ¤Ï a ¥¿¥°¤ÎÃæ¤Ë¥¯¥é¥¹¤Ï¤Ê¤¤
+	// å¼•æ•° $anchor ã¯ a ã‚¿ã‚°ã®ä¸­ã«ã‚¯ãƒ©ã‚¹ã¯ãªã„
 	$aclasspos = mb_strpos($anchor, '<a ', mb_detect_encoding($anchor)) + 3; // 3 is strlen('<a ')
 	$insertpos = mb_strpos($anchor, '</a>', mb_detect_encoding($anchor));
 	preg_match('#href="([^"]+)"#', $anchor, $href);
