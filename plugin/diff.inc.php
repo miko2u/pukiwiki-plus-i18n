@@ -5,7 +5,7 @@
 // $Id: diff.inc.php,v 1.13.2 2005/03/10 05:21:47 miko Exp $
 //
 
-//¥Ú¡¼¥¸¤Îº¹Ê¬¤òÉ½¼¨¤¹¤ë
+//ãƒšãƒ¼ã‚¸ã®å·®åˆ†ã‚’è¡¨ç¤ºã™ã‚‹
 function plugin_diff_action()
 {
 	global $vars;
@@ -21,7 +21,7 @@ function plugin_diff_action()
 	return $retval;
 }
 
-// º¹Ê¬¤òÉ½¼¨
+// å·®åˆ†ã‚’è¡¨ç¤º
 function plugin_diff_view($page)
 {
 	global $script, $hr;
@@ -79,7 +79,7 @@ EOD;
 	return array('msg'=>$_title_diff, 'body'=>$body . $msg);
 }
 
-// ¥Ğ¥Ã¥¯¥¢¥Ã¥×¤òºï½ü
+// ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã‚’å‰Šé™¤
 function plugin_diff_delete($page)
 {
 	global $script, $vars;

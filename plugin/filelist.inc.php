@@ -31,7 +31,7 @@ function plugin_filelist_action()
 	return do_plugin_action('list');
 }
 
-// ´ÉÍı¼Ô¥Ñ¥¹¥ï¡¼¥ÉÆşÎÏ²èÌÌ
+// ç®¡ç†è€…ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰å…¥åŠ›ç”»é¢
 function filelist_adm($pass)
 {
 	global $_filelist_msg;

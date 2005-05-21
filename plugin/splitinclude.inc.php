@@ -7,14 +7,14 @@
 
 /*
  splitinclude.inc.php
- ¥Ú¡¼¥¸¤ò¥¤¥ó¥¯¥ë¡¼¥É¤¹¤ë(Ê¬³ä¤òÍ­¸ú¤Ë¤¹¤ë)
+ ãƒšãƒ¼ã‚¸ã‚’ã‚¤ãƒ³ã‚¯ãƒ«ãƒ¼ãƒ‰ã™ã‚‹(åˆ†å‰²ã‚’æœ‰åŠ¹ã«ã™ã‚‹)
 */
 
 function plugin_splitinclude_convert()
 {
 	global $script,$vars,$get,$post;
 	global $_msg_splitinclude_restrict;
-	static $splitinclude_list = array(); //½èÍıºÑ¥Ú¡¼¥¸Ì¾¤ÎÇÛÎó
+	static $splitinclude_list = array(); //å‡¦ç†æ¸ˆãƒšãƒ¼ã‚¸åã®é…åˆ—
 
 	if (func_num_args() == 0)
 	{
@@ -40,7 +40,7 @@ function plugin_splitinclude_convert()
 		$_page = $vars['page'];
 		$get['page'] = $post['page'] = $vars['page'] = $page;
 		
-		// splitinclude¤Î¤È¤­¤Ï¡¢Ç§¾Ú²èÌÌ¤ò¤¤¤Á¤¤¤Á½Ğ¤µ¤º¡¢¸å»ÏËö¤â¤³¤Á¤é¤Ç¤Ä¤±¤ë
+		// splitincludeã®ã¨ãã¯ã€èªè¨¼ç”»é¢ã‚’ã„ã¡ã„ã¡å‡ºã•ãšã€å¾Œå§‹æœ«ã‚‚ã“ã¡ã‚‰ã§ã¤ã‘ã‚‹
 		if (check_readable($page, false, false)) {
 			if (function_exists('convert_filter')) {
 				$body = convert_html(convert_filter(get_source($page)));

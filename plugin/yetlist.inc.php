@@ -52,7 +52,7 @@ function plugin_yetlist_action()
 			$href = $s_page;
 		} else {
 			// Show edit link
-			// »²¾È¸µ¥Ú¡¼¥¸¤¬Ê£¿ô¤¢¤Ã¤¿¾ì¹ç¡¢refer¤ÏºÇ¸å¤Î¥Ú¡¼¥¸¤ò»Ø¤¹(¤¤¤¤¤Î¤«¤Ê)
+			// å‚ç…§å…ƒãƒšãƒ¼ã‚¸ãŒè¤‡æ•°ã‚ã£ãŸå ´åˆã€referã¯æœ€å¾Œã®ãƒšãƒ¼ã‚¸ã‚’æŒ‡ã™(ã„ã„ã®ã‹ãª)
 			$href = '<a href="' . $script . '?cmd=edit&amp;page=' . $r_page .
 				'&amp;refer=' . $r_refer . '">' . $s_page . '</a>';
 		}

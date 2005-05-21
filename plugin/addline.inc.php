@@ -5,29 +5,29 @@
 // $Id: addline.inc.php,v 0.13.1 2005/03/09 23:15:10 miko Exp $
 // Original is sha(0.13)
 /* 
-*¥×¥é¥°¥¤¥ó addline
- ¤½¤Î¾ì¤Ë¡¢¸ÇÄê¤ÎÊ¸»úÎó¤òÄÉ²Ã¤¹¤ë¡£
+*ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ addline
+ ãã®å ´ã«ã€å›ºå®šã®æ–‡å­—åˆ—ã‚’è¿½åŠ ã™ã‚‹ã€‚
 
 *Usage
- #addline(ÀßÄêÌ¾[,above|below|up|down|number|nonumber][,btn:<¥Ü¥¿¥ó¥Æ¥­¥¹¥È>][,ltext:<º¸¥Æ¥­¥¹¥È>][,rtext:<±¦¥Æ¥­¥¹¥È>])
- &addline(ÀßÄêÌ¾[,before|after|above|below|up|down|number|nonumber]){<¥Ü¥¿¥ó¥Æ¥­¥¹¥È>};
+ #addline(è¨­å®šå[,above|below|up|down|number|nonumber][,btn:<ãƒœã‚¿ãƒ³ãƒ†ã‚­ã‚¹ãƒˆ>][,ltext:<å·¦ãƒ†ã‚­ã‚¹ãƒˆ>][,rtext:<å³ãƒ†ã‚­ã‚¹ãƒˆ>])
+ &addline(è¨­å®šå[,before|after|above|below|up|down|number|nonumber]){<ãƒœã‚¿ãƒ³ãƒ†ã‚­ã‚¹ãƒˆ>};
 
-*¥Ñ¥é¥á¡¼¥¿
-  ÀßÄê:   ¡Ö:config/plugin/addline/ÀßÄê¡×¤ÎÀßÄêÌ¾¤òµ­ºÜ
-  above|below|up|down: ¾å¤«²¼¤ËÄÉ²Ã¤¹¤ë¡£
-  before|after: ¥Ü¥¿¥ó¥Æ¥­¥¹¥È¤ÎÁ°¤«¸å¤ËÄÉ²Ã¤¹¤ë¡£
-  ltext: ¥Ü¥¿¥ó¤Îº¸Â¦¤Î¥Æ¥­¥¹¥È
-  rtext: ¥Ü¥¿¥ó¤Î±¦Â¦¤Î¥Æ¥­¥¹¥È
+*ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿
+  è¨­å®š:   ã€Œ:config/plugin/addline/è¨­å®šã€ã®è¨­å®šåã‚’è¨˜è¼‰
+  above|below|up|down: ä¸Šã‹ä¸‹ã«è¿½åŠ ã™ã‚‹ã€‚
+  before|after: ãƒœã‚¿ãƒ³ãƒ†ã‚­ã‚¹ãƒˆã®å‰ã‹å¾Œã«è¿½åŠ ã™ã‚‹ã€‚
+  ltext: ãƒœã‚¿ãƒ³ã®å·¦å´ã®ãƒ†ã‚­ã‚¹ãƒˆ
+  rtext: ãƒœã‚¿ãƒ³ã®å³å´ã®ãƒ†ã‚­ã‚¹ãƒˆ
 
-*ÀßÄê¥Ú¡¼¥¸¤ÎÆâÍÆ
- ÄÉ²Ã¤¹¤ëÊ¸»úÎó¤òµ­ºÜ¤¹¤ë¡£Ê£¿ô¹Ô¤Ç¤â¤è¤¤¡£
- Îã¡§
+*è¨­å®šãƒšãƒ¼ã‚¸ã®å†…å®¹
+ è¿½åŠ ã™ã‚‹æ–‡å­—åˆ—ã‚’è¨˜è¼‰ã™ã‚‹ã€‚è¤‡æ•°è¡Œã§ã‚‚ã‚ˆã„ã€‚
+ ä¾‹ï¼š
     |&attachref;|&attachref;|&attachref;|
-    |¤¢¤¤¤¦|¤¨¤ª¤«|¤­¤¯¤±|
+    |ã‚ã„ã†|ãˆãŠã‹|ããã‘|
 */
 
 /////////////////////////////////////////////////
-// ¥³¥á¥ó¥È¤òÁŞÆş¤¹¤ë°ÌÃÖ 1:Íó¤ÎÁ° 0:Íó¤Î¸å
+// ã‚³ãƒ¡ãƒ³ãƒˆã‚’æŒ¿å…¥ã™ã‚‹ä½ç½® 1:æ¬„ã®å‰ 0:æ¬„ã®å¾Œ
 define('ADDLINE_INS','1');
 
 function plugin_addline_init()
@@ -276,12 +276,12 @@ function addline_inline($addline,$postdata_old,$addline_no,$above)
     }
     return $postdata;
 }
-function addline_get_source($page) // tracker.inc.php¤Îtracker_list¤«¤é
+function addline_get_source($page) // tracker.inc.phpã®tracker_listã‹ã‚‰
 {
 	$source = get_source($page);
-	// ¸«½Ğ¤·¤Î¸ÇÍ­IDÉô¤òºï½ü
+	// è¦‹å‡ºã—ã®å›ºæœ‰IDéƒ¨ã‚’å‰Šé™¤
 	$source = preg_replace('/^(\*{1,3}.*)\[#[A-Za-z][\w-]+\](.*)$/m','$1$2',$source);
-	// #freeze¤òºï½ü
+	// #freezeã‚’å‰Šé™¤
 	return preg_replace('/^#freeze\s*$/m','',$source);
 }
 ?>

@@ -5,15 +5,15 @@
 // $Id: tooltip.inc.php,v 0.6.1 2004/04/06 23:26:10 miko Exp $
 //
 /* 
-*¥×¥é¥°¥¤¥ó tooltip
- ¥Ä¡¼¥ë¥Á¥Ã¥×¤òÉ½¼¨
+*ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ tooltip
+ ãƒ„ãƒ¼ãƒ«ãƒãƒƒãƒ—ã‚’è¡¨ç¤º
 
 *Usage
  &tooltip(<term>);
  &tooltip(<term>){<glossary>};
-// &tooltip(<term>,[<ÍÑ¸ì½¸>]);
-// &tooltip(<term>,[<ÍÑ¸ì½¸>]){<glossary>};
- <term>¤Ë¥Ş¥¦¥¹¥«¡¼¥½¥ë¤òÅö¤Æ¤ë¤È¡¢<glossary>¤¬½Ğ¸½¤¹¤ë¡£
+// &tooltip(<term>,[<ç”¨èªé›†>]);
+// &tooltip(<term>,[<ç”¨èªé›†>]){<glossary>};
+ <term>ã«ãƒã‚¦ã‚¹ã‚«ãƒ¼ã‚½ãƒ«ã‚’å½“ã¦ã‚‹ã¨ã€<glossary>ãŒå‡ºç¾ã™ã‚‹ã€‚
 */
 //========================================================
 function plugin_tooltip_init()
@@ -82,7 +82,7 @@ function plugin_tooltip_get_page_title($term)
 	return FALSE;
 }
 //========================================================
-// ÍÑ¸ì½¸¤òÊÑ¤¨¤¿¾ì¹ç¤Î¥­¥ã¥Ã¥·¥å¤¬¤¦¤Ş¤¯µ­½Ò¤Ç¤­¤Ê¤¤¡£
+// ç”¨èªé›†ã‚’å¤‰ãˆãŸå ´åˆã®ã‚­ãƒ£ãƒƒã‚·ãƒ¥ãŒã†ã¾ãè¨˜è¿°ã§ããªã„ã€‚
 function plugin_tooltip_get_glossary($term,$g_page)
 {
 	global $_tooltip_messages;

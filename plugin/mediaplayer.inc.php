@@ -5,13 +5,13 @@
 // $Id: mediaplayer.inc.php,v 0.3 2004/09/15 15:41:57 miko Exp $
 //
 
-// Windows Media ¤¬¥µ¥İ¡¼¥È¤Ç¤­¤ë¥×¥í¥È¥³¥ë¤«¡©
+// Windows Media ãŒã‚µãƒãƒ¼ãƒˆã§ãã‚‹ãƒ—ãƒ­ãƒˆã‚³ãƒ«ã‹ï¼Ÿ
 function is_wmv($str)
 {
 	return preg_match('/^(https?|mms)(:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]*)$/', $str);
 }
 
-// Æ°²è¤ò¥Ö¥í¥Ã¥¯É½¼¨
+// å‹•ç”»ã‚’ãƒ–ãƒ­ãƒƒã‚¯è¡¨ç¤º
 function plugin_mediaplayer_convert()
 {
 	global $head_tags;
@@ -20,28 +20,28 @@ function plugin_mediaplayer_convert()
 	$usage = "#mediaplayer(): Usage: (URI-to-image,URI-to-video)<br />\n";
 	$args = func_get_args();
 
-	// ÅºÉÕ¥Õ¥¡¥¤¥ë¤Î¤¢¤ë¥Ú¡¼¥¸: default¤Ï¸½ºß¤Î¥Ú¡¼¥¸Ì¾
+	// æ·»ä»˜ãƒ•ã‚¡ã‚¤ãƒ«ã®ã‚ã‚‹ãƒšãƒ¼ã‚¸: defaultã¯ç¾åœ¨ã®ãƒšãƒ¼ã‚¸å
 	$page = isset($vars['page']) ? $vars['page'] : '';
 
-	// ÅºÉÕ¥Õ¥¡¥¤¥ë¤Î¥Õ¥¡¥¤¥ëÌ¾
+	// æ·»ä»˜ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ•ã‚¡ã‚¤ãƒ«å
 	$name = '';
 
-	// ÅºÉÕ¥Õ¥¡¥¤¥ë¤Ş¤Ç¤Î¥Ñ¥¹¤ª¤è¤Ó(¼Âºİ¤Î)¥Õ¥¡¥¤¥ëÌ¾
+	// æ·»ä»˜ãƒ•ã‚¡ã‚¤ãƒ«ã¾ã§ã®ãƒ‘ã‚¹ãŠã‚ˆã³(å®Ÿéš›ã®)ãƒ•ã‚¡ã‚¤ãƒ«å
 	$file = '';
 
-	// Âè°ì°ú¿ô: "[¥Ú¡¼¥¸Ì¾¤ª¤è¤Ó/]ÅºÉÕ¥Õ¥¡¥¤¥ëÌ¾"¡¢¤¢¤ë¤¤¤Ï"URL"¤ò¼èÆÀ
+	// ç¬¬ä¸€å¼•æ•°: "[ãƒšãƒ¼ã‚¸åãŠã‚ˆã³/]æ·»ä»˜ãƒ•ã‚¡ã‚¤ãƒ«å"ã€ã‚ã‚‹ã„ã¯"URL"ã‚’å–å¾—
 	$name = $args[0];
 	$is_url = is_url($name);
 
 	if(! $is_url) {
-		// ÅºÉÕ¥Õ¥¡¥¤¥ë
+		// æ·»ä»˜ãƒ•ã‚¡ã‚¤ãƒ«
 		if (! is_dir(UPLOAD_DIR)) {
 			return "Preview File not Found.";
 		}
 
 		$matches = array();
 		if (preg_match('#^(.+)/([^/]+)$#', $name, $matches)) {
-			// ¥Õ¥¡¥¤¥ëÌ¾¤Ë¥Ú¡¼¥¸Ì¾(¥Ú¡¼¥¸»²¾È¥Ñ¥¹)¤¬¹çÀ®¤µ¤ì¤Æ¤¤¤ë¤«
+			// ãƒ•ã‚¡ã‚¤ãƒ«åã«ãƒšãƒ¼ã‚¸å(ãƒšãƒ¼ã‚¸å‚ç…§ãƒ‘ã‚¹)ãŒåˆæˆã•ã‚Œã¦ã„ã‚‹ã‹
 			if ($matches[1] == '.' || $matches[1] == '..') {
 				$matches[1] .= '/';
 			}
@@ -51,7 +51,7 @@ function plugin_mediaplayer_convert()
 			$is_file = is_file($file);
 
 		} else {
-			// ¥Ç¥Õ¥©¥ë¥È¥Ú¡¼¥¸Ì¾¤ËÂĞ¤·¤Æ
+			// ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆãƒšãƒ¼ã‚¸åã«å¯¾ã—ã¦
 			$file = UPLOAD_DIR . encode($page) . '_' . encode($name);
 			$is_file = is_file($file);
 		}
@@ -60,7 +60,7 @@ function plugin_mediaplayer_convert()
 		}
 	}
 
-	// ²èÁü¤Î¥¢¥É¥ì¥¹¥Á¥§¥Ã¥¯
+	// ç”»åƒã®ã‚¢ãƒ‰ãƒ¬ã‚¹ãƒã‚§ãƒƒã‚¯
 	$url = isset($args[0]) ? $args[0] : '';
 	if (is_url($url)) {
 		if(! preg_match('/\.(jpe?g|gif|png)$/i', $url)) {
@@ -74,15 +74,15 @@ function plugin_mediaplayer_convert()
 			'&amp;src=' . rawurlencode($name);
 	}
 
-	// Æ°²è¤Î¥¢¥É¥ì¥¹¥Á¥§¥Ã¥¯
+	// å‹•ç”»ã®ã‚¢ãƒ‰ãƒ¬ã‚¹ãƒã‚§ãƒƒã‚¯
 	$wmv = isset($args[1]) ? $args[1] : '';
 	if (! is_wmv($wmv) || ! preg_match('/\.(wmv|asf)$/i', $wmv))
 		return $usage . $wmv;
 
-	// ÄÉ²Ã JavaScript
+	// è¿½åŠ  JavaScript
 	$head_tags[] = '<script type="text/javascript" src="'.SKIN_DIR.'mediaplayer.js"></script>';
 
-	// ¥á¥Ç¥£¥¢¥×¥ì¥¤¥ä¡¼¤ÎÄÉ²Ã
+	// ãƒ¡ãƒ‡ã‚£ã‚¢ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®è¿½åŠ 
 	return <<<EOD
 <div align="center">
 	<div class="playercontainer">

@@ -4,7 +4,7 @@
 //
 // $Id: backup.inc.php,v 1.19.7 2005/03/10 12:20:34 miko Exp $
 //
-// ¥Ğ¥Ã¥¯¥¢¥Ã¥×
+// ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—
 function plugin_backup_action()
 {
 	global $script, $vars, $do_backup, $hr;
@@ -128,7 +128,7 @@ if ($action != 'visualdiff') {
 	}
 }
 
-// ¥Ğ¥Ã¥¯¥¢¥Ã¥×¤òºï½ü
+// ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã‚’å‰Šé™¤
 function plugin_backup_delete($page)
 {
 	global $script, $vars;
@@ -209,7 +209,7 @@ EOD;
 	return $str;
 }
 
-// ¥Ğ¥Ã¥¯¥¢¥Ã¥×°ìÍ÷¤ò¼èÆÀ
+// ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ä¸€è¦§ã‚’å–å¾—
 function get_backup_list($page)
 {
 	global $script;
@@ -262,7 +262,7 @@ EOD;
 	return join('', $retval);
 }
 
-// Á´¥Ú¡¼¥¸¤Î¥Ğ¥Ã¥¯¥¢¥Ã¥×°ìÍ÷¤ò¼èÆÀ
+// å…¨ãƒšãƒ¼ã‚¸ã®ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ä¸€è¦§ã‚’å–å¾—
 function get_backup_list_all($withfilename = FALSE)
 {
 	global $cantedit;
@@ -275,7 +275,7 @@ function get_backup_list_all($withfilename = FALSE)
 	return page_list($pages, 'backup', $withfilename);
 }
 
-// ¥Ğ¥Ã¥¯¥¢¥Ã¥×¤Î¥É¥í¥Ã¥×¥À¥¦¥ó¥³¥ó¥Ü¥Ü¥Ã¥¯¥¹¤òºîÀ®
+// ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã®ãƒ‰ãƒ­ãƒƒãƒ—ãƒ€ã‚¦ãƒ³ã‚³ãƒ³ãƒœãƒœãƒƒã‚¯ã‚¹ã‚’ä½œæˆ
 function plugin_backup_convert()
 {
 	global $script, $vars;

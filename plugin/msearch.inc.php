@@ -5,15 +5,15 @@
 // $Id: msearch.inc.php,v 0.3.1 2005/03/10 05:00:10 miko Exp $
 // Original is sha
 /* 
-*¥×¥é¥°¥¤¥ó msearch
- Ê£¿ô¥µ¥¤¥È¤ÎPukiWiki¤Î¸¡º÷¤ò¼Â¹Ô¤·¤ÆÉ½¼¨
+*ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ msearch
+ è¤‡æ•°ã‚µã‚¤ãƒˆã®PukiWikiã®æ¤œç´¢ã‚’å®Ÿè¡Œã—ã¦è¡¨ç¤º
 
 *Usage
  ?plugin=msearch&word=<words>&site=<sites>&type=<type>&order=<order>
- <words>: Ã±¸ì¡¢¥¹¥Ú¡¼¥¹¶èÀÚ¤ê
- <sites>: PukiWiki¥µ¥¤¥È¤ÎURL¡¢¥¹¥Ú¡¼¥¹¶èÀÚ¤ê¡¢this¤À¤ÈÆ±¤¸¥µ¥¤¥ÈÆâ¡¢(euc|sjis|utf8)
+ <words>: å˜èªã€ã‚¹ãƒšãƒ¼ã‚¹åŒºåˆ‡ã‚Š
+ <sites>: PukiWikiã‚µã‚¤ãƒˆã®URLã€ã‚¹ãƒšãƒ¼ã‚¹åŒºåˆ‡ã‚Šã€thisã ã¨åŒã˜ã‚µã‚¤ãƒˆå†…ã€(euc|sjis|utf8)
  <type>: AND, OR
- <order>: [-]past(·Ğ²á»ş´Ö½ç), [-]site(¥µ¥¤¥È½ç), [-]page(¥Ú¡¼¥¸Ì¾½ç)
+ <order>: [-]past(çµŒéæ™‚é–“é †), [-]site(ã‚µã‚¤ãƒˆé †), [-]page(ãƒšãƒ¼ã‚¸åé †)
 */
 
 //========================================================

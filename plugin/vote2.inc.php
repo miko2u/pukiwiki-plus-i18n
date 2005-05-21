@@ -5,9 +5,9 @@
 // $Id: vote2.inc.php,v 0.12.3 2005/03/10 17:55:04 miko Exp $
 // based on vote.inc.php v1.14
 //
-// v0.2¤Ï¥¤¥ó¥é¥¤¥ó¤Î¥ê¥ó¥¯¤Ëtitle¤òÉÕ¤±¤¿¡£
+// v0.2ã¯ã‚¤ãƒ³ãƒ©ã‚¤ãƒ³ã®ãƒªãƒ³ã‚¯ã«titleã‚’ä»˜ã‘ãŸã€‚
 //
-// Ï¢Â³ÅêÉ¼¶Ø»ß»ş´Ö
+// é€£ç¶šæŠ•ç¥¨ç¦æ­¢æ™‚é–“
 define(VOTE2_COOKIE_EXPIRED,60*60*24*3);
 
 function plugin_vote2_init()
@@ -106,7 +106,7 @@ function plugin_vote2_inline()
 	$str_notitle     = $_vote2_messages['arg_notitle'];
 
 	$args = func_get_args();
-	array_pop($args); // {}Æâ¤ÎÍ×ÁÇ¤Îºï½ü
+	array_pop($args); // {}å†…ã®è¦ç´ ã®å‰Šé™¤
 	$page = $vars['page'];
 	if (!array_key_exists($page,$numbers))	$numbers[$page] = 0;
 	$vote_inno = $numbers[$page]++;

@@ -1,6 +1,6 @@
 <?php
 /**
- * World Time ƒvƒ‰ƒOƒCƒ“
+ * World Time ãƒ—ãƒ©ã‚°ã‚¤ãƒ³
  *
  * @copyright   Copyright &copy; 2005, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @version     $Id: worldtime.inc.php,v 0.1 2005/03/30 01:00:00 upk Exp $

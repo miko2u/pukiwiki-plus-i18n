@@ -4,18 +4,18 @@
 //
 // $Id: cvscheck.inc.php,v 0.17 2004/08/24 04:08:10 sha Exp $
 /* 
-*�ץ饰���� cvscheck
- cvs��version����Ӥ��ưۤʤ��Τ�ɽ��
+*プラグイン cvscheck
+ cvsのversionと比較して異なるものを表示
 
 *Usage
   ./?plugin=cvscheck&refer=<page>&param=local,10m
-  #cvscheck([local|optional|<����>{m,h,d}])
-  local: ��������ˤΤ�¸�ߤ���ե�����ǥС�����󵭽Ҥ�¸�ߤ����Τ�ɽ��
-  <����>m: ����å����ͭ���ˤ��ơ�<����>ʬ������¸��
-  <����>h: ����å����ͭ���ˤ��ơ�<����>���֤�����¸��
-  <����>d: ����å����ͭ���ˤ��ơ�<����>��������¸��
+  #cvscheck([local|optional|<数字>{m,h,d}])
+  local: ローカルにのみ存在するファイルでバージョン記述の存在するものを表示
+  <数字>m: キャッシュを有効にして、<数字>分だけ保存。
+  <数字>h: キャッシュを有効にして、<数字>時間だけ保存。
+  <数字>d: キャッシュを有効にして、<数字>日だけ保存。
 */
-// ���ܤμ��Ф��˼��Ԥ����ڡ����������ɽ������
+// 項目の取り出しに失敗したページを一覧に表示する
 define('CVSCHECK_CACHE_FILE','cvscheck_cache.txt');
 define('CVSCHECK_CACHE_LOCAL_FILE','cvscheck_cache_local.txt');
 

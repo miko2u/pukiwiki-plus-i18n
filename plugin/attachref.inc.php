@@ -10,10 +10,10 @@ ini_set('upload_max_filesize','4M');
 // max file size for upload on script of PukiWiki(default 1MB)
 define('MAX_FILESIZE',(2048 * 1024));
 
-// ´ÉÍı¼Ô¤À¤±¤¬ÅºÉÕ¥Õ¥¡¥¤¥ë¤ò¥¢¥Ã¥×¥í¡¼¥É¤Ç¤­¤ë¤è¤¦¤Ë¤¹¤ë
+// ç®¡ç†è€…ã ã‘ãŒæ·»ä»˜ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ã‚¢ãƒƒãƒ—ãƒ­ãƒ¼ãƒ‰ã§ãã‚‹ã‚ˆã†ã«ã™ã‚‹
 define('ATTACHREF_UPLOAD_ADMIN_ONLY',FALSE); // FALSE or TRUE
 
-// ¥¢¥Ã¥×¥í¡¼¥É/ºï½ü»ş¤Ë¥Ñ¥¹¥ï¡¼¥É¤òÍ×µá¤¹¤ë(ATTACHREF_UPLOAD_ADMIN_ONLY¤¬Í¥Àè)
+// ã‚¢ãƒƒãƒ—ãƒ­ãƒ¼ãƒ‰/å‰Šé™¤æ™‚ã«ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã‚’è¦æ±‚ã™ã‚‹(ATTACHREF_UPLOAD_ADMIN_ONLYãŒå„ªå…ˆ)
 define('ATTACHREF_PASSWORD_REQUIRE',FALSE); // FALSE or TRUE
 
 // Text wrapping
@@ -102,7 +102,7 @@ function plugin_attachref_convert()
 			$ret = $params['_error'];
 			$dispattach = 1;
 		} else {
-			// ¢­¤³¤³¤«¤é¤Ïplugin_ref_convert()¤ÎÈ´¿è
+			// â†“ã“ã“ã‹ã‚‰ã¯plugin_ref_convert()ã®æŠœç²‹
 			if ((PLUGIN_ATTACHREF_WRAP_TABLE && ! $params['nowrap']) || $params['wrap']) {
 				$margin = ($params['around'] ? '0px' : 'auto');
 				$margin_align = ($params['_align'] == 'center') ? '' : ";margin-{$params['_align']}:0px";
@@ -119,9 +119,9 @@ EOD;
 			} else {
 				$style = "text-align:{$params['_align']}";
 			}
-			// div¤ÇÊñ¤à
+			// divã§åŒ…ã‚€
 			$ret = "<div class=\"img_margin\" style=\"$style\">{$params['_body']}</div>\n";
-			// ¢¬¤³¤³¤Ş¤Ç¤Ïplugin_ref_convert()¤ÎÈ´¿è
+			// â†‘ã“ã“ã¾ã§ã¯plugin_ref_convert()ã®æŠœç²‹
 			$dispattach = 0;
 		}
 	}
@@ -155,7 +155,7 @@ function plugin_attachref_inline()
 #	}
 #	$attachref_no = $numbers[$vars['page']]++;
 	
-	//Ìá¤êÃÍ
+	//æˆ»ã‚Šå€¤
 	$ret = '';
 	$dispattach = 1;
 
@@ -203,7 +203,7 @@ function plugin_attachref_inline()
 	    }
 	}
 	if ( $dispattach ) {
-	    //XSSÀÈ¼åÀ­ÌäÂê - ³°Éô¤«¤éÍè¤¿ÊÑ¿ô¤ò¥¨¥¹¥±¡¼¥×
+	    //XSSè„†å¼±æ€§å•é¡Œ - å¤–éƒ¨ã‹ã‚‰æ¥ãŸå¤‰æ•°ã‚’ã‚¨ã‚¹ã‚±ãƒ¼ãƒ—
 	    $s_args = trim(join(",", $args));
 	    if ( $button ){
 			$s_args .= ",button";
@@ -212,7 +212,7 @@ function plugin_attachref_inline()
 			$ret = <<<EOD
   <form action="$script" method="post">
   <div>
-  <input type="hidden" name="encode_hint" value="¤×" />
+  <input type="hidden" name="encode_hint" value="ã·" />
   <input type="hidden" name="attachref_no" value="$attachref_no" />
   <input type="hidden" name="attachref_opt" value="$f_args" />
   <input type="hidden" name="digest" value="$digest" />
@@ -243,7 +243,7 @@ function plugin_attachref_action()
 	global $_attachref_messages;
 	global $pkwk_dtd;
 
-	//Ìá¤êÃÍ¤ò½é´ü²½
+	//æˆ»ã‚Šå€¤ã‚’åˆæœŸåŒ–
 	$retval['msg'] = $_attachref_messages['msg_title'];
 	$retval['body'] = '';
 	
@@ -255,7 +255,7 @@ function plugin_attachref_action()
 		$attachname = $file['name'];
 		$filename = preg_replace('/\..+$/','', $attachname,1);
 
-		//¤¹¤Ç¤ËÂ¸ºß¤·¤¿¾ì¹ç¡¢ ¥Õ¥¡¥¤¥ëÌ¾¤Ë'_0','_1',...¤òÉÕ¤±¤Æ²óÈò(¸ÈÂ©)
+		//ã™ã§ã«å­˜åœ¨ã—ãŸå ´åˆã€ ãƒ•ã‚¡ã‚¤ãƒ«åã«'_0','_1',...ã‚’ä»˜ã‘ã¦å›é¿(å§‘æ¯)
 		$count = '_0';
 		while (file_exists(UPLOAD_DIR .encode($vars['refer']).'_'.encode($attachname)))
 		{
@@ -295,7 +295,7 @@ function attachref_insert_ref($filename)
 	
 	$args = split(",", $vars['attachref_opt']);
 	if ( count($args) ){
-	    $args[0] = './' . $filename;//array_shift,unshift¤Ã¤ÆÍ×¤¹¤ë¤Ë¤³¤ì¤Í
+	    $args[0] = './' . $filename;//array_shift,unshiftã£ã¦è¦ã™ã‚‹ã«ã“ã‚Œã­
 	    $s_args = join(",", $args);
 	}
 	else {
@@ -310,12 +310,12 @@ function attachref_insert_ref($filename)
 	$thedigest = md5(join('',$postdata_old));
 
 	$postdata = '';
-	$attachref_ct = 0; //'#attachref'¤Î½Ğ¸½²ó¿ô
+	$attachref_ct = 0; //'#attachref'ã®å‡ºç¾å›æ•°
 	$attachref_no = $vars['attachref_no'];
 	$skipflag = 0;
 	$postdata_tmp = array();
 
-	// ¤Ş¤º¥¤¥ó¥é¥¤¥ó¤«¤éÄ´ºº¤¹¤ë(ÈÖ¹æ¤Ï¥¤¥ó¥é¥¤¥ó¢ª¥Ö¥í¥Ã¥¯·¿¤È¤Ä¤¯)
+	// ã¾ãšã‚¤ãƒ³ãƒ©ã‚¤ãƒ³ã‹ã‚‰èª¿æŸ»ã™ã‚‹(ç•ªå·ã¯ã‚¤ãƒ³ãƒ©ã‚¤ãƒ³â†’ãƒ–ãƒ­ãƒƒã‚¯å‹ã¨ã¤ã)
 	foreach ($postdata_old as $line)
 	{
 		if ( $skipflag || substr($line,0,1) == ' ' || substr($line,0,2) == '//' ){
@@ -341,7 +341,7 @@ function attachref_insert_ref($filename)
 		array_push($postdata_tmp, $line);
 	}
 
-	// ¼¡¤Ë¥Ö¥í¥Ã¥¯·¿¤òÄ´ºº¤¹¤ë(ÈÖ¹æ¤Ï¥¤¥ó¥é¥¤¥ó¢ª¥Ö¥í¥Ã¥¯·¿¤È¤Ä¤¯)
+	// æ¬¡ã«ãƒ–ãƒ­ãƒƒã‚¯å‹ã‚’èª¿æŸ»ã™ã‚‹(ç•ªå·ã¯ã‚¤ãƒ³ãƒ©ã‚¤ãƒ³â†’ãƒ–ãƒ­ãƒƒã‚¯å‹ã¨ã¤ã)
 	foreach($postdata_tmp as $line) {
 		if ( $skipflag || substr($line,0,1) == ' ' || substr($line,0,2) == '//' ){
 			$postdata .= $line;
@@ -364,7 +364,7 @@ function attachref_insert_ref($filename)
 		$postdata .= $line;
 	}
 
-	// ¹¹¿·¤Î¾×ÆÍ¤ò¸¡½Ğ
+	// æ›´æ–°ã®è¡çªã‚’æ¤œå‡º
 	if ( $thedigest != $digest )
 	{
 		$ret['msg'] = $_attachref_messages['msg_title_collided'];
@@ -378,7 +378,7 @@ function attachref_insert_ref($filename)
 	
 	return $ret;
 }
-//¥¢¥Ã¥×¥í¡¼¥É¥Õ¥©¡¼¥à¤òÉ½¼¨
+//ã‚¢ãƒƒãƒ—ãƒ­ãƒ¼ãƒ‰ãƒ•ã‚©ãƒ¼ãƒ ã‚’è¡¨ç¤º
 function attachref_showform()
 {
 	global $vars;
@@ -389,7 +389,7 @@ function attachref_showform()
 
 	return array('msg'=>$_attachref_messages['msg_upload'],'body'=>$body);
 }
-//¥¢¥Ã¥×¥í¡¼¥É¥Õ¥©¡¼¥à
+//ã‚¢ãƒƒãƒ—ãƒ­ãƒ¼ãƒ‰ãƒ•ã‚©ãƒ¼ãƒ 
 function attachref_form($page)
 {
 	global $script,$vars;

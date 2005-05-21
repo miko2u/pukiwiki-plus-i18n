@@ -1,6 +1,6 @@
 <?php
 /**
- * ¸À¸ì¤òÈ½Äê¤·¥á¥Ã¥»¡¼¥¸¤òÉ½¼¨
+ * è¨€èªžã‚’åˆ¤å®šã—ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’è¡¨ç¤º
  *
  * @copyright   Copyright &copy; 2005, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @version     $Id: multilang.inc.php,v 0.4 2005/03/14 01:01:00 upk Exp $

@@ -5,43 +5,43 @@
 // $Id: qrcode.inc.php,v 0.6.3 2004/12/21 13:57:36 miko Exp $
 //
 /*
-*����
-QR��������������ץ饰����
-*��
- &qrcode{�С������ɲ�����ʸ����};
- &qrcode(������){�С������ɲ�����ʸ����};
- &qrcode(������,������ˡ){�С������ɲ�����ʸ����};
- &qrcode(������,������ˡ,�С������){�С������ɲ�����ʸ����};
- &qrcode(������,������ˡ,�С������,ʬ���){�С������ɲ�����ʸ����};
-*����
-|������     |�С������ɤκǾ��ԥ�����            | 1 |
-|������ˡ   |���������ɤΥ�٥�Ǥ�(N/M/H/Q)     | M |
-|�С������ |���Ѥ���QR�����ɤΥС������(1��10) |��ưȽ��  |
-|ʬ���     |ʬ��С������ɿ�(2��16)             |ʬ�䤷�ʤ�|
-|ʸ����     |�С������ɲ�����ʸ����              |(��ά�Բ�)|
-*���
+*内容
+QR画像を生成するプラグイン
+*書式
+ &qrcode{バーコード化する文字列};
+ &qrcode(サイズ){バーコード化する文字列};
+ &qrcode(サイズ,訂正方法){バーコード化する文字列};
+ &qrcode(サイズ,訂正方法,バージョン){バーコード化する文字列};
+ &qrcode(サイズ,訂正方法,バージョン,分割数){バーコード化する文字列};
+*引数
+|サイズ     |バーコードの最小ピクセル            | 1 |
+|訂正方法   |訂正コードのレベルです(N/M/H/Q)     | M |
+|バージョン |使用するQRコードのバージョン(1〜10) |自動判別  |
+|分割数     |分割バーコード数(2〜16)             |分割しない|
+|文字列     |バーコード化する文字列              |(省略不可)|
+*著作権
 QRcode Perl CGI & PHP scripts ver. 0.50d, (c)2001-2003 Y.Swetake
 QRcode PukiWiki 1.4 Plug-in, (c)2004 Miko.Hoshina
-*�饤����
+*ライセンス
 GPL
-*������
-ʬ�����Ǻ������˥С������θ���ˤ��ޤ�����
-�����ʬ�䤹��ʤ�����������ʡ�С������ˤ�
-�����äƤ����ۤ��������Ȥ���ä�����Ǥ���
+*コメント
+分割数は悩んだ末にバージョンの後ろにしました。
+これは分割するなら画像サイズ（＝バージョン）が
+そろっていたほうがいいとおもったためです。
 */
 
-// QR�ǡ����γ�Ǽ�ǥ��쥯�ȥ�
+// QRデータの格納ディレクトリ
 define('QRCODE_DATA_DIR', DATA_HOME.'data/qr/');
-// QR���᡼���γ�Ǽ�ǥ��쥯�ȥ�
+// QRイメージの格納ディレクトリ
 define('QRCODE_IMAGE_DIR', 'image/qr/');
-// ���簷����С������
+// 最大扱えるバージョン
 define('QRCODE_MAX_VERSION','10');
-// ���簷����ʬ���
+// 最大扱える分割数
 define('QRCODE_MAX_SPLIT','16');
-// ��������Ѥ�������Ѵ�������
+// 漢字を使用する場合の変換コード
 define('QRCODE_ENCODING','SJIS');
 
-// ����饤��ϥ���������ѤΥ��ɥ쥹���������Τ�
+// インラインはアクション用のアドレスを作成するのみ
 function plugin_qrcode_inline()
 {
 	global $script;
@@ -101,7 +101,7 @@ function plugin_qrcode_inline()
 			$result = "<a href=\"$script?plugin=qrcode&amp;d=$d&amp;s=4$addparam\"><img src=\"$script?plugin=qrcode&amp;d=$d$addsize$addparam\" alt=\"$d\" title=\"keitai\" /></a>";
 		}
 	} else {
-		// �ѥ�ƥ���׻�
+		// パリティを計算
 		$l=strlen($d);
 		if ($l>1){
 			$p=0;
@@ -111,7 +111,7 @@ function plugin_qrcode_inline()
 				$i++;
 			}
 		}
-		// �¤٤�(����ʤ�PNG���������Τ����줤�Ǥ��礦���ɤ�)
+		// 並べる(本来ならPNGを合成するのがきれいでしょうけどね)
 		$result = "<nobr>";
 		$i=0;
 		for ($j=1;$j<=$n;$j++) {
@@ -125,7 +125,7 @@ function plugin_qrcode_inline()
 	return $result;
 }
 
-// ���������Ǥϡ��ºݤβ��������
+// アクションでは、実際の画像を作成
 function plugin_qrcode_action()
 {
 	global $vars;
@@ -150,7 +150,7 @@ function plugin_qrcode_action()
 	die();
 }
 
-// �����򥵥ݡ��Ȥ��Ƥ��뤫��
+// 画像をサポートしているか？
 function plugin_qrcode_issupported()
 {
 	$issupported = TRUE;
@@ -163,7 +163,7 @@ function plugin_qrcode_issupported()
 	return $issupported;
 }
 
-// �ºݤ�QR�����ɤβ�������Ȥ��������
+// 実際にQRコードの画像の中身を作成する
 function QRcode($qr)
 {
 	$qrcode_data_string            = $qr['data'];
@@ -343,7 +343,7 @@ function QRcode($qr)
 		  104,  176,  272,  384,  496,  608,  704,  880, 1056, 1232,
 	);
 
-	// �С����������ꤷ�Ƥ��ʤ��Ȥ��ϡ���ưŪ������
+	// バージョンを設定していないときは、自動的に設定
 	if (!$qrcode_version)
 	{
 		$i= 1 + (QRCODE_MAX_VERSION * $ec);
@@ -558,7 +558,7 @@ function QRcode($qr)
     $rs_block_number++;
 }
 
-	// �ޥȥ�å����ν����
+	// マトリックスの初期化
 //	for ($i=0;$i<$max_modules_1side;$i++) {
 //		for ($j=0;$j<$max_modules_1side;$j++) {
 //			$matrix_content[$j][$i]=0;
@@ -566,7 +566,7 @@ function QRcode($qr)
 //	}
 	$matrix_content = array(array());
 
-	// �ǡ�����������
+	// データの埋め込み
 	$i=0;
 	while ($i<$max_codewords)
 	{
@@ -686,7 +686,7 @@ function QRcode($qr)
 		$i++;
 	}
 
-	// �ºݤβ������������.
+	// 実際の画像を作成する.
 	if (ImageTypes() & IMG_GIF) {
 		header("Content-type: image/gif");
 	} else {

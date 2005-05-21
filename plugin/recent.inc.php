@@ -1,21 +1,21 @@
 <?php
 /*
- * PukiWiki ºÇ¿·¤Î?·ï¤òÉ½¼¨¤¹¤ë¥×¥é¥°¥¤¥ó
+ * PukiWiki æœ€æ–°ã®?ä»¶ã‚’è¡¨ç¤ºã™ã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³
  *
  * CopyRight 2002 Y.MASUI GPL2
  * http://masui.net/pukiwiki/ masui@masui.net
  *
- * ÊÑ¹¹ÍúÎò:
- *  2002.04.08: pat¤µ¤ó¡¢¤ß¤Î¤ë¤µ¤ó¤Î»ØÅ¦¤Ë¤è¤ê¡¢¥ê¥ó¥¯Àè¤¬ÆüËÜ¸ì¤Î¾ì¹ç¤Ë
- *              ²½¤±¤ë¤Î¤ò½¤Àµ
+ * å¤‰æ›´å±¥æ­´:
+ *  2002.04.08: patã•ã‚“ã€ã¿ã®ã‚‹ã•ã‚“ã®æŒ‡æ‘˜ã«ã‚ˆã‚Šã€ãƒªãƒ³ã‚¯å…ˆãŒæ—¥æœ¬èªã®å ´åˆã«
+ *              åŒ–ã‘ã‚‹ã®ã‚’ä¿®æ­£
  *
- *  2002.06.17: plugin_recent_init()¤òÀßÄê
- *  2002.07.02: <ul>¤Ë¤è¤ë½ĞÎÏ¤ËÊÑ¹¹¤·¹½Â¤²½
+ *  2002.06.17: plugin_recent_init()ã‚’è¨­å®š
+ *  2002.07.02: <ul>ã«ã‚ˆã‚‹å‡ºåŠ›ã«å¤‰æ›´ã—æ§‹é€ åŒ–
  *
  * $Id: recent.inc.php,v 1.13.1 2005/03/10 14:26:52 miko Exp $
  */
 
-// RecentChanges¤Î¥­¥ã¥Ã¥·¥å
+// RecentChangesã®ã‚­ãƒ£ãƒƒã‚·ãƒ¥
 define('PLUGIN_RECENT_CACHE', CACHE_DIR . 'recent.dat');
 
 function plugin_recent_convert()
@@ -35,7 +35,7 @@ function plugin_recent_convert()
 			$recent_lines = $args[0];
 	}
 
-	// ÀèÆ¬¤ÎN·ï(¹Ô)¤ò¼è¤ê½Ğ¤¹
+	// å…ˆé ­ã®Nä»¶(è¡Œ)ã‚’å–ã‚Šå‡ºã™
 	$lines = array_splice(file(PLUGIN_RECENT_CACHE), 0, $recent_lines);
 
 	$date = $items = '';

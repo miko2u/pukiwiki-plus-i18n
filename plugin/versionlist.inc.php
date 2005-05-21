@@ -21,7 +21,7 @@ function plugin_versionlist_convert()
 {
 	if (PKWK_SAFE_MODE) return ''; // Show nothi
 
-	/* Ãµº÷¥Ç¥£¥ì¥¯¥È¥êÀßÄê */
+	/* æŽ¢ç´¢ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªè¨­å®š */
 	$SCRIPT_DIR = array('./');
 	if (LIB_DIR   != './') array_push($SCRIPT_DIR, LIB_DIR);
 	if (DATA_HOME != './' && DATA_HOME != LIB_DIR) array_push($SCRIPT_DIR, DATA_HOME);

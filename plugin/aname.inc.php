@@ -27,7 +27,7 @@ function plugin_aname_convert()
 	$url     = in_array('full',  $args) ? $script . '?' . rawurlencode($vars['page']) : '';
 	$attr_id = in_array('noid',  $args) ? '' : ' id="' . $id . '"';
 
-	// ·ÈÂÓ¤ÏxhtmlÂĞ±ş¤·¤Æ¤Ê¤¤¤â¤Î¤¬Â¿¤¤¤¿¤á¸½¼Â²ò
+	// æºå¸¯ã¯xhtmlå¯¾å¿œã—ã¦ãªã„ã‚‚ã®ãŒå¤šã„ãŸã‚ç¾å®Ÿè§£
 	if (isset($pkwk_dtd) && $pkwk_dtd < PKWK_DTD_XHTML_1_1) {
 		$attr_id = in_array('noid', $args) ? '' : ' id="' . $id . '" name="' . $id . '"';
 	} elseif (!defined('UA_PROFILE') || UA_PROFILE == 'default') {
@@ -36,7 +36,7 @@ function plugin_aname_convert()
 		$attr_id = in_array('noid', $args) ? '' : ' id="' . $id . '" name="' . $id . '"';
 	}
 
-	// »ÃÄêÂĞ±ş¡§ $attr_id ¤Ï id ¤¬½ÅÊ£¤¹¤ë¤È xhtmlÂĞ±ş¤Ç¤­¤Ê¤¯¤Ê¤ë²ÄÇ½À­¤¢¤ê
+	// æš«å®šå¯¾å¿œï¼š $attr_id ã¯ id ãŒé‡è¤‡ã™ã‚‹ã¨ xhtmlå¯¾å¿œã§ããªããªã‚‹å¯èƒ½æ€§ã‚ã‚Š
 	return "<a class=\"$class\"$attr_id href=\"$url#$id\" title=\"$id\">$body</a>";
 }
 ?>

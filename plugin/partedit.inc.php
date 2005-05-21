@@ -5,7 +5,7 @@
 // $Id: partedit.inc.php,v 1.1.2 2004/09/18 20:27:00 miko Exp $
 //
 
-// Åà·ë»ş¤Ï¶¯À©Åª¤Ë¥ª¥Õ¤Ë¤¹¤ë
+// å‡çµæ™‚ã¯å¼·åˆ¶çš„ã«ã‚ªãƒ•ã«ã™ã‚‹
 define(PARTEDIT_FREEZE_OFF,TRUE);
 
 function plugin_partedit_inline()
@@ -18,7 +18,7 @@ function plugin_partedit_convert()
 	global $vars, $fixed_heading_edited;
 	list($arg) = func_get_args();
 
-	// ¶¯À©¥ª¥ó¡¦¥ª¥Õ
+	// å¼·åˆ¶ã‚ªãƒ³ãƒ»ã‚ªãƒ•
 	if ($arg == 'on') {
 		$fixed_heading_edited = 1;
 	}
@@ -29,7 +29,7 @@ function plugin_partedit_convert()
 //		$fixed_heading_edited = 0;
 	}
 
-	// Åà·ë»ş¤Î¤ß¶¯À©Åª¤Ë¥ª¥Õ
+	// å‡çµæ™‚ã®ã¿å¼·åˆ¶çš„ã«ã‚ªãƒ•
 	if (PARTEDIT_FREEZE_OFF) {
 		if (is_freeze($vars['page'])) {
 			$fixed_heading_edited = 0;

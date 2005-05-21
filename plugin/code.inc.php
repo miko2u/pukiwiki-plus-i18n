@@ -1,6 +1,6 @@
 <?php
 /**
- * ¥³¡¼¥É¥Ï¥¤¥é¥¤¥Èµ¡Ç½¤òPukiWiki¤ËÄÉ²Ã¤¹¤ë
+ * ã‚³ãƒ¼ãƒ‰ãƒã‚¤ãƒ©ã‚¤ãƒˆæ©Ÿèƒ½ã‚’PukiWikiã«è¿½åŠ ã™ã‚‹
  * Time-stamp: <04/12/28 00:57:17 sasaki>
  *
  * GPL
@@ -8,22 +8,22 @@
  * Ver. 0.4.3_2.1
  */
 
-define("PLUGIN_CODE_LANGUAGE", 'pre');  // É¸½à¸À¸ì
-// É¸½àÀßÄê
-define("PLUGIN_CODE_NUMBER",    TRUE);  // ¹ÔÈÖ¹æ
-define("PLUGIN_CODE_OUTLINE",   TRUE);  // ¥¢¥¦¥È¥é¥¤¥ó;
-define("PLUGIN_CODE_COMMENT",   FALSE); // ¥³¥á¥ó¥ÈÉ½¼¨/ÈóÉ½¼¨ // 0.4.0 ¤Ç¤ÏÈó¿ä¾©
-define("PLUGIN_CODE_MENU",      TRUE);  // ¥á¥Ë¥å¡¼¤ÎÉ½¼¨/ÈóÉ½¼¨;
-define("PLUGIN_CODE_FILE_ICON", TRUE);  // ÅºÉÕ¥Õ¥¡¥¤¥ë¤Ë¥À¥¦¥ó¥í¡¼¥É¥¢¥¤¥³¥ó¤òÉÕ¤±¤ë
-define("PLUGIN_CODE_LINK",      TRUE);  // ¥ª¡¼¥È¥ê¥ó¥¯
+define("PLUGIN_CODE_LANGUAGE", 'pre');  // æ¨™æº–è¨€èª
+// æ¨™æº–è¨­å®š
+define("PLUGIN_CODE_NUMBER",    TRUE);  // è¡Œç•ªå·
+define("PLUGIN_CODE_OUTLINE",   TRUE);  // ã‚¢ã‚¦ãƒˆãƒ©ã‚¤ãƒ³;
+define("PLUGIN_CODE_COMMENT",   FALSE); // ã‚³ãƒ¡ãƒ³ãƒˆè¡¨ç¤º/éè¡¨ç¤º // 0.4.0 ã§ã¯éæ¨å¥¨
+define("PLUGIN_CODE_MENU",      TRUE);  // ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã®è¡¨ç¤º/éè¡¨ç¤º;
+define("PLUGIN_CODE_FILE_ICON", TRUE);  // æ·»ä»˜ãƒ•ã‚¡ã‚¤ãƒ«ã«ãƒ€ã‚¦ãƒ³ãƒ­ãƒ¼ãƒ‰ã‚¢ã‚¤ã‚³ãƒ³ã‚’ä»˜ã‘ã‚‹
+define("PLUGIN_CODE_LINK",      TRUE);  // ã‚ªãƒ¼ãƒˆãƒªãƒ³ã‚¯
 
-// URL¤Ç»ØÄê¤·¤¿¥Õ¥¡¥¤¥ë¤òÆÉ¤ß¹ş¤à¤«Èİ¤«
-define("PLUGIN_CODE_READ_URL",  TRUE);  // É¸½à¤Ç¤ÏÅºÉÕ¥Õ¥¡¥¤¥ë°Ê³°ÆÉ¤ß¹ş¤Ş¤Ê¤¤
+// URLã§æŒ‡å®šã—ãŸãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª­ã¿è¾¼ã‚€ã‹å¦ã‹
+define("PLUGIN_CODE_READ_URL",  TRUE);  // æ¨™æº–ã§ã¯æ·»ä»˜ãƒ•ã‚¡ã‚¤ãƒ«ä»¥å¤–èª­ã¿è¾¼ã¾ãªã„
 
-// ¥Æ¡¼¥Ö¥ë¤ò»È¤¦¤«Èİ¤«(FALSE¤ÏCSS¤Îdiv¤Ë¤è¤ëÊ¬³ä)
+// ãƒ†ãƒ¼ãƒ–ãƒ«ã‚’ä½¿ã†ã‹å¦ã‹(FALSEã¯CSSã®divã«ã‚ˆã‚‹åˆ†å‰²)
 define("PLUGIN_CODE_TABLE",     TRUE);
 
-// TABÉı
+// TABå¹…
 define("WIDTHOFTAB", "    ");
 
 define("PLUGIN_CODE_USAGE", 
@@ -34,7 +34,7 @@ define("PLUGIN_CODE_USAGE",
 global $javascript; $javascript = TRUE;
 
 define("CODE_HEADER", "code_");
-// ²èÁü¥Õ¥¡¥¤¥ë¤ÎÀßÄê
+// ç”»åƒãƒ•ã‚¡ã‚¤ãƒ«ã®è¨­å®š
 define("CODE_IMAGE_FILE", IMAGE_DIR.'code_dot.png');
 define("CODE_OUTLINE_OPEN_FILE",  IMAGE_DIR.'plus/outline_open.png');
 define("CODE_OUTLINE_CLOSE_FILE", IMAGE_DIR.'plus/outline_close.png');
@@ -66,18 +66,18 @@ function plugin_code_convert() {
     $title = "";
 	$lang = null;
     $option = array(
-                  "number"      => FALSE,  // ¹ÔÈÖ¹æ¤òÉ½¼¨¤¹¤ë
-                  "nonumber"    => FALSE,  // ¹ÔÈÖ¹æ¤òÉ½¼¨¤·¤Ê¤¤
-                  "outline"     => FALSE,  // ¥¢¥¦¥È¥é¥¤¥ó ¥â¡¼¥É
-                  "nooutline"   => FALSE,  // ¥¢¥¦¥È¥é¥¤¥ó Ìµ¸ú
-		  "comment"     => FALSE,  // ¥³¥á¥ó¥È
+                  "number"      => FALSE,  // è¡Œç•ªå·ã‚’è¡¨ç¤ºã™ã‚‹
+                  "nonumber"    => FALSE,  // è¡Œç•ªå·ã‚’è¡¨ç¤ºã—ãªã„
+                  "outline"     => FALSE,  // ã‚¢ã‚¦ãƒˆãƒ©ã‚¤ãƒ³ ãƒ¢ãƒ¼ãƒ‰
+                  "nooutline"   => FALSE,  // ã‚¢ã‚¦ãƒˆãƒ©ã‚¤ãƒ³ ç„¡åŠ¹
+		  "comment"     => FALSE,  // ã‚³ãƒ¡ãƒ³ãƒˆ
 		  "nocomment"   => FALSE,  // define("PLUGIN_CODE_", TRUE);
-		  "menu"        => FALSE,  // ¥á¥Ë¥å¡¼¤òÉ½¼¨¤¹¤ë
-		  "nomenu"      => FALSE,  // ¥á¥Ë¥å¡¼¤òÉ½¼¨¤·¤Ê¤¤
-		  "icon"        => FALSE,  // ¥¢¥¤¥³¥ó¤òÉ½¼¨¤¹¤ë
-		  "noicon"      => FALSE,  // ¥¢¥¤¥³¥ó¤òÉ½¼¨¤·¤Ê¤¤
-                  "link"        => FALSE,  // ¥ª¡¼¥È¥ê¥ó¥¯ Í­¸ú
-                  "nolink"      => FALSE,  // ¥ª¡¼¥È¥ê¥ó¥¯ Ìµ¸ú
+		  "menu"        => FALSE,  // ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã‚’è¡¨ç¤ºã™ã‚‹
+		  "nomenu"      => FALSE,  // ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã‚’è¡¨ç¤ºã—ãªã„
+		  "icon"        => FALSE,  // ã‚¢ã‚¤ã‚³ãƒ³ã‚’è¡¨ç¤ºã™ã‚‹
+		  "noicon"      => FALSE,  // ã‚¢ã‚¤ã‚³ãƒ³ã‚’è¡¨ç¤ºã—ãªã„
+                  "link"        => FALSE,  // ã‚ªãƒ¼ãƒˆãƒªãƒ³ã‚¯ æœ‰åŠ¹
+                  "nolink"      => FALSE,  // ã‚ªãƒ¼ãƒˆãƒªãƒ³ã‚¯ ç„¡åŠ¹
               );
     $num_of_arg = func_num_args();
     $args = func_get_args();
@@ -92,22 +92,22 @@ function plugin_code_convert() {
 
 	if ($num_of_arg != 1 && !code_check_argment($args[0], $option)) {
 		$is_setlang = TRUE;
-		$lang = $args[0]; // ¸À¸ìÌ¾¤«¥ª¥×¥·¥ç¥ó¤ÎÈ½Äê
+		$lang = $args[0]; // è¨€èªåã‹ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã®åˆ¤å®š
 	}
 	else
 		$lang = PLUGIN_CODE_LANGUAGE; // default
 		
-    // ¥ª¥×¥·¥ç¥ó¤òÄ´¤Ù¤ë
+    // ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã‚’èª¿ã¹ã‚‹
     for ($i = 1;$i < $num_of_arg-1; $i++) {
         code_check_argment($args[$i], $option);
     }
 	
 
-    // ²ş¹Ô¥³¡¼¥ÉÊÑ´¹
+    // æ”¹è¡Œã‚³ãƒ¼ãƒ‰å¤‰æ›
 	$data = str_replace("\r\n", "\n", $data);
     $data = strtr($data,"\r", "\n");
 
-    // ºÇ¸å¤ÎÊ¸»ú¤¬²ş¹Ô¤Ç¤Ê¤¤¾ì¹ç¤Ï³°Éô¥Õ¥¡¥¤¥ë
+    // æœ€å¾Œã®æ–‡å­—ãŒæ”¹è¡Œã§ãªã„å ´åˆã¯å¤–éƒ¨ãƒ•ã‚¡ã‚¤ãƒ«
     if ($data[strlen($data)-1] != "\n") {
         $params = code_read_file_data($data);
         if (isset($params['_error']) && $params['_error'] != '') {
@@ -139,7 +139,7 @@ class CodeHighlight {
 
 	function CodeHighlight() {
 		// common
-        define("CODE_CANCEL",          0); // »ØÄê¤òÌµ¸ú²½¤¹¤ë
+        define("CODE_CANCEL",          0); // æŒ‡å®šã‚’ç„¡åŠ¹åŒ–ã™ã‚‹
         define("IDENTIFIRE",           2); 
         define("SPECIAL_IDENTIFIRE",   3); 
         define("STRING_LITERAL",       5); 
@@ -151,22 +151,22 @@ class CodeHighlight {
 		// outline
         define("BLOCK_START",         20);
         define("BLOCK_END",           21);
-		// ¹Ô»Ø¸şÍÑ
-        define("COMMENT_CHAR",        50); // 1Ê¸»ú¤Ç¥³¥á¥ó¥È¤È·èÄê¤Ç¤­¤ë¤â¤Î
-        define("COMMENT_WORD",        51); // ¥³¥á¥ó¥È¤¬Ê¸»úÎó¤Ç»Ï¤Ş¤ë¤â¤Î
-        define("HEAD_COMMENT",        52); // ¥³¥á¥ó¥È¤¬¹ÔÆ¬¤À¤±¤Î¤â¤Î (1Ê¸»ú)  // fortran
-        define("HEADW_COMMENT",       53); // ¥³¥á¥ó¥È¤¬¹ÔÆ¬¤À¤±¤Î¤â¤Î   // pukiwiki
-        define("CHAR_COMMENT",        54); // ¥³¥á¥ó¥È¤¬¹ÔÆ¬¤À¤±¤«¤Ä±Ñ»ú¤Ç¤¢¤ë¤Î¤â¤Î (1Ê¸»ú) // fortran
-        define("IDENTIFIRE_CHAR",     60); // 1Ê¸»ú¤ÇÌ¿Îá¤¬·èÄê¤¹¤ë¤â¤Î
-        define("IDENTIFIRE_WORD",     61); // Ì¿Îá¤¬Ê¸»úÎó¤Ç·èÄê¤¹¤ë¤â¤Î
-        define("MULTILINE",           62); // Ê£¿ôÊ¸»úÎó¤Ø¤ÎÌ¿Îá
+		// è¡ŒæŒ‡å‘ç”¨
+        define("COMMENT_CHAR",        50); // 1æ–‡å­—ã§ã‚³ãƒ¡ãƒ³ãƒˆã¨æ±ºå®šã§ãã‚‹ã‚‚ã®
+        define("COMMENT_WORD",        51); // ã‚³ãƒ¡ãƒ³ãƒˆãŒæ–‡å­—åˆ—ã§å§‹ã¾ã‚‹ã‚‚ã®
+        define("HEAD_COMMENT",        52); // ã‚³ãƒ¡ãƒ³ãƒˆãŒè¡Œé ­ã ã‘ã®ã‚‚ã® (1æ–‡å­—)  // fortran
+        define("HEADW_COMMENT",       53); // ã‚³ãƒ¡ãƒ³ãƒˆãŒè¡Œé ­ã ã‘ã®ã‚‚ã®   // pukiwiki
+        define("CHAR_COMMENT",        54); // ã‚³ãƒ¡ãƒ³ãƒˆãŒè¡Œé ­ã ã‘ã‹ã¤è‹±å­—ã§ã‚ã‚‹ã®ã‚‚ã® (1æ–‡å­—) // fortran
+        define("IDENTIFIRE_CHAR",     60); // 1æ–‡å­—ã§å‘½ä»¤ãŒæ±ºå®šã™ã‚‹ã‚‚ã®
+        define("IDENTIFIRE_WORD",     61); // å‘½ä»¤ãŒæ–‡å­—åˆ—ã§æ±ºå®šã™ã‚‹ã‚‚ã®
+        define("MULTILINE",           62); // è¤‡æ•°æ–‡å­—åˆ—ã¸ã®å‘½ä»¤
 
-        define("CARRIAGERETURN",      70); // ¶õ¹Ô
-		define("POST_IDENTIFIRE",     71); // Ê¸Ëö¤Î¸ì¤è¤Ã¤Æ·è¤Ş¤ë¥ë¡¼¥ë		
+        define("CARRIAGERETURN",      70); // ç©ºè¡Œ
+		define("POST_IDENTIFIRE",     71); // æ–‡æœ«ã®èªã‚ˆã£ã¦æ±ºã¾ã‚‹ãƒ«ãƒ¼ãƒ«		
 	}
 
     function highlight($lang, $src, &$option) {
-		static $id_number = 0; // ¥×¥é¥°¥¤¥ó¤¬¸Æ¤Ğ¤ì¤¿²ó¿ô(ID¤ËÍøÍÑ)
+		static $id_number = 0; // ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ãŒå‘¼ã°ã‚ŒãŸå›æ•°(IDã«åˆ©ç”¨)
         $id_number++;
 
 		if (strlen($lang) > 16)
@@ -177,35 +177,35 @@ class CodeHighlight {
 		$option["comment"] = (PLUGIN_CODE_COMMENT && !$option["nocomment"] || $option["comment"]);
 		$option["link"]    = (PLUGIN_CODE_LINK    && !$option["nolink"]    || $option["link"]);
 
-        // mozilla¤Î¶õÇò¹ÔÂĞºö
+        // mozillaã®ç©ºç™½è¡Œå¯¾ç­–
         if($option["number"] || $option["outline"]) {
-            // ¥é¥¤¥óÉ½¼¨ÍÑÊäÀµ
+            // ãƒ©ã‚¤ãƒ³è¡¨ç¤ºç”¨è£œæ­£
             $src = preg_replace("/^$/m"," ",$src);
         }
 		
         $lang = htmlspecialchars(strtolower($lang));
 
 		if (file_exists(PLUGIN_DIR.'code/keyword.'.$lang.'.php')) {
-			// ¸À¸ìÄêµÁ¥Õ¥¡¥¤¥ë¤¬Í­¤ë¸À¸ì
+			// è¨€èªå®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«ãŒæœ‰ã‚‹è¨€èª
 			$data = $this->srcToHTML($src, $lang, $id_number, $option);
 			$src = "<pre class=\"code\"><code class=\"" .$lang. "\">".$data['src']."</code></pre>";
 		} else if (file_exists(PLUGIN_DIR.'code/line.'.$lang.'.php')) {
-			// ¹Ô»Ø¸ş²òÀÏÍÑÀßÄê¥Õ¥¡¥¤¥ë¤¬Í­¤ë¸À¸ì
+			// è¡ŒæŒ‡å‘è§£æç”¨è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ãŒæœ‰ã‚‹è¨€èª
 			$data = $this->lineToHTML($src, $lang, $id_number, $option);
 			$src = "<pre class=\"code\"><code class=\"" .$lang. "\">".$data['src']."</code></pre>";
 		} else {
-			// PHP ¤È Ì¤ÄêµÁ¸À¸ì
+			// PHP ã¨ æœªå®šç¾©è¨€èª
 			$option["outline"] = false;
 			$option["comment"] = false;
 
-			// ºÇ¸å¤ÎÍ¾Ê¬¤Ê²ş¹Ô¤òºï½ü
+			// æœ€å¾Œã®ä½™åˆ†ãªæ”¹è¡Œã‚’å‰Šé™¤
 			if ($src[strlen($src)-2] == ' ')
 				$src = substr($src, 0, -2);
 			else
 				$src= substr($src, 0, -1);
 
 			if ($option["number"]) {
-				// ¹Ô¿ô¤òÆÀ¤ë
+				// è¡Œæ•°ã‚’å¾—ã‚‹
 				$num_of_line = substr_count($src, "\n");
  				if($src[strlen($src)-1]=="\n")
  					$src=substr($src,0,-1);
@@ -213,10 +213,10 @@ class CodeHighlight {
 				$data['number'] = $this->makeNumber($num_of_line-1);
 			}
 			if ('php' == $lang) 
-				// PHP¤ÏÉ¸½àµ¡Ç½¤ò»È¤¦
+				// PHPã¯æ¨™æº–æ©Ÿèƒ½ã‚’ä½¿ã†
 				$src =  "<pre class=\"code\">".$this->highlightPHP($src). "</pre>";
 			else
-				// Ì¤ÄêµÁ¸À¸ì
+				// æœªå®šç¾©è¨€èª
 				$src =  "<pre class=\"code\"><code class=\"unknown\">" .htmlspecialchars($src). "</code></pre>";
 		}
 
@@ -225,10 +225,10 @@ class CodeHighlight {
 
 		$menu = '';
 		if ($option["menu"]) {
-			// ¥¢¥¤¥³¥ó¤ÎÀßÄê
+			// ã‚¢ã‚¤ã‚³ãƒ³ã®è¨­å®š
 			$menu .= '<div class="'.CODE_HEADER.'menu">';
 			if ($option["outline"]) {
-				// ¥¢¥¦¥È¥é¥¤¥ó¤Î¥á¥Ë¥å¡¼
+				// ã‚¢ã‚¦ãƒˆãƒ©ã‚¤ãƒ³ã®ãƒ¡ãƒ‹ãƒ¥ãƒ¼
 				$_code_expand = _("Everything is expanded.");
 				$_code_short = _("Everything is shortened.");
 				$menu .= "<img src=\"".CODE_OUTLINE_OPEN_FILE."\" style=\"cursor: hand\" alt=\"$_code_expand\" title=\"$_code_expand\" "
@@ -239,7 +239,7 @@ class CodeHighlight {
 					."onkeypress=\"javascript:code_all_outline('".CODE_HEADER.$id_number."',".$data['blocknum'].",'none','".IMAGE_DIR."')\" />\n";
 			}
 			if ($option["comment"]){
-				// ¥³¥á¥ó¥È¤Î³«ÊÄ¥Ü¥¿¥ó
+				// ã‚³ãƒ¡ãƒ³ãƒˆã®é–‹é–‰ãƒœã‚¿ãƒ³
 				$menu .= "<input type=\"button\" value=\"comment open\" "
 					."onclick=\"javascript:code_comment('".CODE_HEADER.$id_number."',".$data['commentnum'].",'')\" "
 					."onkeypress=\"javascript:code_comment('".CODE_HEADER.$id_number."',".$data['commentnum'].",'')\" />";
@@ -252,7 +252,7 @@ class CodeHighlight {
 
 		if ($option["outline"] || $option["number"] || $option["comment"]) {
 			if (PLUGIN_CODE_TABLE) {
-				// ¥Æ¡¼¥Ö¥ë¤Ë¤è¤ëÃÊÁÈ
+				// ãƒ†ãƒ¼ãƒ–ãƒ«ã«ã‚ˆã‚‹æ®µçµ„
 				$html .= "<div id=\"".CODE_HEADER.$id_number."\" class=\"".CODE_HEADER."table\">";
 				$html .= $menu;
 				$html .= "<table id=\"".CODE_HEADER.$id_number."\" class=\"".CODE_HEADER.
@@ -264,7 +264,7 @@ class CodeHighlight {
 				$html .= "<td class=\"".CODE_HEADER."src\">".$src."</td>\n".
 					"</tr></table></div>\n";
 			} else {
-				// CSS¤Îdiv¤Ë¤è¤ëÃÊÁÈ
+				// CSSã®divã«ã‚ˆã‚‹æ®µçµ„
 				$html .= '<div  id="'.CODE_HEADER.$id_number.'" class="'.CODE_HEADER.'table">';
 				$html .= $menu;
 				if ($option["number"])
@@ -282,14 +282,14 @@ class CodeHighlight {
 	}
 
 	/**
-	 * ¤³¤Î´Ø¿ô¤Ï1¹ÔÀÚ¤ê½Ğ¤¹
-	 * Äê·¿¥Õ¥©¡¼¥Ş¥Ã¥È¤ò»ı¤Ä¸À¸ìÍÑ
+	 * ã“ã®é–¢æ•°ã¯1è¡Œåˆ‡ã‚Šå‡ºã™
+	 * å®šå‹ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã‚’æŒã¤è¨€èªç”¨
 	 */
 	function getline(&$string){
 		$line = '';
 		if(!$string[0]) return false;
-		$pos = strpos($string, "\n"); // ²ş¹Ô¤Ş¤ÇÀÚ¤ê½Ğ¤¹
-		if ($pos === false) { // ¸«¤Ä¤«¤é¤Ê¤¤¤È¤­¤Ï½ª¤ï¤ê¤Ş¤Ç
+		$pos = strpos($string, "\n"); // æ”¹è¡Œã¾ã§åˆ‡ã‚Šå‡ºã™
+		if ($pos === false) { // è¦‹ã¤ã‹ã‚‰ãªã„ã¨ãã¯çµ‚ã‚ã‚Šã¾ã§
 			$line = $string;
 			$string = '';
 		} else {
@@ -301,63 +301,63 @@ class CodeHighlight {
 
 
 	/**
-	 * ¤³¤Î´Ø¿ô¤Ï¹ÔÆ¬¤ÎÊ¸»ú¤òÈ½Äê¤·¤Æ²òÀÏ¡¦ÊÑ´¹¤¹¤ë
-	 * Äê·¿¥Õ¥©¡¼¥Ş¥Ã¥È¤ò»ı¤Ä¸À¸ìÍÑ
+	 * ã“ã®é–¢æ•°ã¯è¡Œé ­ã®æ–‡å­—ã‚’åˆ¤å®šã—ã¦è§£æãƒ»å¤‰æ›ã™ã‚‹
+	 * å®šå‹ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã‚’æŒã¤è¨€èªç”¨
 	 */
 	function lineToHTML($string, $lang, $id_number, &$option) {
 
-        // ¥Æ¡¼¥Ö¥ë¥¸¥ã¥ó¥×ÍÑ¥Ï¥Ã¥·¥å
+        // ãƒ†ãƒ¼ãƒ–ãƒ«ã‚¸ãƒ£ãƒ³ãƒ—ç”¨ãƒãƒƒã‚·ãƒ¥
         $switchHash = Array();
-        $capital = FALSE; // ÂçÊ¸»ú¾®Ê¸»ú¤ò¶èÊÌ¤·¤Ê¤¤
+        $capital = FALSE; // å¤§æ–‡å­—å°æ–‡å­—ã‚’åŒºåˆ¥ã—ãªã„
 
-		$option["outline"] = false; // outline¤ò»È¤ï¤Ê¤¤
+		$option["outline"] = false; // outlineã‚’ä½¿ã‚ãªã„
 		$mknumber  = $option["number"];
 
-		// ²ş¹Ô
+		// æ”¹è¡Œ
 		$switchHash["\n"] = CARRIAGERETURN;
-		// ¥¨¥¹¥±¡¼¥×Ê¸»ú
+		// ã‚¨ã‚¹ã‚±ãƒ¼ãƒ—æ–‡å­—
         $switchHash['\\'] = ESCAPE;
-        // ¼±ÊÌ»Ò³«»ÏÊ¸»ú
+        // è­˜åˆ¥å­é–‹å§‹æ–‡å­—
         for ($i = ord("a"); $i <= ord("z"); $i++)
             $switchHash[chr($i)] = IDENTIFIRE;
         for ($i = ord("A"); $i <= ord("Z"); $i++)
             $switchHash[chr($i)] = IDENTIFIRE;
         $switchHash["_"] = IDENTIFIRE;
 
-        // Ê¸»úÎó³«»ÏÊ¸»ú
+        // æ–‡å­—åˆ—é–‹å§‹æ–‡å­—
         $switchHash["\""] = STRING_LITERAL;
-		$linemode = false; // ¹ÔÆâ¤ò²òÀÏ¤¹¤ë¤«Èİ¤«
+		$linemode = false; // è¡Œå†…ã‚’è§£æã™ã‚‹ã‹å¦ã‹
 
-        // ¸À¸ìÄêµÁ¥Õ¥¡¥¤¥ëÆÉ¤ß¹ş¤ß
+        // è¨€èªå®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«èª­ã¿è¾¼ã¿
         include(PLUGIN_DIR.'code/line.'.$lang.'.php');
 
 
         $str_len = strlen($string);
-        // Ê¸»ú->htmlÊÑ´¹ÍÑ¥Ï¥Ã¥·¥å
+        // æ–‡å­—->htmlå¤‰æ›ç”¨ãƒãƒƒã‚·ãƒ¥
         $htmlHash = Array("\"" => "&quot;", "'" => "&#039;", "<" => "&lt;", ">" => "&gt;", 
 						  "&" => "&amp;", "\t" => WIDTHOFTAB);
  
-        $html = "";   // ½ĞÎÏ¤µ¤ì¤ëHTML¥³¡¼¥ÉÉÕ¤­¥½¡¼¥¹
-        $num_of_line = 0;  // ¹Ô¿ô¤ò¥«¥¦¥ó¥È
-		$commentnum = 0;  // ¥³¥á¥ó¥È¤ÎIDÈÖ¹æ
+        $html = "";   // å‡ºåŠ›ã•ã‚Œã‚‹HTMLã‚³ãƒ¼ãƒ‰ä»˜ãã‚½ãƒ¼ã‚¹
+        $num_of_line = 0;  // è¡Œæ•°ã‚’ã‚«ã‚¦ãƒ³ãƒˆ
+		$commentnum = 0;  // ã‚³ãƒ¡ãƒ³ãƒˆã®IDç•ªå·
 
 		$line = $this->getline($string);
 		while($line !== false) {
 			$num_of_line++;
 			while ($line[strlen($line)-2] == "\\") {
-				// ¹ÔËö¤¬¥¨¥¹¥±¡¼¥×Ê¸»ú¤Ê¤é¼¡¤Î¹Ô¤âÀÚ¤ê½Ğ¤¹
+				// è¡Œæœ«ãŒã‚¨ã‚¹ã‚±ãƒ¼ãƒ—æ–‡å­—ãªã‚‰æ¬¡ã®è¡Œã‚‚åˆ‡ã‚Šå‡ºã™
 				$num_of_line++;
 				$line .= $this->getline($string);
 			}
-			// ¹ÔÆ¬Ê¸»ú¤ÎÈ½Äê
+			// è¡Œé ­æ–‡å­—ã®åˆ¤å®š
             switch ($switchHash[$line[0]]) {
 
 			case CHAR_COMMENT:
 			case HEAD_COMMENT:
 			case COMMENT_CHAR:
-				// ¹ÔÆ¬¤Î1Ê¸»ú¤Ç¥³¥á¥ó¥È¤ÈÈ½ÃÇ¤Ç¤­¤ë¤â¤Î
+				// è¡Œé ­ã®1æ–‡å­—ã§ã‚³ãƒ¡ãƒ³ãƒˆã¨åˆ¤æ–­ã§ãã‚‹ã‚‚ã®
 
-				// html¤ËÄÉ²Ã
+				// htmlã«è¿½åŠ 
 				$commentnum++;
 				$line = htmlspecialchars(substr($line,0,-1), ENT_QUOTES);
 				if ($option["link"]) 
@@ -371,9 +371,9 @@ class CodeHighlight {
 
 			case HEADW_COMMENT:
 			case COMMENT_WORD:
-				// 2Ê¸»ú°Ê¾å¤Î¥Ñ¥¿¡¼¥ó¤«¤é»Ï¤Ş¤ë¥³¥á¥ó¥È
+				// 2æ–‡å­—ä»¥ä¸Šã®ãƒ‘ã‚¿ãƒ¼ãƒ³ã‹ã‚‰å§‹ã¾ã‚‹ã‚³ãƒ¡ãƒ³ãƒˆ
 				if (strncmp($line, $commentpattern, strlen($commentpattern)) == 0) {
-					// html¤ËÄÉ²Ã
+					// htmlã«è¿½åŠ 
 					$commentnum++;
 					$line = htmlspecialchars(substr($line,0,-1), ENT_QUOTES);
 				if ($option["link"]) 
@@ -385,11 +385,11 @@ class CodeHighlight {
 					$line = $this->getline($string); // next line
 					continue 2;
 				}
-				// ¥³¥á¥ó¥È¤Ç¤Ï¤Ê¤¤
+				// ã‚³ãƒ¡ãƒ³ãƒˆã§ã¯ãªã„
 				break;
 
 			case IDENTIFIRE_CHAR:
-				// ¹ÔÆ¬¤Î1Ê¸»ú¤¬°ÕÌ£¤ò»ı¤Ä¤â¤Î
+				// è¡Œé ­ã®1æ–‡å­—ãŒæ„å‘³ã‚’æŒã¤ã‚‚ã®
 				$index = $code_keyword[$line[0]];
 				$line = htmlspecialchars($line, ENT_QUOTES);
 				if ($option["link"]) 
@@ -405,12 +405,12 @@ class CodeHighlight {
 
 
 			case IDENTIFIRE_WORD:
-				if (strlen($line) < 2 && $line[0] == ' ') break; // ¶õ¹ÔÈ½Äê
-				// ¹ÔÆ¬¤Î¥Ñ¥¿¡¼¥ó¤òÄ´¤Ù¤ë
+				if (strlen($line) < 2 && $line[0] == ' ') break; // ç©ºè¡Œåˆ¤å®š
+				// è¡Œé ­ã®ãƒ‘ã‚¿ãƒ¼ãƒ³ã‚’èª¿ã¹ã‚‹
 				foreach ($code_identifire[$line[0]] as $pattern) {
 					if (strncmp($line, $pattern, strlen($pattern)) == 0) {
 						$index = $code_keyword[$pattern];
-						// html¤ËÄÉ²Ã
+						// htmlã«è¿½åŠ 
 						$line = htmlspecialchars($line, ENT_QUOTES);
 						if ($option["link"]) 
 							$line = preg_replace("/(s?https?:\/\/|ftp:\/\/|mailto:)([-_.!~*()a-zA-Z0-9;\/:@?=+$,%#]|&amp;)+/",
@@ -424,7 +424,7 @@ class CodeHighlight {
 						continue 3;
 					}
 				}
-				// ¹ÔÆ¬¤Î1Ê¸»ú¤¬°ÕÌ£¤ò»ı¤Ä¤â¤Î¤«È½Äê
+				// è¡Œé ­ã®1æ–‡å­—ãŒæ„å‘³ã‚’æŒã¤ã‚‚ã®ã‹åˆ¤å®š
 				$index = $code_keyword[$line[0]];
 				if ($index != "") {
 					$line = htmlspecialchars($line, ENT_QUOTES);
@@ -433,16 +433,16 @@ class CodeHighlight {
 					continue 2;
 				}
 				else
-					// IDENTIFIRE¤Ç¤Ï¤Ê¤¤
+					// IDENTIFIREã§ã¯ãªã„
 					break;
 
 			case MULTILINE:
-				// Ê£¿ô¹Ô¤ËÅÏ¤Ã¤Æ¸ú²Ì¤ò»ı¤Ä»ØÄê
+				// è¤‡æ•°è¡Œã«æ¸¡ã£ã¦åŠ¹æœã‚’æŒã¤æŒ‡å®š
 				$index = $code_keyword[$line[0]];
 				$src = $line;
 				$line = $this->getline($string);
 				while (in_array($line[0], $multilineEOL) === false && $line !== false) {
-					// ¸ú²Ì¤ÎÈÏ°ÏÆâ¤ò¼èÆÀ¤¹¤ë
+					// åŠ¹æœã®ç¯„å›²å†…ã‚’å–å¾—ã™ã‚‹
 					$src .= $line;
 					$num_of_line++;
 					$line = $this->getline($string);
@@ -458,8 +458,8 @@ class CodeHighlight {
 				continue 2;
 
 			case POST_IDENTIFIRE:
-				// ¹ÔÃæ¤ÎÆÃÄê¤Î¥Ñ¥¿¡¼¥ó¤ò¸¡º÷¤¹¤ë
-				// make¤Î¥¿¡¼¥²¥Ã¥ÈÍÑ ¼±ÊÌ»Ò(¥¢¥ë¥Õ¥¡¥Ù¥Ã¥È¤«¤é»Ï¤Ş¤Ã¤Æ¤¤¤ë)
+				// è¡Œä¸­ã®ç‰¹å®šã®ãƒ‘ã‚¿ãƒ¼ãƒ³ã‚’æ¤œç´¢ã™ã‚‹
+				// makeã®ã‚¿ãƒ¼ã‚²ãƒƒãƒˆç”¨ è­˜åˆ¥å­(ã‚¢ãƒ«ãƒ•ã‚¡ãƒ™ãƒƒãƒˆã‹ã‚‰å§‹ã¾ã£ã¦ã„ã‚‹)
 				$str_pos = strpos($line, $post_identifire);
 				if ($str_pos !== FALSE) {
 					$result  = htmlspecialchars(substr($line, 0, $str_pos), ENT_QUOTES);
@@ -470,11 +470,11 @@ class CodeHighlight {
 					continue 2;
 				}
 				else
-					// ³ºÅö¤·¤Ê¤¤
+					// è©²å½“ã—ãªã„
 					break;
 
 			default:
-				// ¹ÔÆâ¤ò²òÀÏ¤»¤º¤ËHTML¤ËÄÉ²Ã¤¹¤ë (diff)
+				// è¡Œå†…ã‚’è§£æã›ãšã«HTMLã«è¿½åŠ ã™ã‚‹ (diff)
 				if($linemode) {
 					$line = htmlspecialchars($line, ENT_QUOTES);
 				if ($option["link"]) 
@@ -486,27 +486,27 @@ class CodeHighlight {
 				}
 			} //switch
 				
-			// ¹ÔÆâ¤Î²òÀÏ 1Ê¸»ú¤º¤Ä²òÀÏ¤¹¤ë
+			// è¡Œå†…ã®è§£æ 1æ–‡å­—ãšã¤è§£æã™ã‚‹
 			$str_len = strlen($line);
 			$str_pos = 0;
 			if ($str_len == $str_pos) $code = false; else $code = $line[$str_pos++];// getc
 			while($code !== false) {
 				switch ($switchHash[$code]) {
 					
-				case CHAR_COMMENT: // ¹ÔÆ¬°Ê³°¤Ç¤Ï¥³¥á¥ó¥È¤Ë¤Ï¤Ê¤é¤Ê¤¤ (fortran)
+				case CHAR_COMMENT: // è¡Œé ­ä»¥å¤–ã§ã¯ã‚³ãƒ¡ãƒ³ãƒˆã«ã¯ãªã‚‰ãªã„ (fortran)
 				case IDENTIFIRE:
-					// ¼±ÊÌ»Ò(¥¢¥ë¥Õ¥¡¥Ù¥Ã¥È¤«¤é»Ï¤Ş¤Ã¤Æ¤¤¤ë)
+					// è­˜åˆ¥å­(ã‚¢ãƒ«ãƒ•ã‚¡ãƒ™ãƒƒãƒˆã‹ã‚‰å§‹ã¾ã£ã¦ã„ã‚‹)
 					
-					// ½ĞÍè¤ë¸Â¤êÄ¹¤¯¼±ÊÌ»Ò¤òÆÀ¤ë
-					$str_pos--;// ¥¨¥é¡¼½èÍı¤·¤¿¤¯¤Ê¤¤¤«¤épreg_match¤ÇÉ¬¤º¸«¤Ä¤«¤ë¤è¤¦¤Ë¤¹¤ë
+					// å‡ºæ¥ã‚‹é™ã‚Šé•·ãè­˜åˆ¥å­ã‚’å¾—ã‚‹
+					$str_pos--;// ã‚¨ãƒ©ãƒ¼å‡¦ç†ã—ãŸããªã„ã‹ã‚‰preg_matchã§å¿…ãšè¦‹ã¤ã‹ã‚‹ã‚ˆã†ã«ã™ã‚‹
 					$result = substr($line, $str_pos); 
 					preg_match("/[A-Za-z0-9_\-]+/", $result, $matches);
 					$str_pos += strlen($matches[0]);
 					$result = $matches[0];
 					
-					// html¤ËÄÉ²Ã
+					// htmlã«è¿½åŠ 
 					if($capital)
-						$index = $code_keyword[strtolower($result)];// ÂçÊ¸»ú¾®Ê¸»ú¤ò¶èÊÌ¤·¤Ê¤¤
+						$index = $code_keyword[strtolower($result)];// å¤§æ–‡å­—å°æ–‡å­—ã‚’åŒºåˆ¥ã—ãªã„
 					else
 						$index = $code_keyword[$result];
 					$result = htmlspecialchars($result, ENT_QUOTES);
@@ -515,21 +515,21 @@ class CodeHighlight {
 					else
 						$html .= $result;
 					
-					// ¼¡¤Î¸¡º÷ÍÑ¤ËÆÉ¤ß¹ş¤ß
+					// æ¬¡ã®æ¤œç´¢ç”¨ã«èª­ã¿è¾¼ã¿
 					if ($str_len == $str_pos) $code = false; else $code = $line[$str_pos++]; // getc
 					continue 2;
 					
 				case SPECIAL_IDENTIFIRE:
-					// ÆÃ¼ìÊ¸»ú¤«¤é»Ï¤Ş¤ë¼±ÊÌ»Ò
-					// ¼¡¤ÎÊ¸»ú¤¬±Ñ»ú¤«È½Äê
+					// ç‰¹æ®Šæ–‡å­—ã‹ã‚‰å§‹ã¾ã‚‹è­˜åˆ¥å­
+					// æ¬¡ã®æ–‡å­—ãŒè‹±å­—ã‹åˆ¤å®š
 					if (!ctype_alpha($line[$str_pos])) break;
 					$result = substr($line, $str_pos);
 					preg_match("/[A-Za-z0-9_\-]+/", $result, $matches);
 					$str_pos += strlen($matches[0]);
 					$result = $code.$matches[0];
-					// html¤ËÄÉ²Ã
+					// htmlã«è¿½åŠ 
 					if($capital)
-						$index = $code_keyword[strtolower($result)];// ÂçÊ¸»ú¾®Ê¸»ú¤ò¶èÊÌ¤·¤Ê¤¤
+						$index = $code_keyword[strtolower($result)];// å¤§æ–‡å­—å°æ–‡å­—ã‚’åŒºåˆ¥ã—ãªã„
 					else
 						$index = $code_keyword[$result];
 					$result = htmlspecialchars($result, ENT_QUOTES);
@@ -538,35 +538,35 @@ class CodeHighlight {
 					else
 						$html .= $result;
 					
-					// ¼¡¤Î¸¡º÷ÍÑ¤ËÆÉ¤ß¹ş¤ß
+					// æ¬¡ã®æ¤œç´¢ç”¨ã«èª­ã¿è¾¼ã¿
 					if ($str_len == $str_pos) $code = false; else $code = $line[$str_pos++]; // getc
 					continue 2;
 
 				case STRING_LITERAL:
 				case NONESCAPE_LITERAL:
-					// Ê¸»úÎó¥ê¥Æ¥é¥ë¤òÆÀ¤ë //¸½ºß¥¨¥¹¥±¡¼¥×¤¹¤ëÉ¬Í×¤¬Ìµ¤¤
+					// æ–‡å­—åˆ—ãƒªãƒ†ãƒ©ãƒ«ã‚’å¾—ã‚‹ //ç¾åœ¨ã‚¨ã‚¹ã‚±ãƒ¼ãƒ—ã™ã‚‹å¿…è¦ãŒç„¡ã„
 					$pos = $str_pos;
 					$result = substr($line, $str_pos);
-					$pos1 = strpos($result, $code); // Ê¸»úÎó½ªÎ»Ê¸»ú¸¡º÷
-					if ($pos1 === false) { // Ê¸»úÎó¤¬½ª¤ï¤é¤Ê¤«¤Ã¤¿¤Î¤ÇÁ´ÉôÊ¸»úÎó¤È¤¹¤ë
+					$pos1 = strpos($result, $code); // æ–‡å­—åˆ—çµ‚äº†æ–‡å­—æ¤œç´¢
+					if ($pos1 === false) { // æ–‡å­—åˆ—ãŒçµ‚ã‚ã‚‰ãªã‹ã£ãŸã®ã§å…¨éƒ¨æ–‡å­—åˆ—ã¨ã™ã‚‹
 						$str_pos = $str_len;
 					} else {
 						$str_pos += $pos1 + 1;
 					}
 					$result = $code.substr($line, $pos, $str_pos - $pos);
 					
-					// html¤ËÄÉ²Ã
+					// htmlã«è¿½åŠ 
 					$result = htmlspecialchars($result, ENT_QUOTES);
 					if ($option["link"]) 
 						$result = preg_replace("/(s?https?:\/\/|ftp:\/\/|mailto:)([-_.!~*()a-zA-Z0-9;\/:@?=+$,%#]|&amp;)+/",
 											   "<a href=\"$0\">$0</a>",$result);
 					$html .= '<span class="'.CODE_HEADER.'string">'.$result.'</span>';
 					
-					// ¼¡¤Î¸¡º÷ÍÑ¤ËÆÉ¤ß¹ş¤ß
+					// æ¬¡ã®æ¤œç´¢ç”¨ã«èª­ã¿è¾¼ã¿
 					if ($str_len == $str_pos) $code = false; else $code = $line[$str_pos++]; // getc
 					continue 2;
 
-				case COMMENT_CHAR: // 1Ê¸»ú¤Ç·è¤Ş¤ë¥³¥á¥ó¥È
+				case COMMENT_CHAR: // 1æ–‡å­—ã§æ±ºã¾ã‚‹ã‚³ãƒ¡ãƒ³ãƒˆ
 					$line = substr($line, $str_pos-1, $str_len-$str_pos);
 					$commentnum++;
 					$line = htmlspecialchars($line, ENT_QUOTES);
@@ -580,14 +580,14 @@ class CodeHighlight {
 					continue 3;
 
 				} //switch
-				// ¤½¤ÎÂ¾¤ÎÊ¸»ú
+				// ãã®ä»–ã®æ–‡å­—
 				$result = $htmlHash[$code];
 				if ($result) 
 					$html .= $result;
 				else
 					$html .= $code;
 				
-				// ¼¡¤Î¸¡º÷ÍÑ¤ËÆÉ¤ß¹ş¤ß
+				// æ¬¡ã®æ¤œç´¢ç”¨ã«èª­ã¿è¾¼ã¿
 				if ($str_len == $str_pos) $code = false; else $code = $line[$str_pos++]; // getc
 
 			}// while
@@ -595,106 +595,106 @@ class CodeHighlight {
 			$line = $this->getline($string); // next line
 		} // while
 		
-		// ºÇ¸å¤ÎÍ¾Ê¬¤Ê²ş¹Ô¤òºï½ü
+		// æœ€å¾Œã®ä½™åˆ†ãªæ”¹è¡Œã‚’å‰Šé™¤
 		if ($html[strlen($html)-2] == ' ')
 			$html = substr($html, 0, -2);
 		else
 			$html = substr($html, 0, -1);
 		
 		$html = array( 'src' => $html,  'number' => '', 'outline' => '', 'commentnum' => $commentnum,);
-		if($mknumber) $html['number'] = $this->makeNumber($num_of_line-2); // ºÇ¸å¤Ë²ş¹Ô¤òºï½ü¤·¤¿¤¿¤á -2
+		if($mknumber) $html['number'] = $this->makeNumber($num_of_line-2); // æœ€å¾Œã«æ”¹è¡Œã‚’å‰Šé™¤ã—ãŸãŸã‚ -2
 		return $html;
 	}
 
     /**
-      * ¥½¡¼¥¹¤«¤éHTMLÀ¸À®
+      * ã‚½ãƒ¼ã‚¹ã‹ã‚‰HTMLç”Ÿæˆ
       */
     function srcToHTML($string, $lang, $id_number, &$option) {
 
-        // ¥Æ¡¼¥Ö¥ë¥¸¥ã¥ó¥×ÍÑ¥Ï¥Ã¥·¥å
+        // ãƒ†ãƒ¼ãƒ–ãƒ«ã‚¸ãƒ£ãƒ³ãƒ—ç”¨ãƒãƒƒã‚·ãƒ¥
         $switchHash = Array();
-        $capital = FALSE; // ÂçÊ¸»ú¾®Ê¸»ú¤ò¶èÊÌ¤·¤Ê¤¤
+        $capital = FALSE; // å¤§æ–‡å­—å°æ–‡å­—ã‚’åŒºåˆ¥ã—ãªã„
 		$mkoutline = $option["outline"];
 		$mknumber  = $option["number"];
 
-		// ²ş¹Ô
+		// æ”¹è¡Œ
         $switchHash["\n"] = CARRIAGERETURN;
 
         $switchHash['\\'] = ESCAPE;
-        // ¼±ÊÌ»Ò³«»ÏÊ¸»ú
+        // è­˜åˆ¥å­é–‹å§‹æ–‡å­—
         for ($i = ord("a"); $i <= ord("z"); $i++)
             $switchHash[chr($i)] = IDENTIFIRE;
         for ($i = ord("A"); $i <= ord("Z"); $i++)
             $switchHash[chr($i)] = IDENTIFIRE;
         $switchHash["_"] = IDENTIFIRE;
 
-        // Ê¸»úÎó³«»ÏÊ¸»ú
+        // æ–‡å­—åˆ—é–‹å§‹æ–‡å­—
         $switchHash["\""] = STRING_LITERAL;
 
-        // ¸À¸ìÄêµÁ¥Õ¥¡¥¤¥ëÆÉ¤ß¹ş¤ß
+        // è¨€èªå®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«èª­ã¿è¾¼ã¿
         include(PLUGIN_DIR.'code/keyword.'.$lang.'.php');
 		
-        // Ê¸»ú->htmlÊÑ´¹ÍÑ¥Ï¥Ã¥·¥å
+        // æ–‡å­—->htmlå¤‰æ›ç”¨ãƒãƒƒã‚·ãƒ¥
         $htmlHash = Array("\"" => "&quot;", "'" => "&#039;", "<" => "&lt;", ">" => "&gt;", 
 						  "&" => "&amp;", "\t" => WIDTHOFTAB);
 
         $html = "";
         $str_len = strlen($string);
         $str_pos = 0;
-        $line = 0;  // ¹Ô¿ô¤ò¥«¥¦¥ó¥È
+        $line = 0;  // è¡Œæ•°ã‚’ã‚«ã‚¦ãƒ³ãƒˆ
         // for outline
-        $outline = Array();// $outline[lineno][nest] $outline[lineno][blockno]¤¬¤¢¤ë¡£
-        $nest = 1;// ¥Í¥¹¥È
-        $blockno = 0;// ²¿ÈÖÌÜ¤Î¥Ö¥í¥Ã¥¯¤«¡©ID¤ò¥æ¥Ë¡¼¥¯¤Ë¤¹¤ë¤¿¤á¤ËÍÑ¤¤¤ë
-        $last_start = false;// ºÇ¸å¤Ë¥Ö¥í¥Ã¥¯³«»Ï¤À¤Ã¤¿¤«¡¢¡¢¡¢¡£
+        $outline = Array();// $outline[lineno][nest] $outline[lineno][blockno]ãŒã‚ã‚‹ã€‚
+        $nest = 1;// ãƒã‚¹ãƒˆ
+        $blockno = 0;// ä½•ç•ªç›®ã®ãƒ–ãƒ­ãƒƒã‚¯ã‹ï¼ŸIDã‚’ãƒ¦ãƒ‹ãƒ¼ã‚¯ã«ã™ã‚‹ãŸã‚ã«ç”¨ã„ã‚‹
+        $last_start = false;// æœ€å¾Œã«ãƒ–ãƒ­ãƒƒã‚¯é–‹å§‹ã ã£ãŸã‹ã€ã€ã€ã€‚
 		$commentno = 0;
 
-        // ºÇ½é¤Î¸¡º÷ÍÑ¤ËÆÉ¤ß¹ş¤ß
+        // æœ€åˆã®æ¤œç´¢ç”¨ã«èª­ã¿è¾¼ã¿
         if ($str_len == $str_pos) $code = false; else $code = $string[$str_pos++];// getc
         while ($code !== false) {
 
             switch ($switchHash[$code]) {
 
-			case CARRIAGERETURN: // ²ş¹Ô
+			case CARRIAGERETURN: // æ”¹è¡Œ
 				$line++;
 				$html .="\n";
 				
-				// ¼¡¤Î¸¡º÷ÍÑ¤ËÆÉ¤ß¹ş¤ß
+				// æ¬¡ã®æ¤œç´¢ç”¨ã«èª­ã¿è¾¼ã¿
 				if ($str_len == $str_pos) $code = false; else $code = $string[$str_pos++]; // getc
 				continue 2;
 
 			case ESCAPE:
 				// escape charactor
 				$start = $code;
-				// È½ÄêÍÑ¤Ë¤â¤¦1Ê¸»úÆÉ¤ß¹ş¤à
+				// åˆ¤å®šç”¨ã«ã‚‚ã†1æ–‡å­—èª­ã¿è¾¼ã‚€
 				if ($str_len == $str_pos)
 					$code = false;
 				else
 					$code = $string[$str_pos++]; // getc
 				if (ctype_alnum($code)) {
-					// Ê¸»ú(ÊÑ¿ô)¤Ê¤é½ªÃ¼¤Ş¤Ç¸«ÉÕ¤±¤ë
-					$str_pos--; // ¥¨¥é¡¼½èÍı¤·¤¿¤¯¤Ê¤¤¤«¤épreg_match¤ÇÉ¬¤º¸«¤Ä¤«¤ë¤è¤¦¤Ë¤¹¤ë
+					// æ–‡å­—(å¤‰æ•°)ãªã‚‰çµ‚ç«¯ã¾ã§è¦‹ä»˜ã‘ã‚‹
+					$str_pos--; // ã‚¨ãƒ©ãƒ¼å‡¦ç†ã—ãŸããªã„ã‹ã‚‰preg_matchã§å¿…ãšè¦‹ã¤ã‹ã‚‹ã‚ˆã†ã«ã™ã‚‹
 					$result = substr($string, $str_pos);
 					preg_match("/[A-Za-z0-9_]+/", $result, $matches);
 					$str_pos += strlen($matches[0]);
 					$result = $matches[0];
 				} else {
-					// µ­¹æ¤Ê¤é1Ê¸»ú¤À¤±ÀÚ¤ê½Ğ¤¹
+					// è¨˜å·ãªã‚‰1æ–‡å­—ã ã‘åˆ‡ã‚Šå‡ºã™
 					$result = $code;
 					if ($code == "\n") $line++;
 				}
 				
-				// html¤ËÄÉ²Ã
+				// htmlã«è¿½åŠ 
 				$html .= htmlspecialchars($start.$result, ENT_QUOTES);
 				
-				// ¼¡¤Î¸¡º÷ÍÑ¤ËÆÉ¤ß¹ş¤ß
+				// æ¬¡ã®æ¤œç´¢ç”¨ã«èª­ã¿è¾¼ã¿
 				if ($str_len == $str_pos) $code = false; else $code = $string[$str_pos++]; // getc
 				continue 2;
 				
 			case COMMENT:
-				// ¥³¥á¥ó¥È
+				// ã‚³ãƒ¡ãƒ³ãƒˆ
 				
-				// ½ĞÍè¤ë¸Â¤êÄ¹¤¯¼±ÊÌ»Ò¤òÆÀ¤ë
+				// å‡ºæ¥ã‚‹é™ã‚Šé•·ãè­˜åˆ¥å­ã‚’å¾—ã‚‹
 				$str_pos--;
 				$result = substr($string, $str_pos);
 				foreach($code_comment[$code] as $pattern) {
@@ -702,11 +702,11 @@ class CodeHighlight {
 						$str_pos += strlen($matches[0]);
 						$result = $matches[0];
 						
-						// ¥é¥¤¥ó¿ô¥«¥¦¥ó¥È
+						// ãƒ©ã‚¤ãƒ³æ•°ã‚«ã‚¦ãƒ³ãƒˆ
 						$line+=substr_count($result,"\n");
 						$commentno++;
 						
-						// html¤ËÄÉ²Ã
+						// htmlã«è¿½åŠ 
 						$result = str_replace("\t", WIDTHOFTAB, htmlspecialchars($result, ENT_QUOTES));
 						if ($option["link"]) 
 							$result = preg_replace("/(s?https?:\/\/|ftp:\/\/|mailto:)([-_.!~*()a-zA-Z0-9;\/:@?=+$,%#]|&amp;)+/",
@@ -714,19 +714,19 @@ class CodeHighlight {
 						$html .= '<span class="'.CODE_HEADER.'comment" id="'.CODE_HEADER.$id_number.'_cmt_'.$commentno.'">'
 							.$result.'</span>';
 						
-						// ¼¡¤Î¸¡º÷ÍÑ¤ËÆÉ¤ß¹ş¤ß
+						// æ¬¡ã®æ¤œç´¢ç”¨ã«èª­ã¿è¾¼ã¿
 						if ($str_len == $str_pos) $code = false; else $code = $string[$str_pos++]; // getc
 						continue 3;
 					}
 				}
-				// ¥³¥á¥ó¥È¤Ç¤Ï¤Ê¤¤
+				// ã‚³ãƒ¡ãƒ³ãƒˆã§ã¯ãªã„
 				$str_pos++;
 				break;
 				
 			case COMMENT_WORD:
-				// Ê¸»úÎó¤«¤é»Ï¤Ş¤ë¥³¥á¥ó¥È
+				// æ–‡å­—åˆ—ã‹ã‚‰å§‹ã¾ã‚‹ã‚³ãƒ¡ãƒ³ãƒˆ
 				
-				// ½ĞÍè¤ë¸Â¤êÄ¹¤¯¼±ÊÌ»Ò¤òÆÀ¤ë
+				// å‡ºæ¥ã‚‹é™ã‚Šé•·ãè­˜åˆ¥å­ã‚’å¾—ã‚‹
 				$str_pos--;
 				$result = substr($string, $str_pos);
 				foreach($code_comment[$code] as $pattern) {
@@ -734,11 +734,11 @@ class CodeHighlight {
 						$str_pos += strlen($matches[0]);
 						$result = $matches[0];
 						
-						// ¥é¥¤¥ó¿ô¥«¥¦¥ó¥È
+						// ãƒ©ã‚¤ãƒ³æ•°ã‚«ã‚¦ãƒ³ãƒˆ
 						$line+=substr_count($result,"\n");
 						$commentno++;
 						
-						// html¤ËÄÉ²Ã
+						// htmlã«è¿½åŠ 
 						$result = str_replace("\t", WIDTHOFTAB, htmlspecialchars($result, ENT_QUOTES));
 						if ($option["link"]) 
 							$result = preg_replace("/(s?https?:\/\/|ftp:\/\/|mailto:)([-_.!~*()a-zA-Z0-9;\/:@?=+$,%#]|&amp;)+/",
@@ -746,26 +746,26 @@ class CodeHighlight {
 						$html .= '<span class="'.CODE_HEADER.'comment" id="'.CODE_HEADER.$id_number.'_cmt_'.$commentno.'">'
 							.$result.'</span>';
 						
-						// ¼¡¤Î¸¡º÷ÍÑ¤ËÆÉ¤ß¹ş¤ß
+						// æ¬¡ã®æ¤œç´¢ç”¨ã«èª­ã¿è¾¼ã¿
 						if ($str_len == $str_pos) $code = false; else $code = $string[$str_pos++]; // getc
 						continue 3;
 					}
 				}
 				$str_pos++;
-				// ¥³¥á¥ó¥È¤Ç¤Ê¤±¤ì¤ĞÊ¸»úÎó break ¤ò»È¤ï¤Ê¤¤
+				// ã‚³ãƒ¡ãƒ³ãƒˆã§ãªã‘ã‚Œã°æ–‡å­—åˆ— break ã‚’ä½¿ã‚ãªã„
 			case IDENTIFIRE:
-				// ¼±ÊÌ»Ò(¥¢¥ë¥Õ¥¡¥Ù¥Ã¥È¤«¤é»Ï¤Ş¤Ã¤Æ¤¤¤ë)
+				// è­˜åˆ¥å­(ã‚¢ãƒ«ãƒ•ã‚¡ãƒ™ãƒƒãƒˆã‹ã‚‰å§‹ã¾ã£ã¦ã„ã‚‹)
 				
-				// ½ĞÍè¤ë¸Â¤êÄ¹¤¯¼±ÊÌ»Ò¤òÆÀ¤ë
-				$str_pos--;// ¥¨¥é¡¼½èÍı¤·¤¿¤¯¤Ê¤¤¤«¤épreg_match¤ÇÉ¬¤º¸«¤Ä¤«¤ë¤è¤¦¤Ë¤¹¤ë
+				// å‡ºæ¥ã‚‹é™ã‚Šé•·ãè­˜åˆ¥å­ã‚’å¾—ã‚‹
+				$str_pos--;// ã‚¨ãƒ©ãƒ¼å‡¦ç†ã—ãŸããªã„ã‹ã‚‰preg_matchã§å¿…ãšè¦‹ã¤ã‹ã‚‹ã‚ˆã†ã«ã™ã‚‹
 				$result = substr($string, $str_pos);
 				preg_match("/[A-Za-z0-9_\-]+/", $result, $matches);
 				$str_pos += strlen($matches[0]);
 				$result = $matches[0];
 				
-				// html¤ËÄÉ²Ã
+				// htmlã«è¿½åŠ 
 				if($capital)
-					$index = $code_keyword[strtolower($result)];// ÂçÊ¸»ú¾®Ê¸»ú¤ò¶èÊÌ¤·¤Ê¤¤
+					$index = $code_keyword[strtolower($result)];// å¤§æ–‡å­—å°æ–‡å­—ã‚’åŒºåˆ¥ã—ãªã„
 				else
 					$index = $code_keyword[$result];
 				$result = htmlspecialchars($result, ENT_QUOTES);
@@ -775,21 +775,21 @@ class CodeHighlight {
 				else
 					$html .= $result;
 				
-				// ¼¡¤Î¸¡º÷ÍÑ¤ËÆÉ¤ß¹ş¤ß
+				// æ¬¡ã®æ¤œç´¢ç”¨ã«èª­ã¿è¾¼ã¿
 				if ($str_len == $str_pos) $code = false; else $code = $string[$str_pos++]; // getc
 				continue 2;
 				
 			case SPECIAL_IDENTIFIRE:
-				// ÆÃ¼ìÊ¸»ú¤«¤é»Ï¤Ş¤ë¼±ÊÌ»Ò
-				// ¼¡¤ÎÊ¸»ú¤¬±Ñ»ú¤«È½Äê
+				// ç‰¹æ®Šæ–‡å­—ã‹ã‚‰å§‹ã¾ã‚‹è­˜åˆ¥å­
+				// æ¬¡ã®æ–‡å­—ãŒè‹±å­—ã‹åˆ¤å®š
 				if (!ctype_alpha($string[$str_pos])) break;
 				$result = substr($string, $str_pos);
 				preg_match("/[A-Za-z0-9_\-]+/", $result, $matches);
 				$str_pos += strlen($matches[0]);
 				$result = $code.$matches[0];
-				// html¤ËÄÉ²Ã
+				// htmlã«è¿½åŠ 
 				if($capital)
-					$index = $code_keyword[strtolower($result)];// ÂçÊ¸»ú¾®Ê¸»ú¤ò¶èÊÌ¤·¤Ê¤¤
+					$index = $code_keyword[strtolower($result)];// å¤§æ–‡å­—å°æ–‡å­—ã‚’åŒºåˆ¥ã—ãªã„
 				else
 					$index = $code_keyword[$result];
 				$result = htmlspecialchars($result, ENT_QUOTES);
@@ -797,119 +797,119 @@ class CodeHighlight {
 					$html .= '<span class="'.CODE_HEADER.$code_css[$index-1].'">'.$result.'</span>';
 				else
 					$html .= $result;
-				// ¼¡¤Î¸¡º÷ÍÑ¤ËÆÉ¤ß¹ş¤ß
+				// æ¬¡ã®æ¤œç´¢ç”¨ã«èª­ã¿è¾¼ã¿
 				if ($str_len == $str_pos) $code = false; else $code = $string[$str_pos++]; // getc
 				continue 2;
 
 			case STRING_LITERAL:
-				// Ê¸»úÎó
+				// æ–‡å­—åˆ—
 				
-				// Ê¸»úÎó¥ê¥Æ¥é¥ë¤òÆÀ¤ë
+				// æ–‡å­—åˆ—ãƒªãƒ†ãƒ©ãƒ«ã‚’å¾—ã‚‹
 				$pos = $str_pos;
 				do {
 					$result = substr($string, $str_pos);
-					$pos1 = strpos($result, $code); // Ê¸»úÎó½ªÎ»Ê¸»ú¸¡º÷
-					if ($pos1 === false) { // Ê¸»úÎó¤¬½ª¤ï¤é¤Ê¤«¤Ã¤¿¤Î¤ÇÁ´ÉôÊ¸»úÎó¤È¤¹¤ë
+					$pos1 = strpos($result, $code); // æ–‡å­—åˆ—çµ‚äº†æ–‡å­—æ¤œç´¢
+					if ($pos1 === false) { // æ–‡å­—åˆ—ãŒçµ‚ã‚ã‚‰ãªã‹ã£ãŸã®ã§å…¨éƒ¨æ–‡å­—åˆ—ã¨ã™ã‚‹
 						$str_pos = $str_len;
 						break;
 					}
 					$str_pos += $pos1 + 1;
-				} while ($string[$str_pos-2] == "\\"); // Á°¤ÎÊ¸»ú¤¬¥¨¥¹¥±¡¼¥×Ê¸»ú¤Ê¤éÂ³¤±¤ë
+				} while ($string[$str_pos-2] == "\\"); // å‰ã®æ–‡å­—ãŒã‚¨ã‚¹ã‚±ãƒ¼ãƒ—æ–‡å­—ãªã‚‰ç¶šã‘ã‚‹
 				$result = $code.substr($string, $pos, $str_pos - $pos);
 				
-				// ¥é¥¤¥ó¿ô¥«¥¦¥ó¥È
+				// ãƒ©ã‚¤ãƒ³æ•°ã‚«ã‚¦ãƒ³ãƒˆ
 				$line+=substr_count($result,"\n");
 				
-				// html¤ËÄÉ²Ã
+				// htmlã«è¿½åŠ 
 				$result = htmlspecialchars($result, ENT_QUOTES);
 				if ($option["link"]) 
 					$result = preg_replace("/(s?https?:\/\/|ftp:\/\/|mailto:)([-_.!~*()a-zA-Z0-9;\/:@?=+$,%#]|&amp;)+/",
 										   "<a href=\"$0\">$0</a>",$result);
 				$html .= '<span class="'.CODE_HEADER.'string">'.$result.'</span>';
 				
-				// ¼¡¤Î¸¡º÷ÍÑ¤ËÆÉ¤ß¹ş¤ß
+				// æ¬¡ã®æ¤œç´¢ç”¨ã«èª­ã¿è¾¼ã¿
 				if ($str_len == $str_pos) $code = false; else $code = $string[$str_pos++]; // getc
 				continue 2;
 				
 			case NONESCAPE_LITERAL:
-				// ¥¨¥¹¥±¡¼¥×Ê¸»ú¤È¼°Å¸³«¤òÌµ»ë¤·¤¿Ê¸»úÎó
-				// Ê¸»úÎó¥ê¥Æ¥é¥ë¤òÆÀ¤ë
+				// ã‚¨ã‚¹ã‚±ãƒ¼ãƒ—æ–‡å­—ã¨å¼å±•é–‹ã‚’ç„¡è¦–ã—ãŸæ–‡å­—åˆ—
+				// æ–‡å­—åˆ—ãƒªãƒ†ãƒ©ãƒ«ã‚’å¾—ã‚‹
 
 				$pos = $str_pos;
 				$result = substr($string, $str_pos);
-				$pos1 = strpos($result, $code); // Ê¸»úÎó½ªÎ»Ê¸»ú¸¡º÷
-				if ($pos1 === false) { // Ê¸»úÎó¤¬½ª¤ï¤é¤Ê¤«¤Ã¤¿¤Î¤ÇÁ´ÉôÊ¸»úÎó¤È¤¹¤ë
+				$pos1 = strpos($result, $code); // æ–‡å­—åˆ—çµ‚äº†æ–‡å­—æ¤œç´¢
+				if ($pos1 === false) { // æ–‡å­—åˆ—ãŒçµ‚ã‚ã‚‰ãªã‹ã£ãŸã®ã§å…¨éƒ¨æ–‡å­—åˆ—ã¨ã™ã‚‹
 					$str_pos = $str_len;
 				} else {
 					$str_pos += $pos1 + 1;
 				}
 				$result = $code.substr($string, $pos, $str_pos - $pos);
 				
-				// html¤ËÄÉ²Ã
+				// htmlã«è¿½åŠ 
 				$result = htmlspecialchars($result, ENT_QUOTES);
 				if ($option["link"]) 
 					$result = preg_replace("/(s?https?:\/\/|ftp:\/\/|mailto:)([-_.!~*()a-zA-Z0-9;\/:@?=+$,%#]|&amp;)+/",
 										   "<a href=\"$0\">$0</a>",$result);
 				$html .= '<span class="'.CODE_HEADER.'string">'.$result.'</span>';
 				
-				// ¼¡¤Î¸¡º÷ÍÑ¤ËÆÉ¤ß¹ş¤ß
+				// æ¬¡ã®æ¤œç´¢ç”¨ã«èª­ã¿è¾¼ã¿
 				if ($str_len == $str_pos) $code = false; else $code = $string[$str_pos++]; // getc
 				continue 2;
 				
 			case PAIR_LITERAL:
-				// ÂĞµ­¹æ¤Ç°Ï¤Ş¤ì¤¿Ê¸»úÎó¥ê¥Æ¥é¥ë¤òÆÀ¤ë PostScript
+				// å¯¾è¨˜å·ã§å›²ã¾ã‚ŒãŸæ–‡å­—åˆ—ãƒªãƒ†ãƒ©ãƒ«ã‚’å¾—ã‚‹ PostScript
 				$pos = $str_pos;
 				do {
 					$result = substr($string, $str_pos);
-					$pos1 = strpos($result, $literal_delimiter); // Ê¸»úÎó½ªÎ»Ê¸»ú¸¡º÷
-					if ($pos1 === false) { // Ê¸»úÎó¤¬½ª¤ï¤é¤Ê¤«¤Ã¤¿¤Î¤ÇÁ´ÉôÊ¸»úÎó¤È¤¹¤ë
+					$pos1 = strpos($result, $literal_delimiter); // æ–‡å­—åˆ—çµ‚äº†æ–‡å­—æ¤œç´¢
+					if ($pos1 === false) { // æ–‡å­—åˆ—ãŒçµ‚ã‚ã‚‰ãªã‹ã£ãŸã®ã§å…¨éƒ¨æ–‡å­—åˆ—ã¨ã™ã‚‹
 						$str_pos = $str_len;
 						break;
 					}
 					$str_pos += $pos1 + 1;
-				} while ($string[$str_pos-2] == "\\"); // Á°¤ÎÊ¸»ú¤¬¥¨¥¹¥±¡¼¥×Ê¸»ú¤Ê¤éÂ³¤±¤ë
+				} while ($string[$str_pos-2] == "\\"); // å‰ã®æ–‡å­—ãŒã‚¨ã‚¹ã‚±ãƒ¼ãƒ—æ–‡å­—ãªã‚‰ç¶šã‘ã‚‹
 				$result = $code.substr($string, $pos, $str_pos - $pos);
 				
-				// ¥é¥¤¥ó¿ô¥«¥¦¥ó¥È
+				// ãƒ©ã‚¤ãƒ³æ•°ã‚«ã‚¦ãƒ³ãƒˆ
 				$line+=substr_count($result,"\n");
 				
-				// html¤ËÄÉ²Ã
+				// htmlã«è¿½åŠ 
 				$result = htmlspecialchars($result, ENT_QUOTES);
 				if ($option["link"]) 
 					$result = preg_replace("/(s?https?:\/\/|ftp:\/\/|mailto:)([-_.!~*()a-zA-Z0-9;\/:@?=+$,%#]|&amp;)+/",
 										   "<a href=\"$0\">$0</a>",$result);
 				$html .= '<span class="'.CODE_HEADER.'string">'.$result.'</span>';
 				
-				// ¼¡¤Î¸¡º÷ÍÑ¤ËÆÉ¤ß¹ş¤ß
+				// æ¬¡ã®æ¤œç´¢ç”¨ã«èª­ã¿è¾¼ã¿
 				if ($str_len == $str_pos) $code = false; else $code = $string[$str_pos++]; // getc
 				continue 2;
 				
 			case FORMULA:
-				// TeX¤Î¿ô¼°¤Ë»ÈÍÑ ¾­ÍèÅª¤Ë¤ÏÈÆÍÑÀ­¤ò»ı¤¿¤»¤ë 
+				// TeXã®æ•°å¼ã«ä½¿ç”¨ å°†æ¥çš„ã«ã¯æ±ç”¨æ€§ã‚’æŒãŸã›ã‚‹ 
 
 				$pos = $str_pos;
 				$result = substr($string, $str_pos);
-				$pos1 = strpos($result, $code); // Ê¸»úÎó½ªÎ»Ê¸»ú¸¡º÷
-				if ($pos1 === false) { // Ê¸»úÎó¤¬½ª¤ï¤é¤Ê¤«¤Ã¤¿¤Î¤ÇÁ´ÉôÊ¸»úÎó¤È¤¹¤ë
+				$pos1 = strpos($result, $code); // æ–‡å­—åˆ—çµ‚äº†æ–‡å­—æ¤œç´¢
+				if ($pos1 === false) { // æ–‡å­—åˆ—ãŒçµ‚ã‚ã‚‰ãªã‹ã£ãŸã®ã§å…¨éƒ¨æ–‡å­—åˆ—ã¨ã™ã‚‹
 					$str_pos = $str_len;
 				} else {
 					$str_pos += $pos1 + 1;
 				}
 				$result = $code.substr($string, $pos, $str_pos - $pos);
 				
-				// html¤ËÄÉ²Ã
+				// htmlã«è¿½åŠ 
 				$result = htmlspecialchars($result, ENT_QUOTES);
 				if ($option["link"]) 
 					$result = preg_replace("/(s?https?:\/\/|ftp:\/\/|mailto:)([-_.!~*()a-zA-Z0-9;\/:@?=+$,%#]|&amp;)+/",
 										   "<a href=\"$0\">$0</a>",$result);
 				$html .= '<span class="'.CODE_HEADER.'formula">'.$result.'</span>';
 				
-				// ¼¡¤Î¸¡º÷ÍÑ¤ËÆÉ¤ß¹ş¤ß
+				// æ¬¡ã®æ¤œç´¢ç”¨ã«èª­ã¿è¾¼ã¿
 				if ($str_len == $str_pos) $code = false; else $code = $string[$str_pos++]; // getc
 				continue 2;
 				
 			case BLOCK_START:
-				// outline É½¼¨ÍÑ³«»ÏÊ¸»ú {, (
+				// outline è¡¨ç¤ºç”¨é–‹å§‹æ–‡å­— {, (
 				
 				$blockno++;
 				$nest++;
@@ -917,7 +917,7 @@ class CodeHighlight {
 					$outline[$line]=Array();
 				}
 				array_push($outline[$line],Array("nest"=>$nest, "blockno"=>$blockno));
-				// ¥¢¥¦¥È¥é¥¤¥ó¤¬ÊÄ¤¸¤¿»ş¤ËÉ½¼¨¤¹¤ë²èÁü¤òËä¤á¹ş¤à¾ì½ê
+				// ã‚¢ã‚¦ãƒˆãƒ©ã‚¤ãƒ³ãŒé–‰ã˜ãŸæ™‚ã«è¡¨ç¤ºã™ã‚‹ç”»åƒã‚’åŸ‹ã‚è¾¼ã‚€å ´æ‰€
 				$html .= $code.'<span id="'.CODE_HEADER.$id_number._.$blockno.'_img" display="none"></span>'
 					.'<span id="'.CODE_HEADER.$id_number._.$blockno.'">';
 				if ($str_len == $str_pos)
@@ -927,7 +927,7 @@ class CodeHighlight {
 				continue 2;
 				
 			case BLOCK_END:
-				// outline É½¼¨½ªÎ»Ê¸»ú }, )
+				// outline è¡¨ç¤ºçµ‚äº†æ–‡å­— }, )
 				
 				$nest--;
 				if(!array_key_exists($line,$outline)) {
@@ -952,19 +952,19 @@ class CodeHighlight {
 				
             }// switch
 			
-            // ¤½¤ÎÂ¾¤ÎÊ¸»ú
+            // ãã®ä»–ã®æ–‡å­—
             $result = $htmlHash[$code];
             if ($result) 
 				$html .= $result;
             else
                 $html .= $code;
 
-            // ¼¡¤Î¸¡º÷ÍÑ¤ËÆÉ¤ß¹ş¤ß
+            // æ¬¡ã®æ¤œç´¢ç”¨ã«èª­ã¿è¾¼ã¿
             if ($str_len == $str_pos) $code = false; else $code = $string[$str_pos++]; // getc
 
         }// while
 
-		// ºÇ¸å¤ÎÍ¾Ê¬¤Ê²ş¹Ô¤òºï½ü
+		// æœ€å¾Œã®ä½™åˆ†ãªæ”¹è¡Œã‚’å‰Šé™¤
 		if ($html[strlen($html)-2] == ' ')
 			$html = substr($html, 0, -2);
 		else
@@ -979,9 +979,9 @@ class CodeHighlight {
 		return $html;
 	}
 
-	// outline ¤Î·ÁÀ®
+	// outline ã®å½¢æˆ
 	function makeOutline(&$html,$line,$nest,$mknumber,$tree,$blockno,$id_number) {
-		while($nest>1) {// ¥Í¥¹¥È¤¬¤Á¤ã¤ó¤È¤·¤Æ¤Ê¤«¤Ã¤¿¾ì¹ç¤ÎÂĞºö
+		while($nest>1) {// ãƒã‚¹ãƒˆãŒã¡ã‚ƒã‚“ã¨ã—ã¦ãªã‹ã£ãŸå ´åˆã®å¯¾ç­–
 			$html['src'] .= "</span>";
 			$nest--;
 		}
@@ -1033,7 +1033,7 @@ class CodeHighlight {
 			}
 			$outline.="\n";
 		}
-		while ($nest>1) {// ¥Í¥¹¥È¤¬¤Á¤ã¤ó¤È¤·¤Æ¤Ê¤«¤Ã¤¿¾ì¹ç¤ÎÂĞºö
+		while ($nest>1) {// ãƒã‚¹ãƒˆãŒã¡ã‚ƒã‚“ã¨ã—ã¦ãªã‹ã£ãŸå ´åˆã®å¯¾ç­–
 			$number .= "</span>";
 			$outline .= "</span>";
 			$nest--;
@@ -1044,7 +1044,7 @@ class CodeHighlight {
 	}
 	
 	
-	// number ¤Î·ÁÀ®
+	// number ã®å½¢æˆ
 	function makeNumber($num_of_line){
 		$number="";
 		$linelen=$num_of_line+1;
@@ -1056,25 +1056,25 @@ class CodeHighlight {
 	}
 
 	/**
-	 * PHP¤òÉ¸½à´Ø¿ô¤Ç¥Ï¥¤¥é¥¤¥È¤¹¤ë
+	 * PHPã‚’æ¨™æº–é–¢æ•°ã§ãƒã‚¤ãƒ©ã‚¤ãƒˆã™ã‚‹
 	 */
 	function highlightPHP($src) {
-		// php¥¿¥°¤¬Â¸ºß¤¹¤ë¤«¡©
+		// phpã‚¿ã‚°ãŒå­˜åœ¨ã™ã‚‹ã‹ï¼Ÿ
 		$phptagf = false;
 		if(!strstr($src,"<?php")) {
 			$phptagf = TRUE;
 			$src="<"."?php ".$src." ?".">";
 		}
-		ob_start(); //½ĞÎÏ¤Î¥Ğ¥Ã¥Õ¥¡¥ê¥ó¥°¤òÍ­¸ú¤Ë
-		highlight_string($src); //php¤ÏÉ¸½à´Ø¿ô¤Ç¥Ï¥¤¥é¥¤¥È
-		$html = ob_get_contents(); //¥Ğ¥Ã¥Õ¥¡¤ÎÆâÍÆ¤òÆÀ¤ë
-		ob_end_clean(); //¥Ğ¥Ã¥Õ¥¡¥¯¥ê¥¢?
-		// php¥¿¥°¤ò¼è¤ê½ü¤¯¡£
+		ob_start(); //å‡ºåŠ›ã®ãƒãƒƒãƒ•ã‚¡ãƒªãƒ³ã‚°ã‚’æœ‰åŠ¹ã«
+		highlight_string($src); //phpã¯æ¨™æº–é–¢æ•°ã§ãƒã‚¤ãƒ©ã‚¤ãƒˆ
+		$html = ob_get_contents(); //ãƒãƒƒãƒ•ã‚¡ã®å†…å®¹ã‚’å¾—ã‚‹
+		ob_end_clean(); //ãƒãƒƒãƒ•ã‚¡ã‚¯ãƒªã‚¢?
+		// phpã‚¿ã‚°ã‚’å–ã‚Šé™¤ãã€‚
 		if ($phptagf) {
 			$html = preg_replace("/&lt;\?php (.*)?(<font[^>]*>\?&gt;<\/font>|\?&gt;)/m","$1",$html);
 		}
 		$html = str_replace('&nbsp;', ' ', $html);
-		$html = str_replace("\n", '', $html); //$htmlÆâ¤Î"\n"¤ò''¤ÇÃÖ¤­´¹¤¨¤ë
+		$html = str_replace("\n", '', $html); //$htmlå†…ã®"\n"ã‚’''ã§ç½®ãæ›ãˆã‚‹
 		$html = str_replace('<br />', "\n", $html);
 		//Vaild XHTML 1.1 Patch (thanks miko)
 		$html = str_replace('<font color="', '<span style="color:', $html);
@@ -1086,17 +1086,17 @@ class CodeHighlight {
 }
 
 /**
- * ¤³¤Î´Ø¿ô¤Ï°ú¿ô¤ËÍ¿¤¨¤é¤ì¤¿¥Õ¥¡¥¤¥ë¤ÎÆâÍÆ¤òÊ¸»úÎó¤ËÊÑ´¹¤·¤ÆÊÖ¤¹
- * Ê¸»ú¥³¡¼¥É¤Ï PukiWiki¤ÈÆ±°ì, ²ş¹Ô¤Ï \n ¤Ç¤¢¤ë
+ * ã“ã®é–¢æ•°ã¯å¼•æ•°ã«ä¸ãˆã‚‰ã‚ŒãŸãƒ•ã‚¡ã‚¤ãƒ«ã®å†…å®¹ã‚’æ–‡å­—åˆ—ã«å¤‰æ›ã—ã¦è¿”ã™
+ * æ–‡å­—ã‚³ãƒ¼ãƒ‰ã¯ PukiWikiã¨åŒä¸€, æ”¹è¡Œã¯ \n ã§ã‚ã‚‹
  */
 function code_read_file_data($name) {
     global $vars;
     $filedata = '';
     $arraydata = array();
-    // ÅºÉÕ¥Õ¥¡¥¤¥ë¤Î¤¢¤ë¥Ú¡¼¥¸: default¤Ï¸½ºß¤Î¥Ú¡¼¥¸Ì¾
+    // æ·»ä»˜ãƒ•ã‚¡ã‚¤ãƒ«ã®ã‚ã‚‹ãƒšãƒ¼ã‚¸: defaultã¯ç¾åœ¨ã®ãƒšãƒ¼ã‚¸å
     $page = isset($vars['page']) ? $vars['page'] : '';
 
-    // ÅºÉÕ¥Õ¥¡¥¤¥ë¤Ş¤Ç¤Î¥Ñ¥¹¤ª¤è¤Ó(¼Âºİ¤Î)¥Õ¥¡¥¤¥ëÌ¾
+    // æ·»ä»˜ãƒ•ã‚¡ã‚¤ãƒ«ã¾ã§ã®ãƒ‘ã‚¹ãŠã‚ˆã³(å®Ÿéš›ã®)ãƒ•ã‚¡ã‚¤ãƒ«å
     $file = '';
     $fname = $name;
 
@@ -1110,14 +1110,14 @@ function code_read_file_data($name) {
         }
         $url = htmlspecialchars($fname);
         $params['title'] = htmlspecialchars(preg_match('/([^\/]+)$/', $fname, $matches) ? $matches[1] : $url);
-    } else {  // ÅºÉÕ¥Õ¥¡¥¤¥ë
+    } else {  // æ·»ä»˜ãƒ•ã‚¡ã‚¤ãƒ«
         if (! is_dir(UPLOAD_DIR)) {
             $params['_error'] = 'No UPLOAD_DIR';
             return $params;
         }
 
         $matches = array();
-        // ¥Õ¥¡¥¤¥ëÌ¾¤Ë¥Ú¡¼¥¸Ì¾(¥Ú¡¼¥¸»²¾È¥Ñ¥¹)¤¬¹çÀ®¤µ¤ì¤Æ¤¤¤ë¤«
+        // ãƒ•ã‚¡ã‚¤ãƒ«åã«ãƒšãƒ¼ã‚¸å(ãƒšãƒ¼ã‚¸å‚ç…§ãƒ‘ã‚¹)ãŒåˆæˆã•ã‚Œã¦ã„ã‚‹ã‹
         //   (Page_name/maybe-separated-with/slashes/ATTACHED_FILENAME)
         if (preg_match('#^(.+)/([^/]+)$#', $fname, $matches)) {
             if ($matches[1] == '.' || $matches[1] == '..')
@@ -1165,7 +1165,7 @@ function code_read_file_data($name) {
     $fdata = mb_convert_encoding($fdata, SOURCE_ENCODING, "auto");
     */
 
-	// ¥Õ¥¡¥¤¥ë¤ÎºÇ¸å¤ò²ş¹Ô¤Ë¤¹¤ë
+	// ãƒ•ã‚¡ã‚¤ãƒ«ã®æœ€å¾Œã‚’æ”¹è¡Œã«ã™ã‚‹
 	if($fdata[strlen($fdata)-1] != "\n")
 		$fdata .= "\n";
 
@@ -1175,8 +1175,8 @@ function code_read_file_data($name) {
 }
 
 /**
- * ¥ª¥×¥·¥ç¥ó²òÀÏ
- * °ú¿ô¤ËÂĞ±ş¤¹¤ë¥­¡¼¤òOn¤Ë¤¹¤ë
+ * ã‚ªãƒ—ã‚·ãƒ§ãƒ³è§£æ
+ * å¼•æ•°ã«å¯¾å¿œã™ã‚‹ã‚­ãƒ¼ã‚’Onã«ã™ã‚‹
  */
 function code_check_argment($arg, &$option) {
     $arg = strtolower($arg);

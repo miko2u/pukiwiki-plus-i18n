@@ -1,6 +1,6 @@
 <?php
 // $Id: calendar2.inc.php,v 1.22.3 2005/03/09 13:20:26 miko Exp $
-// *°ú¿ô¤Ëoff¤È½ñ¤¯¤³¤È¤Çº£Æü¤ÎÆüµ­¤òÉ½¼¨¤·¤Ê¤¤¤è¤¦¤Ë¤·¤¿¡£
+// *å¼•æ•°ã«offã¨æ›¸ãã“ã¨ã§ä»Šæ—¥ã®æ—¥è¨˜ã‚’è¡¨ç¤ºã—ãªã„ã‚ˆã†ã«ã—ãŸã€‚
 function plugin_calendar2_convert()
 {
 	global $script,$vars,$post,$get,$weeklabels,$WikiName,$BracketName;

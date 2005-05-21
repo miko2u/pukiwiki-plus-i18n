@@ -4,10 +4,10 @@
 //
 // $Id: replace.inc.php,v 1.1.4 2004/09/22 12:25:20 miko Exp $
 //
-// ¥Õ¥¡¥¤¥ëÌ¾°ìÍ÷¤ÎÉ½¼¨
+// ãƒ•ã‚¡ã‚¤ãƒ«åä¸€è¦§ã®è¡¨ç¤º
 // cmd=replace
 
-// Åà·ë¤·¤Æ¤¢¤ë¥Ú¡¼¥¸¤âÊ¸»úÎóÃÖ´¹¤ÎÂĞ¾İ¤È¤¹¤ë
+// å‡çµã—ã¦ã‚ã‚‹ãƒšãƒ¼ã‚¸ã‚‚æ–‡å­—åˆ—ç½®æ›ã®å¯¾è±¡ã¨ã™ã‚‹
 define(REPLACE_IGNORE_FREEZE, TRUE);
 
 function plugin_replace_init()
@@ -42,13 +42,13 @@ function plugin_replace_action()
 	$search  = isset($post['search'])  ? $post['search']  : NULL;
 	$replace = isset($post['replace']) ? $post['replace'] : NULL;
 
-	// ¥Ñ¥¹¥ï¡¼¥É¤È¸¡º÷Ê¸»úÎó¤¬¤Ê¤¤¤ÈÃÖ´¹¤Ï¤Ç¤­¤Ê¤¤¡£
+	// ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã¨æ¤œç´¢æ–‡å­—åˆ—ãŒãªã„ã¨ç½®æ›ã¯ã§ããªã„ã€‚
 	if ($search == '' || md5($pass) != $adminpass || $pass == 'pass') {
 		$vars['cmd'] = 'read';
 		return replace_adm($pass,$search);
 	}
 
-	// ¥Ñ¥¹¥ï¡¼¥É¤¬¹ç¤Ã¤Æ¤¿¤é¤¤¤è¤¤¤èÃÖ´¹
+	// ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ãŒåˆã£ã¦ãŸã‚‰ã„ã‚ˆã„ã‚ˆç½®æ›
 	$pages = get_existpages();
 	$replaced_pages = array();
 	foreach ($pages as $page)
@@ -64,12 +64,12 @@ function plugin_replace_action()
                 	);
 		}
 		if ($editable) {
-			// ¥Ñ¥¹¥ï¡¼¥É°ìÃ×
+			// ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ä¸€è‡´
 			$postdata = '';
 			$postdata_old = get_source($page);
 			foreach ($postdata_old as $line)
 			{
-				// ¥­¡¼¥ï¡¼¥É¤ÎÃÖ´¹
+				// ã‚­ãƒ¼ãƒ¯ãƒ¼ãƒ‰ã®ç½®æ›
 				$line = str_replace($search,$replace,$line);
 				$postdata .= $line;
 			}
@@ -94,7 +94,7 @@ function plugin_replace_action()
 	);
 }
 
-// ÃÖ´¹Ê¸»úÎóÆşÎÏ²èÌÌ
+// ç½®æ›æ–‡å­—åˆ—å…¥åŠ›ç”»é¢
 function replace_adm($pass,$search)
 {
 	global $_replace_msg;

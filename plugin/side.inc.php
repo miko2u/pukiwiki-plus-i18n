@@ -5,10 +5,10 @@
 // $Id: side.inc.php,v 1.8.6 2005/05/17 14:37:37 miko Exp $
 //
 
-// ���֥�˥塼����Ѥ���
+// サブメニューを使用する
 define('SIDE_ENABLE_SUBMENU', TRUE);
 
-// ���֥�˥塼��̾��
+// サブメニューの名称
 define('SIDE_SUBMENUBAR', 'SideBar');
 
 function plugin_side_convert()

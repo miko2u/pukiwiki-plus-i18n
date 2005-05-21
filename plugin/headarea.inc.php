@@ -5,10 +5,10 @@
 // $Id: headarea.inc.php,v 1.6.6 2004/12/15 14:37:37 miko Exp $
 //
 
-// ¥µ¥Ö¥á¥Ë¥å¡¼¤ò»ÈÍÑ¤¹¤ë
+// ã‚µãƒ–ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã‚’ä½¿ç”¨ã™ã‚‹
 define('HEAD_ENABLE_SUBHEAD', TRUE);
 
-// ¥µ¥Ö¥á¥Ë¥å¡¼¤ÎÌ¾¾Î
+// ã‚µãƒ–ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã®åç§°
 define('HEAD_SUBHEADBAR', 'Header');
 
 function plugin_headarea_convert()

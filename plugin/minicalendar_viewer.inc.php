@@ -1,42 +1,42 @@
 <?php
 /*
- * PukiWiki minicalendar_viewer¥×¥é¥°¥¤¥ó
+ * PukiWiki minicalendar_viewerãƒ—ãƒ©ã‚°ã‚¤ãƒ³
  *
  *
  *$Id: minicalendar_viewer.inc.php,v 1.9.12 2004/12/15 17:18:50 miko Exp $
-  calendarrecent¥×¥é¥°¥¤¥ó¤ò¸µ¤ËºîÀ®
+  calendarrecentãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚’å…ƒã«ä½œæˆ
  */
 /**
- *³µÍ×
-  calendar¥×¥é¥°¥¤¥ó¤äcalendar2¥×¥é¥°¥¤¥ó¤ÇºîÀ®¤·¤¿¥Ú¡¼¥¸¤ò°ìÍ÷É½¼¨¤¹¤ë¤¿¤á¤Î¥×¥é¥°¥¤¥ó¤Ç¤¹¡£
- *¹¹¿·ÍúÎò
+ *æ¦‚è¦
+  calendarãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚„calendar2ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã§ä½œæˆã—ãŸãƒšãƒ¼ã‚¸ã‚’ä¸€è¦§è¡¨ç¤ºã™ã‚‹ãŸã‚ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã§ã™ã€‚
+ *æ›´æ–°å±¥æ­´
   -2002-11-13
-  --Á°¸å¤Ø¤Î¥ê¥ó¥¯¤ËÇ¯·î¤ä¡Ö¼¡¤În·ï¡×¤ÈÉ½¼¨¤¹¤ë¤è¤¦¤Ë¤·¤¿¡£
- *»È¤¤Êı
+  --å‰å¾Œã¸ã®ãƒªãƒ³ã‚¯ã«å¹´æœˆã‚„ã€Œæ¬¡ã®nä»¶ã€ã¨è¡¨ç¤ºã™ã‚‹ã‚ˆã†ã«ã—ãŸã€‚
+ *ä½¿ã„æ–¹
   /// #minicalendar_viewer(pagename,(yyyy-mm|n|this),[mode],[separater])
  **pagename
-  calendar or calendar2¥×¥é¥°¥¤¥ó¤òµ­½Ò¤·¤Æ¤ë¥Ú¡¼¥¸Ì¾
+  calendar or calendar2ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚’è¨˜è¿°ã—ã¦ã‚‹ãƒšãƒ¼ã‚¸å
  **(yyyy-mm|n|this)
   -yyyy-mm
-  --yyyy-mm¤Ç»ØÄê¤·¤¿Ç¯·î¤Î¥Ú¡¼¥¸¤ò°ìÍ÷É½¼¨
+  --yyyy-mmã§æŒ‡å®šã—ãŸå¹´æœˆã®ãƒšãƒ¼ã‚¸ã‚’ä¸€è¦§è¡¨ç¤º
   -n
-  --n·ï¤Î°ìÍ÷É½¼¨
+  --nä»¶ã®ä¸€è¦§è¡¨ç¤º
   -this
-  --º£·î¤Î¥Ú¡¼¥¸¤ò°ìÍ÷É½¼¨
+  --ä»Šæœˆã®ãƒšãƒ¼ã‚¸ã‚’ä¸€è¦§è¡¨ç¤º
  **[mode]
-  ¾ÊÎ¬²ÄÇ½¤Ç¤¹¡£¾ÊÎ¬»ş¤Î¥Ç¥Õ¥©¥ë¥È¤Ïpast
+  çœç•¥å¯èƒ½ã§ã™ã€‚çœç•¥æ™‚ã®ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã¯past
   -past(ex)
-  --º£Æü°ÊÁ°¤Î¥Ú¡¼¥¸¤Î°ìÍ÷É½¼¨¥â¡¼¥É¡£¹¹¿·ÍúÎò¤äÆüµ­¸ş¤­
+  --ä»Šæ—¥ä»¥å‰ã®ãƒšãƒ¼ã‚¸ã®ä¸€è¦§è¡¨ç¤ºãƒ¢ãƒ¼ãƒ‰ã€‚æ›´æ–°å±¥æ­´ã‚„æ—¥è¨˜å‘ã
   -future(ex)
-  --º£Æü°Ê¹ß¤Î¥Ú¡¼¥¸¤Î°ìÍ÷É½¼¨¥â¡¼¥É¡£¥¤¥Ù¥ó¥ÈÍ½Äê¤ä¥¹¥±¥¸¥å¡¼¥ë¸ş¤­
+  --ä»Šæ—¥ä»¥é™ã®ãƒšãƒ¼ã‚¸ã®ä¸€è¦§è¡¨ç¤ºãƒ¢ãƒ¼ãƒ‰ã€‚ã‚¤ãƒ™ãƒ³ãƒˆäºˆå®šã‚„ã‚¹ã‚±ã‚¸ãƒ¥ãƒ¼ãƒ«å‘ã
   -view(ex)
-  --²áµî¤«¤éÌ¤Íè¤Ø¤Î°ìÍ÷É½¼¨¥â¡¼¥É¡£É½¼¨ÍŞ»ß¤¹¤ë¥Ú¡¼¥¸¤Ï¤¢¤ê¤Ş¤»¤ó¡£
+  --éå»ã‹ã‚‰æœªæ¥ã¸ã®ä¸€è¦§è¡¨ç¤ºãƒ¢ãƒ¼ãƒ‰ã€‚è¡¨ç¤ºæŠ‘æ­¢ã™ã‚‹ãƒšãƒ¼ã‚¸ã¯ã‚ã‚Šã¾ã›ã‚“ã€‚
   -[separater]
-  ¾ÊÎ¬²ÄÇ½¡£¥Ç¥Õ¥©¥ë¥È¤Ï-¡£¡Êcalendar2¤Ê¤é¾ÊÎ¬¤ÇOK¡Ë
-  --Ç¯·îÆü¤ò¶èÀÚ¤ë¥»¥Ñ¥ì¡¼¥¿¤ò»ØÄê¡£
+  çœç•¥å¯èƒ½ã€‚ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã¯-ã€‚ï¼ˆcalendar2ãªã‚‰çœç•¥ã§OKï¼‰
+  --å¹´æœˆæ—¥ã‚’åŒºåˆ‡ã‚‹ã‚»ãƒ‘ãƒ¬ãƒ¼ã‚¿ã‚’æŒ‡å®šã€‚
 
  *todo
-  past or future ¤Ç·îÃ±°ÌÉ½¼¨¤¹¤ë¤È¤­¤Ë¡¢¤½¤ì¤¾¤ìÍè·î¡¢Àè·î¤Î°ìÍ÷¤Ø¤Î¥ê¥ó¥¯¤òÉ½¼¨¤·¤Ê¤¤¤è¤¦¤Ë¤¹¤ë
+  past or future ã§æœˆå˜ä½è¡¨ç¤ºã™ã‚‹ã¨ãã«ã€ãã‚Œãã‚Œæ¥æœˆã€å…ˆæœˆã®ä¸€è¦§ã¸ã®ãƒªãƒ³ã‚¯ã‚’è¡¨ç¤ºã—ãªã„ã‚ˆã†ã«ã™ã‚‹
 
  */
 define('MINICALENDAR_VIEWER_HOLIDAYVIEW',TRUE);
@@ -57,20 +57,20 @@ function plugin_minicalendar_viewer_convert()
   $_msg_calendar_viewer_left     = _('&lt;&lt; Prev %d');
   $_msg_calendar_viewer_restrict = _('Due to the blocking, the minicalendar_viewer cannot refer to $1.');
 
-  //*¥Ç¥Õ¥©¥ë¥ÈÃÍ¤ò¥»¥Ã¥È
-  //´ğ½à¤È¤Ê¤ë¥Ú¡¼¥¸Ì¾
+  //*ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤ã‚’ã‚»ãƒƒãƒˆ
+  //åŸºæº–ã¨ãªã‚‹ãƒšãƒ¼ã‚¸å
   $pagename = "";
-  //É½¼¨¤¹¤ë·ï¿ôÀ©¸Â
+  //è¡¨ç¤ºã™ã‚‹ä»¶æ•°åˆ¶é™
   $limit_page = 7;
-  //°ìÍ÷É½¼¨¤¹¤ëÇ¯·î
+  //ä¸€è¦§è¡¨ç¤ºã™ã‚‹å¹´æœˆ
   $date_YM = "";
-  //Æ°ºî¥â¡¼¥É
+  //å‹•ä½œãƒ¢ãƒ¼ãƒ‰
   $mode = "past";
-  //ÆüÉÕ¤Î¥»¥Ñ¥ì¡¼¥¿ calendar2¤Ê¤é"-" calendar¤Ê¤é""
+  //æ—¥ä»˜ã®ã‚»ãƒ‘ãƒ¬ãƒ¼ã‚¿ calendar2ãªã‚‰"-" calendarãªã‚‰""
   $date_sep = "-";
 
 
-  //*°ú¿ô¤Î³ÎÇ§
+  //*å¼•æ•°ã®ç¢ºèª
   if (func_num_args()>=2){
     $func_vars_array = func_get_args();
 
@@ -80,17 +80,17 @@ function plugin_minicalendar_viewer_convert()
       $date_sep = $func_vars_array[3];
     }
     if (preg_match("/[0-9]{4}".$date_sep."[0-9]{2}/",$func_vars_array[1])){
-      //»ØÄêÇ¯·î¤Î°ìÍ÷É½¼¨
+      //æŒ‡å®šå¹´æœˆã®ä¸€è¦§è¡¨ç¤º
       $page_YM = $func_vars_array[1];
       $limit_base = 0;
-      $limit_page = 31;	//¼êÈ´¤­¡£31ÆüÊ¬¤ò¥ê¥ß¥Ã¥È¤È¤¹¤ë¡£
+      $limit_page = 31;	//æ‰‹æŠœãã€‚31æ—¥åˆ†ã‚’ãƒªãƒŸãƒƒãƒˆã¨ã™ã‚‹ã€‚
     }else if (preg_match("/this/si",$func_vars_array[1])){
-      //º£·î¤Î°ìÍ÷É½¼¨
+      //ä»Šæœˆã®ä¸€è¦§è¡¨ç¤º
       $page_YM = get_date("Y".$date_sep."m");
       $limit_base = 0;
       $limit_page = 31;
     }else if (preg_match("/^[0-9]+$/",$func_vars_array[1])){
-      //nÆüÊ¬É½¼¨
+      //næ—¥åˆ†è¡¨ç¤º
       $limit_pitch = $func_vars_array[1];
       $limit_page = $limit_pitch;
       $limit_base = 0;
@@ -104,7 +104,7 @@ function plugin_minicalendar_viewer_convert()
       return $_err_calendar_viewer_param2;
     }
     if (isset($func_vars_array[2])&&preg_match("/^(past|view|viewex|future|pastex|futureex)$/si",$func_vars_array[2])){
-      //¥â¡¼¥É»ØÄê
+      //ãƒ¢ãƒ¼ãƒ‰æŒ‡å®š
       $mode = $func_vars_array[2];
     }
 
@@ -113,9 +113,9 @@ function plugin_minicalendar_viewer_convert()
     return $_err_calendar_viewer_param;
   }
 
-  //*°ìÍ÷É½¼¨¤¹¤ë¥Ú¡¼¥¸Ì¾¤È¥Õ¥¡¥¤¥ëÌ¾¤Î¥Ñ¥¿¡¼¥ó¡¡¥Õ¥¡¥¤¥ëÌ¾¤Ë¤ÏÇ¯·î¤ò´Ş¤à
+  //*ä¸€è¦§è¡¨ç¤ºã™ã‚‹ãƒšãƒ¼ã‚¸åã¨ãƒ•ã‚¡ã‚¤ãƒ«åã®ãƒ‘ã‚¿ãƒ¼ãƒ³ã€€ãƒ•ã‚¡ã‚¤ãƒ«åã«ã¯å¹´æœˆã‚’å«ã‚€
   if ($pagename == ""){
-    //pagenameÌµ¤·¤Îyyyy-mm-dd¤ËÂĞ±ş¤¹¤ë¤¿¤á¤Î½èÍı
+    //pagenameç„¡ã—ã®yyyy-mm-ddã«å¯¾å¿œã™ã‚‹ãŸã‚ã®å‡¦ç†
     $pagepattern = "";
     $pagepattern_len = 0;
     $filepattern = encode($page_YM);
@@ -128,7 +128,7 @@ function plugin_minicalendar_viewer_convert()
   }
 
   //echo "$pagename:$page_YM:$mode:$date_sep:$limit_base:$limit_page";
-  //*¥Ú¡¼¥¸¥ê¥¹¥È¤Î¼èÆÀ
+  //*ãƒšãƒ¼ã‚¸ãƒªã‚¹ãƒˆã®å–å¾—
   //echo $pagepattern;
   //echo $filepattern;
 
@@ -142,39 +142,39 @@ function plugin_minicalendar_viewer_convert()
           if (substr($file,0,$filepattern_len)!=$filepattern) continue;
           //echo "OK";
           $page = decode(trim(preg_replace("/\.txt$/"," ",$file)));
-          //$page¤¬¥«¥ì¥ó¥À¡¼·Á¼°¤Ê¤Î¤«¥Á¥§¥Ã¥¯ ¥Ç¥Õ¥©¥ë¥È¤Ç¤Ï¡¢ yyyy-mm-dd
+          //$pageãŒã‚«ãƒ¬ãƒ³ãƒ€ãƒ¼å½¢å¼ãªã®ã‹ãƒã‚§ãƒƒã‚¯ ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã§ã¯ã€ yyyy-mm-dd
           $page = strip_bracket($page);
           if (plugin_minicalendar_viewer_isValidDate(substr($page,$pagepattern_len),$date_sep) == false) continue;
 
-          //*modeËè¤ËÊÌ¾ò·ï¤Ç¤Ï¤¸¤¯
-          //past mode¤Ç¤Ïº£Æü¤ò´Ş¤àÌ¤Íè¤Î¥Ú¡¼¥¸¤ÏNG
+          //*modeæ¯ã«åˆ¥æ¡ä»¶ã§ã¯ã˜ã
+          //past modeã§ã¯ä»Šæ—¥ã‚’å«ã‚€æœªæ¥ã®ãƒšãƒ¼ã‚¸ã¯NG
           if (((substr($page,$pagepattern_len)) >= $_date)&&($mode=="pastex") )continue;
-          //future mode¤Ç¤Ïº£Æü¤ò´Ş¤à²áµî¤Î¥Ú¡¼¥¸¤ÏNG
+          //future modeã§ã¯ä»Šæ—¥ã‚’å«ã‚€éå»ã®ãƒšãƒ¼ã‚¸ã¯NG
           if (((substr($page,$pagepattern_len)) <= $_date)&&($mode=="futureex") )continue;
-          //past mode¤Ç¤ÏÌ¤Íè¤Î¥Ú¡¼¥¸¤ÏNG
+          //past modeã§ã¯æœªæ¥ã®ãƒšãƒ¼ã‚¸ã¯NG
           if (((substr($page,$pagepattern_len)) > $_date)&&($mode=="past") )continue;
-          //future mode¤Ç¤Ï²áµî¤Î¥Ú¡¼¥¸¤ÏNG
+          //future modeã§ã¯éå»ã®ãƒšãƒ¼ã‚¸ã¯NG
           if (((substr($page,$pagepattern_len)) < $_date)&&($mode=="future") )continue;
-          //view mode¤Ê¤éall OK
+          //view modeãªã‚‰all OK
           $pagelist[] = $page;
         }
     }
   closedir($dir);
   //echo count($pagelist);
-  //*¤³¤³¤«¤é¥¤¥ó¥¯¥ë¡¼¥É³«»Ï
+  //*ã“ã“ã‹ã‚‰ã‚¤ãƒ³ã‚¯ãƒ«ãƒ¼ãƒ‰é–‹å§‹
 
   $tmppage = $vars["page"];
   $return_body = "";
-  //¤Ş¤º¥½¡¼¥È
+  //ã¾ãšã‚½ãƒ¼ãƒˆ
   if ($mode == 'past' || $mode == 'pastex' || $mode =='viewex'){
-    //past mode¤Ç¤Ï¿·¢ªµì
+    //past modeã§ã¯æ–°â†’æ—§
     rsort ($pagelist);
   }else {
-    //view mode ¤È future mode ¤Ç¤Ï¡¢µì¢ª¿·
+    //view mode ã¨ future mode ã§ã¯ã€æ—§â†’æ–°
     sort ($pagelist);
   }
 
-  //$limit_page¤Î·ï¿ô¤Ş¤Ç¥¤¥ó¥¯¥ë¡¼¥É
+  //$limit_pageã®ä»¶æ•°ã¾ã§ã‚¤ãƒ³ã‚¯ãƒ«ãƒ¼ãƒ‰
   $tmp = $limit_base;
   while ($tmp < $limit_page){
     if (empty($pagelist[$tmp])) break;
@@ -184,7 +184,7 @@ function plugin_minicalendar_viewer_convert()
     $post["page"] = $page;
     $vars["page"] = $page;
 	
-	// ¸½¾õ¤Ç±ÜÍ÷µö²Ä¤¬¤¢¤ë¾ì¹ç¤À¤±É½¼¨¤¹¤ë
+	// ç¾çŠ¶ã§é–²è¦§è¨±å¯ãŒã‚ã‚‹å ´åˆã ã‘è¡¨ç¤ºã™ã‚‹
 	if (check_readable($page,false,false)) {
 		if (function_exists('convert_filter')) {
 			$body = convert_html(convert_filter(get_source($page)));
@@ -198,8 +198,8 @@ function plugin_minicalendar_viewer_convert()
     $r_page = rawurlencode($page);
     $s_page = htmlspecialchars($page);
     if(mb_ereg("(.*)/(.*)", $page, $regs)) {
-        $t = $regs[2]; //¥Ú¡¼¥¸¥¿¥¤¥È¥ë
-        $p = $regs[1]; //¥¿¥¤¥È¥ë¤ò½ü¤¤¤¿¥Ú¡¼¥¸¤Î¥Ñ¥¹
+        $t = $regs[2]; //ãƒšãƒ¼ã‚¸ã‚¿ã‚¤ãƒˆãƒ«
+        $p = $regs[1]; //ã‚¿ã‚¤ãƒˆãƒ«ã‚’é™¤ã„ãŸãƒšãƒ¼ã‚¸ã®ãƒ‘ã‚¹
         $e = rawurlencode($t);
 //	$s_page_title = "$t <span class=\"size1\">($p)</span>";
 	$s_page_title = "$t";
@@ -251,16 +251,16 @@ function plugin_minicalendar_viewer_convert()
     $tmp++;
   }
 
-  //¤³¤³¤Ç¡¢Á°¸å¤Î¥ê¥ó¥¯¤òÉ½¼¨
-  //?plugin=minicalendar_viewer&file=¥Ú¡¼¥¸Ì¾&date=yyyy-mm
+  //ã“ã“ã§ã€å‰å¾Œã®ãƒªãƒ³ã‚¯ã‚’è¡¨ç¤º
+  //?plugin=minicalendar_viewer&file=ãƒšãƒ¼ã‚¸å&date=yyyy-mm
   $enc_pagename = rawurlencode(substr($pagepattern,0,$pagepattern_len -1));
 
   if ($page_YM != ""){
-    //Ç¯·îÉ½¼¨»ş
+    //å¹´æœˆè¡¨ç¤ºæ™‚
     $date_sep_len = strlen($date_sep);
     $this_year = substr($page_YM,0,4);
     $this_month = substr($page_YM,4+$date_sep_len,2);
-    //¼¡·î
+    //æ¬¡æœˆ
     $next_year = $this_year;
     $next_month = $this_month + 1;
     if ($next_month >12){
@@ -270,7 +270,7 @@ function plugin_minicalendar_viewer_convert()
     $next_YM = sprintf("%04d%s%02d",$next_year,$date_sep,$next_month);
     $next_YMX = sprintf("%04d%02d",$next_year,$next_month);
 
-    //Á°·î
+    //å‰æœˆ
     $prev_year = $this_year;
     $prev_month = $this_month -1;
     if ($prev_month < 1){
@@ -296,7 +296,7 @@ function plugin_minicalendar_viewer_convert()
       $right_text = $next_YM."&gt;&gt;";
 //  }
   }else{
-    //n·ïÉ½¼¨»ş
+    //nä»¶è¡¨ç¤ºæ™‚
     if ($limit_base >= count($pagelist)){
       $right_YM = "";
     }else{
@@ -315,7 +315,7 @@ function plugin_minicalendar_viewer_convert()
     $prev_YMX = '';
     $next_YMX = '';
   }
-  //¥ê¥ó¥¯ºîÀ®
+  //ãƒªãƒ³ã‚¯ä½œæˆ
   $s_date_sep = htmlspecialchars($date_sep);
   if ($left_YM != ""){
     if ($left_YMX != '') {
@@ -336,7 +336,7 @@ function plugin_minicalendar_viewer_convert()
     $right_link = "";
   }
 
-  //past mode¤Ï<<¿· µì>> Â¾¤Ï<<µì ¿·>>
+  //past modeã¯<<æ–° æ—§>> ä»–ã¯<<æ—§ æ–°>>
 //$return_body .= "<br /><table width=\"90%\" align=\"center\"><tr><td align=\"left\">";
 //$return_body .= $left_link;
 //$return_body .= "</td><td align=\"right\">";
@@ -387,7 +387,7 @@ function plugin_minicalendar_viewer_action()
     $return_vars_array["msg"] .= "/";
   }
   if (preg_match("/\*/",$page_YM)){
-    //¤¦¡¼¤ó¡¢n·ïÉ½¼¨¤Î»ş¤Ï¤Ê¤ó¤Æ¥Ú¡¼¥¸Ì¾¤Ë¤·¤¿¤é¤¤¤¤¡©
+    //ã†ãƒ¼ã‚“ã€nä»¶è¡¨ç¤ºã®æ™‚ã¯ãªã‚“ã¦ãƒšãƒ¼ã‚¸åã«ã—ãŸã‚‰ã„ã„ï¼Ÿ
   }else{
     $return_vars_array["msg"] .= htmlspecialchars($page_YM);
   }
@@ -399,9 +399,9 @@ function plugin_minicalendar_viewer_action()
 }
 
 function plugin_minicalendar_viewer_isValidDate($aStr, $aSepList="-/ .") {
-  //$aSepList=""¤Ê¤é¡¢yyyymmdd¤È¤·¤Æ¥Á¥§¥Ã¥¯¡Ê¼êÈ´¤­(^^;¡Ë
+  //$aSepList=""ãªã‚‰ã€yyyymmddã¨ã—ã¦ãƒã‚§ãƒƒã‚¯ï¼ˆæ‰‹æŠœã(^^;ï¼‰
   if ($aSepList == "") {
-    //yyyymmdd¤È¤·¤Æ¥Á¥§¥Ã¥¯
+    //yyyymmddã¨ã—ã¦ãƒã‚§ãƒƒã‚¯
     return checkdate(substr($aStr,4,2),substr($aStr,6,2),substr($aStr,0,4));
   }
   if ( ereg("^([0-9]{2,4})[$aSepList]([0-9]{1,2})[$aSepList]([0-9]{1,2})$", $aStr, $m) ) {

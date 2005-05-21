@@ -11,7 +11,7 @@
 function plugin_flash_inline()
 {
 	$args = func_get_args();
-	array_pop($args);	// ¥¤¥ó¥é¥¤¥ó¤Î¾ì¹ç°ú¿ô¤Î¿ô¡Ü£±¤Ë¤Ê¤ë»ÅÍÍÂĞºö
+	array_pop($args);	// ã‚¤ãƒ³ãƒ©ã‚¤ãƒ³ã®å ´åˆå¼•æ•°ã®æ•°ï¼‹ï¼‘ã«ãªã‚‹ä»•æ§˜å¯¾ç­–
 	return call_user_func_array('plugin_flash_convert', $args);
 }
 

@@ -10,10 +10,10 @@
 // Allow using resture function
 define('PLUGIN_DUMP_ALLOW_RESTORE', FALSE); // FALSE, TRUE
 
-// ¥Ú¡¼¥¸Ì¾¤ò¥Ç¥£¥ì¥¯¥È¥ê¹½Â¤¤ËÊÑ´¹¤¹¤ëºİ¤ÎÊ¸»ú¥³¡¼¥É (for mbstring)
+// ãƒšãƒ¼ã‚¸åã‚’ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªæ§‹é€ ã«å¤‰æ›ã™ã‚‹éš›ã®æ–‡å­—ã‚³ãƒ¼ãƒ‰ (for mbstring)
 define('PLUGIN_DUMP_FILENAME_ENCORDING', 'SJIS');
 
-// ºÇÂç¥¢¥Ã¥×¥í¡¼¥É¥µ¥¤¥º
+// æœ€å¤§ã‚¢ãƒƒãƒ—ãƒ­ãƒ¼ãƒ‰ã‚µã‚¤ã‚º
 define('PLUGIN_DUMP_MAX_FILESIZE', 1024); // Kbyte
 
 /////////////////////////////////////////////////
@@ -39,7 +39,7 @@ $_STORAGE['BACKUP_DIR']['extract_filter'] =  '^' . preg_quote(BACKUP_DIR, '/') .
 
 
 /////////////////////////////////////////////////
-// ¥×¥é¥°¥¤¥óËÜÂÎ
+// ãƒ—ãƒ©ã‚°ã‚¤ãƒ³æœ¬ä½“
 function plugin_dump_action()
 {
 	global $vars;
@@ -73,7 +73,7 @@ function plugin_dump_action()
 		}
 	}
 
-	// ÆşÎÏ¥Õ¥©¡¼¥à¤òÉ½¼¨
+	// å…¥åŠ›ãƒ•ã‚©ãƒ¼ãƒ ã‚’è¡¨ç¤º
 	$body .= plugin_dump_disp_form();
 
 	$msg = '';
@@ -87,18 +87,18 @@ function plugin_dump_action()
 }
 
 /////////////////////////////////////////////////
-// ¥Õ¥¡¥¤¥ë¤Î¥À¥¦¥ó¥í¡¼¥É
+// ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ€ã‚¦ãƒ³ãƒ­ãƒ¼ãƒ‰
 function plugin_dump_download()
 {
 	global $vars, $_STORAGE;
 
-	// ¥¢¡¼¥«¥¤¥Ö¤Î¼ïÎà
+	// ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–ã®ç¨®é¡
 	$arc_kind = ($vars['pcmd'] == 'tar') ? 'tar' : 'tgz';
 
-	// ¥Ú¡¼¥¸Ì¾¤ËÊÑ´¹¤¹¤ë
+	// ãƒšãƒ¼ã‚¸åã«å¤‰æ›ã™ã‚‹
 	$namedecode = isset($vars['namedecode']) ? TRUE : FALSE;
 
-	// ¥Ğ¥Ã¥¯¥¢¥Ã¥×¥Ç¥£¥ì¥¯¥È¥ê
+	// ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
 	$bk_wiki   = isset($vars['bk_wiki'])   ? TRUE : FALSE;
 	$bk_attach = isset($vars['bk_attach']) ? TRUE : FALSE;
 	$bk_backup = isset($vars['bk_backup']) ? TRUE : FALSE;
@@ -118,15 +118,15 @@ function plugin_dump_download()
 		@unlink($tar->filename);
 		return '<p><strong>' . _("The file was not found.") . '</strong></p>';
 	} else {
-		// ¥À¥¦¥ó¥í¡¼¥É
+		// ãƒ€ã‚¦ãƒ³ãƒ­ãƒ¼ãƒ‰
 		download_tarfile($tar->filename, $arc_kind);
 		@unlink($tar->filename);
-		exit;	// Àµ¾ï½ªÎ»
+		exit;	// æ­£å¸¸çµ‚äº†
 	}
 }
 
 /////////////////////////////////////////////////
-// ¥Õ¥¡¥¤¥ë¤Î¥¢¥Ã¥×¥í¡¼¥É
+// ãƒ•ã‚¡ã‚¤ãƒ«ã®ã‚¢ãƒƒãƒ—ãƒ­ãƒ¼ãƒ‰
 function plugin_dump_upload()
 {
 	global $vars, $_STORAGE;
@@ -182,7 +182,7 @@ function plugin_dump_upload()
 }
 
 /////////////////////////////////////////////////
-// tar¥Õ¥¡¥¤¥ë¤Î¥À¥¦¥ó¥í¡¼¥É
+// tarãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ€ã‚¦ãƒ³ãƒ­ãƒ¼ãƒ‰
 function download_tarfile($tempnam, $arc_kind)
 {
 	$size = filesize($tempnam);
@@ -203,7 +203,7 @@ function download_tarfile($tempnam, $arc_kind)
 }
 
 /////////////////////////////////////////////////
-// ÆşÎÏ¥Õ¥©¡¼¥à¤òÉ½¼¨
+// å…¥åŠ›ãƒ•ã‚©ãƒ¼ãƒ ã‚’è¡¨ç¤º
 function plugin_dump_disp_form()
 {
 	global $script, $defaultpage;
@@ -297,31 +297,31 @@ EOD;
 // tarlib: a class library for tar file creation and expansion
 
 // Tar related definition
-define('TARLIB_HDR_LEN',           512);	// ¥Ø¥Ã¥À¤ÎÂç¤­¤µ
-define('TARLIB_BLK_LEN',           512);	// Ã±°Ì¥Ö¥í¥Ã¥¯Ä¹¤µ
-define('TARLIB_HDR_NAME_OFFSET',     0);	// ¥Õ¥¡¥¤¥ëÌ¾¤Î¥ª¥Õ¥»¥Ã¥È
-define('TARLIB_HDR_NAME_LEN',      100);	// ¥Õ¥¡¥¤¥ëÌ¾¤ÎºÇÂçÄ¹¤µ
-define('TARLIB_HDR_MODE_OFFSET',   100);	// mode¤Ø¤Î¥ª¥Õ¥»¥Ã¥È
-define('TARLIB_HDR_UID_OFFSET',    108);	// uid¤Ø¤Î¥ª¥Õ¥»¥Ã¥È
-define('TARLIB_HDR_GID_OFFSET',    116);	// gid¤Ø¤Î¥ª¥Õ¥»¥Ã¥È
-define('TARLIB_HDR_SIZE_OFFSET',   124);	// ¥µ¥¤¥º¤Ø¤Î¥ª¥Õ¥»¥Ã¥È
-define('TARLIB_HDR_SIZE_LEN',       12);	// ¥µ¥¤¥º¤ÎÄ¹¤µ
-define('TARLIB_HDR_MTIME_OFFSET',  136);	// ºÇ½ª¹¹¿·»ş¹ï¤Î¥ª¥Õ¥»¥Ã¥È
-define('TARLIB_HDR_MTIME_LEN',      12);	// ºÇ½ª¹¹¿·»ş¹ï¤ÎÄ¹¤µ
-define('TARLIB_HDR_CHKSUM_OFFSET', 148);	// ¥Á¥§¥Ã¥¯¥µ¥à¤Î¥ª¥Õ¥»¥Ã¥È
-define('TARLIB_HDR_CHKSUM_LEN',      8);	// ¥Á¥§¥Ã¥¯¥µ¥à¤ÎÄ¹¤µ
-define('TARLIB_HDR_TYPE_OFFSET',   156);	// ¥Õ¥¡¥¤¥ë¥¿¥¤¥×¤Ø¤Î¥ª¥Õ¥»¥Ã¥È
+define('TARLIB_HDR_LEN',           512);	// ãƒ˜ãƒƒãƒ€ã®å¤§ãã•
+define('TARLIB_BLK_LEN',           512);	// å˜ä½ãƒ–ãƒ­ãƒƒã‚¯é•·ã•
+define('TARLIB_HDR_NAME_OFFSET',     0);	// ãƒ•ã‚¡ã‚¤ãƒ«åã®ã‚ªãƒ•ã‚»ãƒƒãƒˆ
+define('TARLIB_HDR_NAME_LEN',      100);	// ãƒ•ã‚¡ã‚¤ãƒ«åã®æœ€å¤§é•·ã•
+define('TARLIB_HDR_MODE_OFFSET',   100);	// modeã¸ã®ã‚ªãƒ•ã‚»ãƒƒãƒˆ
+define('TARLIB_HDR_UID_OFFSET',    108);	// uidã¸ã®ã‚ªãƒ•ã‚»ãƒƒãƒˆ
+define('TARLIB_HDR_GID_OFFSET',    116);	// gidã¸ã®ã‚ªãƒ•ã‚»ãƒƒãƒˆ
+define('TARLIB_HDR_SIZE_OFFSET',   124);	// ã‚µã‚¤ã‚ºã¸ã®ã‚ªãƒ•ã‚»ãƒƒãƒˆ
+define('TARLIB_HDR_SIZE_LEN',       12);	// ã‚µã‚¤ã‚ºã®é•·ã•
+define('TARLIB_HDR_MTIME_OFFSET',  136);	// æœ€çµ‚æ›´æ–°æ™‚åˆ»ã®ã‚ªãƒ•ã‚»ãƒƒãƒˆ
+define('TARLIB_HDR_MTIME_LEN',      12);	// æœ€çµ‚æ›´æ–°æ™‚åˆ»ã®é•·ã•
+define('TARLIB_HDR_CHKSUM_OFFSET', 148);	// ãƒã‚§ãƒƒã‚¯ã‚µãƒ ã®ã‚ªãƒ•ã‚»ãƒƒãƒˆ
+define('TARLIB_HDR_CHKSUM_LEN',      8);	// ãƒã‚§ãƒƒã‚¯ã‚µãƒ ã®é•·ã•
+define('TARLIB_HDR_TYPE_OFFSET',   156);	// ãƒ•ã‚¡ã‚¤ãƒ«ã‚¿ã‚¤ãƒ—ã¸ã®ã‚ªãƒ•ã‚»ãƒƒãƒˆ
 
 // Status
-define('TARLIB_STATUS_INIT',    0);		// ½é´ü¾õÂÖ
-define('TARLIB_STATUS_OPEN',   10);		// ÆÉ¤ß¼è¤ê
-define('TARLIB_STATUS_CREATE', 20);		// ½ñ¤­¹ş¤ß
+define('TARLIB_STATUS_INIT',    0);		// åˆæœŸçŠ¶æ…‹
+define('TARLIB_STATUS_OPEN',   10);		// èª­ã¿å–ã‚Š
+define('TARLIB_STATUS_CREATE', 20);		// æ›¸ãè¾¼ã¿
 
-define('TARLIB_DATA_MODE',      '100666 ');	// ¥Õ¥¡¥¤¥ë¥Ñ¡¼¥ß¥Ã¥·¥ç¥ó
+define('TARLIB_DATA_MODE',      '100666 ');	// ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ãƒ¼ãƒŸãƒƒã‚·ãƒ§ãƒ³
 define('TARLIB_DATA_UGID',      '000000 ');	// uid / gid
 define('TARLIB_DATA_CHKBLANKS', '        ');
 
-// GNU³ÈÄ¥»ÅÍÍ(¥í¥ó¥°¥Õ¥¡¥¤¥ëÌ¾ÂĞ±ş)
+// GNUæ‹¡å¼µä»•æ§˜(ãƒ­ãƒ³ã‚°ãƒ•ã‚¡ã‚¤ãƒ«åå¯¾å¿œ)
 define('TARLIB_DATA_LONGLINK', '././@LongLink');
 
 // Type flag
@@ -340,7 +340,7 @@ class tarlib
 	var $arc_kind;
 	var $dummydata;
 
-	// ¥³¥ó¥¹¥È¥é¥¯¥¿
+	// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	function tarlib() {
 		$this->filename = '';
 		$this->fp       = FALSE;
@@ -349,9 +349,9 @@ class tarlib
 	}
 	
 	////////////////////////////////////////////////////////////
-	// ´Ø¿ô  : tar¥Õ¥¡¥¤¥ë¤òºîÀ®¤¹¤ë
-	// °ú¿ô  : tar¥Õ¥¡¥¤¥ë¤òºîÀ®¤¹¤ë¥Ñ¥¹
-	// ÊÖ¤êÃÍ: TRUE .. À®¸ù , FALSE .. ¼ºÇÔ
+	// é–¢æ•°  : tarãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä½œæˆã™ã‚‹
+	// å¼•æ•°  : tarãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä½œæˆã™ã‚‹ãƒ‘ã‚¹
+	// è¿”ã‚Šå€¤: TRUE .. æˆåŠŸ , FALSE .. å¤±æ•—
 	////////////////////////////////////////////////////////////
 	function create($tempdir, $kind = 'tgz')
 	{
@@ -379,11 +379,11 @@ class tarlib
 	}
 
 	////////////////////////////////////////////////////////////
-	// ´Ø¿ô  : tar¥Õ¥¡¥¤¥ë¤Ë¥Ç¥£¥ì¥¯¥È¥ê¤òÄÉ²Ã¤¹¤ë
-	// °ú¿ô  : $dir    .. ¥Ç¥£¥ì¥¯¥È¥êÌ¾
-	//         $mask   .. ÄÉ²Ã¤¹¤ë¥Õ¥¡¥¤¥ë(Àµµ¬É½¸½)
-	//         $decode .. ¥Ú¡¼¥¸Ì¾¤ÎÊÑ´¹¤ò¤¹¤ë¤«
-	// ÊÖ¤êÃÍ: ºîÀ®¤·¤¿¥Õ¥¡¥¤¥ë¿ô
+	// é–¢æ•°  : tarãƒ•ã‚¡ã‚¤ãƒ«ã«ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’è¿½åŠ ã™ã‚‹
+	// å¼•æ•°  : $dir    .. ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå
+	//         $mask   .. è¿½åŠ ã™ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«(æ­£è¦è¡¨ç¾)
+	//         $decode .. ãƒšãƒ¼ã‚¸åã®å¤‰æ›ã‚’ã™ã‚‹ã‹
+	// è¿”ã‚Šå€¤: ä½œæˆã—ãŸãƒ•ã‚¡ã‚¤ãƒ«æ•°
 	////////////////////////////////////////////////////////////
 	function add_dir($dir, $mask, $decode = FALSE)
 	{
@@ -394,7 +394,7 @@ class tarlib
 
 		unset($files);
 
-		//  »ØÄê¤µ¤ì¤¿¥Ñ¥¹¤Î¥Õ¥¡¥¤¥ë¤Î¥ê¥¹¥È¤ò¼èÆÀ¤¹¤ë
+		//  æŒ‡å®šã•ã‚ŒãŸãƒ‘ã‚¹ã®ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒªã‚¹ãƒˆã‚’å–å¾—ã™ã‚‹
 		$dp = @opendir($dir);
 		if($dp === FALSE) {
 			@unlink($this->filename);
@@ -412,62 +412,62 @@ class tarlib
 		$matches = array();
 		foreach($files as $name)
 		{
-			// Tar¤Ë³ÊÇ¼¤¹¤ë¥Õ¥¡¥¤¥ëÌ¾¤òdecode
+			// Tarã«æ ¼ç´ã™ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«åã‚’decode
 			if ($decode === FALSE) {
 				$filename = $name;
 			} else {
 				$dirname  = dirname(trim($name)) . '/';
 				$filename = basename(trim($name));
 				if (preg_match("/^((?:[0-9A-F]{2})+)_((?:[0-9A-F]{2})+)/", $filename, $matches)) {
-					// attach¥Õ¥¡¥¤¥ëÌ¾
+					// attachãƒ•ã‚¡ã‚¤ãƒ«å
 					$filename = decode($matches[1]) . '/' . decode($matches[2]);
 				} else {
 					$pattern = '^((?:[0-9A-F]{2})+)((\.txt|\.gz)*)$';
 					if (preg_match("/$pattern/", $filename, $matches)) {
 						$filename = decode($matches[1]) . $matches[2];
 
-						// ´í¤Ê¤¤¥³¡¼¥É¤ÏÃÖ´¹¤·¤Æ¤ª¤¯
+						// å±ãªã„ã‚³ãƒ¼ãƒ‰ã¯ç½®æ›ã—ã¦ãŠã
 						$filename = str_replace(':',  '_', $filename);
 						$filename = str_replace('\\', '_', $filename);
 					}
 				}
 				$filename = $dirname . $filename;
-				// ¥Õ¥¡¥¤¥ëÌ¾¤ÎÊ¸»ú¥³¡¼¥É¤òÊÑ´¹
+				// ãƒ•ã‚¡ã‚¤ãƒ«åã®æ–‡å­—ã‚³ãƒ¼ãƒ‰ã‚’å¤‰æ›
 				if (function_exists('mb_convert_encoding'))
 					$filename = mb_convert_encoding($filename, PLUGIN_DUMP_FILENAME_ENCORDING);
 			}
 
-			// ºÇ½ª¹¹¿·»ş¹ï
+			// æœ€çµ‚æ›´æ–°æ™‚åˆ»
 			$mtime = filemtime($name);
 
-			// ¥Õ¥¡¥¤¥ëÌ¾Ä¹¤Î¥Á¥§¥Ã¥¯
+			// ãƒ•ã‚¡ã‚¤ãƒ«åé•·ã®ãƒã‚§ãƒƒã‚¯
 			if (strlen($filename) > TARLIB_HDR_NAME_LEN) {
-				// LongLinkÂĞ±ş
+				// LongLinkå¯¾å¿œ
 				$size = strlen($filename);
-				// LonkLink¥Ø¥Ã¥ÀÀ¸À®
+				// LonkLinkãƒ˜ãƒƒãƒ€ç”Ÿæˆ
 				$tar_data = $this->_make_header(TARLIB_DATA_LONGLINK, $size, $mtime, TARLIB_HDR_LINK);
-				// ¥Õ¥¡¥¤¥ë½ĞÎÏ
+				// ãƒ•ã‚¡ã‚¤ãƒ«å‡ºåŠ›
 	 			$this->_write_data(join('', $tar_data), $filename, $size);
 			}
 
-			// ¥Õ¥¡¥¤¥ë¥µ¥¤¥º¤ò¼èÆÀ
+			// ãƒ•ã‚¡ã‚¤ãƒ«ã‚µã‚¤ã‚ºã‚’å–å¾—
 			$size = filesize($name);
 			if ($size === FALSE) {
 				@unlink($this->filename);
 				die_message($name . ' is not found or not readable.');
 			}
 
-			// ¥Ø¥Ã¥ÀÀ¸À®
+			// ãƒ˜ãƒƒãƒ€ç”Ÿæˆ
 			$tar_data = $this->_make_header($filename, $size, $mtime, TARLIB_HDR_FILE);
 
-			// ¥Õ¥¡¥¤¥ë¥Ç¡¼¥¿¤Î¼èÆÀ
+			// ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‡ãƒ¼ã‚¿ã®å–å¾—
 			$fpr = @fopen($name , 'rb');
 			flock($fpr, LOCK_SH);
 			$data = fread($fpr, $size);
 			flock($fpr, LOCK_UN);
 			fclose( $fpr );
 
-			// ¥Õ¥¡¥¤¥ë½ĞÎÏ
+			// ãƒ•ã‚¡ã‚¤ãƒ«å‡ºåŠ›
 			$this->_write_data(join('', $tar_data), $data, $size);
 			++$retvalue;
 		}
@@ -475,23 +475,23 @@ class tarlib
 	}
 	
 	////////////////////////////////////////////////////////////
-	// ´Ø¿ô  : tar¤Î¥Ø¥Ã¥À¾ğÊó¤òÀ¸À®¤¹¤ë (add)
-	// °ú¿ô  : $filename .. ¥Õ¥¡¥¤¥ëÌ¾
-	//         $size     .. ¥Ç¡¼¥¿¥µ¥¤¥º
-	//         $mtime    .. ºÇ½ª¹¹¿·Æü
+	// é–¢æ•°  : tarã®ãƒ˜ãƒƒãƒ€æƒ…å ±ã‚’ç”Ÿæˆã™ã‚‹ (add)
+	// å¼•æ•°  : $filename .. ãƒ•ã‚¡ã‚¤ãƒ«å
+	//         $size     .. ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚º
+	//         $mtime    .. æœ€çµ‚æ›´æ–°æ—¥
 	//         $typeflag .. TypeFlag (file/link)
-	// Ìá¤êÃÍ: tar¥Ø¥Ã¥À¾ğÊó
+	// æˆ»ã‚Šå€¤: tarãƒ˜ãƒƒãƒ€æƒ…å ±
 	////////////////////////////////////////////////////////////
 	function _make_header($filename, $size, $mtime, $typeflag)
 	{
 		$tar_data = array_fill(0, TARLIB_HDR_LEN, "\0");
 		
-		// ¥Õ¥¡¥¤¥ëÌ¾¤òÊİÂ¸
+		// ãƒ•ã‚¡ã‚¤ãƒ«åã‚’ä¿å­˜
 		for($i = 0; $i < strlen($filename); $i++ ) {
 			if ($i < TARLIB_HDR_NAME_LEN) {
 				$tar_data[$i + TARLIB_HDR_NAME_OFFSET] = $filename{$i};
 			} else {
-				break;	// ¥Õ¥¡¥¤¥ëÌ¾¤¬Ä¹¤¹¤®
+				break;	// ãƒ•ã‚¡ã‚¤ãƒ«åãŒé•·ã™ã
 			}
 		}
 
@@ -508,28 +508,28 @@ class tarlib
 			$tar_data[$i + TARLIB_HDR_GID_OFFSET] = $ugid{$i};
 		}
 
-		// ¥µ¥¤¥º
+		// ã‚µã‚¤ã‚º
 		$strsize = sprintf('%11o', $size);
 		for($i = 0; $i < strlen($strsize); $i++ ) {
 			$tar_data[$i + TARLIB_HDR_SIZE_OFFSET] = $strsize{$i};
 		}
 
-		// ºÇ½ª¹¹¿·»ş¹ï
+		// æœ€çµ‚æ›´æ–°æ™‚åˆ»
 		$strmtime = sprintf('%o', $mtime);
 		for($i = 0; $i < strlen($strmtime); $i++ ) {
 			$tar_data[$i + TARLIB_HDR_MTIME_OFFSET] = $strmtime{$i};
 		}
 
-		// ¥Á¥§¥Ã¥¯¥µ¥à·×»»ÍÑ¤Î¥Ö¥é¥ó¥¯¤òÀßÄê
+		// ãƒã‚§ãƒƒã‚¯ã‚µãƒ è¨ˆç®—ç”¨ã®ãƒ–ãƒ©ãƒ³ã‚¯ã‚’è¨­å®š
 		$chkblanks = TARLIB_DATA_CHKBLANKS;
 		for($i = 0; $i < strlen($chkblanks); $i++ ) {
 			$tar_data[$i + TARLIB_HDR_CHKSUM_OFFSET] = $chkblanks{$i};
 		}
 
-		// ¥¿¥¤¥×¥Õ¥é¥°
+		// ã‚¿ã‚¤ãƒ—ãƒ•ãƒ©ã‚°
 		$tar_data[TARLIB_HDR_TYPE_OFFSET] = $typeflag;
 
-		// ¥Á¥§¥Ã¥¯¥µ¥à¤Î·×»»
+		// ãƒã‚§ãƒƒã‚¯ã‚µãƒ ã®è¨ˆç®—
 		$sum = 0;
 		for($i = 0; $i < TARLIB_BLK_LEN; $i++ ) {
 			$sum += 0xff & ord($tar_data[$i]);
@@ -543,11 +543,11 @@ class tarlib
 	}
 	
 	////////////////////////////////////////////////////////////
-	// ´Ø¿ô  : tar¥Ç¡¼¥¿¤Î¥Õ¥¡¥¤¥ë½ĞÎÏ (add)
-	// °ú¿ô  : $header .. tar¥Ø¥Ã¥À¾ğÊó
-	//         $body   .. tar¥Ç¡¼¥¿
-	//         $size   .. ¥Ç¡¼¥¿¥µ¥¤¥º
-	// Ìá¤êÃÍ: ¤Ê¤·
+	// é–¢æ•°  : tarãƒ‡ãƒ¼ã‚¿ã®ãƒ•ã‚¡ã‚¤ãƒ«å‡ºåŠ› (add)
+	// å¼•æ•°  : $header .. tarãƒ˜ãƒƒãƒ€æƒ…å ±
+	//         $body   .. tarãƒ‡ãƒ¼ã‚¿
+	//         $size   .. ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚º
+	// æˆ»ã‚Šå€¤: ãªã—
 	////////////////////////////////////////////////////////////
 	function _write_data($header, $body, $size)
 	{
@@ -565,9 +565,9 @@ class tarlib
 	}
 
 	////////////////////////////////////////////////////////////
-	// ´Ø¿ô  : tar¥Õ¥¡¥¤¥ë¤ò³«¤¯
-	// °ú¿ô  : tar¥Õ¥¡¥¤¥ëÌ¾
-	// ÊÖ¤êÃÍ: TRUE .. À®¸ù , FALSE .. ¼ºÇÔ
+	// é–¢æ•°  : tarãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‹ã
+	// å¼•æ•°  : tarãƒ•ã‚¡ã‚¤ãƒ«å
+	// è¿”ã‚Šå€¤: TRUE .. æˆåŠŸ , FALSE .. å¤±æ•—
 	////////////////////////////////////////////////////////////
 	function open($name = '', $kind = 'tgz')
 	{
@@ -593,10 +593,10 @@ class tarlib
 	}
 
 	////////////////////////////////////////////////////////////
-	// ´Ø¿ô  : »ØÄê¤·¤¿¥Ç¥£¥ì¥¯¥È¥ê¤Ëtar¥Õ¥¡¥¤¥ë¤òÅ¸³«¤¹¤ë
-	// °ú¿ô  : Å¸³«¤¹¤ë¥Õ¥¡¥¤¥ë¥Ñ¥¿¡¼¥ó(Àµµ¬É½¸½)
-	// ÊÖ¤êÃÍ: Å¸³«¤·¤¿¥Õ¥¡¥¤¥ëÌ¾¤Î°ìÍ÷
-	// ÊäÂ­  : ARAI¤µ¤ó¤Îattach¥×¥é¥°¥¤¥ó¥Ñ¥Ã¥Á¤ò»²¹Í¤Ë¤·¤Ş¤·¤¿
+	// é–¢æ•°  : æŒ‡å®šã—ãŸãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã«tarãƒ•ã‚¡ã‚¤ãƒ«ã‚’å±•é–‹ã™ã‚‹
+	// å¼•æ•°  : å±•é–‹ã™ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¿ãƒ¼ãƒ³(æ­£è¦è¡¨ç¾)
+	// è¿”ã‚Šå€¤: å±•é–‹ã—ãŸãƒ•ã‚¡ã‚¤ãƒ«åã®ä¸€è¦§
+	// è£œè¶³  : ARAIã•ã‚“ã®attachãƒ—ãƒ©ã‚°ã‚¤ãƒ³ãƒ‘ãƒƒãƒã‚’å‚è€ƒã«ã—ã¾ã—ãŸ
 	////////////////////////////////////////////////////////////
 	function extract($pattern)
 	{
@@ -609,10 +609,10 @@ class tarlib
 			$buff = fread($this->fp, TARLIB_HDR_LEN);
 			if (strlen($buff) != TARLIB_HDR_LEN) break;
 
-			// ¥Õ¥¡¥¤¥ëÌ¾
+			// ãƒ•ã‚¡ã‚¤ãƒ«å
 			$name = '';
 			if ($longname != '') {
-				$name     = $longname;	// LongLinkÂĞ±ş
+				$name     = $longname;	// LongLinkå¯¾å¿œ
 				$longname = '';
 			} else {
 				for ($i = 0; $i < TARLIB_HDR_NAME_LEN; $i++ ) {
@@ -625,9 +625,9 @@ class tarlib
 			}
 			$name = trim($name);
 
-			if ($name == '') break;	// Å¸³«½ªÎ»
+			if ($name == '') break;	// å±•é–‹çµ‚äº†
 
-			// ¥Á¥§¥Ã¥¯¥µ¥à¤ò¼èÆÀ¤·¤Ä¤Ä¡¢¥Ö¥é¥ó¥¯¤ËÃÖ´¹¤·¤Æ¤¤¤¯
+			// ãƒã‚§ãƒƒã‚¯ã‚µãƒ ã‚’å–å¾—ã—ã¤ã¤ã€ãƒ–ãƒ©ãƒ³ã‚¯ã«ç½®æ›ã—ã¦ã„ã
 			$checksum = '';
 			$chkblanks = TARLIB_DATA_CHKBLANKS;
 			for ($i = 0; $i < TARLIB_HDR_CHKSUM_LEN; $i++ ) {
@@ -651,17 +651,17 @@ class tarlib
 			list($size) = sscanf('0' . trim($size), '%i');
 
 			// ceil
-			// ¥Ç¡¼¥¿¥Ö¥í¥Ã¥¯¤Ï512byte¤Ç¥Ñ¥Ç¥£¥ó¥°¤µ¤ì¤Æ¤¤¤ë
+			// ãƒ‡ãƒ¼ã‚¿ãƒ–ãƒ­ãƒƒã‚¯ã¯512byteã§ãƒ‘ãƒ‡ã‚£ãƒ³ã‚°ã•ã‚Œã¦ã„ã‚‹
 			$pdsz = ceil($size / TARLIB_BLK_LEN) * TARLIB_BLK_LEN;
 
-			// ºÇ½ª¹¹¿·»ş¹ï
+			// æœ€çµ‚æ›´æ–°æ™‚åˆ»
 			$strmtime = '';
 			for ($i = 0; $i < TARLIB_HDR_MTIME_LEN; $i++ ) {
 				$strmtime .= $buff{$i + TARLIB_HDR_MTIME_OFFSET};
 			}
 			list($mtime) = sscanf('0' . trim($strmtime), '%i');
 
-			// ¥¿¥¤¥×¥Õ¥é¥°
+			// ã‚¿ã‚¤ãƒ—ãƒ•ãƒ©ã‚°
 //			 $type = $buff{TARLIB_HDR_TYPE_OFFSET};
 
 			if ($name == TARLIB_DATA_LONGLINK) {
@@ -672,7 +672,7 @@ class tarlib
 //			} else if ($type == 0 && preg_match("/$pattern/", $name) ) {
 				$buff = fread($this->fp, $pdsz);
 
-				// ´û¤ËÆ±¤¸¥Õ¥¡¥¤¥ë¤¬¤¢¤ë¾ì¹ç¤Ï¾å½ñ¤­¤µ¤ì¤ë
+				// æ—¢ã«åŒã˜ãƒ•ã‚¡ã‚¤ãƒ«ãŒã‚ã‚‹å ´åˆã¯ä¸Šæ›¸ãã•ã‚Œã‚‹
 				$fpw = @fopen($name, 'wb');
 				if ($fpw !== FALSE) {
 					flock($fpw, LOCK_EX);
@@ -685,7 +685,7 @@ class tarlib
 					$files[] = $name;
 				}
 			} else {
-				// ¥Õ¥¡¥¤¥ë¥İ¥¤¥ó¥¿¤ò¿Ê¤á¤ë
+				// ãƒ•ã‚¡ã‚¤ãƒ«ãƒã‚¤ãƒ³ã‚¿ã‚’é€²ã‚ã‚‹
 				@fseek($this->fp, $pdsz, SEEK_CUR);
 			}
 		}
@@ -693,21 +693,21 @@ class tarlib
 	}
 
 	////////////////////////////////////////////////////////////
-	// ´Ø¿ô  : tar¥Õ¥¡¥¤¥ë¤òÊÄ¤¸¤ë
-	// °ú¿ô  : ¤Ê¤·
-	// ÊÖ¤êÃÍ: ¤Ê¤·
+	// é–¢æ•°  : tarãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‰ã˜ã‚‹
+	// å¼•æ•°  : ãªã—
+	// è¿”ã‚Šå€¤: ãªã—
 	////////////////////////////////////////////////////////////
 	function close()
 	{
 		if ($this->status == TARLIB_STATUS_CREATE) {
-			// ¥Õ¥¡¥¤¥ë¤òÊÄ¤¸¤ë
+			// ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‰ã˜ã‚‹
 			if ($this->arc_kind == TARLIB_KIND_TGZ) {
-				// ¥Ğ¥¤¥Ê¥ê¡¼¥¼¥í¤ò1024¥Ğ¥¤¥È½ĞÎÏ
+				// ãƒã‚¤ãƒŠãƒªãƒ¼ã‚¼ãƒ­ã‚’1024ãƒã‚¤ãƒˆå‡ºåŠ›
 				gzwrite($this->fp, $this->dummydata, TARLIB_HDR_LEN);
 				gzwrite($this->fp, $this->dummydata, TARLIB_HDR_LEN);
 				gzclose($this->fp);
 			} else {
-				// ¥Ğ¥¤¥Ê¥ê¡¼¥¼¥í¤ò1024¥Ğ¥¤¥È½ĞÎÏ
+				// ãƒã‚¤ãƒŠãƒªãƒ¼ã‚¼ãƒ­ã‚’1024ãƒã‚¤ãƒˆå‡ºåŠ›
 				fwrite($this->fp, $this->dummydata, TARLIB_HDR_LEN);
 				fwrite($this->fp, $this->dummydata, TARLIB_HDR_LEN);
 				fclose($this->fp);

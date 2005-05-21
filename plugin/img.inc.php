@@ -7,7 +7,7 @@
 define('PLUGIN_IMG_USAGE', '#img(): Usage: (URI-to-image[,right[,clear]])<br />' . "\n");
 define('PLUGIN_IMG_CLEAR', '<div style="clear:both"></div>' . "\n"); // Stop word-wrapping
 
-// ≤Ë¡¸§Ú•§•Û•È•§•Û…Ωº®
+// ÁîªÂÉè„Çí„Ç§„É≥„É©„Ç§„É≥Ë°®Á§∫
 function plugin_img_convert()
 {
 	$args = func_get_args();
