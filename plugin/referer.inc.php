@@ -1,7 +1,7 @@
 <?php
-// $Id: referer.inc.php,v 1.10.1 2005/03/10 05:20:02 miko Exp $
+// $Id: referer.inc.php,v 1.10.2 2005/05/21 15:11:00 upk Exp $
 /*
- * PukiWiki Referer ¥×¥é¥°¥¤¥ó(¥ê¥ó¥¯¸µÉ½¼¨¥×¥é¥°¥¤¥ó)
+ * PukiWiki Referer ãƒ—ãƒ©ã‚°ã‚¤ãƒ³(ãƒªãƒ³ã‚¯å…ƒè¡¨ç¤ºãƒ—ãƒ©ã‚°ã‚¤ãƒ³)
  * (C) 2003,2005, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * License: GPL
 */
@@ -51,10 +51,11 @@ function plugin_referer_action()
 	}
 }
 
-// Referer ÌÀºÙ¹ÔÊÔ½¸
+// Referer æ˜ç´°è¡Œç·¨é›†
 function plugin_referer_body($page, $sort)
 {
 	global $script, $_referer_msg;
+	global $referer;
 
 	$data = tb_get(tb_get_filename($page, '.ref'));
 	if (empty($data)) return '<p>no data.</p>';
@@ -68,37 +69,37 @@ function plugin_referer_body($page, $sort)
 	$sort_ctr  = '2d';
 
 	switch ($sort) {
-	case '0d': // 0d ºÇ½ª¹¹¿·Æü»ş(¿·Ãå½ç)
+	case '0d': // 0d æœ€çµ‚æ›´æ–°æ—¥æ™‚(æ–°ç€é †)
 		usort($data, create_function('$a,$b', 'return $b[0] - $a[0];'));
 		$color_last = $bg['cur'];
 		$arrow_last = $_referer_msg['msg_Chr_darr'];
 		$sort_last = '0a';
 		break;
-	case '0a': // 0a ºÇ½ª¹¹¿·Æü»ş(ÆüÉÕ½ç)
+	case '0a': // 0a æœ€çµ‚æ›´æ–°æ—¥æ™‚(æ—¥ä»˜é †)
 		usort($data, create_function('$a,$b', 'return $a[0] - $b[0];'));
 		$color_last = $bg['cur'];
 		$arrow_last = $_referer_msg['msg_Chr_uarr'];
 //		$sort_last = '0d';
 		break;
-	case '1d': // 1d ½é²óÅĞÏ¿Æü»ş(¿·Ãå½ç)
+	case '1d': // 1d åˆå›ç™»éŒ²æ—¥æ™‚(æ–°ç€é †)
 		usort($data, create_function('$a,$b', 'return $b[1] - $a[1];'));
 		$color_1st = $bg['cur'];
 		$arrow_1st = $_referer_msg['msg_Chr_darr'];
 		$sort_1st = '1a';
 		break;
-	case '1a': // 1a ½é²óÅĞÏ¿Æü»ş(ÆüÉÕ½ç)
+	case '1a': // 1a åˆå›ç™»éŒ²æ—¥æ™‚(æ—¥ä»˜é †)
 		usort($data, create_function('$a,$b', 'return $a[1] - $b[1];'));
 		$color_1st = $bg['cur'];
 		$arrow_1st = $_referer_msg['msg_Chr_uarr'];
 //		$sort_1st = '1d';
 		break;
-	case '2d': // 2d ¥«¥¦¥ó¥¿(Âç¤­¤¤½ç)
+	case '2d': // 2d ã‚«ã‚¦ãƒ³ã‚¿(å¤§ãã„é †)
 		usort($data, create_function('$a,$b', 'return $b[2] - $a[2];'));
 		$color_ctr = $bg['cur'];
 		$arrow_ctr = $_referer_msg['msg_Chr_darr'];
 		$sort_ctr = '2a';
 		break;
-	case '2a': // 2a ¥«¥¦¥ó¥¿(¾®¤µ¤¤½ç)
+	case '2a': // 2a ã‚«ã‚¦ãƒ³ã‚¿(å°ã•ã„é †)
 		usort($data, create_function('$a,$b', 'return $a[2] - $b[2];'));
 		$color_ctr = $bg['cur'];
 		$arrow_ctr = $_referer_msg['msg_Chr_uarr'];
@@ -113,18 +114,21 @@ function plugin_referer_body($page, $sort)
 
 	$body = '';
 	foreach ($data as $arr) {
-		// 0:ºÇ½ª¹¹¿·Æü»ş, 1:½é²óÅĞÏ¿Æü»ş, 2:»²¾È¥«¥¦¥ó¥¿, 3:Referer ¥Ø¥Ã¥À, 4:ÍøÍÑ²ÄÈİ¥Õ¥é¥°(1¤ÏÍ­¸ú)
+		// 0:æœ€çµ‚æ›´æ–°æ—¥æ™‚, 1:åˆå›ç™»éŒ²æ—¥æ™‚, 2:å‚ç…§ã‚«ã‚¦ãƒ³ã‚¿, 3:Referer ãƒ˜ãƒƒãƒ€, 4:åˆ©ç”¨å¯å¦ãƒ•ãƒ©ã‚°(1ã¯æœ‰åŠ¹)
 		list($ltime, $stime, $count, $url, $enable) = $arr;
 
-		// ÈóASCII¥­¥ã¥é¥¯¥¿(¤À¤±)¤òURL¥¨¥ó¥³¡¼¥É¤·¤Æ¤ª¤¯ BugTrack/440
+		$sw_ignore = plugin_referer_ignore_check($url);
+		if ($sw_ignore && $referer > 1) continue;
+
+		// éASCIIã‚­ãƒ£ãƒ©ã‚¯ã‚¿(ã ã‘)ã‚’URLã‚¨ãƒ³ã‚³ãƒ¼ãƒ‰ã—ã¦ãŠã BugTrack/440
 		$e_url = htmlspecialchars(preg_replace('/([" \x80-\xff]+)/e', 'rawurlencode("$1")', $url));
 		$s_url = htmlspecialchars(mb_convert_encoding(rawurldecode($url), SOURCE_ENCODING, 'auto'));
 		$s_url = mb_strimwidth($s_url,0,REFERE_TITLE_LENGTH,'...');
 
-		$lpass = get_passage($ltime, FALSE); // ºÇ½ª¹¹¿·Æü»ş¤«¤é¤Î·Ğ²á»ş´Ö
-		$spass = get_passage($stime, FALSE); // ½é²óÅĞÏ¿Æü»ş¤«¤é¤Î·Ğ²á»ş´Ö
-		$ldate = get_date($_referer_msg['msg_Fmt_Date'], $ltime); // ºÇ½ª¹¹¿·Æü»şÊ¸»úÎó
-		$sdate = get_date($_referer_msg['msg_Fmt_Date'], $stime); // ½é²óÅĞÏ¿Æü»şÊ¸»úÎó
+		$lpass = get_passage($ltime, FALSE); // æœ€çµ‚æ›´æ–°æ—¥æ™‚ã‹ã‚‰ã®çµŒéæ™‚é–“
+		$spass = get_passage($stime, FALSE); // åˆå›ç™»éŒ²æ—¥æ™‚ã‹ã‚‰ã®çµŒéæ™‚é–“
+		$ldate = get_date($_referer_msg['msg_Fmt_Date'], $ltime); // æœ€çµ‚æ›´æ–°æ—¥æ™‚æ–‡å­—åˆ—
+		$sdate = get_date($_referer_msg['msg_Fmt_Date'], $stime); // åˆå›ç™»éŒ²æ—¥æ™‚æ–‡å­—åˆ—
 
 		$body .=
 			' <tr>' . "\n" .
@@ -138,8 +142,8 @@ function plugin_referer_body($page, $sort)
 
 		$body .= '  <td style="text-align:right;">' . $count . '</td>' . "\n";
 
-		// Å¬ÍÑÉÔ²Ä¥Ç¡¼¥¿¤Î¤È¤­¤Ï¥¢¥ó¥«¡¼¤ò¤Ä¤±¤Ê¤¤
-		$body .= plugin_referer_ignore_check($url) ?
+		// é©ç”¨ä¸å¯ãƒ‡ãƒ¼ã‚¿ã®ã¨ãã¯ã‚¢ãƒ³ã‚«ãƒ¼ã‚’ã¤ã‘ãªã„
+		$body .= ($sw_ignore) ?
 			'  <td>' . $s_url . '</td>' . "\n" :
 			'  <td><a href="' . $e_url . '" rel="nofollow">' . $s_url . '</a></td>' . "\n";
 

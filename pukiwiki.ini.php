@@ -149,13 +149,23 @@ $ajax = 1;
 // TrackBack feature
 
 // Enable Trackback
-$trackback = 1;
+// 0: off
+// 1: on
+//    Only the reception of ping.
+//    Ping is not transmitted by the automatic operation.
+// 2: on
+//    Function in the past. Automatic ping transmission.
+$trackback = 2;
 
 // Show trackbacks with an another window (using JavaScript)
 $trackback_javascript = 0;
 
 /////////////////////////////////////////////////
 // Referer list feature
+// 0: off
+// 1: on
+// 2: on
+//    IGNORE is not having a look displayed.
 $referer = 1;
 
 /////////////////////////////////////////////////
