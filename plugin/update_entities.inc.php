@@ -1,35 +1,31 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: update_entities.inc.php,v 1.8 2005/02/27 09:38:24 henoheno Exp $
+// $Id: update_entities.inc.php,v 1.8.1 2005/05/22 00:40:00 upk Exp $
 //
 // Update entities plugin - Update XHTML entities from DTD
 // (for admin)
 
-// DTD¤Î¾ì½ê
+// DTDã®å ´æ‰€
 define('W3C_XHTML_DTD_LOCATION', 'http://www.w3.org/TR/xhtml1/DTD/');
 
-// ¥á¥Ã¥»¡¼¥¸ÀßÄê
+// ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸è¨­å®š
 function plugin_update_entities_init()
 {
 	$messages = array(
 		'_entities_messages'=>array(
-			'title_update'  => '¥­¥ã¥Ã¥·¥å¹¹¿·',
-			'msg_adminpass' => '´ÉÍý¼Ô¥Ñ¥¹¥ï¡¼¥É',
-			'btn_submit'    => '¼Â¹Ô',
-			'msg_done'      => '¥­¥ã¥Ã¥·¥å¤Î¹¹¿·¤¬´°Î»¤·¤Þ¤·¤¿¡£',
-			'msg_usage'     => '
-* ½èÍýÆâÍÆ
-
-:Ê¸»ú¼ÂÂÎ»²¾È¤Ë¥Þ¥Ã¥Á¤¹¤ëÀµµ¬É½¸½¥Ñ¥¿¡¼¥ó¤Î¥­¥ã¥Ã¥·¥å¤ò¹¹¿·|
-PHP¤Î»ý¤Ä¥Æ¡¼¥Ö¥ë¤ª¤è¤ÓW3C¤ÎDTD¤ò¥¹¥­¥ã¥ó¤·¤Æ¡¢¥­¥ã¥Ã¥·¥å¤Ëµ­Ï¿¤·¤Þ¤¹¡£
-
-* ½èÍýÂÐ¾Ý
-¡ÖCOLOR(red){not found.}¡×¤ÈÉ½¼¨¤µ¤ì¤¿¥Õ¥¡¥¤¥ë¤Ï½èÍý¤µ¤ì¤Þ¤»¤ó¡£
--%s
-
-* ¼Â¹Ô
-´ÉÍý¼Ô¥Ñ¥¹¥ï¡¼¥É¤òÆþÎÏ¤·¤Æ¡¢[¼Â¹Ô]¥Ü¥¿¥ó¤ò¥¯¥ê¥Ã¥¯¤·¤Æ¤¯¤À¤µ¤¤¡£
-'
+			'title_update'  => _('Cache update'),
+			'msg_adminpass' => _('Administrator password'),
+			'btn_submit'    => _('Exec'),
+			'msg_done'      => _('The update of cache was completed.'),
+			'msg_usage'     => 
+				_("* Content of processing\n\n") .
+				_(":The cache of the regular expression pattern that matches to the Character entity references is updated.|\n") .
+				_("The table of PHP and DTD of W3C are scanned, and it records in the cache.\n\n") .
+				_("* Processing object\n") .
+				_("The file displayed as `COLOR(red){not found.}` is not processed.\n") .
+				"-%s\n\n" .
+				_("* Execution\n") .
+				_("Please input the Administrator password, and click the [Exec] button.\n"),
 		));
 	set_plugin_messages($messages);
 }
