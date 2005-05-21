@@ -10,100 +10,100 @@
 // PukiWiki setting file (Cell phones, PDAs and other thin clients)
 
 /////////////////////////////////////////////////
-// ���ӡ�PDA���ѤΥڡ��������ڡ����Ȥ��ƻ��ꤹ��
+// 携帯・PDA専用のページを初期ページとして指定する
 
 // $defaultpage = 'm';
 
 /////////////////////////////////////////////////
-// ������ե�����ξ��
+// スキンファイルの場所
 define('SKIN_FILE', DATA_HOME . SKIN_DIR . 'keitai.skin.php');
 
 /////////////////////////////////////////////////
-// �����Ȥ���ڡ������ɤ߹��ߤ��ǽ�ˤ���
+// 雛形とするページの読み込みを可能にする
 $load_template_func = 0;
 
 /////////////////////////////////////////////////
-// ����ʸ�����ʬ������
+// 検索文字列を色分けする
 $search_word_color = 0;
 
 /////////////////////////////////////////////////
-// �����ڡ�����Ƭʸ������ǥå�����Ĥ���
+// 一覧ページに頭文字インデックスをつける
 $list_index = 0;
 
 /////////////////////////////////////////////////
-// �ꥹ�ȹ�¤�κ��ޡ�����
-$_ul_left_margin =  0;	// �ꥹ�ȤȲ��̺�ü�Ȥδֳ�(px)
-$_ul_margin      = 16;	// �ꥹ�Ȥγ��ش֤δֳ�(px)
-$_ol_left_margin =  0;	// �ꥹ�ȤȲ��̺�ü�Ȥδֳ�(px)
-$_ol_margin      = 16;	// �ꥹ�Ȥγ��ش֤δֳ�(px)
-$_dl_left_margin =  0;	// �ꥹ�ȤȲ��̺�ü�Ȥδֳ�(px)
-$_dl_margin      = 16;	// �ꥹ�Ȥγ��ش֤δֳ�(px)
+// リスト構造の左マージン
+$_ul_left_margin =  0;	// リストと画面左端との間隔(px)
+$_ul_margin      = 16;	// リストの階層間の間隔(px)
+$_ol_left_margin =  0;	// リストと画面左端との間隔(px)
+$_ol_margin      = 16;	// リストの階層間の間隔(px)
+$_dl_left_margin =  0;	// リストと画面左端との間隔(px)
+$_dl_margin      = 16;	// リストの階層間の間隔(px)
 $_list_pad_str   = '';
 
 /////////////////////////////////////////////////
-// �硦�����Ф������ܼ�������󥯤�ʸ��
+// 大・小見出しから目次へ戻るリンクの文字
 $top = '';
 
 /////////////////////////////////////////////////
-// ź�եե�����ΰ�������ɽ������ (��ô��������ޤ�)
-// ��keitai������ˤϤ��ΰ�����ɽ�����뵡ǽ������ޤ���
+// 添付ファイルの一覧を常に表示する (負担がかかります)
+// ※keitaiスキンにはこの一覧を表示する機能がありません
 $attach_link = 0;
 
 /////////////////////////////////////////////////
-// ��Ϣ����ڡ����Υ�󥯰�������ɽ������(��ô��������ޤ�)
-// ��keitai������ˤϤ��ΰ�����ɽ�����뵡ǽ������ޤ���
+// 関連するページのリンク一覧を常に表示する(負担がかかります)
+// ※keitaiスキンにはこの一覧を表示する機能がありません
 $related_link = 0;
 
-// ��󥯰����ζ��ڤ�ʸ��
-// ����Ʊ
+// リンク一覧の区切り文字
+// ※上同
 $related_str = "\n ";
 
-// (#related�ץ饰����ɽ������) ��󥯰����ζ��ڤ�ʸ��
+// (#relatedプラグインが表示する) リンク一覧の区切り文字
 $rule_related_str = "</li>\n<li>";
 
 /////////////////////////////////////////////////
-// ��ʿ���Υ���
+// 水平線のタグ
 $hr = '<hr>';
 
-// ʸ���������ľ����ɽ�����륿��
+// 文末の注釈の直前に表示するタグ
 $note_hr = '<hr>';
 
 /////////////////////////////////////////////////
-// WikiName,BracketName�˷в���֤��ղä���
+// WikiName,BracketNameに経過時間を付加する
 $show_passage = 0;
 
 /////////////////////////////////////////////////
-// ���ɽ���򥳥�ѥ��Ȥˤ���
-// * �ڡ������Ф���ϥ��ѡ���󥯤��饿���ȥ�򳰤�
-// * Dangling link��CSS�򳰤�
+// リンク表示をコンパクトにする
+// * ページに対するハイパーリンクからタイトルを外す
+// * Dangling linkのCSSを外す
 $link_compact = 1;
 
 /////////////////////////////////////////////////
-// �ե������ޡ�����ʸ�����Ѵ����� (��i-mode, Vodafone, EzWeb�ʤɷ������ø���)
+// フェイスマークを絵文字に変換する (※i-mode, Vodafone, EzWebなど携帯電話限定)
 $usefacemark = 1;
 
 /////////////////////////////////////////////////
-// accesskey (SKIN�ǻ���)
+// accesskey (SKINで使用)
 $accesskey = 'accesskey';
 
 /////////////////////////////////////////////////
-// $script��û��
+// $scriptを短縮
 if (preg_match('#([^/]+)$#', $script, $matches)) {
 	$script = $matches[1];
 }
 
 /////////////////////////////////////////////////
-// �֥饦��Ĵ�����Υǥե������
+// ブラウザ調整前のデフォルト値
 
-// max_size (SKIN�ǻ���)
-$max_size = 5;	// SKIN�ǻ���, KByte
+// max_size (SKINで使用)
+$max_size = 5;	// SKINで使用, KByte
 
-// cols: �ƥ����ȥ��ꥢ�Υ����� rows: �Կ�
+// cols: テキストエリアのカラム数 rows: 行数
 $cols = 22; $rows = 5;	// i_mode
 
 
 /////////////////////////////////////////////////
-// �֥饦���˹�碌��Ĵ��
+// ブラウザに合わせた調整
 
 $ua_name  = $user_agent['name'];
 $ua_vers  = $user_agent['vers'];
@@ -114,9 +114,9 @@ $matches  = array();
 switch ($ua_name) {
 
 	// NetFront / Compact NetFront
-	//   DoCoMo Net For MOBILE: ��⡼���б�HTML�ιͤ���: �桼�������������
+	//   DoCoMo Net For MOBILE: ｉモード対応HTMLの考え方: ユーザエージェント
 	//   http://www.nttdocomo.co.jp/mc-user/i/tag/imodetag.html
-	//   DDI POCKET: ����饤��ʥå�: AirH"PHONE�ѥۡ���ڡ����κ�����ˡ
+	//   DDI POCKET: 機種ラインナップ: AirH"PHONE用ホームページの作成方法
 	//   http://www.ddipocket.co.jp/p_s/products/airh_phone/homepage.html
 	case 'NetFront':
 	case 'CNF':
@@ -129,9 +129,9 @@ switch ($ua_name) {
 		break;
 
 	// Vodafone (ex. J-PHONE)
-	// �ܡ����ե���饤�֡����������֥���ƥ�ĳ�ȯ������ [������] (Version 1.2.0 P13)
+	// ボーダフォンライブ！向けウェブコンテンツ開発ガイド [概要編] (Version 1.2.0 P13)
 	// http://www.dp.j-phone.com/dp/tool_dl/download.php?docid=110
-	// ���ѻ���: �桼��������������ȤˤĤ���
+	// 技術資料: ユーザーエージェントについて
 	// http://www.dp.j-phone.com/dp/tool_dl/web/useragent.php
 	case 'J-PHONE':
 		$matches = array("");
@@ -162,14 +162,14 @@ switch ("$ua_name/$ua_vers") {
 
 
 /////////////////////////////////////////////////
-// �桼������롼��
+// ユーザ定義ルール
 //
-//  ����ɽ���ǵ��Ҥ��Ƥ���������?(){}-*./+\$^|�ʤ�
-//  �� \? �Τ褦�˥������Ȥ��Ƥ���������
-//  �����ɬ�� / ��ޤ�Ƥ�����������Ƭ����� ^ ��Ƭ�ˡ�
-//  ��������� $ �����ˡ�
+//  正規表現で記述してください。?(){}-*./+\$^|など
+//  は \? のようにクォートしてください。
+//  前後に必ず / を含めてください。行頭指定は ^ を頭に。
+//  行末指定は $ を後ろに。
 
-// �桼������롼��(����С��Ȼ����ִ�)
+// ユーザ定義ルール(コンバート時に置換)
 $line_rules = array(
 	'COLOR\(([^\(\)]*)\){([^}]*)}'	=> '<font color="$1">$2</font>',
 	'SIZE\(([^\(\)]*)\){([^}]*)}'	=> '$2',	// Disabled
@@ -183,11 +183,11 @@ $line_rules = array(
 
 
 /////////////////////////////////////////////////
-// �������äˤ��碌���ե������ޡ���
+// 携帯電話にあわせたフェイスマーク
 
-// $usefacemark = 1�ʤ�ե������ޡ������ִ�����ޤ�
-// ʸ�����' XD'�ʤɤ����ä�����facemark���ִ�����Ƥ��ޤ����ᡢ
-// ɬ�פΤʤ����� $usefacemark��0�ˤ��Ƥ���������
+// $usefacemark = 1ならフェイスマークが置換されます
+// 文章内に' XD'などがあった場合にfacemarkに置換されてしまうため、
+// 必要のない方は $usefacemarkを0にしてください。
 
 // Browser-name only
 $facemark_rules = array();
@@ -272,14 +272,14 @@ switch ($ua_name) {
 	'\s(\:d)'	=>	chr(27).'$E%'.chr(15),	// '&#57605;',	// huh
 	'\s(XD)'	=>	chr(27).'$Gx'.chr(15),	// '&#57432;',	// oh
 	'\s(X\()'	=>	chr(27).'$Gx'.chr(15),	// '&#57432;',	// oh
-	'\s(;\))'	=>	chr(27).'$E&'.chr(15),	// '&#57606;',	// wink����ʤ����ɤ�(^^; (���ܤ��ϡ���)
+	'\s(;\))'	=>	chr(27).'$E&'.chr(15),	// '&#57606;',	// winkじゃないけどね(^^; (※目がハート)
 	'\s(;\()'	=>	chr(27).'$E&'.chr(15),	// '&#57606;',	// sad
 	'\s(\:\()'	=>	chr(27).'$Gy'.chr(15),	// '&#57433;',	// sad
 	'&amp;(smile);'	=>	chr(27).'$Gv'.chr(15),	// '&#57430;',
 	'&amp;(bigsmile);'=>	chr(27).'$Gw'.chr(15),	// '&#57431;',
 	'&amp;(huh);'	=>	chr(27).'$E%'.chr(15),	// '&#57605;',
 	'&amp;(oh);'	=>	chr(27).'$Gx'.chr(15),	// '&#57432;',
-	'&amp;(wink);'	=>	chr(27).'$E&'.chr(15),	// '&#57606;',	// wink����ʤ����ɤ�(^^; (���ܤ��ϡ���)
+	'&amp;(wink);'	=>	chr(27).'$E&'.chr(15),	// '&#57606;',	// winkじゃないけどね(^^; (※目がハート)
 	'&amp;(sad);'	=>	chr(27).'$Gy'.chr(15),	// '&#57433;',
 	'&amp;(heart);'	=>	chr(27).'$GB'.chr(15),	// '&#57378;',
 	'&amp;(worried);'=>	chr(27).'$E('.chr(15),	// '&#57608;',
@@ -290,7 +290,7 @@ switch ($ua_name) {
 	'(\(\^\^\))'	=>	chr(27).'$Gv'.chr(15),	// smile
 	'(\(\^-\^)'	=>	chr(27).'$Gv'.chr(15),	// smile
 	'(\(\.\.;)'	=>	chr(27).'$Gx'.chr(15),	// oh
-	'(\(\^_-\))'	=>	chr(27).'$E&'.chr(15),	// wink����ʤ����ɤ�(^^; (���ܤ��ϡ���)
+	'(\(\^_-\))'	=>	chr(27).'$E&'.chr(15),	// winkじゃないけどね(^^; (※目がハート)
 	'(\(--;)'	=>	chr(27).'$E&'.chr(15),	// sad
 	'(\(\^\^;\))'	=>	chr(27).'$E('.chr(15),	// worried
 	'(\(\^\^;)'	=>	chr(27).'$E('.chr(15),	// worried
