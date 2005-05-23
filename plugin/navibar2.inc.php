@@ -2,19 +2,29 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: navibar2.inc.php,v 0.1.5 2005/05/21 14:50:00 upk Exp $
+// $Id: navibar2.inc.php,v 0.1.6 2005/05/23 20:42:00 upk Exp $
 //
 function plugin_navibar2_convert()
 {
-	global $hr;
+	global $vars, $hr;
 
-	$menubarcount = -1;
-	$page = 'Navigation';
-
-	if (!is_page($page)) {
-		exist_plugin('navibar');
-		return do_plugin_convert('navibar','top,list,search,recent,help,|,new,edit,upload,|,trackback') . $hr;
+	$page = strip_bracket($vars['page']) . '/Navigation';
+	if (is_page($page)) {
+		return plugin_navibar2_makehtml($page);
 	}
+
+	$page = 'Navigation';
+	if (is_page($page)) {
+		return plugin_navibar2_makehtml($page);
+	}
+
+	exist_plugin('navibar');
+	return do_plugin_convert('navibar','top,list,search,recent,help,|,new,edit,upload,|,trackback') . $hr;
+}
+
+function plugin_navibar2_makehtml($page)
+{
+	$menubarcount = -1;
 
 	$lines = get_source($page);
 	convert_html( $lines ); // Processing for prior execution of plug-in.
