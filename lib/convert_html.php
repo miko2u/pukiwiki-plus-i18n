@@ -1,6 +1,11 @@
 <?php
-// PukiWiki - Yet another WikiWikiWeb clone
-// $Id: convert_html.php,v 1.9.9 2005/04/21 17:55:20 miko Exp $
+// PukiWiki Plus! - Yet another WikiWikiWeb clone
+// $Id: convert_html.php,v 1.12.9 2005/04/30 05:21:00 miko Exp $
+// Copyright (C)
+//   2005      PukiWiki Plus! Team
+//   2002-2005 PukiWiki Developers Team
+//   2001-2002 Originally written by yu-ji
+// License: GPL v2 or (at your option) any later version
 //
 // function 'convert_html()', wiki text parser
 // and related classes-and-functions
@@ -130,6 +135,17 @@ function & Factory_YTable(& $root, $text)
 
 function & Factory_Div(& $root, $text)
 {
+	// multiline block plugin
+	if (preg_match('/^\#([^\(\{]+)(?:\(([^\r]*)\))?(\{{2,})/', $text, $out)) {
+		$stop_len = strlen($out[3]);
+		if (exist_plugin_convert($out[1]) &&
+		    preg_match('/\{{'.$stop_len.'}(\r.*\r)\}{'.$stop_len.'}/', $text, $matched)) {
+			$out[2] .= $matched[1];
+			return new Div($out);
+		} else {
+			return new Paragraph($text);
+		}
+	}
 	if (! preg_match('/^\#([^\(]+)(?:\((.*)\))?/', $text, $out) ||
 	    ! exist_plugin_convert($out[1])) {
 		return new Paragraph($text);
@@ -882,37 +898,17 @@ class Body extends Element
 				continue;
 			}
 
-			// Here Document for Block-type Plugin
-			if (preg_match('/^(#[^\(]\w+)(\((.*)\))?(PRE:)?({+)$/',$line, $matches))
-			{
-				$name = $matches[1];
-				$args = $matches[3];
-				$here = str_repeat('}', substr_count($matches[5], '{'));
-				$line = $name . "(" . $args . "\r";
+			// multiline block plugin
+			if (preg_match('/#[^{]*(\{{2,})\s*$/', $line, $matches)) {
+				$stop_len = strlen($matches[1]);
+				$line .= "\r";
 				while (count($lines)) {
-					$nextline = array_shift($lines);
-					if (preg_match("/^$here/",$nextline)) {
-						$line .= ")";
+					$next_line = preg_replace("/[\r\n]*$/", '', array_shift($lines));
+					if (preg_match('/\}{'.$stop_len.'}/', $next_line)) {
+						$line .= $next_line;
 						break;
 					} else {
-						$line .= preg_replace("/[\r\n]*$/",'',$nextline) . "\r";
-					}
-				}
-			} // Matsuda's Version (Here Documents)
-			else if (preg_match('/^(#[^\(]*)(\((.*)\))?<<(PRE:)?([A-Z0-9_]+)$/',$line, $matches))
-			{
-				$name = $matches[1];
-				$args = $matches[3];
-				$here = $matches[5];
-				$line = $name . "(" . $args . "\r";
-				while (count($lines))
-				{
-					$nextline = array_shift($lines);
-					if (preg_match("/^$here/",$nextline)) {
-						$line .= ")";
-						break;
-					} else {
-						$line .= preg_replace("/[\r\n]*$/",'',$nextline) . "\r";
+						$line .= $next_line .= "\r";
 					}
 				}
 			}
