@@ -374,7 +374,7 @@ function plugin_ref_body($args)
 	} else {
 		$icon = $params['noicon'] ? '' : FILE_ICON;
 //		$params['_body'] = "<a href=\"$url\" title=\"$info\">$icon$title</a>";
-		$params['_body'] = "<a href=\"$url\" title=\"$info\" onclick=\"return open_uri('$url', '_blank');\">$icon$title</a>";
+		$params['_body'] = "<a href=\"$url\" title=\"$info\" onclick=\"return open_attach_uri('$url', '_blank');\">$icon$title</a>";
 	}
 
 	return $params;

@@ -43,6 +43,15 @@ function open_uri(href, frame)
 	return false;
 }
 
+function open_attach_uri(href, frame)
+{
+	if (!frame) {
+		return false;
+	}
+	window.open(href, frame, "width=100,height=100");
+	return false;
+}
+
 // cookie
 var pukiwiki_adv = pukiwiki_load_cookie("pwplus");
 
