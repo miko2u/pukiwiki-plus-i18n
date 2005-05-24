@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: add.inc.php,v 1.6.2 2005/03/09 02:30:27 miko Exp $
+// $Id: add.inc.php,v 1.7.2 2005/05/02 02:46:23 miko Exp $
 //
 // Add plugin - Append new text below/above existing page
 // Usage: cmd=add&page=pagename

@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: html.php,v 1.36.16 2005/05/16 13:25:43 henoheno Exp $
+// $Id: html.php,v 1.37.16 2005/05/23 14:22:30 miko Exp $
 // Copyright (C)
 //   2005      PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
@@ -16,6 +16,7 @@ function catbody($title, $page, $body)
 	global $attach_link, $related_link, $cantedit, $function_freeze;
 	global $search_word_color, $foot_explain, $note_hr, $head_tags;
 	global $trackback, $trackback_javascript, $referer, $javascript;
+	global $nofollow;
 	global $_LANG, $_LINK, $_IMAGE;
 
 	global $pkwk_dtd;     // XHTML 1.1, XHTML1.0, HTML 4.01 Transitional...

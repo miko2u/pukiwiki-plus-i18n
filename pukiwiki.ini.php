@@ -1,6 +1,11 @@
 <?php
-// PukiWiki - Yet another WikiWikiWeb clone
-// $Id: pukiwiki.ini.php,v 1.119.15 2005/04/26 16:34:50 miko Exp $
+// PukiWiki Plks! - Yet another WikiWikiWeb clone
+// $Id: pukiwiki.ini.php,v 1.123.15 2005/05/23 14:22:29 miko Exp $
+// Copyright (C)
+//   2005      PukiWiki Plus! Team
+//   2002-2005 PukiWiki Developers Team
+//   2001-2002 Originally written by yu-ji
+// License: GPL v2 or (at your option) any later version
 //
 // PukiWiki main setting file
 
@@ -136,6 +141,11 @@ $footarea     = ':Footer';
 //$pkwk_dtd = PKWK_DTD_XHTML_1_0_TRANSITIONAL;
 //$pkwk_dtd = PKWK_DTD_HTML_4_01_STRICT;
 //$pkwk_dtd = PKWK_DTD_HTML_4_01_TRANSITIONAL;
+
+/////////////////////////////////////////////////
+// Always output "nofollow,noindex" attribute
+
+$nofollow = 0; // 1 = Hide from search engines
 
 /////////////////////////////////////////////////
 

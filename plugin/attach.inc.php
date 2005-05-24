@@ -1,13 +1,15 @@
 <?php
-// PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: attach.inc.php,v 1.73.8 2005/05/24 07:44:53 miko Exp $
+// PukiWiki - Yet another WikiWikiWeb clone
+// $Id: attach.inc.php,v 1.74.8 2005/05/24 07:44:53 miko Exp $
+// Copyright (C)
+//   2005      PukiWiki Plus! Team
+//   2003-2005 PukiWiki Developers Team
+//   2002-2003 PANDA <panda@arino.jp> http://home.arino.jp/
+//   2002      Y.MASUI <masui@hisec.co.jp> http://masui.net/pukiwiki/
+//   2001-2002 Originally written by yu-ji
+// License: GPL v2 or (at your option) any later version
 //
 // File attach plugin
-
-/*
- changed by Y.MASUI <masui@hisec.co.jp> http://masui.net/pukiwiki/
- modified by PANDA <panda@arino.jp> http://home.arino.jp/
-*/
 
 // Max file size for upload on PHP (PHP default: 2MB)
 ini_set('upload_max_filesize', '4M');
