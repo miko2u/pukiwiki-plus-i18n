@@ -1,8 +1,8 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: make_link.php,v 1.24.4 2005/05/15 07:45:54 miko Exp $
+// $Id: make_link.php,v 1.25.4 2005/05/24 07:45:54 miko Exp $
 // Copyright (C)
-//   2005      Customized/Patched by Miko.Hoshina
+//   2005      PukiWiki Plus! Team
 //   2003-2005 PukiWiki Developers Team
 //   2001-2002 Originally written by yu-ji
 // License: GPL v2 or (at your option) any later version
@@ -896,22 +896,25 @@ function make_pagelink($page, $alias = '', $anchor = '', $refer = '')
 		$related[$page] = get_filetime($page);
 
 	if (is_page($page)) {
-		// Hyperlinks
-		$passage = get_pg_passage($page, FALSE);
-		$title   = $link_compact ? '' : ' title="' . $s_page . $passage . '"';
+		// Hyperlink to the page
+		if ($link_compact) {
+			$title   = '';
+		} else {
+			$title   = ' title="' . $s_page . get_pg_passage($page, FALSE) . '"';
+		}
 		return '<a href="' . $script . '?' . $r_page . $anchor . '"' . $title . '>' .
 			$s_alias . '</a>';
 //		return open_uri_in_new_window('<a href="' . $script . '?' . $r_page . $anchor . '"' . $title . '>' . $s_alias . '</a>', 'make_pagelink');
-	} else if (PKWK_READONLY) {
-		// Without hyperlink (= Suppress dangling link)
-		return $s_alias;
 	} else {
-		// Dangling links
+		// Dangling link
+		if (PKWK_READONLY) return $s_alias; // No dacorations
 		$retval = $s_alias . '<a href="' .
 			$script . '?cmd=edit&amp;page=' . $r_page . $r_refer . '">' .
 			$_symbol_noexists . '</a>';
-		if (! $link_compact)
+		if ($link_compact) {
+		} else {
 			$retval = '<span class="noexists">' . $retval . '</span>';
+		}
 		return $retval;
 //		return open_uri_in_new_window($retval, 'make_pagelink_e');
 	}
