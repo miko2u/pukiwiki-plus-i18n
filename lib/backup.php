@@ -63,7 +63,7 @@ function make_backup($page, $delete = FALSE)
 		$strout = preg_replace("/([^\n])\n*$/", "$1\n", $strout);
 
 		// Escape 'lines equal to PKWK_SPLITTER', by inserting a space
-		$body = preg_replace('/^(' . preg_quote(PKWK_SPLITTER) . "\s\d+)$/", '$1 ', get_source($page));
+		$body = preg_replace('/^(' . preg_quote(PKWK_SPLITTER) . "\s\d+(\s(\d+)|))$/", '$1 ', get_source($page));
 		// BugTrack/685 by UPK
 		// $body = PKWK_SPLITTER . ' ' . get_filetime($page) . "\n" . join('', $body);
 		$body = PKWK_SPLITTER . ' ' . get_filetime($page) . ' ' . UTIME. "\n" . join('', $body);
@@ -98,7 +98,7 @@ function get_backup($page, $age = 0)
 
 	$_age = 0;
 	$retvars = $match = array();
-	$regex_splitter = '/^' . preg_quote(PKWK_SPLITTER) . '\s(\d+)$/';
+	$regex_splitter = '/^' . preg_quote(PKWK_SPLITTER) . '\s(\d+)(\s(\d+)|)$/';
 	foreach($lines as $line) {
 		if (preg_match($regex_splitter, $line, $match)) {
 			++$_age;
