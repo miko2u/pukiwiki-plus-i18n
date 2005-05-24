@@ -650,9 +650,15 @@ EOD;
 		mb_http_output('pass');
 
 		pkwk_common_headers();
-		header('Content-Disposition: inline; filename="' . $filename . '"');
-		header('Content-Length: ' . $this->size);
-		header('Content-Type: '   . $this->type);
+		if ($this->type == 'text/html' || $this->type == 'application/octet-stream') {
+			header('Content-Disposition: attachment; filename="' . $filename . '"');
+			header('Content-Type: application/octet-stream; name="' . $filename . '"');
+			header('Content-Length: ' . $this->size);
+		} else {
+			header('Content-Disposition: inline; filename="' . $filename . '"');
+			header('Content-Type: '   . $this->type);
+			header('Content-Length: ' . $this->size);
+		}
 
 		@readfile($this->filename);
 		exit;
