@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: ref.inc.php,v 1.48.4 2005/05/17 11:58:56 miko Exp $
+// $Id: ref.inc.php,v 1.48.6 2005/05/24 11:58:56 miko Exp $
 //
 // Image refernce plugin
 // Include an attached image-file as an inline-image
@@ -373,7 +373,8 @@ function plugin_ref_body($args)
 		}
 	} else {
 		$icon = $params['noicon'] ? '' : FILE_ICON;
-		$params['_body'] = "<a href=\"$url\" title=\"$info\">$icon$title</a>";
+//		$params['_body'] = "<a href=\"$url\" title=\"$info\">$icon$title</a>";
+		$params['_body'] = "<a href=\"$url\" title=\"$info\" onclick=\"return open_uri('$url', '_blank');\">$icon$title</a>";
 	}
 
 	return $params;
@@ -445,10 +446,15 @@ function plugin_ref_action()
 
 	// Output
 	pkwk_common_headers();
-	header('Content-Disposition: inline; filename="' . $filename . '"');
-	header('Content-Length: ' . $size);
-	header('Content-Type: '   . $type);
-
+	if ($type == 'text/html' || $type == 'application/octet-stream') {
+		header('Content-Disposition: attachment; filename="' . $filename . '"');
+		header('Content-Type: application/octet-stream; name="' . $filename . '"');
+		header('Content-Length: ' . $size);
+	} else {
+		header('Content-Disposition: inline; filename="' . $filename . '"');
+		header('Content-Length: ' . $size);
+		header('Content-Type: '   . $type);
+	}
 	@readfile($ref);
 
 	exit;
