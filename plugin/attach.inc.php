@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: attach.inc.php,v 1.73.7 2005/03/15 07:44:53 miko Exp $
+// $Id: attach.inc.php,v 1.73.8 2005/05/24 07:44:53 miko Exp $
 //
 // File attach plugin
 
@@ -699,9 +699,18 @@ EOD;
 		mb_http_output('pass');
 
 		pkwk_common_headers();
-		header('Content-Disposition: inline; filename="' . $filename . '"');
-		header('Content-Length: ' . $this->size);
-		header('Content-Type: '   . $this->type);
+//		header('Content-Disposition: inline; filename="' . $filename . '"');
+//		header('Content-Length: ' . $this->size);
+//		header('Content-Type: '   . $this->type);
+		if ($this->type == 'text/html') {
+			header('Content-Disposition: attachment; filename="' . $filename . '"');
+			header('Content-Type: application/octet-stream;name="' . $filename . '"');
+			header('Content-Length: ' . $this->size);
+		} else {
+			header('Content-Disposition: inline; filename="' . $filename . '"');
+			header('Content-Type: '   . $this->type);
+			header('Content-Length: ' . $this->size);
+		}
 
 		@readfile($this->filename);
 		exit;
