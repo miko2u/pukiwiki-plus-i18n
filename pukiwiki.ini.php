@@ -286,6 +286,14 @@ $edit_auth_pages = array(
 $search_auth = 0;
 
 /////////////////////////////////////////////////
+// Exclude plugin for this site-policy.
+$exclude_plugin = array(
+	'server',
+	'version',
+	'versionlist',
+);
+
+/////////////////////////////////////////////////
 // Fuzzy Search (for Japanese EUC-JP Version Only)
 // 0: Disabled
 // 1: Enabled
