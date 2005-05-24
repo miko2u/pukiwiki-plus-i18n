@@ -702,7 +702,7 @@ EOD;
 //		header('Content-Disposition: inline; filename="' . $filename . '"');
 //		header('Content-Length: ' . $this->size);
 //		header('Content-Type: '   . $this->type);
-		if ($this->type == 'text/html') {
+		if ($this->type == 'text/html' || $this->type == 'application/octet-stream') {
 			header('Content-Disposition: attachment; filename="' . $filename . '"');
 			header('Content-Type: application/octet-stream;name="' . $filename . '"');
 			header('Content-Length: ' . $this->size);
