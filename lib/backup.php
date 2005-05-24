@@ -98,9 +98,14 @@ function get_backup($page, $age = 0)
 
 	$_age = 0;
 	$retvars = $match = array();
-	$regex_splitter = '/^' . preg_quote(PKWK_SPLITTER) . '\s(\d+)(\s(\d+)|)$/';
+	$regex_splitter = '/^' . preg_quote(PKWK_SPLITTER) . '\s(\d+)$/';
+	// BugTrack/685 by UPK
+	$regex_splitter_new = '/^' . preg_quote(PKWK_SPLITTER) . '\s(\d+)\s(\d+)$/';
 	foreach($lines as $line) {
-		if (preg_match($regex_splitter, $line, $match)) {
+		// BugTrack/685 by UPK
+		// if (preg_match($regex_splitter, $line, $match)) {
+		if (preg_match($regex_splitter, $line, $match) ||
+		    preg_match($regex_splitter_new, $line, $match)) {
 			++$_age;
 			if ($age > 0 && $_age > $age)
 				return $retvars[$age];
