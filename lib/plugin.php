@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: plugin.php,v 1.13.5 2005/04/30 05:21:00 miko Exp $
+// $Id: plugin.php,v 1.13.6 2005/05/25 21:16:00 upk Exp $
 // Copyright (C)
 //   2005      PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
@@ -22,7 +22,7 @@ function set_plugin_messages($messages)
 // Check plugin '$name' is here
 function exist_plugin($name)
 {
-	global $vars;
+	global $vars, $exclude_plugin;
 	static $exist = array(), $count = array();
 
 	$name = strtolower($name);
