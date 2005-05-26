@@ -862,6 +862,7 @@ function make_tooltips($term,$glossarypage='')
 		$glossary = plugin_tooltip_get_page_title($term);
 		if ( $glossary === FALSE ) $glossary = "";
 	}
+	$s_term = htmlspecialchars($term);
 	$s_glossary = htmlspecialchars($glossary);
 
 	$page = strip_bracket($term);
