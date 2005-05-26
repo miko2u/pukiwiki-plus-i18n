@@ -1,5 +1,5 @@
 <?php
-// $Id: referer.inc.php,v 1.10.2 2005/05/21 15:11:00 upk Exp $
+// $Id: referer.inc.php,v 1.10.3 2005/05/27 01:42:00 upk Exp $
 /*
  * PukiWiki Referer プラグイン(リンク元表示プラグイン)
  * (C) 2003,2005, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
@@ -113,6 +113,7 @@ function plugin_referer_body($page, $sort)
 	}
 
 	$body = '';
+	$ctr = 0;
 	foreach ($data as $arr) {
 		// 0:最終更新日時, 1:初回登録日時, 2:参照カウンタ, 3:Referer ヘッダ, 4:利用可否フラグ(1は有効)
 		list($ltime, $stime, $count, $url, $enable) = $arr;
@@ -148,7 +149,11 @@ function plugin_referer_body($page, $sort)
 			'  <td><a href="' . $e_url . '" rel="nofollow">' . $s_url . '</a></td>' . "\n";
 
 		$body .= ' </tr>' . "\n";
+		$ctr++;
 	}
+
+	if ($ctr === 0) return '<p>no data.</p>';
+
 	$href = $script . '?plugin=referer&amp;page=' . rawurlencode($page);
 	return <<<EOD
 <table border="1" cellspacing="1" summary="Referer">
