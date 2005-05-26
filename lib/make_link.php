@@ -848,8 +848,9 @@ class Link_glossary_a extends Link_glossary
 // ツールチップの展開
 function make_tooltips($term,$glossarypage='')
 {
-	global $script;
+	global $script, $ajax;
 	static $tooltip_initialized = FALSE;
+
 	if (!exist_plugin('tooltip')) { return FALSE; }
 	if (!$tooltip_initialized) {
 		do_plugin_init('tooltip');
