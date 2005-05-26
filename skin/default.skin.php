@@ -61,7 +61,7 @@ if (isset($pkwk_dtd)) {
 <?php echo $head_tag ?>
 </head>
 <body onload="init()">
-
+<div id="popUpContainer"></div>
 <?php if (exist_plugin_convert('headarea') && do_plugin_convert('headarea') != '') { ?>
 <div id="header">
 <h1 style="display:none;"><?php echo(($newtitle!='' && $is_read)?$newtitle:$page) ?></h1>
