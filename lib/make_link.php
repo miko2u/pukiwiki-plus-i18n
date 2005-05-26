@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: make_link.php,v 1.25.4 2005/05/24 07:45:54 miko Exp $
+// $Id: make_link.php,v 1.25.5 2005/05/24 07:45:54 miko Exp $
 // Copyright (C)
 //   2005      PukiWiki Plus! Team
 //   2003-2005 PukiWiki Developers Team
@@ -856,26 +856,29 @@ function make_tooltips($term,$glossarypage='')
 		$tooltip_initialized = TRUE;
 	}
 
-	$glossary = plugin_tooltip_get_glossary($term,$glossary_page);
+	$glossary = plugin_tooltip_get_glossary($term,$glossary_page,FALSE);
 	if ( $glossary === FALSE ) {
 		$glossary = plugin_tooltip_get_page_title($term);
 		if ( $glossary === FALSE ) $glossary = "";
 	}
-        $s_glossary = htmlspecialchars($glossary);
+	$s_glossary = htmlspecialchars($glossary);
 
-        $page = strip_bracket($term);
-        if ( is_page($page) ) {
-                $f_page = rawurlencode($page);
-                $passage = get_pg_passage($page,FALSE);
-                return <<<EOD
-<a href="$script?$f_page" class="linktip" title="$s_glossary$passage">$term</a>
-EOD;
-        }
-        else {
-        return <<<EOD
-<span class="tooltip" title="$s_glossary" onmouseover="javascript:this.style.backgroundColor='#ffe4e1';" onmouseout="javascript:this.style.backgroundColor='transparent';">$term</span>
-EOD;
-        }
+	$page = strip_bracket($term);
+	if ( is_page($page) ) {
+		$f_page = rawurlencode($page);
+		$passage = get_pg_passage($page,FALSE);
+		return '<a href="' . $script . '?' . $f_page . '" class="linktip" title="' . $s_glossary . $passage . '">' . $term . '</a>';
+	} elseif ($ajax) {
+		return '<span class="tooltip"' . 
+			' onmouseover="' . "javascript:this.style.backgroundColor='#ffe4e1';showGlossaryPopup('" . $script . "?plugin=tooltip&amp;q=" . $s_term . "',event,0.2);" . '"' .
+			' onmouseout="' . "javascript:this.style.backgroundColor='transparent';hideGlossaryPopup();" . '">' .
+			$term . '</span>';
+	} else {
+		return '<span class="tooltip" title="' . $s_glossary . '"' . 
+			' onmouseover="javascript:this.style.backgroundColor=\'#ffe4e1\';"' .
+			' onmouseout="javascript:this.style.backgroundColor=\'transparent\';">' .
+			$term . '</span>';
+	}
 }
 
 // Make hyperlink for the page

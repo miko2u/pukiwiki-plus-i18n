@@ -1766,3 +1766,14 @@ div.naviblock a:hover {
 	overflow:scroll;
 	display:none;
 }
+
+/* for ajaxpopup */
+#ajaxpopup {
+        position: absolute;
+        z-index: 100;
+        border: solid 1px #000;
+        background-color: #ffc;
+        font-size: 84%;
+        margin: 0px;
+        padding: 0.15em;
+}

@@ -28,6 +28,26 @@ function plugin_tooltip_init()
 	);
 	set_plugin_messages($messages);
 }
+
+///////////////////////////////////////
+// Plus! ajax Glossary for UTF-8
+function plugin_tooltip_action()
+{
+	global $vars;
+
+	$term = $vars['q'];
+	if (trim($term) == '') { exit; }
+	$glossary = plugin_tooltip_get_glossary($term, '', TRUE);
+	if ($glossary == FALSE) { exit; }
+	$s_glossary = convert_html($glossary);
+
+	pkwk_common_headers();
+	header('Content-type: text/xml');
+	print '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
+	print $s_glossary;
+	exit;
+}
+
 //========================================================
 function plugin_tooltip_inline()
 {
@@ -40,7 +60,7 @@ function plugin_tooltip_inline()
 	$glossary_page = '';
 
 	if ( $glossary == '' ){
-		$glossary = plugin_tooltip_get_glossary($term,$glossary_page);
+		$glossary = plugin_tooltip_get_glossary($term,$glossary_page,FALSE);
 		$debug .= "B=$glossary/";
 		if ( $glossary === FALSE ) {
 			$glossary = plugin_tooltip_get_page_title($term);
@@ -83,7 +103,7 @@ function plugin_tooltip_get_page_title($term)
 }
 //========================================================
 // 用語集を変えた場合のキャッシュがうまく記述できない。
-function plugin_tooltip_get_glossary($term,$g_page)
+function plugin_tooltip_get_glossary($term,$g_page,$plain)
 {
 	global $_tooltip_messages;
 	static $aglossary = '';
@@ -106,8 +126,10 @@ function plugin_tooltip_get_glossary($term,$g_page)
 		}
 	}
 	$out = $aglossary[trim($term)];
-	$out = preg_replace('/&br;/', "\n", $out);
-	$out = preg_replace('/&t;/', "\t", $out);
+	if (!$plain) {
+		$out = preg_replace('/&br;/', "\n", $out);
+		$out = preg_replace('/&t;/', "\t", $out);
+	}
 //	echo "/out=$out/term=$term";
 	if ( $out == '' ) return FALSE;
 	return $out;

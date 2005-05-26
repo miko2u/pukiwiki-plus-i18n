@@ -64,10 +64,10 @@ function make_backup($page, $delete = FALSE)
 		$strout = preg_replace("/([^\n])\n*$/", "$1\n", $strout);
 
 		// Escape 'lines equal to PKWK_SPLITTER', by inserting a space
-		$body = preg_replace('/^(' . preg_quote(PKWK_SPLITTER) . "\s\d+)$/", '$1 ', get_source($page));
+		$body = preg_replace('/^(' . preg_quote(PKWK_SPLITTER) . "\s\d+(\s(\d+)|))$/", '$1 ', get_source($page));
 		// BugTrack/685 by UPK
 		// $body = PKWK_SPLITTER . ' ' . get_filetime($page) . "\n" . join('', $body);
-		$body = PKWK_SPLITTER . ' ' . get_filetime($page) . ' ' . UTIME. "\n" . join('', $body);
+		$body = PKWK_SPLITTER . ' ' . get_filetime($page) . ' ' . UTIME . "\n" . join('', $body);
 		$body = preg_replace("/\n*$/", "\n", $body);
 
 		$fp = _backup_fopen($page, 'wb')

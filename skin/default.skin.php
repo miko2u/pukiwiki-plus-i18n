@@ -50,6 +50,8 @@ if (isset($pkwk_dtd)) {
  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
  <script type="text/javascript" src="<?php echo SKIN_URI ?>default.js"></script>
  <script type="text/javascript" src="<?php echo SKIN_URI ?>kanzaki.js"></script>
+ <script type="text/javascript" src="<?php echo SKIN_URI ?>ajax/textloader.js"></script>
+ <script type="text/javascript" src="<?php echo SKIN_URI ?>ajax/glossary.js"></script>
 <?php
   global $trackback, $referer;
   if ($trackback) {
