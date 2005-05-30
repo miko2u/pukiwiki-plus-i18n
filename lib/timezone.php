@@ -3,7 +3,7 @@
  * TimeZone
  *
  * @copyright   Copyright &copy; 2005, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: timezone.php,v 0.8 2005/05/30 21:31:00 upk Exp $
+ * @version     $Id: timezone.php,v 0.7 2005/05/04 01:52:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
@@ -15,17 +15,13 @@ function set_time()
 {
 	global $language;
 
-	// define('LOCALZONE', date('Z'));
-	// define('UTIME', time() - LOCALZONE);
-
-	define('UTIME', time() - date('Z'));
+	define('LOCALZONE', date('Z'));
+	define('UTIME', time() - LOCALZONE);
 	define('MUTIME', getmicrotime());
 
 	list($zone, $zonetime) = set_timezone( $language );
 	define('ZONE', $zone);
 	define('ZONETIME', $zonetime);
-
-	define('LOCALZONE', $zonetime); // Interchangeability maintenance
 }
 
 /*
