@@ -1,9 +1,9 @@
 <?php
-// $Id: tb.inc.php,v 1.19.1 2005/04/10 08:10:05 miko Exp $
+// $Id: tb.inc.php,v 1.19.2 2005/05/29 18:02:00 upk Exp $
 /*
  * PukiWiki/TrackBack: TrackBack Ping receiver and viewer
  * (C) 2003-2004 PukiWiki Developers Team
- * (C) 2003 Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * (C) 2003,2005 Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * License: GPL
  *
  * plugin_tb_action()    action
@@ -12,6 +12,14 @@
  * plugin_tb_mode_rss($tb_id)   ?__mode=rss
  * plugin_tb_mode_view($tb_id)  ?__mode=view
  */
+
+
+function plugin_tb_convert()
+{
+	global $vars;
+	$tb_id = tb_get_id($vars['page']);
+	return plugin_tb_mode_view_set($tb_id, $vars['page']);
+}
 
 function plugin_tb_action()
 {
@@ -28,7 +36,8 @@ function plugin_tb_action()
 			// Show TrackBacks received (and exit)
 			switch ($vars['__mode']) {
 			case 'rss' : plugin_tb_mode_rss($vars['tb_id']);  break;
-			case 'view': plugin_tb_mode_view($vars['tb_id']); break;
+			// case 'view': plugin_tb_mode_view($vars['tb_id']); break;
+			case 'view': return plugin_tb_mode_view($vars['tb_id']);
 			}
 		}
 
@@ -161,82 +170,62 @@ EOD;
 // ?__mode=view
 function plugin_tb_mode_view($tb_id)
 {
-	global $script, $page_title;
-	global $language;
-
-	$_tb_title  = _('TrackBack: Discussion on TrackBack in %s');
-	$_tb_header = _('Continuing the discussion...');
-	$_tb_entry  = _('TrackBack URL for this entry:');
-	$_tb_refer  = _(' Listed below are links to weblogs that reference %s from %s.');
-	$_tb_header_Excerpt = _('Summary:');
-	$_tb_header_Weblog  = _('Weblog:');
-	$_tb_header_Tracked = _('Tracked:');
-	$_tb_date   = _('F j, Y, g:i A');
+	global $script, $vars;
 
 	$page = tb_id2page($tb_id);
 	if ($page === FALSE) return FALSE;
 
-	$r_page = rawurlencode($page);
+	$vars['page'] = $page; // topicpath
+	$retval = array();
+	$retval['msg'] = sprintf( _('TrackBack: Discussion on TrackBack in %s'), $page);
+	$retval['body'] = plugin_tb_mode_view_set($tb_id, $page);
+	return $retval;
+}
 
-	$tb_title = sprintf($_tb_title, $page);
-	$tb_refer = sprintf($_tb_refer, '<a href="' . $script . '?' . $r_page .
-		'">\'' . $page . '\'</a>', '<a href="' . $script . '">' . $page_title . '</a>');
+function plugin_tb_mode_view_set($tb_id, $page)
+{
+	global $script, $vars;
+
+	$body  = '<h3>' . _('TrackBack URL for this entry:') . "</h3>\n";
+	$body .= '<p>' . $script . '?tb_id=' . $tb_id . "</p>\n";
+	$body .= '<h3>' . _('Continuing the discussion...') . "</h3>\n";
+	
+	$_tb_header_Excerpt = _('Summary:');
+	$_tb_header_Weblog  = _('Weblog:');
+	$_tb_header_Tracked = _('Tracked:');
+	$_tb_date   = _('F j, Y, g:i A');
 
 	$data = tb_get(tb_get_filename($page));
 
 	// Sort: The first is the latest
 	usort($data, create_function('$a,$b', 'return $b[0] - $a[0];'));
 
-	$tb_body = '';
 	foreach ($data as $x) {
 		if (count($x) != 5) continue; // Ignore incorrect record
 
 		list ($time, $url, $title, $excerpt, $blog_name) = $x;
 		if ($title == '') $title = 'no title';
 
-		$time = date($_tb_date, $time + LOCALZONE); // May 2, 2003 11:25 AM
-		$tb_body .= <<<EOD
-<div class="trackback-body">
- <span class="trackback-post"><a href="$url" target="new" rel="nofollow">$title</a><br />
-  <strong>$_tb_header_Excerpt</strong> $excerpt<br />
-  <strong>$_tb_header_Weblog</strong> $blog_name<br />
-  <strong>$_tb_header_Tracked</strong> $time
- </span>
-</div>
-EOD;
+		$time = date($_tb_date, $time + LOCALZONE);
+
+		$body .= '<h4><a class="ext" href="' . $url . '" rel="nofollow">' . $title . 
+			 '<img src="./image/plus/ext.png" alt="" title="" class="ext" onclick="return open_uri(\'' .
+			 $url . '\', \'_blank\');" /></a></h4>' . "\n";
+
+		$body .= '<p>' . $excerpt . "</p>\n";
+
+		$body .= '<div style="text-align:right">' .
+			 $_tb_header_Tracked . $time . ' ' .
+			 $_tb_header_Weblog . $blog_name . "</div>\n";
+
 	}
-	$msg = <<<EOD
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="$language" lang="$language">
-<head>
- <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
- <title>$tb_title</title>
- <link rel="stylesheet" href="skin/trackback.css" type="text/css" />
-</head>
-<body>
- <div id="banner-commentspop">$_tb_header</div>
- <div class="blog">
-  <div class="trackback-url">
-   $_tb_entry<br />
-   $script?tb_id=$tb_id<br /><br />
-   $tb_refer
-  </div>
-  $tb_body
- </div>
-</body>
-</html>
-EOD;
 
-	pkwk_common_headers();
+	$body .= '<div style="text-align:right">' .
+		 '<a href="' . $script . '?plugin=tb&amp;__mode=view">' . 'Trackback List' . 
+		 '<img src="./image/plus/trackback.png" alt="" title="" />' .
+		 '</a>'. "</div>\n";
 
-	// BugTrack/466 Care for MSIE trouble
-	// Logically correct, but MSIE will treat the data like 'file downloading'
-	//header('Content-type: application/xhtml+xml; charset=UTF-8');
-	header('Content-type: text/html; charset=UTF-8'); // Works well
-
-	// echo mb_convert_encoding($msg, 'UTF-8', SOURCE_ENCODING);
-	echo $msg;
-	exit;
+	return $body;
 }
+
 ?>
