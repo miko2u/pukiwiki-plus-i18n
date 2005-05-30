@@ -233,11 +233,15 @@ function do_search($word, $type = 'AND', $non_format = FALSE)
 		$r_page  = rawurlencode($page);
 		$s_page  = htmlspecialchars($page);
 		$passage = get_passage($time);
-		$retval .= ' <li>' . '<span class="tooltip" onmouseover="showGlossaryPopup(\'' . $script . '?cmd=preview&amp;page=' .
-			$r_page . '&amp;word=' . $r_word . '\',event,0.2);" onmouseout="hideGlossaryPopup();">[x]</span> ' .
-			'<a href="' . $script . '?cmd=read&amp;page=' .
-			$r_page . '&amp;word=' . $r_word . '">' . $s_page .
-			'</a>' . $passage . '</li>' . "\n";
+//		$retval .= ' <li>' . '<span class="tooltip" onmouseover="showGlossaryPopup(\'' . $script . '?cmd=preview&amp;page=' .
+//			$r_page . '&amp;word=' . $r_word . '\',event,0.2);" onmouseout="hideGlossaryPopup();">[x]</span> ' .
+//			'<a href="' . $script . '?cmd=read&amp;page=' .
+//			$r_page . '&amp;word=' . $r_word . '">' . $s_page .
+//			'</a>' . $passage . '</li>' . "\n";
+		$retval .= ' <li>' . 
+			'<a href="' . $script . '?cmd=read&amp;page=' . $r_page . '&amp;word=' . $r_word . '"' .
+			' onmouseover="showGlossaryPopup(\'' . $script . '?cmd=preview&amp;page=' . $r_page . '&amp;word=' . $r_word .
+			'\',event,0.2);" onmouseout="hideGlossaryPopup();">' . $s_page . '</a>' . $passage . '</li>' . "\n";
 	}
 	$retval .= '</ul>' . "\n";
 
