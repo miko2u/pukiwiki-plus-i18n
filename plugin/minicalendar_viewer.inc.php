@@ -3,7 +3,7 @@
  * PukiWiki minicalendar_viewerプラグイン
  *
  *
- *$Id: minicalendar_viewer.inc.php,v 1.9.12 2004/12/15 17:18:50 miko Exp $
+ *$Id: minicalendar_viewer.inc.php,v 1.9.13 2005/05/30 23:38:00 upk Exp $
   calendarrecentプラグインを元に作成
  */
 /**
@@ -222,7 +222,8 @@ function plugin_minicalendar_viewer_convert()
       $mmstr = $monthlabel[$mm];
       $h_today = public_holiday($yy,$mm,$dd); 
       $hday = $h_today['rc'];
-      $f_today = getdate(mktime(0,0,0,$mm,$dd,$yy) - LOCALZONE + ZONETIME);
+      // $f_today = getdate(mktime(0,0,0,$mm,$dd,$yy) - LOCALZONE + ZONETIME);
+      $f_today = getdate(mktime(0,0,0,$mm,$dd,$yy));
       $wday = $f_today['wday'];
       if($hday != 0) { $classname = 'date_holiday'; }
       else if ($wday == 0) { $classname = 'date_holiday'; }
