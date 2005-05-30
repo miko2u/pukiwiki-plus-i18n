@@ -21,4 +21,4 @@ msgstr "編輯"
 
 #: ../../plugin/newpage.inc.php:19 ../../plugin/newpage.inc.php:43
 msgid "New page"
-msgstr "新建頁面"
+msgstr "新增頁面"
