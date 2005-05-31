@@ -1,5 +1,5 @@
 <?php
-// $Id: dump.inc.php,v 1.36.1 2005/03/27 12:16:50 upk Exp $
+// $Id: dump.inc.php,v 1.36.2 2005/03/27 12:16:50 miko Exp $
 //
 // Remote dump / restore plugin
 // Originated as tarfile.inc.php by teanan / Interfair Laboratory 2004.
@@ -376,6 +376,76 @@ class tarlib
 			rewind($this->fp);
 			return TRUE;
 		}
+	}
+
+	////////////////////////////////////////////////////////////
+	// 関数  : tarファイルにファイルを追加する
+	//
+	function add_file($name, $filename = '', $decode = FALSE)
+	{
+		if ($this->status != TARLIB_STATUS_CREATE)
+			return ''; // File is not created
+
+		// Tarに格納するファイル名をdecode
+		if ($decode === FALSE) {
+			if ($filename == '') {
+				$filename = $name;
+			}
+		} else {
+			$dirname  = dirname(trim($name)) . '/';
+			$filename = basename(trim($name));
+			if (preg_match("/^((?:[0-9A-F]{2})+)_((?:[0-9A-F]{2})+)/", $filename, $matches)) {
+				// attachファイル名
+				$filename = decode($matches[1]) . '/' . decode($matches[2]);
+			} else {
+				$pattern = '^((?:[0-9A-F]{2})+)((\.txt|\.gz)*)$';
+				if (preg_match("/$pattern/", $filename, $matches)) {
+					$filename = decode($matches[1]) . $matches[2];
+
+					// 危ないコードは置換しておく
+					$filename = str_replace(':',  '_', $filename);
+					$filename = str_replace('\\', '_', $filename);
+				}
+			}
+			$filename = $dirname . $filename;
+			// ファイル名の文字コードを変換
+			if (function_exists('mb_convert_encoding'))
+				$filename = mb_convert_encoding($filename, PLUGIN_DUMP_FILENAME_ENCORDING);
+		}
+
+		// 最終更新時刻
+		$mtime = filemtime($name);
+
+		// ファイル名長のチェック
+		if (strlen($filename) > TARLIB_HDR_NAME_LEN) {
+			// LongLink対応
+			$size = strlen($filename);
+			// LonkLinkヘッダ生成
+			$tar_data = $this->_make_header(TARLIB_DATA_LONGLINK, $size, $mtime, TARLIB_HDR_LINK);
+			// ファイル出力
+ 			$this->_write_data(join('', $tar_data), $filename, $size);
+		}
+
+		// ファイルサイズを取得
+		$size = filesize($name);
+		if ($size === FALSE) {
+			@unlink($this->filename);
+			die_message($name . ' is not found or not readable.');
+		}
+
+		// ヘッダ生成
+		$tar_data = $this->_make_header($filename, $size, $mtime, TARLIB_HDR_FILE);
+
+		// ファイルデータの取得
+		$fpr = @fopen($name , 'rb');
+		flock($fpr, LOCK_SH);
+		$data = fread($fpr, $size);
+		flock($fpr, LOCK_UN);
+		fclose( $fpr );
+
+		// ファイル出力
+		$this->_write_data(join('', $tar_data), $data, $size);
+		return 1;
 	}
 
 	////////////////////////////////////////////////////////////

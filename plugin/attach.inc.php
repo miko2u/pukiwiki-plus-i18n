@@ -154,7 +154,7 @@ function plugin_attach_action()
 	case 'delete':  /*FALLTHROUGH*/ 
 	case 'freeze': 
 	case 'unfreeze': 
-		if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing'); 
+		if (PKWK_READONLY) die_message(_("PKWK_READONLY prohibits editing")); 
 	} 
 	switch ($pcmd) { 
 		case 'info'     : return attach_info();
@@ -197,7 +197,7 @@ function attach_upload($file, $page, $pass = NULL)
 {
 	global $_attach_messages;
 
-	if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
+	if (PKWK_READONLY) die_message(_("PKWK_READONLY prohibits editing"));
 
 	// Check query-string 
 	$query = 'plugin=attach&amp;pcmd=info&amp;refer=' . rawurlencode($page) . 
@@ -205,10 +205,10 @@ function attach_upload($file, $page, $pass = NULL)
 
 	if (PKWK_QUERY_STRING_MAX && strlen($query) > PKWK_QUERY_STRING_MAX) { 
 		pkwk_common_headers(); 
-		echo('Query string (page name and/or file name) too long'); 
+		echo(_("Query string (page name and/or file name) too long")); 
 		exit; 
 	} else if (! is_page($page)) { 
-		die_message("No such page");
+		die_message(_("No such page"));
 	} else if ($file['tmp_name'] == '' || ! is_uploaded_file($file['tmp_name'])) {
 		return array('result'=>FALSE);
 	} else if ($file['size'] > PLUGIN_ATTACH_MAX_FILESIZE) {
@@ -225,14 +225,51 @@ function attach_upload($file, $page, $pass = NULL)
 			'result'=>FALSE,
 			'msg'=>$_attach_messages['err_adminpass']);
 	}
+//miko 4.3.3 or upper only
+	$must_compress = 0;
+	if (function_exists('mime_content_type')) {
+		$type = mime_content_type($file['tmp_name']);
+		if (preg_match('/^(text\/)/i', $type)) {
+			// file type is text, gzip compressed.
+			$must_compress = 1;
+		} else if (preg_match('/^(image\/)/i', $type)) {
+			// file type is image, check image.
+			$size = @getimagesize($file['tmp_name']);
+			if (!is_array($size) || $size[2] < 0 || $size[2] > 4) {
+				$must_compress = 1;
+			}
+		} else {
+			// other is user settings.
+		}
+	}
 
-	$obj = & new AttachFile($page, $file['name']);
-	if ($obj->exist)
-		return array('result'=>FALSE,
-			'msg'=>$_attach_messages['err_exists']);
+	if ($must_compress && exist_plugin('dump')) {
+		if (is_uploaded_file($file['tmp_name'])) {
+			$obj = & new AttachFile($page, $file['name'] . '.tgz');
+			if ($obj->exist)
+				return array('result'=>FALSE,
+					'msg'=>$_attach_messages['err_exists']);
 
-	if (move_uploaded_file($file['tmp_name'], $obj->filename))
-		chmod($obj->filename, PLUGIN_ATTACH_FILE_MODE);
+			$tar = new tarlib();
+			$tar->create(CACHE_DIR, 'tgz') or
+				die_message( _("It failed in the generation of a temporary file.") );
+			$tar->add_file($file['tmp_name'], $file['name']);
+			$tar->close();
+
+			@rename($tar->filename, $obj->filename);
+			chmod($obj->filename, PLUGIN_ATTACH_FILE_MODE);
+			@unlink($tar->filename);
+		}
+	} else {
+//miko
+		$obj = & new AttachFile($page, $file['name']);
+		if ($obj->exist)
+			return array('result'=>FALSE,
+				'msg'=>$_attach_messages['err_exists']);
+
+		if (move_uploaded_file($file['tmp_name'], $obj->filename))
+			chmod($obj->filename, PLUGIN_ATTACH_FILE_MODE);
+	}
 
 	if (is_page($page))
 		touch(get_filename($page));
