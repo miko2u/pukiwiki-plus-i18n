@@ -788,3 +788,305 @@ Level[0]
 
 This section needs to be brushed up.
 }}
+
+#multilang(zh_TW){{
+TITLE:寫作語法
+#norelated
+*寫作語法 [#t474cb3d]
+底下是 PukiWiki 的寫作語法，HTML 的標籤語法目前並不支援
+#contents
+
+**文字的裝飾 [#sa30d3f7]
+ ''粗體字''
+''粗體字''
+ '''斜體字'''
+'''斜體字'''
+ %%刪除線%%
+%%刪除線%%
+ ((註解))
+((註解))
+ COLOR(#rrggbb){文字變顏色的}
+COLOR(red){文字變成紅色的}
+ SIZE(n){文字的大小}
+SIZE(36){文字的大小,36}
+
+**文字的對齊 [#j8a91132]
+ CENTER:置中對齊
+CENTER:置中對齊
+
+ LEFT:靠左對齊
+LEFT:靠左對齊
+
+ RIGHT:靠右對齊
+RIGHT:靠右對齊
+**圖片的顯示 [#p91a3a79]
+ #img(圖片的URL,left)
+#img(http://pukiwiki.idv.tw/image/noIE.png,left)
+
+ #img(圖片的URL,right)
+#img(http://pukiwiki.idv.tw/image/noIE.png,right)
+
+ #img(,clear)
+#img(,clear)
+
+**附件的處理 [#x09c9333]
+ #attach
+#attach
+
+ #ref(附件的名稱)
+#ref(附件的名稱)
+
+ #ref(附件的名稱,center)
+#ref(附件的名稱,center)
+
+ #ref(附件的名稱,right)
+#ref(附件的名稱,right)
+
+ #ref(附件的名稱,left)
+#ref(附件的名稱,left)
+
+ #ref(附件的名稱,right,around)
+#ref(附件的名稱,right,around)
+
+ #ref(附件的名稱,left,around)
+#ref(附件的名稱,left,around)
+
+預設為 left
+
+**標題列 [#ledb8597]
+ *H1
+ **H2
+ ***H3
+
+ #contents
+ 製作目錄索引
+
+**表格 [#bf80cc12]
+ |''Category:A''|''Category:B''|''Category:C''|
+ |Objective|for AI|Other|
+ |Java|LISP|Assembla|
+
+|''Category:A''|''Category:B''|''Category:C''|
+|Objective|for AI|Other|
+|Java|LISP|Assembla|
+
+ 表格可搭配 CENTER: RIGHT: 等屬性來使用
+
+ |左左左左左|中中中中中|右右右右右|
+ |左|CENTER:中|RIGHT:右|
+ |RIGHT:右|左|CENTER:中|
+
+|左左左左左|中中中中中|右右右右右|
+|左|CENTER:中|RIGHT:右|
+|RIGHT:右|左|CENTER:中|
+
+**評論 [#f9013a01]
+ #comment
+
+**文章 [#me286aca]
+ #article
+
+**備忘 [#u814f0e3]
+ #memo
+
+**投票 [#h4e58e45]
+ #vote(選項1,選項2,選項3)
+#vote(選項1[24],選項2[5],選項3[5])
+
+**語法的原型 [#nb55d0ba]
+開頭空白則表示該行文字不會被寫作語法所轉換
+
+**條列項目 [#t8a85629]
+ -第一層
+ --第二層
+ ---第三層
+-第一層
+--第二層
+---第三層
+
+ +
+ ++
+ +++
++數字1
+++數字2
++++數字3
+
+ :用語1|更多的解說1
+:用語1|更多的解說1
+
+**引用文字 [#s3e68591]
+ >
+> 這是引用文字
+
+**水平線 [#rbebd5f2]
+ ----
+----
+
+**換行、換段落 [#sdeecf57]
+ hoge~  換行
+hoge~
+
+ ~hoge  換段落
+~hoge
+
+**連結 [#ve789b5e]
+ (WikiName)
+ PukiWiki 
+PukiWiki
+
+ (BracketName)
+ [[SandBox]]
+[[SandBox]]
+
+ [[測試區]]
+[[測試區]]
+
+ [[http://pukiwiki.idv.tw/image/pukiwikiorg.png>FrontPage]]
+[[http://pukiwiki.idv.tw/image/pukiwikiorg.png>FrontPage]]
+
+ (InterWiki)
+ [[PukiWiki:FrontPage]]
+[[PukiWiki:FrontPage]]
+
+ [[PukiWiki.org>PukiWiki:FrontPage]]
+[[PukiWiki.org>PukiWiki:FrontPage]]
+
+ http://www.pukiwiki.org/
+ webmaster@pukiwiki.org
+http://www.pukiwiki.org/
+webmaster@pukiwiki.org
+
+ [[PukiWiki:http://www.pukiwiki.org/]]
+[[PukiWiki:http://www.pukiwiki.org/]]
+
+ [[PukiWiki>http://www.pukiwiki.org/]]
+[[PukiWiki>http://www.pukiwiki.org/]]
+
+**註解用的符號 [#j878c9e6]
+ 開頭以 // 表示的為註解用的行
+ // 這行是註解,看不到的
+// 這行是註解,看不到的
+
+**時間、日期的轉換 [#m05233d9]
+ date?
+2003-09-17
+
+ time?
+15:40:03
+
+ now?
+2003-09-17 (Wed) 15:40:03
+
+**其他 [#hfbedfc0]
+ #related
+#related
+
+ #norelated
+#norelated
+
+ #calendar_read(200309)
+#calendar_read(200309)
+
+ #calendar_edit(200309)
+#calendar_edit(200309)
+
+ #calendar2(off)
+#calendar2(off)
+
+**情境圖示 [#a404388d]
+CENTER:''各種臉型''
+|||CENTER:|c
+|~用法1|~用法2|~臉型|h
+|&smile；|:)|&smile;|
+|&bigsmile；|:D|&bigsmile;|
+|&huh；|:p，:d|&huh;|
+|&oh；|X(，XD|&oh;|
+|&wink；|;)|&wink;|
+|&sad；|:(，;(|&sad;|
+|&heart；||&heart;|
+|&mheart；||&mheart;|
+
+**直接插入型的元素 [#k43cefee]
+|''範例''|''用法''|''備註''|
+|''粗體字''|&#39;&#39;粗體字&#39;&#39;|將文字放在兩個單引號之間。|
+|'''斜體字'''|&#39;&#39;&#39;斜體字&#39;&#39;&#39;|將文字放在三個單引號之間。|
+|文字的&br;換行|文字的&amp;br;換行||
+|&size(24){文字大小是 24};| &amp;size(24){文字大小是 24};||
+|&color(red){紅色字};| &amp;color(red){紅色字};||
+|&color(#a98765){有顏色的字};| &amp;color(#a98765){有顏色的字};||
+|&color(red,yellow){黃底紅字};| &amp;color(red,yellow){黃底紅字};||
+|%%刪除線%%| &#37;&#37;刪除線&#37;&#37;||
+|((這是註腳的文字))|&#40;&#40;這是註腳的文字&#41;&#41;|在頁面的底部插入註腳。|
+|&ref(http://pukiwiki.idv.tw);|&amp;ref(http:&#47;&#47;pukiwiki.idv.tw);|插入一個參考連結。|
+|&aname(Anchor);|&amp;aname(Anchor);|插入一個頁內連結。|
+|&counter;|&amp;counter;|插入訪客人數統計。|
+|&online;|&amp;online;|插入目前站上訪客人數。|
+|&version;|&amp;version;|插入目前的 PukiWiki 版本資訊。|
+|WikiName|&#87;ikiName|連結至站內的另一個頁面。|
+|[[BracketName]]|&#x5b;&#x5b;&#x42;racketName&#x5d;&#x5d;|連結至站內的另一個頁面。|
+|[[外部連結:http://pukiwiki.org]]|&#91;&#91;外部連結:http:&#47;&#47;pukiwiki.org]]|連結至外部的頁面。|
+|[[InterWikiLink:頁面]]|&#91;&#91;Inter&#87;iki&#76;ink:頁面]]|連結至其他 Wiki 站的頁面。|
+&br;
+
+**區塊型元素 [#z57f6202]
+ ~段落
+~段落
+ 後面隱藏的是註解: &#47;&#47;註解
+後面隱藏的是註解: //您無法看到註解。
+  預先格式化的文字。在文字的前面有一個空白。
+ 預先格式化的文字。在文字的前面有一個空白。
+
+ *標題一
+ **標題二
+ ***標題三
+
+ >第一層引用
+ >>第二層引用
+ >>>第三層引用
+>第一層引用
+>>第二層引用
+>>>第三層引用
+
+ -條列一
+ --條列二
+ ---條列三
+-條列一
+--條列二
+---條列三
+
+ +數字條列一
+ ++數字條列二
+ +++數字條列三
++數字條列一
+++數字條列二
++++數字條列三
+
+ :定義|描述
+:定義|描述
+
+ 水平線
+ ----
+----
+
+ 表格
+ |aaa|bbb|ccc|
+ |111|222|333|
+|aaa|bbb|ccc|
+|111|222|333|
+
+ CSV 表格
+ ,aaa,bbb,ccc
+ ,111,222,333
+,aaa,bbb,ccc
+,111,222,333
+&br;
+|&heart;|&amp;heart;||
+|&copy;|&amp;copy;||
+|&reg;|&amp;reg;||
+|&trade;|&amp;trade;||
+|&sup2;|&amp;sup2;||
+|&sup3;|&amp;sup3;||
+|&nbsp;|&amp;nbsp;|You may not be able to see it,&br;but there is a non-breaking space in the first column. &br; It prevents a line from being broken at that point.|
+|&#10;|&amp;#10;|Is this a normal space?|
+|&#16;|&amp;#16;|And this, a minus sign? |
+}}
