@@ -174,6 +174,5 @@ if (isset($pkwk_dtd)) {
 </div>
 <?php } ?>
 
-<script type="text/javascript" src="skin/assistloaded.js"></script>
 </body>
 </html>
