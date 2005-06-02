@@ -9,7 +9,7 @@
 
 // CORRESPONDENCE LANGUAGE : 対応言語
 // == CASE SENSITIVE ==    : 大文字小文字を区別
-$language_prepared = array('ja_JP', 'zh_TW', 'en_US', 'ko_KR');
+$language_prepared = array('ja_JP', 'zh_TW', 'zh_CN',  'en_US', 'ko_KR');
 $language = '';
 
 /*
