@@ -147,6 +147,8 @@ function plugin_ls2_get_headings($page, & $params, $level, $include = FALSE)
 			$level = strlen($matches[1]);
 			if ($id == '') {
 				$id = PLUGIN_LS2_ANCHOR_PREFIX . $anchor;
+			} else {
+				$id = '#' . $id;
 			}
 			$anchor++;
 			plugin_ls2_list_push($params, $level + strlen($level));
