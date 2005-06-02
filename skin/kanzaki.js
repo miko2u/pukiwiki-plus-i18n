@@ -532,3 +532,8 @@ function procKey(e){
 	}
 }
 
+var __kanzaki_onload_save = window.onload;
+window.onload = function() {
+	if (__kanzaki_onload_save) __kanzaki_onload_save();
+	init();
+}
