@@ -56,7 +56,7 @@ if (isset($pkwk_dtd)) {
 <?php } ?>
 <?php echo $head_tag ?>
 </head>
-<body onload="init()">
+<body>
 
 <?php if (exist_plugin_convert('headarea') && do_plugin_convert('headarea') != '') { ?>
 <div id="header">
