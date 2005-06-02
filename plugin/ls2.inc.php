@@ -1,7 +1,7 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: ls2.inc.php,v 1.23.2 2005/03/10 07:37:37 miko Exp $
+// $Id: ls2.inc.php,v 1.23.4 2005/06/02 07:37:37 miko Exp $
 //
 // List plugin 2
 
@@ -145,7 +145,10 @@ function plugin_ls2_get_headings($page, & $params, $level, $include = FALSE)
 		if ($params['title'] && preg_match('/^(\*{1,3})/', $line, $matches)) {
 			$id    = make_heading($line);
 			$level = strlen($matches[1]);
-			$id    = PLUGIN_LS2_ANCHOR_PREFIX . $anchor++;
+			if ($id == '') {
+				$id = PLUGIN_LS2_ANCHOR_PREFIX . $anchor;
+			}
+			$anchor++;
 			plugin_ls2_list_push($params, $level + strlen($level));
 			array_push($params['result'],
 				'<li><a href="' . $href . $id . '">' . $line . '</a>');
