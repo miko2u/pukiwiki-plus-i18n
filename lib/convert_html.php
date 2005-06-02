@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: convert_html.php,v 1.12.9 2005/04/30 05:21:00 miko Exp $
+// $Id: convert_html.php,v 1.12.10 2005/06/02 05:21:00 miko Exp $
 // Copyright (C)
 //   2005      PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
@@ -547,7 +547,8 @@ class TableCell extends Element
 		if (! empty($this->style))
 			$param .= ' style="' . join(' ', $this->style) . '"';
 
-		return $this->wrap(parent::toString(), $this->tag, $param, FALSE);
+//		return $this->wrap(parent::toString(), $this->tag, $param, FALSE);
+		return $this->wrap(parent::toString(), $this->tag, $param, FALSE) . "\n";
 	}
 }
 
