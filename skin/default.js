@@ -183,3 +183,9 @@ else
 {
 	document.write ('<scr'+'ipt type="text/javascr'+'ipt" src="skin/other.js"></scr'+'ipt>');
 }
+
+var __default_onload_save = window.onload;
+window.onload = function() {
+	if (__default_onload_save) __default_onload_save();
+	pukiwiki_initTexts();
+}

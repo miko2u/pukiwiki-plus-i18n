@@ -60,7 +60,7 @@ if (isset($pkwk_dtd)) {
 <?php } ?>
 <?php echo $head_tag ?>
 </head>
-<body onload="init()">
+<body>
 <div id="popUpContainer"></div>
 <?php if (exist_plugin_convert('headarea') && do_plugin_convert('headarea') != '') { ?>
 <div id="header">
@@ -179,6 +179,5 @@ if (isset($pkwk_dtd)) {
 </div>
 <?php } ?>
 
-<script type="text/javascript" src="skin/assistloaded.js"></script>
 </body>
 </html>
