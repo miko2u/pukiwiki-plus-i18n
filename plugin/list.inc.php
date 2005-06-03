@@ -5,8 +5,7 @@
 // IndexPages plugin: Show a list of page names
 function plugin_list_action()
 {
-	global $vars,$_title_list,$_title_filelist,$whatsnew;
-	global $adminpass;
+	global $vars, $_title_list, $_title_filelist;
 
 	// Redirected from filelist plugin?
 	$filelist = (array_key_exists('cmd',$vars) and $vars['cmd']=='filelist');
@@ -21,7 +20,7 @@ function plugin_list_action()
 // Get a list
 function plugin_list_getlist($withfilename = FALSE)
 {
-	global $non_list,$whatsnew;
+	global $non_list, $whatsnew;
 
 	$pages = array_diff(get_existpages(),array($whatsnew));
 	if (!$withfilename)

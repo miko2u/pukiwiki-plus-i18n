@@ -23,9 +23,9 @@ function plugin_filelist_init()
 function plugin_filelist_action()
 {
 	global $vars;
-	global $adminpass;
+
 	if (!isset($vars['pass'])) return filelist_adm('');
-	// if ($adminpass != md5($vars['pass'])) return filelist_adm('__nopass__');
+
 	if (! pkwk_login($vars['pass']))
 		return filelist_adm('__nopass__');
 	return do_plugin_action('list');
