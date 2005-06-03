@@ -35,7 +35,7 @@ function plugin_replace_init()
 
 function plugin_replace_action()
 {
-	global $post, $adminpass, $cycle, $cantedit;
+	global $post, $cycle, $cantedit;
 	global $_replace_msg;
 
 	$pass    = isset($post['pass'])    ? $post['pass']    : '__nopass__';
@@ -43,7 +43,7 @@ function plugin_replace_action()
 	$replace = isset($post['replace']) ? $post['replace'] : NULL;
 
 	// パスワードと検索文字列がないと置換はできない。
-	if ($search == '' || md5($pass) != $adminpass || $pass == 'pass') {
+	if ($search == '' || !pkwk_login($pass) || $pass == 'pass') {
 		$vars['cmd'] = 'read';
 		return replace_adm($pass,$search);
 	}
