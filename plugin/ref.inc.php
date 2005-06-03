@@ -1,8 +1,6 @@
 <?php
-/////////////////////////////////////////////////
-// PukiWiki - Yet another WikiWikiWeb clone.
-//
-// $Id: ref.inc.php,v 1.48.7 2005/05/24 11:58:56 miko Exp $
+// PukiWiki - Yet another WikiWikiWeb clone
+// $Id: ref.inc.php,v 1.49.7 2005/05/28 13:31:57 miko Exp $
 //
 // Image refernce plugin
 // Include an attached image-file as an inline-image
@@ -248,6 +246,14 @@ function plugin_ref_body($args)
 	$matches = array();
 
 	if ($is_url) {	// URL
+		if (PKWK_DISABLE_INLINE_IMAGE_FROM_URI) {
+			//$params['_error'] = 'PKWK_DISABLE_INLINE_IMAGE_FROM_URI prohibits this';
+			//return $params;
+			$url = htmlspecialchars($name);
+			$params['_body'] = '<a href="' . $url . '">' . $url . '</a>';
+			return $params;
+		}
+
 		$url = $url2 = htmlspecialchars($name);
 		$title = htmlspecialchars(preg_match('/([^\/]+)$/', $name, $matches) ? $matches[1] : $url);
 
