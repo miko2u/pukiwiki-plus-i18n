@@ -1,12 +1,11 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: list.inc.php,v 1.5.2 2005/03/09 08:16:28 miko Exp $
+// $Id: list.inc.php,v 1.5.6 2005/06/02 08:16:28 miko Exp $
 //
 // IndexPages plugin: Show a list of page names
 function plugin_list_action()
 {
 	global $vars;
-	global $adminpass;
 //	global $_title_list,$_title_filelist;
 	$_title_list = _('List of pages');
 	$_title_filelist = _('List of page files');
@@ -14,9 +13,7 @@ function plugin_list_action()
 	// Redirected from filelist plugin?
 	$filelist = (array_key_exists('cmd',$vars) and $vars['cmd']=='filelist');
 
-	// if ($filelist and $adminpass != md5($vars['pass'])) $filelist = false;
-	if ( pkwk_hash_compute($adminpass, $vars['pass']) != $adminpass )
-		$filelist = false;
+	if ($filelist && ! pkwk_login($vars['pass'])) $filelist = false;
 
 	return array(
 		'msg'=>$filelist ? $_title_filelist : $_title_list,
