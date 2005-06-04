@@ -164,7 +164,7 @@ function _backup_file_exists($page)
 function _backup_get_filetime($page)
 {
 	return _backup_file_exists($page) ?
-		filemtime(_backup_get_filename($page)) - LOCALZONE : 0;
+		filemtime(_backup_get_filename($page)) : 0;
 }
 
 /**

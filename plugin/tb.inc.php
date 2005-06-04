@@ -206,7 +206,8 @@ function plugin_tb_mode_view_set($tb_id, $page)
 		list ($time, $url, $title, $excerpt, $blog_name) = $x;
 		if ($title == '') $title = 'no title';
 
-		$time = date($_tb_date, $time + LOCALZONE);
+		// $time = date($_tb_date, $time + LOCALZONE);
+		$time = gmdate($_tb_date, $time + ZONETIME);
 
 		$body .= '<h4><a class="ext" href="' . $url . '" rel="nofollow">' . $title . 
 			 '<img src="./image/plus/ext.png" alt="" title="" class="ext" onclick="return open_uri(\'' .

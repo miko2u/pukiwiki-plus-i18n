@@ -37,7 +37,7 @@ function plugin_new_inline()
 
 		$timestamp = strtotime($date);
 		if ($timestamp === -1) return '&new([nodate]){date}: Invalid date string;';
-		$timestamp -= ZONETIME;
+		// $timestamp -= ZONETIME;
 
 		$retval = in_array('nodate', $args) ? '' : htmlspecialchars($date);
 	} else {

@@ -501,7 +501,7 @@ class AttachFile
 		$this->filename = $this->basename . ($age ? '.' . $age : '');
 		$this->logname  = $this->basename . '.log';
 		$this->exist    = file_exists($this->filename);
-		$this->time     = $this->exist ? filemtime($this->filename) - LOCALZONE : 0;
+		$this->time     = $this->exist ? filemtime($this->filename) : 0;
 		$this->md5hash  = $this->exist ? md5_file($this->filename) : '';
 	}
 

@@ -445,7 +445,7 @@ function get_date($format, $timestamp = NULL)
 
 	$time = ZONETIME + (($timestamp !== NULL) ? $timestamp : UTIME);
 
-	return date($format, $time);
+	return gmdate($format, $time);
 }
 
 // Format date string
@@ -455,9 +455,9 @@ function format_date($val, $paren = FALSE)
 
 	$val += ZONETIME;
 
-	$date = date($date_format, $val) .
-		' (' . $weeklabels[date('w', $val)] . ') ' .
-		date($time_format, $val);
+        $date = gmdate($date_format, $val) .
+                ' (' . $weeklabels[gmdate('w', $val)] . ') ' .
+                gmdate($time_format, $val);
 
 	return $paren ? '(' . $date . ')' : $date;
 }

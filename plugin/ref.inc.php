@@ -299,7 +299,7 @@ function plugin_ref_body($args)
 				$rawheight = $height = $size[1];
 			}
 		} else {
-			$info = get_date('Y/m/d H:i:s', filemtime($file) - LOCALZONE) .
+			$info = get_date('Y/m/d H:i:s', filemtime($file)) .
 				' ' . sprintf('%01.1f', round(filesize($file)/1024, 1)) . 'KB';
 		}
 	}

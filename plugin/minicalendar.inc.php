@@ -59,14 +59,12 @@ function plugin_minicalendar_convert()
 		$other_month = 0;
 	}
 	
-	// $today = getdate(mktime(0,0,0,$mon,$now_day,$yr) - LOCALZONE + ZONETIME);
 	$today = getdate(mktime(0,0,0,$mon,$now_day,$yr));
 	
 	$m_num = $today['mon'];
 	$d_num = $today['mday'];
 	$year = $today['year'];
 	
-	// $f_today = getdate(mktime(0,0,0,$m_num,1,$year) - LOCALZONE + ZONETIME);
 	$f_today = getdate(mktime(0,0,0,$m_num,1,$year));
 	$wday = $f_today['wday'];
 	$day = 1;

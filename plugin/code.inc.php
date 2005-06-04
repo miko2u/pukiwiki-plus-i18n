@@ -1144,7 +1144,7 @@ function code_read_file_data($name) {
     }
 
 	$params['url'] = $url;
-	$params['info'] = get_date('Y/m/d H:i:s', filemtime($file) - LOCALZONE)
+	$params['info'] = get_date('Y/m/d H:i:s', filemtime($file))
 		. ' ' . sprintf('%01.1f', round(filesize($file)/1024, 1)) . 'KB';
 
     /* Read file data */

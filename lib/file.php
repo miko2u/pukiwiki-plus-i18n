@@ -19,7 +19,7 @@ function get_source($page = NULL)
 // Get last-modified filetime of the page
 function get_filetime($page)
 {
-	return is_page($page) ? filemtime(get_filename($page)) - LOCALZONE : 0;
+	return is_page($page) ? filemtime(get_filename($page)) : 0;
 }
 
 // Get physical file name of the page
@@ -118,7 +118,7 @@ function file_write($dir, $page, $str, $notimestamp = FALSE)
 		$str = rtrim($str) . "\n";
 
 		if ($notimestamp && file_exists($file))
-			$timestamp = filemtime($file) - LOCALZONE;
+			$timestamp = filemtime($file);
 
 		$fp = fopen($file, 'w') or die('fopen() failed: ' .
 			htmlspecialchars(basename($dir) . '/' . encode($page) . '.txt') .	
@@ -132,7 +132,7 @@ function file_write($dir, $page, $str, $notimestamp = FALSE)
 		flock($fp, LOCK_UN);
 		fclose($fp);
 
-		if ($timestamp) pkwk_touch_file($file, $timestamp + LOCALZONE);
+		if ($timestamp) pkwk_touch_file($file, $timestamp);
 	}
 
 	// Clear is_page() cache

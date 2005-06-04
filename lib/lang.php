@@ -3,7 +3,7 @@
  * Language judgment (言語判定)
  *
  * @copyright   Copyright &copy; 2005, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: lang.php,v 0.17 2005/05/14 02:38:00 upk Exp $
+ * @version     $Id: lang.php,v 0.18 2005/06/04 19:19:00 upk Exp $
  *
  */
 
@@ -124,7 +124,7 @@ function get_language($level = 0)
  */
 function get_content_charset($lang)
 {
-	return "UTF-8";
+	return 'UTF-8';
 /*
 	$content_charset = array(
 		'en'	=> 'iso-8859-1',
@@ -146,11 +146,14 @@ function get_content_charset($lang)
  */
 function get_source_encoding($lang)
 {
+	return 'UTF-8';
+/*
 	$source_encoding = array(
-//		'en'	=> 'ASCII',
+		'en'	=> 'ASCII',
 		'default' => 'UTF-8', // default
 	);
 	return _lang_keyset($lang,$source_encoding);
+*/
 }
 
 /*
@@ -353,10 +356,10 @@ class accept_language
 	 */
 	function get_accept_language()
 	{
-		if ( !isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ) return "";
+		if ( !isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ) return '';
 		$accept_language = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
 		// TEST:
-		//$accept_language = "ko,en,ja,fr;q=0.7,DE;q=0.3";
+		//$accept_language = 'ko,en,ja,fr;q=0.7,DE;q=0.3';
 		return accept_language::split_str($accept_language);
 	}
 
@@ -369,15 +372,15 @@ class accept_language
 	 */
 	function get_user_agent_mozilla()
 	{
-		if ( !isset($_SERVER['HTTP_USER_AGENT']) ) return "";
+		if ( !isset($_SERVER['HTTP_USER_AGENT']) ) return '';
 		$user_agent = $_SERVER['HTTP_USER_AGENT'];
 		// TEST:
-		// $user_agent = "Mozilla/5.0 (Windows; U; Windows NT 5.1; zh-TW; rv:1.7.5) Gecko/20041119 Firefox/1.0";
-		// $user_agent = "Mozilla/5.0 (Macintosh; U; PPC Mac OS X; ja-jp) AppleWebKit/125.2 (KHTML, like Gecko) Safari/125.8";
+		// $user_agent = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; zh-TW; rv:1.7.5) Gecko/20041119 Firefox/1.0';
+		// $user_agent = 'Mozilla/5.0 (Macintosh; U; PPC Mac OS X; ja-jp) AppleWebKit/125.2 (KHTML, like Gecko) Safari/125.8';
 		$rc = array();
 		preg_match("'Mozilla.*? \((.*?)\) .*?'si",$user_agent,$regs);
-		if ( count($regs) < 2) return "";
-		foreach(split(";",$regs[1]) as $x) {
+		if ( count($regs) < 2) return '';
+		foreach(split(';',$regs[1]) as $x) {
 			$str = trim($x);
 			$i = strlen($str);
 			if ($i == 5 || $i == 2) {
@@ -397,10 +400,10 @@ class accept_language
 	 */
 	function get_accept_charset()
 	{
-		if ( !isset($_SERVER['HTTP_ACCEPT_CHARSET']) ) return "";
+		if ( !isset($_SERVER['HTTP_ACCEPT_CHARSET']) ) return '';
 		$accept_charset = $_SERVER['HTTP_ACCEPT_CHARSET'];
 		// TEST:
-		// $accept_charset = "Shift_JIS,utf-8;q=0.7,*;q=0.7";
+		// $accept_charset = 'Shift_JIS,utf-8;q=0.7,*;q=0.7';
 		// 取り扱い文字が、CHARSET列なので言語_国変換を行わない(第2引数)
 		$tmp = accept_language::split_str($accept_charset,FALSE);
 		$rc = array();
@@ -420,15 +423,15 @@ class accept_language
 	 */
 	function get_remote_addr()
 	{
-		if ( !isset($_SERVER['REMOTE_ADDR']) ) return "";
+		if ( !isset($_SERVER['REMOTE_ADDR']) ) return '';
 		$ip = $_SERVER['REMOTE_ADDR'];
 		$host = gethostbyaddr($ip);
-		if ($ip == $host) return "";
+		if ($ip == $host) return '';
 		$x = substr($host,strrpos($host, '.')+1);
                 $x = strtolower($x);
                 if (isset($this->flag[$x]))
 			return accept_language::split_str($this->flag[$x], FALSE, FALSE);
-                return "";
+                return '';
 	}
 
 	/*
@@ -443,10 +446,10 @@ class accept_language
 	function split_str($env, $conv=TRUE, $sort=TRUE)
 	{
 		$rc = array();
-		foreach( split(",",$env) as $x ) {
-			$x1 = split(";", $x);
-			// "",1 の "" は、DUMMY
-			$q = (count($x1) == 1) ? array("",1) : split("=",$x1[1]);
+		foreach( split(',',$env) as $x ) {
+			$x1 = split(';', $x);
+			// '',1 の '' は、DUMMY
+			$q = (count($x1) == 1) ? array('',1) : split('=',$x1[1]);
 			if ($conv) {
 				$l = accept_language::split_locale_str($x1[0]);
 				$rc[] = array( $l[0], $q[1]);
@@ -514,7 +517,7 @@ class lang2country
 	function get_lang2country($x)
 	{
 		if (isset($this->lang[$x])) return $this->lang[$x];
-		return "";
+		return '';
 	}
 
 }

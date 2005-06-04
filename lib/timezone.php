@@ -3,7 +3,7 @@
  * TimeZone
  *
  * @copyright   Copyright &copy; 2005, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: timezone.php,v 0.7 2005/05/04 01:52:00 upk Exp $
+ * @version     $Id: timezone.php,v 0.8 2005/06/04 19:16:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
@@ -15,8 +15,7 @@ function set_time()
 {
 	global $language;
 
-	define('LOCALZONE', date('Z'));
-	define('UTIME', time() - LOCALZONE);
+	define('UTIME', time());
 	define('MUTIME', getmicrotime());
 
 	list($zone, $zonetime) = set_timezone( $language );
@@ -876,7 +875,7 @@ class timezone
 		foreach($this->tz_country as $_key => $_tz) {
 			if (! empty($_tz[$idx])) return $_tz[$idx];
 		}
-		return "";
+		return '';
 	}
 
 	/*
@@ -889,7 +888,7 @@ class timezone
 	{
 		if (! isset($this->y)) $this->set_datetime(); // 日時未設定の場合
 		$tbl = array();
-		$str_dst = "";
+		$str_dst = '';
 		foreach($this->dst as $x) {
 			if ($x[0] != $rule_name) continue;	// 他のルールは除く
 			if ($x[1] > $this->y) continue;		// 先日付は除く
@@ -936,20 +935,20 @@ class timezone
 		if (strlen($key) < 3) return $key;
 
 		$wday = array('Sun'=>0,'Mon'=>1,'Tue'=>2,'Wed'=>3,'Thu'=>4,'Fri'=>5,'Sat'=>6);
-		$gl = "";
+		$gl = '';
 
 		if (substr($key,0,4) == 'last') {
 			// 最後の指定曜日を算出
 			$week = $wday[substr($key,4)]; // 求めたい曜日
 			// mktime(h,i,s,   m,d, y,dst);
-			$calc_week = date("w", mktime(0,0,0,$m+1,0,$y) ); // 当月末
-			$calc_day  = date("j", mktime(0,0,0,$m+1,0,$y) );
+			$calc_week = date('w', mktime(0,0,0,$m+1,0,$y) ); // 当月末
+			$calc_day  = date('j', mktime(0,0,0,$m+1,0,$y) );
 		} else {
 			// 指定日の直近(前後)の指定曜日を算出
 			$week = $wday[substr($key,0,3)]; // 求めたい曜日
 			$gl = substr($key,3,1);
 			$calc_day = substr($key,5);
-			$calc_week = date("w", mktime(0,0,0,$m,$calc_day,$y) );
+			$calc_week = date('w', mktime(0,0,0,$m,$calc_day,$y) );
 		}
 
 		// 指定日以降

@@ -222,7 +222,6 @@ function plugin_minicalendar_viewer_convert()
       $mmstr = $monthlabel[$mm];
       $h_today = public_holiday($yy,$mm,$dd); 
       $hday = $h_today['rc'];
-      // $f_today = getdate(mktime(0,0,0,$mm,$dd,$yy) - LOCALZONE + ZONETIME);
       $f_today = getdate(mktime(0,0,0,$mm,$dd,$yy));
       $wday = $f_today['wday'];
       if($hday != 0) { $classname = 'date_holiday'; }

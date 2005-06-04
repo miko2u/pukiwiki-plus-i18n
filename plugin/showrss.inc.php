@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: showrss.inc.php,v 1.17 2005/04/09 03:18:06 henoheno Exp $
+// $Id: showrss.inc.php,v 1.17.1 2005/06/04 21:21:00 upk Exp $
 //  Id:showrss.inc.php,v 1.40 2003/03/18 11:52:58 hiro Exp
 //
 // Show RSS of remote site plugin
@@ -154,7 +154,7 @@ function plugin_showrss_get_rss($target, $usecache)
 		$filename = CACHE_DIR . encode($target) . '.tmp';
 		if (is_readable($filename)) {
 			$buf  = join('', file($filename));
-			$time = filemtime($filename) - LOCALZONE;
+			$time = filemtime($filename);
 		}
 	}
 
@@ -268,10 +268,9 @@ class ShowRSS_XML
 		} else if (isset($item['DESCRIPTION']) &&
 			($description = trim($item['DESCRIPTION'])) != '' &&
 			($time = strtotime($description)) != -1) {
-				$time -= LOCALZONE;
-
+				// $time -= LOCALZONE; FIXME:
 		} else {
-			$time = time() - LOCALZONE;
+			$time = time();
 		}
 		$item['_TIMESTAMP'] = $time;
 		$date = get_date('Y-m-d', $item['_TIMESTAMP']);
@@ -296,14 +295,13 @@ function plugin_showrss_get_timestamp($str)
 	$matches = array();
 	if (! preg_match('/(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2}:\d{2})(([+-])(\d{2}):(\d{2}))?/', $str, $matches)) {
 		$time = strtotime($str);
-		return ($time == -1) ? UTIME : $time - LOCALZONE;
+		return ($time == -1) ? UTIME : $time;
 	}
-	$str  = $matches[1];
-	$time = strtotime($matches[1] . ' ' . $matches[2]);
+	$str  = $matches[1] . ' ' . $matches[2];
 	if (! empty($matches[3])) {
-		$diff = ($matches[5] * 60 + $matches[6]) * 60;
-		$time += ($matches[4] == '-' ? $diff : -$diff);
+		$str .= ' ' . $matches[4].$matches[5].$matches[6];
 	}
+	$time = strtotime($str);
 	return $time;
 }
 ?>

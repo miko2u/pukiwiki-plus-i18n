@@ -31,11 +31,11 @@ function plugin_mixirss_action()
 
 	$recent = CACHE_DIR . 'recent.dat';
 	if (! file_exists($recent)) die('recent.dat is not found');
-	$time_recent = filemtime($recent) - LOCALZONE;
+	$time_recent = filemtime($recent);
 
 	$rsscache = CACHE_DIR . 'rsscache' . $version . '.dat';
 	if (file_exists($rsscache)) {
-		$time_rsscache = filemtime($rsscache) - LOCALZONE;
+		$time_rsscache = filemtime($rsscache);
 	} else {
 		$time_rsscache = 0;
 	}

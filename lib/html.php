@@ -141,7 +141,7 @@ function catbody($title, $page, $body)
 
 	// 1.3.x compat
 	// Last modification date (UNIX timestamp) of the page
-	$fmt = $is_read ? get_filetime($_page) + LOCALZONE : 0;
+	$fmt = $is_read ? get_filetime($_page) : 0;
 
 	// Search words
 	if ($search_word_color && isset($vars['word'])) {
