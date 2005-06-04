@@ -445,7 +445,20 @@ function get_date($format, $timestamp = NULL)
 
 	$time = ZONETIME + (($timestamp !== NULL) ? $timestamp : UTIME);
 
-	return gmdate($format, $time);
+	$str = gmdate($format, $time);
+	if (ZONETIME == 0) return $str;
+
+        $zonetime = get_zonetime_offset(ZONETIME);
+	return str_replace('+0000', $zonetime, $str);
+}
+
+function get_zonetime_offset($zonetime)
+{
+	$pm = ($zonetime < 0) ? '-' : '+';
+	$zonetime = abs($zonetime);
+	(int)$h = $zonetime / 3600;
+	$m = $zonetime - ($h * 3600);
+	return sprintf('%s%02d%02d', $pm,$h,$m);
 }
 
 // Format date string
