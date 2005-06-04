@@ -1,5 +1,5 @@
 <?php
-// $Id: tb.inc.php,v 1.19.2 2005/05/29 18:02:00 upk Exp $
+// $Id: tb.inc.php,v 1.19.3 2005/06/05 03:52:00 upk Exp $
 /*
  * PukiWiki/TrackBack: TrackBack Ping receiver and viewer
  * (C) 2003-2004 PukiWiki Developers Team
@@ -206,8 +206,7 @@ function plugin_tb_mode_view_set($tb_id, $page)
 		list ($time, $url, $title, $excerpt, $blog_name) = $x;
 		if ($title == '') $title = 'no title';
 
-		// $time = date($_tb_date, $time + LOCALZONE);
-		$time = gmdate($_tb_date, $time + ZONETIME);
+		$time = get_date($_tb_date, $time);
 
 		$body .= '<h4><a class="ext" href="' . $url . '" rel="nofollow">' . $title . 
 			 '<img src="./image/plus/ext.png" alt="" title="" class="ext" onclick="return open_uri(\'' .
