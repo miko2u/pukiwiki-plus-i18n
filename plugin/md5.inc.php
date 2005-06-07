@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: md5.inc.php,v 1.15 2005/04/11 14:59:54 henoheno Exp $
+// $Id: md5.inc.php,v 1.21 2005/06/04 12:30:50 henoheno Exp $
 //
 //  MD5 plugin
 
@@ -12,10 +12,20 @@ function plugin_md5_action()
 	if (PKWK_SAFE_MODE || PKWK_READONLY) die_message('Prohibited');
 
 	// Wait POST
-	$key    = isset($post['key']) ? $post['key'] : '';
-	$submit = isset($post['key']);
-	if ($key != '') {
-		// Compute (Don't show its $key at the same time)
+	$phrase = isset($post['phrase']) ? $post['phrase'] : '';
+
+	if ($phrase == '') {
+		// Show the form
+
+		// If plugin=md5&md5=password, only set it (Don't compute)
+		$value  = isset($get['md5']) ? $get['md5'] : '';
+
+		return array(
+			'msg' =>'Compute userPassword',
+			'body'=>plugin_md5_show_form(isset($post['phrase']), $value));
+
+	} else {
+		// Compute (Don't show its $phrase at the same time)
 
 		$prefix = isset($post['prefix']);
 		$salt   = isset($post['salt']) ? $post['salt'] : '';
@@ -26,40 +36,63 @@ function plugin_md5_action()
 			$salt   = $scheme . $salt;
 		}
 
-		return array('msg'=>'MD5',
-			'body'=>pkwk_hash_compute($salt, $key, $prefix, TRUE));
+		return array(
+			'msg' =>'Result',
+			'body'=>
+				//($prefix ? 'userPassword: ' : '') .
+				pkwk_hash_compute($salt, $phrase, $prefix, TRUE));
+	}
+}
 
-	} else {
-		// If plugin=md5&md5=password, only set it (Don't compute)
-		$value = isset($get['md5']) ? $get['md5'] : '';
-		if (strlen($value) > PKWK_PASSPHRASE_LIMIT_LENGTH)
-			die_message('Limit: malicious message length');
-		if ($value != '') $value  = 'value="' . htmlspecialchars($value) . '" ';
+// $nophrase = Passphrase is (submitted but) empty
+// $value    = Default passphrase value
+function plugin_md5_show_form($nophrase = FALSE, $value = '')
+{
+	if (PKWK_SAFE_MODE || PKWK_READONLY) die_message('Prohibited');
+	if (strlen($value) > PKWK_PASSPHRASE_LIMIT_LENGTH)
+		die_message('Limit: malicious message length');
 
-		$self = get_script_uri();
-		$form = '';
-		if ($submit) $form .= '<strong>NO PHRASE</strong><br />';
-		$form .= <<<EOD
+	if ($value != '') $value = 'value="' . htmlspecialchars($value) . '" ';
+	$sha1_enabled = function_exists('sha1');
+	$self = get_script_uri();
+
+	$form = <<<EOD
+<p><strong>NOTICE: Don't use this feature via untrustful or unsure network</strong></p>
+<hr>
+EOD;
+
+	if ($nophrase) $form .= '<strong>NO PHRASE</strong><br />';
+
+	$form .= <<<EOD
 <form action="$self" method="post">
  <div>
   <input type="hidden" name="plugin" value="md5" />
   <label for="_p_md5_phrase">Phrase:</label>
-  <input type="text" name="key"  id="_p_md5_phrase" size="60" $value/><br />
+  <input type="text" name="phrase"  id="_p_md5_phrase" size="60" $value/><br />
+EOD;
 
+	if ($sha1_enabled) $form .= <<<EOD
   <input type="radio" name="scheme" id="_p_md5_sha1" value="x-php-sha1" />
   <label for="_p_md5_sha1">PHP sha1()</label><br />
+EOD;
+
+	$form .= <<<EOD
   <input type="radio" name="scheme" id="_p_md5_md5"  value="x-php-md5" checked="checked" />
   <label for="_p_md5_md5">PHP md5()</label><br />
   <input type="radio" name="scheme" id="_p_md5_crpt" value="x-php-crypt" />
   <label for="_p_md5_crpt">PHP crypt() *</label><br />
+EOD;
 
+	if ($sha1_enabled) $form .= <<<EOD
   <input type="radio" name="scheme" id="_p_md5_lssha" value="SSHA" />
-  <label for="_p_md5_lssha">LDAP SSHA (sha-1 with a seed)</label><br />
+  <label for="_p_md5_lssha">LDAP SSHA (sha-1 with a seed) *</label><br />
   <input type="radio" name="scheme" id="_p_md5_lsha" value="SHA" />
   <label for="_p_md5_lsha">LDAP SHA (sha-1)</label><br />
+EOD;
 
+	$form .= <<<EOD
   <input type="radio" name="scheme" id="_p_md5_lsmd5" value="SMD5" />
-  <label for="_p_md5_lsmd5">LDAP SMD5 (md5 with a seed)</label><br />
+  <label for="_p_md5_lsmd5">LDAP SMD5 (md5 with a seed) *</label><br />
   <input type="radio" name="scheme" id="_p_md5_lmd5" value="MD5" />
   <label for="_p_md5_lmd5">LDAP MD5</label><br />
 
@@ -69,14 +102,17 @@ function plugin_md5_action()
   <input type="checkbox" name="prefix" id="_p_md5_prefix" checked="checked" />
   <label for="_p_md5_prefix">Add scheme prefix (RFC2307, Using LDAP as NIS)</label><br />
 
-  <label for="_p_md5_salt">*Salt or userPassword itself:</label>
+  <label for="_p_md5_salt">Salt, '{scheme}', '{scheme}salt', or userPassword itself to specify:</label><br />
   <input type="text" name="salt" id="_p_md5_salt" size="60" /><br />
 
-  <input type="submit" value="Compute" />
+  <input type="submit" value="Compute" /><br />
+
+  <hr>
+  <p>* = Salt enabled<p/>
  </div>
 </form>
 EOD;
-		return array('msg'=>'MD5', 'body'=>$form);
-	}
+
+	return $form;
 }
 ?>

@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plks! - Yet another WikiWikiWeb clone
-// $Id: pukiwiki.ini.php,v 1.124.13 2005/05/28 13:31:56 miko Exp $
+// $Id: pukiwiki.ini.php,v 1.125.13 2005/06/03 13:56:25 miko Exp $
 // Copyright (C)
 //   2005      Customized/Patched by Miko.Hoshina
 //   2002-2005 PukiWiki Developers Team
@@ -193,6 +193,9 @@ $notimeupdate = 1;
 
 // CHANGE THIS
 $adminpass = '{x-php-md5}1a1dc91c907325c69271ddf0c944bc72'; // md5('pass')
+//$adminpass = '{CRYPT}$1$AR.Gk94x$uCe8fUUGMfxAPH83psCZG/'; // CRYPT 'pass'
+//$adminpass = '{MD5}Gh3JHJBzJcaScd3wyUS8cg==';             // MD5   'pass'
+//$adminpass = '{SMD5}o7lTdtHFJDqxFOVX09C8QnlmYmZnd2Qx';    // SMD5  'pass'
 
 /////////////////////////////////////////////////
 // Page-reading feature settings
