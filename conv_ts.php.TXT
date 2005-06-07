@@ -3,7 +3,7 @@
  * TrackBack データ変換スクリプト
  *
  * @copyright   Copyright &copy; 2005, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: conv_ts_tb.php,v 0.4 2005/06/06 00:29:00 upk Exp $
+ * @version     $Id: conv_ts.php,v 0.5 2005/06/07 21:51:00 upk Exp $
  *
  *
  * THIS SCRIPT IS USED TO CORRESPOND TO
@@ -31,6 +31,7 @@ $do_false  = 0; // 変換処理迂回
 // pukiwiki.ini.php と同じ設定でＯＫです。
 $do_backup = 1; // バックアップを実施している場合は 1 です。
 $trackback = 1; // TrackBack で蓄積したファイルを変換するなら1 です。
+$referer   = 1;
 
 define('PKWK_SPLITTER', '>>>>>>>>>>');
 /* **************************************************************************
@@ -43,6 +44,7 @@ define('LOG_DIR',       DATA_HOME . 'log/');
 
 $config_dir = array(
 	array('tb',		$trackback,	TRACKBACK_DIR,		'.txt',		'TrackBack Data'),
+	array('referer',	$referer,	TRACKBACK_DIR,		'.ref',		'Referer Data'),
 	array('backup',		$do_backup,	BACKUP_DIR,		BACKUP_EXT,	'Backup Data'),
 	array('log.view',	$do_false,	LOG_DIR.'browse/',	'.txt',		'Log Data(View)'),
 	array('log.update',	$do_false,	LOG_DIR.'update/',	'.txt',		'Log Data(Update)'),
@@ -80,10 +82,11 @@ function convert_data($kind,$path,$ext,$title)
 		data_update($kind,$path,$file);
 	}
 	closedir($dir);
+
+	echo "$ctr_all files, $ctr_ok changed[O], $ctr_err errores[E].\n";
 	if ($ctr_err == 0) {
 		echo "== ALL PROCESSING WAS COMPLETED. ==\n";
 	}
-	echo "$ctr_all files, $ctr_ok changed[O], $ctr_err errores[E].\n";
 	return '';
 }
 
@@ -115,16 +118,15 @@ function data_update($kind,$path,$file)
 		echo "[E]$file\n";
 		return '';
 	}
-	// @flock($fw, LOCK_EX);
 
 	$fr = @$fopen($path.$file.'.bak', 'r');
-	// set_file_buffer($fr, 0);
-	// @flock($fr, LOCK_EX);
-	// rewind($fr);
 	while ($data = @$fgets($fr, 8192)) {
 		switch ($kind) {
 		case 'tb':
 			$body = conv_trackback($data);
+			continue;
+		case 'referer':
+			$body = conv_referer($data);
 			continue;
 		case 'backup':
 			$body = conv_backup($data);
@@ -135,11 +137,9 @@ function data_update($kind,$path,$file)
 		}
 		$fwrite($fw, $body);
 	}
-	// @flock($fr, LOCK_UN);
 	$fclose ($fr);
-        // @flock($fw, LOCK_UN);
-        @$fclose($fw);
-        @touch($path.$file, $mtime);
+        $fclose($fw);
+        touch($path.$file, $mtime);
 
 	rm($path.$file);
 	// echo "[O]$file\n";
@@ -149,34 +149,41 @@ function data_update($kind,$path,$file)
 
 function conv_trackback($data)
 {
-	$ts = substr($data,0,10);
-	$time = $ts + LOCALZONE;
-	$body = substr($data,10);
-	return $time.$body;
+	$ts  = substr($data,0,10);
+	$ts += LOCALZONE;
+	return $ts.substr($data,10);
+}
+
+function conv_referer($data)
+{
+	$ts1  = substr($data, 0,10);
+	$ts1 += LOCALZONE;
+	$ts2  = substr($data,11,10);
+	$ts2 += LOCALZONE;
+	return $ts1.','.$ts2.substr($data,21);
 }
 
 function conv_log($data)
 {
-        $ts = substr($data,1,10);
-        $time = $ts + LOCALZONE;
-        $body = substr($data,11);
-        return '|'.$time.$body;
+	$ts  = substr($data,1,10);
+	$ts += LOCALZONE;
+	return '|'.$ts.substr($data,11);
 }
 
 function conv_backup($data)
 {
-  $regex_splitter = '/^' . preg_quote(PKWK_SPLITTER) . '\s(\d+)$/';
-  $regex_splitter_new = '/^' . preg_quote(PKWK_SPLITTER) . '\s(\d+)\s(\d+)$/';
+	$regex_splitter = '/^' . preg_quote(PKWK_SPLITTER) . '\s(\d+)$/';
+	$regex_splitter_new = '/^' . preg_quote(PKWK_SPLITTER) . '\s(\d+)\s(\d+)$/';
 
-  if (preg_match($regex_splitter, $data, $match) ||
-      preg_match($regex_splitter_new, $data, $match)) {
-    $time = $match[1];
-    $real = (isset($match[2])) ? $match[2] : $match[1];
-    $time += LOCALZONE;
-    $real += LOCALZONE;
-    return PKWK_SPLITTER . ' ' . $time . ' ' . $real . "\n";
-  }
-  return $data;
+	if (preg_match($regex_splitter, $data, $match) ||
+	    preg_match($regex_splitter_new, $data, $match)) {
+		$time = $match[1];
+		$real = (isset($match[2])) ? $match[2] : $match[1];
+		$time += LOCALZONE;
+		$real += LOCALZONE;
+		return PKWK_SPLITTER . ' ' . $time . ' ' . $real . "\n";
+	}
+	return $data;
 }
 
 function cp($file)
