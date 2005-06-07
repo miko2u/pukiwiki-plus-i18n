@@ -5,6 +5,19 @@
 // Calendar viewer plugin - List pages that calendar/calnedar2 plugin created
 // (Based on calendar and recent plugin)
 
+// Page title's date format
+//  * See PHP date() manual for detail
+//  * '$\w' = weeklabel defined in $_msg_week
+define('PLUGIN_CALENDAR_VIEWER_DATE_FORMAT',
+		FALSE         // 'pagename/2004-02-09' -- As is
+	//	'D, d M, Y'   // 'Mon, 09 Feb, 2004'
+	//	'F d, Y'      // 'February 09, 2004'
+	//	'[Y-m-d]'     // '[2004-02-09]'
+	//	'Y/n/j ($\w)' // '2004/2/9 (Mon)'
+	);
+
+// ----
+
 define('PLUGIN_CALENDAR_VIEWER_USAGE',
 	'#calendar_viewer(pagename,this|yyyy-mm|n|x*y[,mode[,separater]])');
 /*
@@ -36,7 +49,7 @@ define('PLUGIN_CALENDAR_VIEWER_USAGE',
 
 function plugin_calendar_viewer_convert()
 {
-	global $vars, $get, $post, $script;
+	global $vars, $get, $post, $script, $weeklabels;
 //	global $_msg_calendar_viewer_right, $_msg_calendar_viewer_left;
 //	global $_msg_calendar_viewer_restrict, $_err_calendar_viewer_param2;
 
@@ -164,7 +177,22 @@ function plugin_calendar_viewer_convert()
 		}
 
 		$r_page = rawurlencode($page);
-		$s_page = htmlspecialchars($page);
+
+		if (PLUGIN_CALENDAR_VIEWER_DATE_FORMAT !== FALSE) {
+			$time = strtotime(basename($page)); // $date_sep must be assumed '-' or ''!
+			if ($time == -1) {
+				$s_page = htmlspecialchars($page); // Failed. Why?
+			} else {
+				$week   = $weeklabels[date('w', $time)];
+				$s_page = htmlspecialchars(str_replace(
+						array('$w' ),
+						array($week),
+						date(PLUGIN_CALENDAR_VIEWER_DATE_FORMAT, $time)
+					));
+			}
+		} else {
+			$s_page = htmlspecialchars($page);
+		}
 
 		if (PKWK_READONLY) {
 			$link   = $script . '?' . $r_page;
