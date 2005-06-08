@@ -3,7 +3,7 @@
  * PukiWiki Plus! UTF-8 移行支援スクリプト
  *
  * @copyright   Copyright &copy; 2005, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: data2utf8.php,v 0.1 2005/06/08 23:20:00 upk Exp $
+ * @version     $Id: data2utf8.php,v 0.2 2005/06/08 23:46:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License
  * @link        http://jo1upk.blogdns.net/saito/
  *
@@ -12,8 +12,9 @@
  * 2. PukiWiki Plus! I18N のファイルを展開する
  * 3. 2.で展開したところに、現在、稼動していた(EUC-JPの)データを上書きする
  * 4. 通常 PukiWiki を設定しているように DATA_HOME の定義
- * 5. 実行
- *    php -f 2utf8.php
+ * 5. data2utf8.php.TXT を必要ならば data2utf8.php にリネームする
+ * 6. 実行
+ *    php -f data2utf8.php
  *
  * == ブラウザから実行する場合 ==
  * 権限上の問題があるので、 * .htaccess などの定義を適宜変更する必要がある。
