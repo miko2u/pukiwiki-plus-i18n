@@ -38,6 +38,7 @@ if (! defined('LIB_DIR')) define('LIB_DIR', '');
 require(LIB_DIR . 'func.php');
 require(LIB_DIR . 'file.php');
 require(LIB_DIR . 'funcplus.php');
+require(LIB_DIR . 'fileplus.php');
 require(LIB_DIR . 'plugin.php');
 require(LIB_DIR . 'html.php');
 require(LIB_DIR . 'backup.php');
