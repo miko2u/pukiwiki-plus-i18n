@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: init.php,v 1.32.4 2005/04/30 05:21:00 miko Exp $
+// $Id: init.php,v 1.32.5 2005/06/10 05:21:00 miko Exp $
 // Copyright (C)
 //   2005      PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
@@ -11,13 +11,13 @@
 
 // PukiWiki version / Copyright / Licence
 
-define('S_VERSION', '1.4.6_alpha');
+define('S_VERSION', '1.4.5-u2-i18n');
 define('S_COPYRIGHT',
-	'<strong>PukiWiki ' . S_VERSION . '</strong>' .
+	'<strong>PukiWiki Plus!' . S_VERSION . '</strong>' .
 	' Copyright &copy; 2001-2005' .
-	' <a href="http://pukiwiki.org/">PukiWiki Developers Team</a>.' .
+	' <a href="http://pukiwiki.cafelounge.net/plus/">PukiWiki Plus! Team</a>.' .
 	' License is <a href="http://www.gnu.org/licenses/gpl.html">GPL</a>.<br />' .
-	' Based on "PukiWiki" 1.3 by <a href="http://factage.com/yu-ji/">yu-ji</a>'
+	' Based on <a href="http://pukiwiki.org/">PukiWiki</a>'
 );
 
 /////////////////////////////////////////////////
