@@ -578,11 +578,12 @@ function pkwk_output_dtd($pkwk_dtd = PKWK_DTD_XHTML_1_1, $charset = CONTENT_CHAR
 
 	$charset = htmlspecialchars($charset);
 
-	// Output XML or not(IEPatch: for W3C standard rendering)
+	// Output XML or not
 	if ($type == PKWK_DTD_TYPE_XHTML) {
-		if (!(CONTENT_CHARSET == 'UTF-8' && UA_NAME == 'MSIE')) {
+		// for IEPatch: for W3C standard rendering
+//		if (!(CONTENT_CHARSET == 'UTF-8' && UA_NAME == 'MSIE')) {
 			echo '<?xml version="1.0" encoding="' . CONTENT_CHARSET . '" ?' . '>' . "\n";
-		}
+//		}
 	}
 
 	// Output doctype
