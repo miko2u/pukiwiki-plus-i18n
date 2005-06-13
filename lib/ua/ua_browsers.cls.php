@@ -2,8 +2,8 @@
 /*
  * Browser
  *
- * @copyright   Copyright &copy; 2004, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: ua_browsers.cls.php,v 0.1 2005/05/27 01:00:00 upk Exp $
+ * @copyright   Copyright &copy; 2004-2005, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * @version     $Id: ua_browsers.cls.php,v 0.2 2005/06/14 00:10:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License
  *
  * o 参考にしたコード(AWStats)
@@ -351,50 +351,5 @@ class ua_browsers
 	}
 
 }
-
-/*
-
-$ua = array(
-	// ID=harbotgatestation / IC=
-	//"Harbot GateStation",
-	// ID=sleipnir / IC=
-	//"Sleipnir Version 1.61",
-	// ID=wwwc / IC=
-	//"WWWC/1.04",
-	// ID=mozilla / IC=msie
-	//"Mozilla/4.0 (compatible; MSIE 6.0; Windows 98)",
-	// ID=mozilla / IC=msie
-	//"Mozilla/4.0 (compatible; MSIE 5.0; Windows 98; DigExt)",
-	// ID=chimera / IC=chimera
-	//"Mozilla/5.0 (Macintosh; U; PPC Mac OS X Mach-O; en-US; rv:1.0.1) Gecko/20030108 Chimera/0.6+",
-	// ID=phoenix / IC=phoenix
-	//"Mozilla/5.0 (Macintosh; U; PPC Mac OS X Mach-O; en-US; rv:1.4a) Gecko/20030405 Phoenix/0.5+",
-	// ID=safari / IC=safari
-	//"Mozilla/5.0 (Macintosh; U; PPC Mac OS X; en) AppleWebKit/60 (like Gecko) Safari/60",
-	// ID=feedreader / IC=msie
-	//"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0; Feedreader; .NET CLR 1.0.3705)",
-	// ID=jphone / IC=pdaphone
-	//"J-PHONE/4.0/J-SH51/SNxxxx SH/0001a Profile/MIDP-1.0 Configuration/CLDC-1.0 Ext-Profile/JSCL-1.1.0", // ,pdaphone
-	// ID=ddipocket / IC=pdaphone
-	//"Mozilla/3.0(DDIPOCKET;JRC/AH-J3001V,AH-J3002V/1.0/0100/c50)CNF/2.0",
-	//"Mozilla/3.0(DDIPOCKET;KYOCERA/AH-K3001V/1.4.1.67.000000/0.1/C100) Opera 7.0",
-	// ID=w3c_validator / IC=
-	//"W3C_Validator/1.80 libwww-perl/5.50",
-	// ID=lunascape / IC=msie
-	//"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0; T312461; i-NavFourF; Lunascape 1.4.0)",
-	// "Mozilla/5.0 (Windows; U; Windows NT 5.1; ja-JP; rv:1.7.6) Gecko/20050318 Firefox/1.0.2",
-	// "MOT-61/04.02 UP/4.1.17r",
-	"Bookmark Renewal Check Agent [http://www.bookmark.ne.jp/] (Version 2.0beta)",
-);
-
-$obj = new ua_browsers();
-foreach($ua as $x) {
-	print "-----\n";
-	print "UA=".$x."\n";
-	print "ID=".$obj->get_id($x)."\n";
-	print "IC=".$obj->get_icon($x)."\n";
-}
-
-*/
 
 ?>

@@ -2,8 +2,8 @@
 /*
  * Robot
  *
- * @copyright   Copyright &copy; 2004, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: robots.cls.php,v 0.1 2005/05/27 00:59:00 upk Exp $
+ * @copyright   Copyright &copy; 2004-2005, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * @version     $Id: robots.cls.php,v 0.2 2005/06/14 00:11:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License
  * 情報取得先
  * o Robot一覧

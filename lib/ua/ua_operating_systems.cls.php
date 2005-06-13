@@ -2,8 +2,8 @@
 /*
  * Operating System
  *
- * @copyright   Copyright &copy; 2004, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: ua_operating_systems.cls.php,v 0.1 2005/05/27 01:02:00 upk Exp $
+ * @copyright   Copyright &copy; 2004-2005, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * @version     $Id: ua_operating_systems.cls.php,v 0.1 2005/06/14 00:10:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License
  *
  * o 参考にしたコード(AWStats)
@@ -69,23 +69,6 @@ class ua_operating_systems
 		array('webtv',				'webtv'),	// webtv.png
 	);
 
-	/*
-	apple.png
-	debian.png
-	digital.png
-	dos.png
-	ibm.png
-	imode.png
-	java.png
-	mac.png
-	netware.png
-	next.png
-	qnx.png
-	sco.png
-	unknown.png
-	win.png
-	*/
-
 	function get_icon($ua)
 	{
 		foreach($this->OSHashID as $x) {
@@ -97,12 +80,5 @@ class ua_operating_systems
 		return '';
 	}
 }
-
-// win2000
-// $x = "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0; .NET CLR 1.0.3705; .NET CLR 1.1.4322)";
-// $x = "Mozilla/4.0 (compatible; MSIE 6.0; Windows 98)";
-
-// $obj = new operating_systems();
-// print $obj->set_os_icon($x);
 
 ?>

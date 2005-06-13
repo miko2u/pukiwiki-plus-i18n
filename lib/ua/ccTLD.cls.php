@@ -3,7 +3,7 @@
  * ccTLD (country code TLD)
  *
  * @copyright   Copyright &copy; 2005, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: ccTLD.cls.php,v 0.1 2005/05/27 00:58:00 upk Exp $
+ * @version     $Id: ccTLD.cls.php,v 0.2 2005/06/14 00:09:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License
  * o 参考にしたコード(AWStats)
  *   http://awstats.sourceforge.net/
@@ -298,13 +298,5 @@ class ccTLD
 	}
 
 }
-
-/*
- $x = "aaaa.bbbb.cccc.so-net.ne.jp";
- $obj = new ccTLD();
- list($ico,$name) = $obj->get_icon($x);
- print "ICO =".$ico."\n";
- print "NAME=".$name."\n";
-*/
 
 ?>
