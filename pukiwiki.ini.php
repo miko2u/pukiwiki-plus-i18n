@@ -89,6 +89,7 @@ define('COUNTER_DIR',   DATA_HOME . 'counter/'  ); // Counter plugin's counts
 define('TRACKBACK_DIR', DATA_HOME . 'trackback/'); // TrackBack logs
 define('PLUGIN_DIR',    DATA_HOME . 'plugin/'   ); // Plugin directory
 define('LANG_DIR',      DATA_HOME . 'locale/'   ); // Language file
+define('LOG_DIR',       DATA_HOME . 'log/'      ); // Logging file
 
 /////////////////////////////////////////////////
 // Directory settings II (ended with '/')
@@ -161,6 +162,9 @@ define('PKWK_ALLOW_JAVASCRIPT', 1);
 
 // Javascript Async Library Extenstion
 $ajax = 1;
+
+// LOG
+require_once('config-log.inc.php');
 
 /////////////////////////////////////////////////
 // TrackBack feature
@@ -274,6 +278,7 @@ $read_auth = 0;
 
 // Read auth regex
 $read_auth_pages = array(
+	'/:log/'		=> 'hoge',
 	'#ひきこもるほげ#'	=> 'hoge',
 	'#(ネタバレ|ねたばれ)#'	=> 'foo,bar,hoge',
 );
@@ -480,16 +485,16 @@ $use_open_uri_in_new_window  = 1;
 
 // 同一サーバーとしてみなすホストのURI
 $open_uri_in_new_window_servername = array(
-      "http://localhost/",
-      "http://localhost.localdomain/",
+      'http://localhost/',
+      'http://localhost.localdomain/',
 );
 // URIの種類によって開く動作を設定。
 // "_blank"で別窓へ表示、falseを指定すると無効
-$open_uri_in_new_window_opis  = "_blank";     // pukiwikiの外で同一サーバー内
+$open_uri_in_new_window_opis  = '_blank';     // pukiwikiの外で同一サーバー内
 $open_uri_in_new_window_opisi = false;        // pukiwikiの外で同一サーバー内(InterWikiLink)
-$open_uri_in_new_window_opos  = "_blank";     // pukiwikiの外で外部サーバー
-$open_uri_in_new_window_oposi = "_blank";     // pukiwikiの外で外部サーバー(InterWikiLink)
-// (注意：あえて拡張しやすいようにしていますが、"_blank"以外は指定しないでください)
+$open_uri_in_new_window_opos  = '_blank';     // pukiwikiの外で外部サーバー
+$open_uri_in_new_window_oposi = '_blank';     // pukiwikiの外で外部サーバー(InterWikiLink)
+// (注意：あえて拡張しやすいようにしていますが、'_blank'以外は指定しないでください)
 
 /////////////////////////////////////////////////
 // User-Agent settings

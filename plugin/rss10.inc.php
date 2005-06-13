@@ -7,6 +7,7 @@ function plugin_rss10_action()
 	pkwk_headers_sent();
 	header('Status: 301 Moved Permanently');
 	header('Location: ' . $script . '?cmd=rss&ver=1.0'); // HTTP
+	log_write('cmd','rss10');
 	exit;
 }
 ?>

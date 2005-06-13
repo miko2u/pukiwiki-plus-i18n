@@ -752,6 +752,7 @@ EOD;
 		}
 
 		@readfile($this->filename);
+		log_put_download($this->page,$this->file);
 		exit;
 	}
 }

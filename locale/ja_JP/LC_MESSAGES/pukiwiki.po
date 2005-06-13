@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PukiWiki Plus! 1.4.5-u2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-05-10 00:27+0900\n"
+"POT-Creation-Date: 2005-05-10 02:35+0900\n"
 "PO-Revision-Date: 2005-04-03 21:13+0900\n"
 "Last-Translator: Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>\n"
 "Language-Team: Japanese <ja@li.org>\n"
@@ -257,3 +257,27 @@ msgstr "Trackback"
 #: ../../lib/resource.php:93
 msgid "Upload"
 msgstr "添付"
+
+#: ../../lib/resource.php:95
+msgid "Search Key List"
+msgstr "検索キー一覧"
+
+#: ../../lib/resource.php:96
+msgid "Link List"
+msgstr "自動相互リンク表"
+
+#: ../../lib/resource.php:97
+msgid "Browse Log"
+msgstr "閲覧ログ"
+
+#: ../../lib/resource.php:98
+msgid "Update Log"
+msgstr "更新ログ"
+
+#: ../../lib/resource.php:99
+msgid "Download Log"
+msgstr "ダウンロードログ"
+
+#: ../../lib/resource.php:100
+msgid "Log"
+msgstr "ログ"

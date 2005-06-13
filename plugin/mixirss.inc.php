@@ -238,6 +238,7 @@ EOD;
 	flock($fp, LOCK_UN);
 	fclose($fp);
 
+	log_write('cmd','mixirss');
 	exit;
 }
 

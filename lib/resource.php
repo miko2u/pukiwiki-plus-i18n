@@ -91,6 +91,12 @@ $_LANG['skin'] = array(
 	'trackback' => _('Trackback'),
 	'unfreeze'  => _('Unfreeze'),
 	'upload'    => _('Upload'),
+	'skeylist'  => _('Search Key List'),
+	'linklist'  => _('Link List'),
+	'log_browse'=> _('Browse Log'),
+	'log_update'=> _('Update Log'),
+	'log_down'  => _('Download Log'),
+	'log'       => _('Log'),
 );
 
 ?>

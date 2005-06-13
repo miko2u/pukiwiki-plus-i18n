@@ -115,6 +115,9 @@ $_IMAGE['skin']['help']     = 'help.png';
 $_IMAGE['skin']['rss']      = 'rss.png';
 $_IMAGE['skin']['rssplus']  = 'rss.png';
 $_IMAGE['skin']['mixirss']  = 'rss.png';
+$_IMAGE['skin']['skeylist'] = 'plus/skeylist.png';
+$_IMAGE['skin']['linklist'] = 'plus/linklist.png';
+$_IMAGE['skin']['log']      = 'log.png';
 
 	$lang = $_LANG['skin'];
 	$link = $_LINK;

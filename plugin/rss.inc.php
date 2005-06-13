@@ -136,6 +136,7 @@ $items
 EOD;
 		break;
 	}
+	log_write('cmd','rss');
 	exit;
 }
 ?>

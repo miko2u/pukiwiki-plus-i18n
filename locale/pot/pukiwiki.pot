@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-05-10 00:27+0900\n"
+"POT-Creation-Date: 2005-05-10 02:35+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -250,4 +250,28 @@ msgstr ""
 
 #: ../../lib/resource.php:93
 msgid "Upload"
+msgstr ""
+
+#: ../../lib/resource.php:95
+msgid "Search Key List"
+msgstr ""
+
+#: ../../lib/resource.php:96
+msgid "Link List"
+msgstr ""
+
+#: ../../lib/resource.php:97
+msgid "Browse Log"
+msgstr ""
+
+#: ../../lib/resource.php:98
+msgid "Update Log"
+msgstr ""
+
+#: ../../lib/resource.php:99
+msgid "Download Log"
+msgstr ""
+
+#: ../../lib/resource.php:100
+msgid "Log"
 msgstr ""

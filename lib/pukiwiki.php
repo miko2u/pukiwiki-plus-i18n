@@ -54,6 +54,11 @@ require(LIB_DIR . 'proxy.php');
 require(LIB_DIR . 'mail.php');
 require(LIB_DIR . 'lang.php');
 require(LIB_DIR . 'timezone.php');
+require(LIB_DIR . 'log.php');
+require(LIB_DIR . 'proxy.cls.php');
+require(LIB_DIR . 'auth.cls.php');
+require(LIB_DIR . 'netbios.cls.php');
+require(LIB_DIR . 'ua/user_agent.cls.php');
 
 if (! extension_loaded('mbstring')) {
 	require(LIB_DIR . 'mbstring.php');
@@ -148,6 +153,7 @@ if (isset($retvars['body']) && $retvars['body'] != '') {
 
 	if ($trackback) $body .= tb_get_rdf($base); // Add TrackBack-Ping URI
 	if ($referer) ref_save($base);
+	log_write('browse',$vars['page']);
 }
 
 // Output

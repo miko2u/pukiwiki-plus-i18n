@@ -200,7 +200,30 @@ function plugin_navibar2_keyword($name)
 		}
 		break;
 	case 'refer':
+	case 'skeylist':
+	case 'linklist':
 		if ($referer) {
+			if (!isset($refcount)) $refcount = tb_count($vars['page'],'.ref');
+			if ($refcount > 0) {
+				return _navigator2($name);
+			}
+		}
+		break;
+	case 'log_browse':
+		$logcount = log_count('browse',$vars['page']);
+		if ($logcount >0) {
+			return _navigator2($name);
+		}
+		break;
+	case 'log_update':
+		$logcount = log_count('update',$vars['page']);
+		if ($logcount >0) {
+			return _navigator2($name);
+		}
+		break;
+	case 'log_down':
+		$logcount = log_count('download',$vars['page']);
+		if ($logcount >0) {
 			return _navigator2($name);
 		}
 		break;

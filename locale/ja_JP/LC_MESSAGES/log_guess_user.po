@@ -1,0 +1,21 @@
+# PukiWiki Plus! - Yet Another WikiWikiWeb Clone
+# Copyright (C) 2005 PukiWiki Plus! Developer Team
+# License is GPL2
+# Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>, 2005.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PukiWiki Plus! 1.4.5-u2-i18n\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2005-06-11 22:38+0900\n"
+"PO-Revision-Date: 2005-06-11 22:41+0900\n"
+"Last-Translator: Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>\n"
+"Language-Team: Japanese <ja@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../plugin/log_guess_user.inc.php:19
+#, php-format
+msgid "<div>PUT: %s</div>"
+msgstr "<div>出力: %s 件</div>"

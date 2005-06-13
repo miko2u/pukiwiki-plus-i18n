@@ -67,6 +67,11 @@ function catbody($title, $page, $body)
 	$_LINK['rss10']    = "$script?cmd=rss&amp;ver=1.0"; // Same as 'rdf'
 	$_LINK['rss20']    = "$script?cmd=rss&amp;ver=2.0";
 	$_LINK['mixirss']  = "$script?cmd=mixirss";         // Same as 'rdf' for mixi
+	$_LINK['skeylist']   = "$script?cmd=skeylist&amp;page=$r_page";
+	$_LINK['linklist']   = "$script?cmd=linklist&amp;page=$r_page";
+	$_LINK['log_browse'] = "$script?cmd=logview&amp;kind=browse&amp;page=$r_page";
+	$_LINK['log_update'] = "$script?cmd=logview&amp;page=$r_page";
+	$_LINK['log_down']   = "$script?cmd=logview&amp;kind=download&amp;page=$r_page";
 	$_LINK['search']   = "$script?cmd=search";
 	$_LINK['side']     = "$script?$sidebar";
 	$_LINK['source']   = "$script?plugin=source&amp;page=$r_page";

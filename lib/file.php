@@ -57,6 +57,7 @@ function page_write($page, $postdata, $notimestamp = FALSE)
 	}
 
 	links_update($page);
+	log_write('update',$page);
 }
 
 // User-defined rules (replace the source)
