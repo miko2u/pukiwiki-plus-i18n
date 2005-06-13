@@ -11,4 +11,4 @@
 define('UA_MOBILE', 1);	// 1 or 0
 
 // PukiWiki.org Compat.
-reuqire_once('keitai.ini.php');
+require_once('keitai.ini.php');
