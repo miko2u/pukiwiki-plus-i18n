@@ -95,7 +95,7 @@ function plugin_qrcode_inline()
 	if ($e != '') { $addparam .= "&amp;e=$e"; }
 	if ($n < 2 || $n > 16) {
 		$d = rawurlencode($d);
-		if (!defined('UA_PROFILE') || UA_PROFILE == 'default') {
+		if (defined('UA_MOBILE') && UA_MOBILE != 0) {
 			$result = "<a href=\"$script?plugin=qrcode&amp;d=$d&amp;s=4$addparam\"><img src=\"$script?plugin=qrcode&amp;d=$d$addsize$addparam\" alt=\"$d\" title=\"$d\" /></a>";
 		} else {
 			$result = "<a href=\"$script?plugin=qrcode&amp;d=$d&amp;s=4$addparam\"><img src=\"$script?plugin=qrcode&amp;d=$d$addsize$addparam\" alt=\"$d\" title=\"keitai\" /></a>";

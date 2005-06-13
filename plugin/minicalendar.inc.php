@@ -85,7 +85,7 @@ function plugin_minicalendar_convert()
 	
 	$ret = '';
 
-if (!defined('UA_PROFILE') || UA_PROFILE == 'default') {
+if (!defined('UA_MOBILE') || UA_MOBILE == 0) {
 	if ($today_view) {
 		if (exist_plugin('topicpath')) {
 			$ret = "<div id=\"topicpath\"><a href=\"".$script."\">".PLUGIN_TOPICPATH_TOP_LABEL."</a>".PLUGIN_TOPICPATH_TOP_SEPARATOR."calendar - ".$s_base."</div>\n";

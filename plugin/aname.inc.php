@@ -30,10 +30,10 @@ function plugin_aname_convert()
 	// 携帯はxhtml対応してないものが多いため現実解
 	if (isset($pkwk_dtd) && $pkwk_dtd < PKWK_DTD_XHTML_1_1) {
 		$attr_id = in_array('noid', $args) ? '' : ' id="' . $id . '" name="' . $id . '"';
-	} elseif (!defined('UA_PROFILE') || UA_PROFILE == 'default') {
-		$attr_id = in_array('noid', $args) ? '' : ' id="' . $id . '"';
-	} else {
+	} elseif (defined('UA_MOBILE') && UA_MOBILE != 0) {
 		$attr_id = in_array('noid', $args) ? '' : ' id="' . $id . '" name="' . $id . '"';
+	} else {
+		$attr_id = in_array('noid', $args) ? '' : ' id="' . $id . '"';
 	}
 
 	// 暫定対応： $attr_id は id が重複すると xhtml対応できなくなる可能性あり

@@ -366,7 +366,7 @@ function plugin_ref_body($args)
 	if ($is_image) {
 		// DoCoMo recommended picture size is 128x128
 		// http://www.nttdocomo.co.jp/p_s/imode/xhtml/s1.html#1_4_2
-		if (UA_PROFILE == 'keitai') {
+		if (defined('UA_MOBILE') && UA_MOBILE != 0) {
 			if ($rawwidth > 0 && $rawheight > 0 && $rawwidth <= 128 && $rawheight <= 128 && PLUGIN_REF_SHOW_IMAGE_TO_MOBILEPHONE) {
 				$params['_body'] = "<img src=\"$url\" alt=\"$title\" title=\"keitai\" $info/>";
 			} else {
