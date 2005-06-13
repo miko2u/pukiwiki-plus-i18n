@@ -409,8 +409,8 @@ $notify_from = 'from@example.com';	// From:
 $notify_subject = '[PukiWiki] $page';
 
 // Mail header
-$notify_header = "From: $notify_from\r\n" .
-	'X-Mailer: PukiWiki/' .  S_VERSION . ' PHP/' . phpversion();
+// NOTE: Multiple items must be divided by "\r\n", not "\n".
+$notify_header = '';
 
 // No Mail for Remote Host.
 $notify_exclude = array(

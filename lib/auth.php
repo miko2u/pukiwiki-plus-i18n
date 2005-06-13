@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: auth.php,v 1.16.6 2005/06/04 00:55:22 henoheno Exp $
+// $Id: auth.php,v 1.18.6 2005/06/12 10:13:43 miko Exp $
 // Copyright (C)
 //   2005      PukiWiki Plus! Team
 //   2003-2005 PukiWiki Developers Team
@@ -17,7 +17,7 @@ function pkwk_login($pass = '')
 	global $adminpass;
 
 	if (! PKWK_READONLY && isset($adminpass) &&
-		pkwk_hash_compute($adminpass, $pass) === $adminpass) {
+		pkwk_hash_compute($pass, $adminpass) === $adminpass) {
 		return TRUE;
 	} else {
 		sleep(2);       // Blocking brute force attack
@@ -26,11 +26,11 @@ function pkwk_login($pass = '')
 }
 
 // Compute RFC2307 'userPassword' value, like slappasswd (OpenLDAP)
-// $scheme : Specify '{scheme}' or '{scheme}salt'
 // $phrase : Pass-phrase
+// $scheme : Specify '{scheme}' or '{scheme}salt'
 // $prefix : Output with a scheme-prefix or not
 // $canonical : Correct or Preserve $scheme prefix
-function pkwk_hash_compute($scheme = '{php_md5}', $phrase = '', $prefix = TRUE, $canonical = FALSE)
+function pkwk_hash_compute($phrase = '', $scheme = '{php_md5}', $prefix = TRUE, $canonical = FALSE)
 {
 	if (strlen($phrase) > PKWK_PASSPHRASE_LIMIT_LENGTH)
 		die('pkwk_hash_compute(): malicious message length');
@@ -40,7 +40,7 @@ function pkwk_hash_compute($scheme = '{php_md5}', $phrase = '', $prefix = TRUE, 
 	if (preg_match('/^(\{.+\})(.*)$/', $scheme, $matches)) {
 		$scheme = & $matches[1];
 		$salt   = & $matches[2];
-	} else {
+	} else if ($scheme != '') {
 		$scheme  = ''; // Cleartext
 		$salt    = '';
 	}
@@ -103,8 +103,7 @@ function pkwk_hash_compute($scheme = '{php_md5}', $phrase = '', $prefix = TRUE, 
 	// LDAP CLEARTEXT and just cleartext
 	case '{cleartext}'   : /* FALLTHROUGH */
 	case ''              :
-		$hash = ($prefix ? ($canonical ? '' : $scheme) : '') .
-			$phrase; // Keep NO prefix with $canonical
+		$hash = ($prefix ? ($canonical ? '{CLEARTEXT}' : $scheme) : '') . $phrase;
 		break;
 
 	// Invalid scheme
@@ -205,8 +204,10 @@ function basic_auth($page, $auth_flag, $exit_flag, $auth_pages, $title_cannot)
 		! isset($_SERVER['PHP_AUTH_USER']) ||
 		! in_array($_SERVER['PHP_AUTH_USER'], $user_list) ||
 		! isset($auth_users[$_SERVER['PHP_AUTH_USER']]) ||
-		pkwk_hash_compute($auth_users[$_SERVER['PHP_AUTH_USER']],
-			$_SERVER['PHP_AUTH_PW']) !== $auth_users[$_SERVER['PHP_AUTH_USER']])
+		pkwk_hash_compute(
+			$_SERVER['PHP_AUTH_PW'],
+			$auth_users[$_SERVER['PHP_AUTH_USER']],
+			) !== $auth_users[$_SERVER['PHP_AUTH_USER']])
 	{
 		// Auth failed
 		pkwk_common_headers();
