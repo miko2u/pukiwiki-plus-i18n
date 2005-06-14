@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: auth.php,v 1.18.6 2005/06/12 10:13:43 miko Exp $
+// $Id: auth.php,v 1.19.6 2005/06/13 14:02:07 miko Exp $
 // Copyright (C)
 //   2005      PukiWiki Plus! Team
 //   2003-2005 PukiWiki Developers Team
@@ -32,6 +32,8 @@ function pkwk_login($pass = '')
 // $canonical : Correct or Preserve $scheme prefix
 function pkwk_hash_compute($phrase = '', $scheme = '{php_md5}', $prefix = TRUE, $canonical = FALSE)
 {
+	if (! is_string($phrase) || ! is_string($scheme)) return FALSE;
+
 	if (strlen($phrase) > PKWK_PASSPHRASE_LIMIT_LENGTH)
 		die('pkwk_hash_compute(): malicious message length');
 
