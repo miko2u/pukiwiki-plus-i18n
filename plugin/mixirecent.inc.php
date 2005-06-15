@@ -18,7 +18,7 @@ define('PLUGIN_MIXIRECENT_DEFAULT_LINES', 10);
 define('PLUGIN_MIXIRECENT_USAGE', '#mixirecent(number-to-show)');
 
 // Place of the cache of 'RecentChanges'
-define('PLUGIN_MIXIRECENT_CACHE', CACHE_DIR . 'mixirecent.dat');
+define('PLUGIN_MIXIRECENT_CACHE', CACHE_DIR . 'recent.dat');
 
 // Hide title, if Pickup Headings
 define('PLUGIN_MIXIRECENT_NOTITLE', TRUE);
