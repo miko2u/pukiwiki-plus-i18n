@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: tdiary.skin.php,v 1.26 2005/05/23 14:22:30 henoheno Exp $
+// $Id: tdiary.skin.php,v 1.26.1 2005/05/23 14:22:30 miko Exp $
 // Copyright (C)
 //   2002-2005 PukiWiki Developers Team
 //   2001-2002 Originally written by yu-ji
@@ -382,7 +382,7 @@ switch(UI_LANG){
 
 // HTTP headers
 pkwk_common_headers();
-header('Cache-control: no-cache');
+header('Cache-Control: no-cache');
 header('Pragma: no-cache');
 header('Content-Type: text/html; charset=' . CONTENT_CHARSET);
 

@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: default.skin.php,v 1.34.21 2005/05/06 14:23:43 miko Exp $
+// $Id: default.skin.php,v 1.34.22 2005/05/06 14:23:43 miko Exp $
 //
 if (!defined('DATA_DIR')) { exit; }
 
@@ -15,7 +15,7 @@ switch(UI_LANG){
 
 // Output header
 pkwk_common_headers();
-header('Cache-control: no-cache');
+header('Cache-Control: no-cache');
 header('Pragma: no-cache');
 header('Content-Type: text/html; charset=' . CONTENT_CHARSET);
 
