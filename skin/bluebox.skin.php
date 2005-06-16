@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: bluebox.skin.php,v 1.18.2 2004/11/02 14:02:10 miko Exp $
+// $Id: bluebox.skin.php,v 1.18.3 2004/11/02 14:02:10 miko Exp $
 // Original is ari-
 
 // Prohibit direct access
@@ -38,7 +38,7 @@ switch(UI_LANG){
 }
 // Output header
 pkwk_common_headers();
-header('Cache-control: no-cache');
+header('Cache-Control: no-cache');
 header('Pragma: no-cache');
 header('Content-Type: text/html; charset=' . CONTENT_CHARSET);
 
