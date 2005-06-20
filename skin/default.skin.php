@@ -18,6 +18,7 @@ pkwk_common_headers();
 header('Cache-Control: no-cache');
 header('Pragma: no-cache');
 header('Content-Type: text/html; charset=' . CONTENT_CHARSET);
+header('ETag: ' . md5(MUTIME));
 
 // Output HTML DTD, <html>, and receive content-type
 if (isset($pkwk_dtd)) {
