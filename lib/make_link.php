@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: make_link.php,v 1.25.5 2005/05/24 07:45:54 miko Exp $
+// $Id: make_link.php,v 1.27.5 2005/06/16 15:04:07 miko Exp $
 // Copyright (C)
 //   2005      PukiWiki Plus! Team
 //   2003-2005 PukiWiki Developers Team
@@ -190,9 +190,9 @@ class Link
 		$this->name = $name;
 		$this->body = $body;
 		$this->type = $type;
-		if (is_url($alias) && preg_match('/\.(gif|png|jpe?g)$/i', $alias)) {
-			$alias = htmlspecialchars($alias);
-			$alias = '<img src="' . $alias . '" alt="' . $name . '" />';
+		if (! PKWK_DISABLE_INLINE_IMAGE_FROM_URI &&
+			is_url($alias) && preg_match('/\.(gif|png|jpe?g)$/i', $alias)) {
+			$alias = '<img src="' . htmlspecialchars($alias) . '" alt="' . $name . '" />';
 		} else if ($alias != '') {
 			if ($converter === NULL)
 				$converter = new InlineConverter(array('plugin'));
@@ -687,7 +687,7 @@ class Link_autolink extends Link
 
 	function toString()
 	{
-		return make_pagelink($this->name, $this->alias, '', $this->page);
+		return make_pagelink($this->name, $this->alias, '', $this->page, TRUE);
 	}
 }
 
@@ -740,7 +740,7 @@ class Link_autoalias extends Link
 		global $WikiName;
 
 		list($name) = $this->splice($arr);
-		// 無視リストに含まれている、あるいは存在しないページを捨てる
+		// no set "Autoalias" - force ingore pagelist.
 		if (in_array($name,$this->forceignorepages))
 		{
 			return FALSE;
@@ -751,7 +751,7 @@ class Link_autoalias extends Link
 	{
 		global $autoalias;
 
-		// AutoAliasNameの一覧取得
+		// Get "AutoAliasName" lists
 		$linkpages = array();
 		$pattern = <<<EOD
 ^-\s*               # list
@@ -817,7 +817,7 @@ class Link_glossary extends Link
 	function set($arr,$page)
 	{
 		list($name) = $this->splice($arr);
-		// 無視リストに含まれている、あるいは存在しないページを捨てる
+		// no set glossary - force ingore pagelist.
 		if (in_array($name,$this->forceignorepages))
 		{
 			return FALSE;
@@ -845,7 +845,7 @@ class Link_glossary_a extends Link_glossary
 	}
 }
 
-// ツールチップの展開
+// Plus! tooltips function(w/ajax)
 function make_tooltips($term,$glossarypage='')
 {
 	global $script, $ajax;
@@ -884,7 +884,7 @@ function make_tooltips($term,$glossarypage='')
 }
 
 // Make hyperlink for the page
-function make_pagelink($page, $alias = '', $anchor = '', $refer = '')
+function make_pagelink($page, $alias = '', $anchor = '', $refer = '', $isautolink = FALSE)
 {
 	global $script, $vars, $link_compact, $related, $_symbol_noexists;
 
@@ -900,28 +900,41 @@ function make_pagelink($page, $alias = '', $anchor = '', $refer = '')
 	if (! isset($related[$page]) && $page != $vars['page'] && is_page($page))
 		$related[$page] = get_filetime($page);
 
-	if (is_page($page)) {
+	if ($isautolink || is_page($page)) {
 		// Hyperlink to the page
 		if ($link_compact) {
 			$title   = '';
 		} else {
 			$title   = ' title="' . $s_page . get_pg_passage($page, FALSE) . '"';
 		}
-		return '<a href="' . $script . '?' . $r_page . $anchor . '"' . $title . '>' .
-			$s_alias . '</a>';
-//		return open_uri_in_new_window('<a href="' . $script . '?' . $r_page . $anchor . '"' . $title . '>' . $s_alias . '</a>', 'make_pagelink');
+
+		// AutoLink marker
+		if ($isautolink) {
+			$al_left  = '<!--autolink-->';
+			$al_right = '<!--/autolink-->';
+		} else {
+			$al_left = $al_right = '';
+		}
+
+		return $al_left . '<a ' . 'href="' . $script . '?' . $r_page . $anchor .
+			'"' . $title . '>' . $s_alias . '</a>' . $al_right;
+//		return open_uri_in_new_window($al_left .
+//			'<a href="' . $script . '?' . $r_page . $anchor . '"' . $title . '>' .
+//			$s_alias . '</a>' . $al_right, 'make_pagelink');
 	} else {
 		// Dangling link
 		if (PKWK_READONLY) return $s_alias; // No dacorations
+
 		$retval = $s_alias . '<a href="' .
 			$script . '?cmd=edit&amp;page=' . $r_page . $r_refer . '">' .
 			$_symbol_noexists . '</a>';
+
 		if ($link_compact) {
+			return $retval;
+//			return open_uri_in_new_window($retval, 'make_pagelink_e');
 		} else {
-			$retval = '<span class="noexists">' . $retval . '</span>';
+			return '<span class="noexists">' . $retval . '</span>';
 		}
-		return $retval;
-//		return open_uri_in_new_window($retval, 'make_pagelink_e');
 	}
 }
 
