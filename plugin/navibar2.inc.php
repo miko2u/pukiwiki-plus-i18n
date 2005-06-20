@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: navibar2.inc.php,v 0.1.7 2005/05/25 21:11:00 upk Exp $
+// $Id: navibar2.inc.php,v 0.1.8 2005/06/20 20:44:00 upk Exp $
 //
 function plugin_navibar2_convert()
 {
@@ -203,28 +203,27 @@ function plugin_navibar2_keyword($name)
 	case 'skeylist':
 	case 'linklist':
 		if ($referer) {
-			if (!isset($refcount)) $refcount = tb_count($vars['page'],'.ref');
+			if (!isset($refcount))
+				$refcount = tb_count($vars['page'],'.ref');
 			if ($refcount > 0) {
 				return _navigator2($name);
 			}
 		}
 		break;
 	case 'log_browse':
-		$logcount = log_count('browse',$vars['page']);
-		if ($logcount >0) {
+		return _navigator2($name);
+		if (log_exist('browse',$vars['page'])) {
 			return _navigator2($name);
 		}
 		break;
 	case 'log_update':
-		$logcount = log_count('update',$vars['page']);
-		if ($logcount >0) {
+		if (log_exist('update',$vars['page'])) {
 			return _navigator2($name);
 		}
 		break;
 	case 'log_down':
-		$logcount = log_count('download',$vars['page']);
-		if ($logcount >0) {
-			return _navigator2($name);
+		if (log_exist('download',$vars['page'])) {
+			return _navigator2($name);	
 		}
 		break;
 	case 'new':

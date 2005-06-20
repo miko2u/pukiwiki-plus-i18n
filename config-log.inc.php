@@ -39,7 +39,7 @@ $log_common = array(
 ***use
 1:ロギング 0:オフ
 ***view
-all:全項目表示 0:1:2 のようにコロンで項目名を指定すると、
+all:全項目表示 ts:@diff:host のようにコロンで項目名を指定すると、
 指定項目名のみを選択表示できる。
 各項目の記述名については、''項目の記述名について'' を参照。
 ***guest
@@ -102,7 +102,7 @@ $log = array(
 		),
 	// NetBIOS認証の利用可否
 	'auth_netbios' => array(
-		'use'      => 1,
+		'use'      => 0,
 		'scope'    => $log_common['private']
 		),
 	'auth_nolog'	   => 0,

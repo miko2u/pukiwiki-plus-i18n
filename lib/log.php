@@ -3,7 +3,7 @@
  * PukiWiki Plus! 更新ログ処理
  *
  * @copyright	Copyright &copy; 2004-2005, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version	$Id: log.php,v 0.5 2005/06/12 14:27:00 upk Exp $
+ * @version	$Id: log.php,v 0.6 2005/06/20 20:40:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
@@ -12,9 +12,9 @@
 $log_ua = log_set_user_agent(); // 保存
 
 /**
- * ログ件数
+ * ログの存在チェック
  */
-function log_count($kind,$page)
+function log_exist($kind,$page)
 {
 	global $log;
 
@@ -22,7 +22,18 @@ function log_count($kind,$page)
 	$filename = log::set_filename($kind,$page);
 	if (!file_exists($filename)) return 0;
 	if (!is_readable($filename)) return 0;
-        if (!($fd = fopen($filename,"r"))) return 0;
+	return 1;
+}
+
+/**
+ * ログ件数
+ */
+function log_count($kind,$page)
+{
+	global $log;
+
+	if (! log_exist($kind,$page)) return 0;
+        if (!($fd = fopen($filename,'r'))) return 0;
         $ctr = 0;
         while ($data = @fgets($fd, 4096)) {
 		$x = trim($data);
