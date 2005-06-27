@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: navibar.php,v 0.1.4 2005/03/15 15:33:43 miko Exp $
+// $Id: navibar.php,v 0.1.5 2005/06/27 15:33:43 miko Exp $
 //
 function plugin_navibar_convert()
 {
@@ -29,8 +29,11 @@ function plugin_navibar_convert()
 		switch ($name) {
 		case 'freeze':
 			if ($is_read && $function_freeze) {
-				if (!$is_freeze)
+				if (!$is_freeze) {
 					$name = 'freeze';
+				} else {
+					$name = 'unfreeze';
+				}
 				if ($body != '' && $oldname != '|') { $body .= ' | '; }
 				$body .= _navigator($name);
 			}
@@ -53,6 +56,13 @@ function plugin_navibar_convert()
 				$body .= _navigator($name);
 			}
 			break;
+		case 'template':
+		case 'source':
+			if (!empty($_page)) {
+				if ($body != '' && $oldname != '|') { $body .= ' | '; }
+				$body .= _navigator($name);
+			}
+			break;
 		case 'trackback':
 			if ($trackback) {
 				if ($body != '' && $oldname != '|') { $body .= ' | '; }
@@ -67,7 +77,28 @@ function plugin_navibar_convert()
 			}
 			break;
 		case 'refer':
+		case 'skeylist':
+		case 'linklist':
 			if ($referer) {
+				if ($body != '' && $oldname != '|') { $body .= ' | '; }
+				$body .= _navigator($name);
+			}
+			break;
+		case 'log_browse':
+			if ($body != '' && $oldname != '|') { $body .= ' | '; }
+			$body .= _navigator($name);
+//			if (log_exist('browse',$vars['page'])) {
+//				return _navigator($name);
+//			}
+			break;
+		case 'log_update':
+			if (log_exist('update',$vars['page'])) {
+				if ($body != '' && $oldname != '|') { $body .= ' | '; }
+				$body .= _navigator($name);
+			}
+			break;
+		case 'log_down':
+			if (log_exist('download',$vars['page'])) {
 				if ($body != '' && $oldname != '|') { $body .= ' | '; }
 				$body .= _navigator($name);
 			}
