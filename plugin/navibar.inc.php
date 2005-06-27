@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: navibar.php,v 0.1.5 2005/06/27 15:33:43 miko Exp $
+// $Id: navibar.php,v 0.1.6 2005/06/27 15:33:43 miko Exp $
 //
 function plugin_navibar_convert()
 {
@@ -31,11 +31,18 @@ function plugin_navibar_convert()
 			if ($is_read && $function_freeze) {
 				if (!$is_freeze) {
 					$name = 'freeze';
-				} else {
-					$name = 'unfreeze';
+					if ($body != '' && $oldname != '|') { $body .= ' | '; }
+					$body .= _navigator($name);
 				}
-				if ($body != '' && $oldname != '|') { $body .= ' | '; }
-				$body .= _navigator($name);
+			}
+			break;
+		case 'unfreeze':
+			if ($is_read && $function_freeze) {
+				if ($is_freeze) {
+					$name = 'unfreeze';
+					if ($body != '' && $oldname != '|') { $body .= ' | '; }
+					$body .= _navigator($name);
+				}
 			}
 			break;
 		case 'upload':
