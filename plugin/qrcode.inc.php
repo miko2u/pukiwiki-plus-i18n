@@ -31,9 +31,9 @@ GPL
 */
 
 // QRデータの格納ディレクトリ
-define('QRCODE_DATA_DIR', DATA_HOME.'data/qr/');
+define('QRCODE_DATA_DIR',  PLUGIN_DIR.'qrcode/');
 // QRイメージの格納ディレクトリ
-define('QRCODE_IMAGE_DIR', 'image/qr/');
+define('QRCODE_IMAGE_DIR', PLUGIN_DIR.'qrcode/');
 // 最大扱えるバージョン
 define('QRCODE_MAX_VERSION','10');
 // 最大扱える分割数
@@ -153,11 +153,11 @@ function plugin_qrcode_action()
 // 画像をサポートしているか？
 function plugin_qrcode_issupported()
 {
-	$issupported = TRUE;
-	if (!function_exists("gd_info")) {
+	$issupported = FALSE;
+	if (function_exists("gd_info")) {
 		$gdinfo = gd_info();
 		if (isset($gdinfo['PNG Support']) && $gdinfo['PNG Support'] === TRUE) {
-			$issupported = FALSE;
+			$issupported = TRUE;
 		}
 	}
 	return $issupported;
