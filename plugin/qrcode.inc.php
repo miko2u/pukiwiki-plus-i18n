@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: qrcode.inc.php,v 0.6.3 2004/12/21 13:57:36 miko Exp $
+// $Id: qrcode.inc.php,v 0.7.3 2005/06/29 13:57:36 miko Exp $
 //
 /*
 *内容
@@ -147,7 +147,7 @@ function plugin_qrcode_action()
 	
 	/* Thanks nanashi */
 	echo QRcode($qr);
-	die();
+	exit;
 }
 
 // 画像をサポートしているか？
