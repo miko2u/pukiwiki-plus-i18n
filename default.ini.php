@@ -13,10 +13,10 @@
 // Skin file
 if (defined('TDIARY_THEME')) { 
 //	define('SKIN_FILE', DATA_HOME . SKIN_DIR . 'tdiary.skin.php');
-	define('SKIN_FILE_DEFAULT', DATA_HOME . SKIN_DIR . 'tdiary.skin.php'); 
+	define('SKIN_FILE_DEFAULT', SKIN_DIR . 'tdiary.skin.php'); 
 } else {
 //	define('SKIN_FILE', DATA_HOME . SKIN_DIR . 'pukiwiki.skin.php');
-	define('SKIN_FILE_DEFAULT', DATA_HOME . SKIN_DIR . 'default.skin.php');
+	define('SKIN_FILE_DEFAULT', SKIN_DIR . 'default.skin.php');
 }
 $skin_file = SKIN_FILE_DEFAULT;
 

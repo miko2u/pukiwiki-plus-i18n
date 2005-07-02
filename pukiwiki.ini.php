@@ -87,8 +87,8 @@ define('CACHE_DIR',     DATA_HOME . 'cache/'    ); // Some sort of caches
 define('UPLOAD_DIR',    DATA_HOME . 'attach/'   ); // Attached files and logs
 define('COUNTER_DIR',   DATA_HOME . 'counter/'  ); // Counter plugin's counts
 define('TRACKBACK_DIR', DATA_HOME . 'trackback/'); // TrackBack logs
-define('PLUGIN_DIR',    DATA_HOME . 'plugin/'   ); // Plugin directory
-define('LANG_DIR',      DATA_HOME . 'locale/'   ); // Language file
+define('PLUGIN_DIR',    PLUS_HOME . 'plugin/'   ); // Plugin directory
+define('LANG_DIR',      PLUS_HOME . 'locale/'   ); // Language file
 define('LOG_DIR',       DATA_HOME . 'log/'      ); // Logging file
 
 /////////////////////////////////////////////////
