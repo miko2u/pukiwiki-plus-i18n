@@ -11,12 +11,13 @@
 |   `-- plugin
 |
 `-- wiki-data
-    |-- attach
-    |-- backup
-    |-- cache
-    |-- counter
-    |-- diff
-    |-- log
-    |-- trackback
-    `-- wiki
+    `-- contents
+        |-- attach
+        |-- backup
+        |-- cache
+        |-- counter
+        |-- diff
+        |-- log
+        |-- trackback
+        `-- wiki
 
