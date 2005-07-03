@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: qrcode.inc.php,v 0.6.3 2004/12/21 13:57:36 miko Exp $
+// $Id: qrcode.inc.php,v 0.7.3 2005/06/29 13:57:36 miko Exp $
 //
 /*
 *内容
@@ -31,9 +31,9 @@ GPL
 */
 
 // QRデータの格納ディレクトリ
-define('QRCODE_DATA_DIR', DATA_HOME.'data/qr/');
+define('QRCODE_DATA_DIR',  PLUGIN_DIR.'qrcode/');
 // QRイメージの格納ディレクトリ
-define('QRCODE_IMAGE_DIR', 'image/qr/');
+define('QRCODE_IMAGE_DIR', PLUGIN_DIR.'qrcode/');
 // 最大扱えるバージョン
 define('QRCODE_MAX_VERSION','10');
 // 最大扱える分割数
