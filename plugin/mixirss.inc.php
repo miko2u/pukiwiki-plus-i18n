@@ -9,7 +9,7 @@
 define('MIXIRSS_DESCRIPTION_LENGTH', 256);
 define('MIXIRSS_LANG', 'ja_JP');
 
-define('MIXIRSS_IGNORE_REGEX', 'Navigation|RecentDeleted');
+define('MIXIRSS_IGNORE_REGEX', 'Navigation|RecentDeleted|MenuBar|SideBar');
 
 // XSLT extra parameters
 //define('LOGO', 'http://pukiwiki.cafelounge.net/image/plus.gif');
