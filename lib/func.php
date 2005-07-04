@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: func.php,v 1.45.3 2005/06/06 05:21:00 miko Exp $
+// $Id: func.php,v 1.46.3 2005/07/04 05:21:00 miko Exp $
 // Copyright (C)
 //   2005      PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
