@@ -1,14 +1,20 @@
 #!/bin/sh
 
 # PukiWiki Plus! アーカイブのディレクトリ名を指定
+# ** 変更が必要 **
 ARC_DIR=../1.4.5-u1-utf8
+
 # Apache の稼動設定
 WEB_OWNER=apache
 WEB_GROUP=apache
+
 # Sample PukiWiki Plus! Directory
-WIKI_COMMON=wiki-common
-WIKI_DATA=wiki-data
+# 公開するファイル
 WIKI_CONTENTS=contents
+# wiki-data/contents となるディレクトリ
+WIKI_DATA=wiki-data
+# 共通利用分
+WIKI_COMMON=wiki-common
 
 # wiki-data (残りの全てのファイルは、ここに)
 rm -R $WIKI_DATA > /dev/null 2>&1
@@ -32,6 +38,10 @@ chown -R $WEB_OWNER.$WEB_GROUP $WIKI_CONTENTS
 rm -R $WIKI_COMMON > /dev/null 2>&1
 mkdir $WIKI_COMMON
 #
+mv $WIKI_DATA/default.ini.*    $WIKI_COMMON
+mv $WIKI_DATA/mobile.ini.*     $WIKI_COMMON
+mv $WIKI_DATA/keitai.ini.*     $WIKI_COMMON
+mv $WIKI_DATA/rules.ini.*      $WIKI_COMMON
 mv $WIKI_DATA/lib              $WIKI_COMMON
 mv $WIKI_DATA/locale           $WIKI_COMMON
 mv $WIKI_DATA/plugin           $WIKI_COMMON

@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: pukiwiki.ini.php,v 1.127.17 2005/07/03 14:16:23 miko Exp $
+// $Id: pukiwiki.ini.php,v 1.127.18 2005/07/05 01:53:00 upk Exp $
 // Copyright (C)
 //   2005      PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
@@ -179,7 +179,7 @@ define('PKWK_ALLOW_JAVASCRIPT', 1);
 $ajax = 1;
 
 // LOG
-require_once('config-log.inc.php');
+require_once('config-log.ini.php');
 
 /////////////////////////////////////////////////
 // TrackBack feature
