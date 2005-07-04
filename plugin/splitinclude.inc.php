@@ -2,19 +2,16 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: splitinclude.inc.php,v 1.3 2004/08/06 06:12:17 miko Exp $
+// $Id: splitinclude.inc.php,v 1.4 2005/06/02 09:12:17 miko Exp $
 //
 
-/*
- splitinclude.inc.php
- ページをインクルードする(分割を有効にする)
-*/
+define('PLUGIN_SPLITINCLUDE_LAYOUT_TABLE',FALSE);
 
 function plugin_splitinclude_convert()
 {
 	global $script,$vars,$get,$post;
 	global $_msg_splitinclude_restrict;
-	static $splitinclude_list = array(); //処理済ページ名の配列
+	static $splitinclude_list = array();
 
 	if (func_num_args() == 0)
 	{
@@ -40,7 +37,7 @@ function plugin_splitinclude_convert()
 		$_page = $vars['page'];
 		$get['page'] = $post['page'] = $vars['page'] = $page;
 		
-		// splitincludeのときは、認証画面をいちいち出さず、後始末もこちらでつける
+		// Check read authentification(if not readable, show error message.)
 		if (check_readable($page, false, false)) {
 			if (function_exists('convert_filter')) {
 				$body = convert_html(convert_filter(get_source($page)));
@@ -53,10 +50,19 @@ function plugin_splitinclude_convert()
 		
 		$get['page'] = $post['page'] = $vars['page'] = $_page;
 		
-		$incbody .= "<div style=\"width:".intval(96/$func_vars_num)."%;margin:0px 2px;vartical-align:top;float:left;\">$body</div>\n";
+		if (PLUGIN_SPLITINCLUDE_LAYOUT_TABLE) {
+			$incbody .= '<td>' . $body . '</td>' . "\n";
+		} else {
+			$incbody .= "<div style=\"width:".intval(96/$func_vars_num)."%;margin:0px 2px;vartical-align:top;float:left;\">$body</div>\n";
+		}
 	}
-	$incbody = "<div style=\"width:100%\">\n$incbody</div>\n<div style=\"display:block;\"></div>\n";
-
+	if (PLUGIN_SPLITINCLUDE_LAYOUT_TABLE) {
+		$incbody = '<table width="100%" border="0" cellspacing="0" cellpadding="0">' . "\n"
+		         . '<tr>' . "\n" . $incbody . '</tr>' . "\n"
+		         . '</table>' . "\n";
+	} else {
+		$incbody = "<div style=\"width:100%\">\n$incbody</div>\n<div style=\"display:block;\"></div>\n";
+	}
 	return $incbody;
 }
 ?>
