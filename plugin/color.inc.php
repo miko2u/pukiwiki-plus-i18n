@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: color.inc.php,v 1.21.1 2005/05/16 07:36:35 miko Exp $
+// $Id: color.inc.php,v 1.22.1 2005/06/16 15:04:08 miko Exp $
 //
 // Text color plugin
 
@@ -17,7 +17,7 @@ function plugin_color_inline()
 	global $pkwk_dtd;
 
 	$args = func_get_args();
-	$text = array_pop($args); // htmlspecialchars(text)
+	$text = strip_autolink(array_pop($args)); // Already htmlspecialchars(text)
 
 	list($color, $bgcolor) = array_pad($args, 2, '');
 	if ($color != '' && $bgcolor != '' && $text == '') {
