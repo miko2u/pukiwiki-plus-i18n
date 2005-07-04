@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: pukiwiki.ini.php,v 1.126.16 2005/06/10 02:56:25 miko Exp $
+// $Id: pukiwiki.ini.php,v 1.127.17 2005/07/03 14:16:23 miko Exp $
 // Copyright (C)
 //   2005      PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
@@ -41,6 +41,20 @@ if (! defined('PKWK_DISABLE_INLINE_IMAGE_FROM_URI'))
 //   Max length of GET method, prohibits some worm attack ASAP
 //   NOTE: Keep (page-name + attach-file-name) <= PKWK_QUERY_STRING_MAX
 define('PKWK_QUERY_STRING_MAX', 640); // Bytes, 0 = OFF
+
+/////////////////////////////////////////////////
+// Experimental features
+
+// Multiline plugin hack (See BugTrack2/84)
+// EXAMPLE(with a known BUG):
+//   #plugin(args1,args2,...,argsN){{
+//   argsN+1
+//   argsN+1
+//   #memo(foo)
+//   argsN+1
+//   }}
+//   #memo(This makes '#memo(foo)' to this)
+define('PKWKEXP_DISABLE_MULTILINE_PLUGIN_HACK', 0); // 1 = Disabled
 
 /////////////////////////////////////////////////
 // Language / Encoding settings
@@ -87,9 +101,10 @@ define('CACHE_DIR',     DATA_HOME . 'cache/'    ); // Some sort of caches
 define('UPLOAD_DIR',    DATA_HOME . 'attach/'   ); // Attached files and logs
 define('COUNTER_DIR',   DATA_HOME . 'counter/'  ); // Counter plugin's counts
 define('TRACKBACK_DIR', DATA_HOME . 'trackback/'); // TrackBack logs
+define('LOG_DIR',       DATA_HOME . 'log/'      ); // Logging file
+
 define('PLUGIN_DIR',    PLUS_HOME . 'plugin/'   ); // Plugin directory
 define('LANG_DIR',      PLUS_HOME . 'locale/'   ); // Language file
-define('LOG_DIR',       DATA_HOME . 'log/'      ); // Logging file
 
 /////////////////////////////////////////////////
 // Directory settings II (ended with '/')

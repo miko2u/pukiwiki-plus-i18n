@@ -1,5 +1,5 @@
 <?php
-// $Id: trackback.php,v 1.19.1 2005/04/29 11:24:20 upk Exp $
+// $Id: trackback.php,v 1.20.1 2005/06/30 12:55:57 upk Exp $
 // Copyright (C)
 //   2005      PukiWiki Plus! Team
 //   2003-2005 PukiWiki Developers Team
