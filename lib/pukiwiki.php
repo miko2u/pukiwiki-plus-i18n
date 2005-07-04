@@ -51,10 +51,8 @@ require(LIB_DIR . 'make_link.php');
 require(LIB_DIR . 'diff.php');
 require(LIB_DIR . 'config.php');
 require(LIB_DIR . 'link.php');
-require(LIB_DIR . 'trackback.php');
 require(LIB_DIR . 'auth.php');
 require(LIB_DIR . 'proxy.php');
-require(LIB_DIR . 'mail.php');
 require(LIB_DIR . 'public_holiday.php');
 
 if (! extension_loaded('mbstring')) {
