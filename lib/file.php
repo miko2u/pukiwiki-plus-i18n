@@ -1,6 +1,6 @@
 <?php
-// PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: file.php,v 1.25.3 2005/04/30 05:21:00 miko Exp $
+// PukiWiki - Yet another WikiWikiWeb clone.
+// $Id: file.php,v 1.30.3 2005/07/03 14:16:23 miko Exp $
 // Copyright (C)
 //   2005      Customized/Patched by Miko.Hoshina
 //   2002-2005 PukiWiki Developers Team
@@ -59,42 +59,72 @@ function page_write($page, $postdata, $notimestamp = FALSE)
 	links_update($page);
 }
 
-// User-defined rules (replace the source)
-function make_str_rules($str)
+// Modify ogirinal text with user-defined / system-defined rules
+function make_str_rules($source)
 {
 	global $str_rules, $fixed_heading_anchor;
 
-	$arr = explode("\n", $str);
+	$lines = explode("\n", $source);
+	$count = count($lines);
 
-	$retvars = $matches = array();
-	foreach ($arr as $str) {
-		if ($str != '' && $str{0} != ' ' && $str{0} != "\t")
-			foreach ($str_rules as $rule => $replace)
-				$str = preg_replace('/' . $rule . '/', $replace, $str);
+	$modify    = TRUE;
+	$multiline = 0;
+	$matches   = array();
+	for ($i = 0; $i < $count; $i++) {
+		$line = & $lines[$i]; // Modify directly
+
+		// Ignore null string and preformatted texts
+		if ($line == '' || $line{0} == ' ' || $line{0} == "\t") continue;
+
+		// Modify this line?
+		if ($modify) {
+			if (! PKWKEXP_DISABLE_MULTILINE_PLUGIN_HACK &&
+			    $multiline == 0 &&
+			    preg_match('/#[^{]*(\{\{+)\s*$/', $line, $matches)) {
+			    	// Multiline convert plugin start
+				$modify    = FALSE;
+				$multiline = strlen($matches[1]); // Set specific number
+			}
+		} else {
+			if (! PKWKEXP_DISABLE_MULTILINE_PLUGIN_HACK &&
+			    $multiline != 0 &&
+			    preg_match('/^\}{' . $multiline . '}\s*$/', $line)) {
+			    	// Multiline convert plugin end
+				$modify    = TRUE;
+				$multiline = 0;
+			}
+		}
+		if ($modify === FALSE) continue;
+
+		// Replace with $str_rules
+		foreach ($str_rules as $pattern => $replacement)
+			$line = preg_replace('/' . $pattern . '/', $replacement, $line);
 		
 		// Adding fixed anchor into headings
 		if ($fixed_heading_anchor &&
-			preg_match('/^(\*{1,3}(.(?!\[#[A-Za-z][\w-]+\]))+)$/', $str, $matches))
+			preg_match('/^(\*{1,3}(.(?!\[#[A-Za-z][\w-]+\]))+)$/', $line, $matches))
 		{
 			// Generate ID:
 			// A random alphabetic letter + 7 letters of random strings from md()
 			$anchor = chr(mt_rand(ord('a'), ord('z'))) .
 				substr(md5(uniqid(substr($matches[1], 0, 100), 1)), mt_rand(0, 24), 7);
-			$str = rtrim($matches[1]) . ' [#' . $anchor . ']';
+			$line = rtrim($matches[1]) . ' [#' . $anchor . ']';
 		}
-		$retvars[] = $str;
 	}
 
-	return join("\n", $retvars);
+	// Multiline part has no stopper
+	if (! PKWKEXP_DISABLE_MULTILINE_PLUGIN_HACK &&
+	    $modify === FALSE && $multiline != 0)
+		$lines[] = str_repeat('}', $multiline);
+
+	return implode("\n", $lines);
 }
 
 // Output to a file
 function file_write($dir, $page, $str, $notimestamp = FALSE)
 {
-	global $update_exec, $_msg_invalidiwn;
-	global $notify, $notify_diff_only, $notify_to, $notify_subject, $notify_header;
+	global $update_exec, $_msg_invalidiwn, $notify, $notify_diff_only, $notify_subject;
 	global $notify_exclude;
-	global $smtp_server, $smtp_auth;
 	global $whatsdeleted, $maxshow_deleted;
 
 	if (PKWK_READONLY) return; // Do nothing
@@ -155,17 +185,15 @@ function file_write($dir, $page, $str, $notimestamp = FALSE)
 
 	if ($notify && $dir == DIFF_DIR) {
 		if ($notify_diff_only) $str = preg_replace('/^[^-+].*\n/m', '', $str);
-		$str .= "\n" .
-			str_repeat('-', 30) . "\n" .
-			'URI: ' . get_script_uri() . '?' . rawurlencode($page) . "\n" .
-			'REMOTE_ADDR: ' . $_SERVER['REMOTE_ADDR'] . "\n";
 
- 		$subject = str_replace('$page', $page, $notify_subject);
-		ini_set('SMTP', $smtp_server);
- 		mb_language(LANG);
+		$footer['ACTION'] = 'Page update';
+		$footer['PAGE']   = & $page;
+		$footer['URI']    = get_script_uri() . '?' . rawurlencode($page);
+		$footer['USER_AGENT']  = TRUE;
+		$footer['REMOTE_ADDR'] = TRUE;
 
-		if ($smtp_auth) pop_before_smtp();
- 		mb_send_mail($notify_to, $subject, $str, $notify_header);
+		pkwk_mail_notify($notify_subject, $str, $footer) or
+			die('pkwk_mail_notify(): Failed');
 	}
 }
 
@@ -210,7 +238,8 @@ function add_recent($page, $recentpage, $subject = '', $limit = 0)
 // Update RecentChanges
 function put_lastmodified()
 {
-	global $maxshow, $whatsnew, $non_list, $autolink, $autoalias, $autoglossary;
+	global $maxshow, $whatsnew, $non_list, $autolink;
+	global $autoalias, $autoglossary;
 
 	if (PKWK_READONLY) return; // Do nothing
 

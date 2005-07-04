@@ -1,6 +1,10 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: pukiwiki.php,v 1.8.4 2005/04/10 08:06:03 miko Exp $
+// $Id: pukiwiki.php,v 1.10.4 2005/06/28 14:06:06 miko Exp $
+//
+// PukiWiki 1.4.* Plus!
+//  Copyright (C) 2002-2005 by PukiWiki Plus Team
+//  http://pukiwiki.cafelounge.net/plus/
 //
 // PukiWiki 1.4.*
 //  Copyright (C) 2002-2005 by PukiWiki Developers Team
@@ -57,8 +61,21 @@ if (! extension_loaded('mbstring')) {
 	require(LIB_DIR . 'mbstring.php');
 }
 
+// Defaults
+$notify = $trackback = $referer = 0;
+
 // Load *.ini.php files and init PukiWiki
 require(LIB_DIR . 'init.php');
+
+// Load optional libraries
+if ($notify) {
+	require(LIB_DIR . 'mail.php'); // Mail notification
+}
+if ($trackback || $referer) {
+	// Referer functionality uses trackback functions
+	// without functional reason now
+	require(LIB_DIR . 'trackback.php'); // TrackBack
+}
 
 /////////////////////////////////////////////////
 // Main

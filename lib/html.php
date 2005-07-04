@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: html.php,v 1.37.14 2005/05/23 14:22:30 miko Exp $
+// $Id: html.php,v 1.40.14 2005/07/03 14:51:18 miko Exp $
 // Copyright (C)
 //   2005      Customized/Patched by Miko.Hoshina
 //   2002-2005 PukiWiki Developers Team
@@ -399,6 +399,12 @@ function strip_htmltag($str)
 	return preg_replace('/<[^>]+>/', '', $str);
 }
 
+// Remove AutoLink marker with AutLink itself
+function strip_autolink($str)
+{
+	return preg_replace('#<!--autolink--><a [^>]+>|</a><!--/autolink-->#', '', $str);
+}
+
 // Make a backlink. searching-link of the page name, by the page name, for the page name
 function make_search($page)
 {
@@ -411,17 +417,17 @@ function make_search($page)
 		'">' . $s_page . '</a> ';
 }
 
-// Make heading (remove footnotes and HTML tags)
+// Make heading string (remove heading-related decorations from Wiki text)
 function make_heading(& $str, $strip = TRUE)
 {
 	global $NotePattern;
 
-	// Cut fixed-anchors
+	// Cut fixed-heading anchors
 	$id = '';
 	$matches = array();
 	if (preg_match('/^(\*{0,3})(.*?)\[#([A-Za-z][\w-]+)\](.*?)$/m', $str, $matches)) {
 		$str = $matches[2] . $matches[4];
-		$id  = $matches[3];
+		$id  = & $matches[3];
 	} else {
 		$str = preg_replace('/^\*{0,3}/', '', $str);
 	}
@@ -502,33 +508,67 @@ define('PKWK_DTD_HTML_4_01_STRICT',        3);
 define('PKWK_DTD_HTML_4_01_TRANSITIONAL',  2);
 define('PKWK_DTD_HTML_4_01_FRAMESET',      1);
 
+define('PKWK_DTD_TYPE_XHTML',  1);
+define('PKWK_DTD_TYPE_HTML',   0);
+
 // Output HTML DTD, <html> start tag. Return content-type.
-function pkwk_output_dtd($pkwk_dtd = PKWK_DTD_XHTML_1_1)
+function pkwk_output_dtd($pkwk_dtd = PKWK_DTD_XHTML_1_1, $charset = CONTENT_CHARSET)
 {
 	static $called;
 	if (isset($called)) die('pkwk_output_dtd() already called. Why?');
 	$called = TRUE;
 
-	$type = 'XHTML';
+	$type = PKWK_DTD_TYPE_XHTML;
 	$option = '';
 	switch($pkwk_dtd){
-	case PKWK_DTD_XHTML_1_1             : $version = '1.1' ; $dtd = 'http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd'; break;
-	case PKWK_DTD_XHTML_1_0_STRICT      : $version = '1.0' ; $option = 'Strict';       $dtd = 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd';      break;
-	case PKWK_DTD_XHTML_1_0_TRANSITIONAL: $version = '1.0' ; $option = 'Transitional'; $dtd = 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'; break;
-	case PKWK_DTD_HTML_4_01_STRICT      : $type = 'HTML'; $version = '4.01'; $dtd = 'http://www.w3.org/TR/html4/strict.dtd';   break;
-	case PKWK_DTD_HTML_4_01_TRANSITIONAL: $type = 'HTML'; $version = '4.01'; $option = 'Transitional'; $dtd = 'http://www.w3.org/TR/html4/loose.dtd';    break;
-	default: die('DTD not specified or invalid DTD'); break;
+	case PKWK_DTD_XHTML_1_1             :
+		$version = '1.1' ;
+		$dtd     = 'http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd';
+		break;
+	case PKWK_DTD_XHTML_1_0_STRICT      :
+		$version = '1.0' ;
+		$option  = 'Strict';
+		$dtd     = 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd';
+		break;
+	case PKWK_DTD_XHTML_1_0_TRANSITIONAL:
+		$version = '1.0' ;
+		$option  = 'Transitional';
+		$dtd     = 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd';
+		break;
+
+	case PKWK_DTD_HTML_4_01_STRICT      :
+		$type    = PKWK_DTD_TYPE_HTML;
+		$version = '4.01';
+		$dtd     = 'http://www.w3.org/TR/html4/strict.dtd';
+		break;
+	case PKWK_DTD_HTML_4_01_TRANSITIONAL:
+		$type    = PKWK_DTD_TYPE_HTML;
+		$version = '4.01';
+		$option  = 'Transitional';
+		$dtd     = 'http://www.w3.org/TR/html4/loose.dtd';
+		break;
+
+	default: die('DTD not specified or invalid DTD');
+		break;
 	}
 
+	$charset = htmlspecialchars($charset);
+
 	// Output XML or not
-	if ($type == 'XHTML') echo '<?xml version="1.0" encoding="' . CONTENT_CHARSET . '" ?>' . "\n";
+	if ($type == PKWK_DTD_TYPE_XHTML) echo '<?xml version="1.0" encoding="' . $charset . '" ?>' . "\n";
 
 	// Output doctype
-	echo '<!DOCTYPE html PUBLIC "-//W3C//DTD ' . $type . ' ' . $version . ($option != '' ? ' ' . $option : '') . '//EN" "' . $dtd . '">' . "\n";
+	echo '<!DOCTYPE html PUBLIC "-//W3C//DTD ' .
+		($type == PKWK_DTD_TYPE_XHTML ? 'XHTML' : 'HTML') . ' ' .
+		$version .
+		($option != '' ? ' ' . $option : '') .
+		'//EN" "' .
+		$dtd .
+		'">' . "\n";
 
 	// Output <html> start tag
 	echo '<html';
-	if ($type == 'XHTML') {
+	if ($type == PKWK_DTD_TYPE_XHTML) {
 		echo ' xmlns="http://www.w3.org/1999/xhtml"'; // dir="ltr" /* LeftToRight */
 		echo ' xml:lang="' . LANG . '"';
 		if ($version == '1.0') echo ' lang="' . LANG . '"'; // Only XHTML 1.0
@@ -538,11 +578,11 @@ function pkwk_output_dtd($pkwk_dtd = PKWK_DTD_XHTML_1_1)
 	echo '>' . "\n"; // <html>
 
 	// Return content-type (with MIME type)
-	if ($type == 'XHTML') {
+	if ($type == PKWK_DTD_TYPE_XHTML) {
 		// NOTE: XHTML 1.1 browser will ignore http-equiv
-		return '<meta http-equiv="content-type" content="application/xhtml+xml; charset=' . CONTENT_CHARSET . '" />' . "\n";
+		return '<meta http-equiv="content-type" content="application/xhtml+xml; charset=' . $charset . '" />' . "\n";
 	} else {
-		return '<meta http-equiv="content-type" content="text/html; charset=' . CONTENT_CHARSET . '" />' . "\n";
+		return '<meta http-equiv="content-type" content="text/html; charset=' . $charset . '" />' . "\n";
 	}
 }
 ?>

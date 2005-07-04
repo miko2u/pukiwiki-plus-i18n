@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: plugin.php,v 1.13.4 2005/04/30 05:21:00 miko Exp $
+// $Id: plugin.php,v 1.15.4 2005/07/03 14:16:23 miko Exp $
 // Copyright (C)
 //   2005      Customized/Patched by Miko.Hoshina
 //   2002-2005 PukiWiki Developers Team
@@ -122,20 +122,22 @@ function do_plugin_convert($name, $args = '')
 	if(do_plugin_init($name) === FALSE)
 		return '[Plugin init failed: ' . $name . ']';
 
-	$multiline_arg = array();
-	if (($pos = strpos($args, "\r")) !== FALSE) {
-		$multiline_arg[] = substr($args, $pos + 1);
-		$args = substr($args, 0, $pos);
+	if (! PKWKEXP_DISABLE_MULTILINE_PLUGIN_HACK) {
+		// Multiline plugin?
+		$pos  = strpos($args, "\r"); // "\r" is just a delimiter
+		if ($pos !== FALSE) {
+			$body = substr($args, $pos + 1);
+			$args = substr($args, 0, $pos);
+		}
 	}
 
-	if ($args !== '') {
-		$aryargs = csv_explode(',', $args);
+	if ($args === '') {
+		$aryargs = array();                 // #plugin()
 	} else {
-		$aryargs = array();
+		$aryargs = csv_explode(',', $args); // #plugin(A,B,C,D)
 	}
-
-	if (count($multiline_arg)) {
-		$aryargs[] = $multiline_arg[0];
+	if (! PKWKEXP_DISABLE_MULTILINE_PLUGIN_HACK) {
+		if (isset($body)) $aryargs[] = & $body;     // #plugin(){{body}}
 	}
 
 	$_digest = $digest;
