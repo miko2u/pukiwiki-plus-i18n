@@ -5,13 +5,13 @@
 // $Id: mediaplayer.inc.php,v 0.3 2004/09/15 15:41:57 miko Exp $
 //
 
-// Windows Media がサポートできるプロトコルか？
+// URI is Supported Windows Media?
 function is_wmv($str)
 {
 	return preg_match('/^(https?|mms)(:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]*)$/', $str);
 }
 
-// 動画をブロック表示
+// Media Player BLOCK Plugin.
 function plugin_mediaplayer_convert()
 {
 	global $head_tags;
@@ -51,7 +51,7 @@ function plugin_mediaplayer_convert()
 			$is_file = is_file($file);
 
 		} else {
-			// デフォルトページ名に対して
+			// for default page
 			$file = UPLOAD_DIR . encode($page) . '_' . encode($name);
 			$is_file = is_file($file);
 		}
@@ -60,7 +60,7 @@ function plugin_mediaplayer_convert()
 		}
 	}
 
-	// 画像のアドレスチェック
+	// check thumbnail picture URL.
 	$url = isset($args[0]) ? $args[0] : '';
 	if (is_url($url)) {
 		if(! preg_match('/\.(jpe?g|gif|png)$/i', $url)) {
@@ -74,15 +74,15 @@ function plugin_mediaplayer_convert()
 			'&amp;src=' . rawurlencode($name);
 	}
 
-	// 動画のアドレスチェック
+	// check movie URL.
 	$wmv = isset($args[1]) ? $args[1] : '';
 	if (! is_wmv($wmv) || ! preg_match('/\.(wmv|asf)$/i', $wmv))
 		return $usage . $wmv;
 
-	// 追加 JavaScript
+	// Additional JavaScript
 	$head_tags[] = '<script type="text/javascript" src="'.SKIN_DIR.'mediaplayer.js"></script>';
 
-	// メディアプレイヤーの追加
+	// Output "Media Player"
 	return <<<EOD
 <div align="center">
 	<div class="playercontainer">
