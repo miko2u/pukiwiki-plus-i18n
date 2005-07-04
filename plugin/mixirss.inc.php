@@ -9,6 +9,8 @@
 define('MIXIRSS_DESCRIPTION_LENGTH', 256);
 define('MIXIRSS_LANG', 'ja_JP');
 
+define('MIXIRSS_IGNORE_REGEX', 'Navigation|RecentDeleted');
+
 // XSLT extra parameters
 //define('LOGO', 'http://pukiwiki.cafelounge.net/image/plus.gif');
 //define('FOAF', 'http://pukiwiki.cafelounge.net/elements/foaf.rdf');
@@ -46,7 +48,7 @@ function plugin_mixirss_action()
 		header('Content-type: application/xml');
 		print '<?xml version="1.0" encoding="UTF-8"?>' . "\n\n";
 		print implode('', file($rsscache));
-		die;
+		exit;
 	}
 
 	// Official Main routine ...
@@ -154,7 +156,7 @@ $trackback_ping
 
 EOD;
 				}
-			} else if (check_readable($page,false,false)) {
+			} else if (check_readable($page,false,false) && !ereg(MIXIRSS_IGNORE_REGEX, $page)) {
 //miko added
 				$description = strip_htmltag(convert_html(get_source($page)));
 				$description = mb_strimwidth(preg_replace("/[\r\n]/",' ',$description),0,MIXIRSS_DESCRIPTION_LENGTH,'...');
