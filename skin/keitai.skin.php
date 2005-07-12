@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: keitai.skin.php,v 1.9.11 2005/05/01 02:43:27 miko Exp $
+// $Id: keitai.skin.php,v 1.14.11 2005/07/05 14:41:33 miko Exp $
 // Copyright (C)
 //   2005      Customized/Patched by Miko.Hoshina
 //   2003-2005 PukiWiki Developers Team
@@ -12,24 +12,20 @@
 // Prohibit direct access
 if (! defined('UI_LANG')) die('UI_LANG is not set');
 
-global $vars, $page_title;
-global $max_size, $accesskey, $menubar;
+$pageno = (isset($vars['p']) && is_numeric($vars['p'])) ? $vars['p'] : 0;
+$edit = (isset($vars['cmd'])    && $vars['cmd']    == 'edit') ||
+	(isset($vars['plugin']) && $vars['plugin'] == 'edit');
+
+global $max_size, $accesskey, $menubar, $_symbol_anchor;
+$max_size = --$max_size * 1024; // Make 1KByte spare (for $navi, etc)
 $link = $_LINK;
 $rw = ! PKWK_READONLY;
 
-// Output HTTP headers
-pkwk_headers_sent();
-if(TRUE) {
-	// Force Shift JIS encode for Japanese embedded browsers and devices
-	header('Content-Type: text/html; charset=Shift_JIS');
-	$title = mb_convert_encoding($title, 'SJIS', SOURCE_ENCODING);
-	$body  = mb_convert_encoding($body,  'SJIS', SOURCE_ENCODING);
-} else {
-	header('Content-Type: text/html; charset=' . CONTENT_CHARSET);
-}
+// ----
+// Modify
 
-// Make 1KByte spare (for header, etc)
-$max_size = --$max_size * 1024;
+// Ignore &dagger;s
+$body = preg_replace('#<a[^>]+>' . preg_quote($_symbol_anchor, '#') . '</a>#', '', $body);
 
 // Replace IMG tags (= images) with character strings
 // STEP1: Delete comment lines
@@ -47,18 +43,26 @@ $body = preg_replace('#(<div[^>]+>)?(<a[^>]+>)?<img[^>]+>(?(2)</a>)(?(1)</div>)#
 // STEP5: change to <PWimg ...> to <img
 $body = preg_replace('#<PWimg#', '<img', $body);
 
-// Page numbers, divided by this skin
-$pageno = (isset($vars['p']) and is_numeric($vars['p'])) ? $vars['p'] : 0;
-$pagecount = ceil(strlen($body) / $max_size);
-$lastpage = $pagecount - 1;
+// ----
 
+// Check content volume, Page numbers, divided by this skin
+$pagecount = ceil(strlen($body) / $max_size);
+
+// Too large contents to edit
+if ($edit && $pagecount > 1)
+   	die('Unable to edit: Too large contents for your device');
+
+// Get one page
+$body = substr($body, $pageno * $max_size, $max_size);
+
+// ----
 // Top navigation (text) bar
 $headnavi = array();
 $footnavi = array();
 if ($rw) {
 	$footnavi[] = '<a href="' . $link['new']  . '" ' . $accesskey . '="1">1.New</a>';
 	$footnavi[] = '<a href="' . $link['edit'] . '" ' . $accesskey . '="2">2.Edit</a>';
-	if ($is_read and $function_freeze) {
+	if ($is_read && $function_freeze) {
 		if (! $is_freeze) {
 			$footnavi[] = '<a href="' . $link['freeze']   . '" ' . $accesskey . '="3">3.Freeze</a>';
 		} else {
@@ -75,18 +79,31 @@ if ($pagecount > 1) {
 	$prev = $pageno - 1;
 	$next = $pageno + 1;
 	if ($pageno > 0) {
-		$headnavi[] = '<a href="' . $script . '?cmd=read&amp;page=' . $r_page . '&amp;p=' . $prev . '" ' . $accesskey . '="7">7.Prev</a>';
+		$headnavi[] = '<a href="' . $script . '?cmd=read&amp;page=' . $r_page .
+			'&amp;p=' . $prev . '" ' . $accesskey . '="7">7.Prev</a>';
 	}
 	$navi[] = $next . '/' . $pagecount . ' ';
-	if ($pageno < $lastpage) {
-		$headnavi[] = '<a href="' . $script . '?cmd=read&amp;page=' . $r_page . '&amp;p=' . $next . '" ' . $accesskey . '="8">8.Next</a>';
+	if ($pageno < $pagecount - 1) {
+		$headnavi[] = '<a href="' . $script . '?cmd=read&amp;page=' . $r_page .
+			'&amp;p=' . $next . '" ' . $accesskey . '="8">8.Next</a>';
 	}
 }
 $headnavi[] = '<a href="' . $_LINK['reload'] . '"' . $accesskey . '="9">9.Reload</a>';
 
 $headnavi = join(' | ', $headnavi);
 $footnavi = join(' | ', $footnavi);
-$body = substr($body, $pageno * $max_size, $max_size);
+
+// ----
+// Output HTTP headers
+pkwk_headers_sent();
+if(TRUE) {
+	// Force Shift JIS encode for Japanese embedded browsers and devices
+	header('Content-Type: text/html; charset=Shift_JIS');
+	$title = mb_convert_encoding($title, 'SJIS', SOURCE_ENCODING);
+	$body  = mb_convert_encoding($body,  'SJIS', SOURCE_ENCODING);
+} else {
+	header('Content-Type: text/html; charset=' . CONTENT_CHARSET);
+}
 
 // Output
 ?><html><head><title><?php
