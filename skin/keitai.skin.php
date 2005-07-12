@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: keitai.skin.php,v 1.14.11 2005/07/05 14:41:33 miko Exp $
+// $Id: keitai.skin.php,v 1.14.13 2005/07/05 14:41:33 miko Exp $
 // Copyright (C)
 //   2005      Customized/Patched by Miko.Hoshina
 //   2003-2005 PukiWiki Developers Team
@@ -55,10 +55,29 @@ if ($edit && $pagecount > 1)
 // Get one page
 $body = substr($body, $pageno * $max_size, $max_size);
 
+// Navigation resource string
+$navistr = array(
+  'start'    => '[u]',
+  'final'    => '[b]',
+  'new'      => 'New',
+  'edit'     => 'Edit',
+  'freeze'   => 'Freeze',
+  'unfreeze' => 'Unfreeze',
+  'top'      => 'Top',
+  'menu'     => 'Menu',
+  'recent'   => 'Recent',
+  'prev'     => 'Prev',
+  'next'     => 'Next',
+  'reload'   => 'Reload',
+);
+
 // ----
 // Top navigation (text) bar
 $headnavi = array();
 $footnavi = array();
+$headnavi[] = '<a id="pstart" name="pstart" href="#pfinal">' . $navistr['final'] . '</a>';
+$footnavi[] = '<a id="pfinal" name="pfinal" href="#pstart">' . $navistr['start'] . '</a>';
+
 if ($rw) {
 	$footnavi[] = '<a href="' . $link['new']  . '" ' . $accesskey . '="1">1.New</a>';
 	$footnavi[] = '<a href="' . $link['edit'] . '" ' . $accesskey . '="2">2.Edit</a>';
@@ -90,8 +109,8 @@ if ($pagecount > 1) {
 }
 $headnavi[] = '<a href="' . $_LINK['reload'] . '"' . $accesskey . '="9">9.Reload</a>';
 
-$headnavi = join(' | ', $headnavi);
-$footnavi = join(' | ', $footnavi);
+$headnavi = join(' ', $headnavi);
+$footnavi = join(' ', $footnavi);
 
 // ----
 // Output HTTP headers
