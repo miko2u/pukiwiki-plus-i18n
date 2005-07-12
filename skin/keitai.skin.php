@@ -54,7 +54,7 @@ $pageno = (isset($vars['p']) and is_numeric($vars['p'])) ? $vars['p'] : 0;
 $pagecount = ceil(strlen($body) / $max_size);
 $lastpage = $pagecount - 1;
 
-// Navigatino resource string
+// Navigation resource string
 if (TRUE) {
 	$navistr = array(
 	  'start'    => '[u]',
