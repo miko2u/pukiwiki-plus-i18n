@@ -179,6 +179,6 @@ if (isset($pkwk_dtd)) {
 </table>
 </div>
 <?php } ?>
-
+<?php echo $foot_tag ?>
 </body>
 </html>

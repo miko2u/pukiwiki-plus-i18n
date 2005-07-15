@@ -280,6 +280,6 @@ function _toolbar($key, $x = 20, $y = 20){
  <?php echo S_COPYRIGHT ?>.
  Powered by PHP <?php echo PHP_VERSION ?>. HTML convert time: <?php echo $taketime ?> sec.
 </div>
-
+<?php echo $foot_tag ?>
 </body>
 </html>

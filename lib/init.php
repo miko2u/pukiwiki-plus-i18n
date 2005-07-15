@@ -35,6 +35,7 @@ foreach (array('SCRIPT_NAME', 'SERVER_ADMIN', 'SERVER_NAME',
 $foot_explain = array();	// Footnotes
 $related      = array();	// Related pages
 $head_tags    = array();	// XHTML tags in <head></head>
+$foot_tags    = array();
 
 /////////////////////////////////////////////////
 // Require INI_FILE

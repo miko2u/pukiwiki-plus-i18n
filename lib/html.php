@@ -14,7 +14,7 @@ function catbody($title, $page, $body)
 {
 	global $script, $vars, $arg, $defaultpage, $whatsnew, $help_page, $hr;
 	global $attach_link, $related_link, $cantedit, $function_freeze;
-	global $search_word_color, $foot_explain, $note_hr, $head_tags;
+	global $search_word_color, $foot_explain, $note_hr, $head_tags, $foot_tags;;
 	global $trackback, $trackback_javascript, $referer, $javascript;
 	global $nofollow;
 	global $_LANG, $_LINK, $_IMAGE;
@@ -143,6 +143,7 @@ function catbody($title, $page, $body)
 
 	// Tags will be inserted into <head></head>
 	$head_tag = ! empty($head_tags) ? join("\n", $head_tags) ."\n" : '';
+	$foot_tag = ! empty($foot_tags) ? join("\n", $foot_tags) ."\n" : '';
 
 	// 1.3.x compat
 	// Last modification date (UNIX timestamp) of the page

@@ -755,6 +755,7 @@ function _toolbar($key, $x = 20, $y = 20){
 </div><!-- class="pkwk_body" -->
 <?php } ?>
 
+<?php echo $foot_tag ?>
 
 </body>
 </html>
