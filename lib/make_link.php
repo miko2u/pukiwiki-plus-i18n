@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: make_link.php,v 1.28.4 2005/06/27 14:18:07 miko Exp $
+// $Id: make_link.php,v 1.29.4 2005/07/14 14:45:07 miko Exp $
 // Copyright (C)
 //   2005      Customized/Patched by Miko.Hoshina
 //   2003-2005 PukiWiki Developers Team
@@ -309,9 +309,11 @@ EOD;
 
 		list(, $body) = $this->splice($arr);
 
-		$script = '';
-		if (! PKWK_ALLOW_RELATIVE_FOOTNOTE_ANCHOR)
-			$script = get_script_uri() . '?' . $page;
+		if (PKWK_ALLOW_RELATIVE_FOOTNOTE_ANCHOR) {
+			$script = '';
+		} else {
+			$script = get_script_uri() . '?' . rawurlencode($page);
+		}
 
 		$id   = ++$note_id;
 		$note = make_link($body);
