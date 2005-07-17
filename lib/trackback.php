@@ -188,9 +188,12 @@ EOD;
 // HTTP-GET from $uri, and reveal the TrackBack Ping URL
 function tb_get_url($url)
 {
+	global $use_proxy, $no_proxy;
+
 	// Don't go across HTTP-proxy server
 	$parse_url = parse_url($url);
-	if (empty($parse_url['host']) || via_proxy($parse_url['host']))
+	if (empty($parse_url['host']) ||
+	   ($use_proxy && ! in_the_net($no_proxy, $parse_url['host'])))
 		return '';
 
 	$data = http_request($url);
