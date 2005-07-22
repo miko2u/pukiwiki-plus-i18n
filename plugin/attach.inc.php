@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: attach.inc.php,v 1.74.8 2005/05/24 07:44:53 miko Exp $
+// $Id: attach.inc.php,v 1.78.9 2005/06/26 09:51:38 miko Exp $
 // Copyright (C)
 //   2005      PukiWiki Plus! Team
 //   2003-2005 PukiWiki Developers Team
@@ -149,14 +149,14 @@ function plugin_attach_action()
 	if (isset($_FILES['attach_file'])) {
 		// Upload
 		return attach_upload($_FILES['attach_file'], $refer, $pass);
-	}
-	switch ($pcmd) {
-	case 'delete':  /*FALLTHROUGH*/ 
-	case 'freeze': 
-	case 'unfreeze': 
-		if (PKWK_READONLY) die_message(_("PKWK_READONLY prohibits editing")); 
-	} 
-	switch ($pcmd) { 
+	} else {
+		switch ($pcmd) {
+		case 'delete':	/*FALLTHROUGH*/
+		case 'freeze':
+		case 'unfreeze':
+			if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
+		}
+		switch ($pcmd) {
 		case 'info'     : return attach_info();
 		case 'delete'   : return attach_delete();
 		case 'open'     : return attach_open();
@@ -164,11 +164,12 @@ function plugin_attach_action()
 		case 'freeze'   : return attach_freeze(TRUE);
 		case 'unfreeze' : return attach_freeze(FALSE);
 		case 'upload'   : return attach_showform();
-	}
-	if ($page == '' || ! is_page($page)) {
-		return attach_list();
-	} else {
-		return attach_showform();
+		}
+		if ($page == '' || ! is_page($page)) {
+			return attach_list();
+		} else {
+			return attach_showform();
+		}
 	}
 }
 
@@ -195,19 +196,19 @@ function attach_filelist()
 // $pass = TRUE : アップロード許可
 function attach_upload($file, $page, $pass = NULL)
 {
-	global $_attach_messages;
+	global $_attach_messages, $notify, $notify_subject;
 
-	if (PKWK_READONLY) die_message(_("PKWK_READONLY prohibits editing"));
+	if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
 
-	// Check query-string 
-	$query = 'plugin=attach&amp;pcmd=info&amp;refer=' . rawurlencode($page) . 
-		'&amp;file=' . rawurlencode($file['name']); 
+	// Check query-string
+	$query = 'plugin=attach&amp;pcmd=info&amp;refer=' . rawurlencode($page) .
+		'&amp;file=' . rawurlencode($file['name']);
 
-	if (PKWK_QUERY_STRING_MAX && strlen($query) > PKWK_QUERY_STRING_MAX) { 
-		pkwk_common_headers(); 
+	if (PKWK_QUERY_STRING_MAX && strlen($query) > PKWK_QUERY_STRING_MAX) {
+		pkwk_common_headers();
 		echo(_("Query string (page name and/or file name) too long")); 
-		exit; 
-	} else if (! is_page($page)) { 
+		exit;
+	} else if (! is_page($page)) {
 		die_message(_("No such page"));
 	} else if ($file['tmp_name'] == '' || ! is_uploaded_file($file['tmp_name'])) {
 		return array('result'=>FALSE);
@@ -278,6 +279,28 @@ function attach_upload($file, $page, $pass = NULL)
 	$obj->status['pass'] = ($pass !== TRUE && $pass !== NULL) ? md5($pass) : '';
 	$obj->putstatus();
 
+	if ($notify) {
+		$footer['ACTION']   = 'File attached';
+		$footer['FILENAME'] = & $file['name'];
+		$footer['FILESIZE'] = & $file['size'];
+		$footer['PAGE']     = & $page;
+
+		$footer['URI']      = get_script_uri() .
+			//'?' . rawurlencode($page);
+
+			// MD5 may heavy
+			'?plugin=attach' .
+				'&refer=' . rawurlencode($page) .
+				'&file='  . rawurlencode($file['name']) .
+				'&pcmd=info';
+
+		$footer['USER_AGENT']  = TRUE;
+		$footer['REMOTE_ADDR'] = TRUE;
+
+		pkwk_mail_notify($notify_subject, "\n", $footer) or
+			die('pkwk_mail_notify(): Failed');
+	}
+
 	return array(
 		'result'=>TRUE,
 		'msg'=>$_attach_messages['msg_uploaded']);
@@ -305,14 +328,14 @@ function attach_delete()
 	foreach (array('refer', 'file', 'age', 'pass') as $var)
 		${$var} = isset($vars[$var]) ? $vars[$var] : '';
 
-	if (is_freeze($refer) || ! is_editable($refer)) {
+	if (is_freeze($refer) || ! is_editable($refer))
 		return array('msg'=>$_attach_messages['err_noparm']);
-	} else {
-		$obj = & new AttachFile($refer, $file, $age);
-		return $obj->getstatus() ?
-			$obj->delete($pass) :
-			array('msg'=>$_attach_messages['err_notfound']);
-	}
+
+	$obj = & new AttachFile($refer, $file, $age);
+	if (! $obj->getstatus())
+		return array('msg'=>$_attach_messages['err_notfound']);
+		
+	return $obj->delete($pass);
 }
 
 // 凍結
@@ -582,8 +605,7 @@ class AttachFile
 		if ($this->age) {
 			$msg_freezed = '';
 			$msg_delete  = '<input type="radio" name="pcmd" id="_p_attach_delete" value="delete" />' .
-				'<label for="_p_attach_delete">' .
-				$_attach_messages['msg_delete'] .
+				'<label for="_p_attach_delete">' .  $_attach_messages['msg_delete'] .
 				$_attach_messages['msg_require'] . '</label><br />';
 			$msg_freeze  = '';
 		} else {
@@ -591,20 +613,17 @@ class AttachFile
 				$msg_freezed = "<dd>{$_attach_messages['msg_isfreeze']}</dd>";
 				$msg_delete  = '';
 				$msg_freeze  = '<input type="radio" name="pcmd" id="_p_attach_unfreeze" value="unfreeze" />' .
-					'<label for="_p_attach_unfreeze">' .
-					$_attach_messages['msg_unfreeze'] .
+					'<label for="_p_attach_unfreeze">' .  $_attach_messages['msg_unfreeze'] .
 					$_attach_messages['msg_require'] . '</label><br />';
 			} else {
 				$msg_freezed = '';
 				$msg_delete = '<input type="radio" name="pcmd" id="_p_attach_delete" value="delete" />' .
-					'<label for="_p_attach_delete">' .
-					$_attach_messages['msg_delete'];
+					'<label for="_p_attach_delete">' . $_attach_messages['msg_delete'];
 				if (PLUGIN_ATTACH_DELETE_ADMIN_ONLY || $this->age)
 					$msg_delete .= $_attach_messages['msg_require'];
 				$msg_delete .= '</label><br />';
 				$msg_freeze  = '<input type="radio" name="pcmd" id="_p_attach_freeze" value="freeze" />' .
-					'<label for="_p_attach_freeze">' .
-					$_attach_messages['msg_freeze'] .
+					'<label for="_p_attach_freeze">' .  $_attach_messages['msg_freeze'] .
 					$_attach_messages['msg_require'] . '</label><br />';
 			}
 		}
@@ -652,7 +671,7 @@ $s_err
   $msg_delete
   $msg_freeze
   <label for="_p_attach_password">{$_attach_messages['msg_password']}:</label>
-  <input type="password" name="pass" size="8" id="_p_attach_password" />
+  <input type="password" name="pass" id="_p_attach_password" size="8" />
   <input type="submit" value="{$_attach_messages['btn_submit']}" />
  </div>
 </form>
@@ -662,7 +681,7 @@ EOD;
 
 	function delete($pass)
 	{
-		global $_attach_messages;
+		global $_attach_messages, $notify, $notify_subject;
 
 		if ($this->status['freeze']) return attach_info('msg_isfreeze');
 
@@ -696,6 +715,18 @@ EOD;
 
 		if (is_page($this->page))
 			touch(get_filename($this->page));
+
+		if ($notify) {
+			$footer['ACTION']   = 'File deleted';
+			$footer['FILENAME'] = & $this->file;
+			$footer['PAGE']     = & $this->page;
+			$footer['URI']      = get_script_uri() .
+				'?' . rawurlencode($this->page);
+			$footer['USER_AGENT']  = TRUE;
+			$footer['REMOTE_ADDR'] = TRUE;
+			pkwk_mail_notify($notify_subject, "\n", $footer) or
+				die('pkwk_mail_notify(): Failed');
+		}
 
 		return array('msg'=>$_attach_messages['msg_deleted']);
 	}
@@ -738,9 +769,6 @@ EOD;
 		mb_http_output('pass');
 
 		pkwk_common_headers();
-//		header('Content-Disposition: inline; filename="' . $filename . '"');
-//		header('Content-Length: ' . $this->size);
-//		header('Content-Type: '   . $this->type);
 		if ($this->type == 'text/html' || $this->type == 'application/octet-stream') {
 			header('Content-Disposition: attachment; filename="' . $filename . '"');
 			header('Content-Type: application/octet-stream; name="' . $filename . '"');
