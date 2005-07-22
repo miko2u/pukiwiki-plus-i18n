@@ -969,7 +969,7 @@ class Body extends Element
 	function getAnchor($text, $level)
 	{
 		global $top, $_symbol_anchor;
-		glabal $fixed_heading_edited;
+		global $fixed_heading_edited;
 
 		// Heading id (auto-generated)
 		$autoid = 'content_' . $this->id . '_' . $this->count;
