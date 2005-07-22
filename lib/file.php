@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: file.php,v 1.26.7 2005/06/07 14:37:46 miko Exp $
+// $Id: file.php,v 1.31.8 2005/07/05 12:39:19 miko Exp $
 // Copyright (C)
 //   2005      PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
@@ -48,7 +48,7 @@ function page_write($page, $postdata, $notimestamp = FALSE)
 	// Create wiki text
 	file_write(DATA_DIR, $page, $postdata, $notimestamp);
 
-	if ($trackback > 1) {
+	if ($trackback) {
 		// TrackBack Ping
 		$_diff = explode("\n", $diffdata);
 		$plus  = join("\n", preg_replace('/^\+/', '', preg_grep('/^\+/', $_diff)));
@@ -60,33 +60,72 @@ function page_write($page, $postdata, $notimestamp = FALSE)
 	log_write('update',$page);
 }
 
-// User-defined rules (replace the source)
-function make_str_rules($str)
+// Modify ogirinal text with user-defined / system-defined rules
+function make_str_rules($source)
 {
 	global $str_rules, $fixed_heading_anchor;
 
-	$arr = explode("\n", $str);
+	$lines = explode("\n", $source);
+	$count = count($lines);
 
-	$retvars = $matches = array();
-	foreach ($arr as $str) {
-		if ($str != '' && $str{0} != ' ' && $str{0} != "\t")
-			foreach ($str_rules as $rule => $replace)
-				$str = preg_replace('/' . $rule . '/', $replace, $str);
+	$modify    = TRUE;
+	$multiline = 0;
+	$matches   = array();
+	for ($i = 0; $i < $count; $i++) {
+		$line = & $lines[$i]; // Modify directly
+
+		// Ignore null string and preformatted texts
+		if ($line == '' || $line{0} == ' ' || $line{0} == "\t") continue;
+
+		// Modify this line?
+		if ($modify) {
+			if (! PKWKEXP_DISABLE_MULTILINE_PLUGIN_HACK &&
+			    $multiline == 0 &&
+			    preg_match('/#[^{]*(\{\{+)\s*$/', $line, $matches)) {
+			    	// Multiline convert plugin start
+				$modify    = FALSE;
+				$multiline = strlen($matches[1]); // Set specific number
+			}
+		} else {
+			if (! PKWKEXP_DISABLE_MULTILINE_PLUGIN_HACK &&
+			    $multiline != 0 &&
+			    preg_match('/^\}{' . $multiline . '}\s*$/', $line)) {
+			    	// Multiline convert plugin end
+				$modify    = TRUE;
+				$multiline = 0;
+			}
+		}
+		if ($modify === FALSE) continue;
+
+		// Replace with $str_rules
+		foreach ($str_rules as $pattern => $replacement)
+			$line = preg_replace('/' . $pattern . '/', $replacement, $line);
 		
 		// Adding fixed anchor into headings
 		if ($fixed_heading_anchor &&
-			preg_match('/^(\*{1,3}(.(?!\[#[A-Za-z][\w-]+\]))+)$/', $str, $matches))
-		{
-			// Generate ID:
-			// A random alphabetic letter + 7 letters of random strings from md()
-			$anchor = chr(mt_rand(ord('a'), ord('z'))) .
-				substr(md5(uniqid(substr($matches[1], 0, 100), 1)), mt_rand(0, 24), 7);
-			$str = rtrim($matches[1]) . ' [#' . $anchor . ']';
+		    preg_match('/^(\*{1,3}.*?)(?:\[#([A-Za-z][\w-]*)\]\s*)?$/', $line, $matches) &&
+		    (! isset($matches[2]) || $matches[2] == '')) {
+			// Generate unique id
+			$anchor = generate_fixed_heading_anchor_id($matches[1]);
+			$line = rtrim($matches[1]) . ' [#' . $anchor . ']';
 		}
-		$retvars[] = $str;
 	}
 
-	return join("\n", $retvars);
+	// Multiline part has no stopper
+	if (! PKWKEXP_DISABLE_MULTILINE_PLUGIN_HACK &&
+	    $modify === FALSE && $multiline != 0)
+		$lines[] = str_repeat('}', $multiline);
+
+	return implode("\n", $lines);
+}
+
+// Generate ID
+function generate_fixed_heading_anchor_id($seed)
+{
+	// A random alphabetic letter + 7 letters of random strings from md()
+	return chr(mt_rand(ord('a'), ord('z'))) .
+		substr(md5(uniqid(substr($seed, 0, 100), TRUE)),
+		mt_rand(0, 24), 7);
 }
 
 // Output to a file
@@ -145,23 +184,24 @@ function file_write($dir, $page, $str, $notimestamp = FALSE)
 	if ($update_exec && $dir == DATA_DIR)
 		system($update_exec . ' > /dev/null &');
 
+	// notify_exclude にアドレスが一致する場合はメールを送信しない
+	foreach ($notify_exclude as $exclude) {
+		$exclude = preg_quote($exclude);
+		if (substr($exclude, -1) == ".")
+			$exclude = $exclude . "*";
+		if (preg_match("/^" . $exclude . "/", $_SERVER["REMOTE_ADDR"]))
+			return;
+	}
+
 	if ($notify && $dir == DIFF_DIR) {
-//@plus-extension
-		// If write from notify_exclude, do not send notify mail.
-		foreach ($notify_exclude as $exclude) {
-			$exclude = preg_quote($exclude);
-			if (substr($exclude, -1) == ".")
-				$exclude = $exclude . "*";
-			if (preg_match("/^" . $exclude . "/", $_SERVER["REMOTE_ADDR"]))
-				return;
-		}
-//@plus-extension
+		if ($notify_diff_only) $str = preg_replace('/^[^-+].*\n/m', '', $str);
 
 		$footer['ACTION'] = 'Page update';
-		$footer['PAGE'] = $page;
-		$footer['URI']  = get_script_uri() . '?' . rawurlencode($page);
-		$footer['REMOTE_ADDR'] = TRUE;
+		$footer['PAGE']   = & $page;
+		$footer['URI']    = get_script_uri() . '?' . rawurlencode($page);
 		$footer['USER_AGENT']  = TRUE;
+		$footer['REMOTE_ADDR'] = TRUE;
+
 		pkwk_mail_notify($notify_subject, $str, $footer);
 //@plus-comment why die on notify-failed?
 //		or die('pkwk_mail_notify(): Failed');
@@ -209,7 +249,8 @@ function add_recent($page, $recentpage, $subject = '', $limit = 0)
 // Update RecentChanges
 function put_lastmodified()
 {
-	global $maxshow, $whatsnew, $non_list, $autolink, $autoalias, $autoglossary;
+	global $maxshow, $whatsnew, $non_list, $autolink;
+	global $autoalias, $autoglossary;
 
 	if (PKWK_READONLY) return; // Do nothing
 

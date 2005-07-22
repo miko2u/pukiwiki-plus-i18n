@@ -1,42 +1,120 @@
 <?php
-// PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: aname.inc.php,v 1.17.3 2005/04/29 07:00:16 miko Exp $
+// PukiWiki - Yet another WikiWikiWeb clone
+// $Id: aname.inc.php,v 1.24.4 2005/06/16 15:04:08 miko Exp $
+// Copyright (C)
+//   2005      PukiWiki Plus! Team
+//   2002-2005 PukiWiki Developers Team
+//   2001-2002 Originally written by yu-ji
+// License: GPL v2 or (at your option) any later version
 //
-// aname plugin - Set an anchor <a name="key"> to link
+// aname plugin - Set various anchor tag
+//   * A simple anchor <a id="key"></a>
+//   * A clickable link to the anchor <a href="#key">string</a>
+//   * Clickable anchor with the key itself <a id="key" href="#key">string</a>
+//
+// NOTE:
+//   Use 'id="key"' instead of 'name="key"' at XHTML 1.1
 
-function plugin_aname_inline()
-{
-	$args = func_get_args();
-	return call_user_func_array('plugin_aname_convert', $args);
-}
+// Check ID is unique or not (compatible: no-check)
+define('PLUGIN_ANAME_ID_MUST_UNIQUE', 0);
 
+// Max length of ID
+define('PLUGIN_ANAME_ID_MAX',   40);
+
+// Pattern of ID
+define('PLUGIN_ANAME_ID_REGEX', '/^[A-Za-z][\w\-]*$/');
+
+
+// #aname
 function plugin_aname_convert()
 {
-	global $script, $vars;
-	global $pkwk_dtd;
+	$args = func_get_args(); // Zero or more
+	return plugin_aname_tag($args);
+}
 
-	if (func_num_args() < 1) return FALSE;
+// &aname;
+function plugin_aname_inline()
+{
+	$args = func_get_args(); // ONE or more
 
-	$args = func_get_args();
-	$id = array_shift($args);
-	if (! preg_match('/^[A-Za-z][\w\-]*$/', $id)) return FALSE;
+	$body = strip_autolink(array_pop($args));
+	array_push($args, $body);
 
-	$body = ! empty($args) ? preg_replace('/<\/?a[^>]*>/', '', array_pop($args)) : '';
+	return plugin_aname_tag($args, FALSE);
+}
 
-	$class   = in_array('super', $args) ? 'anchor_super' : 'anchor';
-	$url     = in_array('full',  $args) ? $script . '?' . rawurlencode($vars['page']) : '';
-	$attr_id = in_array('noid',  $args) ? '' : ' id="' . $id . '"';
-
-	// 携帯はxhtml対応してないものが多いため現実解
-	if (isset($pkwk_dtd) && $pkwk_dtd < PKWK_DTD_XHTML_1_1) {
-		$attr_id = in_array('noid', $args) ? '' : ' id="' . $id . '" name="' . $id . '"';
-	} elseif (defined('UA_MOBILE') && UA_MOBILE != 0) {
-		$attr_id = in_array('noid', $args) ? '' : ' id="' . $id . '" name="' . $id . '"';
+// Show usage
+function plugin_aname_usage($convert = TRUE, $message = '')
+{
+	if ($message == '') {
+		if ($convert) {
+			return '#aname(anchorID[[,super][,full][,noid],Link title])';
+		} else {
+			return '&amp;aname(anchorID[,super][,full][,noid]){[Link title]}';
+		}
 	} else {
-		$attr_id = in_array('noid', $args) ? '' : ' id="' . $id . '"';
+		if ($convert) {
+			return '#aname: ' . $message;
+		} else {
+			return '&amp;aname: ' . $message . ';';
+		}
+	}
+}
+
+// Aname plugin itself
+function plugin_aname_tag($args = array(), $convert = TRUE)
+{
+	global $pkwk_dtd;
+	global $vars;
+	static $_id = array();
+
+	if (empty($args) || $args[0] == '') return plugin_aname_usage($convert);
+	$id = array_shift($args);
+	$body = '';
+	if (! empty($args)) $body = array_pop($args);
+	$f_noid  = in_array('noid',  $args); // Option: Without id attribute
+	$f_super = in_array('super', $args); // Option: CSS class
+	$f_full  = in_array('full',  $args); // Option: With full(absolute) URI
+
+	if ($body == '') {
+		if ($f_noid)  return plugin_aname_usage($convert, 'Meaningless(No link-title with \'noid\')');
+//miko	if ($f_super) return plugin_aname_usage($convert, 'Meaningless(No link-title with \'super\')');
+//miko	if ($f_full)  return plugin_aname_usage($convert, 'Meaningless(No link-title with \'full\')');
 	}
 
-	// 暫定対応： $attr_id は id が重複すると xhtml対応できなくなる可能性あり
-	return "<a class=\"$class\"$attr_id href=\"$url#$id\" title=\"$id\">$body</a>";
+	if (PLUGIN_ANAME_ID_MUST_UNIQUE && isset($_id[$id]) && ! $f_noid) {
+		return plugin_aname_usage($convert, 'ID already used: '. $id);
+	} else {
+		if (strlen($id) > PLUGIN_ANAME_ID_MAX)
+			return plugin_aname_usage($convert, 'ID too long');
+		if (! preg_match(PLUGIN_ANAME_ID_REGEX, $id))
+			return plugin_aname_usage($convert, 'Invalid ID string: ' .
+				htmlspecialchars($id));
+		$_id[$id] = TRUE; // Set
+	}
+
+	if ($convert) $body = htmlspecialchars($body);
+	$id = htmlspecialchars($id); // Insurance
+	$class   = $f_super ? 'anchor_super' : 'anchor';
+//miko
+	// Moblie Phone is not xhtml. umm...
+	if (isset($pkwk_dtd) && $pkwk_dtd < PKWK_DTD_XHTML_1_1) {
+		$attr_id = $f_noid  ? '' : ' id="' . $id . '" name ="' . $id . '"';
+	} elseif (defined('UA_MOBILE') && UA_MOBILE != 0) {
+		$attr_id = $f_noid  ? '' : ' id="' . $id . '"';
+	} else {
+		$attr_id = $f_noid  ? '' : ' id="' . $id . '" name ="' . $id . '"';
+	}
+//miko
+	$url     = $f_full  ? get_script_uri() . '?' . rawurlencode($vars['page']) : '';
+	if ($body != '') {
+		$href  = ' href="' . $url . '#' . $id . '"';
+		$title = ' title="' . $id . '"';
+	} else {
+		$href = $title = '';
+	}
+
+	return '<a class="' . $class . '"' . $attr_id . $href . $title . '>' .
+		$body . '</a>';
 }
 ?>
