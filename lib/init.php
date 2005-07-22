@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: init.php,v 1.33.5 2005/07/03 05:21:00 miko Exp $
+// $Id: init.php,v 1.36.5 2005/07/19 19:32:09 miko Exp $
 // Copyright (C)
 //   2005      PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
@@ -11,7 +11,7 @@
 
 // PukiWiki version / Copyright / Licence
 
-define('S_VERSION', '1.4.6-rc1-i18n');
+define('S_VERSION', '1.4.6-u1-i18n');
 define('S_COPYRIGHT',
 	'<strong>PukiWiki Plus!' . S_VERSION . '</strong>' .
 	' Copyright &copy; 2001-2005' .
@@ -296,7 +296,7 @@ if (isset($vars['msg'])) {
 }
 
 // 後方互換性 (?md5=...)
-if (isset($vars['md5']) && $vars['md5'] != '') {
+if (!isset($vars['cmd']) && !isset($vars['plugin']) && isset($vars['md5']) && $vars['md5'] != '') {
 	$get['cmd'] = $post['cmd'] = $vars['cmd'] = 'md5';
 }
 
