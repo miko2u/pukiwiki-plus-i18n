@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: convert_html.php,v 1.12.10 2005/06/02 05:21:00 miko Exp $
+// $Id: convert_html.php,v 1.16.11 2005/07/19 15:38:35 miko Exp $
 // Copyright (C)
 //   2005      PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
@@ -135,23 +135,31 @@ function & Factory_YTable(& $root, $text)
 
 function & Factory_Div(& $root, $text)
 {
-	// multiline block plugin
-	if (preg_match('/^\#([^\(\{]+)(?:\(([^\r]*)\))?(\{{2,})/', $text, $out)) {
-		$stop_len = strlen($out[3]);
-		if (exist_plugin_convert($out[1]) &&
-		    preg_match('/\{{'.$stop_len.'}(\r.*\r)\}{'.$stop_len.'}/', $text, $matched)) {
-			$out[2] .= $matched[1];
-			return new Div($out);
-		} else {
-			return new Paragraph($text);
+	$matches = array();
+
+	// Seems block plugin?
+	if (PKWKEXP_DISABLE_MULTILINE_PLUGIN_HACK) {
+		// Usual code
+		if (preg_match('/^\#([^\(]+)(?:\((.*)\))?/', $text, $matches) &&
+		    exist_plugin_convert($matches[1])) {
+			return new Div($matches);
+		}
+	} else {
+		// Hack code
+		if(preg_match('/^#([^\(\{]+)(?:\(([^\r]*)\))?(\{*)/', $text, $matches) &&
+		   exist_plugin_convert($matches[1])) {
+			$len  = strlen($matches[3]);
+			$body = array();
+			if ($len == 0) {
+				return new Div($matches); // Seems legacy block plugin
+			} else if (preg_match('/\{{' . $len . '}\s*\r(.*)\r\}{' . $len . '}/', $text, $body)) { 
+				$matches[2] .= "\r" . $body[1] . "\r";
+				return new Div($matches); // Seems multiline-enabled block plugin
+			}
 		}
 	}
-	if (! preg_match('/^\#([^\(]+)(?:\((.*)\))?/', $text, $out) ||
-	    ! exist_plugin_convert($out[1])) {
-		return new Paragraph($text);
-	} else {
-		return new Div($out);
-	}
+
+	return new Paragraph($text);
 }
 
 // インライン要素
@@ -250,8 +258,7 @@ class Heading extends Element
 	function toString()
 	{
 		return $this->msg_top .  $this->wrap(parent::toString(),
-//			'h' . $this->level, ' id="' . $this->id . '"');
-			'h' . $this->level, ' id="h' . $this->level . '_' . $this->id . '"');
+			'h' . $this->level, ' id="' . 'h' . $this->level . '_' . $this->id . '"');
 	}
 }
 
@@ -547,8 +554,7 @@ class TableCell extends Element
 		if (! empty($this->style))
 			$param .= ' style="' . join(' ', $this->style) . '"';
 
-//		return $this->wrap(parent::toString(), $this->tag, $param, FALSE);
-		return $this->wrap(parent::toString(), $this->tag, $param, FALSE) . "\n";
+		return $this->wrap(parent::toString(), $this->tag, $param, FALSE);
 	}
 }
 
@@ -801,6 +807,7 @@ class Div extends Element
 
 	function toString()
 	{
+		// Call #plugin
 		return do_plugin_convert($this->name, $this->param);
 	}
 }
@@ -899,17 +906,18 @@ class Body extends Element
 				continue;
 			}
 
-			// multiline block plugin
-			if (preg_match('/#[^{]*(\{{2,})\s*$/', $line, $matches)) {
-				$stop_len = strlen($matches[1]);
-				$line .= "\r";
-				while (count($lines)) {
+			// Multiline-enabled block plugin
+			if (! PKWKEXP_DISABLE_MULTILINE_PLUGIN_HACK &&
+			    preg_match('/^#[^{]+(\{\{+)\s*$/', $line, $matches)) {
+				$len = strlen($matches[1]);
+				$line .= "\r"; // Delimiter
+				while (! empty($lines)) {
 					$next_line = preg_replace("/[\r\n]*$/", '', array_shift($lines));
-					if (preg_match('/\}{'.$stop_len.'}/', $next_line)) {
+					if (preg_match('/\}{' . $len . '}/', $next_line)) {
 						$line .= $next_line;
 						break;
 					} else {
-						$line .= $next_line .= "\r";
+						$line .= $next_line .= "\r"; // Delimiter
 					}
 				}
 			}
@@ -960,22 +968,31 @@ class Body extends Element
 
 	function getAnchor($text, $level)
 	{
-		global $top, $_symbol_anchor, $fixed_heading_edited;
+		global $top, $_symbol_anchor;
+		global $fixed_heading_edited;
 
-		$id = make_heading($text, FALSE); // Cut fixed-anchor from $text
-		$anchor = '';
-
-		if ($id != '') {
-			$anchor = " &aname($id,super,full)\{$_symbol_anchor};";
-			if ($fixed_heading_edited) $anchor .= " &edit(,$id);";
-		} else {
-			$id = 'content_' . $this->id . '_' . $this->count;
-		}
-		$text = ' ' . $text;
+		// Heading id (auto-generated)
+		$autoid = 'content_' . $this->id . '_' . $this->count;
 		$this->count++;
+
+		// Heading id (specified by users)
+		$id = make_heading($text, FALSE); // Cut fixed-anchor from $text
+		if ($id == '') {
+			// Not specified
+			$id     = & $autoid;
+			$anchor = '';
+		} else {
+			$anchor = ' &aname(' . $id . ',super,full){' . $_symbol_anchor . '};';
+			if ($fixed_heading_edited) $anchor .= " &edit(,$id);";
+		}
+
+		$text = ' ' . $text;
+
+		// Add 'page contents' link to its heading
 		$this->contents_last = & $this->contents_last->add(new Contents_UList($text, $level, $id));
 
-		return array($text . $anchor, $this->count > 1 ? "\n" . $top : '', $id);
+		// Add heding
+		return array($text . $anchor, $this->count > 1 ? "\n" . $top : '', $autoid);
 	}
 
 	function & insert(& $obj)
