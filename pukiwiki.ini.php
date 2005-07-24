@@ -102,9 +102,11 @@ define('UPLOAD_DIR',    DATA_HOME . 'attach/'   ); // Attached files and logs
 define('COUNTER_DIR',   DATA_HOME . 'counter/'  ); // Counter plugin's counts
 define('TRACKBACK_DIR', DATA_HOME . 'trackback/'); // TrackBack logs
 define('LOG_DIR',       DATA_HOME . 'log/'      ); // Logging file
+define('INIT_DIR',      DATA_HOME . 'init/'     ); // Initial value (Contents)
 
 define('PLUGIN_DIR',    SITE_HOME . 'plugin/'   ); // Plugin directory
 define('LANG_DIR',      SITE_HOME . 'locale/'   ); // Language file
+define('SITE_INIT_DIR', SITE_HOME . 'init/'     ); // Initial value (Site)
 
 /////////////////////////////////////////////////
 // Directory settings II (ended with '/')

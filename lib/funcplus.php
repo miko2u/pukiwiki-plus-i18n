@@ -93,4 +93,26 @@ function is_inside_uri($anchor)
 	}
 	return false;
 }
+
+function load_init_value($name,$must=0)
+{
+	$init_dir = array(INIT_DIR, SITE_INIT_DIR);
+	$read_dir = array();
+	$init_data = $name . '.ini.php';
+
+	// Exclusion of repetition definition
+	foreach($init_dir as $val) { $read_dir[$val] = ''; }
+
+	foreach($read_dir as $key=>$val) {
+		if (file_exists($key.$init_data)) {
+			if ($must)
+				require_once($key.$init_data);
+			else
+				include_once($key.$init_data);
+			return TRUE;
+		}
+	}
+
+	return FALSE;
+}
 ?>

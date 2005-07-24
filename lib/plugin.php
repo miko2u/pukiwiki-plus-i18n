@@ -49,6 +49,7 @@ function exist_plugin($name)
 	    file_exists(PLUGIN_DIR . $name . '.inc.php')) {
 	    	$exist[$name] = TRUE;
 	    	$count[$name] = 1;
+		load_init_value($name);
 		require_once(PLUGIN_DIR . $name . '.inc.php');
 		return TRUE;
 	} else {
