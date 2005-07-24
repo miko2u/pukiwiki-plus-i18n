@@ -103,8 +103,8 @@ define('COUNTER_DIR',   DATA_HOME . 'counter/'  ); // Counter plugin's counts
 define('TRACKBACK_DIR', DATA_HOME . 'trackback/'); // TrackBack logs
 define('LOG_DIR',       DATA_HOME . 'log/'      ); // Logging file
 
-define('PLUGIN_DIR',    PLUS_HOME . 'plugin/'   ); // Plugin directory
-define('LANG_DIR',      PLUS_HOME . 'locale/'   ); // Language file
+define('PLUGIN_DIR',    SITE_HOME . 'plugin/'   ); // Plugin directory
+define('LANG_DIR',      SITE_HOME . 'locale/'   ); // Language file
 
 /////////////////////////////////////////////////
 // Directory settings II (ended with '/')

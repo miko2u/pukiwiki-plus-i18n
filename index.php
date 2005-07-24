@@ -17,11 +17,11 @@ error_reporting(E_ERROR | E_PARSE); // Avoid E_WARNING, E_NOTICE, etc
 // Directory definition
 // (Ended with a slash like '../path/to/pkwk/', or '')
 //
-// define('PLUS_HOME',     '../wiki-common/');
-define('PLUS_HOME',	'');
+// define('SITE_HOME',     '../wiki-common/');
+define('SITE_HOME',	'');
 // define('DATA_HOME',     '../../wiki-data/contents/');
 define('DATA_HOME',	'');
-define('LIB_DIR',	PLUS_HOME . 'lib/');
+define('LIB_DIR',	SITE_HOME . 'lib/');
 
 /////////////////////////////////////////////////
 require(LIB_DIR . 'pukiwiki.php');
