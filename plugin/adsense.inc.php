@@ -8,10 +8,18 @@
 // 125x125, 120x600, 160x600, 120x240
 // 300x250, 250x250, 336x280, 180x150
 //
-define("GOOGLE_ACCOUNT",'pub-1612057690088425');
-define("GOOGLE_DEF_W", 160);
-define("GOOGLE_DEF_H", 600);
-define("GOOGLE_DEF_TYPE", 'text');
+if (!defined('GOOGLE_ACCOUNT')) {
+	define('GOOGLE_ACCOUNT','pub-1612057690088425');
+}
+if (!defined('GOOGLE_DEF_W')) {
+	define('GOOGLE_DEF_W', 160);
+}
+if (!defined('GOOGLE_DEF_H')) {
+	define('GOOGLE_DEF_H', 600);
+}
+if (!defined('GOOGLE_DEF_TYPE')) {
+	define('GOOGLE_DEF_TYPE', 'text');
+}
 
 function plugin_adsense_action()
 {

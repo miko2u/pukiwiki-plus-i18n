@@ -13,9 +13,13 @@
 //
 ///////////////////////////////////////////////// 要変更箇所
 // テスト使用後はアマゾンアソシエイトとなり、rakujuku09-22 を自サイトのアソシエイト ID に変更のこと
-define('AMAZON_AID','mikoscafeterr-22');
+if (!defined('AMAZON_AID')) {
+	define('AMAZON_AID','mikoscafeterr-22');
+}
 // 買物かごを使うには、さらに Web サービス契約を結び、自サイトの Developer's Token に変更すること
-define('AMAZON_DT','D1C2RO8WE4EZPC');
+if (!defined('AMAZON_DT')) {
+	define('AMAZON_DT','D1C2RO8WE4EZPC');
+}
 ///////////////////////////////////////////////// 変更してもよい箇所
 // expire 写影/タイトル/価格キャッシュを何時間で削除するか。基本的にキャッシュは 24 時間
 define('AMAZON_EXPIRE_img', 365*24); // アソシエイトの固定リンク作成の指示により、これで問題なし
