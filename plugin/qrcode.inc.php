@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: qrcode.inc.php,v 0.7.3 2005/06/29 13:57:36 miko Exp $
+// $Id: qrcode.inc.php,v 0.8.4 2005/07/29 13:57:36 miko Exp $
 //
 /*
 *内容
@@ -16,12 +16,12 @@ QR画像を生成するプラグイン
 *引数
 |サイズ     |バーコードの最小ピクセル            | 1 |
 |訂正方法   |訂正コードのレベルです(N/M/H/Q)     | M |
-|バージョン |使用するQRコードのバージョン(1〜10) |自動判別  |
-|分割数     |分割バーコード数(2〜16)             |分割しない|
+|バージョン |使用するQRコードのバージョン(1～10) |自動判別  |
+|分割数     |分割バーコード数(2～16)             |分割しない|
 |文字列     |バーコード化する文字列              |(省略不可)|
 *著作権
-QRcode Perl CGI & PHP scripts ver. 0.50d, (c)2001-2003 Y.Swetake
-QRcode PukiWiki 1.4 Plug-in, (c)2004 Miko.Hoshina
+QRcode Perl CGI & PHP scripts ver. 0.50g, (c)2001-2005 Y.Swetake
+QRcode PukiWiki 1.4 Plug-in, (c)2004-2005 Miko.Hoshina
 *ライセンス
 GPL
 *コメント
@@ -175,6 +175,7 @@ function QRcode($qr)
 	$qrcode_structureappend_parity = $qr['parity'];
 	$data_length = strlen($qrcode_data_string);
 	if ($data_length<=0) {
+	    trigger_error("QRcode : Data do not exist.", E_USER_ERROR);
 		return '';
 	}
 
@@ -343,6 +344,10 @@ function QRcode($qr)
 		  104,  176,  272,  384,  496,  608,  704,  880, 1056, 1232,
 	);
 
+	if (!is_numeric($qrcode_version)) {
+	    $qrcode_version=0;
+	}
+
 	// バージョンを設定していないときは、自動的に設定
 	if (!$qrcode_version)
 	{
@@ -363,6 +368,11 @@ function QRcode($qr)
 	else
 	{
 		$max_data_bits=$max_data_bits_array[$qrcode_version+(QRCODE_MAX_VERSION * $ec)];
+	}
+
+	if ($qrcode_version > QRCODE_MAX_VERSION) {
+		trigger_error("QRcode : too large version.", E_USER_ERROR);
+		return '';
 	}
 
 	$total_data_bits+=$codeword_num_plus[$qrcode_version];
@@ -427,20 +437,13 @@ function QRcode($qr)
 	{
 		$data_value[$data_counter]=0;
 		$data_bits[$data_counter]=4;
-	}
-	else 
-	{
-		if ($total_data_bits<$max_data_bits)
-		{
+	} else {
+		if ($total_data_bits<$max_data_bits) {
 			$data_value[$data_counter]=0;
 			$data_bits[$data_counter]=$max_data_bits-$total_data_bits;
-		}
-		else 
-		{
-			if ($total_data_bits>$max_data_bits)
-			{
-//				echo "Overflow error  $total_data_bits  $max_data_bits";
-//				exit;
+		} else {
+			if ($total_data_bits>$max_data_bits) {
+			    trigger_error("QRcode : Overflow error",E_USER_ERROR);
 				return '';
 			}
 		}
@@ -618,6 +621,8 @@ function QRcode($qr)
 
 	    $ver_shift1=$ver.str_repeat(chr(170),$max_modules_1side);
 	    $ver_shift2=str_repeat(chr(170),$max_modules_1side).$ver;
+	    $ver_shift1_0=$ver.str_repeat(chr(0),$max_modules_1side);
+	    $ver_shift2_0=str_repeat(chr(0),$max_modules_1side).$ver;
 	    $ver_or=chunk_split(~($ver_shift1 | $ver_shift2),$max_modules_1side,chr(170));
 	    $ver_and=chunk_split(~($ver_shift1 & $ver_shift2),$max_modules_1side,chr(170));
 
@@ -628,8 +633,7 @@ function QRcode($qr)
 	    $n1_search="/".str_repeat(chr(255),5)."+|".str_repeat(chr($bit_r),5)."+/";
 	    $n3_search=chr($bit_r).chr(255).chr($bit_r).chr($bit_r).chr($bit_r).chr(255).chr($bit_r);
 
-	   $demerit_n3=substr_count($hor,$n3_search)*40;
-	//	$demerit_n4=floor(abs(( (100* (substr_count($ver,chr($bit_r))/($all_matrix)) )-50)/5))*10;
+		$demerit_n3=substr_count($hor,$n3_search)*40;
 		$demerit_n4=floor(abs(( (100* (substr_count($ver,chr($bit_r))/($byte_num)) )-50)/5))*10;
 
 
@@ -686,15 +690,12 @@ function QRcode($qr)
 		$i++;
 	}
 
-	// 実際の画像を作成する.
-	if (ImageTypes() & IMG_GIF) {
-		header("Content-type: image/gif");
-	} else {
-		header("Content-type: image/png");
-	}
-
 	$mib = $max_modules_1side + 8;
 	$qrcode_image_size = $mib * $qrcode_module_size;
+	if ($qrcode_image_size>1480){
+		trigger_error("QRcode : Too large image size",E_USER_ERROR);
+		return '';
+	}
 	$output_image = ImageCreateTrueColor($qrcode_image_size,$qrcode_image_size);
 	$base_image = ImageCreateFromPNG(QRCODE_IMAGE_DIR ."/qrv".$qrcode_version.".png");
 	$col[1]=ImageColorAllocate($base_image,  0,  0,  0);
@@ -704,14 +705,11 @@ function QRcode($qr)
 	$i = 4;
 	$mxe = 4 + $max_modules_1side;
 	$ii = 0;
-	while ($i<$mxe)
-	{
+	while ($i<$mxe) {
 		$j=4;
 		$jj=0;
-		while ($j<$mxe)
-		{
-			if (isset($matrix_content[$ii][$jj]) && ($matrix_content[$ii][$jj] & $mask_content))
-			{
+		while ($j<$mxe) {
+			if (isset($matrix_content[$ii][$jj]) && ($matrix_content[$ii][$jj] & $mask_content)) {
 				ImageSetPixel($base_image,$i,$j,$col[1]); 
 			}
 			$j++;
@@ -722,6 +720,11 @@ function QRcode($qr)
 	}
 
 	/* Output Images(Thanks nanashi) */
+	if (ImageTypes() & IMG_GIF) {
+		header("Content-type: image/gif");
+	} else {
+		header("Content-type: image/png");
+	}
 	ImageCopyResized($output_image,$base_image,0,0,0,0,$qrcode_image_size,$qrcode_image_size,$mib,$mib);
 	ImageTrueColorToPalette($output_image,false,2);
 	if (ImageTypes() & IMG_GIF) {
