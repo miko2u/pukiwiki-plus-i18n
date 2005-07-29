@@ -112,7 +112,7 @@ function plugin_qrcode_inline()
 			}
 		}
 		// 並べる(本来ならPNGを合成するのがきれいでしょうけどね)
-		$resul
+		$result = "<nobr>";
 		$i=0;
 		for ($j=1;$j<=$n;$j++) {
 			$splitdata = substr($d,$i,ceil($l/$n));
