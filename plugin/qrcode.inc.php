@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: qrcode.inc.php,v 0.8.3 2005/06/29 13:57:36 miko Exp $
+// $Id: qrcode.inc.php,v 0.8.3 2005/07/29 13:57:36 miko Exp $
 //
 /*
 *内容
@@ -147,17 +147,17 @@ function plugin_qrcode_action()
 	
 	/* Thanks nanashi */
 	echo QRcode($qr);
-	die();
+	exit;
 }
 
 // 画像をサポートしているか？
 function plugin_qrcode_issupported()
 {
-	$issupported = TRUE;
-	if (!function_exists("gd_info")) {
+	$issupported = FALSE;
+	if (function_exists("gd_info")) {
 		$gdinfo = gd_info();
 		if (isset($gdinfo['PNG Support']) && $gdinfo['PNG Support'] === TRUE) {
-			$issupported = FALSE;
+			$issupported = TRUE;
 		}
 	}
 	return $issupported;
@@ -179,7 +179,6 @@ function QRcode($qr)
 		return '';
 	}
 
-	$version_ul = 10;
 	$data_counter = 0;
 	if ($qrcode_structureappend_n>1 && $qrcode_structureappend_n<=16
 	 && $qrcode_structureappend_m>0 && $qrcode_structureqppend_m<=16)
@@ -371,7 +370,7 @@ function QRcode($qr)
 		$max_data_bits=$max_data_bits_array[$qrcode_version+(QRCODE_MAX_VERSION * $ec)];
 	}
 
-	if ($qrcode_version>$version_ul){
+	if ($qrcode_version > QRCODE_MAX_VERSION) {
 		trigger_error("QRcode : too large version.", E_USER_ERROR);
 		return '';
 	}
