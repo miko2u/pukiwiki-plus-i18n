@@ -112,7 +112,7 @@ function plugin_qrcode_inline()
 			}
 		}
 		// 並べる(本来ならPNGを合成するのがきれいでしょうけどね)
-		$result = "<nobr>";
+		$resul
 		$i=0;
 		for ($j=1;$j<=$n;$j++) {
 			$splitdata = substr($d,$i,ceil($l/$n));
@@ -179,6 +179,7 @@ function QRcode($qr)
 		return '';
 	}
 
+	$version_ul = 10;
 	$data_counter = 0;
 	if ($qrcode_structureappend_n>1 && $qrcode_structureappend_n<=16
 	 && $qrcode_structureappend_m>0 && $qrcode_structureqppend_m<=16)
