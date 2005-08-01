@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: file.php,v 1.31.3 2005/07/05 12:39:19 miko Exp $
+// $Id: file.php,v 1.33.3 2005/07/31 03:12:06 miko Exp $
 // Copyright (C)
 //   2005      Customized/Patched by Miko.Hoshina
 //   2002-2005 PukiWiki Developers Team
@@ -12,8 +12,23 @@
 // Get source(wiki text) data of the page
 function get_source($page = NULL)
 {
-	// Removing line-feeds: Because file() doesn't remove them.
-	return is_page($page) ? str_replace("\r", '', file(get_filename($page))) : array();
+	$array = array();
+
+	if (is_page($page)) {
+		$path  = get_filename($page);
+
+		$fp = @fopen($path, 'r');
+		if ($fp == FALSE) return $array;
+		flock($fp, LOCK_SH);
+
+		// Removing line-feeds: Because file() doesn't remove them.
+		$array = str_replace("\r", '', file($path));
+
+		flock($fp, LOCK_UN);
+		@fclose($fp);
+	}
+
+	return $array;
 }
 
 // Get last-modified filetime of the page
@@ -181,7 +196,7 @@ function file_write($dir, $page, $str, $notimestamp = FALSE)
 	if ($update_exec && $dir == DATA_DIR)
 		system($update_exec . ' > /dev/null &');
 
-	// notify_exclude ¤Ë¥¢¥É¥ì¥¹¤¬°ìÃ×¤¹¤ë¾ì¹ç¤Ï¥á¡¼¥ë¤òÁ÷¿®¤·¤Ê¤¤
+	// notify_exclude ¤Ë¥¢¥É¥E¹¤¬°E×¤¹¤EEç¤Ï¥á¡¼¥EòÁ÷¿®¤·¤Ê¤¤
 	foreach ($notify_exclude as $exclude) {
 		$exclude = preg_quote($exclude);
 		if (substr($exclude, -1) == ".")
