@@ -199,7 +199,8 @@ function file_write($dir, $page, $str, $notimestamp = FALSE)
 	if ($update_exec && $dir == DATA_DIR)
 		system($update_exec . ' > /dev/null &');
 
-	// notify_exclude にアドレスが一致する場合�Eメールを送信しなぁE	foreach ($notify_exclude as $exclude) {
+	// notify_exclude
+	foreach ($notify_exclude as $exclude) {
 		$exclude = preg_quote($exclude);
 		if (substr($exclude, -1) == ".")
 			$exclude = $exclude . "*";
