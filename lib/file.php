@@ -196,7 +196,7 @@ function file_write($dir, $page, $str, $notimestamp = FALSE)
 	if ($update_exec && $dir == DATA_DIR)
 		system($update_exec . ' > /dev/null &');
 
-	// notify_exclude ､ﾋ･｢･ﾉ･・ｹ､ｬｰ・ﾗ､ｹ､・・遉ﾏ･癸ｼ･・ｮ､ｷ､ﾊ､､
+	// notify_exclude
 	foreach ($notify_exclude as $exclude) {
 		$exclude = preg_quote($exclude);
 		if (substr($exclude, -1) == ".")
