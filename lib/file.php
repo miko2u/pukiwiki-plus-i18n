@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: file.php,v 1.33.3 2005/07/31 03:12:06 miko Exp $
+// $Id: file.php,v 1.38.3 2005/08/01 15:38:26 miko Exp $
 // Copyright (C)
 //   2005      Customized/Patched by Miko.Hoshina
 //   2002-2005 PukiWiki Developers Team
@@ -10,22 +10,26 @@
 // File related functions
 
 // Get source(wiki text) data of the page
-function get_source($page = NULL)
+function get_source($page = NULL, $lock = TRUE)
 {
 	$array = array();
 
 	if (is_page($page)) {
 		$path  = get_filename($page);
 
-		$fp = @fopen($path, 'r');
-		if ($fp == FALSE) return $array;
-		flock($fp, LOCK_SH);
+		if ($lock) {
+			$fp = @fopen($path, 'r');
+			if ($fp == FALSE) return $array;
+			flock($fp, LOCK_SH);
+		}
 
 		// Removing line-feeds: Because file() doesn't remove them.
 		$array = str_replace("\r", '', file($path));
 
-		flock($fp, LOCK_UN);
-		@fclose($fp);
+		if ($lock) {
+			flock($fp, LOCK_UN);
+			@fclose($fp);
+		}
 	}
 
 	return $array;
@@ -156,31 +160,37 @@ function file_write($dir, $page, $str, $notimestamp = FALSE)
 		            str_replace('$2', 'WikiName', $_msg_invalidiwn)));
 
 	$page      = strip_bracket($page);
-	$timestamp = FALSE;
 	$file      = $dir . encode($page) . '.txt';
+	$timestamp = FALSE;
 
-	if ($dir == DATA_DIR && $str == '' && file_exists($file)) {
-		unlink($file);
-		add_recent($page, $whatsdeleted, '', $maxshow_deleted); // RecentDeleted
-	}
-
-	if ($str != '') {
-		$str = preg_replace('/' . "\r" . '/', '', $str);
-		$str = rtrim($str) . "\n";
+	if ($str === '') {
+		if ($dir == DATA_DIR && file_exists($file)) {
+			// File deletion
+			unlink($file);
+			add_recent($page, $whatsdeleted, '', $maxshow_deleted); // RecentDeleted
+		}
+	} else {
+		// File replacement (Edit)
+		$str = rtrim(preg_replace('/' . "\r" . '/', '', $str)) . "\n";
 
 		if ($notimestamp && file_exists($file))
 			$timestamp = filemtime($file) - LOCALZONE;
 
-		$fp = fopen($file, 'w') or die('fopen() failed: ' .
+		$fp = fopen($file, 'a') or die('fopen() failed: ' .
 			htmlspecialchars(basename($dir) . '/' . encode($page) . '.txt') .	
 			'<br />' . "\n" .
 			'Maybe permission is not writable or filename is too long');
-
 		set_file_buffer($fp, 0);
+
 		flock($fp, LOCK_EX);
+
+		// Write
+		ftruncate($fp, 0);
 		rewind($fp);
 		fputs($fp, $str);
+
 		flock($fp, LOCK_UN);
+
 		fclose($fp);
 
 		if ($timestamp) pkwk_touch_file($file, $timestamp + LOCALZONE);
