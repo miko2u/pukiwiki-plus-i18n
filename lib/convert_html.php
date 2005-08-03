@@ -1,5 +1,5 @@
 <?php
-// PukiWiki - Yet another WikiWikiWeb clone
+// PukiWiki Plus! - Yet another WikiWikiWeb clone
 // $Id: convert_html.php,v 1.16.6 2005/07/19 15:38:35 miko Exp $
 // Copyright (C)
 //   2005      Customized/Patched by Miko.Hoshina
@@ -26,13 +26,12 @@ function convert_html($lines)
 	return $body->toString();
 }
 
-// ¥Ö¥í¥Ã¥¯Í×ÁÇ
+// ¥Ö¥úÁÃ¥¯Í×ÁÇ
 class Element
 {
 	var $parent;   // ¿ÆÍ×ÁÇ
-	var $last;     // ¼¡¤ËÍ×ÁÇ¤òÁŞÆş¤¹¤ëÀè
-	var $elements; // Í×ÁÇ¤ÎÇÛÎó
-
+	var $last;     // ¼¡¤ËÍ×ÁÇ¤òÁŞÆ
+¤¹¤EE	var $elements; // Í×ÁÇ¤ÎÇÛÎE
 	function Element()
 	{
 		$this->elements = array();
@@ -305,7 +304,7 @@ class ListContainer extends Element
 		$this->margin      = $$var_margin;
 		$this->left_margin = $$var_left_margin;
 
-		//½é´ü²½
+		//½é´E½
 		$this->tag   = $tag;
 		$this->tag2  = $tag2;
 		$this->level = min(3, strspn($text, $head));
@@ -344,7 +343,8 @@ class ListContainer extends Element
 		if (! is_a($obj, get_class($this)))
 			return $this->last = & $this->last->insert($obj);
 
-		// ¹ÔÆ¬Ê¸»ú¤Î¤ß¤Î»ØÄê»ş¤ÏUL/OL¥Ö¥í¥Ã¥¯¤òÃ¦½Ğ
+		// ¹ÔÆ¬Ê¸»ú¤Î¤ß¤Î»ØÄE
+¤ÏUL/OL¥Ö¥úÁÃ¥¯¤òÃ¦½Ğ
 		// BugTrack/524
 		if (count($obj->elements) == 1 && empty($obj->elements[0]->elements))
 			return $this->last->parent; // up to ListElement.
@@ -522,8 +522,7 @@ class TableCell extends Element
 		}
 
 		if ($text != '' && $text{0} == '#') {
-			// ¥»¥ëÆâÍÆ¤¬'#'¤Ç»Ï¤Ş¤ë¤È¤­¤ÏDiv¥¯¥é¥¹¤òÄÌ¤·¤Æ¤ß¤ë
-			$obj = & Factory_Div($this, $text);
+			// ¥»¥EâÍÆ¤¬'#'¤Ç»Ï¤Ş¤EÈ¤­¤ÏDiv¥¯¥é¥¹¤òÄÌ¤·¤Æ¤ß¤E			$obj = & Factory_Div($this, $text);
 			if (is_a($obj, 'Paragraph'))
 				$obj = & $obj->elements[0];
 		} else {
@@ -598,7 +597,7 @@ class Table extends Element
 	{
 		static $parts = array('h'=>'thead', 'f'=>'tfoot', ''=>'tbody');
 
-		// rowspan¤òÀßÄê(²¼¤«¤é¾å¤Ø)
+		// rowspan¤òÀßÄE²¼¤«¤é¾å¤Ø)
 		for ($ncol = 0; $ncol < $this->col; $ncol++) {
 			$rowspan = 1;
 			foreach (array_reverse(array_keys($this->elements)) as $nrow) {
@@ -608,14 +607,12 @@ class Table extends Element
 					continue;
 				}
 				$row[$ncol]->rowspan = $rowspan;
-				while (--$rowspan) // ¹Ô¼ïÊÌ¤ò·Ñ¾µ¤¹¤ë
-					$this->types[$nrow + $rowspan] = $this->types[$nrow];
+				while (--$rowspan) // ¹Ô¼EÌ¤ò·Ñ¾µ¤¹¤E					$this->types[$nrow + $rowspan] = $this->types[$nrow];
 				$rowspan = 1;
 			}
 		}
 
-		// colspan,style¤òÀßÄê
-		$stylerow = NULL;
+		// colspan,style¤òÀßÄE		$stylerow = NULL;
 		foreach (array_keys($this->elements) as $nrow) {
 			$row = & $this->elements[$nrow];
 			if ($this->types[$nrow] == 'c')
@@ -629,8 +626,7 @@ class Table extends Element
 				$row[$ncol]->colspan = $colspan;
 				if ($stylerow !== NULL) {
 					$row[$ncol]->setStyle($stylerow[$ncol]->style);
-					while (--$colspan) // Îó¥¹¥¿¥¤¥ë¤ò·Ñ¾µ¤¹¤ë
-						$row[$ncol - $colspan]->setStyle($stylerow[$ncol]->style);
+					while (--$colspan) // Îó¥¹¥¿¥¤¥Eò·Ñ¾µ¤¹¤E						$row[$ncol - $colspan]->setStyle($stylerow[$ncol]->style);
 				}
 				$colspan = 1;
 			}
@@ -1028,8 +1024,7 @@ class Contents_UList extends ListContainer
 {
 	function Contents_UList($text, $level, $id)
 	{
-		// ¥Æ¥­¥¹¥È¤Î¥ê¥Õ¥©¡¼¥à
-		// ¹ÔÆ¬\n¤ÇÀ°·ÁºÑ¤ß¤òÉ½¤¹ ... X(
+		// ¥Æ¥­¥¹¥È¤Î¥EÕ¥©¡¼¥E		// ¹ÔÆ¬\n¤ÇÀ°·ÁºÑ¤ß¤òÉ½¤¹ ... X(
 		make_heading($text);
 		$text = "\n" . '<a href="#' . $id . '">' . $text . '</a>' . "\n";
 		parent::ListContainer('ul', 'li', '-', str_repeat('-', $level));
