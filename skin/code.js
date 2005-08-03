@@ -52,7 +52,7 @@ function code_all_outline(id,num,disp,path)
 
 function code_comment(id,num,disp)
 {
-	for (i=num; i>0; i--) {
+	for (var i=num; i>0; i--) {
 		if(document.getElementById(id+"_cmt_"+i)) document.getElementById(id+"_cmt_"+i).style.display=disp;	
 		if(document.getElementById(id+"_cmt_"+i+"n")) document.getElementById(id+"_cmt_"+i+"n").style.display=disp;
 		if(document.getElementById(id+"_cmt_"+i+"o")) document.getElementById(id+"_cmt_"+i+"o").style.display=disp;
