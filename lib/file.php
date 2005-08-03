@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: file.php,v 1.38.8 2005/08/01 15:38:26 miko Exp $
+// $Id: file.php,v 1.38.10 2005/08/01 15:38:26 miko Exp $
 // Copyright (C)
 //   2005      PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
@@ -100,7 +100,7 @@ function make_str_rules($source)
 		if ($modify) {
 			if (! PKWKEXP_DISABLE_MULTILINE_PLUGIN_HACK &&
 			    $multiline == 0 &&
-			    preg_match('/#[^{]*(\{\{+)\s*$/', $line, $matches)) {
+			    preg_match('/^#[^{]*(\{\{+)\s*$/', $line, $matches)) {
 			    	// Multiline convert plugin start
 				$modify    = FALSE;
 				$multiline = strlen($matches[1]); // Set specific number
