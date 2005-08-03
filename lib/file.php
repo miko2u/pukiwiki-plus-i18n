@@ -99,7 +99,7 @@ function make_str_rules($source)
 		if ($modify) {
 			if (! PKWKEXP_DISABLE_MULTILINE_PLUGIN_HACK &&
 			    $multiline == 0 &&
-			    preg_match('/#[^{]*(\{\{+)\s*$/', $line, $matches)) {
+			    preg_match('/^#[^{]*(\{\{+)\s*$/', $line, $matches)) {
 			    	// Multiline convert plugin start
 				$modify    = FALSE;
 				$multiline = strlen($matches[1]); // Set specific number
