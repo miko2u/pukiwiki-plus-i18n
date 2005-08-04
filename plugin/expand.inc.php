@@ -25,9 +25,9 @@ function plugin_expand_convert()
 		list($source) = func_get_args();
 		$width = 380;
 	} else {
-		return '';
+		return _('#expand: invalid arguments');
 	}
-	if (!defined($width) || $width < 380){ return ''; }
+	if (!isset($width) || $width < 380){ return _('#expand: too few width. ') . $width; }
 
 	$script = get_script_uri();
 
