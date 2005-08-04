@@ -1,18 +1,21 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: expand.inc.php,v 0.1.1 2005/07/29 13:57:36 miko Exp $
+// $Id: expand.inc.php,v 0.1.2 2005/08/04 13:57:36 miko Exp $
 //
 // Expand Plugin
 function plugin_expand_action()
 {
 	global $post;
 
-	$lines = preg_replace(array("[\\r|\\n]","[\\r]"), array("\n","\n"), $post['fullcontents']);
-	$lines = preg_replace(array("'<p>'si","'</p>'si"), array("",""), convert_html($lines));
+//	$lines = preg_replace(array("[\\r|\\n]","[\\r]"), array("\n","\n"), $post['fullcontents']);
+//	$lines = preg_replace(array("'<p>'si","'</p>'si"), array("",""), convert_html($lines));
+	$postdata = $post['fullcontents'];
+	$postdata = make_str_rules($postdata);
+	$postdata = drop_submit(convert_html($postdata));
 
 	return array(
 			'msg' => _('View all contents'),
-			'body'=> $lines,
+			'body'=> $postdata,
 	);
 }
 function plugin_expand_convert()
