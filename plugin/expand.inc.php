@@ -48,7 +48,7 @@ function plugin_expand_convert()
 	return '<div style="width:' . $width . 'px;overflow:hidden;">' . $lines . '</div>'
 		 . '<form method="post" action="' . $script . '"><textarea name="fullcontents" rows="1" cols="1" style="display:none;">'
 		 . htmlspecialchars($source) . '</textarea><input type="image" name="submit" src="' . PLUGIN_EXPAND_ICON
-		 . '" class="btnExpand" alt="' . _('Click to all views') . '" />'
+		 . '" style="float:right;" alt="' . _('Click to all views') . '" />'
 		 . '<input type="hidden" name="cmd" value="expand" /></form>';
 }
 ?>
