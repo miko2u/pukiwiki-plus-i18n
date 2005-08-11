@@ -1,14 +1,17 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: expand.inc.php,v 0.1.2 2005/08/04 13:57:36 miko Exp $
+// $Id: expand.inc.php,v 0.1.2 2005/08/11 11:57:36 miko Exp $
 //
 // Expand Plugin
+define('PLUGIN_EXPAND_ICON', IMAGE_DIR . 'plus/expand.gif');
+define('PLUGIN_EXPAND_DEFAULT_WIDTH', 380);
+define('PLUGIN_EXPAND_MIN_WIDTH',  PLUGIN_EXPAND_DEFAULT_WIDTH);
+define('PLUGIN_EXPAND_MIN_HEIGHT', 380);
+
 function plugin_expand_action()
 {
 	global $post;
 
-//	$lines = preg_replace(array("[\\r|\\n]","[\\r]"), array("\n","\n"), $post['fullcontents']);
-//	$lines = preg_replace(array("'<p>'si","'</p>'si"), array("",""), convert_html($lines));
 	$postdata = $post['fullcontents'];
 	$postdata = make_str_rules($postdata);
 	$postdata = drop_submit(convert_html($postdata));
@@ -18,19 +21,25 @@ function plugin_expand_action()
 			'body'=> $postdata,
 	);
 }
+
 function plugin_expand_convert()
 {
 	$numargs = func_num_args();
-	if ($numargs == 2) {
+	if ($numargs == 3) {
+		list($width,$height,$source) = func_get_args();
+		$width = intval($width);
+		$height = intval($height);
+	} else if ($numargs == 2) {
 		list($width,$source) = func_get_args();
 		$width = intval($width);
 	} else if ($numargs == 1) {
 		list($source) = func_get_args();
-		$width = 380;
+		$width = PLUGIN_EXPAND_DEFAULT_WIDTH;
 	} else {
 		return _('#expand: invalid arguments');
 	}
-	if (!isset($width) || $width < 380){ return _('#expand: too few width. ') . $width; }
+	if (!isset($width) || $width < PLUGIN_EXPAND_MIN_WIDTH) { return _('#expand: too few width. ') . $width; }
+	if (isset($height) && $height < PLUGIN_EXPAND_MIN_HEIGHT) { return _('#expand: too few height. ') . $height; }
 
 	$script = get_script_uri();
 
@@ -38,7 +47,8 @@ function plugin_expand_convert()
 	$lines = preg_replace(array("'<p>'si","'</p>'si"), array("",""), convert_html($lines));
 	return '<div style="width:' . $width . 'px;overflow:hidden;">' . $lines . '</div>'
 		 . '<form method="post" action="' . $script . '"><textarea name="fullcontents" rows="1" cols="1" style="display:none;">'
-		 . htmlspecialchars($source) . '</textarea><input type="submit" name="submit" class="btnExpand" value=" " />'
+		 . htmlspecialchars($source) . '</textarea><input type="image" name="submit" src="' . PLUGIN_EXPAND_ICON . 
+		 . '" class="btnExpand" alt="' . _('Click to all views') . '" />'
 		 . '<input type="hidden" name="cmd" value="expand" /></form>';
 }
 ?>
