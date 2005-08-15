@@ -11,6 +11,9 @@
 //
 // File attach plugin
 
+// NOTE (PHP > 4.2.3):
+//    This feature is disabled at newer version of PHP.
+//    Set this at php.ini if you want.
 // Max file size for upload on PHP (PHP default: 2MB)
 ini_set('upload_max_filesize', '4M');
 
