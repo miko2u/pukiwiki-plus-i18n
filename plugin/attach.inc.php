@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: attach.inc.php,v 1.78.9 2005/06/26 09:51:38 miko Exp $
+// $Id: attach.inc.php,v 1.78.10 2005/08/15 09:51:38 miko Exp $
 // Copyright (C)
 //   2005      PukiWiki Plus! Team
 //   2003-2005 PukiWiki Developers Team
@@ -280,6 +280,22 @@ function attach_upload($file, $page, $pass = NULL)
 	$obj->putstatus();
 
 	if ($notify) {
+		$notify_flag = TRUE;
+		// notify_exclude
+		foreach ($notify_exclude as $exclude) {
+			$exclude = preg_quote($exclude);
+			if (substr($exclude, -1) == ".")
+				$exclude = $exclude . "*";
+			if (preg_match("/^" . $exclude . "/", $_SERVER["REMOTE_ADDR"])) {
+				$notify_flag = FALSE;
+				break;
+			}
+		}
+	} else {
+		$notify_flag = FALSE;
+	}
+
+	if ($notify_flag) {
 		$footer['ACTION']   = 'File attached';
 		$footer['FILENAME'] = & $file['name'];
 		$footer['FILESIZE'] = & $file['size'];
@@ -297,8 +313,9 @@ function attach_upload($file, $page, $pass = NULL)
 		$footer['USER_AGENT']  = TRUE;
 		$footer['REMOTE_ADDR'] = TRUE;
 
-		pkwk_mail_notify($notify_subject, "\n", $footer) or
-			die('pkwk_mail_notify(): Failed');
+		pkwk_mail_notify($notify_subject, "\n", $footer);
+//@plus-comment why die on notify-failed?
+//		or die('pkwk_mail_notify(): Failed');
 	}
 
 	return array(
