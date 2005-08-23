@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: edit.inc.php,v 1.19.36.2 2005/07/03 17:29:02 miko Exp $
+// $Id: edit.inc.php,v 1.19.37.2 2005/08/22 14:59:24 miko Exp $
 //
 // Edit plugin
 // cmd=edit
@@ -132,7 +132,7 @@ function plugin_edit_inline()
 
 	$args = func_get_args();
 
-	$s_label = strip_autolink(array_pop($args));
+	$s_label = strip_htmltag(array_pop($args), FALSE); // {label}. Strip anchor tags only
 	if ($s_label == '')
 	{
 		$s_label = $_symbol_paraedit;

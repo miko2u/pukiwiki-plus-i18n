@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: html.php,v 1.41.18 2005/07/26 15:04:07 miko Exp $
+// $Id: html.php,v 1.42.18 2005/08/22 14:35:47 miko Exp $
 // Copyright (C)
 //   2005      PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
@@ -413,7 +413,8 @@ function make_line_rules($str)
 	return preg_replace($pattern, $replace, $str);
 }
 
-function strip_htmltag($str)
+// Remove all HTML tags(or just anchor tags), and WikiName-speific decorations
+function strip_htmltag($str, $all = TRUE)
 {
 	global $_symbol_noexists;
 	static $noexists_pattern;
@@ -422,10 +423,16 @@ function strip_htmltag($str)
 		$noexists_pattern = '#<span class="noexists">([^<]*)<a[^>]+>' .
 			preg_quote($_symbol_noexists, '#') . '</a></span>#';
 
+	// Strip Dagnling-Link decoration (Tags and "$_symbol_noexists")
 	$str = preg_replace($noexists_pattern, '$1', $str);
-	//$str = preg_replace('/<a[^>]+>\?<\/a>/', '', $str);
 
-	return preg_replace('/<[^>]+>/', '', $str);
+	if ($all) {
+		// All other HTML tags
+		return preg_replace('#<[^>]+>#', '', $str);
+	} else {
+		// All other anchor-tags only
+		return preg_replace('#<a[^>]+>|</a>#i', '', $str);
+	}
 }
 
 // Remove AutoLink marker with AutLink itself
