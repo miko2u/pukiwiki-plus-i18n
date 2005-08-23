@@ -435,7 +435,7 @@ function strip_htmltag($str, $all = TRUE)
 	}
 }
 
-// Remove AutoLink marker with AutLink itself
+// Remove AutoLink marker with AutoLink itself
 function strip_autolink($str)
 {
 	return preg_replace('#<!--autolink--><a [^>]+>|</a><!--/autolink-->#', '', $str);
