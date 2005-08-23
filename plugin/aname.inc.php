@@ -62,7 +62,7 @@ function plugin_aname_inline()
 		return plugin_aname_usage($convert);
 
 	$args = func_get_args(); // ONE or more
-	$body = strip_htmltag(array_pop($args)), FALSE); // Strip anchor tags only
+	$body = strip_htmltag(array_pop($args), FALSE); // Strip anchor tags only
 	array_push($args, $body);
 
 	return plugin_aname_tag($args, $convert);
