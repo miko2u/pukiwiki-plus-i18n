@@ -1,186 +1,244 @@
-NAME
+Ì¾Á°
+    PukiWiki - ¼«Í³¤Ë¥Ú¡¼¥¸¤òÄÉ²Ã¡¦ºï½ü¡¦ÊÔ½¸¤Ç¤­¤ëWeb¥Ú¡¼¥¸¹½ÃÛ¥¹¥¯¥ê¥×¥È
 
-    PukiWiki - è‡ªç”±ã«ãƒšãƒ¼ã‚¸ã‚’è¿½åŠ ãƒ»å‰Šé™¤ãƒ»ç·¨é›†ã§ãã‚‹Webãƒšãƒ¼ã‚¸æ§‹ç¯‰PHPã‚¹ã‚¯ãƒªãƒ—ãƒˆ
+    PukiWiki 1.4.6
+    Copyright (C)
+      2001-2005 PukiWiki Developers Team
+      2001-2002 yu-ji (Based on PukiWiki 1.3 by yu-ji)
+    License: GPL version 2 or (at your option) any later version
+    URL:
+      http://pukiwiki.org/
+      http://pukiwiki.sourceforge.jp/dev/
+      http://sourceforge.jp/projects/pukiwiki/
 
-        PukiWiki 1.4.4
-        Copyright (C) 2001-2004 PukiWiki Developers Team
-        License is GNU GPL
-        Based on "PukiWiki" 1.3 by yu-ji
+½ñ¼°
+    index.php?PAGE_NAME_ENCODED
+    index.php?plugin=PLUGIN_NAME
 
-SYNOPSIS
+³µÍ×
+    PukiWiki(¤×¤­¤¦¤£¤­)¤Ï¼«Í³¤Ë¥Ú¡¼¥¸¤òÄÉ²Ã¡¦ºï½ü¡¦ÊÔ½¸¤Ç¤­¤ë¥Ú¡¼¥¸·²¤òºî¤ë¤³
+    ¤È¤¬¤Ç¤­¤ëWeb¥¢¥×¥ê¥±¡¼¥·¥ç¥ó(WikiWikiWeb)¤Ç¤¹¡£¥Æ¥­¥¹¥È¥Ç¡¼¥¿¤«¤éXHTML1.1
+    ¤òÀ¸À®¤¹¤ë¤³¤È¤¬¤Ç¤­¡¢¤½¤Î¥Æ¥­¥¹¥È¤òWeb¥Ö¥é¥¦¥¶¤«¤é¼«Í³¤Ë½¤Àµ¤¹¤ë¤³¤È¤¬¤Ç
+    ¤­¤Þ¤¹¡£
 
-        http://pukiwiki.org/
-        http://pukiwiki.sourceforge.jp/dev/
-        http://sourceforge.jp/projects/pukiwiki/
+    ÆÃ¤ËPukiWiki¤ÏPHP¸À¸ì¤Ç½ñ¤«¤ì¤¿¥¹¥¯¥ê¥×¥È¤Ç¤¹¤Î¤Ç¡¢PHP¤¬Æ°ºî¤¹¤ëWeb¥µ¡¼¥Ð
+    ¤Ê¤é¤ÐÍÆ°×¤ËÀßÃÖ¤Ç¤­¤Þ¤¹¡£
 
-DESCRIPTION
+    PukiWiki¤Ï¡¢·ë¾ë¹À¤µ¤ó¤¬ºî¤é¤ì¤¿YukiWiki¤Î»ÅÍÍ¤ò»²¹Í¤ËÆÈ¼«¤Ë³«È¯¤µ¤ì¤Þ¤·
+    ¤¿¡£PukiWiki ¥Ð¡¼¥¸¥ç¥ó1.3¤Þ¤Ç¤Ïyu-ji¤µ¤ó¤¬¸Ä¿Í¤ÇÀ½ºî¤·¡¢1.3.1b °Ê¹ß¤Ï
+    PukiWiki Developers Team ¤Ë¤è¤Ã¤Æ³«È¯¤¬Â³¤±¤é¤ì¤Æ¤¤¤Þ¤¹¡£
 
-        PukiWikiã¯å‚åŠ è€…ãŒè‡ªç”±ã«ãƒšãƒ¼ã‚¸ã‚’è¿½åŠ ãƒ»å‰Šé™¤ãƒ»ç·¨é›†ã§ãã‚‹
-        Webãƒšãƒ¼ã‚¸ç¾¤ã‚’ä½œã‚‹PHPã‚¹ã‚¯ãƒªãƒ—ãƒˆã§ã™ã€‚
-        Webã§å‹•ä½œã™ã‚‹æŽ²ç¤ºæ¿ã¨ã¡ã‚‡ã£ã¨ä¼¼ã¦ã„ã¾ã™ãŒã€
-        WebæŽ²ç¤ºæ¿ãŒå˜ã«ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’è¿½åŠ ã™ã‚‹ã ã‘ãªã®ã«å¯¾ã—ã¦ã€
-        PukiWikiã¯ã€Webãƒšãƒ¼ã‚¸å…¨ä½“ã‚’è‡ªç”±ã«å¤‰æ›´ã™ã‚‹ã“ã¨ãŒã§ãã¾ã™ã€‚
+    PukiWiki¤Ï¡¢yu-ji¤µ¤ó¤ò´Þ¤à PukiWiki Develpers Team ¤ä¤½¤Î¹×¸¥¼Ô¤¬¡¢³Æ¼«¤Î
+    ÃøºîÊª¤ËGPL¥Ð¡¼¥¸¥ç¥ó2(¤Þ¤¿¤Ï _¤¢¤Ê¤¿¤ÎÁªÂò¤Ç_ ¤½¤ì°Ê¹ß¤ÎGPL)¤òÅ¬ÍÑ¤·¤Æ¤¤
+    ¤ë¡Ö¥Õ¥ê¡¼¥½¥Õ¥È¥¦¥§¥¢(¼«Í³¤Ê¥½¥Õ¥È¥¦¥§¥¢)¡×¤Ç¤¹¡£ºÇ¿·ÈÇ¤ÏPukiWiki¸ø¼°¥µ¥¤
+    ¥È¤«¤éÆþ¼ê¤Ç¤­¤Þ¤¹¡£
 
-        PukiWikiã¯ã€çµåŸŽæµ©ã•ã‚“ã®YukiWikiã®ä»•æ§˜ã‚’å‚è€ƒã«ã—ã¦ç‹¬è‡ªã«ä½œã‚‰ã‚Œã¾ã—ãŸã€‚
-        1.3ã¾ã§ã¯yu-jiã•ã‚“ãŒä½œæˆã—ã€1.3.1bä»¥é™ã¯PukiWiki Developers Team
-        ã«ã‚ˆã£ã¦é–‹ç™ºãŒç¶šã‘ã‚‰ã‚Œã¦ã„ã¾ã™ã€‚
+¥¤¥ó¥¹¥È¡¼¥ë
+    PukiWiki¤ÏPHP¥¹¥¯¥ê¥×¥È¤Ê¤Î¤Ç¡¢(Îã¤¨¤ÐPerl¤Î¤è¤¦¤Ë)¥¹¥¯¥ê¥×¥È¤Ë¼Â¹Ô¸¢¤òÉÕ
+    ¤±¤ëÉ¬Í×¤Ï¤¢¤ê¤Þ¤»¤ó¡£CGIµ¯Æ°¤Ç¤Ê¤¤¤Î¤Ç¤¢¤ì¤Ð¡¢¥¹¥¯¥ê¥×¥È¤Î°ì¹ÔÌÜ¤ò½¤Àµ¤¹
+    ¤ëÉ¬Í×¤â¤¢¤ê¤Þ¤»¤ó¡£
 
-        PukiWikiã¯PHPã§æ›¸ã‹ã‚ŒãŸPHPã‚¹ã‚¯ãƒªãƒ—ãƒˆã¨ã—ã¦å®Ÿç¾ã•ã‚Œã¦ã„ã¾ã™ã®ã§ã€
-        PHPãŒå‹•ä½œã™ã‚‹Webã‚µãƒ¼ãƒãªã‚‰ã°æ¯”è¼ƒçš„å®¹æ˜“ã«è¨­ç½®ã§ãã¾ã™ã€‚
+    Web¥µ¡¼¥Ð¡¼¤Ø¤Î¥·¥§¥ë¥¢¥¯¥»¥¹¤¬²ÄÇ½¤Ç¤¢¤ì¤Ð¡¢PukiWiki¤Î¥¢¡¼¥«¥¤¥Ö¤ò¤½¤Î¤Þ
+    ¤Þ¥µ¡¼¥Ð¡¼¤ËÅ¾Á÷¤·¡¢¥µ¡¼¥Ð¡¼¾å¤Ç²òÅà(tar pzxf pukiwiki*.tar.gz) ¤¹¤ë¤À¤±¤Ç
+    ¥Ñ¡¼¥ß¥Ã¥·¥ç¥ó¤ÎÀßÄê¤â¹Ô¤ï¤ì¡¢¤¹¤°¤Ë»È¤¤»Ï¤á¤ë»ö¤¬¤Ç¤­¤ë¤Ç¤·¤ç¤¦¡£
 
-        PukiWikiã¯ãƒ•ãƒªãƒ¼ã‚½ãƒ•ãƒˆã§ã™ã€‚ ã”è‡ªç”±ã«ãŠä½¿ã„ãã ã•ã„ã€‚
-        æœ€æ–°ç‰ˆã¯ã€ http://pukiwiki.org/ ã‹ã‚‰å…¥æ‰‹ã§ãã¾ã™ã€‚
+    °Ê²¼¤Ë¡¢»öÁ°¤Ë¥¯¥é¥¤¥¢¥ó¥ÈPC¤Çºî¶È¤ò¹Ô¤¦¾ì¹ç¤ÎÎã¤òµ­¤·¤Þ¤¹¡£
 
-è¨­ç½®æ–¹æ³•
+    1. PukiWiki¤Î¥¢¡¼¥«¥¤¥Ö¤òÅ¸³«¤·¤Þ¤¹¡£
 
-        ä»¥ä¸‹ã¯ä¸€ä¾‹ã§ã™ã€‚Webã‚µãƒ¼ãƒãƒ¼ã¸ã®ã‚·ã‚§ãƒ«ã‚¢ã‚¯ã‚»ã‚¹ãŒå¯èƒ½ã§ã‚ã‚Œã°ã€
-        ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–ã‚’ãã®ã¾ã¾ã‚µãƒ¼ãƒãƒ¼ã«è»¢é€ã—ã€ã‚µãƒ¼ãƒãƒ¼ä¸Šã§è§£å‡
-        (tar pzxf pukiwiki*.tar.gz) ã™ã‚‹ã ã‘ã§ã‚‚å‹•ä½œã™ã‚‹ã¯ãšã§ã™ã€‚
+    2. É¬Í×¤Ë±þ¤¸¤ÆÀßÄê¥Õ¥¡¥¤¥ë(*.ini.php)¤ÎÆâÍÆ¤ò³ÎÇ§¤·¤Þ¤¹¡£
+      ¥¹¥¯¥ê¥×¥È¤ÎÃæ¤ÎÆüËÜ¸ì¤Ï(¤¢¤ì¤Ð¡¢´ðËÜÅª¤Ë)EUC-JP¤Ç¡¢¤Þ¤¿²þ¹Ô¥³¡¼¥É¤ÏLF¤Ç
+      µ­½Ò¤µ¤ì¤Æ¤¤¤Þ¤¹¤Î¤Ç¡¢ÆüËÜ¸ìÊ¸»ú¥³¡¼¥É¤È²þ¹Ô¥³¡¼¥É¤Î¼«Æ°È½ÊÌ¤¬¤Ç¤­¡¢¤½¤ì
+      ¤ò¸µ¤Î¤Þ¤ÞÊÝÂ¸¤Ç¤­¤ë¥Æ¥­¥¹¥È¥¨¥Ç¥£¥¿¤ò»ÈÍÑ¤·¤Æ²¼¤µ¤¤¡£
 
-    1.  ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–ã‚’è§£ãã¾ã™ã€‚
+      ¢¨¥¤¥ó¥¿¡¼¥Í¥Ã¥È¤Ë¸ø³«¤¹¤ëPukiWiki¤Ç¤¢¤ë¤Ê¤é¤Ð¡¢PKWK_SAFE_MODE¤òÍ­¸ú¤Ë¤¹
+        ¤ë¤³¤È¤ò¤ªÁ¦¤á¤·¤Þ¤¹¡£(¾ÜºÙ:BugTrack/787)
 
-    2.  å¿…è¦ã«å¿œã˜ã¦è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«(*.ini.php)ã®å†…å®¹ã‚’ç¢ºèªã—ã¾ã™ã€‚
-        1.11  ã‹ã‚‰è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ãŒåˆ¥ãƒ•ã‚¡ã‚¤ãƒ«ã®pukiwiki.ini.phpã«ãªã‚Šã¾ã—ãŸã€‚
-        1.4   ã‹ã‚‰è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ãŒåˆ†å‰²ã•ã‚Œã¾ã—ãŸã€‚
-        1.4.4 ã‹ã‚‰æºå¸¯é›»è©±ãŠã‚ˆã³PDAå‘ã‘ã®è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ãŒä¸€ã¤ã«é›†ç´„ã•ã‚Œã¾ã—ãŸã€‚
-          (i_mode.ini.php, jphone.ini.php ã®è¨­å®š+Î±ã‚’ keitai.ini.php ã«é›†ç´„)
+        Á´ÂÎÀßÄê           : pukiwiki.ini.php
+        ¥æ¡¼¥¶ÄêµÁ         : rules.ini.php
 
-        * å…±é€šè¨­å®š
-          å…¨ä½“               : pukiwiki.ini.php
-          ãƒ¦ãƒ¼ã‚¶å®šç¾©         : rules.ini.php
+        ¥Ç¥¹¥¯¥È¥Ã¥×PC     : default.ini.php
+        ·ÈÂÓÅÅÏÃ¤ª¤è¤ÓPDA  : keitai.ini.php
+           (µì i_mode.ini.php/jphone.ini.php)
 
-        * ã‚¨ãƒ¼ã‚¸ã‚§ãƒ³ãƒˆåˆ¥è¨­å®š
-          æºå¸¯é›»è©±ãŠã‚ˆã³PDA  : keitai.ini.php
-          ãã®ä»–             : default.ini.php
+    3.  ¥Õ¥¡¥¤¥ë¤òFTP¤Ê¤É¤Ç¥µ¡¼¥Ð¤ËÅ¾Á÷¤·¤Þ¤¹¡£
+      ¢¨FTP¤ÎÅ¾Á÷¥â¡¼¥É¤Ï¡Ö¥Ð¥¤¥Ê¥ê(bin)¡×¤ò»ÈÍÑ¤·¤Æ²¼¤µ¤¤
 
-    3.  ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–ã®å†…å®¹ã‚’ã‚µãƒ¼ãƒã«è»¢é€ã—ã¾ã™ã€‚
-        ãƒ•ã‚¡ã‚¤ãƒ«ã®è»¢é€ãƒ¢ãƒ¼ãƒ‰ã«ã¤ã„ã¦ã¯æ¬¡é …ã‚’å‚ç…§ã—ã¦ãã ã•ã„ã€‚
+    4.  ¥µ¡¼¥Ð¾å¤Î¥Õ¥¡¥¤¥ë¤ª¤è¤Ó¥Ç¥£¥ì¥¯¥È¥ê¤Î¥Ñ¡¼¥ß¥Ã¥·¥ç¥ó¤ò³ÎÇ§¤·¤Þ¤¹¡£
 
-    4.  ã‚µãƒ¼ãƒä¸Šã®ãƒ•ã‚¡ã‚¤ãƒ«ãŠã‚ˆã³ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®ãƒ‘ãƒ¼ãƒŸãƒƒã‚·ãƒ§ãƒ³ã‚’ç¢ºèªã—ã¾ã™ã€‚
+    ¥Ç¥£¥ì¥¯¥È¥ê ¥Ñ¡¼¥ß¥Ã¥·¥ç¥ó
+      attach         777	ÅºÉÕ¥Õ¥¡¥¤¥ë³ÊÇ¼¥Ç¥£¥ì¥¯¥È¥ê
+      backup         777	¥Ð¥Ã¥¯¥¢¥Ã¥×¥Õ¥¡¥¤¥ë³ÊÇ¼¥Ç¥£¥ì¥¯¥È¥ê
+      cache          777	¥­¥ã¥Ã¥·¥å¥Õ¥¡¥¤¥ë³ÊÇ¼¥Ç¥£¥ì¥¯¥È¥ê
+      counter        777	¥«¥¦¥ó¥¿¥Õ¥¡¥¤¥ë³ÊÇ¼¥Ç¥£¥ì¥¯¥È¥ê
+      diff           777	º¹Ê¬¥Õ¥¡¥¤¥ë³ÊÇ¼¥Ç¥£¥ì¥¯¥È¥ê
+      image          755	²èÁü¥Õ¥¡¥¤¥ë
+      image/face     755 	(²èÁü¥Õ¥¡¥¤¥ë)¥Õ¥§¥¤¥¹¥Þ¡¼¥¯  
+      lib            755	¥é¥¤¥Ö¥é¥ê
+      plugin         755	¥×¥é¥°¥¤¥ó
+      skin           755	¥¹¥­¥ó¡¢CSS¡¢JavaScirpt¥Õ¥¡¥¤¥ë
+      trackback      777	TrackBack¥Õ¥¡¥¤¥ë³ÊÇ¼¥Ç¥£¥ì¥¯¥È¥ê
+      wiki           777	¥Ç¡¼¥¿¤Î³ÊÇ¼¥Ç¥£¥ì¥¯¥È¥ê
 
-        ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª   ãƒ‘ãƒ¼ãƒŸãƒƒã‚·ãƒ§ãƒ³
-        attach         777	æ·»ä»˜ãƒ•ã‚¡ã‚¤ãƒ«æ ¼ç´ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
-        backup         777	ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ãƒ•ã‚¡ã‚¤ãƒ«æ ¼ç´ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
-        cache          777	ã‚­ãƒ£ãƒƒã‚·ãƒ¥ãƒ•ã‚¡ã‚¤ãƒ«æ ¼ç´ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
-        counter        777	ã‚«ã‚¦ãƒ³ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«æ ¼ç´ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
-        diff           777	å·®åˆ†ãƒ•ã‚¡ã‚¤ãƒ«æ ¼ç´ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
-        image          755	ç”»åƒãƒ•ã‚¡ã‚¤ãƒ«
-        image/face     755 	(ç”»åƒãƒ•ã‚¡ã‚¤ãƒ«)ãƒ•ã‚§ã‚¤ã‚¹ãƒžãƒ¼ã‚¯  
-        lib            755	ãƒ©ã‚¤ãƒ–ãƒ©ãƒª
-        plugin         755	ãƒ—ãƒ©ã‚°ã‚¤ãƒ³
-        skin           755	ã‚¹ã‚­ãƒ³ã€CSSã€JavaScirptãƒ•ã‚¡ã‚¤ãƒ«
-        trackback      777	TrackBackãƒ•ã‚¡ã‚¤ãƒ«æ ¼ç´ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
-        wiki           777	ãƒ‡ãƒ¼ã‚¿ã®æ ¼ç´ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
+    ¥Õ¥¡¥¤¥ë    ¥Ñ¡¼¥ß¥Ã¥·¥ç¥ó ¥Ç¡¼¥¿¤Î¼ïÎà(»²¹Í)
+      .htaccess      644       ASCII
+      .htpasswd      644       ASCII
+      */.htaccess    644       ASCII
 
-        ãƒ•ã‚¡ã‚¤ãƒ«       ãƒ‘ãƒ¼ãƒŸãƒƒã‚·ãƒ§ãƒ³ è»¢é€ãƒ¢ãƒ¼ãƒ‰
-        *.php          644            ASCII
-        *.lng          644            ASCII
-        cache/*        666            ASCII
-        image/*        644            BINARY
-        image/face/*   644            BINARY
-        lib/*          644            ASCII
-        plugin/*       644            ASCII
-        skin/*         644            ASCII
-        wiki/*         666            ASCII
+    ¥Õ¥¡¥¤¥ë    ¥Ñ¡¼¥ß¥Ã¥·¥ç¥ó ¥Ç¡¼¥¿¤Î¼ïÎà(»²¹Í)
+      *.php          644       ASCII
+      */*.php        644       ASCII
+      attach/*       666       BINARY (¤Ï¤¸¤á¤ÏÂ¸ºß¤»¤º)
+      backup/*.gz    666       BINARY (¥¤¥ó¥¹¥È¡¼¥ë»þ¤ÏÂ¸ºß¤»¤º)
+      backup/*.txt   666       ASCII  (Â¿¤¯¤Î´Ä¶­¤Ç¤ÏÂ¸ºß¤»¤º)
+      cache/*        666       ASCII
+        (°ìÉô¤Î¥×¥é¥°¥¤¥ó¤Ï¥Ð¥¤¥Ê¥ê¥Õ¥¡¥¤¥ë¤òÊÝÂ¸¤·¤Þ¤¹)
+      counter/*      666       ASCII  (¤Ï¤¸¤á¤ÏÂ¸ºß¤»¤º)
+      diff/*.txt     666       ASCII  (¤Ï¤¸¤á¤ÏÂ¸ºß¤»¤º)
+      wiki/*.txt     666       ASCII
+      image/*        644       BINARY
+      image/face/*   644       BINARY
+      lib/*          644       ASCII
+      plugin/*       644       ASCII
+      skin/*         644       ASCII
 
-    5.  index.php ã‚ã‚‹ã„ã¯ pukiwiki.php ã«ãƒ–ãƒ©ã‚¦ã‚¶ã‹ã‚‰ã‚¢ã‚¯ã‚»ã‚¹ã—ã¾ã™ã€‚
-        å¿…è¦ã«å¿œã˜ã¦ã€ã•ã‚‰ã«è¨­å®šã‚„ãƒ‡ã‚¶ã‚¤ãƒ³ã‚’èª¿æ•´ã—ã¦ä¸‹ã•ã„ã€‚
+    5.  ¥µ¡¼¥Ð¡¼¤ËÀßÃÖ¤·¤¿ PukiWiki ¤Î index.php ¤¢¤ë¤¤¤Ï pukiwiki.php ¤Ë¡¢Web
+      ¥Ö¥é¥¦¥¶¤«¤é¥¢¥¯¥»¥¹¤·¤Þ¤¹¡£
 
-ãƒ‡ãƒ¼ã‚¿ã®ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—æ–¹æ³•
+    6.  É¬Í×¤Ë±þ¤¸¤Æ¡¢¤µ¤é¤ËÀßÄê¤ä¥Ç¥¶¥¤¥ó¤òÄ´À°¤·¤Æ²¼¤µ¤¤¡£
 
-        ãƒ‡ãƒ¼ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªä»¥ä¸‹ã‚’ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã—ã¾ã™ã€‚
-        (ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªåã¯ wiki)
+      ¢¨CSS(³°¸«)¤Ï skin/¥¹¥­¥óÌ¾.css.php ¤Ë¤¢¤ê¤Þ¤¹¡£¤³¤ì¤ÏÌÜÅª¤Ë±þ¤¸¤¿CSS¤ò
+        ½ÐÎÏ¤¹¤ë¤³¤È¤Î¤Ç¤­¤ë¡¢Ã±ÆÈ¤ÎPHP¥¹¥¯¥ê¥×¥È¤Ç¤¹¡£¤³¤ì¤òÀÅÅª¤Ê¥Õ¥¡¥¤¥ë¤Ë
+        ¤·¤¿¤¤¾ì¹ç¤Ï¡¢½ÐÎÏ·ë²Ì¤òWeb¥Ö¥é¥¦¥¶¤Ç¼è¤ê½Ð¤·¤Æ²¼¤µ¤¤¡£¤É¤Î¤è¤¦¤ÊCSS
+        ¤¬µá¤á¤é¤ì¤Æ¤¤¤ë¤«¤Ï¥¹¥­¥ó¤Ëµ­½Ò¤µ¤ì¤Æ¤¤¤Þ¤¹¡£
+      ¢¨¥¹¥­¥ó(³°¸«¤Î¹üÁÈ¤ß)¤Ë´Ø¤¹¤ëÀßÄê¹àÌÜ¤Ï skin/¥¹¥­¥óÌ¾.skin.php ¤ÎÀèÆ¬¤Ë
+        ¤¢¤ê¤Þ¤¹¡£¤Þ¤¿ tDiary¥¹¥­¥ó ¤Î»ÈÍÑË¡¤Ï BugTrack/769 ¤ò»²¾È¤·¤Æ²¼¤µ¤¤¡£
+      ¢¨¥×¥é¥°¥¤¥óÆÈ¼«¤ÎÀßÄê¹àÌÜ¤Ï plugin/¥×¥é¥°¥¤¥óÌ¾.inc.php ¤ÎÀèÆ¬¤Ë¤¢¤ê¤Þ
+        ¤¹
 
-        å¿…è¦ã«å¿œã˜ã¦ä»–ã®ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®å†…å®¹ã‚’ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã—ã¾ã™ã€‚
-        (ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªåã¯ attach, backup, counter, cache,
-         diff, trackback)
+¥Ð¥Ã¥¯¥¢¥Ã¥×¤È¥ê¥¹¥È¥¢
+    ¥Ú¡¼¥¸¤ÎºÇ¿·¥Ç¡¼¥¿¤ò¼ý¤á¤Æ¤¤¤ë¥Ç¥£¥ì¥¯¥È¥ê(¥Ç¥Õ¥©¥ë¥È¤ÎÌ¾Á°¤Ï wiki)°Ê²¼
+    ¤ò¡¢¤Þ¤¿É¬Í×¤Ë±þ¤¸¤ÆÂ¾¤Î¥Ç¡¼¥¿¤ò¼ý¤á¤Æ¤¤¤ë¥Ç¥£¥ì¥¯¥È¥ê°Ê²¼¤ò¥Ð¥Ã¥¯¥¢¥Ã¥×¤·
+    ¤Æ²¼¤µ¤¤¡£(Æ± attach, backup, cache, counter, diff, trackback)
 
+    cache¥Ç¥£¥ì¥¯¥È¥ê¤â¥Ð¥Ã¥¯¥¢¥Ã¥×¤¹¤ë¤³¤È¤ò¤ªÁ¦¤á¤·¤Þ¤¹¡£
+    1. cache/*.rel ¥Õ¥¡¥¤¥ë¤È cache/*.ref ¥Õ¥¡¥¤¥ë¤Ï links¥×¥é¥°¥¤¥ó ¤ÇºÆÀ¸
+       À®²ÄÇ½¤Ç¤¹¤¬¡¢¤³¤Î½èÍý¤ÏÈó¾ï¤Ë½Å¤¯¡¢´Ä¶­¤Ë¤è¤Ã¤Æ¤Ï½èÍý¤¬É¬¤º¼ºÇÔ¤¹¤ë
+       (ÃæÃÇ¤¹¤ë)¾ì¹ç¤¬¤¢¤ê¤Þ¤¹¡£
+    2. cache/*.rel ¥Õ¥¡¥¤¥ë¤¬PukiWiki¤ËÁ´¤¯¤Ê¤¤»þ¤Ë´ûÂ¸¤Î¥Ú¡¼¥¸¤òÊÔ½¸¤¹¤ë¤È¡¢
+      links¥×¥é¥°¥¤¥ó¤ò¼Â¹Ô¤·¤¿¾õÂÖ¤È¤Û¤ÜÆ±Åù¤ÎÉé²Ù¤¬¤«¤«¤ê¤Þ¤¹¡£
+      (¾ÜºÙ:BugTrack2/56)
+    3. amazon¥×¥é¥°¥¤¥ó¤Ï¤³¤³¤Ë²èÁü(¤Î¥­¥ã¥Ã¥·¥å)¤òÊÝÂ¸¤·¤Þ¤¹¡£
 
-æ–°ã—ã„ãƒšãƒ¼ã‚¸ã®ä½œã‚Šæ–¹
+    ¥Ç¡¼¥¿¤òÇÛÃÖ¤·¤¿»þ¤Ï¡¢¥Õ¥¡¥¤¥ë¤Î¥Ñ¡¼¥ß¥Ã¥·¥ç¥ó¤¬´üÂÔ¤µ¤ì¤Æ¤¤¤ëÄÌ¤ê¤«¤É¤¦
+    ¤«¡¢¤Þ¤¿¼ÂºÝ¤ËÆ°ºî¤¹¤ë¤«¤É¤¦¤«¤ò³ÎÇ§¤·¤Æ²¼¤µ¤¤¡£(Îã: ÇÛÃÖ¤·¤¿¥Ú¡¼¥¸¤Î¹¹¿·
+    ¤ò»î¤ß¤ë)
 
-        ã€Œæ–°è¦ã€ãƒªãƒ³ã‚¯ã‹ã‚‰æ–°ã—ããƒšãƒ¼ã‚¸ã‚’ä½œæˆã™ã‚‹ä»¥å¤–ã«ã€ãƒšãƒ¼ã‚¸ã®ä¸­ã«
-        æ›¸ã„ãŸèªžå¥ã‹ã‚‰ãã®ãƒšãƒ¼ã‚¸åã®ãƒšãƒ¼ã‚¸ã‚’ä½œæˆã™ã‚‹ã“ã¨ãŒã§ãã¾ã™ã€‚
+    PukiWiki 1.4.5 °Ê¹ß¤Ç¤Ï¡¢ÅºÉÕ¤µ¤ì¤Æ¤¤¤ë dump¥×¥é¥°¥¤¥ó ¤Ç¡¢wiki/attach/
+    backup ¥Ç¥£¥ì¥¯¥È¥ê¤Î¥ê¥â¡¼¥È¥Ð¥Ã¥¯¥¢¥Ã¥×(*.tar.gz¤Ê¤¤¤·*.tar·Á¼°)¤¬²ÄÇ½¤Ç
+    ¤¹¡£
+      µ¯Æ°¤ÎÎã: http://path/to/pukiwiki/index.php?plugin=dump
 
-    1.  ã¾ãšã€é©å½“ãªãƒšãƒ¼ã‚¸ï¼ˆä¾‹ãˆã°FrontPageï¼‰ã‚’é¸ã³ã€
-        ãƒšãƒ¼ã‚¸ã®ä¸Šä¸‹ã«ã‚ã‚‹ã€Œç·¨é›†ã€ãƒªãƒ³ã‚¯ã‚’ãŸã©ã‚Šã¾ã™ã€‚
+    dump¥×¥é¥°¥¤¥ó¤Ë¤Ïdump¥×¥é¥°¥¤¥ó¤Ç¼èÆÀ¤·¤¿¥Õ¥¡¥¤¥ë¤ÎÃæ¿È¤òPukiWiki¤ËÅ¸³«¤¹
+    ¤ëµ¡Ç½(¥ê¥â¡¼¥È¥ê¥¹¥È¥¢)¤âÍÑ°Õ¤µ¤ì¤Æ¤¤¤Þ¤¹¡£¤¿¤À¤·¥Õ¥¡¥¤¥ë¤Ë´Þ¤Þ¤ì¤Æ¤¤¤Ê¤¤
+    ¥Ç¡¼¥¿¤òPukiWiki¤«¤éºï½ü¤¹¤ëµ¡Ç½¤Ï¤¢¤ê¤Þ¤»¤ó(¾ï¤Ë¾å½ñ¤­¤Ë¤Ê¤ê¤Þ¤¹)¤·¡¢Web
+    ¥µ¡¼¥Ð¡¼¤äPHP¤Î¥¢¥Ã¥×¥í¡¼¥É¥Õ¥¡¥¤¥ë¥µ¥¤¥ºÀ©¸Â¤ò±Û¤¨¤ë¥Õ¥¡¥¤¥ë¤òÍøÍÑ¤¹¤ë¤³
+    ¤È¤Ï¤Ç¤­¤Þ¤»¤ó¡£¤Þ¤¿¤³¤Îµ¡Ç½¤Ï¥Ç¥Õ¥©¥ë¥È¤ÇÌµ¸ú¤Ë¤Ê¤Ã¤Æ¤¤¤Þ¤¹¡£
 
-    2.  ã™ã‚‹ã¨ãƒ†ã‚­ã‚¹ãƒˆå…¥åŠ›ãŒã§ãã‚‹çŠ¶æ…‹ã«ãªã‚‹ã®ã§ã€ ãã“ã«NewPageã®ã‚ˆã†ãªå˜èªž
-        ï¼ˆå¤§æ–‡å­—å°æ–‡å­—æ··åœ¨ã—ã¦ã„ã‚‹è‹±æ–‡å­—åˆ—ï¼‰ã‚„ã€ [[æ–°ã—ã„ãƒšãƒ¼ã‚¸å]] ã®æ§˜ã«
-        äºŒé‡ã®ãƒ–ãƒ©ã‚±ãƒƒãƒˆã§å›²ã‚“ã èªžå¥ã‚’æ›¸ã„ã¦ã€Œä¿å­˜ã€ã—ã¾ã™ã€‚
+    ¤½¤ÎÂ¾¡¢PukiWiki¤Î¹¹¿·ÆâÍÆ¤ò¥á¡¼¥ë¤ÇÄÌÃÎ¤¹¤ëµ¡Ç½¤Ï¡¢´ûÂ¸¤Î¥Ç¡¼¥¿¤ò¼º¤ï¤Ê¤¤
+    ¤¿¤á¤Îµ¡Ç½¤È¤·¤Æ¤È¤é¤¨¤ë»ö¤¬¤Ç¤­¤ë¤Ç¤·¤ç¤¦¡£
 
-    3.  ä¿å­˜ã™ã‚‹ã¨ã€FrontPageã®ãƒšãƒ¼ã‚¸ãŒæ›¸ãæ›ã‚ã‚Šã€
-        ã‚ãªãŸãŒæ›¸ã„ãŸNewPageã¨ã„ã†å˜èªžã‚„ã€Œæ–°ã—ã„ãƒšãƒ¼ã‚¸åã€ã¨ã„ã†èªžå¥ã®
-        ã®å¾Œã‚ã« '?' ã¨ã„ã†å°ã•ãªãƒªãƒ³ã‚¯ãŒè¡¨ç¤ºã•ã‚Œã¾ã™ã€‚ ã“ã®ãƒªãƒ³ã‚¯
-        ã¯ãã®ãƒšãƒ¼ã‚¸ãŒã¾ã å­˜åœ¨ã—ãªã„ã“ã¨ã‚’ç¤ºã™å°ã§ã™ã€‚
+¥Ú¡¼¥¸¤ÎºîÀ®
+    ¤½¤Î¥Ú¡¼¥¸¤¬ÃÖ¤«¤ì¤ë¤Ï¤º¤ÎURL¤ËÄ¾ÀÜ¥¢¥¯¥»¥¹¤·¤¿¤ê¡¢¡Ö¿·µ¬¡×¥ê¥ó¥¯¤«¤é¿·¤·
+    ¤¯¥Ú¡¼¥¸¤òºîÀ®¤¹¤ë°Ê³°¤Ë¡¢¥Ú¡¼¥¸¤ÎÃæ¤Ë½ñ¤¤¤¿¸ì¶ç¤«¤é¤½¤Î¥Ú¡¼¥¸Ì¾¤Î¥Ú¡¼¥¸¤ò
+    ºîÀ®¤¹¤ë¤³¤È¤¬¤Ç¤­¤Þ¤¹¡£
 
-    4.  ãã® '?' ã‚’ã‚¯ãƒªãƒƒã‚¯ã™ã‚‹ã¨æ–°ã—ã„ãƒšãƒ¼ã‚¸ãŒã§ãã¾ã™ã®ã§ã€
-        ã‚ãªãŸã®å¥½ããªæ–‡ç« ã‚’ãã®æ–°ã—ã„ãƒšãƒ¼ã‚¸ã«æ›¸ã„ã¦ä¿å­˜ã—ã¾ã™ã€‚
+    1.  ¤Þ¤º¡¢Å¬Åö¤Ê¥Ú¡¼¥¸¡ÊÎã¤¨¤ÐFrontPage¡Ë¤òÁª¤Ó¡¢¥Ú¡¼¥¸¤Î¾å²¼¤Ë¤¢¤ë
+     ¡ÖÊÔ½¸¡×¥ê¥ó¥¯¤ò¤¿¤É¤ê¤Þ¤¹¡£
 
-    5.  æ–°ã—ã„ãƒšãƒ¼ã‚¸ãŒã§ãã‚‹ã¨FrontPageã®ãã‚Œã‚‰ã®èªžå¥ã‹ã‚‰ '?' ã¯æ¶ˆãˆã¦ã€
-        æ™®é€šã®ãƒã‚¤ãƒ‘ãƒ¼ãƒªãƒ³ã‚¯ã¨ãªã‚Šã¾ã™ã€‚
+    2.  ¤¹¤ë¤È¥Æ¥­¥¹¥ÈÆþÎÏ¤¬¤Ç¤­¤ë¾õÂÖ¤Ë¤Ê¤ë¤Î¤Ç¡¢ ¤½¤³¤ËNewPage¤Î¤è¤¦¤ÊÃ±¸ì
+    ¡ÊÂçÊ¸»ú¾®Ê¸»úº®ºß¤·¤Æ¤¤¤ë±ÑÊ¸»úÎó¡Ë¤ä¡¢ [[¿·¤·¤¤¥Ú¡¼¥¸Ì¾]] ¤ÎÍÍ¤ËÆó½Å¤Î¥Ö
+     ¥é¥±¥Ã¥È¤Ç°Ï¤ó¤À¸ì¶ç¤ò½ñ¤¤¤Æ¡ÖÊÝÂ¸¡×¤·¤Þ¤¹¡£
 
-ãƒ†ã‚­ã‚¹ãƒˆæ•´å½¢ã®ãƒ«ãƒ¼ãƒ«
+    3.  ÊÝÂ¸¤¹¤ë¤È¡¢FrontPage¤Î¥Ú¡¼¥¸¤¬½ñ¤­´¹¤ï¤ê¡¢¤¢¤Ê¤¿¤¬½ñ¤¤¤¿NewPage¤È¤¤¤¦
+      Ã±¸ì¤ä¡Ö¿·¤·¤¤¥Ú¡¼¥¸Ì¾¡×¤È¤¤¤¦¸ì¶ç¤Î¸å¤í¤Ë '?' ¤È¤¤¤¦¾®¤µ¤Ê¥ê¥ó¥¯¤¬É½¼¨
+      ¤µ¤ì¤Þ¤¹¡£ ¤³¤Î¥ê¥ó¥¯¤Ï¤½¤Î¥Ú¡¼¥¸¤¬¤Þ¤ÀÂ¸ºß¤·¤Ê¤¤¤³¤È¡¢¤½¤·¤Æ¤½¤Î¥ê¥ó¥¯
+      ¤«¤é¤¹¤°¤ËºîÀ®¤Ç¤­¤ë¤³¤È¤ò¼¨¤¹°õ¤Ç¤¹¡£
 
-        [[æ•´å½¢ãƒ«ãƒ¼ãƒ«]] ãƒšãƒ¼ã‚¸ã‚’å‚ç…§ã—ã¦ãã ã•ã„ã€‚
+    4.  ¤½¤Î '?' ¤ò¥¯¥ê¥Ã¥¯¤¹¤ë¤È¿·¤·¤¤¥Ú¡¼¥¸¤¬¤Ç¤­¤Þ¤¹¤Î¤Ç¡¢¤¢¤Ê¤¿¤Î¹¥¤­¤ÊÊ¸
+      ¾Ï¤ò¤½¤Î¿·¤·¤¤¥Ú¡¼¥¸¤Ë½ñ¤¤¤ÆÊÝÂ¸¤·¤Þ¤¹¡£
 
-InterWiki
+    5.  ¿·¤·¤¤¥Ú¡¼¥¸¤¬¤Ç¤­¤ë¤È¡¢¸µ¤Î¥Ú¡¼¥¸¤Ë¤¢¤Ã¤¿¤½¤ì¤é¤Î¸ì¶ç¤«¤é¤Ï '?' ¤¬¾Ã
+      ¤¨¡¢¤½¤Î¥Ú¡¼¥¸¤ò»Ø¤·¼¨¤¹ÉáÄÌ¤Î¥Ï¥¤¥Ñ¡¼¥ê¥ó¥¯¤È¤Ê¤ê¤Þ¤¹¡£
 
-        1.11 ã‹ã‚‰InterWikiãŒå®Ÿè£…ã•ã‚Œã¾ã—ãŸã€‚
+    6. º£¸å¤Ï¡¢¤½¤ì¤é¤Î¸ì¶ç(¤Î¥ê¥ó¥¯)¤ò¥¯¥ê¥Ã¥¯¤¹¤ë¤³¤È¤Ç¡¢µ¤·Ú¤Ë¤½¤Î¥Ú¡¼¥¸¤ò
+      É½¼¨¤Ç¤­¤ë¤è¤¦¤Ë¤Ê¤ê¤Þ¤¹¡£
 
-        InterWiki ã¨ã¯ã€Wikiã‚µãƒ¼ãƒãƒ¼ã‚’ã¤ãªã’ã‚‹æ©Ÿèƒ½ã§ã™ã€‚
-        æœ€åˆã¯ãã†ã ã£ãŸã‚“ã§ InterWiki ã¨ã„ã†åå‰ãªã®ã ãã†ã§ã™ãŒã€
-        ä»Šã¯ã€Wikiã‚µãƒ¼ãƒãƒ¼ã ã‘ã§ã¯ãªãã¦ã€ã„ã‚ã‚“ãªã‚µãƒ¼ãƒãƒ¼ã‚’å¼•ã‘ã¾ã™ã€‚
-        ãªã‹ãªã‹ä¾¿åˆ©ã§ã™ã€‚ãã†ãªã‚‹ã¨ InterWiki ã¨ã„ã†åå‰ã¯ã‚ã¾ã‚Šæ©Ÿèƒ½ã‚’
-        è¡¨ã—ã¦ã„ãªã„ã“ã¨ã«ãªã‚Šã¾ã™ã€‚
-        ã“ã®æ©Ÿèƒ½ã¯ Tiki ã‹ã‚‰ã»ã¼å®Œå…¨ã«ç§»æ¤ã—ã¦ã„ã¾ã™ã€‚
+¥Æ¥­¥¹¥È¤Î¥ë¡¼¥ë
+    ¥Æ¥­¥¹¥È¥Ç¡¼¥¿¤òXHTML¤ËÊÑ´¹¤¹¤ë¤¿¤á¤Î¥ë¡¼¥ë¤Ë¤Ä¤¤¤Æ¤Ï [[¥Ø¥ë¥×]] [[À°·Á¥ë
+    ¡¼¥ë]] ¤Î¥Ú¡¼¥¸¤ò»²¾È¤·¤Æ¤¯¤À¤µ¤¤¡£
 
-        è©³ç´°ã¯ [[InterWikiãƒ†ã‚¯ãƒ‹ã‚«ãƒ«]] ãƒšãƒ¼ã‚¸ã‚’å‚ç…§ã—ã¦ãã ã•ã„ã€‚
+    ¥Æ¥­¥¹¥È¥Ç¡¼¥¿¤Ç¤Î²þ¹Ô¤ò¡¢XHTML¤Î½ÐÎÏ¤Ç¤â¤½¤Î¤Þ¤Þ²þ¹Ô(<br />)¤È¤·¤ÆÈ¿±Ç¤µ
+    ¤»¤¿¤¤¾ì¹ç:
+      1. ÀßÄê $line_break ¤ÎÆâÍÆ¤òÀÚ¤êÂØ¤¨¤ë¤³¤È¤ÇÁ´ÂÎ¤ÎÆ°ºî¤¬ÊÑ¤ï¤ê¤Þ¤¹
+      2. #setlinebreak ¥×¥é¥°¥¤¥ó¤Ç¹ÔÃ±°Ì¤ËÁàºî¤¹¤ë»ö¤¬²ÄÇ½¤Ç¤¹
 
-RDF/RSSã®å‡ºåŠ›
+    WikiName (ÂçÊ¸»ú»Ï¤Þ¤ê¤Î±ÑÃ±¸ì¤¬Æó¤Ä°Ê¾åÂ³¤¤¤¿Ã±¸ì) ¤ËÂÐ¤¹¤ë¼«Æ°¥ê¥ó¥¯µ¡Ç½
+    ¤òÌµ¸ú¤Ë¤¹¤ë¤Ë¤Ï¡¢ÀßÄê $nowikiname ¤ÎÆâÍÆ¤òÀÚ¤êÂØ¤¨¤Æ²¼¤µ¤¤¡£
 
-        1.2.1ã‹ã‚‰ã€RecentChangesã®RDF/RSSã‚’å‡ºåŠ›ã§ãã‚‹ã‚ˆã†ã«ãªã‚Šã¾ã—ãŸã€‚
+    AutoLink (´ûÂ¸¤Î¥Ú¡¼¥¸¤ËÂÐ¤¹¤ë¥ê¥ó¥¯¤ò¼«Æ°Åª¤ËºîÀ®¤¹¤ëµ¡Ç½)¤òÌµ¸ú¤Ë¤·¤¿
+    ¤ê¡¢Í­¸ú¤È¤ß¤Ê¤¹¥Ú¡¼¥¸Ì¾¤Î¥Ð¥¤¥È¿ô¤ò½¤Àµ¤¹¤ë¾ì¹ç¡¢ÀßÄê $autolink ¤ÎÃÍ¤ò½¤
+    Àµ¤·¤Æ²¼¤µ¤¤¡£
 
-        * RSS 0.91 ã®å‡ºåŠ›æ–¹æ³•ã®ä¾‹
-            http://pukiwiki/index.php?cmd=rss
+InterWiki¤Ë¤Ä¤¤¤Æ
+    InterWiki ¤È¤Ï¡¢Wiki¤ÈWiki¤ò¤Ä¤Ê¤²¤ëµ¡Ç½¤Ç¤¹¡£Îã¤¨¤Ð
+    [[Wiki¥µ¥¤¥ÈÌ¾:¥Ú¡¼¥¸Ì¾]]
+    ¤³¤Î¤è¤¦¤Ëµ­½Ò¤¹¤ë¤³¤È¤Ç¡¢¤½¤ÎWiki¤ÎÆÃÄê¤Î¥Ú¡¼¥¸¤ËÂÐ¤¹¤ë¥ê¥ó¥¯¤ò´ÊÃ±¤Ë½ÐÎÏ
+    ¤µ¤»¤ë»ö¤¬¤Ç¤­¤Þ¤¹¡£
+    ¢¨Wiki°Ê³°¤Î¥µ¥¤¥È¡¢Îã¤¨¤Ð¸¡º÷¥¨¥ó¥¸¥ó¤Ø¤ÎURI¤òÀ¸À®¤¹¤ë¤³¤È¤â²ÄÇ½¤Ç¤¹
 
-        * RSS 1.0 ã®å‡ºåŠ›æ–¹æ³•ã®ä¾‹
-            http://pukiwiki.org/index.php?cmd=rss10
+    ¤³¤Îµ¡Ç½¤Ï Tiki ¤«¤é¤Û¤Ü´°Á´¤Ë°Ü¿¢¤µ¤ì¤Æ¤¤¤Þ¤¹¡£
+    ¾ÜºÙ¤Ï [[InterWiki¥Æ¥¯¥Ë¥«¥ë]] ¤Î¥Ú¡¼¥¸¤ò»²¾È¤·¤Æ¤¯¤À¤µ¤¤¡£
 
-FAQ
+RDF/RSS¤Î½ÐÎÏ
+    °ìÉô¤ÎWeb¥Ö¥é¥¦¥¶¤Ê¤É¤ËÅëºÜ¤µ¤ì¤Æ¤¤¤ëRSS¥ê¡¼¥À¡¼¤ò»È¤Ã¤Æ¡¢PukiWiki¤Î¹¹¿·¾õ
+    ¶·¤ò³ÎÇ§¤¹¤ë¤³¤È¤¬¤Ç¤­¤Þ¤¹¡£
+      1.2.1¤«¤é¡¢RecentChanges¤ÎRDF/RSS¤ò½ÐÎÏ¤Ç¤­¤ë¤è¤¦¤Ë¤Ê¤ê¤Þ¤·¤¿¡£
+    ¡¡ 1.4.5¤«¤é¡¢RSS 2.0 ¤ò½ÐÎÏ¤Ç¤­¤ë¤è¤¦¤Ë¤Ê¤ê¤Þ¤·¤¿¡£
 
-        PukiWiki.orgã®ãã‚Œãžã‚Œã®ãƒšãƒ¼ã‚¸ã‚’ãƒã‚§ãƒƒã‚¯ã—ã¦ä¸‹ã•ã„ã€‚
+    ½ÐÎÏÊýË¡¤ÎÎã:
+      RSS 0.91 http://path/to/pukiwiki/index.php?plugin=rss
+      RSS 1.0  http://path/to/pukiwiki/index.php?plugin=rss&ver=1.0
+      RSS 2.0  http://path/to/pukiwiki/index.php?plugin=rss&ver=2.0
 
-        FAQ
-        http://pukiwiki.org/?FAQ
+´ØÏ¢¹àÌÜ
+    É¸½àÅºÉÕ¤µ¤ì¤Æ¤¤¤ë¥×¥é¥°¥¤¥ó¤Î´ÊÃ±¤ÊÀâÌÀ¤Ï¡¢[[PukiWiki/1.4/Manual/Plugin]]
+    ¤Î¥Ú¡¼¥¸¤ò»²¾È¤·¤Æ²¼¤µ¤¤¡£
 
-        è³ªå•ç®±
-        http://pukiwiki.org/?%E8%B3%AA%E5%95%8F%E7%AE%B1
+    ¤½¤ÎÂ¾¡¢¥ê¥ê¡¼¥¹ÈÇ¤Î´ðËÜÅª¤Ê»È¤¤Êý¤Ë´Ø¤¹¤ë¾ðÊó¤ÏPukiWiki.org¤ò¤´Í÷²¼¤µ¤¤¡£
+    °Ê²¼¤Î¤è¤¦¤Ê¥³¥ó¥Æ¥ó¥Ä¤¬ÆÃ¤ËÍ­ÍÑ¤Ç¤¹¡£
 
-        ç¶šãƒ»è³ªå•ç®±
-        http://pukiwiki.org/?%E7%B6%9A%E3%83%BB%E8%B3%AA%E5%95%8F%E7%AE%B1
+    FAQ        http://pukiwiki.org/?FAQ
+    ¼ÁÌäÈ¢     http://pukiwiki.org/?%E8%B3%AA%E5%95%8F%E7%AE%B1
+    Â³¡¦¼ÁÌäÈ¢ http://pukiwiki.org/?%E7%B6%9A%E3%83%BB%E8%B3%AA%E5%95%8F%E7%AE%B1
 
-BUG
+¥Ð¥°
+    PukiWiki¤Î¥»¥­¥å¥ê¥Æ¥£¤Ë´Ø¤¹¤ë¾ðÊó¤Ï°Ê²¼¤Ç¤Þ¤È¤á¤é¤ì¤Æ¤¤¤Þ¤¹¡£
+    http://pukiwiki.org/?PukiWiki/Errata
 
-        ãƒã‚°å ±å‘Šã¯ devã‚µã‚¤ãƒˆã¾ã§ãŠé¡˜ã„ã—ã¾ã™ã€‚
-        (æˆ‘ã€…ã¯PukiWikiã§PukiWikiã®ãƒã‚°ãƒˆãƒ©ãƒƒã‚­ãƒ³ã‚°ã‚’è¡Œã£ã¦ã„ã¾ã™)
+    ¥Ð¥°Êó¹ð¤Ï dev¥µ¥¤¥È¤Þ¤Ç¤ª´ê¤¤¤·¤Þ¤¹¡£
+    (²æ¡¹¤ÏPukiWiki¤ÇPukiWiki¤Î¥Ð¥°¥È¥é¥Ã¥­¥ó¥°¤ò¹Ô¤Ã¤Æ¤¤¤Þ¤¹)
+    http://pukiwiki.sourceforge.jp/dev/?BugTrack2
 
-        dev:BugTrack
-        http://pukiwiki.sourceforge.jp/dev/?BugTrack
+¼Õ¼­
+    PukiWiki Develpers Team¤Î³§¤µ¤ó¡¢PukiWiki¥æ¡¼¥¶¤Î³§¤µ¤ó¤Ë´¶¼Õ¤·¤Þ¤¹¡£
+    PukiWiki ¤ò³«È¯¤·¤¿¡¢yu-ji(µìsng)¤µ¤ó¤Ë´¶¼Õ¤·¤Þ¤¹¡£
+    YukiWiki ¤Î¥¯¥í¡¼¥ó²½¤òµö²Ä¤·¤Æ¤¤¤¿¤À¤¤¤¿·ë¾ë¹À¤µ¤ó¤Ë´¶¼Õ¤·¤Þ¤¹¡£
+    ËÜ²È¤ÎWikiWiki¤òºî¤Ã¤¿Cunningham & Cunningham, Inc.¤Ë ´¶¼Õ¤·¤Þ¤¹¡£
 
-è¬è¾ž
-
-    PukiWiki Develpers Teamã®çš†ã•ã‚“ã€PukiWikiãƒ¦ãƒ¼ã‚¶ã®çš†ã•ã‚“ã«æ„Ÿè¬ã—ã¾ã™ã€‚
-    PukiWiki ã‚’é–‹ç™ºã—ãŸã€yu-ji(æ—§sng)ã•ã‚“ã«æ„Ÿè¬ã—ã¾ã™ã€‚
-    YukiWiki ã®ã‚¯ãƒ­ãƒ¼ãƒ³åŒ–ã‚’è¨±å¯ã—ã¦ã„ãŸã ã„ãŸçµåŸŽæµ©ã•ã‚“ã«æ„Ÿè¬ã—ã¾ã™ã€‚
-    æœ¬å®¶ã®WikiWikiã‚’ä½œã£ãŸCunningham & Cunningham, Inc.ã« æ„Ÿè¬ã—ã¾ã™ã€‚
-
-å‚ç…§ãƒªãƒ³ã‚¯
-
-    * PukiWikiãƒ›ãƒ¼ãƒ ãƒšãƒ¼ã‚¸	http://pukiwiki.org/
-    * yu-jiã•ã‚“ã®ãƒ›ãƒ¼ãƒ ãƒšãƒ¼ã‚¸	http://factage.com/yu-ji/
-    * çµåŸŽæµ©ã•ã‚“ã®ãƒ›ãƒ¼ãƒ ãƒšãƒ¼ã‚¸	http://www.hyuki.com/
-    * YukiWikiãƒ›ãƒ¼ãƒ ãƒšãƒ¼ã‚¸	http://www.hyuki.com/yukiwiki/
-    * Tiki	http://todo.org/cgi-bin/tiki/tiki.cgi
-    * æœ¬å®¶WikiWikiWeb	http://c2.com/cgi/wiki?WikiWikiWeb
-    * WikiWikiWebã®ä½œè€…(Cunningham & Cunningham, Inc.)	http://c2.com/
-    
+    * yu-ji¤µ¤ó¤Î¥Û¡¼¥à¥Ú¡¼¥¸   http://factage.com/yu-ji/
+    * ·ë¾ë¹À¤µ¤ó¤Î¥Û¡¼¥à¥Ú¡¼¥¸  http://www.hyuki.com/
+    * YukiWiki¥Û¡¼¥à¥Ú¡¼¥¸      http://www.hyuki.com/yukiwiki/
+    * Tiki          http://todo.org/cgi-bin/tiki/tiki.cgi
+    * ËÜ²ÈWikiWikiWeb       http://c2.com/cgi/wiki?WikiWikiWeb
+    * WikiWikiWeb¤Îºî¼Ô(Cunningham & Cunningham, Inc.) http://c2.com/
