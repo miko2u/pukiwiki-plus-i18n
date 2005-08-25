@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plks! - Yet another WikiWikiWeb clone
-// $Id: pukiwiki.ini.php,v 1.127.13 2005/07/03 14:16:23 miko Exp $
+// $Id: pukiwiki.ini.php,v 1.128.13 2005/08/24 14:52:25 miko Exp $
 // Copyright (C)
 //   2005      Customized/Patched by Miko.Hoshina
 //   2002-2005 PukiWiki Developers Team
@@ -156,7 +156,7 @@ $footarea     = ':Footer';
 /////////////////////////////////////////////////
 // Always output "nofollow,noindex" attribute
 
-$nofollow = 0; // 1 = Hide from search engines
+$nofollow = 0; // 1 = Try hiding from search engines
 
 /////////////////////////////////////////////////
 
