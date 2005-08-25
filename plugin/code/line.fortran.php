@@ -3,14 +3,14 @@
  * Fortran (60, 77, 90) キーワード定義ファイル
  */
 
-$switchHash["'"] = NONESCAPE_LITERAL;   // ' はエスケープしない文字列リテラル
-$mkoutline = $option["outline"] = false; // アウトラインモード不可 
+$switchHash['\''] = PLUGIN_CODE_NONESCAPE_LITERAL;   // ' はエスケープしない文字列リテラル
+$mkoutline = $option['outline'] = false; // アウトラインモード不可 
 $capital = true;                        // 予約語の大文字小文字を区別しない
 
-$switchHash["c"] = CHAR_COMMENT;   // コメントは行頭の c/C から改行まで (f66)
-$switchHash["C"] = CHAR_COMMENT;
-$switchHash["*"] = HEAD_COMMENT;   // コメントは行頭の  * から改行まで (f77)
-$switchHash["!"] = HEAD_COMMENT;   // コメントは行頭の  ! から改行まで (f90)
+$switchHash['c'] = PLUGIN_CODE_CHAR_COMMENT;   // コメントは行頭の c/C から改行まで (f66)
+$switchHash['C'] = PLUGIN_CODE_CHAR_COMMENT;
+$switchHash['*'] = PLUGIN_CODE_HEAD_COMMENT;   // コメントは行頭の  * から改行まで (f77)
+$switchHash['!'] = PLUGIN_CODE_HEAD_COMMENT;   // コメントは行頭の  ! から改行まで (f90)
 /*
 $code_comment = Array(
 	"\n"=> Array(
@@ -19,16 +19,16 @@ $code_comment = Array(
 		"/^\n*.*\n/",
 		"/^\n!.*\n/",
 	),
-	"c" => Array(
+	'c' => Array(
 		"/^c.*\n/",
 	),
-	"C" => Array(
+	'C' => Array(
 		"/^C.*\n/",
 	),
-	"*" => Array(
+	'*' => Array(
 		"/^\*.*\n/",
 	),
-	"!" => Array(
+	'!' => Array(
 		"/^!.*\n/",
 	),
 );

@@ -6,21 +6,20 @@
 $capital = true;	// 予約語の大文字小文字を区別しない
 
 // コメント定義
-$switchHash["r"] = COMMENT_WORD;	// コメントは REM から行末まで
-$switchHash["R"] = COMMENT_WORD;
+$switchHash['r'] = PLUGIN_CODE_COMMENT_WORD;	// コメントは REM から行末まで
+$switchHash['R'] = PLUGIN_CODE_COMMENT_WORD;
 $code_comment = Array(
-	"r" => Array(
-		"/^rem\s.*\n/i",
-	),
-	"R" => Array(
-		"/^rem\s.*\n/i",
-	),
+	'r' => Array(
+				 Array('/^rem /i', "\n", 1),
+		),
+	'R' => Array(
+				 Array('/^rem /i', "\n", 1),
+		),
 );
-
 // アウトライン用
 if($mkoutline){
-  $switchHash["("] = BLOCK_START;
-  $switchHash[")"] = BLOCK_END;
+  $switchHash['('] = PLUGIN_CODE_BLOCK_START;
+  $switchHash[')'] = PLUGIN_CODE_BLOCK_END;
 }
 
 $code_css = Array(

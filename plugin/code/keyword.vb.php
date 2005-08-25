@@ -1,24 +1,24 @@
 <?php
 /**
- *キーワード定義ファイル
+ * VisualBasic
  */
 
-$switchHash["\""] = NONESCAPE_LITERAL;  // VisualBasicでは \ は文字
-$mkoutline = $option["outline"] = false; // アウトラインモード不可 
+$switchHash['"'] = PLUGIN_CODE_NONESCAPE_LITERAL;  // VisualBasicでは \ は文字
+$mkoutline = $option['outline'] = false; // アウトラインモード不可 
 
 // コメント定義
-$switchHash["'"] = COMMENT;    // コメントは ' から改行まで
-$switchHash["r"] = COMMENT_WORD;   // コメントは REM から改行まで
-$switchHash["R"] = COMMENT_WORD;
+$switchHash['\''] = PLUGIN_CODE_COMMENT;    // コメントは ' から改行まで
+$switchHash['r'] = PLUGIN_CODE_COMMENT_WORD;   // コメントは REM から改行まで
+$switchHash['R'] = PLUGIN_CODE_COMMENT_WORD;
 $code_comment = Array(
-	"'" => Array(
-		"/^'.*\n/",
+	'\'' => Array(
+				 Array('/^\'/', "\n", 1),
+	    ),
+	'r' => Array(
+				 Array('/^rem /i', "\n", 1),
 		),
-	"r" => Array(
-		"/^rem\s.*\n/i",
-		),
-	"R" => Array(
-		"/^rem\s.*\n/i",
+	'R' => Array(
+				 Array('/^rem /i', "\n", 1),
 		),
 );
 

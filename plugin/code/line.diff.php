@@ -4,20 +4,20 @@
  * 行指向モード用
  */
 
-$switchHash['!'] = IDENTIFIRE_CHAR;   // changed
-$switchHash['|'] = IDENTIFIRE_CHAR;   // changed
-$switchHash['+'] = IDENTIFIRE_WORD;   // added
-$switchHash['>'] = IDENTIFIRE_CHAR;   // added
-$switchHash[')'] = IDENTIFIRE_CHAR;   // added
-$switchHash['-'] = IDENTIFIRE_WORD;   // removed
-$switchHash['<'] = IDENTIFIRE_CHAR;   // removed
-$switchHash['('] = IDENTIFIRE_CHAR;   // removed
-$switchHash['*'] = IDENTIFIRE_CHAR;   // control
-$switchHash['\\']= IDENTIFIRE_CHAR;   // control
-$switchHash['@'] = IDENTIFIRE_CHAR;   // control
+$switchHash['!'] = PLUGIN_CODE_IDENTIFIRE_CHAR;   // changed
+$switchHash['|'] = PLUGIN_CODE_IDENTIFIRE_CHAR;   // changed
+$switchHash['+'] = PLUGIN_CODE_IDENTIFIRE_WORD;   // added
+$switchHash['>'] = PLUGIN_CODE_IDENTIFIRE_CHAR;   // added
+$switchHash[')'] = PLUGIN_CODE_IDENTIFIRE_CHAR;   // added
+$switchHash['-'] = PLUGIN_CODE_IDENTIFIRE_WORD;   // removed
+$switchHash['<'] = PLUGIN_CODE_IDENTIFIRE_CHAR;   // removed
+$switchHash['('] = PLUGIN_CODE_IDENTIFIRE_CHAR;   // removed
+$switchHash['*'] = PLUGIN_CODE_IDENTIFIRE_CHAR;   // control
+$switchHash['\\']= PLUGIN_CODE_IDENTIFIRE_CHAR;   // control
+$switchHash['@'] = PLUGIN_CODE_IDENTIFIRE_CHAR;   // control
 
-$mkoutline = $option["outline"] = false; // アウトラインモード不可 
-$mkcomment = $option["comment"] = false; // コメント無し 
+$mkoutline = $option['outline'] = false; // アウトラインモード不可 
+$mkcomment = $option['comment'] = false; // コメント無し 
 $linemode = true; // 行内を解析しない
 
 // 
@@ -32,7 +32,7 @@ $code_identifire = array(
 
 
 // コメント定義
-$switchHash["#"] = COMMENT;	// コメントは # から改行まで
+$switchHash['#'] = PLUGIN_CODE_COMMENT;	// コメントは # から改行まで
 
 $code_css = Array(
 					   'changed', //

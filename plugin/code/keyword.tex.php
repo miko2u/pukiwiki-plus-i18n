@@ -1,17 +1,17 @@
 <?php
 /**
- *キーワード定義ファイル
+ * TeX キーワード定義ファイル
  */
 
-$switchHash['$']  = FORMULA;  // Texでは$は数式に使用する
-$switchHash['\\'] = SPECIAL_IDENTIFIRE;  // Texでは\は予約語に使用する
-$mkoutline = $option["outline"] = false; // アウトラインモード不可 
+$switchHash['$']  = PLUGIN_CODE_FORMULA;  // Texでは$は数式に使用する
+$switchHash['\\'] = PLUGIN_CODE_SPECIAL_IDENTIFIRE;  // Texでは\は予約語に使用する
+$mkoutline = $option['outline'] = false; // アウトラインモード不可 
 
 // コメント定義
-$switchHash["%"]  = COMMENT;    // コメントは % から改行まで
+$switchHash['%']  = PLUGIN_CODE_COMMENT;    // コメントは % から改行まで
 $code_comment = Array(
-	"%" => Array(
-		"/^%.*\n/",
+	'%' => Array(
+				 Array('/^%/', "\n", 1),
 	)
 );
 

@@ -1,19 +1,20 @@
 <?php
 /**
- *キーワード定義ファイル
+ * Pascal
  */
 
 $capital = true;                        // 予約語の大文字小文字を区別しない
-$mkoutline = $option["outline"] = false; // アウトラインモード不可 
+$mkoutline = $option['outline'] = false; // アウトラインモード不可 
+$switchHash['\''] = PLUGIN_CODE_NONESCAPE_LITERAL;
 
-$switchHash["("] = COMMENT;       // コメントは (* から *) まで
-$switchHash["{"] = COMMENT;       // コメントは { から } まで
+$switchHash['('] = PLUGIN_CODE_COMMENT;       // コメントは (* から *) まで
+$switchHash['{'] = PLUGIN_CODE_COMMENT;       // コメントは { から } まで
 $code_comment = Array(
-	"(" => Array(
-		"/^\(\*(.|\n)*?\*\)/",
+	'(' => Array(
+				 Array('/^\(\*/', '*)', 2),
 		),
-	"{" => Array(
-		"/^{(.|\n)*?}/",
+	'{' => Array(
+				 Array('/^{/', '}', 1),
 		),
 );
 

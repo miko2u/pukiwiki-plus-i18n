@@ -1,25 +1,25 @@
 <?php
 /**
- *キーワード定義ファイル
+ * D Language
  */
 
-$switchHash["#"] = SHARP_IDENTIFIRE; // # から始まる予約語あり
-$switchHash["`"] = NONESCAPE_LITERAL;  // ` はエスケープしない文字列リテラル
+$switchHash['#'] = PLUGIN_CODE_SHARP_IDENTIFIRE; // # から始まる予約語あり
+$switchHash['\`'] = NONESCAPE_LITERAL;  // ` はエスケープしない文字列リテラル
 
 // コメント定義
-$switchHash["/"] = COMMENT;    //  コメントは /* から */ までと // から改行までと、/+ から +/ まで。
+$switchHash['/'] = PLUGIN_CODE_COMMENT;    //  コメントは /* から */ までと // から改行までと、/+ から +/ まで。
 $code_comment = Array(
-	"/" => Array(
-		"/^\/\/.*\\n/",
-		"/^\/\*(.|\n)*?\*\//",
-		"/^\/\+(.|\n)*?\+\//",
+	'/' => Array(
+				 Array('/^\/\*/', '*/', 2),
+				 Array('/^\/\+/', '+/', 2),
+				 Array('/^\/\//', "\n", 1),
 	)
 );
 
 // アウトライン用
 if($mkoutline){
-  $switchHash["{"] = BLOCK_START;
-  $switchHash["}"] = BLOCK_END;
+  $switchHash['{'] = PLUGIN_CODE_BLOCK_START;
+  $switchHash['}'] = PLUGIN_CODE_BLOCK_END;
 }
 
 $code_css = Array(

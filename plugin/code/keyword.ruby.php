@@ -1,29 +1,29 @@
 <?php
 /**
- *キーワード定義ファイル
+ * Ruby
  */
 
-$switchHash["$"] = ESCAPE;            // $ はエスケープ
-$switchHash["'"] = NONESCAPE_LITERAL; // ' はエスケープしない文字列リテラル
-$mkoutline = $option["outline"] = false; // アウトラインモード不可 
+$switchHash['$'] = PLUGIN_CODE_ESCAPE;            // $ はエスケープ
+$switchHash['\''] = PLUGIN_CODE_NONESCAPE_LITERAL; // ' はエスケープしない文字列リテラル
+$mkoutline = $option['outline'] = false; // アウトラインモード不可 
 
 // コメント定義
 
-$switchHash["#"] = COMMENT;	// コメントは # から改行まで (例外あり)
-$switchHash["="] = COMMENT;	// コメントは =begin から =end まで
-$switchHash["("] = COMMENT;	// コメントは (?# から ) まで (正規表現内)
+$switchHash['#'] = PLUGIN_CODE_COMMENT;	// コメントは # から改行まで (例外あり)
+$switchHash['='] = PLUGIN_CODE_COMMENT;	// コメントは =begin から =end まで
+$switchHash['('] = PLUGIN_CODE_COMMENT;	// コメントは (?# から ) まで (正規表現内)
 $code_comment = Array(
-	"#" => Array(
-		"/#(\n|[^{].*\n)/",
-	),
-		"=" => Array(
-		"/=begin\n(.|\n)*=end\n/",
-	),
-		'(' => Array(
-		"/\(\?\#.*\)/",
-	)
-);
-
+					  '#' => Array(
+								   Array('/^#[^{]/', "\n", 1),
+								   ),
+					  '=' => Array(
+								   Array('/^=begin/', '=end', 4),
+								   ),
+					  '(' => Array(
+								   Array('/^\(\?#/', ')', 1),
+								   )
+					  );
+					  
 $code_css = Array(
   'operator',		// オペレータ関数
   'identifier',	// その他の識別子

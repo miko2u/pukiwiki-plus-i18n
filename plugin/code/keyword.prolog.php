@@ -1,22 +1,23 @@
 <?php
 /**
- * Prologキーワード定義ファイル
+ * Prolog キーワード定義ファイル
  */
 
-$mkoutline = $option["outline"] = false; // アウトラインモード不可 
+$mkoutline = $option['outline'] = false; // アウトラインモード不可 
+$switchHash['$'] = PLUGIN_CODE_NONESCAPE_LITERAL;
 
-//$switchHash['['] = PAIR_LITERAL;  // ()は文字列リテラル
+//$switchHash['['] = PLUGIN_CODE_PAIR_LITERAL;  // ()は文字列リテラル
 //$literal_delimiter = ']';
 
 // コメント定義
-$switchHash["/"] = COMMENT;        //  コメントは /* から */ まで
-$switchHash["%"]  = COMMENT;    // コメントは % から改行まで
+$switchHash['/'] = PLUGIN_CODE_COMMENT;    //  コメントは /* から */ まで
+$switchHash['%'] = PLUGIN_CODE_COMMENT;    // コメントは % から改行まで
 $code_comment = Array(
-	"/" => Array(
-		"/^\/\*(.|\n)*?\*\//",
+	'/' => Array(
+				 Array('/^\/\*/', '*/', 2),
 	 ),
-	"%" => Array(
-		"/^%.*\\n/",
+	'%' => Array(
+				 Array('/^%/', "\n", 1),
 	 )
 );
 

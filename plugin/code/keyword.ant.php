@@ -1,17 +1,16 @@
 <?php
 /**
- * apatch-ant キーワード定義ファイル
+ * apatch-ant (XML) キーワード定義ファイル
  */
 
-//$capital = true;                      // 予約語の大文字小文字を区別しない
-$mkoutline = $option["outline"] = false; // アウトラインモード不可 
+$mkoutline = $option['outline'] = false; // アウトラインモード不可 
 
 // コメント定義
-$switchHash["<"] = COMMENT;        // コメントは <!-- から --> まで
+$switchHash['<'] = PLUGIN_CODE_COMMENT;
 $code_comment = Array(
-	"<" => Array(
-		"/^<\!\-\-(.|\n)*?\-\->/",
-		"/^<\?(.|\n)*?\?>/",
+	'<' => Array(
+				 Array('/^<\!--/', '-->', 3),
+				 Array('/^<\?/', '?>', 2),
 	)
 );
 

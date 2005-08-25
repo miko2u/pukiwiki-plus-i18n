@@ -1,30 +1,30 @@
 <?php
 /**
- *キーワード定義ファイル
+ * HSP キーワード定義ファイル
  */
 
-$switchHash["\""] = NONESCAPE_LITERAL;   // \" は非エスケープ文字
-$switchHash["#"] = SPECIAL_IDENTIFIRE;  // # から始まる予約語あり
-$switchHash['*'] = SPECIAL_IDENTIFIRE;  // * から始まるのはラベル
+$switchHash['\''] = PLUGIN_CODE_NONESCAPE_LITERAL;   // " は非エスケープ文字
+$switchHash['#'] = PLUGIN_CODE_SPECIAL_IDENTIFIRE;  // # から始まる予約語あり
+$switchHash['*'] = PLUGIN_CODE_SPECIAL_IDENTIFIRE;  // * から始まるのはラベル
 $capital = true;                    // 予約語の大文字小文字を区別しない
 
 // コメント定義
-$switchHash["/"] = COMMENT;        //  コメントは /* から */ までと // から改行までと ; から改行まで
-$switchHash[";"] = COMMENT;
+$switchHash['/'] = PLUGIN_CODE_COMMENT;     // コメントは /* から */ までと // から改行までと
+$switchHash[';'] = PLUGIN_CODE_COMMENT;     // コメントは ; から改行まで
 $code_comment = Array(
-	"/" => Array(
-		"/^\/\/.*\\n/",
-		"/^\/\*(.|\n)*?\*\//",
+	'/' => Array(
+				 Array('/^\/\*/', '*/', 2),
+				 Array('/^\/\//', "\n", 1),
 	),
-	";" => Array(
-		"/^;.*\n/",
+	';' => Array(
+				 Array('/^;/', "\n", 1),
 	)
 );
 
 // アウトライン用
 if($mkoutline){
-  $switchHash["{"] = BLOCK_START;
-  $switchHash["}"] = BLOCK_END;
+  $switchHash['{'] = PLUGIN_CODE_BLOCK_START;
+  $switchHash['}'] = PLUGIN_CODE_BLOCK_END;
 }
 
 $code_css = Array(

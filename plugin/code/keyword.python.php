@@ -1,17 +1,17 @@
 <?php
 /**
- *キーワード定義ファイル
+ * Python
  */
 
-$switchHash["$"] = ESCAPE;            // $ はエスケープ
-$switchHash["'"] = NONESCAPE_LITERAL; // ' はエスケープしない文字列リテラル
-$mkoutline = $option["outline"] = false; // アウトラインモード不可 
+$switchHash['$'] = PLUGIN_CODE_ESCAPE;            // $ はエスケープ
+$switchHash['\''] = PLUGIN_CODE_NONESCAPE_LITERAL; // ' はエスケープしない文字列リテラル
+$mkoutline = $option['outline'] = false; // アウトラインモード不可 
 
 // コメント定義
-$switchHash["#"] = COMMENT;	// コメントは # から改行まで (例外あり)
+$switchHash['#'] = PLUGIN_CODE_COMMENT;	// コメントは # から改行まで (例外あり)
 $code_comment = Array(
-	"#" => Array(
-		"/#(\n|[^{].*\n)/",
+	'#' => Array(
+				 Array('/^#[^{]/', "\n", 1),
 	)
 );
 

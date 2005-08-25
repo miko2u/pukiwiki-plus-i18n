@@ -3,14 +3,15 @@
  * AviSynth キーワード定義ファイル
  */
 
-$mkoutline = $option["outline"] = false; // アウトラインモード不可
+$switchHash['"'] = PLUGIN_CODE_NONESCAPE_LITERAL;  // " はエスケープ文字ではない
+$mkoutline = $option['outline'] = false; // アウトラインモード不可
 $capital = true;                    // 予約語の大文字小文字を区別しない
 
 // コメント定義
-$switchHash["#"] = COMMENT;    // コメントは # から改行まで
+$switchHash['#'] = PLUGIN_CODE_COMMENT;    // コメントは # から改行まで
 $code_comment = Array(
-	"#" => Array(
-		"/^#.*\n/",
+	'#' => Array(
+				 Array('/^#/', "\n", 1),
 	)
 );
 
@@ -229,6 +230,10 @@ $code_keyword = Array(
 		'writefilestart' => 3,
 		'writefileend' => 3,
 		'writefile' => 3,
+
+		'loadplugin' => 3,
+		'loadvirtualdubplugin' => 3,
+		'loadvfapiplugin' => 3,
 		
 		//ClipProperties
 		'width' => 3,

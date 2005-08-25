@@ -3,23 +3,23 @@
  * PS (PostScript) キーワード定義ファイル
  */
 
-$switchHash['.'] = SPECIAL_IDENTIFIRE;  //  予約語
-$switchHash['$'] = SPECIAL_IDENTIFIRE;  //  予約語
-$switchHash['"'] = CODE_CANCEL;         //  " はリテラルではない (指定を無効化)
-$switchHash["("] = PAIR_LITERAL;  // ()は文字列リテラル
+$switchHash['.'] = PLUGIN_CODE_SPECIAL_IDENTIFIRE;  //  予約語
+$switchHash['$'] = PLUGIN_CODE_SPECIAL_IDENTIFIRE;  //  予約語
+$switchHash['"'] = PLUGIN_CODE_CODE_CANCEL;         //  " はリテラルではない (指定を無効化)
+$switchHash['('] = PLUGIN_CODE_PAIR_LITERAL;  // ()は文字列リテラル
 $literal_delimiter = ')';
 // コメント定義
-$switchHash['%'] = COMMENT;        //  コメントは % から改行まで
+$switchHash['%'] = PLUGIN_CODE_COMMENT;        //  コメントは % から改行まで
 $code_comment = Array(
 	'%' => Array(
-		"/^\%.*\\n/",
+				 Array('/^%/', "\n", 1),
 	)
 );
 
 // アウトライン用
 if($mkoutline){
-  $switchHash["{"] = BLOCK_START;
-  $switchHash["}"] = BLOCK_END;
+  $switchHash['{'] = PLUGIN_CODE_BLOCK_START;
+  $switchHash['}'] = PLUGIN_CODE_BLOCK_END;
 }
 
 $code_css = Array(

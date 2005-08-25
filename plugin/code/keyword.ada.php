@@ -1,15 +1,15 @@
 <?php
 /**
- *キーワード定義ファイル
+ * Ada
  */
 
-$mkoutline = $option["outline"] = false; // アウトラインモード不可 
-
+$mkoutline = $option['outline'] = false; // アウトラインモード不可 
+$switchHash['\''] = PLUGIN_CODE_NONESCAPE_LITERAL;
 // コメント定義
-$switchHash["-"] = COMMENT;    // コメントは -- から改行まで
+$switchHash['-'] = PLUGIN_CODE_COMMENT;    // コメントは -- から改行まで
 $code_comment = Array(
-	"-" => Array(
-		"/^--.*\n/",
+	'-' => Array(
+				 Array('/^--/', "\n", 1),
 	)
 );
 

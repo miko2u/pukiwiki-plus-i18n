@@ -3,21 +3,21 @@
  * TCL キーワード定義ファイル
  */
 
-$switchHash["$"] = ESCAPE;            // $ はエスケープ
-$switchHash["'"] = NONESCAPE_LITERAL; // ' はエスケープしない文字列リテラル
+$switchHash['$'] = PLUGIN_CODE_ESCAPE;            // $ はエスケープ
+$switchHash['\''] = PLUGIN_CODE_NONESCAPE_LITERAL; // ' はエスケープしない文字列リテラル
 
 // コメント定義
-$switchHash["#"] = COMMENT;	// コメントは # から改行まで (例外あり)
+$switchHash['#'] = PLUGIN_CODE_COMMENT;	// コメントは # から改行まで (例外あり)
 $code_comment = Array(
-	"#" => Array(
-		"/#(\n|[^{].*\n)/",
+	'#' => Array(
+				 Array('/^#[^{]/', "\n", 1),
 	)
 );
 
 // アウトライン用
 if($mkoutline){
-  $switchHash["{"] = BLOCK_START;
-  $switchHash["}"] = BLOCK_END;
+  $switchHash['{'] = PLUGIN_CODE_BLOCK_START;
+  $switchHash['}'] = PLUGIN_CODE_BLOCK_END;
 }
 
 $code_css = Array(

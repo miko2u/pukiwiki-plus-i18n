@@ -1,22 +1,22 @@
 <?php
 /**
- *キーワード定義ファイル
+ * Scheme
  */
 
-$switchHash["'"]  = CHARACTOR;        // Lisp Scheme は ' 文字リテラルではない
+$switchHash['\'']  = PLUGIN_CODE_CHARACTOR;        // Lisp Scheme は ' 文字リテラルではない
 
 // コメント定義
-$switchHash[";"]  = COMMENT;  // コメントは ; から改行まで
+$switchHash[';']  = PLUGIN_CODE_COMMENT;  // コメントは ; から改行まで
 $code_comment = Array(
-	";" => Array(
-		"/^;.*\n/",
+	';' => Array(
+				 Array('/^;/', "\n", 1),
 	)
 );
 
 // アウトライン用
 if($mkoutline){
-  $switchHash["("] = BLOCK_START;
-  $switchHash[")"] = BLOCK_END;
+  $switchHash['('] = PLUGIN_CODE_BLOCK_START;
+  $switchHash[')'] = PLUGIN_CODE_BLOCK_END;
 }
 
 $code_css = Array(

@@ -6,20 +6,20 @@
 
 
 // 識別子開始文字
-for ($i = ord("a"); $i <= ord("z"); $i++)
-	 $switchHash[chr($i)] = POST_IDENTIFIRE;
-for ($i = ord("A"); $i <= ord("Z"); $i++)
-	 $switchHash[chr($i)] = POST_IDENTIFIRE;
-$switchHash["."] = POST_IDENTIFIRE;
+for ($i = ord('a'); $i <= ord('z'); $i++)
+	 $switchHash[chr($i)] = PLUGIN_CODE_POST_IDENTIFIRE;
+for ($i = ord('A'); $i <= ord('Z'); $i++)
+	 $switchHash[chr($i)] = PLUGIN_CODE_POST_IDENTIFIRE;
+$switchHash['.'] = PLUGIN_CODE_POST_IDENTIFIRE;
 $post_identifire = ':';
 
 	 
-$switchHash["\t"] = IDENTIFIRE_CHAR;   // tab
-//$switchHash["."]  = IDENTIFIRE_CHAR;   // 
-$mkoutline = $option["outline"] = false; // アウトラインモード不可 
+$switchHash["\t"] = PLUGIN_CODE_IDENTIFIRE_CHAR;   // tab
+//$switchHash['.']  = PLUGIN_CODE_IDENTIFIRE_CHAR;   // 
+$mkoutline = $option['outline'] = false; // アウトラインモード不可 
 
 // コメント定義
-$switchHash["#"] = COMMENT_CHAR;	// コメントは # から改行まで
+$switchHash['#'] = PLUGIN_CODE_COMMENT_CHAR;	// コメントは # から改行まで
 
 $code_css = Array(
   'operator',		// オペレータ関数

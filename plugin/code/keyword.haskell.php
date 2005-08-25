@@ -3,17 +3,17 @@
  * Haskell キーワード定義ファイル
  */
 
-$mkoutline = $option["outline"] = false; // アウトラインモード不可 
+$mkoutline = $option['outline'] = false; // アウトラインモード不可 
 
 // コメント定義
-$switchHash["-"] = COMMENT;    //  コメントは -- から 改行まで -->は含まない。
-$switchHash["{"] = COMMENT;    //  コメントは {- -} から 改行まで
+$switchHash['-'] = PLUGIN_CODE_COMMENT;    //  コメントは -- から 改行まで -->は含まない。
+$switchHash['{'] = PLUGIN_CODE_COMMENT;    //  コメントは {- から -}まで
 $code_comment = Array(
-	"-" => Array(
-		"/^--(\\n|[^>].*\\n)/",
+	'-' => Array(
+				 Array('/^--[^>]/', "\n", 1),
 	),
-	"{" => Array(
-		"/^{-(.|\n)*?-}/",
+	'{' => Array(
+				 Array('/^{-/', '-}', 2),
 	),
 );
 

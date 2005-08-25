@@ -1,31 +1,31 @@
 <?php
 /**
- *キーワード定義ファイル
+ * Perl
  */
 
-$switchHash["$"] = ESCAPE;            // $ はエスケープ
-$switchHash["'"] = NONESCAPE_LITERAL; // ' はエスケープしない文字列リテラル
+$switchHash['$'] = PLUGIN_CODE_ESCAPE;            // $ はエスケープ
+$switchHash['\''] = PLUGIN_CODE_NONESCAPE_LITERAL; // ' はエスケープしない文字列リテラル
 
 // コメント定義
-$switchHash["#"] = COMMENT;	// コメントは # から改行まで (例外あり)
-$switchHash["="] = COMMENT;	// コメントは =pod から =cut まで
-$switchHash["("] = COMMENT;	// コメントは (?# から ) まで (正規表現内)
+$switchHash['#'] = PLUGIN_CODE_COMMENT;	// コメントは # から改行まで (例外あり)
+$switchHash['='] = PLUGIN_CODE_COMMENT;	// コメントは =pod から =cut まで
+$switchHash['('] = PLUGIN_CODE_COMMENT;	// コメントは (?# から ) まで (正規表現内)
 $code_comment = Array(
-	"#" => Array(
-		"/#(\n|[^{].*\n)/",
-	),
-	"=" => Array(
-		"/^=pod\n(.|\n)*=cut\n/",
-	),
-	"(" => Array(
-		"/^\(\?#.*\)/",
-	)
-);
+					  '#' => Array(
+								   Array('/^#[^{]/', "\n", 1),
+								   ),
+					  '=' => Array(
+								   Array('/^=pod/', '=cut', 4),
+								   ),
+					  '(' => Array(
+								   Array('/^\(\?#/', ')', 1),
+								   )
+					  );
 
 // アウトライン用
 if($mkoutline){
-  $switchHash["{"] = BLOCK_START;
-  $switchHash["}"] = BLOCK_END;
+  $switchHash['{'] = PLUGIN_CODE_BLOCK_START;
+  $switchHash['}'] = PLUGIN_CODE_BLOCK_END;
 }
 
 $code_css = Array(

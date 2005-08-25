@@ -1,27 +1,27 @@
 <?php
 /**
- *キーワード定義ファイル
+ * SQL キーワード定義ファイル
  */
 
-$switchHash["`"] = STRING_LITERAL;  // ` も文字列リテラル
+$switchHash['\`'] = PLUGIN_CODE_STRING_LITERAL;  // ` も文字列リテラル
 $capital = true;                    // 予約語の大文字小文字を区別しない
 
 // コメント定義
-$switchHash["-"] = COMMENT;    // コメントは -- から改行まで
-$switchHash["/"] = COMMENT;    // コメントは /* から */ まで
+$switchHash['-'] = PLUGIN_CODE_COMMENT;    // コメントは -- から改行まで
+$switchHash['/'] = PLUGIN_CODE_COMMENT;    // コメントは /* から */ まで
 $code_comment = Array(
- 	"-" => Array(
- 		"/^--.*\n/",
+ 	'-' => Array(
+				 Array('/^--/', "\n", 1),
 	),
-	"/" => Array(
-		"/^\/\*(.|\n)*?\*\//",
+	'/' => Array(
+				 Array('/^\/\*/', '*/', 2),
  	)
  );
 
 // アウトライン用
 if($mkoutline){
-  $switchHash["("] = BLOCK_START;
-  $switchHash[")"] = BLOCK_END;
+  $switchHash['('] = PLUGIN_CODE_BLOCK_START;
+  $switchHash[')'] = PLUGIN_CODE_BLOCK_END;
 }
 
 $code_css = Array(
@@ -99,8 +99,8 @@ $code_keyword = Array(
 	'check'=> 2,
 	'checked'=> 2,
 	'checkpoint'=> 2,
-	 /*'class'=> 2,
-	 */'class_origin'=> 2,
+	 /*'class'=> 2, */
+    'class_origin'=> 2,
 	'clob'=> 2,
 	'close'=> 2,
 	'cluster'=> 2,

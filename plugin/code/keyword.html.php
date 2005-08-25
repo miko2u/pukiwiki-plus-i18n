@@ -1,16 +1,16 @@
 <?php
 /**
- *キーワード定義ファイル
+ * HTML キーワード定義ファイル
  */
 
 $capital = true;                      // 予約語の大文字小文字を区別しない
-$mkoutline = $option["outline"] = false; // アウトラインモード不可 
+$mkoutline = $option['outline'] = false; // アウトラインモード不可 
 
 // コメント定義
-$switchHash["<"] = COMMENT;        // コメントは <!-- から --> まで
+$switchHash['<'] = PLUGIN_CODE_COMMENT;        // コメントは <!-- から --> まで
 $code_comment = Array(
-	"<" => Array(
-		"/^<\!\-\-(.|\n)*?\-\->/",
+	'<' => Array(
+				 Array('/^<\!--/', '-->', 3),
 	)
 );
 

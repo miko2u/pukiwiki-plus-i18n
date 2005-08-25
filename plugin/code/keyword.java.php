@@ -1,23 +1,23 @@
 <?php
 /**
- *キーワード定義ファイル
+ * Java
  */
 
-$switchHash["#"] = SPECIAL_IDENTIFIRE;  // # から始まる予約語あり
+$switchHash['#'] = PLUGIN_CODE_SPECIAL_IDENTIFIRE;  // # から始まる予約語あり
 
 // コメント定義
-$switchHash["/"] = COMMENT;        //  コメントは /* から */ までと // から改行まで
+$switchHash['/'] = PLUGIN_CODE_COMMENT;        //  コメントは /* から */ までと // から改行まで
 $code_comment = Array(
-	"/" => Array(
-		"/^\/\/.*\\n/",
-		"/^\/\*(.|\n)*?\*\//",
+	'/' => Array(
+				 Array('/^\/\*/', '*/', 2),
+				 Array('/^\/\//', "\n", 1),
 	)
 );
 
 // アウトライン用
 if($mkoutline){
-  $switchHash["{"] = BLOCK_START;
-  $switchHash["}"] = BLOCK_END;
+  $switchHash['{'] = PLUGIN_CODE_BLOCK_START;
+  $switchHash['}'] = PLUGIN_CODE_BLOCK_END;
 }
 
 $code_css = Array(

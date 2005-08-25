@@ -4,15 +4,15 @@
  * キーワード定義ファイル
  */
 
-$mkoutline = $option["outline"] = false; // アウトラインモード不可
+$mkoutline = $option['outline'] = false; // アウトラインモード不可
  
-$switchHash["."] = SPECIAL_IDENTIFIRE;  // . から始まる予約語あり
+$switchHash['.'] = PLUGIN_CODE_SPECIAL_IDENTIFIRE;  // . から始まる予約語あり
 
 // コメント定義
-$switchHash[";"] = COMMENT;        //  コメントは ;  から改行まで
+$switchHash[';'] = PLUGIN_CODE_COMMENT;        //  コメントは ;  から改行まで
 $code_comment = Array(
-	"/" => Array(
-		"/^;.*\\n/",
+	'/' => Array(
+				 Array('/^;/', "\n", 1),
 	)
 );
 
