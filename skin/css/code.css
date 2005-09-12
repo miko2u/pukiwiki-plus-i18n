@@ -1,0 +1,194 @@
+/**
+ * PukiWiki Plugin Code highlight
+ *
+ */
+
+/* オペレータ */
+span.code_operator {color: blue;}
+/* 識別子 */
+span.code_identifier {color: darkblue;}
+
+/* 制御構文 */
+span.code_control  {color: navy;}
+/* 標準関数 */
+span.code_function {color: blue;}
+/* 定数 */
+span.code_constant {color: teal;}
+
+/* module, import, 将来対応する pragma */
+span.code_pragma {color: #008080;}
+/* __stdcall などの処理系専用の奴とか */
+span.code_system {color: #5f0000;}
+/* 環境変数  */
+span.code_environment {color: #777777;}
+/* 文字列 */
+span.code_string {color: green;}
+/* コメント */
+span.code_comment {color: darkorange;}
+/* Outline */
+span.code_outline {color: #999;}
+/* 個々のハイライト専用 */
+/* for TeX */
+span.code_formula {color: teal;}
+/* for diff*/
+span.code_changed {color: green;}
+span.code_added   {color: blue;}
+span.code_removed {color: red;}
+/* for make*/
+span.code_execute {color: teal;}
+span.code_target  {color: darkblue;}
+span.code_src     {color: darkgreen;}
+/* for PukiWiki */
+span.code_header{color: blue;}
+span.code_table {color: darkgreen;}
+span.code_list  {color: navy;}
+span.code_pre   {color: teal;}
+span.code_quote {color: #777700;}
+
+/* ソースコード表示部分の設定 */
+/* 段組をしない場合の設定 */
+pre.code {
+    background: #EEFFFF;
+    margin: 1em 2em 0.5em 1em;
+    padding: 0.5em;
+    border-top:    #DDDDEE 1px solid;
+    border-right:  #888899 1px solid;
+    border-bottom: #888899 1px solid;
+    border-left:   #DDDDEE 1px solid;
+	white-space: pre;
+	overflow: visible;
+    line-height: 120%;
+}
+/* 段組をした場合の設定 */
+table.code_table pre.code,
+div.code_table pre.code,
+table.code_table pre.pre_body,
+div.code_src pre.pre_body
+{
+    margin: 0;
+    padding: 0;
+    padding-left: 0.5em;
+    border: 1px;
+    line-height: 120%;
+}
+
+/* 行番号表示 */
+pre.code_number,
+pre.pre_number
+{
+    background: #FFFFFF;
+    margin: 0;
+    padding: 0;
+    padding-right: 0.5em;
+    border: 1px;
+    border-right: 1px solid #CCDDDD;
+    line-height: 120%;
+    min-width: 3ex;
+}
+
+/* アウトライン表示 */
+pre.code_outline {
+    margin:  0;
+    padding: 0;
+    border: 1px;
+    border-right: 1px solid #F5FFFF;
+    width: 10px;
+    text-align: center;
+    background: #E0F5F5;
+    line-height: 120%;
+}
+
+/* 枠組 */
+div.code_table,
+div.pre_table
+{
+    color: black;
+    background-color: #F0F8FF;
+    border-top:    #DDDDEE 1px solid;
+    border-right:  #888899 1px solid;
+    border-bottom: #888899 1px solid;
+    border-left:   #DDDDEE 1px solid;
+    margin: 1em 2em 0.5em 1em;
+    white-space: pre;
+}
+
+/* 段組要素の設定無効化 */
+table.code_table,
+table.code_table td,
+div.code_number pre,
+div.code_outline pre,
+div.code_src pre,
+div.pre_number pre,
+div.pre_body pre
+{
+    margin:  0;
+    padding: 0;
+    border: none;
+}
+
+/* tableによる段組 */
+td.code_src,
+td.pre_body 
+{width:100%;}
+
+/* divによる分割の定義  */
+div.code_number,
+div.code_outline,
+div.code_src,
+div.pre_number,
+div.pre_body
+{
+    position: relative;
+    margin: 0;
+    padding: 0;
+    left: 0;
+    float: left;
+}
+
+/**
+ * アウトライン・メニューの設定
+ */
+
+/* icon */ 
+div.code_menu {
+    background-color: #d4d0c8;
+}
+
+/* アウトラインが閉じた時のイメージ */
+img.code_dotimage {width:20px;height:8px;margin:0;padding:0;}
+
+/* アウトラインの設定 */
+a.code_outline{
+    background-color: #FFFFFF;
+    color: black;
+    border: 1px solid #888888;
+    text-decoration: none;
+}
+a.code_outline:link
+{
+    background-color: #FFFFFF;
+    color: black;
+    border: 1px solid #888888;
+    text-decoration: none;
+}
+a.code_outline:visited
+{
+    background-color: #FFFFFF;
+    color: black;
+    border: 1px solid #888888;
+    text-decoration: none;
+}
+a.code_outline:hover
+{
+    background-color: #FFFFFF;
+    color: black;
+    border: 1px solid #888888;
+    text-decoration: none;
+}
+a.code_outline:active
+{
+    background-color: #FFFFFF;
+    color: black;
+    border: 1px solid #888888;
+    text-decoration: none;
+}
