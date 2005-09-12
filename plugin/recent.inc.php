@@ -50,7 +50,8 @@ function plugin_recent_convert()
 
 	// Get latest N changes
 	if (file_exists(PLUGIN_RECENT_CACHE)) {
-		$lines = array_splice(file(PLUGIN_RECENT_CACHE), 0, $recent_lines);
+		$source = file(PLUGIN_RECENT_CACHE);
+		$lines = array_splice($source, 0, $recent_lines);
 	} else {
 		return '#recent(): Cache file of RecentChanges not found' . '<br />';
 	}

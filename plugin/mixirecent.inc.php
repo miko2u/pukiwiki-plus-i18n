@@ -46,7 +46,8 @@ function plugin_mixirecent_convert()
 
 	// Get latest N changes
 	if (file_exists(PLUGIN_MIXIRECENT_CACHE)) {
-		$lines = array_splice(file(PLUGIN_MIXIRECENT_CACHE), 0, $mixirecent_lines);
+		$source = file(PLUGIN_MIXIRECENT_CACHE);
+		$lines = array_splice($source, 0, $mixirecent_lines);
 	} else {
 		return '#mixirecent(): Cache file of RecentChanges not found' . '<br />';
 	}

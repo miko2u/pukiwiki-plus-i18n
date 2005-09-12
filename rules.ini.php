@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: rules.ini.php,v 1.7.2 2005/04/30 11:35:43 miko Exp $
+// $Id: rules.ini.php,v 1.7.5 2005/09/12 11:35:43 miko Exp $
 // Copyright (C)
 //   2005      Customized/Patched by Miko.Hoshina
 //   2003-2005 PukiWiki Developers Team
@@ -50,7 +50,7 @@ $str_rules = array(
 	'&now;' 	=> format_date(UTIME),
 	'&date;'	=> get_date($date_format),
 	'&time;'	=> get_date($time_format),
-	'&page;'	=> array_pop(explode('/', $vars['page'])),
+	'&page;'	=> get_short_pagename($vars['page']),
 	'&fpage;'	=> $vars['page'],
 	'&t;'   	=> "\t",
 );

@@ -482,6 +482,13 @@ function format_date($val, $paren = FALSE)
 	return $paren ? '(' . $date . ')' : $date;
 }
 
+// Get short pagename(last token without '/')
+function get_short_pagename($fullpagename)
+{
+	$pagestack = explode('/', $fullpagename);
+	return array_pop($pagestack);
+}
+
 // Get short string of the passage, 'N seconds/minutes/hours/days/years ago'
 function get_passage($time, $paren = TRUE)
 {

@@ -57,7 +57,8 @@ function plugin_mixirss_action()
 
 	// Creating <item>
 	$items = $rdf_li = '';
-	foreach (array_splice(file($recent), 0, $rss_max) as $line) {
+	$source = file($recent);
+	foreach (array_splice($source, 0, $rss_max) as $line) {
 		list($time, $page) = explode("\t", rtrim($line));
 		$r_page = rawurlencode($page);
 		$title  = mb_convert_encoding($page, 'UTF-8', SOURCE_ENCODING);

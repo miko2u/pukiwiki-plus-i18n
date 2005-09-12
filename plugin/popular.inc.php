@@ -69,7 +69,8 @@ function plugin_popular_convert()
 	}
 
 	asort($counters, SORT_NUMERIC);
-	$counters = array_splice(array_reverse($counters, TRUE), 0, $max);
+	$counters = array_reverse($counters, TRUE);
+	$counters = array_splice($counters, 0, $max);
 
 	$items = '';
 	if (! empty($counters)) {
