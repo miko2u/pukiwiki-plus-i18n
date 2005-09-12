@@ -1,67 +1,67 @@
 <?php
 /**
- * JSP (Java Server Pages) ¥­¡¼¥ï¡¼¥ÉÄêµÁ¥Õ¥¡¥¤¥ë
+ * JSP (Java Server Pages)
  */
 
-// ¥³¥á¥ó¥ÈÄêµÁ
-$switchHash["/"] = COMMENT;        //  ¥³¥á¥ó¥È¤Ï /* ¤«¤é */ ¤Þ¤Ç¤È // ¤«¤é²þ¹Ô¤Þ¤Ç
+// ã‚³ãƒ¡ãƒ³ãƒˆå®šç¾©
+$switchHash['/'] = PLUGIN_CODE_COMMENT;        //  ã‚³ãƒ¡ãƒ³ãƒˆã¯ /* ã‹ã‚‰ */ ã¾ã§ã¨ // ã‹ã‚‰æ”¹è¡Œã¾ã§
 $code_comment = Array(
-	"/" => Array(
-		"/^\/\/.*\\n/",
-		"/^\/\*(.|\n)*?\*\//",
+	'/' => Array(
+				 Array('/^\/\*/', '*/', 2),
+				 Array('/^\/\//', "\n", 1),
 	)
 );
 
-// ¥¢¥¦¥È¥é¥¤¥óÍÑ
+// ã‚¢ã‚¦ãƒˆãƒ©ã‚¤ãƒ³ç”¨
 if($mkoutline){
-  $switchHash["{"] = BLOCK_START;
-  $switchHash["}"] = BLOCK_END;
+  $switchHash['{'] = PLUGIN_CODE_BLOCK_START;
+  $switchHash['}'] = PLUGIN_CODE_BLOCK_END;
 }
 
 $code_css = Array(
-  'operator',		// ¥ª¥Ú¥ì¡¼¥¿´Ø¿ô
-  'identifier',	// ¤½¤ÎÂ¾¤Î¼±ÊÌ»Ò
-  'pragma',		// module, import ¤È pragma
-  'system',		// ½èÍý·ÏÁÈ¤ß¹þ¤ß¤ÎÅÛ __stdcall ¤È¤«
+  'operator',		// ã‚ªãƒšãƒ¬ãƒ¼ã‚¿é–¢æ•°
+  'identifier',	// ãã®ä»–ã®è­˜åˆ¥å­
+  'pragma',		// module, import ã¨ pragma
+  'system',		// å‡¦ç†ç³»çµ„ã¿è¾¼ã¿ã®å¥´ __stdcall ã¨ã‹
 );
 
 $code_keyword = Array(
 
-  "contained" => 2,
-  "include" => 2,
-  "forward" => 2,
-  "getProperty" => 2,
-  "plugin" => 2,
-  "setProperty" => 2,
-  "useBean" => 2,
-  "param" => 2,
-  "params" => 2,
-  "fallback" => 2,
-  "contained" => 2,
-  "id" => 2,
-  "scope" => 2,
-  "class" => 2,
-  "type" => 2,
-  "beanName" => 2,
-  "page" => 2,
-  "flush" => 2,
-  "name" => 2,
-  "value" => 2,
-  "property" => 2,
-  "contained" => 2,
-  "code" => 2,
-  "codebase" => 2,
-  "name" => 2,
-  "archive" => 2,
-  "align" => 2,
-  "height" => 2,
-  "contained" => 2,
-  "width" => 2,
-  "hspace" => 2,
-  "vspace" => 2,
-  "jreversion" => 2,
-  "nspluginurl" => 2,
-  "iepluginurl" => 2,
+  'contained' => 2,
+  'include' => 2,
+  'forward' => 2,
+  'getProperty' => 2,
+  'plugin' => 2,
+  'setProperty' => 2,
+  'useBean' => 2,
+  'param' => 2,
+  'params' => 2,
+  'fallback' => 2,
+  'contained' => 2,
+  'id' => 2,
+  'scope' => 2,
+  'class' => 2,
+  'type' => 2,
+  'beanName' => 2,
+  'page' => 2,
+  'flush' => 2,
+  'name' => 2,
+  'value' => 2,
+  'property' => 2,
+  'contained' => 2,
+  'code' => 2,
+  'codebase' => 2,
+  'name' => 2,
+  'archive' => 2,
+  'align' => 2,
+  'height' => 2,
+  'contained' => 2,
+  'width' => 2,
+  'hspace' => 2,
+  'vspace' => 2,
+  'jreversion' => 2,
+  'nspluginurl' => 2,
+  'iepluginurl' => 2,
 
   );
 ?>

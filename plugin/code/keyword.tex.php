@@ -1,30 +1,30 @@
 <?php
 /**
- *¥­¡¼¥ï¡¼¥ÉÄêµÁ¥Õ¥¡¥¤¥ë
+ * TeX ã‚­ãƒ¼ãƒ¯ãƒ¼ãƒ‰å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«
  */
 
-$switchHash['$']  = FORMULA;  // Tex¤Ç¤Ï$¤Ï¿ô¼°¤Ë»ÈÍÑ¤¹¤ë
-$switchHash['\\'] = SPECIAL_IDENTIFIRE;  // Tex¤Ç¤Ï\¤ÏÍ½Ìó¸ì¤Ë»ÈÍÑ¤¹¤ë
-$mkoutline = $option["outline"] = false; // ¥¢¥¦¥È¥é¥¤¥ó¥â¡¼¥ÉÉÔ²Ä 
+$switchHash['$']  = PLUGIN_CODE_FORMULA;  // Texã§ã¯$ã¯æ•°å¼ã«ä½¿ç”¨ã™ã‚‹
+$switchHash['\\'] = PLUGIN_CODE_SPECIAL_IDENTIFIRE;  // Texã§ã¯\ã¯äºˆç´„èªžã«ä½¿ç”¨ã™ã‚‹
+$mkoutline = $option['outline'] = false; // ã‚¢ã‚¦ãƒˆãƒ©ã‚¤ãƒ³ãƒ¢ãƒ¼ãƒ‰ä¸å¯ 
 
-// ¥³¥á¥ó¥ÈÄêµÁ
-$switchHash["%"]  = COMMENT;    // ¥³¥á¥ó¥È¤Ï % ¤«¤é²þ¹Ô¤Þ¤Ç
+// ã‚³ãƒ¡ãƒ³ãƒˆå®šç¾©
+$switchHash['%']  = PLUGIN_CODE_COMMENT;    // ã‚³ãƒ¡ãƒ³ãƒˆã¯ % ã‹ã‚‰æ”¹è¡Œã¾ã§
 $code_comment = Array(
-	"%" => Array(
-		"/^%.*\n/",
+	'%' => Array(
+				 Array('/^%/', "\n", 1),
 	)
 );
 
 $code_css = Array(
-  'operator',		// ¥ª¥Ú¥ì¡¼¥¿´Ø¿ô
-  'identifier',	// ¤½¤ÎÂ¾¤Î¼±ÊÌ»Ò
-  'pragma',		// module, import ¤È pragma
-  'system',		// ½èÍý·ÏÁÈ¤ß¹þ¤ß¤ÎÅÛ __stdcall ¤È¤«
+  'operator',		// ã‚ªãƒšãƒ¬ãƒ¼ã‚¿é–¢æ•°
+  'identifier',	// ãã®ä»–ã®è­˜åˆ¥å­
+  'pragma',		// module, import ã¨ pragma
+  'system',		// å‡¦ç†ç³»çµ„ã¿è¾¼ã¿ã®å¥´ __stdcall ã¨ã‹
   );
 
 $code_keyword = Array(
-  //'operator',		// ¥ª¥Ú¥ì¡¼¥¿´Ø¿ô
-  //'identifier',	// ¤½¤ÎÂ¾¤Î¼±ÊÌ»Ò
+  //'operator',		// ã‚ªãƒšãƒ¬ãƒ¼ã‚¿é–¢æ•°
+  //'identifier',	// ãã®ä»–ã®è­˜åˆ¥å­
   'document' => 2,
   'abstract' => 2,
   'thebibliography' => 2,
@@ -52,8 +52,8 @@ $code_keyword = Array(
   'tabular' => 2,
   'tabbing' => 2,
   'minipage' => 2,
-  //'pragma',		// module, import ¤È pragma
-  //'system',		// ½èÍý·ÏÁÈ¤ß¹þ¤ß¤ÎÅÛ __stdcall ¤È¤«
+  //'pragma',		// module, import ã¨ pragma
+  //'system',		// å‡¦ç†ç³»çµ„ã¿è¾¼ã¿ã®å¥´ __stdcall ã¨ã‹
   '\documentstyle' => 4,
   '\documentclass' => 4,
   '\usepackage' => 4,

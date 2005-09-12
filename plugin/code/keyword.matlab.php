@@ -1,75 +1,75 @@
 <?php
 /**
- * Matlab ¥­¡¼¥ï¡¼¥ÉÄêµÁ¥Õ¥¡¥¤¥ë
+ * Matlab ã‚­ãƒ¼ãƒ¯ãƒ¼ãƒ‰å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«
  */
 
-$mkoutline = $option["outline"] = false; // ¥¢¥¦¥È¥é¥¤¥ó¥â¡¼¥ÉÉÔ²Ä 
+$mkoutline = $option['outline'] = false; // ã‚¢ã‚¦ãƒˆãƒ©ã‚¤ãƒ³ãƒ¢ãƒ¼ãƒ‰ä¸å¯ 
 
-// ¥³¥á¥ó¥ÈÄêµÁ
-$switchHash["%"]  = COMMENT;    // ¥³¥á¥ó¥È¤Ï % ¤«¤é²þ¹Ô¤Þ¤Ç
+// ã‚³ãƒ¡ãƒ³ãƒˆå®šç¾©
+$switchHash['%']  = PLUGIN_CODE_COMMENT;    // ã‚³ãƒ¡ãƒ³ãƒˆã¯ % ã‹ã‚‰æ”¹è¡Œã¾ã§
 $code_comment = Array(
-	"%" => Array(
-		"/^%.*\\n/",
+	'%' => Array(
+				 Array('/^%/', "\n", 1),
 	)
 );
 
 $code_css = Array(
-  'operator',		// ¥ª¥Ú¥ì¡¼¥¿´Ø¿ô
-  'identifier',	// ¤½¤ÎÂ¾¤Î¼±ÊÌ»Ò
-  'pragma',		// module, import ¤È pragma
-  'system',		// ½èÍý·ÏÁÈ¤ß¹þ¤ß¤ÎÅÛ __stdcall ¤È¤«
+  'operator',		// ã‚ªãƒšãƒ¬ãƒ¼ã‚¿é–¢æ•°
+  'identifier',	// ãã®ä»–ã®è­˜åˆ¥å­
+  'pragma',		// module, import ã¨ pragma
+  'system',		// å‡¦ç†ç³»çµ„ã¿è¾¼ã¿ã®å¥´ __stdcall ã¨ã‹
   );
 
 $code_keyword = Array(
-  "return" => 2,
-  "case" => 2,
-  "switch" => 2,
-  "else" => 2,
-  "elseif" => 2,
-  "end" => 2,
-  "if" => 2,
-  "otherwise" => 2,
-  "do" => 2,
-  "for" => 2,
-  "while" => 2,
-  "contained" => 2,
-  "oneline" => 2,
-  "break" => 2,
-  "zeros" => 2,
-  "default" => 2,
-  "margin" => 2,
-  "round" => 2,
-  "ones" => 2,
-  "rand" => 2,
-  "ceil" => 2,
-  "floor" => 2,
-  "size" => 2,
-  "clear" => 2,
-  "zeros" => 2,
-  "eye" => 2,
-  "mean" => 2,
-  "std" => 2,
-  "cov" => 2,
-  "error" => 2,
-  "eval" => 2,
-  "function" => 2,
-  "abs" => 2,
-  "acos" => 2,
-  "atan" => 2,
-  "asin" => 2,
-  "cos" => 2,
-  "cosh" => 2,
-  "exp" => 2,
-  "log" => 2,
-  "prod" => 2,
-  "sum" => 2,
-  "log10" => 2,
-  "max" => 2,
-  "min" => 2,
-  "sign" => 2,
-  "sin" => 2,
-  "sqrt" => 2,
-  "tan" => 2,
-  "reshape" => 2,
+  'return' => 2,
+  'case' => 2,
+  'switch' => 2,
+  'else' => 2,
+  'elseif' => 2,
+  'end' => 2,
+  'if' => 2,
+  'otherwise' => 2,
+  'do' => 2,
+  'for' => 2,
+  'while' => 2,
+  'contained' => 2,
+  'oneline' => 2,
+  'break' => 2,
+  'zeros' => 2,
+  'default' => 2,
+  'margin' => 2,
+  'round' => 2,
+  'ones' => 2,
+  'rand' => 2,
+  'ceil' => 2,
+  'floor' => 2,
+  'size' => 2,
+  'clear' => 2,
+  'zeros' => 2,
+  'eye' => 2,
+  'mean' => 2,
+  'std' => 2,
+  'cov' => 2,
+  'error' => 2,
+  'eval' => 2,
+  'function' => 2,
+  'abs' => 2,
+  'acos' => 2,
+  'atan' => 2,
+  'asin' => 2,
+  'cos' => 2,
+  'cosh' => 2,
+  'exp' => 2,
+  'log' => 2,
+  'prod' => 2,
+  'sum' => 2,
+  'log10' => 2,
+  'max' => 2,
+  'min' => 2,
+  'sign' => 2,
+  'sin' => 2,
+  'sqrt' => 2,
+  'tan' => 2,
+  'reshape' => 2,
   );
 ?>

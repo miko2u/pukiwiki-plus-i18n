@@ -1,24 +1,24 @@
 <?php
 /**
- *¥­¡¼¥ï¡¼¥ÉÄêµÁ¥Õ¥¡¥¤¥ë
+ * HTML ã‚­ãƒ¼ãƒ¯ãƒ¼ãƒ‰å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«
  */
 
-$capital = true;                      // Í½Ìó¸ì¤ÎÂçÊ¸»ú¾®Ê¸»ú¤ò¶èÊÌ¤·¤Ê¤¤
-$mkoutline = $option["outline"] = false; // ¥¢¥¦¥È¥é¥¤¥ó¥â¡¼¥ÉÉÔ²Ä 
+$capital = true;                      // äºˆç´„èªã®å¤§æ–‡å­—å°æ–‡å­—ã‚’åŒºåˆ¥ã—ãªã„
+$mkoutline = $option['outline'] = false; // ã‚¢ã‚¦ãƒˆãƒ©ã‚¤ãƒ³ãƒ¢ãƒ¼ãƒ‰ä¸å¯ 
 
-// ¥³¥á¥ó¥ÈÄêµÁ
-$switchHash["<"] = COMMENT;        // ¥³¥á¥ó¥È¤Ï <!-- ¤«¤é --> ¤Ş¤Ç
+// ã‚³ãƒ¡ãƒ³ãƒˆå®šç¾©
+$switchHash['<'] = PLUGIN_CODE_COMMENT;        // ã‚³ãƒ¡ãƒ³ãƒˆã¯ <!-- ã‹ã‚‰ --> ã¾ã§
 $code_comment = Array(
-	"<" => Array(
-		"/^<\!\-\-(.|\n)*?\-\->/",
+	'<' => Array(
+				 Array('/^<\!--/', '-->', 3),
 	)
 );
 
 $code_css = array(
-  'operator',		// ¥ª¥Ú¥ì¡¼¥¿´Ø¿ô
-  'identifier',	// ¤½¤ÎÂ¾¤Î¼±ÊÌ»Ò
-  'pragma',		// module, import ¤È pragma
-  'system',		// ½èÍı·ÏÁÈ¤ß¹ş¤ß¤ÎÅÛ __stdcall ¤È¤«
+  'operator',		// ã‚ªãƒšãƒ¬ãƒ¼ã‚¿é–¢æ•°
+  'identifier',	// ãã®ä»–ã®è­˜åˆ¥å­
+  'pragma',		// module, import ã¨ pragma
+  'system',		// å‡¦ç†ç³»çµ„ã¿è¾¼ã¿ã®å¥´ __stdcall ã¨ã‹
   );
 
 $code_keyword = array(

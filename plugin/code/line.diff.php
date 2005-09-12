@@ -1,24 +1,24 @@
 <?php
 /**
- * diff ¥­¡¼¥ï¡¼¥ÉÄêµÁ¥Õ¥¡¥¤¥ë
- * ¹Ô»Ø¸þ¥â¡¼¥ÉÍÑ
+ * diff ã‚­ãƒ¼ãƒ¯ãƒ¼ãƒ‰å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«
+ * è¡ŒæŒ‡å‘ãƒ¢ãƒ¼ãƒ‰ç”¨
  */
 
-$switchHash['!'] = IDENTIFIRE_CHAR;   // changed
-$switchHash['|'] = IDENTIFIRE_CHAR;   // changed
-$switchHash['+'] = IDENTIFIRE_WORD;   // added
-$switchHash['>'] = IDENTIFIRE_CHAR;   // added
-$switchHash[')'] = IDENTIFIRE_CHAR;   // added
-$switchHash['-'] = IDENTIFIRE_WORD;   // removed
-$switchHash['<'] = IDENTIFIRE_CHAR;   // removed
-$switchHash['('] = IDENTIFIRE_CHAR;   // removed
-$switchHash['*'] = IDENTIFIRE_CHAR;   // control
-$switchHash['\\']= IDENTIFIRE_CHAR;   // control
-$switchHash['@'] = IDENTIFIRE_CHAR;   // control
+$switchHash['!'] = PLUGIN_CODE_IDENTIFIRE_CHAR;   // changed
+$switchHash['|'] = PLUGIN_CODE_IDENTIFIRE_CHAR;   // changed
+$switchHash['+'] = PLUGIN_CODE_IDENTIFIRE_WORD;   // added
+$switchHash['>'] = PLUGIN_CODE_IDENTIFIRE_CHAR;   // added
+$switchHash[')'] = PLUGIN_CODE_IDENTIFIRE_CHAR;   // added
+$switchHash['-'] = PLUGIN_CODE_IDENTIFIRE_WORD;   // removed
+$switchHash['<'] = PLUGIN_CODE_IDENTIFIRE_CHAR;   // removed
+$switchHash['('] = PLUGIN_CODE_IDENTIFIRE_CHAR;   // removed
+$switchHash['*'] = PLUGIN_CODE_IDENTIFIRE_CHAR;   // control
+$switchHash['\\']= PLUGIN_CODE_IDENTIFIRE_CHAR;   // control
+$switchHash['@'] = PLUGIN_CODE_IDENTIFIRE_CHAR;   // control
 
-$mkoutline = $option["outline"] = false; // ¥¢¥¦¥È¥é¥¤¥ó¥â¡¼¥ÉÉÔ²Ä 
-$mkcomment = $option["comment"] = false; // ¥³¥á¥ó¥ÈÌµ¤· 
-$linemode = true; // ¹ÔÆâ¤ò²òÀÏ¤·¤Ê¤¤
+$mkoutline = $option['outline'] = false; // ã‚¢ã‚¦ãƒˆãƒ©ã‚¤ãƒ³ãƒ¢ãƒ¼ãƒ‰ä¸å¯ 
+$mkcomment = $option['comment'] = false; // ã‚³ãƒ¡ãƒ³ãƒˆç„¡ã— 
+$linemode = true; // è¡Œå†…ã‚’è§£æžã—ãªã„
 
 // 
 $code_identifire = array(
@@ -31,8 +31,8 @@ $code_identifire = array(
 	 );
 
 
-// ¥³¥á¥ó¥ÈÄêµÁ
-$switchHash["#"] = COMMENT;	// ¥³¥á¥ó¥È¤Ï # ¤«¤é²þ¹Ô¤Þ¤Ç
+// ã‚³ãƒ¡ãƒ³ãƒˆå®šç¾©
+$switchHash['#'] = PLUGIN_CODE_COMMENT;	// ã‚³ãƒ¡ãƒ³ãƒˆã¯ # ã‹ã‚‰æ”¹è¡Œã¾ã§
 
 $code_css = Array(
 					   'changed', //

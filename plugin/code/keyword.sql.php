@@ -1,34 +1,34 @@
 <?php
 /**
- *ƒL[ƒ[ƒh’è‹`ƒtƒ@ƒCƒ‹
+ * SQL ã‚­ãƒ¼ãƒ¯ãƒ¼ãƒ‰å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«
  */
 
-$switchHash["`"] = STRING_LITERAL;  // ` ‚à•¶Žš—ñƒŠƒeƒ‰ƒ‹
-$capital = true;                    // —\–ñŒê‚Ì‘å•¶Žš¬•¶Žš‚ð‹æ•Ê‚µ‚È‚¢
+$switchHash['\`'] = PLUGIN_CODE_STRING_LITERAL;  // ` ã‚‚æ–‡å­—åˆ—ãƒªãƒ†ãƒ©ãƒ«
+$capital = true;                    // äºˆç´„èªžã®å¤§æ–‡å­—å°æ–‡å­—ã‚’åŒºåˆ¥ã—ãªã„
 
-// ƒRƒƒ“ƒg’è‹`
-$switchHash["-"] = COMMENT;    // ƒRƒƒ“ƒg‚Í -- ‚©‚ç‰üs‚Ü‚Å
-$switchHash["/"] = COMMENT;    // ƒRƒƒ“ƒg‚Í /* ‚©‚ç */ ‚Ü‚Å
+// ã‚³ãƒ¡ãƒ³ãƒˆå®šç¾©
+$switchHash['-'] = PLUGIN_CODE_COMMENT;    // ã‚³ãƒ¡ãƒ³ãƒˆã¯ -- ã‹ã‚‰æ”¹è¡Œã¾ã§
+$switchHash['/'] = PLUGIN_CODE_COMMENT;    // ã‚³ãƒ¡ãƒ³ãƒˆã¯ /* ã‹ã‚‰ */ ã¾ã§
 $code_comment = Array(
- 	"-" => Array(
- 		"/^--.*\n/",
+ 	'-' => Array(
+				 Array('/^--/', "\n", 1),
 	),
-	"/" => Array(
-		"/^\/\*(.|\n)*?\*\//",
+	'/' => Array(
+				 Array('/^\/\*/', '*/', 2),
  	)
  );
 
-// ƒAƒEƒgƒ‰ƒCƒ“—p
+// ã‚¢ã‚¦ãƒˆãƒ©ã‚¤ãƒ³ç”¨
 if($mkoutline){
-  $switchHash["("] = BLOCK_START;
-  $switchHash[")"] = BLOCK_END;
+  $switchHash['('] = PLUGIN_CODE_BLOCK_START;
+  $switchHash[')'] = PLUGIN_CODE_BLOCK_END;
 }
 
 $code_css = Array(
-  'operator',		// ƒIƒyƒŒ[ƒ^ŠÖ”
-  'identifier',	// ‚»‚Ì‘¼‚ÌŽ¯•ÊŽq
-  'pragma',		// module, import ‚Æ pragma
-  'system',		// ˆ—Œn‘g‚Ýž‚Ý‚Ì“z __stdcall ‚Æ‚©
+  'operator',		// ã‚ªãƒšãƒ¬ãƒ¼ã‚¿é–¢æ•°
+  'identifier',	// ãã®ä»–ã®è­˜åˆ¥å­
+  'pragma',		// module, import ã¨ pragma
+  'system',		// å‡¦ç†ç³»çµ„ã¿è¾¼ã¿ã®å¥´ __stdcall ã¨ã‹
   );
 
 $code_keyword = Array(
@@ -99,8 +99,8 @@ $code_keyword = Array(
 	'check'=> 2,
 	'checked'=> 2,
 	'checkpoint'=> 2,
-	 /*'class'=> 2,
-	 */'class_origin'=> 2,
+	 /*'class'=> 2, */
+    'class_origin'=> 2,
 	'clob'=> 2,
 	'close'=> 2,
 	'cluster'=> 2,

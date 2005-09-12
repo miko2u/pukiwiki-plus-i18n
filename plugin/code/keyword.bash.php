@@ -1,32 +1,32 @@
 <?php
 /**
- * bash ¥­¡¼¥ï¡¼¥ÉÄêµÁ¥Õ¥¡¥¤¥ë
+ * bash ã‚­ãƒ¼ãƒ¯ãƒ¼ãƒ‰å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«
  */
 
-$switchHash["$"] = ESCAPE;            // $ ¤Ï¥¨¥¹¥±¡¼¥×
-$switchHash["'"] = NONESCAPE_LITERAL; // ' ¤Ï¥¨¥¹¥±¡¼¥×¤·¤Ê¤¤Ê¸»úÎó¥ê¥Æ¥é¥ë
-$mkoutline = $option["outline"] = false; // ¥¢¥¦¥È¥é¥¤¥ó¥â¡¼¥ÉÉÔ²Ä 
+$switchHash['$'] = PLUGIN_CODE_ESCAPE;            // $ ã¯ã‚¨ã‚¹ã‚±ãƒ¼ãƒ—
+$switchHash['\''] = PLUGIN_CODE_NONESCAPE_LITERAL; // ' ã¯ã‚¨ã‚¹ã‚±ãƒ¼ãƒ—ã—ãªã„æ–‡å­—åˆ—ãƒªãƒ†ãƒ©ãƒ«
+$mkoutline = $option['outline'] = false; // ã‚¢ã‚¦ãƒˆãƒ©ã‚¤ãƒ³ãƒ¢ãƒ¼ãƒ‰ä¸å¯ 
 
-// ¥³¥á¥ó¥ÈÄêµÁ
-$switchHash["#"] = COMMENT;	// ¥³¥á¥ó¥È¤Ï # ¤«¤é²þ¹Ô¤Þ¤Ç (Îã³°¤¢¤ê)
+// ã‚³ãƒ¡ãƒ³ãƒˆå®šç¾©
+$switchHash['#'] = PLUGIN_CODE_COMMENT;	// ã‚³ãƒ¡ãƒ³ãƒˆã¯ # ã‹ã‚‰æ”¹è¡Œã¾ã§ (ä¾‹å¤–ã‚ã‚Š)
 $code_comment = Array(
-	"#" => Array(
-		"/#(\n|[^{].*\n)/",
+	'#' => Array(
+				 Array('/^#[^{]/', "\n", 1),
 	)
 );
 
 
 $code_css = Array(
-  'operator',		// ¥ª¥Ú¥ì¡¼¥¿´Ø¿ô
-  'identifier',	// ¤½¤ÎÂ¾¤Î¼±ÊÌ»Ò
-  'pragma',		// module, import ¤È pragma
-  'system',		// ½èÍý·ÏÁÈ¤ß¹þ¤ß¤ÎÅÛ __stdcall ¤È¤«
-  'environment',  // ´Ä¶­ÊÑ¿ô 
+  'operator',		// ã‚ªãƒšãƒ¬ãƒ¼ã‚¿é–¢æ•°
+  'identifier',	// ãã®ä»–ã®è­˜åˆ¥å­
+  'pragma',		// module, import ã¨ pragma
+  'system',		// å‡¦ç†ç³»çµ„ã¿è¾¼ã¿ã®å¥´ __stdcall ã¨ã‹
+  'environment',  // ç’°å¢ƒå¤‰æ•° 
   );
 
 $code_keyword = Array(
-  //'operator',		// ¥ª¥Ú¥ì¡¼¥¿´Ø¿ô
-  //'identifier',	// ¤½¤ÎÂ¾¤Î¼±ÊÌ»Ò
+  //'operator',		// ã‚ªãƒšãƒ¬ãƒ¼ã‚¿é–¢æ•°
+  //'identifier',	// ãã®ä»–ã®è­˜åˆ¥å­
   	'for' => 2,
 	'in' => 2,
   	'while' => 2,
@@ -45,8 +45,8 @@ $code_keyword = Array(
   	'return' => 2,
   	'selsct' => 2,
     'endif' => 2,
-  //'pragma',		// module, import ¤È pragma
-  //'system',		// ½èÍý·ÏÁÈ¤ß¹þ¤ß¤ÎÅÛ __stdcall ¤È¤«
+  //'pragma',		// module, import ã¨ pragma
+  //'system',		// å‡¦ç†ç³»çµ„ã¿è¾¼ã¿ã®å¥´ __stdcall ã¨ã‹
 		'source' => 4,
 		'alias' => 4,
 		'bg' => 4,
@@ -99,7 +99,7 @@ $code_keyword = Array(
 		'unalias' => 4,
 		'unset' => 4,
 		'wait' => 4,
-  //'environment',  // ´Ä¶­ÊÑ¿ô 
+  //'environment',  // ç’°å¢ƒå¤‰æ•° 
 		'PPID' => 5,
 		'PWD' => 5,
 		'OLDPWD' => 5,

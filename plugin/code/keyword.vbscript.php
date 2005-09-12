@@ -1,37 +1,36 @@
 <?php
 /**
- * Microsoft VBScript Web Content (ASP) ƒL[ƒ[ƒh’è‹`ƒtƒ@ƒCƒ‹
+ * Microsoft VBScript Web Content (ASP)
  */
 
-$switchHash["\""] = NONESCAPE_LITERAL;  // VBScript‚Å‚Í \ ‚Í•¶Žš
-$mkoutline = $option["outline"] = false; // ƒAƒEƒgƒ‰ƒCƒ“ƒ‚[ƒh•s‰Â 
+$switchHash['"'] = PLUGIN_CODE_NONESCAPE_LITERAL;  
+$mkoutline = $option['outline'] = false; 
 
-// ƒRƒƒ“ƒg’è‹`
-$switchHash["'"] = COMMENT;    // ƒRƒƒ“ƒg‚Í ' ‚©‚ç‰üs‚Ü‚Å
-$switchHash["r"] = COMMENT_WORD;   // ƒRƒƒ“ƒg‚Í REM ‚©‚ç‰üs‚Ü‚Å
-$switchHash["R"] = COMMENT_WORD;
+$switchHash['\''] = PLUGIN_CODE_COMMENT;    
+$switchHash['r'] = PLUGIN_CODE_COMMENT_WORD;
+$switchHash['R'] = PLUGIN_CODE_COMMENT_WORD;
 $code_comment = Array(
-	"'" => Array(
-		"/^'.*\n/",
+	'\'' => Array(
+				 Array('/^\'/', "\n", 1),
 	    ),
-	"r" => Array(
-		"/^rem\s.*\n/i",
+	'r' => Array(
+				 Array('/^rem /i', "\n", 1),
 		),
-	"R" => Array(
-		"/^rem\s.*\n/i",
+	'R' => Array(
+				 Array('/^rem /i', "\n", 1),
 		),
 );
 
 $code_css = Array(
-  'operator',		// ƒIƒyƒŒ[ƒ^ŠÖ”
-  'identifier',	// ‚»‚Ì‘¼‚ÌŽ¯•ÊŽq
-  'pragma',		// module, import ‚Æ pragma
-  'system',		// ˆ—Œn‘g‚Ýž‚Ý‚Ì“z __stdcall ‚Æ‚©
+  'operator',
+  'identifier',
+  'pragma',
+  'system',
   );
 
 $code_keyword = Array(
 
-//MsgBoxŠÖ”‚Ì’è”
+//MsgBoxé–¢æ•°ã®å®šæ•°
 
 'vbOKOnly' => 2,
 'vbOKCancel' => 2,
@@ -50,13 +49,13 @@ $code_keyword = Array(
 'vbApplicationModal' => 2,
 'vbSystemModal' => 2,
 
-//Tristate‚Ì’è”
+//Tristateã®å®šæ•°
 
 'TristateTrue' => 2,
 'TristateFalse' => 2,
 'TristateUseDefault' => 2,
 
-//VarTypeŠÖ”‚Ì’è”
+//VarTypeé–¢æ•°ã®å®šæ•°
 
 'vbEmpty' => 2,
 'vbNull' => 2,
@@ -76,7 +75,7 @@ $code_keyword = Array(
 'vbByte' => 2,
 'vbArray' => 2,
 
-//F‚Ì’è”
+//è‰²ã®å®šæ•°
 
 'vbBlack' => 2,
 'vbRed' => 2,
@@ -87,18 +86,18 @@ $code_keyword = Array(
 'vbCyan' => 2,
 'vbWhite' => 2,
 
-//“ÁŽêƒtƒHƒ‹ƒ_‚Ì’è”
+//ç‰¹æ®Šãƒ•ã‚©ãƒ«ãƒ€ã®å®šæ•°
 
 'WindowsFolder' => 2,
 'SystemFolder' => 2,
 'TemporaryFolder' => 2,
 
-//”äŠr‚Ì’è”
+//æ¯”è¼ƒã®å®šæ•°
 'vbBinaryCompare' => 2,
 'vbTextCompare' => 2,
 'vbDatabaseCompare' => 2,
 
-//“ú•t‚ÆŽž‚Ì’è”
+//æ—¥ä»˜ã¨æ™‚åˆ»ã®å®šæ•°
 
 'vbSunday' => 2,
 'vbMonday' => 2,
@@ -113,14 +112,14 @@ $code_keyword = Array(
 'vbUseSystem' => 2,
 'vbUseSystemDayOfWeek' => 2,
 
-//“ú•tŒ`Ž®‚Ì’è”
+//æ—¥ä»˜å½¢å¼ã®å®šæ•°
 'vbGeneralDate' => 2,
 'vbLongDate' => 2,
 'vbShortDate' => 2,
 'vbLongTime' => 2,
 'vbShortTime' => 2,
 
-//ƒtƒ@ƒCƒ‹‘®«‚Ì’è”
+//ãƒ•ã‚¡ã‚¤ãƒ«å±žæ€§ã®å®šæ•°
 
 'Normal' => 2,
 'ReadOnly' => 2,
@@ -132,13 +131,13 @@ $code_keyword = Array(
 'Alias' => 2,
 'Compressed' => 2,
 
-//ƒtƒ@ƒCƒ‹“üo—Í‚Ì’è”
+//ãƒ•ã‚¡ã‚¤ãƒ«å…¥å‡ºåŠ›ã®å®šæ•°
 
 'ForReading' => 2,
 'ForWriting' => 2,
 'ForAppending' => 2,
 
-//•¶Žš—ñ‚Ì’è”
+//æ–‡å­—åˆ—ã®å®šæ•°
 
 'vbCr' => 2,
 'vbCrLf' => 2,
@@ -150,14 +149,14 @@ $code_keyword = Array(
 'vbTab' => 2,
 'vbVerticalTab' => 2,
 
-//‚»‚Ì‘¼‚Ì’è”
+//ãã®ä»–ã®å®šæ•°
 'vbObjectError' => 2,
 
-//ƒNƒ‰ƒX
+//ã‚¯ãƒ©ã‚¹
 'Class_Initialize' => 2,
 'Class_Terminate' => 2,
 
-//ŠÖ”
+//é–¢æ•°
 
 'Abs' => 2,
 'Array' => 2,
@@ -253,16 +252,16 @@ $code_keyword = Array(
 'WeekdayName' => 2,
 'Year' => 2,
 
-//ƒƒ\ƒbƒh
+//ãƒ¡ã‚½ãƒƒãƒ‰
 'Clear' => 2,
 'Execute' => 2,
 'Raise' => 2,
 'Replace' => 2,
 'Test' => 2,
 
-//ƒIƒuƒWƒFƒNƒg
+//ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
 
-//‰‰ŽZŽq
+//æ¼”ç®—å­
 
 'Not' => 2,
 'And' => 2,
@@ -273,7 +272,7 @@ $code_keyword = Array(
 'Imp' => 2,
 'Is' => 2,
 
-//ƒvƒƒpƒeƒB
+//ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
 'Description' => 2,
 'FirstIndex' => 2,
 'Global' => 2,
@@ -286,7 +285,7 @@ $code_keyword = Array(
 'Source' => 2,
 'Value' => 2,
 
-//ƒXƒe[ƒgƒƒ“ƒg
+//ã‚¹ãƒ†ãƒ¼ãƒˆãƒ¡ãƒ³ãƒˆ
 'Call' => 2,
 'Case' => 2,
 'Class' => 2,

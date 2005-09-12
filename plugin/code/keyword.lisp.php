@@ -1,36 +1,36 @@
 <?php
 /**
- *¥­¡¼¥ï¡¼¥ÉÄêµÁ¥Õ¥¡¥¤¥ë
+ * Lisp
  */
 
-$switchHash["'"]  = CHARACTOR;        // Lisp Scheme ¤Ï ' Ê¸»ú¥ê¥Æ¥é¥ë¤Ç¤Ï¤Ê¤¤
-$switchHash[":"] = SPECIAL_IDENTIFIRE;  // : ¤«¤é»Ï¤Þ¤ëÍ½Ìó¸ì¤¢¤ê
-$switchHash["*"] = SPECIAL_IDENTIFIRE;  // * ¤«¤é»Ï¤Þ¤ëÍ½Ìó¸ì¤¢¤ê
+$switchHash['\'']  = PLUGIN_CODE_CHARACTOR;        // Lisp Scheme ã¯ ' æ–‡å­—ãƒªãƒ†ãƒ©ãƒ«ã§ã¯ãªã„
+$switchHash[':'] = PLUGIN_CODE_SPECIAL_IDENTIFIRE;  // : ã‹ã‚‰å§‹ã¾ã‚‹äºˆç´„èªžã‚ã‚Š
+$switchHash['*'] = PLUGIN_CODE_SPECIAL_IDENTIFIRE;  // * ã‹ã‚‰å§‹ã¾ã‚‹äºˆç´„èªžã‚ã‚Š
 
-// ¥³¥á¥ó¥ÈÄêµÁ
-$switchHash[";"]  = COMMENT;  // ¥³¥á¥ó¥È¤Ï ; ¤«¤é²þ¹Ô¤Þ¤Ç
+// ã‚³ãƒ¡ãƒ³ãƒˆå®šç¾©
+$switchHash[';']  = PLUGIN_CODE_COMMENT;  // ã‚³ãƒ¡ãƒ³ãƒˆã¯ ; ã‹ã‚‰æ”¹è¡Œã¾ã§
 $code_comment = Array(
-	";" => Array(
-		"/^;.*\n/",
+	';' => Array(
+				 Array('/^;/', "\n", 1),
 	)
 );
 
-// ¥¢¥¦¥È¥é¥¤¥óÍÑ
+// ã‚¢ã‚¦ãƒˆãƒ©ã‚¤ãƒ³ç”¨
 if($mkoutline){
-  $switchHash["("] = BLOCK_START;
-  $switchHash[")"] = BLOCK_END;
+  $switchHash['('] = PLUGIN_CODE_BLOCK_START;
+  $switchHash[')'] = PLUGIN_CODE_BLOCK_END;
 }
 
 $code_css = Array(
-  'operator',		// ¥ª¥Ú¥ì¡¼¥¿´Ø¿ô
-  'identifier',	// ¤½¤ÎÂ¾¤Î¼±ÊÌ»Ò
-  'pragma',		// module, import ¤È pragma
-  'system',		// ½èÍý·ÏÁÈ¤ß¹þ¤ß¤ÎÅÛ __stdcall ¤È¤«
+  'operator',		// ã‚ªãƒšãƒ¬ãƒ¼ã‚¿é–¢æ•°
+  'identifier',	// ãã®ä»–ã®è­˜åˆ¥å­
+  'pragma',		// module, import ã¨ pragma
+  'system',		// å‡¦ç†ç³»çµ„ã¿è¾¼ã¿ã®å¥´ __stdcall ã¨ã‹
   );
 
 $code_keyword = Array(
-  //'operator',		// ¥ª¥Ú¥ì¡¼¥¿´Ø¿ô
-  //'identifier',	// ¤½¤ÎÂ¾¤Î¼±ÊÌ»Ò
+  //'operator',		// ã‚ªãƒšãƒ¬ãƒ¼ã‚¿é–¢æ•°
+  //'identifier',	// ãã®ä»–ã®è­˜åˆ¥å­
   'find-method' => 2,
   'pprint-indent' => 2,
   'find-package' => 2,
@@ -1099,7 +1099,7 @@ $code_keyword = Array(
   'do*' => 2,
   'flet' => 2,
   'multiple-value-bind' => 2,
-  //'pragma',		// module, import ¤È pragma
-  //'system',		// ½èÍý·ÏÁÈ¤ß¹þ¤ß¤ÎÅÛ __stdcall ¤È¤«
+  //'pragma',		// module, import ã¨ pragma
+  //'system',		// å‡¦ç†ç³»çµ„ã¿è¾¼ã¿ã®å¥´ __stdcall ã¨ã‹
 );
 ?>

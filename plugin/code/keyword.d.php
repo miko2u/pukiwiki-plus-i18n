@@ -1,32 +1,32 @@
 <?php
 /**
- *¥­¡¼¥ï¡¼¥ÉÄêµÁ¥Õ¥¡¥¤¥ë
+ * D Language
  */
 
-$switchHash["#"] = SHARP_IDENTIFIRE; // # ¤«¤é»Ï¤Ş¤ëÍ½Ìó¸ì¤¢¤ê
-$switchHash["`"] = NONESCAPE_LITERAL;  // ` ¤Ï¥¨¥¹¥±¡¼¥×¤·¤Ê¤¤Ê¸»úÎó¥ê¥Æ¥é¥ë
+$switchHash['#'] = PLUGIN_CODE_SHARP_IDENTIFIRE; // # ã‹ã‚‰å§‹ã¾ã‚‹äºˆç´„èªã‚ã‚Š
+$switchHash['\`'] = NONESCAPE_LITERAL;  // ` ã¯ã‚¨ã‚¹ã‚±ãƒ¼ãƒ—ã—ãªã„æ–‡å­—åˆ—ãƒªãƒ†ãƒ©ãƒ«
 
-// ¥³¥á¥ó¥ÈÄêµÁ
-$switchHash["/"] = COMMENT;    //  ¥³¥á¥ó¥È¤Ï /* ¤«¤é */ ¤Ş¤Ç¤È // ¤«¤é²ş¹Ô¤Ş¤Ç¤È¡¢/+ ¤«¤é +/ ¤Ş¤Ç¡£
+// ã‚³ãƒ¡ãƒ³ãƒˆå®šç¾©
+$switchHash['/'] = PLUGIN_CODE_COMMENT;    //  ã‚³ãƒ¡ãƒ³ãƒˆã¯ /* ã‹ã‚‰ */ ã¾ã§ã¨ // ã‹ã‚‰æ”¹è¡Œã¾ã§ã¨ã€/+ ã‹ã‚‰ +/ ã¾ã§ã€‚
 $code_comment = Array(
-	"/" => Array(
-		"/^\/\/.*\\n/",
-		"/^\/\*(.|\n)*?\*\//",
-		"/^\/\+(.|\n)*?\+\//",
+	'/' => Array(
+				 Array('/^\/\*/', '*/', 2),
+				 Array('/^\/\+/', '+/', 2),
+				 Array('/^\/\//', "\n", 1),
 	)
 );
 
-// ¥¢¥¦¥È¥é¥¤¥óÍÑ
+// ã‚¢ã‚¦ãƒˆãƒ©ã‚¤ãƒ³ç”¨
 if($mkoutline){
-  $switchHash["{"] = BLOCK_START;
-  $switchHash["}"] = BLOCK_END;
+  $switchHash['{'] = PLUGIN_CODE_BLOCK_START;
+  $switchHash['}'] = PLUGIN_CODE_BLOCK_END;
 }
 
 $code_css = Array(
-  'operator',		// ¥ª¥Ú¥ì¡¼¥¿´Ø¿ô
-  'identifier',	// ¤½¤ÎÂ¾¤Î¼±ÊÌ»Ò
-  'pragma',		// module, import ¤È pragma
-  'system',		// ½èÍı·ÏÁÈ¤ß¹ş¤ß¤ÎÅÛ __stdcall ¤È¤«
+  'operator',		// ã‚ªãƒšãƒ¬ãƒ¼ã‚¿é–¢æ•°
+  'identifier',	// ãã®ä»–ã®è­˜åˆ¥å­
+  'pragma',		// module, import ã¨ pragma
+  'system',		// å‡¦ç†ç³»çµ„ã¿è¾¼ã¿ã®å¥´ __stdcall ã¨ã‹
   );
 
 $code_keyword = Array(

@@ -1,32 +1,32 @@
 <?php
 /**
- * PS (PostScript) ¥­¡¼¥ï¡¼¥ÉÄêµÁ¥Õ¥¡¥¤¥ë
+ * PS (PostScript) ã‚­ãƒ¼ãƒ¯ãƒ¼ãƒ‰å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«
  */
 
-$switchHash['.'] = SPECIAL_IDENTIFIRE;  //  Í½Ìó¸ì
-$switchHash['$'] = SPECIAL_IDENTIFIRE;  //  Í½Ìó¸ì
-$switchHash['"'] = CODE_CANCEL;         //  " ¤Ï¥ê¥Æ¥é¥ë¤Ç¤Ï¤Ê¤¤ (»ØÄê¤òÌµ¸ú²½)
-$switchHash["("] = PAIR_LITERAL;  // ()¤ÏÊ¸»úÎó¥ê¥Æ¥é¥ë
+$switchHash['.'] = PLUGIN_CODE_SPECIAL_IDENTIFIRE;  //  äºˆç´„èª
+$switchHash['$'] = PLUGIN_CODE_SPECIAL_IDENTIFIRE;  //  äºˆç´„èª
+$switchHash['"'] = PLUGIN_CODE_CODE_CANCEL;         //  " ã¯ãƒªãƒ†ãƒ©ãƒ«ã§ã¯ãªã„ (æŒ‡å®šã‚’ç„¡åŠ¹åŒ–)
+$switchHash['('] = PLUGIN_CODE_PAIR_LITERAL;  // ()ã¯æ–‡å­—åˆ—ãƒªãƒ†ãƒ©ãƒ«
 $literal_delimiter = ')';
-// ¥³¥á¥ó¥ÈÄêµÁ
-$switchHash['%'] = COMMENT;        //  ¥³¥á¥ó¥È¤Ï % ¤«¤é²ş¹Ô¤Ş¤Ç
+// ã‚³ãƒ¡ãƒ³ãƒˆå®šç¾©
+$switchHash['%'] = PLUGIN_CODE_COMMENT;        //  ã‚³ãƒ¡ãƒ³ãƒˆã¯ % ã‹ã‚‰æ”¹è¡Œã¾ã§
 $code_comment = Array(
 	'%' => Array(
-		"/^\%.*\\n/",
+				 Array('/^%/', "\n", 1),
 	)
 );
 
-// ¥¢¥¦¥È¥é¥¤¥óÍÑ
+// ã‚¢ã‚¦ãƒˆãƒ©ã‚¤ãƒ³ç”¨
 if($mkoutline){
-  $switchHash["{"] = BLOCK_START;
-  $switchHash["}"] = BLOCK_END;
+  $switchHash['{'] = PLUGIN_CODE_BLOCK_START;
+  $switchHash['}'] = PLUGIN_CODE_BLOCK_END;
 }
 
 $code_css = Array(
-  'operator',		// ¥ª¥Ú¥ì¡¼¥¿´Ø¿ô
-  'identifier',	// ¤½¤ÎÂ¾¤Î¼±ÊÌ»Ò
-  'pragma',		// module, import ¤È pragma
-  'system',		// ½èÍı·ÏÁÈ¤ß¹ş¤ß¤ÎÅÛ __stdcall ¤È¤«
+  'operator',		// ã‚ªãƒšãƒ¬ãƒ¼ã‚¿é–¢æ•°
+  'identifier',	// ãã®ä»–ã®è­˜åˆ¥å­
+  'pragma',		// module, import ã¨ pragma
+  'system',		// å‡¦ç†ç³»çµ„ã¿è¾¼ã¿ã®å¥´ __stdcall ã¨ã‹
   );
 
 $code_keyword = Array(

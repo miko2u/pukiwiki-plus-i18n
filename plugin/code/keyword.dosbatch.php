@@ -1,40 +1,39 @@
 <?php
 /*
- * MS-DOS¥Ð¥Ã¥Á ¥­¡¼¥ï¡¼¥ÉÄêµÁ¥Õ¥¡¥¤¥ë
+ * MS-DOSãƒãƒƒãƒ ã‚­ãƒ¼ãƒ¯ãƒ¼ãƒ‰å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«
  */
 
-$capital = true;	// Í½Ìó¸ì¤ÎÂçÊ¸»ú¾®Ê¸»ú¤ò¶èÊÌ¤·¤Ê¤¤
+$capital = true;	// äºˆç´„èªžã®å¤§æ–‡å­—å°æ–‡å­—ã‚’åŒºåˆ¥ã—ãªã„
 
-// ¥³¥á¥ó¥ÈÄêµÁ
-$switchHash["r"] = COMMENT_WORD;	// ¥³¥á¥ó¥È¤Ï REM ¤«¤é¹ÔËö¤Þ¤Ç
-$switchHash["R"] = COMMENT_WORD;
+// ã‚³ãƒ¡ãƒ³ãƒˆå®šç¾©
+$switchHash['r'] = PLUGIN_CODE_COMMENT_WORD;	// ã‚³ãƒ¡ãƒ³ãƒˆã¯ REM ã‹ã‚‰è¡Œæœ«ã¾ã§
+$switchHash['R'] = PLUGIN_CODE_COMMENT_WORD;
 $code_comment = Array(
-	"r" => Array(
-		"/^rem\s.*\n/i",
-	),
-	"R" => Array(
-		"/^rem\s.*\n/i",
-	),
+	'r' => Array(
+				 Array('/^rem /i', "\n", 1),
+		),
+	'R' => Array(
+				 Array('/^rem /i', "\n", 1),
+		),
 );
-
-// ¥¢¥¦¥È¥é¥¤¥óÍÑ
+// ã‚¢ã‚¦ãƒˆãƒ©ã‚¤ãƒ³ç”¨
 if($mkoutline){
-  $switchHash["("] = BLOCK_START;
-  $switchHash[")"] = BLOCK_END;
+  $switchHash['('] = PLUGIN_CODE_BLOCK_START;
+  $switchHash[')'] = PLUGIN_CODE_BLOCK_END;
 }
 
 $code_css = Array(
-  'operator',	// ¥ª¥Ú¥ì¡¼¥¿´Ø¿ô
-  'identifier',	// ¤½¤ÎÂ¾¤Î¼±ÊÌ»Ò
-  'pragma',	// module, import ¤È pragma
-  'system',	// ½èÍý·ÏÁÈ¤ß¹þ¤ß¤ÎÅÛ __stdcall ¤È¤«
-  'environment',	// ´Ä¶­ÊÑ¿ô 
+  'operator',	// ã‚ªãƒšãƒ¬ãƒ¼ã‚¿é–¢æ•°
+  'identifier',	// ãã®ä»–ã®è­˜åˆ¥å­
+  'pragma',	// module, import ã¨ pragma
+  'system',	// å‡¦ç†ç³»çµ„ã¿è¾¼ã¿ã®å¥´ __stdcall ã¨ã‹
+  'environment',	// ç’°å¢ƒå¤‰æ•° 
   );
 
 $code_keyword = Array(
-	//'operator',	// ¥ª¥Ú¥ì¡¼¥¿´Ø¿ô
-	//'identifier',	// ¤½¤ÎÂ¾¤Î¼±ÊÌ»Ò
-	// À©¸æ¹½Ê¸·Ï
+	//'operator',	// ã‚ªãƒšãƒ¬ãƒ¼ã‚¿é–¢æ•°
+	//'identifier',	// ãã®ä»–ã®è­˜åˆ¥å­
+	// åˆ¶å¾¡æ§‹æ–‡ç³»
 	'cmdextversion' => 2,
 	'defined' => 2,
 	'do' => 2,
@@ -46,9 +45,9 @@ $code_keyword = Array(
 	'goto' => 2,
 	'if' => 2,
 	'not' => 2,
-	//'pragma',	// module, import ¤È pragma
-	//'system',	// ½èÍý·ÏÁÈ¤ß¹þ¤ß¤ÎÅÛ __stdcall ¤È¤«
-	// ÆâÉô¥³¥Þ¥ó¥É·Ï
+	//'pragma',	// module, import ã¨ pragma
+	//'system',	// å‡¦ç†ç³»çµ„ã¿è¾¼ã¿ã®å¥´ __stdcall ã¨ã‹
+	// å†…éƒ¨ã‚³ãƒžãƒ³ãƒ‰ç³»
 	'assoc' => 4,
 	'break' => 4,
 	'call' => 4,
@@ -86,7 +85,7 @@ $code_keyword = Array(
 	'ver' => 4,
 	'verify' => 4,
 	'vol' => 4,
-	// ³°Éô¥³¥Þ¥ó¥É·Ï
+	// å¤–éƒ¨ã‚³ãƒžãƒ³ãƒ‰ç³»
 	'at' => 4,
 	'attrib' => 4,
 	'cacls' => 4,
@@ -115,7 +114,7 @@ $code_keyword = Array(
 	'subst' => 4,
 	'tree' => 4,
 	'xcopy' => 4,
-	//'environment',	// ´Ä¶­ÊÑ¿ô
+	//'environment',	// ç’°å¢ƒå¤‰æ•°
 	'alluserprofile' => 5,
 	'appdata' => 5,
 //	'cd' => 5,

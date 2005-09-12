@@ -1,32 +1,32 @@
 <?php
 /**
- * make ¥­¡¼¥ï¡¼¥ÉÄêµÁ¥Õ¥¡¥¤¥ë
- * ¹Ô»Ø¸þ¥â¡¼¥ÉÍÑ
+ * make ã‚­ãƒ¼ãƒ¯ãƒ¼ãƒ‰å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«
+ * è¡ŒæŒ‡å‘ãƒ¢ãƒ¼ãƒ‰ç”¨
  */
 
 
-// ¼±ÊÌ»Ò³«»ÏÊ¸»ú
-for ($i = ord("a"); $i <= ord("z"); $i++)
-	 $switchHash[chr($i)] = POST_IDENTIFIRE;
-for ($i = ord("A"); $i <= ord("Z"); $i++)
-	 $switchHash[chr($i)] = POST_IDENTIFIRE;
-$switchHash["."] = POST_IDENTIFIRE;
+// è­˜åˆ¥å­é–‹å§‹æ–‡å­—
+for ($i = ord('a'); $i <= ord('z'); $i++)
+	 $switchHash[chr($i)] = PLUGIN_CODE_POST_IDENTIFIRE;
+for ($i = ord('A'); $i <= ord('Z'); $i++)
+	 $switchHash[chr($i)] = PLUGIN_CODE_POST_IDENTIFIRE;
+$switchHash['.'] = PLUGIN_CODE_POST_IDENTIFIRE;
 $post_identifire = ':';
 
 	 
-$switchHash["\t"] = IDENTIFIRE_CHAR;   // tab
-//$switchHash["."]  = IDENTIFIRE_CHAR;   // 
-$mkoutline = $option["outline"] = false; // ¥¢¥¦¥È¥é¥¤¥ó¥â¡¼¥ÉÉÔ²Ä 
+$switchHash["\t"] = PLUGIN_CODE_IDENTIFIRE_CHAR;   // tab
+//$switchHash['.']  = PLUGIN_CODE_IDENTIFIRE_CHAR;   // 
+$mkoutline = $option['outline'] = false; // ã‚¢ã‚¦ãƒˆãƒ©ã‚¤ãƒ³ãƒ¢ãƒ¼ãƒ‰ä¸å¯ 
 
-// ¥³¥á¥ó¥ÈÄêµÁ
-$switchHash["#"] = COMMENT_CHAR;	// ¥³¥á¥ó¥È¤Ï # ¤«¤é²þ¹Ô¤Þ¤Ç
+// ã‚³ãƒ¡ãƒ³ãƒˆå®šç¾©
+$switchHash['#'] = PLUGIN_CODE_COMMENT_CHAR;	// ã‚³ãƒ¡ãƒ³ãƒˆã¯ # ã‹ã‚‰æ”¹è¡Œã¾ã§
 
 $code_css = Array(
-  'operator',		// ¥ª¥Ú¥ì¡¼¥¿´Ø¿ô
-  'identifier',	// ¤½¤ÎÂ¾¤Î¼±ÊÌ»Ò
-  'pragma',		// module, import ¤È pragma
-  'system',		// ½èÍý·ÏÁÈ¤ß¹þ¤ß¤ÎÅÛ __stdcall ¤È¤«
-  'execute'       // ¼Â¹ÔÌ¿Îá
+  'operator',		// ã‚ªãƒšãƒ¬ãƒ¼ã‚¿é–¢æ•°
+  'identifier',	// ãã®ä»–ã®è­˜åˆ¥å­
+  'pragma',		// module, import ã¨ pragma
+  'system',		// å‡¦ç†ç³»çµ„ã¿è¾¼ã¿ã®å¥´ __stdcall ã¨ã‹
+  'execute'       // å®Ÿè¡Œå‘½ä»¤
   );
 
 $code_keyword = Array(
