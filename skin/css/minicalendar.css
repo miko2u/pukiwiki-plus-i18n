@@ -1,0 +1,90 @@
+/*
+// PukiWiki - Yet another WikiWikiWeb clone.
+// $Id: minicalendar.css,v 1.32.15 2004/07/31 03:09:20 miko Exp $
+//
+*/
+
+/* minicalendar.inc.php */
+.ministyle_calendar
+{
+	width:150px;
+	padding:0px;
+	margin:2px;
+	color:inherit;
+	background-color:#E0E0E0;
+	text-align:center;
+}
+
+.ministyle_td_caltop
+{
+	padding:2px;
+	margin:1px;
+	color:inherit;
+	background-color:#FFF5EE;
+	font-size:12px;
+	text-align:center;
+}
+
+.ministyle_td_today
+{
+	padding:1px;
+	margin:1px;
+	color:inherit;
+	background-color:#FFFFDD;
+	font-size:16px;
+	text-align:center;
+}
+
+.ministyle_td_sat
+{
+	padding:1px;
+	margin:1px;
+	color:inherit;
+	background-color:#DDE5FF;
+	font-size:16px;
+	text-align:center;
+}
+
+.ministyle_td_sun
+{
+	height:20px;
+	padding:1px;
+	margin:1px;
+	color:inherit;
+	background-color:#FFEEEE;
+	font-size:16px;
+	text-align:center;
+}
+
+.ministyle_td_blank
+{
+	padding:1px;
+	margin:1px;
+	color:inherit;
+	background-color:#EEEEEE;
+	font-size:16px;
+	text-align:center;
+}
+
+.ministyle_td_day
+{
+	padding:1px;
+	margin:1px;
+	color:inherit;
+	background-color:#EEF5FF;
+	font-size:16px;
+	text-align:center;
+	vertical-align:center;
+}
+
+.ministyle_td_week
+{
+	width:23px;
+	padding:2px 0px;
+	margin:2px 0px;
+	color:inherit;
+	background-color:#E0E0E0; /*#DDE5EE;*/
+	font-size:12px;
+	font-weight:bold;
+	text-align:center;
+}

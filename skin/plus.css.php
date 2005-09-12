@@ -21,6 +21,7 @@ switch ($charset) {
 echo '@charset "' . $charset . '";' . "\n";
 
 echo file_get_contents('pukiwiki.css');
+echo file_get_contents('plus.css');
 
 $dir = @opendir('./css/');
 while ($file = @readdir($dir)) {

@@ -1,0 +1,127 @@
+/*
+// PukiWiki - Yet another WikiWikiWeb clone.
+// $Id: minicalendar.css,v 1.32.15 2004/07/31 03:09:20 miko Exp $
+//
+*/
+
+/* calendar_viewer.inc.php, minicalendar_viewer.inc.php */
+div.trackback {
+	font-size:80%;
+	text-align:right;
+}
+
+div.prevnext {
+}
+
+div.prevnext_l {
+	float:left;
+}
+
+div.prevnext_r {
+	float:right;
+}
+
+/* minicalendar_viewer */
+h3.minicalendar
+{
+	margin: 8px -8px 0px -6px;
+
+        font-size:100%;
+	border:0px;
+	border-left:8px solid;
+	border-bottom:1px solid;
+	border-color:#ffffff #ffffff #999999 #ff9933;
+        color:inherit;
+}
+
+h4.minicalendar
+{
+	margin: 8px -8px 0px -6px;
+
+        font-size:100%;
+	border:0px;
+	border-left:8px solid;
+	border-bottom:1px solid;
+	border-color:#ffffff #ffffff #999999 #ffCC66;
+        color:inherit;
+}
+
+.minicalendar_viewer
+{
+        margin: 0px 0px 0px 0px;
+}
+
+.minicalendar_viewer h4
+{
+	margin: 0.5em 0px 0px 0.5em;
+}
+
+.minicalendar_viewer p
+{
+	margin: 0.5em 0px 0px 1.5em;
+}
+
+
+/* minicalendar_viewer+public_holiday view */
+.date_weekday {
+	font-family: verdana, arial, sans-serif;
+	font-size: 100%;
+	line-height: 110%;
+	font-weight: normal;
+	padding: 3px 0;
+	border: none;
+	border-bottom: 1px solid #666;
+	margin-bottom: 10px;
+}
+
+.date_weekend {
+	color: #14F;
+	font-family: verdana, arial, sans-serif;
+	font-size: 100%;
+	line-height: 110%;
+	font-weight: normal;
+	padding: 3px 0;
+	border: none;
+	border-bottom: 1px solid #666;
+	margin-bottom: 10px;
+}
+
+.date_holiday {
+	color: #f41;
+	font-family: verdana, arial, sans-serif;
+	font-size: 100%;
+	line-height: 110%;
+	font-weight: normal;
+	padding: 3px 0px;
+	border: none;
+	border-bottom: 1px solid #666;
+	margin-bottom: 10px;
+}
+
+.day {
+	float: left;
+	font-size: 200%;
+	line-height: 100%;
+	font-weight: normal;
+	letter-spacing: 0.02em;
+	padding-left: 4pt;
+	padding-right: 3pt;
+	padding-top: 3pt;
+	padding-bottom: 3pt;
+	margin: 0px;
+	margin-top:3pt;
+	margin-right:4pt;
+}
+.date_weekday .day {
+	background-color: #333;
+	color: #fff;
+}
+.date_weekend .day {
+	background-color: #14F;
+	color: #fff;
+}
+.date_holiday .day {
+	background-color: #F41;
+	color: #fff;
+}
+
