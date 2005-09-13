@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: minicalendar_viewer.inc.php,v 1.34.15 2005/09/13 12:46:59 miko Exp $
+// $Id: minicalendar_viewer.inc.php,v 1.34.16 2005/09/13 12:46:59 miko Exp $
 //
 // Calendar viewer plugin - List pages that calendar/calnedar2 plugin created
 // (Based on calendar and recent plugin)
@@ -224,9 +224,9 @@ function plugin_minicalendar_viewer_convert()
 		if (PLUGIN_MINICALENDAR_VIEWER_HOLIDAYVIEW === TRUE) {
 			$time = strtotime($page_title);
 			if ($time != -1) {
-				$yy = date('Y', $time);
-				$mm = date('m', $time);
-				$dd = date('d', $time);
+				$yy = intval(date('Y', $time));
+				$mm = intval(date('n', $time));
+				$dd = intval(date('d', $time));
 				$monthlabel = array(1 => 
 					'January','Feburary','March',    'April',  'May',     'June',
 					'July',   'August',  'September','Octover','November','December'
