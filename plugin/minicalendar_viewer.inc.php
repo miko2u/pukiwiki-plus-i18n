@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: minicalendar_viewer.inc.php,v 1.34.16 2005/09/13 12:46:59 miko Exp $
+// $Id: minicalendar_viewer.inc.php,v 1.34.18 2005/09/13 12:46:59 miko Exp $
 //
 // Calendar viewer plugin - List pages that calendar/calnedar2 plugin created
 // (Based on calendar and recent plugin)
@@ -240,7 +240,7 @@ function plugin_minicalendar_viewer_convert()
 				else if ($wday == 0) { $classname = 'date_holiday'; }
 				else if ($wday == 6) { $classname = 'date_weekend'; }
 				else { $classname = 'date_weekday'; }
-				$head = '<h3 class="'. $classname . '"><span class="day">' . $dd . '</span> <br />'
+				$head = '<h3 class="'. $classname . '"><span class="day">' . sprintf('%02d', $dd) . '</span> <br />'
 				      . '<b>' . $mmstr . '</b>, <b>' . $yy . '</b>' . $link . '</h3>' . "\n";
 			}
 		}
