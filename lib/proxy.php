@@ -9,6 +9,7 @@
 
 // Max number of 'track' redirection message with 301 or 302 response
 define('PKWK_HTTP_REQUEST_URL_REDIRECT_MAX', 2);
+define('PKWK_HTTP_REQUEST_TIMEOUT', 8);
 
 /*
  * http_request($url)
@@ -102,7 +103,7 @@ function http_request($url, $method = 'GET', $headers = '', $post = array(),
 	$fp = fsockopen(
 		$via_proxy ? $proxy_host : $arr['host'],
 		$via_proxy ? $proxy_port : $arr['port'],
-		$errno, $errstr, 30);
+		$errno, $errstr, PKWK_HTTP_REQUEST_TIMEOUT);
 	if ($fp === FALSE) {
 		return array(
 			'query'  => $query, // Query string
