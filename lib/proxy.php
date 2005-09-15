@@ -1,5 +1,5 @@
 <?php
-// $Id: proxy.php,v 1.9 2005/06/28 14:03:29 henoheno Exp $
+// $Id: proxy.php,v 1.9.2 2005/09/15 14:03:29 miko Exp $
 // Copyright (C) 2003-2005 PukiWiki Developers Team
 // License: GPL v2 or (at your option) any later version
 //
@@ -7,6 +7,7 @@
 
 // Max number of 'track' redirection message with 301 or 302 response
 define('PKWK_HTTP_REQUEST_URL_REDIRECT_MAX', 2);
+define('PKWK_HTTP_REQUEST_TIMEOUT', 8);
 
 /*
  * http_request($url)
@@ -81,7 +82,7 @@ function http_request($url, $method = 'GET', $headers = '', $post = array(),
 	$fp = fsockopen(
 		$via_proxy ? $proxy_host : $arr['host'],
 		$via_proxy ? $proxy_port : $arr['port'],
-		$errno, $errstr, 30);
+		$errno, $errstr, PKWK_HTTP_REQUEST_TIMEOUT);
 	if ($fp === FALSE) {
 		return array(
 			'query'  => $query, // Query string
