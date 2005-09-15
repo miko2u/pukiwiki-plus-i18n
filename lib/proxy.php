@@ -1,5 +1,5 @@
 <?php
-// $Id: proxy.php,v 1.9.1 2005/06/28 14:03:29 miko Exp $
+// $Id: proxy.php,v 1.9.3 2005/09/15 14:03:29 miko Exp $
 // Copyright (C)
 //   2005      PukiWiki Plus! Team
 //   2003-2005 PukiWiki Developers Team
