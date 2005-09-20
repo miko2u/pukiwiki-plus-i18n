@@ -1,5 +1,5 @@
 <?php
-// $Id: counter.inc.php,v 1.16.3 2005/09/20 03:08:09 miko Exp $
+// $Id: counter.inc.php,v 1.16.5 2005/09/20 03:08:09 miko Exp $
 //
 // PukiWiki counter plugin
 //
@@ -122,7 +122,7 @@ function get_server_date($format, $timestamp = NULL)
 	$time = $zonetime + (($timestamp !== NULL) ? $timestamp : UTIME);
 
 	$str = gmdate($format, $time);
-	if (ZONETIME == 0) return $str;
+	if ($zonetime == 0) return $str;
 
 	$zonetime = get_zonetime_offset($zonetime);
 
