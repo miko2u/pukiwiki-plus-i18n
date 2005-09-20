@@ -1,8 +1,9 @@
 <?php
-// $Id: counter.inc.php,v 1.16 2005/04/09 03:08:09 henoheno Exp $
+// $Id: counter.inc.php,v 1.16.3 2005/09/20 03:08:09 miko Exp $
 //
 // PukiWiki counter plugin
 //
+// (C) 2002-2005 PukiWiki Plus! Team
 // (C) 2002-2005 PukiWiki Developers Team
 // (C) 2002 Y.MASUI GPL2 http://masui.net/pukiwiki/ masui@masui.net
 
@@ -49,13 +50,14 @@ function plugin_counter_get_count($page)
 	static $counters = array();
 	static $default;
 
-	if (! isset($default))
+	if (! isset($default)) {
 		$default = array(
 			'total'     => 0,
-			'date'      => get_date('Y/m/d'),
+			'date'      => get_server_date('Y/m/d'),
 			'today'     => 0,
 			'yesterday' => 0,
 			'ip'        => '');
+	}
 
 	if (! is_page($page)) return $default;
 	if (isset($counters[$page])) return $counters[$page];
@@ -78,7 +80,7 @@ function plugin_counter_get_count($page)
 	if ($counters[$page]['date'] != $default['date']) {
 		// New day
 		$modify = TRUE;
-		$is_yesterday = ($counters[$page]['date'] == get_date('Y/m/d', strtotime('yesterday', UTIME)));
+		$is_yesterday = ($counters[$page]['date'] == get_server_date('Y/m/d', strtotime('yesterday', UTIME)));
 		$counters[$page]['ip']        = $_SERVER['REMOTE_ADDR'];
 		$counters[$page]['date']      = $default['date'];
 		$counters[$page]['yesterday'] = $is_yesterday ? $counters[$page]['today'] : 0;
@@ -103,5 +105,27 @@ function plugin_counter_get_count($page)
 	fclose($fp);
 
 	return $counters[$page];
+}
+
+// Get the server-depend date
+function get_server_date($format, $timestamp = NULL)
+{
+	static $zone = '';
+	static $timezone = '';
+
+	if ($zone == '') {
+		list($zone, $zonetime) = set_timezone(DEFAULT_LANG);
+	}
+
+	$format = preg_replace('/(?<!\\\)T/', preg_replace('/(.)/', '\\\$1', $zone), $format);
+
+	$time = $zonetime + (($timestamp !== NULL) ? $timestamp : UTIME);
+
+	$str = gmdate($format, $time);
+	if (ZONETIME == 0) return $str;
+
+	$zonetime = get_zonetime_offset($zonetime);
+
+	return str_replace('+0000', $zonetime, $str);
 }
 ?>
