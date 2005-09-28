@@ -4,7 +4,7 @@
 //
 // PukiWiki 1.4.*
 //  Copyright (C) 2002-2005 by PukiWiki Developers Team
-//  http://pukiwiki.org/
+//  http://pukiwiki.sourceforge.jp/
 //
 // PukiWiki 1.3.*
 //  Copyright (C) 2002-2004 by PukiWiki Developers Team
