@@ -26,7 +26,7 @@ function plugin_cvscheck_init()
 	  '_cvscheck_messages' => array(
 		 'URL'      => 'http://cvs.sourceforge.jp/cgi-bin/viewcvs.cgi/pukiwiki/pukiwiki',
 		 'URL_FILE' => 'http://cvs.sourceforge.jp/cgi-bin/viewcvs.cgi/*checkout*/pukiwiki/pukiwiki/',
-		 'OPTIONAL_URL' => 'http://pukiwiki.org/?',
+		 'OPTIONAL_URL' => 'http://pukiwiki.sourceforge.jp/?',
 		 'OPTIONAL_OPT' => 'plugin=ls2&prefix=',
 		 'OPTIONAL_DIR' => '%E8%87%AA%E4%BD%9C%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3%2F',
 		 'DIRS' => array("DATA_HOME"   => '/',
