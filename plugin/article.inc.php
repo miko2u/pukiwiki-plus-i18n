@@ -1,5 +1,5 @@
 <?php
-// $Id: article.inc.php,v 1.24.4 2005/06/25 07:06:12 miko Exp $
+// $Id: article.inc.php,v 1.25.4 2005/09/24 01:12:29 miko Exp $
 // Copyright (C)
 //   2005      PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
