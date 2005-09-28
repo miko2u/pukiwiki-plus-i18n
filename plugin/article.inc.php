@@ -49,6 +49,7 @@ function plugin_article_action()
 	global $script, $post, $vars, $cols, $rows, $now;
 //	global $_title_collided, $_msg_collided, $_title_updated;
 	global $_plugin_article_mailto, $_no_subject, $_no_name;
+//	global $_msg_article_mail_sender, $_msg_article_mail_page;
 
 $_title_collided   = _('On updating $1, a collision has occurred.');
 $_title_updated    = _('$1 was updated');
@@ -56,6 +57,8 @@ $_msg_collided = _('It seems that someone has already updated this page while yo
  + is placed at the beginning of a line that was newly added.<br />
  ! is placed at the beginning of a line that has possibly been updated.<br />
  Edit those lines, and submit again.');
+$_msg_article_mail_sender = _('Author: ');
+$_msg_article_mail_page = _('Page: ');
 
 	if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
 
