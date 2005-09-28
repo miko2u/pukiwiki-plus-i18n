@@ -1,5 +1,5 @@
 <?php
-// $Id: article.inc.php,v 1.24.1 2005/06/25 07:06:12 miko Exp $
+// $Id: article.inc.php,v 1.25.1 2005/09/24 01:12:29 miko Exp $
 // Copyright (C)
 //   2005      Customized/Patched by Miko.Hoshina
 //   2002-2005 PukiWiki Developers Team
@@ -49,6 +49,7 @@ function plugin_article_action()
 	global $script, $post, $vars, $cols, $rows, $now;
 	global $_title_collided, $_msg_collided, $_title_updated;
 	global $_plugin_article_mailto, $_no_subject, $_no_name;
+	global $_msg_article_mail_sender, $_msg_article_mail_page;
 
 	if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
 
