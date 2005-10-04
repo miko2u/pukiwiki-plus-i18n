@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: edit.inc.php,v 1.19.37.2 2005/08/22 14:59:24 miko Exp $
+// $Id: edit.inc.php,v 1.19.37.3 2005/08/22 14:59:24 miko Exp $
 //
 // Edit plugin
 // cmd=edit
@@ -61,7 +61,7 @@ function plugin_edit_realview()
 	}
 	// Feeding start
 	pkwk_common_headers();
-	header('Content-type: text/xml');
+	header('Content-type: text/xml; charset=UTF-8');
 	print '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
 	print $postdata;
 
