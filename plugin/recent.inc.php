@@ -1,5 +1,5 @@
 <?php
-// $Id: recent.inc.php,v 1.16.1 2005/07/17 10:55:28 miko Exp $
+// $Id: recent.inc.php,v 1.17.1 2005/10/02 16:15:06 miko Exp $
 // Copyright (C)
 //   2005      PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
@@ -50,8 +50,9 @@ function plugin_recent_convert()
 
 	// Get latest N changes
 	if (file_exists(PLUGIN_RECENT_CACHE)) {
-		$source = file(PLUGIN_RECENT_CACHE);
-		$lines = array_splice($source, 0, $recent_lines);
+		// Only variables can be passed by reference from PHP 5.0.5
+		$file_array = file(PLUGIN_RECENT_CACHE); // with array_splice()
+		$lines = array_splice($file_array, 0, $recent_lines);
 	} else {
 		return '#recent(): Cache file of RecentChanges not found' . '<br />';
 	}

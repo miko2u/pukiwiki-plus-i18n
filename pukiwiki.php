@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: pukiwiki.php,v 1.41.1 2005/04/29 11:26:28 miko Exp $
+// $Id: pukiwiki.php,v 1.42.1 2005/10/02 15:28:47 miko Exp $
 // Copyright (C)
 //   2005      PukiWiki Plus! Team
 //   2004-2005 PukiWiki Developers Team
@@ -9,7 +9,7 @@
 /////////////////////////////////////////////////
 // Error reporting
 
-// error_reporting(0): // Nothing
+// error_reporting(0); // Nothing
 error_reporting(E_ERROR | E_PARSE); // Avoid E_WARNING, E_NOTICE, etc
 // error_reporting(E_ALL);
 
