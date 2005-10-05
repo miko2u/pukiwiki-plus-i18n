@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: html.php,v 1.45.14 2005/10/02 16:26:12 miko Exp $
+// $Id: html.php,v 1.46.14 2005/10/04 13:41:03 miko Exp $
 // Copyright (C)
 //   2005      Customized/Patched by Miko.Hoshina
 //   2002-2005 PukiWiki Developers Team
@@ -140,8 +140,8 @@ function catbody($title, $page, $body)
 	if ($search_word_color && isset($vars['word'])) {
 		$body = '<div class="small">' . $_msg_word . htmlspecialchars($vars['word']) .
 			'</div>' . $hr . "\n" . $body;
-		// Only variables can be passed by reference from PHP 5.0.5
-		// with array_splice(), array_flip()
+
+		// BugTrack2/106: Only variables can be passed by reference from PHP 5.0.5
 		$tmp_array = preg_split('/\s+/', $vars['word'], -1, PREG_SPLIT_NO_EMPTY);
 		$tmp_array = array_splice($tmp_array, 0, 10);
 		$words = array_flip($tmp_array);

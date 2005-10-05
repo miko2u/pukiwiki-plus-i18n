@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: file.php,v 1.39.3 2005/10/02 16:15:05 miko Exp $
+// $Id: file.php,v 1.40.3 2005/10/04 13:41:03 miko Exp $
 // Copyright (C)
 //   2005      Customized/Patched by Miko.Hoshina
 //   2002-2005 PukiWiki Developers Team
@@ -309,7 +309,7 @@ function put_lastmodified()
 	flock($fp, LOCK_EX);
 	rewind($fp);
 
-	// Only variables can be passed by reference from PHP 5.0.5
+	// BugTrack2/106: Only variables can be passed by reference from PHP 5.0.5
 	$tmp_array = array_keys($recent_pages); // with array_splice()
 
 	foreach (array_splice($tmp_array, 0, $maxshow) as $page) {
