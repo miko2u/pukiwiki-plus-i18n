@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: rules.ini.php,v 1.8.2 2005/10/02 16:15:05 miko Exp $
+// $Id: rules.ini.php,v 1.8.2 2005/10/04 13:41:03 miko Exp $
 // Copyright (C)
 //   2005      Customized/Patched by Miko.Hoshina
 //   2003-2005 PukiWiki Developers Team
@@ -44,7 +44,7 @@ $datetime_rules = array(
 //  行末指定は $ を後ろに。
 //
 
-// Only variables can be passed by reference from PHP 5.0.5
+// BugTrack2/106: Only variables can be passed by reference from PHP 5.0.5
 $page_array = explode('/', $vars['page']); // with array_pop()
 
 $str_rules = array(
