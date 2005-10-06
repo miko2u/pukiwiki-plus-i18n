@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: tracker.inc.php,v 1.29.2 2005/05/03 08:31:05 miko Exp $
+// $Id: tracker.inc.php,v 1.33.2 2005/10/05 13:57:35 miko Exp $
 //
 // Issue tracker plugin (See Also bugtrack plugin)
 
@@ -855,13 +855,15 @@ class Tracker_list
 
 		if (is_array($order) && isset($order[$sort]))
 		{
-			$index = array_flip(array_keys($order));
+			// BugTrack2/106: Only variables can be passed by reference from PHP 5.0.5
+			$order_keys = array_keys($order); // with array_shift();
+			$index = array_flip($order_keys);
 			$pos = 1 + $index[$sort];
-			$b_end = ($sort == array_shift(array_keys($order)));
+			$b_end = ($sort == array_shift($order_keys));
 			$b_order = ($order[$sort] == SORT_ASC);
 			$dir = ($b_end xor $b_order) ? SORT_ASC : SORT_DESC;
 			$arrow = '&br;'.($b_order ? '&uarr;' : '&darr;')."($pos)";
-			unset($order[$sort]);
+			unset($order[$sort], $order_keys);
 		}
 		$title = $this->fields[$field]->title;
 		$r_page = rawurlencode($this->page);
