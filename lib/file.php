@@ -67,7 +67,7 @@ function page_write($page, $postdata, $notimestamp = FALSE)
 	// Create wiki text
 	file_write(DATA_DIR, $page, $postdata, $notimestamp);
 
-	if ($trackback) {
+	if ($trackback > 1) {
 		// TrackBack Ping
 		$_diff = explode("\n", $diffdata);
 		$plus  = join("\n", preg_replace('/^\+/', '', preg_grep('/^\+/', $_diff)));
