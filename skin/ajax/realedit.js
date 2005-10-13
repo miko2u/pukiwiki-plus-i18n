@@ -11,7 +11,11 @@ function pukiwiki_apx(page)
 		msg.rows = msg.rows * 2;
 	} else {
 		ajax_apx = true;
-		outer.style.display = "inline";
+		if (navigator.userAgent.indexOf("Safari",0) != -1) {
+			outer.style.display = "block";
+		} else {
+			outer.style.display = "inline";
+		}
 		outer.style.overflow = "scroll";
 		outer.style.width = "660px";
 		msg.rows = msg.rows / 2;
@@ -23,25 +27,26 @@ function pukiwiki_apv(page,oSource)
 {
 	if (ajax_apx) {
 		var source = oSource.value;
-		if (oSource.setSelectionRange) {
-			sttlen = oSource.selectionStart;
-			endlen = oSource.value.length - oSource.selectionEnd;
-			sellen = oSource.selectionEnd-sttlen;
-			finlen = source.lastIndexOf("\n",sttlen);
-			source = source.substring(0,finlen) + "\n\n" + '&editmark;' + "\n\n" + source.substring(finlen);
-		} else if (document.selection.createRange) {
-			var sel = document.selection.createRange();
-			sellen = sel.text.length;
-			var end = oSource.createTextRange();
-			var all = end.text.length;
-			end.moveToPoint(sel.offsetLeft,sel.offsetTop);
-			end.moveEnd("textedit");
-			endlen = end.text.length;
-			sttlen = all - endlen;
-			finlen = source.lastIndexOf("\n",sttlen);
-			source = source.substring(0,finlen) + "\n\n" + '&editmark;' + "\n\n" + source.substring(finlen);
+		if (navigator.userAgent.indexOf("Safari",0) == -1) {
+			if (oSource.setSelectionRange) {
+				sttlen = oSource.selectionStart;
+				endlen = oSource.value.length - oSource.selectionEnd;
+				sellen = oSource.selectionEnd-sttlen;
+				finlen = source.lastIndexOf("\n",sttlen);
+				source = source.substring(0,finlen) + "\n\n" + '&editmark;' + "\n\n" + source.substring(finlen);
+			} else if (document.selection.createRange) {
+				var sel = document.selection.createRange();
+				sellen = sel.text.length;
+				var end = oSource.createTextRange();
+				var all = end.text.length;
+				end.moveToPoint(sel.offsetLeft,sel.offsetTop);
+				end.moveEnd("textedit");
+				endlen = end.text.length;
+				sttlen = all - endlen;
+				finlen = source.lastIndexOf("\n",sttlen);
+				source = source.substring(0,finlen) + "\n\n" + '&editmark;' + "\n\n" + source.substring(finlen);
+			}
 		}
-
 		preview_onload = function(htmldoc) {
 			var result = document.getElementById("realview");
 			result.innerHTML = htmldoc.responseText;
