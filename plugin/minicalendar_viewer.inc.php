@@ -229,7 +229,7 @@ function plugin_minicalendar_viewer_convert()
 				$dd = intval(date('d', $time));
 				$monthlabel = array(1 => 
 					'January','Feburary','March',    'April',  'May',     'June',
-					'July',   'August',  'September','Octover','November','December'
+					'July',   'August',  'September','October','November','December'
 				);
 				$mmstr = $monthlabel[$mm];
 				$h_today = public_holiday($yy, $mm, $dd); 
