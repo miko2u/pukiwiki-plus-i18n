@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: make_link.php,v 1.29.4 2005/07/14 14:45:07 miko Exp $
+// $Id: make_link.php,v 1.29.8 2005/10/20 14:45:07 miko Exp $
 // Copyright (C)
 //   2005      Customized/Patched by Miko.Hoshina
 //   2003-2005 PukiWiki Developers Team
@@ -381,9 +381,21 @@ EOD;
 		} else {
 			$rel = ' rel="nofollow"';
 		}
+		// another fix - official:BugTrack2/51
+		if (is_url($this->alias)) {
+			$nparse = parse_url($this->name);
+			$aparse = parse_url($this->alias);
+			if ($aparse['scheme'] != $nparse['scheme'] || $aparse['host'] != $nparse['host']) {
+				$title = ' title="Link to ' . htmlspecialchars($nparse['host']) . '"';
+				$extra = '<span style="color:red;"><em>!</em></span>';
+			} else {
+				$title = '';
+				$extra = '';
+			}
+		}
 
 //		return '<a href="' . $this->name . '">' . $this->alias . '</a>';
-		return open_uri_in_new_window('<a href="' . $this->name . '"' . $rel . '>' . $this->alias . '</a>', get_class($this));
+		return open_uri_in_new_window('<a href="' . $this->name . '"' . $rel . $title . '>' . $this->alias . '</a>' . $extra, get_class($this));
 	}
 }
 
