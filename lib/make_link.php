@@ -390,8 +390,9 @@ EOD;
 				$title = ' title="Link to ' . htmlspecialchars($parse['host']) . '"';
 				$extra = '<span style="color:red;"><em>!</em></span>';
 			} else {
-				$this->alias = htmlspecialchars($this->name);
+				$title = ' title="alias deined - ' . htmlspecialchars($this->alias) . '"';
 				$extra = '<span style="color:red;"><em>!?</em></span>';
+				$this->alias = htmlspecialchars($this->name);
 			}
 		}
 
