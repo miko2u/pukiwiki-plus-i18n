@@ -1777,3 +1777,16 @@ div.naviblock a:hover {
 	background-color:#ffeecc;
 	text-decoration: none;
 }
+
+/* 1.4.6u1 added */
+span.linkwarn {
+	font-size:xx-small;
+	font-weight:bold;
+	color:#f00;
+	background-color:#ff6;
+}
+
+span.linkwarn a {
+	color:#f00;
+	background-color:#ff6;
+}

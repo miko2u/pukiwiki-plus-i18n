@@ -385,18 +385,14 @@ EOD;
 		// another fix - official:BugTrack2/51
 		$title = $extra = '';
 		if (is_url($this->alias) && $this->alias != $this->name) {
-			if (FALSE) {
-				$parse = parse_url($this->name);
-				$title = ' title="Link to ' . htmlspecialchars($parse['host']) . '"';
-				$extra = '<span style="color:red;"><em>!</em></span>';
-			} else {
-				$title = ' title="alias deined - ' . htmlspecialchars($this->alias) . '" style="background-color:#f09;"';
-				$this->alias = htmlspecialchars($this->name);
-			}
+			$extra = '<span class="linkwarn"> [WARNING! - ' . 
+			         '<a href="' . $this->name . '">' . htmlspecialchars($this->name) . '</a>] ' . 
+			         '</span>';
+			return $this->alias . $extra;
 		}
 
 //		return '<a href="' . $this->name . '">' . $this->alias . '</a>';
-		return open_uri_in_new_window('<a href="' . $this->name . '"' . $rel . $title . '>' . $this->alias . '</a>', get_class($this));
+		return open_uri_in_new_window('<a href="' . $this->name . '"' . $rel . '>' . $this->alias . '</a>', get_class($this));
 	}
 }
 
