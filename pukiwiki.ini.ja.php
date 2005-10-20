@@ -1,109 +1,99 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: pukiwiki.ini.php,v 1.128.13 2005/08/24 14:52:25 miko Exp $
+// $Id: pukiwiki.ini.php,v 1.128.13.5 2005/10/20 14:57:09 miko Exp $
 // Copyright (C)
 //   2005      Customized/Patched by Miko.Hoshina
 //   2002-2005 PukiWiki Developers Team
 //   2001-2002 Originally written by yu-ji
 // License: GPL v2 or (at your option) any later version
 //
-// PukiWiki main setting file
+// PukiWiki メイン設定ファイル
 
 /////////////////////////////////////////////////
-// Functionality settings
+// 機能性に関する設定
 
-// PKWK_OPTIMISE - Ignore verbose but understandable checking and warning
-//   If you end testing this PukiWiki, set '1'.
-//   If you feel in trouble about this PukiWiki, set '0'.
+// PKWK_OPTIMISE - 過剰ではあるが解りやすいチェックや警告を省略する
+//   このPukiWikiに関する動作確認を終えているならば '1' に、
+//   このPukiWikiが何かトラブルを抱えているならば '0' にして下さい
 if (! defined('PKWK_OPTIMISE'))
 	define('PKWK_OPTIMISE', 0);
 
 /////////////////////////////////////////////////
-// Security settings
+// セキュリティ設定
 
-// PKWK_READONLY - Prohibits editing and maintain via WWW
-//   NOTE: Counter-related functions will work now (counter, attach count, etc)
+// PKWK_READONLY - Webブラウザ経由の編集やメンテナンスを禁止する
+//   補足: カウンター関係の機能は動作します(counterプラグインや、
+//         attachプラグインがダウンロード数をカウントする機能など)
 if (! defined('PKWK_READONLY'))
 	define('PKWK_READONLY', 0); // 0 or 1
 
-// PKWK_SAFE_MODE - Prohibits some unsafe(but compatible) functions 
+// PKWK_SAFE_MODE - いくつかの安全でない(しかし互換性のある)機能を禁止する
 if (! defined('PKWK_SAFE_MODE'))
 	define('PKWK_SAFE_MODE', 0);
 
-// PKWK_DISABLE_INLINE_IMAGE_FROM_URI - Disallow using inline-image-tag for URIs
-//   Inline-image-tag for URIs may allow leakage of Wiki readers' information
-//   (in short, 'Web bug') or external malicious CGI (looks like an image's URL)
-//   attack to Wiki readers, but easy way to show images.
-if (! defined('PKWK_DISABLE_INLINE_IMAGE_FROM_URI'))
-	define('PKWK_DISABLE_INLINE_IMAGE_FROM_URI', 0);
-
 // PKWK_QUERY_STRING_MAX
-//   Max length of GET method, prohibits some worm attack ASAP
-//   NOTE: Keep (page-name + attach-file-name) <= PKWK_QUERY_STRING_MAX
+//   GETメソッドの最大長を制限することにより、ある種のウイルス(ワーム)
+//   からのアクセスを直ちに禁止する
+//   注意: ページ名と添付ファイル名を足した長さより大きい必要があります
+//        (page-name + attach-file-name) <= PKWK_QUERY_STRING_MAX
 define('PKWK_QUERY_STRING_MAX', 640); // Bytes, 0 = OFF
 
 /////////////////////////////////////////////////
-// Experimental features
+// 言語 / エンコーディング方式の設定
 
-// Multiline plugin hack (See official:BugTrack2/84)
-// EXAMPLE(with a known BUG):
-//   #plugin(args1,args2,...,argsN){{
-//   argsN+1
-//   argsN+1
-//   #memo(foo)
-//   argsN+1
-//   }}
-//   #memo(This makes '#memo(foo)' to this)
-define('PKWKEXP_DISABLE_MULTILINE_PLUGIN_HACK', 0); // 1 = Disabled
-
-/////////////////////////////////////////////////
-// Language / Encoding settings
-
-// LANG - Internal content encoding ('en', 'ja', or ...)
+// LANG - 内部コンテンツの言語を指定する ('en', 'ja', or ...)
 define('LANG', 'ja');
 
-// UI_LANG - Content encoding for buttons, menus,  etc
+// UI_LANG - メニューやボタンなどに使う言語を指定する
 define('UI_LANG', LANG); // 'en' for Internationalized wikisite
 
 /////////////////////////////////////////////////
-// Directory settings I (ended with '/', permission '777')
+// ディレクトリ関係の設定その1
+// (末尾に '/' が必要。パーミッションは '777')
 
-// You may hide these directories (from web browsers)
-// by setting DATA_HOME at index.php.
+// index.php の中で定数 DATA_HOME の値を変更することにより
+// これらのディレクトリをWebブラウザから隠すことができます
 
-define('DATA_DIR',      DATA_HOME . 'wiki/'     ); // Latest wiki texts
-define('DIFF_DIR',      DATA_HOME . 'diff/'     ); // Latest diffs
-define('BACKUP_DIR',    DATA_HOME . 'backup/'   ); // Backups
-define('CACHE_DIR',     DATA_HOME . 'cache/'    ); // Some sort of caches
-define('UPLOAD_DIR',    DATA_HOME . 'attach/'   ); // Attached files and logs
-define('COUNTER_DIR',   DATA_HOME . 'counter/'  ); // Counter plugin's counts
-define('TRACKBACK_DIR', DATA_HOME . 'trackback/'); // TrackBack logs
-define('PLUGIN_DIR',    DATA_HOME . 'plugin/'   ); // Plugin directory
+define('DATA_DIR',      DATA_HOME . 'wiki/'     ); // 最新のwikiテキスト
+define('DIFF_DIR',      DATA_HOME . 'diff/'     ); // 最新のdiff(直前のデータ)
+define('BACKUP_DIR',    DATA_HOME . 'backup/'   ); // バックアップデータ
+define('CACHE_DIR',     DATA_HOME . 'cache/'    ); // キャッシュデータ
+define('UPLOAD_DIR',    DATA_HOME . 'attach/'   ); // 添付ファイルとそのログ
+define('COUNTER_DIR',   DATA_HOME . 'counter/'  ); // counterプラグインのログ
+define('TRACKBACK_DIR', DATA_HOME . 'trackback/'); // TrackBackのログ
+define('PLUGIN_DIR',    DATA_HOME . 'plugin/'   ); // プラグインを収める場所
 
 /////////////////////////////////////////////////
-// Directory settings II (ended with '/')
+// ディレクトリ関係の設定その2 (末尾に '/' が必要)
 
-// Skins / Stylesheets
+// スキン / スタイルシートを格納するディレクトリ
 define('SKIN_DIR', 'skin/');
-// Skin files (SKIN_DIR/*.skin.php) are needed at
-// ./DATAHOME/SKIN_DIR from index.php, but
-// CSSs(*.css) and JavaScripts(*.js) are needed at
-// ./SKIN_DIR from index.php.
+//  このディレクトリ以下のスキンファイル (*.php) はPukiWiki本体側
+//  (DATA_HOME/SKIN_DIR) に必要ですが、CSSファイル(*.css) および
+//  JavaScriptファイル( *.js) はWebブラウザから見える場所
+//  (index.php から見て ./SKIN_DIR にあたる場所)に配置して下さい
 
-// Static image files
+// 静的な画像ファイルを格納するディレクトリ
 define('IMAGE_DIR', 'image/');
-// Keep this directory shown via web browsers like
-// ./IMAGE_DIR from index.php.
+//  このディレクトリ以下の全てのファイルは、Webブラウザから見える
+//  場所(index.php から見て ./IMAGE_DIR にあたる場所)に配置して
+//  下さい
 
-// for Fancy URL
+/////////////////////////////////////////////////
+// 実験的な設定
+
+// 仮想URLのための記述(Plus! experimental)
 define('ROOT_URI', '');
 define('SKIN_URI', ROOT_URI . SKIN_DIR);
 define('IMAGE_URI', ROOT_URI . IMAGE_DIR);
 
-/////////////////////////////////////////////////
-// Local time setting
+// 複数行ブロック型プラグインの設定(See official:BugTrack2/84)
+define('PKWKEXP_DISABLE_MULTILINE_PLUGIN_HACK', 0); // 0:有効, 1:無効
 
-switch (LANG) { // or specifiy one
+/////////////////////////////////////////////////
+// ローカル時刻設定
+
+switch (LANG) { // または一つを指定する
 case 'ja':
 	define('ZONE', 'JST');
 	define('ZONETIME', 9 * 3600); // JST = GMT + 9
@@ -115,175 +105,222 @@ default  :
 }
 
 /////////////////////////////////////////////////
-// Title of your Wikisite (Name this)
-// Also used as RSS feed's channel name etc
+// あなたのWikiサイトの名前 (※命名して下さい)
+// この値はRSSフィードのチャンネル名などにも使われます
 $page_title = 'PukiWiki Plus!';
 
-// Specify PukiWiki URL (default: auto)
+// このPukiWikiのURL (デフォルト:自動判別)
 //$script = 'http://example.com/pukiwiki/';
 
-// Shorten $script: Cut its file name (default: not cut)
+// $scriptを短くする: ファイル名を取り除く (デフォルト:取り除かない)
+// ディレクトリのインデックス候補として 'index.php' が設定されて
+// おり、かつ 'index.php' よりも優先順位の高いファイルが存在しない
+// 環境でなければ、この設定は活用できません
 //$script_directory_index = 'index.php';
 
-// Site admin's name (CHANGE THIS)
+// サイト管理者の名前 (※変更して下さい)
 $modifier = 'anonymous';
 
-// Site admin's Web page (CHANGE THIS)
+// サイト管理者のWebページ (※変更して下さい)
 $modifierlink = 'http://pukiwiki.example.com/';
 
-// Default page name
-$defaultpage  = 'FrontPage';     // Top / Default page
-$whatsnew     = 'RecentChanges'; // Modified page list
-$whatsdeleted = 'RecentDeleted'; // Removeed page list
-$interwiki    = 'InterWikiName'; // Set InterWiki definition here
-$menubar      = 'MenuBar';       // Menu
-$sidebar      = 'SideBar';       // Side
-$headarea     = ':Header';
-$footarea     = ':Footer';
+// ページ名称
+$defaultpage  = 'FrontPage';     // トップページ / 既定のページ
+$whatsnew     = 'RecentChanges'; // 変更されたページの一覧
+$whatsdeleted = 'RecentDeleted'; // 削除されたページの一覧
+$interwiki    = 'InterWikiName'; // InterWikiの定義を行うページ
+$menubar      = 'MenuBar';       // メニュー(左サイド)
+$sidebar      = 'SideBar';       // メニュー(右サイド)
+$headarea     = ':Header';       // ヘッダ(画面上)
+$footarea     = ':Footer';       // フッタ(画面下)
 
 /////////////////////////////////////////////////
-// Change default Document Type Definition
+// デフォルトの DTD(Document Type Definition) を変更する
 
-// Some web browser's bug, and / or Java apprets may needs not-Strict DTD.
-// Some plugin (e.g. paint) set this PKWK_DTD_XHTML_1_0_TRANSITIONAL.
+// いくつかのWebブラウザが抱えているバグ、または/および Javaアプレットは
+// Strict でないDTDを要求するかもしれません。いくつかのプラグイン(paint
+// など)はこの値を PKWK_DTD_XHTML_1_0_TRANSITIONAL に変更します
 
-//$pkwk_dtd = PKWK_DTD_XHTML_1_1; // Default
+//$pkwk_dtd = PKWK_DTD_XHTML_1_1; // デフォルト
 //$pkwk_dtd = PKWK_DTD_XHTML_1_0_STRICT;
 //$pkwk_dtd = PKWK_DTD_XHTML_1_0_TRANSITIONAL;
 //$pkwk_dtd = PKWK_DTD_HTML_4_01_STRICT;
 //$pkwk_dtd = PKWK_DTD_HTML_4_01_TRANSITIONAL;
 
 /////////////////////////////////////////////////
-// Always output "nofollow,noindex" attribute
+// 全てのページの META に "nofollow,noindex" 属性をつける
 
-$nofollow = 0; // 1 = Try hiding from search engines
+$nofollow = 0; // 1:サーチエンジンから見えないようにする
 
 /////////////////////////////////////////////////
 
-// PKWK_ALLOW_JAVASCRIPT - Allow / Prohibit using JavaScript
+// PKWK_ALLOW_JAVASCRIPT - JavaScriptの利用を許可/禁止する
 define('PKWK_ALLOW_JAVASCRIPT', 1);
 
 /////////////////////////////////////////////////
-// TrackBack feature
+// TrackBack 機能
 
-// Enable Trackback
+// トラックバックを有効にする
 $trackback = 1;
 
-// Show trackbacks with an another window (using JavaScript)
+// トラックバックの一覧を別画面で表示する (JavaScriptを利用する)
 $trackback_javascript = 0;
 
 /////////////////////////////////////////////////
-// Referer list feature
+// リファラの一覧を表示する
 $referer = 1;
 
 /////////////////////////////////////////////////
-// _Disable_ WikiName auto-linking
+// WikiNameに対する自動リンク機能を *無効に* する
 $nowikiname = 1;
 
 /////////////////////////////////////////////////
-// AutoLink feature
+// AutoLink 機能
 
-// AutoLink minimum length of page name
-// Pukiwiki Plus! Recommended "5"
+// AutoLink の対象とするページ名の最低バイト長 (0 = 無効)
+// PukiWiki Plus では "5" を推奨
 $autolink = 5;
 
-// AutoAlias minimum bytes (0 = Disable)
+// AutoAlias の対象とするページ名の最低バイト長 (0 = 無効)
 $autoalias = 2;
 
-// AutoGlossary minimum bytes (0 = Disable)
+// AutoGlossary の対象とするページ名の最低バイト長 (0 = 無効)
 $autoglossary = 2;
 
 /////////////////////////////////////////////////
-// Enable Freeze / Unfreeze feature
+// 凍結 / 凍結解除 機能
 $function_freeze = 1;
 
 /////////////////////////////////////////////////
-// Enable 'Do not change timestamp' at edit
-// (1:Enable, 2:Enable only administrator, 0:Disable)
+// 編集時に「タイムススタンプを更新しない」を有効にする
+// (1:全てのユーザに有効, 2:管理者のみ有効, 0:無効)
 $notimeupdate = 1;
 
 /////////////////////////////////////////////////
-// Admin password for this Wikisite
+// このWikiサイトの管理者パスワード
 
-// CHANGE THIS
+// ※変更して下さい※
 $adminpass = '{x-php-md5}1a1dc91c907325c69271ddf0c944bc72'; // md5('pass')
 //$adminpass = '{CRYPT}$1$AR.Gk94x$uCe8fUUGMfxAPH83psCZG/'; // CRYPT 'pass'
 //$adminpass = '{MD5}Gh3JHJBzJcaScd3wyUS8cg==';             // MD5   'pass'
 //$adminpass = '{SMD5}o7lTdtHFJDqxFOVX09C8QnlmYmZnd2Qx';    // SMD5  'pass'
 
-/////////////////////////////////////////////////
-// Page-reading feature settings
-// (Automatically creating pronounce datas, for Kanji-included page names,
-//  to show sorted page-list correctly)
+// = 注意 =
+//
+// 管理者パスワードはMD5ハッシュの形で取り扱われます。
+// 設定する方法としては、PHPの md5() 関数を用いる方法と、
+// MD5ハッシュを別途算出し、その結果を用いる方法があ
+// ります。あなたがコンピュータの操作に充分慣れている
+// のであれば、後者をお勧めします。
+//
+// ----
+//
+// 例えばパスワードを仮に「pass」とする場合、以下の様に記述する
+// ことができます。
+//
+// $adminpass = md5('pass');	// PHPの md5() 関数を使う方法
+//
+// ただし、この方法では、この設定ファイルを覗き見ることができる
+// (できた) 誰かに、パスワードそのものを知られる高い危険性が
+// あります。この危険性を下げるために、md5() 関数の結果だけを
+// 記述することができます。
+//
+// MD5関数の結果(ハッシュ)は0から9の数字と、AからFまでの英字
+// からなる32文字の文字列で、この情報だけでは元の文字列を
+// 推測することは困難です。
+//
+// // MD5ハッシュのみを使う方法
+// $adminpass = '{x-php-md5}1a1dc91c907325c69271ddf0c944bc72';
+//
+// 仮に'pass' のMD5ハッシュを算出するには、Linuxやcygwinであれば
+//    $ echo -n 'pass' | md5sum
+// の様にして算出する事ができます。('-n' オプションを忘れずに!)
+// FreeBSDなどではmd5sumの代わりにmd5コマンドを使ってください。
+//
+// PukiWikiの 'md5プラグイン' でも算出が可能です。
+// http://<設置した場所>/index.php?plugin=md5
+// このURLにアクセスすることで、MD5ハッシュを算出するための画
+// 面が表示されます。しかし、この機能を利用する場合、あなたが
+// タイプしたパスワードがネットワークをそのまま流れる可能性が
+// あるため、(1)あなたが使っているコンピュータ、(2)サーバーま
+// でのネットワーク、(3)サーバー のいずれかが信頼できないので
+// あれば、この方法は使わないで下さい。
 
-// Enable page-reading feature by calling ChaSen or KAKASHI command
-// (1:Enable, 0:Disable)
+/////////////////////////////////////////////////
+// Page-reading (ページ名に読みがなをつける機能) に関する設定
+// (「ページ一覧」の並び順を正しくするために、漢字仮名まじりの
+// ページ名について、自動的に読みがなを生成する)
+
+// ChaSen または KAKASHI コマンドを使って読みがなを得る機能を
+// 有効にする (1:有効, 0:無効)
 $pagereading_enable = 0;
 
-// Specify converter as ChaSen('chasen') or KAKASI('kakasi') or None('none')
+// コンバーターを指定する: ChaSen('chasen'), KAKASI('kakasi'), なし('none')
 $pagereading_kanji2kana_converter = 'none';
 
-// Specify Kanji encoding to pass data between PukiWiki and the converter
-$pagereading_kanji2kana_encoding = 'EUC'; // Default for Unix
-//$pagereading_kanji2kana_encoding = 'SJIS'; // Default for Windows
+// 受け渡すデータのエンコーディングを指定する
+$pagereading_kanji2kana_encoding = 'EUC'; // Unix でのデフォルト
+//$pagereading_kanji2kana_encoding = 'SJIS'; // Windows でのデフォルト
 
-// Absolute path of the converter (ChaSen)
+// コンバーターの絶対パス (ChaSen)
 $pagereading_chasen_path = '/usr/local/bin/chasen';
 //$pagereading_chasen_path = 'c:\progra~1\chasen21\chasen.exe';
 
-// Absolute path of the converter (KAKASI)
+// コンバーターの絶対パス (KAKASI)
 $pagereading_kakasi_path = '/usr/local/bin/kakasi';
 //$pagereading_kakasi_path = 'c:\kakasi\bin\kakasi.exe';
 
-// Page name contains pronounce data (written by the converter)
+// 読みがなを格納するページ名
 $pagereading_config_page = ':config/PageReading';
 
-// Page name of default pronouncing dictionary, used when converter = 'none'
+// コンバーターが「なし('none')」である時に使われる、既定の読み
+// がなを収めたページ名
 $pagereading_config_dict = ':config/PageReading/dict';
 
 /////////////////////////////////////////////////
-// User definition
+// ユーザー定義
 $auth_users = array(
-	'foo'	=> 'foo_passwd', // Cleartext
+	// 'ユーザー名' => 'パスワード',
+	'foo'	=> 'foo_passwd', // クリアテキスト
 	'bar'	=> '{x-php-md5}f53ae779077e987718cc285b14dfbe86', // md5('bar_passwd')
 	'hoge'	=> '{SMD5}OzJo/boHwM4q5R+g7LCOx2xGMkFKRVEx', // SMD5 'hoge_passwd'
 );
 
 /////////////////////////////////////////////////
-// Authentication method
+// 認証方法
 
-$auth_method_type = 'contents';	// By Page contents
-//$auth_method_type = 'pagename';	// By Page name
+$auth_method_type = 'contents';	// ページの内容による認証
+//$auth_method_type = 'pagename';	// ページ名による認証
 
 /////////////////////////////////////////////////
-// Read auth (0:Disable, 1:Enable)
+// 閲覧認証 (0:無効、1:有効)
 $read_auth = 0;
 
-// Read auth regex
+// 閲覧認証をかけるための正規表現
 $read_auth_pages = array(
 	'#ひきこもるほげ#'	=> 'hoge',
 	'#(ネタバレ|ねたばれ)#'	=> 'foo,bar,hoge',
 );
 
 /////////////////////////////////////////////////
-// Edit auth (0:Disable, 1:Enable)
+// 編集認証 (0:無効、1:有効)
 $edit_auth = 0;
 
-// Edit auth regex
+// 編集認証をかけるための正規表現
 $edit_auth_pages = array(
 	'#Barの公開日記#'	=> 'bar',
 	'#ひきこもるほげ#'	=> 'hoge',
-	'#(ネタバレ|ねたばれ)#'	=> 'foo,bar,hoge',
+	'#(ネタバレ|ねたばれ)#'	=> 'foo',
 );
 
 /////////////////////////////////////////////////
-// Search auth
-// 0: Disabled (Search read-prohibited page contents)
-// 1: Enabled  (Search only permitted pages for the user)
+// 検索認証
+// 0: 無効 (閲覧禁止であるページの内容も検索する)
+// 1: 有効 (そのユーザーに許可されているページのみを検索する)
 $search_auth = 0;
 
 /////////////////////////////////////////////////
-// Exclude plugin for this site-policy.
+// 使用しないプラグイン(サイトのポリシーによって変更してください)
 $exclude_plugin = array(
 	'server',
 	'version',
@@ -291,71 +328,70 @@ $exclude_plugin = array(
 );
 
 /////////////////////////////////////////////////
-// $whatsnew: Max number of RecentChanges
+// $whatsnew: RecentChangesの最大項目数
 $maxshow = 60;
 
-// $whatsdeleted: Max number of RecentDeleted
-// (0 = Disabled)
+// $whatsdeleted: RecentDeletedの最大項目数 (0 = 無効)
 $maxshow_deleted = 60;
 
 /////////////////////////////////////////////////
-// Page names can't be edit via PukiWiki
+// 編集を禁止するページ名
 $cantedit = array( $whatsnew, $whatsdeleted );
 
 /////////////////////////////////////////////////
-// HTTP: Output Last-Modified header
+// HTTP: Last-Modified ヘッダを出力する
 $lastmod = 0;
 
 /////////////////////////////////////////////////
-// Date format
+// 日付のフォーマット
 $date_format = 'Y-m-d';
 
-// Time format
+// 時刻のフォーマット
 $time_format = 'H:i:s';
 
 /////////////////////////////////////////////////
-// Max number of RSS feed
+// RSSフィードの最大項目数
 $rss_max = 15;
 
 /////////////////////////////////////////////////
-// Backup related settings
+// バックアップ関係の設定
 
-// Enable backup
+// バックアップ機能を有効にする
 $do_backup = 1;
 
-// When a page had been removed, remove its backup too?
+// ページが削除された時に、そのバックアップも削除するか?
 $del_backup = 0;
 
-// Bacukp interval and generation
-$cycle  = 1;    // Wait N hours between backup (0 = no wait)
-$maxage = 360; // Stock latest N backups
+// バックアップの間隔と世代
+$cycle  =   1; // 何時間ごとにバックアップするか (0 = 常に行う)
+$maxage = 360; // 何世代までのバックアップを保存するか
 
-// NOTE: $cycle x $maxage / 24 = Minimum days to lost your data
+// 参考: $cycle x $maxage / 24 = データを失うまでの最短日数
 //          1   x   360   / 24 = 15
 
-// Splitter of backup data (NOTE: Too dangerous to change)
+// バックアップデータの中身を区切る文字列 (注意: 変更しないでください!)
 define('PKWK_SPLITTER', '>>>>>>>>>>');
 
 /////////////////////////////////////////////////
-// Command executed per update
+// 更新される度に実行するコマンド
 $update_exec = '';
 //$update_exec = '/usr/bin/mknmz --media-type=text/pukiwiki -O /var/lib/namazu/index/ -L ja -c -K /var/www/wiki/';
 
 /////////////////////////////////////////////////
-// HTTP proxy setting (for TrackBack etc)
+// プロキシの設定 (TrackBackなどが用いる)
 
-// Use HTTP proxy server to get remote data
+// 他のサイトからデータを得るためにHTTPプロキシサーバーを経由する
 $use_proxy = 0;
 
 $proxy_host = 'proxy.example.com';
 $proxy_port = 8080;
 
-// Do Basic authentication
+// ベーシック認証を行う
 $need_proxy_auth = 0;
 $proxy_auth_user = 'username';
 $proxy_auth_pass = 'password';
 
-// Hosts that proxy server will not be needed
+// プロキシサーバーを必要としないホスト
 $no_proxy = array(
 	'localhost',	// localhost
 	'127.0.0.0/8',	// loopback
@@ -366,36 +402,37 @@ $no_proxy = array(
 );
 
 ////////////////////////////////////////////////
-// Mail related settings
+// 電子メール関連の設定
 
-// Send mail per update of pages
+// ページが更新される度にメールを送る
 $notify = 0;
 
-// Send diff only
+// 差分データのみを送る
 $notify_diff_only = 1;
 
-// SMTP server (Windows only. Usually specified at php.ini)
+// SMTP サーバー (Windows環境のみ。通常は php.ini で定義されている)
 $smtp_server = 'localhost';
 
-// Mail recipient (To:) and sender (From:)
+// 宛先(To:)と送信者(From:)
 $notify_to   = 'to@example.com';	// To:
 $notify_from = 'from@example.com';	// From:
 
-// Subject: ($page = Page name wll be replaced)
+// 件名(Subject:) ($page = 更新されたページの名前に置換される)
 $notify_subject = '[PukiWiki] $page';
 
-// Mail header
-$notify_header = '';
+// メールヘッダ
+$notify_header = "From: $notify_from\r\n" .
+	'X-Mailer: PukiWiki/' .  S_VERSION . ' PHP/' . phpversion();
 
-// No Mail for Remote Host.
+// メールによる通知を必要としないホスト
 $notify_exclude = array(
 //	'192.168.0.',
 );
 
 /////////////////////////////////////////////////
-// Mail: POP / APOP Before SMTP
+// 電子メール: POP / APOP Before SMTP
 
-// Do POP/APOP authentication before send mail
+// メールを送る前に POP/APOP 認証を行う
 $smtp_auth = 0;
 
 $pop_server = 'localhost';
@@ -403,23 +440,23 @@ $pop_port   = 110;
 $pop_userid = '';
 $pop_passwd = '';
 
-// Use APOP instead of POP (If server uses)
-//   Default = Auto (Use APOP if possible)
-//   1       = Always use APOP
-//   0       = Always use POP
+// POPの代わりにAPOPを用いる (もしサーバーが対応していれば)
+//   未設定  = 自動 (可能ならAPOPを用いる)
+//   1       = 常に APOP を用いる
+//   0       = 常に  POP を用いる
 // $pop_auth_use_apop = 1;
 
 /////////////////////////////////////////////////
-// Ignore list
+// 無視するページのリスト
 
-// Regex of ignore pages
+// 無視するページの正規表現
 $non_list = '^\:';
 
-// Search ignored pages
+// 無視するページを検索するかどうか
 $search_non_list = 1;
 
 /////////////////////////////////////////////////
-// Template setting
+// テンプレートの設定
 
 $auto_template_func = 1;
 $auto_template_rules = array(
@@ -427,19 +464,19 @@ $auto_template_rules = array(
 );
 
 /////////////////////////////////////////////////
-// Automatically add fixed heading anchor
+// 見出しに既定の形式でアンカー(タグ)を自動挿入する
 $fixed_heading_anchor = 1;
 
 /////////////////////////////////////////////////
-// Remove the first spaces from Preformatted text
+// 「整形済みテキスト」から先頭のスペースを取り除く
 $preformat_ltrim = 1;
 
 /////////////////////////////////////////////////
-// Convert linebreaks into <br />
+// 改行を <br /> タグに置換する
 $line_break = 0;
 
 /////////////////////////////////////////////////
-// Use date-time rules (See rules.ini.php)
+// 日付・時刻の置換ルールを使用(rules.ini.phpも参照)
 $usedatetime = 1;
 
 /////////////////////////////////////////////////
@@ -467,13 +504,15 @@ $open_uri_in_new_window_oposi = "_blank";     // pukiwikiの外で外部サーバー(Inte
 // (注意：あえて拡張しやすいようにしていますが、"_blank"以外は指定しないでください)
 
 /////////////////////////////////////////////////
-// User-Agent settings
+// ユーザーエージェント設定
 //
-// If you want to ignore embedded browsers for rich-content-wikisite,
-// remove (or comment-out) all 'keitai' settings.
+// もしもリッチコンテンツを含んだWikiサイトとして組み込みブラウザを
+// サポートしたく無いのであれば、'keitai' に関する設定を全て削除
+// (ないしコメントアウト)して下さい。
 //
-// If you want to to ignore desktop-PC browsers for simple wikisite,
-// copy keitai.ini.php to default.ini.php and customize it.
+// もしkeitaiスキンを使用した、簡素なWikiサイトとして利用したいので
+// あれば、 keitai.ini.php を default.ini.php にコピーし、中身を
+// デスクトップPC向けにカスタマイズして下さい。
 
 $agents = array(
 // pattern: A regular-expression that matches device(browser)'s name and version
@@ -549,7 +588,7 @@ $agents = array(
 
     // Desktop-PC browsers
 
-	// Opera (for desktop PC, not embedded) -- See BugTrack/743 for detail
+	// Opera (for desktop PC, not embedded) -- See official:BugTrack/743 for detail
 	// NOTE: Keep this pattern above MSIE and Mozilla
 	// Sample: "Opera/7.0 (OS; U)" (not disguise)
 	// Sample: "Mozilla/4.0 (compatible; MSIE 5.0; OS) Opera 6.0" (disguise)
