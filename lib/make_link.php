@@ -385,12 +385,13 @@ EOD;
 		// another fix - official:BugTrack2/51
 		$title = $extra = '';
 		if (is_url($this->alias) && $this->alias != $this->name) {
-			if (TRUE) {
+			if (FALSE) {
 				$parse = parse_url($this->name);
 				$title = ' title="Link to ' . htmlspecialchars($parse['host']) . '"';
 				$extra = '<span style="color:red;"><em>!</em></span>';
 			} else {
 				$this->alias = htmlspecialchars($this->name);
+				$extra = '<span style="color:red;"><em>!?</em></span>';
 			}
 		}
 
