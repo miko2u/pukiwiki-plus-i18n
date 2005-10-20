@@ -381,14 +381,16 @@ EOD;
 		} else {
 			$rel = ' rel="nofollow"';
 		}
+
 		// another fix - official:BugTrack2/51
 		$title = $extra = '';
-		if (is_url($this->alias)) {
-			$nparse = parse_url($this->name);
-			$aparse = parse_url($this->alias);
-			if ($aparse['scheme'] != $nparse['scheme'] || $aparse['host'] != $nparse['host']) {
-				$title = ' title="Link to ' . htmlspecialchars($nparse['host']) . '"';
+		if (is_url($this->alias) && $this->alias != $this->name) {
+			if (TRUE) {
+				$parse = parse_url($this->name);
+				$title = ' title="Link to ' . htmlspecialchars($parse['host']) . '"';
 				$extra = '<span style="color:red;"><em>!</em></span>';
+			} else {
+				$this->alias = htmlspecialchars($this->name);
 			}
 		}
 
