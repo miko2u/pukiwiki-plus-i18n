@@ -1,244 +1,249 @@
-̾��
-    PukiWiki - ��ͳ�˥ڡ������ɲá�������Խ��Ǥ���Web�ڡ������ۥ�����ץ�
+名前
+    PukiWiki - 自由にページを追加・削除・編集できるWebページ構築スクリプト
 
-    PukiWiki 1.4.6
+    Version 1.4.6
     Copyright (C)
       2001-2005 PukiWiki Developers Team
       2001-2002 yu-ji (Based on PukiWiki 1.3 by yu-ji)
     License: GPL version 2 or (at your option) any later version
+
     URL:
-      http://pukiwiki.org/
+      http://pukiwiki.sourceforge.jp/
       http://pukiwiki.sourceforge.jp/dev/
       http://sourceforge.jp/projects/pukiwiki/
 
-��
+    $Id: README.txt,v 1.24 2005/09/11 05:58:33 henoheno Exp $
+
+書式
+    index.php
     index.php?PAGE_NAME_ENCODED
     index.php?plugin=PLUGIN_NAME
 
-����
-    PukiWiki(�פ�������)�ϼ�ͳ�˥ڡ������ɲá�������Խ��Ǥ���ڡ��������뤳
-    �Ȥ��Ǥ���Web���ץꥱ�������(WikiWikiWeb)�Ǥ����ƥ����ȥǡ�������XHTML1.1
-    ���������뤳�Ȥ��Ǥ������Υƥ����Ȥ�Web�֥饦�����鼫ͳ�˽������뤳�Ȥ���
-    ���ޤ���
+概要
+    PukiWiki(ぷきうぃき)はハイパーテキストを素早く自由に追加・削除・編集でき
+    るWebアプリケーション(WikiWikiWeb)です。テキストデータからXHTML1.1を生成
+    することができ、そのテキストはWebブラウザから何度でも修正することができま
+    す。それぞれのページは自然にハイパーリンクで結びつきます。
 
-    �ä�PukiWiki��PHP����ǽ񤫤줿������ץȤǤ��Τǡ�PHP��ư���Web������
-    �ʤ���ưפ����֤Ǥ��ޤ���
+    PukiWikiはPHP言語で書かれたスクリプトであるため、PHP(PHP4.1.2～PHP5)が動
+    作するWebサーバに容易に設置でき、軽快に動作します。
 
-    PukiWiki�ϡ��������󤬺��줿YukiWiki�λ��ͤ򻲹ͤ��ȼ��˳�ȯ����ޤ�
-    ����PukiWiki �С������1.3�ޤǤ�yu-ji���󤬸Ŀͤ������1.3.1b �ʹߤ�
-    PukiWiki Developers Team �ˤ�äƳ�ȯ��³�����Ƥ��ޤ���
+    PukiWikiは、yu-jiさんを含む PukiWiki Develpers Team やその貢献者が、各自の
+    著作物にGPLバージョン2(または _あなたの選択で_ それ以降のGPL)を適用してい
+    る「フリーソフトウェア(自由なソフトウェア)」です。最新版はPukiWiki公式サイ
+    トから入手できます。
 
-    PukiWiki�ϡ�yu-ji�����ޤ� PukiWiki Develpers Team �䤽�ι׸��Ԥ����Ƽ���
-    ����ʪ��GPL�С������2(�ޤ��� _���ʤ��������_ ����ʹߤ�GPL)��Ŭ�Ѥ��Ƥ�
-    ��֥ե꡼���եȥ�����(��ͳ�ʥ��եȥ�����)�פǤ����ǿ��Ǥ�PukiWiki��������
-    �Ȥ�������Ǥ��ޤ���
+ページの作成、編集、削除、復旧
 
-���󥹥ȡ���
-    PukiWiki��PHP������ץȤʤΤǡ�(�㤨��Perl�Τ褦��)������ץȤ˼¹Ը�����
-    ����ɬ�פϤ���ޤ���CGI��ư�Ǥʤ��ΤǤ���С�������ץȤΰ���ܤ�����
-    ��ɬ�פ⤢��ޤ���
+    1. 「新規」のリンクからページ名(まだそのWikiに存在していないもの)を入力し
+      たり、既存のページを表示した状態で「編集」のリンクをたどったり、そのペー
+      ジが置かれるはずのURLに直接アクセスすると、テキストの入力ができる状態に
+      なります。
 
-    Web�����С��ؤΥ����륢����������ǽ�Ǥ���С�PukiWiki�Υ��������֤򤽤Τ�
-    �ޥ����С���ž�����������С���ǲ���(tar pzxf pukiwiki*.tar.gz) ���������
-    �ѡ��ߥå����������Ԥ�졢�����˻Ȥ��Ϥ������Ǥ���Ǥ��礦��
+      ※「凍結」されていたり、「編集が禁止」されている場合は、リンクが存在し
+        なかったり、そのようなメッセージが表示されるでしょう
 
-    �ʲ��ˡ������˥��饤�����PC�Ǻ�Ȥ�Ԥ�������򵭤��ޤ���
+    2. テキストを入力(ないし修正)し「保存」すると、そのテキストはサーバーに保
+      存され、すぐに「そのテキストを元にしたWebページ」が表示されます。
+      「編集」は何度でも繰り返す事ができます。
 
-    1. PukiWiki�Υ��������֤�Ÿ�����ޤ���
+    3. テキストの中に、「大文字始まりの英単語が二つ以上連結された単語」(例え
+      ば"NewPage")や、二重のブラケットで囲まれた語句(例えば[[新しいページ]])
+      があった場合、その語句は背景が変化し、末尾に '?' という小さなリンクが挿
+      入されます(未解決のリンク)。 この装飾は「(表示した時点では)その名前のペ
+      ージが存在していなかった」ことを示しています。もしもその名前のページが
+      存在しているならば、その語句の部分は「その名前のページ」を指し示すハイ
+      パーリンクになります。
 
-    2. ɬ�פ˱���������ե�����(*.ini.php)�����Ƥ��ǧ���ޤ���
-      ������ץȤ�������ܸ��(����С�����Ū��)EUC-JP�ǡ��ޤ����ԥ����ɤ�LF��
-      ���Ҥ���Ƥ��ޤ��Τǡ����ܸ�ʸ�������ɤȲ��ԥ����ɤμ�ưȽ�̤��Ǥ�������
-      �򸵤Τޤ���¸�Ǥ���ƥ����ȥ��ǥ�������Ѥ��Ʋ�������
+    4. テキストを全て削除して「保存」することで、そのページを削除することがで
+       きます。いたずらを検知するため、削除された事実は専用のページに記録され
+       ます。
 
-      �����󥿡��ͥåȤ˸�������PukiWiki�Ǥ���ʤ�С�PKWK_SAFE_MODE��ͭ���ˤ�
-        �뤳�Ȥ����ᤷ�ޤ���(�ܺ�:BugTrack/787)
+    5. テキストの編集履歴は自動的に記録(バックアップ)されます。設定によります
+       が、バックアップは既定の時間が経過するか、毎回編集するたびに行われま
+       す。バックアップされたデータがあるならば、それを使いコンテンツを当時の
+       状態に復旧することができます。バックアップを削除することは管理者にしか
+       できません。
 
-        ��������           : pukiwiki.ini.php
-        �桼�����         : rules.ini.php
+テキストの整形ルール
+    テキストをWebページ(HTML/XHTML)としてうまく出力させるため、「どのようなテ
+    キストを書くとどのようなHTML/XHTMLになるのか」、という部分には一定のルール
+    (書式)が決められています。こちらについては [[ヘルプ]] [[整形ルール]] のペ
+    ージを参照してください。
 
-        �ǥ����ȥå�PC     : default.ini.php
-        �������ä����PDA  : keitai.ini.php
-           (�� i_mode.ini.php/jphone.ini.php)
+    テキストに書き込んだHTMLエンティティはほぼそのまま表示されます。一部の文
+    字は、状況によってはHTMLエンティティで記述する必要があるかもしれません。
+    (例: & => &amp;)
 
-    3.  �ե������FTP�ʤɤǥ����Ф�ž�����ޤ���
-      ��FTP��ž���⡼�ɤϡ֥Х��ʥ�(bin)�פ���Ѥ��Ʋ�����
+    テキストデータでの改行を、XHTMLの出力でもそのまま改行(<br />)として反映さ
+    せたい場合:
+      1. 設定 $line_break の内容を切り替えることで全体の動作が変わります
+      2. #setlinebreak プラグインで行単位に操作する事が可能です
 
-    4.  �����о�Υե����뤪��ӥǥ��쥯�ȥ�Υѡ��ߥå������ǧ���ޤ���
+    WikiName (大文字始まりの英単語が二つ以上続いた単語) に対する自動リンク機能
+    を無効にするには、設定 $nowikiname の内容を切り替えて下さい。
 
-    �ǥ��쥯�ȥ� �ѡ��ߥå����
-      attach         777	ź�եե������Ǽ�ǥ��쥯�ȥ�
-      backup         777	�Хå����åץե������Ǽ�ǥ��쥯�ȥ�
-      cache          777	����å���ե������Ǽ�ǥ��쥯�ȥ�
-      counter        777	�����󥿥ե������Ǽ�ǥ��쥯�ȥ�
-      diff           777	��ʬ�ե������Ǽ�ǥ��쥯�ȥ�
-      image          755	�����ե�����
-      image/face     755 	(�����ե�����)�ե������ޡ���  
-      lib            755	�饤�֥��
-      plugin         755	�ץ饰����
-      skin           755	������CSS��JavaScirpt�ե�����
-      trackback      777	TrackBack�ե������Ǽ�ǥ��쥯�ȥ�
-      wiki           777	�ǡ����γ�Ǽ�ǥ��쥯�ȥ�
+    AutoLink (既存のページに対するリンクを自動的に作成する機能)を無効にした
+    り、有効とみなすページ名のバイト数を修正する場合、設定 $autolink の値を修
+    正して下さい。
 
-    �ե�����    �ѡ��ߥå���� �ǡ����μ���(����)
-      .htaccess      644       ASCII
-      .htpasswd      644       ASCII
-      */.htaccess    644       ASCII
+ページの編集を禁止する
+    以下のような方法があります。
 
-    �ե�����    �ѡ��ߥå���� �ǡ����μ���(����)
-      *.php          644       ASCII
-      */*.php        644       ASCII
-      attach/*       666       BINARY (�Ϥ����¸�ߤ���)
-      backup/*.gz    666       BINARY (���󥹥ȡ������¸�ߤ���)
-      backup/*.txt   666       ASCII  (¿���δĶ��Ǥ�¸�ߤ���)
-      cache/*        666       ASCII
-        (�����Υץ饰����ϥХ��ʥ�ե��������¸���ޤ�)
-      counter/*      666       ASCII  (�Ϥ����¸�ߤ���)
-      diff/*.txt     666       ASCII  (�Ϥ����¸�ߤ���)
-      wiki/*.txt     666       ASCII
-      image/*        644       BINARY
-      image/face/*   644       BINARY
-      lib/*          644       ASCII
-      plugin/*       644       ASCII
-      skin/*         644       ASCII
+    1. 「凍結」機能でページ単位に編集を禁じる/許可する
+      凍結/凍結解除には管理者パスワードが必要です。
+      ページを書き換えるプラグイン(例: #comment プラグイン)は凍結されたページ
+      の中でも動作しますので、それらをページに含めた場合、管理者が定期的にそ
+      のページをクリンナップする必要があるかもしれません。
 
-    5.  �����С������֤��� PukiWiki �� index.php ���뤤�� pukiwiki.php �ˡ�Web
-      �֥饦�����饢���������ޤ���
+    2. PKWK_READONLY でPukiWiki全体を書き込み禁止にする
+      これは閲覧専用のPukiWikiを用意するためのオプションです。
+      有効/無効にするためには管理者による設定変更が必要です。
+      (詳しくは: BugTrack/744)
 
-    6.  ɬ�פ˱����ơ�����������ǥ������Ĵ�����Ʋ�������
+    3. 編集認証($edit_auth)でページの編集を禁じる
+      これはベーシック認証との組み合わせで、特定のアカウントにだけ編集を許可
+      するためのオプションです。
+      ユーザーの設定などは管理者による設定変更が必要です。
+      編集認証は「ページの中身」「ページ名」いずれかに対してかける事ができま
+      す。設定は正規表現で行います。
 
-      ��CSS(����)�� skin/������̾.css.php �ˤ���ޤ����������Ū�˱�����CSS��
-        ���Ϥ��뤳�ȤΤǤ��롢ñ�Ȥ�PHP������ץȤǤ����������Ū�ʥե������
-        ���������ϡ����Ϸ�̤�Web�֥饦���Ǽ��Ф��Ʋ��������ɤΤ褦��CSS
-        �������Ƥ��뤫�ϥ�����˵��Ҥ���Ƥ��ޤ���
-      ��������(�����ι��Ȥ�)�˴ؤ���������ܤ� skin/������̾.skin.php ����Ƭ��
-        ����ޤ����ޤ� tDiary������ �λ���ˡ�� BugTrack/769 �򻲾Ȥ��Ʋ�������
-      ���ץ饰�����ȼ���������ܤ� plugin/�ץ饰����̾.inc.php ����Ƭ�ˤ����
-        ��
+    4. 指定したページの編集を禁じる($cantedit)
+      ページ名を事前に指定しておく事により、通常の操作によるそのページの編集
+      を禁じる事ができます。RecentChangesなどはこの機能を利用しています。
+      設定を追加/削除するためには管理者による設定変更が必要です。
 
-�Хå����åפȥꥹ�ȥ�
-    �ڡ����κǿ��ǡ��������Ƥ���ǥ��쥯�ȥ�(�ǥե���Ȥ�̾���� wiki)�ʲ�
-    �򡢤ޤ�ɬ�פ˱�����¾�Υǡ��������Ƥ���ǥ��쥯�ȥ�ʲ���Хå����åפ�
-    �Ʋ�������(Ʊ attach, backup, cache, counter, diff, trackback)
+ページを秘密にする、パスワードを秘密にする
+    PukiWiki全体を秘密の場所に置くことは簡単です。認証や暗号化をかける場合、
+    そのWebサーバーに関する知識が必要です。
 
-    cache�ǥ��쥯�ȥ��Хå����åפ��뤳�Ȥ����ᤷ�ޤ���
-    1. cache/*.rel �ե������ cache/*.ref �ե������ links�ץ饰���� �Ǻ���
-       ����ǽ�Ǥ��������ν��������˽Ť����Ķ��ˤ�äƤϽ�����ɬ�����Ԥ���
-       (���Ǥ���)��礬����ޤ���
-    2. cache/*.rel �ե����뤬PukiWiki�������ʤ����˴�¸�Υڡ������Խ�����ȡ�
-      links�ץ饰�����¹Ԥ������֤Ȥۤ�Ʊ������٤�������ޤ���
-      (�ܺ�:BugTrack2/56)
-    3. amazon�ץ饰����Ϥ����˲���(�Υ���å���)����¸���ޤ���
+    1. Webサーバーの機能によって、PukiWikiを設置するフォルダ全体にベーシック
+       認証/ダイジェスト認証などをかけることができるでしょう。
 
-    �ǡ��������֤������ϡ��ե�����Υѡ��ߥå���󤬴��Ԥ���Ƥ����̤꤫�ɤ�
-    �����ޤ��ºݤ�ư��뤫�ɤ������ǧ���Ʋ�������(��: ���֤����ڡ����ι���
-    ���ߤ�)
+    2. Webサーバーの拡張機能によって、SSL(TLS)などで全体を暗号化することがで
+      き、これによってベーシック認証のパスワードやコンテンツが盗聴される / 漏
+      洩する可能性を低下させることができるでしょう。
 
-    PukiWiki 1.4.5 �ʹߤǤϡ�ź�դ���Ƥ��� dump�ץ饰���� �ǡ�wiki/attach/
-    backup �ǥ��쥯�ȥ�Υ�⡼�ȥХå����å�(*.tar.gz�ʤ���*.tar����)����ǽ��
-    ����
-      ��ư����: http://path/to/pukiwiki/index.php?plugin=dump
+    PukiWikiのコンテンツを「部分的に」秘密にするためには、PukiWikiの複数の設
+    定やプラグインに関する知識が必要です。以下にいくつかの注意点をまとめます。
 
-    dump�ץ饰����ˤ�dump�ץ饰����Ǽ��������ե��������Ȥ�PukiWiki��Ÿ����
-    �뵡ǽ(��⡼�ȥꥹ�ȥ�)���Ѱդ���Ƥ��ޤ����������ե�����˴ޤޤ�Ƥ��ʤ�
-    �ǡ�����PukiWiki���������뵡ǽ�Ϥ���ޤ���(��˾�񤭤ˤʤ�ޤ�)����Web
-    �����С���PHP�Υ��åץ����ɥե����륵�������¤�ۤ���ե���������Ѥ��뤳
-    �ȤϤǤ��ޤ��󡣤ޤ����ε�ǽ�ϥǥե���Ȥ�̵���ˤʤäƤ��ޤ���
+    1. 公開用の入り口(index.php)とは別に編集用の入り口(例えばsecret.php)を用
+      意し、それぞれの設定を調整/改造することができます。
 
-    ����¾��PukiWiki�ι������Ƥ�᡼������Τ��뵡ǽ�ϡ���¸�Υǡ����򼺤�ʤ�
-    ����ε�ǽ�Ȥ��ƤȤ館������Ǥ���Ǥ��礦��
+     例:
+      * 公開するPukiWikiの編集を PKWK_READONLY で禁止する
+      * 編集用の入り口では、編集認証と閲覧認証を全てのページ名に適用する
+        (正規表現では '')
 
-�ڡ����κ���
-    ���Υڡ������֤����Ϥ���URL��ľ�ܥ������������ꡢ�ֿ����ץ�󥯤��鿷��
-    ���ڡ������������ʳ��ˡ��ڡ�������˽񤤤���礫�餽�Υڡ���̾�Υڡ�����
-    �������뤳�Ȥ��Ǥ��ޤ���
+    2. 編集認証($edit_auth) と 閲覧認証($read_auth) を利用する場合、それぞれ
+       の対象が一致するように設定する必要があります。例えば閲覧認証だけをかけ
+       ている場合、編集行為によってコンテンツが漏洩する可能性があります。
 
-    1.  �ޤ���Ŭ���ʥڡ������㤨��FrontPage�ˤ����ӡ��ڡ����ξ岼�ˤ���
-     ���Խ��ץ�󥯤򤿤ɤ�ޤ���
+    3. MenuBarやヘッダ/フッタは、編集認証/閲覧認証の影響を受けません。
+       (詳しくは:続・質問箱/11)
 
-    2.  ����ȥƥ��������Ϥ��Ǥ�����֤ˤʤ�Τǡ� ������NewPage�Τ褦��ñ��
-    ����ʸ����ʸ�����ߤ��Ƥ����ʸ����ˤ䡢 [[�������ڡ���̾]] ���ͤ���ŤΥ�
-     �饱�åȤǰϤ������񤤤ơ���¸�פ��ޤ���
+    4. あまり利用されていない一部のプラグインは、編集認証/閲覧認証に対応して
+       いません。そのためにページのコンテンツやページ名が漏洩する可能性があり
+       ます。編集認証/閲覧認証に頼る場合はこれらを事前に削除する必要がありま
+       す。(例:BugTrack/511)
 
-    3.  ��¸����ȡ�FrontPage�Υڡ������񤭴���ꡢ���ʤ����񤤤�NewPage�Ȥ���
-      ñ���ֿ������ڡ���̾�פȤ������θ���� '?' �Ȥ��������ʥ�󥯤�ɽ��
-      ����ޤ��� ���Υ�󥯤Ϥ��Υڡ������ޤ�¸�ߤ��ʤ����ȡ������Ƥ��Υ��
-      ���餹���˺����Ǥ��뤳�Ȥ򼨤����Ǥ���
+プラグインについて
+    プラグインを組み込むことで、PukiWikiに様々な機能を追加/拡張することができ
+    ます。PukiWikiには70を越える標準添付のプラグインの他に、多数の自作プラグ
+    インが存在しています。
 
-    4.  ���� '?' �򥯥�å�����ȿ������ڡ������Ǥ��ޤ��Τǡ����ʤ��ι�����ʸ
-      �Ϥ򤽤ο������ڡ����˽񤤤���¸���ޤ���
+    プラグインのスタイルは大きく分けて三種類あります。多くはWebコンテンツ(静
+    的なもの/動的なもの)を出力しますが、それ以外の動作をするものも存在します。
 
-    5.  �������ڡ������Ǥ���ȡ����Υڡ����ˤ��ä������θ�礫��� '?' ����
-      �������Υڡ�����ؤ��������̤Υϥ��ѡ���󥯤Ȥʤ�ޤ���
+    ブロック型プラグイン(convert)
+       行単位に特殊なWebコンテンツを挿入するものです。
+       ※コメント欄(#comment)、目次(#contents)、配下のページを一覧(#ls2)、最
+         新のN件(#recent)、ページのインクルード(#include)、投票ボックス
+         (#vote)など
 
-    6. ����ϡ������θ��(�Υ��)�򥯥�å����뤳�Ȥǡ����ڤˤ��Υڡ�����
-      ɽ���Ǥ���褦�ˤʤ�ޤ���
+    インライン型プラグイン(inline)
+       HTMLエンティティを拡張した文字列をテキストの途中に挿入することで、
+       文章の途中にWebコンテンツを挿入するものです。
+       ※文章の色と背景色の操作(&color(red,yellow){文字列};)など
 
-�ƥ����ȤΥ롼��
-    �ƥ����ȥǡ�����XHTML���Ѵ����뤿��Υ롼��ˤĤ��Ƥ� [[�إ��]] [[������
-    ����]] �Υڡ����򻲾Ȥ��Ƥ���������
+    アクション型プラグイン(action)
+       Wikiページを表示する代わりに、独自の効果を発揮するものです。
+       ※RSSの出力(rss)、ページ名の変更(rename)など
 
-    �ƥ����ȥǡ����Ǥβ��Ԥ�XHTML�ν��ϤǤ⤽�Τޤ޲���(<br />)�Ȥ���ȿ�Ǥ�
-    ���������:
-      1. ���� $line_break �����Ƥ��ڤ��ؤ��뤳�Ȥ����Τ�ư��Ѥ��ޤ�
-      2. #setlinebreak �ץ饰����ǹ�ñ�̤����������ǽ�Ǥ�
+文字列置換ルール
+    いくつかの機能は、プラグインではなく文字列の置換か、それとの組み合わせに
+    よって実現されています。
 
-    WikiName (��ʸ���Ϥޤ�α�ñ�줬��İʾ�³����ñ��) ���Ф��뼫ư��󥯵�ǽ
-    ��̵���ˤ���ˤϡ����� $nowikiname �����Ƥ��ڤ��ؤ��Ʋ�������
+    テキストを表示する際にWebコンテンツと置き換えるタイプ
+       ※ハートマーク(&heart;)の描画、顔文字を画像に置き換える機構など
 
-    AutoLink (��¸�Υڡ������Ф����󥯤�ưŪ�˺������뵡ǽ)��̵���ˤ���
-    �ꡢͭ���Ȥߤʤ��ڡ���̾�ΥХ��ȿ����������硢���� $autolink ���ͤ�
-    �����Ʋ�������
+    テキストを保存する瞬間に置き換え、結果を保存するタイプ
+       ※&now; を、「その時の現在時刻」に置き換える機構など
 
-InterWiki�ˤĤ���
-    InterWiki �Ȥϡ�Wiki��Wiki��Ĥʤ��뵡ǽ�Ǥ����㤨��
-    [[Wiki������̾:�ڡ���̾]]
-    ���Τ褦�˵��Ҥ��뤳�Ȥǡ�����Wiki������Υڡ������Ф����󥯤��ñ�˽���
-    ����������Ǥ��ޤ���
-    ��Wiki�ʳ��Υ����ȡ��㤨�и������󥸥�ؤ�URI���������뤳�Ȥ��ǽ�Ǥ�
+InterWikiについて
+    InterWiki とは、WikiとWikiをつなげる機能です。例えば
+    [[Wikiサイト名:ページ名]]
+    このように記述することで、そのWikiの特定のページに対するリンクを簡単に出力
+    させる事ができます。
+    ※Wiki以外のサイト、例えば検索エンジンへのURIを生成することも可能です
 
-    ���ε�ǽ�� Tiki ����ܴۤ����˰ܿ�����Ƥ��ޤ���
-    �ܺ٤� [[InterWiki�ƥ��˥���]] �Υڡ����򻲾Ȥ��Ƥ���������
+    この機能は Tiki からほぼ完全に移植されています。
+    詳細は [[InterWikiテクニカル]] のページを参照してください。
 
-RDF/RSS�ν���
-    ������Web�֥饦���ʤɤ���ܤ���Ƥ���RSS�꡼������Ȥäơ�PukiWiki�ι�����
-    �����ǧ���뤳�Ȥ��Ǥ��ޤ���
-      1.2.1���顢RecentChanges��RDF/RSS����ϤǤ���褦�ˤʤ�ޤ�����
-    �� 1.4.5���顢RSS 2.0 ����ϤǤ���褦�ˤʤ�ޤ�����
+Wikiの様子を見る
+    Wikiの更新状況(更新された順に並べた一覧)は RecentChanges という特殊なペー
+    ジからチェックすることができます。(名前は変更できます)
 
-    ������ˡ����:
-      RSS 0.91 http://path/to/pukiwiki/index.php?plugin=rss
-      RSS 1.0  http://path/to/pukiwiki/index.php?plugin=rss&ver=1.0
-      RSS 2.0  http://path/to/pukiwiki/index.php?plugin=rss&ver=2.0
+    #recentプラグインはこの内容をコンパクトなリストとして表示します。
+      ※デフォルトでMenuBarに追加されています
 
-��Ϣ����
-    ɸ��ź�դ���Ƥ���ץ饰����δ�ñ�������ϡ�[[PukiWiki/1.4/Manual/Plugin]]
-    �Υڡ����򻲾Ȥ��Ʋ�������
+    rssプラグインはこの内容をRSSのフォーマットで提供することができます。
+      出力方法の例:
+        RSS 0.91 index.php?plugin=rss
+        RSS 1.0  index.php?plugin=rss&ver=1.0
+        RSS 2.0  index.php?plugin=rss&ver=2.0
 
-    ����¾����꡼���Ǥδ���Ū�ʻȤ����˴ؤ�������PukiWiki.org������������
-    �ʲ��Τ褦�ʥ���ƥ�Ĥ��ä�ͭ�ѤǤ���
+関連項目
+    INSTALL.txt (インストールとアップグレード)
 
-    FAQ        http://pukiwiki.org/?FAQ
-    ����Ȣ     http://pukiwiki.org/?%E8%B3%AA%E5%95%8F%E7%AE%B1
-    ³������Ȣ http://pukiwiki.org/?%E7%B6%9A%E3%83%BB%E8%B3%AA%E5%95%8F%E7%AE%B1
+    標準添付されているプラグインの簡単な説明は、[[PukiWiki/1.4/Manual/Plugin]]
+    のページを参照して下さい。
 
-�Х�
-    PukiWiki�Υ������ƥ��˴ؤ������ϰʲ��ǤޤȤ���Ƥ��ޤ���
-    http://pukiwiki.org/?PukiWiki/Errata
+    その他、リリース版の基本的な使い方に関する情報はPukiWiki.orgをご覧下さい。
+    以下のようなコンテンツが特に有用です。
 
-    �Х����� dev�����ȤޤǤ��ꤤ���ޤ���
-    (�桹��PukiWiki��PukiWiki�ΥХ��ȥ�å��󥰤�ԤäƤ��ޤ�)
+    FAQ        http://pukiwiki.sourceforge.jp/?FAQ
+    質問箱     http://pukiwiki.sourceforge.jp/?%E8%B3%AA%E5%95%8F%E7%AE%B1
+    続・質問箱 http://pukiwiki.sourceforge.jp/?%E7%B6%9A%E3%83%BB%E8%B3%AA%E5%95%8F%E7%AE%B1
+
+バグ
+    PukiWikiのセキュリティに関する情報は以下でまとめられています。
+    http://pukiwiki.sourceforge.jp/?PukiWiki/Errata
+
+    バグ報告は devサイトまでお願いします。
+    (我々はPukiWikiでPukiWikiのバグトラッキングを行っています)
     http://pukiwiki.sourceforge.jp/dev/?BugTrack2
 
-�ռ�
-    PukiWiki Develpers Team�γ�����PukiWiki�桼���γ�����˴��դ��ޤ���
-    PukiWiki ��ȯ������yu-ji(��sng)����˴��դ��ޤ���
-    YukiWiki �Υ������󲽤���Ĥ��Ƥ�����������������˴��դ��ޤ���
-    �ܲȤ�WikiWiki���ä�Cunningham & Cunningham, Inc.�� ���դ��ޤ���
+歴史
+    PukiWikiは、結城浩さんが作られたYukiWikiの仕様を参考に独自に開発されまし
+    た。PukiWiki バージョン1.3まではyu-jiさんが個人で製作していました。
 
-    * yu-ji����Υۡ���ڡ���   http://factage.com/yu-ji/
-    * ��������Υۡ���ڡ���  http://www.hyuki.com/
-    * YukiWiki�ۡ���ڡ���      http://www.hyuki.com/yukiwiki/
+    バージョン1.2.1 から、RecentChangesのRDF/RSSを出力できるようになりました。
+
+    バージョン1.3.1b 以降はPukiWiki Developers Team によって開発が続けられて
+    います。
+
+ 　 バージョン1.4.5 から、RSS 2.0 を出力できるようになりました。
+
+謝辞
+    PukiWiki Develpers Teamの皆さん、PukiWikiユーザの皆さんに感謝します。
+    PukiWiki を開発した、yu-ji(旧sng)さんに感謝します。
+    YukiWiki のクローン化を許可していただいた結城浩さんに感謝します。
+    本家のWikiWikiを作ったCunningham & Cunningham, Inc.に 感謝します。
+
+    * yu-jiさんのホームページ   http://factage.com/yu-ji/
+    * 結城浩さんのホームページ  http://www.hyuki.com/
+    * YukiWikiホームページ      http://www.hyuki.com/yukiwiki/
     * Tiki          http://todo.org/cgi-bin/tiki/tiki.cgi
-    * �ܲ�WikiWikiWeb       http://c2.com/cgi/wiki?WikiWikiWeb
-    * WikiWikiWeb�κ��(Cunningham & Cunningham, Inc.) http://c2.com/
+    * 本家WikiWikiWeb       http://c2.com/cgi/wiki?WikiWikiWeb
+    * WikiWikiWebの作者(Cunningham & Cunningham, Inc.) http://c2.com/
