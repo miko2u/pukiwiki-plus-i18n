@@ -390,14 +390,13 @@ EOD;
 				$title = ' title="Link to ' . htmlspecialchars($parse['host']) . '"';
 				$extra = '<span style="color:red;"><em>!</em></span>';
 			} else {
-				$title = ' title="alias deined - ' . htmlspecialchars($this->alias) . '"';
-				$extra = '<span style="color:red;"><em>!?</em></span>';
+				$title = ' title="alias deined - ' . htmlspecialchars($this->alias) . '" style="background-color:#f09;"';
 				$this->alias = htmlspecialchars($this->name);
 			}
 		}
 
 //		return '<a href="' . $this->name . '">' . $this->alias . '</a>';
-		return open_uri_in_new_window('<a href="' . $this->name . '"' . $rel . $title . '>' . $this->alias . '</a>' . $extra, get_class($this));
+		return open_uri_in_new_window('<a href="' . $this->name . '"' . $rel . $title . '>' . $this->alias . '</a>', get_class($this));
 	}
 }
 
