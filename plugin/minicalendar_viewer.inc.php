@@ -21,6 +21,8 @@ define('PLUGIN_MINICALENDAR_VIEWER_DATE_FORMAT',
 define('PLUGIN_MINICALENDAR_VIEWER_USAGE',
 	'#calendar_viewer(pagename,this|yyyy-mm|n|x*y[,mode[,separater]])');
 
+define('PLUGIN_MINICALENDAR_MAX_VIEWS', 3);
+
 define('PLUGIN_MINICALENDAR_VIEWER_HOLIDAYVIEW',TRUE);
 define('PLUGIN_MINICALENDAR_VIEWER_COMMENT',FALSE);
 define('PLUGIN_MINICALENDAR_VIEWER_TRACKBACK',TRUE);
@@ -111,10 +113,13 @@ function plugin_minicalendar_viewer_convert()
 
 	// Avoid Loop etc.
 	if (isset($viewed[$pagename])) {
-		$s_page = htmlspecialchars($pagename);
-		return "#calendar_viewer(): You already view: $s_page<br />";
+		if ($viewed[$pagename] > PLUGIN_MINICALENDAR_MAX_VIEWS) {
+			$s_page = htmlspecialchars($pagename);
+			return "#calendar_viewer(): You already view: $s_page<br />";
+		}
+		$viewed[$pagename]++; // Valid
 	} else {
-		$viewed[$pagename] = TRUE; // Valid
+		$viewed[$pagename]=1; // Valid
 	}
 
 	// 一覧表示するページ名とファイル名のパターン　ファイル名には年月を含む
