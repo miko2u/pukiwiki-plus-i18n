@@ -200,6 +200,7 @@ function attach_filelist()
 function attach_upload($file, $page, $pass = NULL)
 {
 	global $_attach_messages, $notify, $notify_subject;
+	global $notify_exclude;
 
 	if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
 
