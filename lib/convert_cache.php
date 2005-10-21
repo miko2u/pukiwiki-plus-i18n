@@ -10,9 +10,18 @@
 function bodycache_default_process($page, $source)
 {
     $body = convert_html($source);
-    $fb = fopen(get_cachename($page), 'wb');
-    fwrite($fb, $body);
-    fclose($fb);
+
+	$fp = fopen(get_cachename($page), 'ab');
+	@flock($fp, LOCK_EX);
+	$last = ignore_user_abort(1);
+	ftruncate($fp, 0);
+	fwrite($fp, $body);
+	fflush($fp);
+	ignore_user_abort($last);
+	@flock($fp, LOCK_UN);
+	fclose($fp);
+	if (connection_status()) exit;
+
     return $body;
 }
 
@@ -62,15 +71,20 @@ function get_cache($page, $source)
         return bodycache_default_process($page, $source);
     }
 
-	// return file_get_contents(get_cachename($page));
-    $fp = fopen(get_cachename($page), 'rb');
-    do {
-        $tmp = fread($fp, 8192);
-        $body .= $tmp;
-    } while (strlen($tmp) != 0);
-    fclose($fp);
+	if (version_compare(PHP_VERSION, '4.3.0', '>=')) {
+		$body = file_get_contents(get_cachename($page));
+	} else {
+		$fp = @fopen(get_cachename($page), 'rb');
+		flock($fp, LOCK_SH);
+		do {
+			$tmp = fread($fp, 8192);
+			$body .= $tmp;
+		} while (strlen($tmp) != 0);
+		flock($fp, LOCK_UN);
+		@fclose($fp);
+	}
 
-    return $body;
+	return $body;
 }
 
 // Convert HTML with cache
