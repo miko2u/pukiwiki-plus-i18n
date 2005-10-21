@@ -163,7 +163,7 @@ if (isset($pkwk_dtd)) {
  <td id="footerctable"><div id="sigunature">
   Modified by <a href="<?php echo $modifierlink ?>"><?php echo $modifier ?></a>.
   <br />
-  Powered by PukiWiki Plus! 1.4.5-u2-i18n/PHP <?php echo PHP_VERSION ?>.
+  Powered by PukiWiki Plus! <?php echo S_VERSION ?>/PHP <?php echo PHP_VERSION ?>.
   HTML convert time to <?php echo $taketime ?> sec.
  </div></td>
  <td id="footerrtable"><div id="validxhtml">
