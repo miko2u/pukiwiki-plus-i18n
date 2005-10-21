@@ -3,7 +3,7 @@
  * PukiWiki Plus! 目次プラグイン
  *
  * @copyright	Copyright &copy; 2004-2005, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version	$Id: toc.php,v 0.9 2005/10/21 21:46:00 upk Exp $
+ * @version	$Id: toc.php,v 0.10 2005/10/21 23:21:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License
  * @link	http://jo1upk.blogdns.net/saito/
  */
@@ -72,9 +72,11 @@ function toc_make_index($src, $mode, $lvl)
 
 	foreach ($src as $_src) {
 		// $sw は、#toc 以降の行だと true
-		if ($sw == 0 && substr($_src,0,5) == '#toc(') {
-			$sw = 1;
-			continue;
+		if ($sw == 0) {
+			if (substr($_src,0,5) == '#toc(' || trim($_src) == '#toc') {
+				$sw = 1;
+				continue;
+			}
 		}
 		if (! $sw) continue;
 
@@ -100,7 +102,8 @@ function toc_make_index_part($src, $id, $lvl)
 	$start = $i = 0;
 
 	foreach ($src as $_src) {
-		if (substr($_src,0,5) == '#toc(') {
+		// if (substr($_src,0,5) == '#toc(') {
+		if (substr($_src,0,5) == '#toc(' || trim($_src) == '#toc') {
 			if ($id == toc_get_id('#toc',$_src,3)) {
 				$start = 1;
 				continue;
