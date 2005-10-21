@@ -157,7 +157,13 @@ if (isset($retvars['body']) && $retvars['body'] != '') {
 		}
 		// これは、一時的なものです。本来は plugin に plugin_xxxx_prepare みたいなものを用意すべきですね。
 		if (preg_match("/^\#(" . implode('|',$convert_misscache_plugin) . ")(?:\((.*)\))?/", $line, $matches)) {
-			$convert_cache = 0;
+			if ($matches[1] == 'norelated' || $matches[1] == 'nomenubar' || $matches[1] == 'nosidebar') {
+				if (exist_plugin($matches[1])) {
+					do_plugin_convert($matches[1]);
+				}
+			} else {
+				$convert_cache = 0;
+			}
 		}
 	}
 	if ($convert_cache) {
