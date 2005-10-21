@@ -133,9 +133,9 @@ if (isset($retvars['body']) && $retvars['body'] != '') {
 	global $fixed_heading_edited;
 	global $convert_cache;
 	$source = get_source($base);
-	// Œ©o‚µ•ÒW‚ğ“®“I‚És‚¤‚½‚ß‚Ìˆ—
-	// convert_html ‚ÍÄ“ü‹Ö~‚Ì‚½‚ß‹[—ƒvƒ‰ƒOƒCƒ“‚Æ‚·‚é
-	// (]—ˆ‚Æˆá‚¢A–{•¶ƒ\[ƒX‚µ‚©Œ©‚È‚¢)
+	// ¸«½Ğ¤·ÊÔ½¸¤òÆ°Åª¤Ë¹Ô¤¦¤¿¤á¤Î½èÍı
+	// convert_html ¤ÏºÆÆş¶Ø»ß¤Î¤¿¤áµ¼»÷¥×¥é¥°¥¤¥ó¤È¤¹¤ë
+	// (½¾Íè¤È°ã¤¤¡¢ËÜÊ¸¥½¡¼¥¹¤·¤«¸«¤Ê¤¤)
 	$lines = $source;
 	while (! empty($lines)) {
 		$line = array_shift($lines);
@@ -147,6 +147,10 @@ if (isset($retvars['body']) && $retvars['body'] != '') {
 			} else if ( $matches[2] == 'off') {
 				$fixed_heading_edited = 0;
 			}
+		}
+		// ¤³¤ì¤Ï¡¢°ì»şÅª¤Ê¤â¤Î¤Ç¤¹¡£ËÜÍè¤Ï plugin ¤Ë plugin_xxxx_prepare ¤ß¤¿¤¤¤Ê¤â¤Î¤òÍÑ°Õ¤¹¤Ù¤­¤Ç¤¹¤Í¡£
+		if (preg_match("/^\#(description|keywords|mediaplayer|navi|nomenubar|nosidebar|norelated|skin)(?:\((.*)\))?/", $line, $matches)) {
+			$convert_cache = 0;
 		}
 	}
 	if ($convert_cache) {
