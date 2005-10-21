@@ -1,10 +1,9 @@
 <?php
 /**
- * PukiWiki 目次プラグイン
+ * PukiWiki Plus! 目次プラグイン
  *
- * @package	org.pukiwiki.plugin.toc
  * @copyright	Copyright &copy; 2004-2005, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version	$Id: toc.php,v 0.8 2005/10/21 00:20:00 upk Exp $
+ * @version	$Id: toc.php,v 0.9 2005/10/21 21:46:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License
  * @link	http://jo1upk.blogdns.net/saito/
  */
@@ -28,9 +27,7 @@ function plugin_toc_convert()
 		$$field[$i] = $argv[$i];
 	}
 
-	// ex. 2レベルまで表示 : -2
-	//     2レベルから表示 :  2, +2
-	if (empty($lvl)) $lvl = -3;		// 表示レベル : 3 まで表示
+	if (empty($lvl)) $lvl = 3;		// 表示レベル : 3 まで表示
 	if (empty($view)) $view = 'toc';	// 表示形式   : toc, tree
 	if (empty($mode)) $mode = 'toc';	// 処理対象   : full, toc, part
 	if (empty($id)) $id = '';		// #toc 位置識別子
@@ -56,12 +53,10 @@ function toc_from_to_check($lvl,$dat_lvl)
 {
 	$chk_lvl = abs($lvl);
 
-	// ex. 2レベルまで表示 : -2
-	//     2レベルから表示 :  2, +2
 	if ($lvl < 0) {
-		if ($dat_lvl > $chk_lvl) return 0;
-	} else {
 		if ($dat_lvl < $chk_lvl) return 0;
+	} else {
+		if ($dat_lvl > $chk_lvl) return 0;
 	}
 	return 1;
 }
