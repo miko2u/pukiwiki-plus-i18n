@@ -157,6 +157,7 @@ if (isset($retvars['body']) && $retvars['body'] != '') {
 		}
 		// これは、一時的なものです。本来は plugin に plugin_xxxx_prepare みたいなものを用意すべきですね。
 		if (preg_match("/^\#(" . implode('|',$convert_misscache_plugin) . ")(?:\((.*)\))?/", $line, $matches)) {
+			// 内部パラメータ変更のみのブロック型は先に処理してしまう。
 			if ($matches[1] == 'norelated' || $matches[1] == 'nomenubar' || $matches[1] == 'nosidebar') {
 				if (exist_plugin($matches[1])) {
 					do_plugin_convert($matches[1]);
