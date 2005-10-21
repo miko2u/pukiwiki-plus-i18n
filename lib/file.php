@@ -67,6 +67,9 @@ function page_write($page, $postdata, $notimestamp = FALSE)
 	// Create wiki text
 	file_write(DATA_DIR, $page, $postdata, $notimestamp);
 
+	// for Cache
+	touch_sitecache();
+
 	if ($trackback) {
 		// TrackBack Ping
 		$_diff = explode("\n", $diffdata);
@@ -194,6 +197,11 @@ function file_write($dir, $page, $str, $notimestamp = FALSE)
 		fclose($fp);
 
 		if ($timestamp) pkwk_touch_file($file, $timestamp + LOCALZONE);
+	}
+
+	// Clear page cache
+	if ($dir == DATA_DIR && is_cache($page)) { // cleanup bodycache.
+		unlink(get_cachename($page));
 	}
 
 	// Clear is_page() cache

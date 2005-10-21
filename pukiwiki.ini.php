@@ -173,6 +173,10 @@ $trackback = 1;
 $trackback_javascript = 0;
 
 /////////////////////////////////////////////////
+// Convert cache feature
+$convert_cache = 1;
+
+/////////////////////////////////////////////////
 // Referer list feature
 $referer = 1;
 

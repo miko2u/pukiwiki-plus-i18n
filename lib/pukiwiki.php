@@ -46,6 +46,7 @@ require(LIB_DIR . 'plugin.php');
 require(LIB_DIR . 'html.php');
 require(LIB_DIR . 'backup.php');
 
+require(LIB_DIR . 'convert_cache.php');
 require(LIB_DIR . 'convert_html.php');
 require(LIB_DIR . 'make_link.php');
 require(LIB_DIR . 'diff.php');
@@ -130,6 +131,7 @@ if (isset($retvars['body']) && $retvars['body'] != '') {
 //	$body  = convert_html(get_source($base));
 //miko
 	global $fixed_heading_edited;
+	global $convert_cache;
 	$source = get_source($base);
 	// 見出し編集を動的に行うための処理
 	// convert_html は再入禁止のため擬似プラグインとする
@@ -147,8 +149,11 @@ if (isset($retvars['body']) && $retvars['body'] != '') {
 			}
 		}
 	}
-
-	$body = convert_html($source);
+	if ($convert_cache) {
+		$body = convert_cache_html($base, $source);
+	} else {
+		$body = convert_html($source);
+	}
 //miko
 
 	if ($trackback) $body .= tb_get_rdf($base); // Add TrackBack-Ping URI

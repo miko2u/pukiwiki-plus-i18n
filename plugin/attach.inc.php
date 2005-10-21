@@ -153,6 +153,7 @@ function attach_filelist()
 function attach_upload($file, $page, $pass = NULL)
 {
 	global $_attach_messages, $notify, $notify_subject;
+	global $notify_exclude;
 
 	if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
 
@@ -191,12 +192,23 @@ function attach_upload($file, $page, $pass = NULL)
 	if (move_uploaded_file($file['tmp_name'], $obj->filename))
 		chmod($obj->filename, PLUGIN_ATTACH_FILE_MODE);
 
-	if (is_page($page))
+	if (is_page($page)) {
 		touch(get_filename($page));
+		touch_sitecache();
+	}
 
 	$obj->getstatus();
 	$obj->status['pass'] = ($pass !== TRUE && $pass !== NULL) ? md5($pass) : '';
 	$obj->putstatus();
+
+	// notify_exclude
+	foreach ($notify_exclude as $exclude) {
+		$exclude = preg_quote($exclude);
+		if (substr($exclude, -1) == ".")
+			$exclude = $exclude . "*";
+		if (preg_match("/^" . $exclude . "/", $_SERVER["REMOTE_ADDR"]))
+			return;
+	}
 
 	if ($notify) {
 		$footer['ACTION']   = 'File attached';
