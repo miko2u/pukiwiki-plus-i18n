@@ -58,7 +58,7 @@ function get_cache($page, $source)
 	if ( ! is_cache($page) ) { // cache not exists.
 		return bodycache_default_process($page, $source);
 	}
-	if ( get_site_updatetime($page) > get_cachetime($page) ) { // cache is obsolete.
+	if ( get_sitecache($page) > get_cachetime($page) ) { // cache is obsolete.
         return bodycache_default_process($page, $source);
     }
 
