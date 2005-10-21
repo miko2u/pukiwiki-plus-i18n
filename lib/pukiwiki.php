@@ -136,6 +136,13 @@ if (isset($retvars['body']) && $retvars['body'] != '') {
 	// 見出し編集を動的に行うための処理
 	// convert_html は再入禁止のため擬似プラグインとする
 	// (従来と違い、本文ソースしか見ない)
+
+	// これは、一時的なものです。本来は plugin に plugin_xxxx_prepare みたいなものを用意すべきですね。
+	global $convert_misscache_plugin;
+	if (!isset($convert_misscache_plugin) || !is_array($convert_misscache_plugin)) {
+		$convert_misscache_plugin = array('counter', 'online', 'popular', 'norelated', 'navi'); // for official-plugin
+	}
+
 	$lines = $source;
 	while (! empty($lines)) {
 		$line = array_shift($lines);
@@ -149,7 +156,7 @@ if (isset($retvars['body']) && $retvars['body'] != '') {
 			}
 		}
 		// これは、一時的なものです。本来は plugin に plugin_xxxx_prepare みたいなものを用意すべきですね。
-		if (preg_match("/^\#(description|keywords|mediaplayer|navi|nomenubar|nosidebar|norelated|skin)(?:\((.*)\))?/", $line, $matches)) {
+		if (preg_match("/^\#(" . implode('|',$convert_misscache_plugin) . ")(?:\((.*)\))?/", $line, $matches)) {
 			$convert_cache = 0;
 		}
 	}

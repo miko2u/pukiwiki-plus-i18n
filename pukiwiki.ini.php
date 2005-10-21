@@ -176,6 +176,12 @@ $trackback_javascript = 0;
 // Convert cache feature
 $convert_cache = 1;
 
+$convert_misscache_plugin = array(
+	'counter', 'online', 'popular',
+	'description', 'keywords', 'mediaplayer', 'navi',
+	'nomenubar', 'nosidebar', 'norelated', 'skin',
+);
+
 /////////////////////////////////////////////////
 // Referer list feature
 $referer = 1;
