@@ -150,7 +150,7 @@ if (isset($retvars['body']) && $retvars['body'] != '') {
 		}
 	}
 	if ($convert_cache) {
-		$body = convert_cache_html($base, $source);
+		$body = convert_html_cache($base, $source);
 	} else {
 		$body = convert_html($source);
 	}
