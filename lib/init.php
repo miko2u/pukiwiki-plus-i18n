@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: init.php,v 1.39.4 2005/09/11 05:58:33 miko Exp $
+// $Id: init.php,v 1.39.14 2005/10/26 05:58:33 miko Exp $
 // Copyright (C)
 //   2005      Customized/Patched by Miko.Hoshina
 //   2002-2005 PukiWiki Developers Team
@@ -416,7 +416,7 @@ $now = format_date(UTIME);
 
 // 日時置換ルールを$line_rulesに加える
 if ($usedatetime) $line_rules += $datetime_rules;
-unset($datetime_rules);
+//unset($datetime_rules); // check bodycache for Plus!
 
 // フェイスマークを$line_rulesに加える
 if ($usefacemark) $line_rules += $facemark_rules;

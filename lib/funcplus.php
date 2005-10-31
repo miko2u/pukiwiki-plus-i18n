@@ -93,4 +93,10 @@ function is_inside_uri($anchor)
 	}
 	return false;
 }
+
+if (version_compare(PHP_VERSION, '5.0.0', '<')) {
+	function htmlspecialchars_decode($str, $quote_style = ENT_COMPAT) {
+	   return strtr($str, array_flip(get_html_translation_table(HTML_SPECIALCHARS, $quote_style)));
+	}
+}
 ?>
