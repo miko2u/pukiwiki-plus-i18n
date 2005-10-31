@@ -7,18 +7,18 @@
 var nIE4 = false;	// Internet Explorer 4,5,6
 var nDOM = false;	// Netscape 6,7
 var nOP6 = false;	// Opera 6,7
-var nSAF = false;
+var nSAF = false;   // Safari
 
-// 特有のオブジェクトを取得してバージョン確認
+// ﾆﾃﾍｭ､ﾎ･ｪ･ﾖ･ｸ･ｧ･ｯ･ﾈ､霹ﾀ､ｷ､ﾆ･ﾐ｡ｼ･ｸ･逾ﾎﾇｧ
 objSaf = (navigator.userAgent.indexOf("Safari",0) != -1)?1:0;
 objOP6 = (navigator.userAgent.indexOf("Opera",0) != -1)?1:0;
 objDOM = document.getElementById;
 objIE4 = document.all;
 
-if(objOP6){ nOP6 = true; }
-else if(objIE4){ nIE4 = true; }
-else if(objDOM){ nDOM = true; }
-if(objSaf){ nSAF = true; }
+if( objOP6 ){ nOP6 = true; }
+else if( objIE4 ){ nIE4 = true; }
+else if( objDOM	){ nDOM = true; }
+if( objSaf ){ nSAF = true; }
 
 var objOpenedNaviMenu = null;
 
@@ -43,45 +43,70 @@ function startNaviMenu(NaviBarID, NaviMenuID, NaviMenuClass, NaviLinkID, MenuBlo
     strMenuItemClass = MenuItemClass; 
 
     // event handling
-  if(nIE4 || nOP6){
-        document.onmouseover = viewNaviMenuIEandOpera; 
-  }
-	if(nDOM){
+	if(nIE4 || nOP6) {
+		document.onmouseover = viewNaviMenuIEandOpera; 
+	} else if(nDOM) {
 		window.addEventListener("mouseover", viewNaviMenuN6, true);
 	}
+}
+
+function GetPositionTop(o){
+ var p = o.offsetParent;
+
+ if(p.tagName == 'BODY'){
+  return o.offsetTop;
+ }
+ else{
+  return o.offsetTop + GetPositionTop(p);
+ }
+}
+function GetPositionLeft(o){
+ var p = o.offsetParent;
+
+ if(p.tagName == 'BODY'){
+  return o.offsetLeft;
+ }
+ else{
+  return o.offsetLeft + GetPositionLeft(p);
+ }
 }
 
 // Common Open Menu
 function viewNaviMenuCommon(objEvent){
 
     objPosition = document.getElementById(strNaviBarID);
-    if( objEvent.className == strNaviMenuClass ){
+    if(objEvent.className == strNaviMenuClass) {
         closeNaviMenu();
         var strThisID = objEvent.id;
-        if( strThisID.indexOf(strNaviLinkID) >= 0 ){ 
-            strThisID = strThisID.replace(strNaviLinkID, strNaviMenuID)
+        if (strThisID.indexOf(strNaviLinkID) >= 0) {
+            strThisID = strThisID.replace(strNaviLinkID, strNaviMenuID);
         }
 
-        objItem = document.getElementById( strThisID );
-        objOpenedNaviMenu = document.getElementById( strThisID.replace(strNaviMenuID, strMenuBlockID) );
+        objItem = document.getElementById(strThisID);
+        if (objItem != null) {
+	        objOpenedNaviMenu = document.getElementById(strThisID.replace(strNaviMenuID, strMenuBlockID));
+	        if (objOpenedNaviMenu != null) {
+			patchHeight = 0;
+			if (nSAF) { patchHeight = 11; }
+		        objOpenedNaviMenu.style.top  = GetPositionTop(objItem) + objPosition.offsetHeight + patchHeight + "px";
+		        if ( GetPositionLeft(objItem) + objOpenedNaviMenu.offsetWidth >= GetPositionLeft(objPosition) + objPosition.offsetWidth)  {
+				objOpenedNaviMenu.style.left = GetPositionLeft(objPosition) + objPosition.offsetWidth - objOpenedNaviMenu.offsetWidth + "px";
+		        } else {
+				objOpenedNaviMenu.style.left = GetPositionLeft(objItem) + "px";
+			}
+		        objOpenedNaviMenu.style.visibility = "visible";
+		}
+	}
+    } else if( objOpenedNaviMenu != null ) {
 
-        objOpenedNaviMenu.style.top  = (objItem.offsetTop  + objPosition.offsetTop + objPosition.offsetHeight) + "px";
-if (nSAF) {
-        objOpenedNaviMenu.style.top  = (objItem.offsetTop  + objPosition.offsetTop + objPosition.offsetHeight + 12) + "px";
-}
-        objOpenedNaviMenu.style.left = (objItem.offsetLeft + objPosition.offsetLeft) + "px";
-        objOpenedNaviMenu.style.visibility = "visible";
-	
-    }else if( objOpenedNaviMenu != null ){
-
-        if( nDOM ){
+        if( nDOM ) {
             if( objEvent.id.indexOf( strMenuBlockID ) >= 0 ){ return; }
             if( objEvent.className == strMenuItemClass ){ return; }
 
-        }else{
+        } else {
             if( objOpenedNaviMenu.contains(objEvent) == true
                 || objPosition.contains(objEvent) == true){ return; }
-        } 
+        }
     	closeNaviMenu();
     }
 
