@@ -80,9 +80,15 @@ if (isset($pkwk_dtd)) {
 <div id="navigator">
  <?php echo convert_html(get_source('SiteNavigator')) ?>
 </div>
-<div id="page_navigator">
- <?php echo convert_html(get_source('PageNavigator')) ?>
-</div>
+<?php
+ if (exist_plugin('navibar2')) {
+  echo do_plugin_convert('navibar2');
+ } else {
+  echo '<div id="page_navigator">';
+  echo convert_html(get_source('PageNavigator'))
+  echo '</div>';
+ }
+?>
 
 <div id="main">
 <div id="center_bar">
