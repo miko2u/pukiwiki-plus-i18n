@@ -85,7 +85,7 @@ if (isset($pkwk_dtd)) {
   echo do_plugin_convert('navibar2');
  } else {
   echo '<div id="page_navigator">';
-  echo convert_html(get_source('PageNavigator'))
+  echo convert_html(get_source('PageNavigator'));
   echo '</div>';
  }
 ?>
