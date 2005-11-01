@@ -126,6 +126,7 @@ $_LANG['skin']['top']       = 'ホーム';	// Top page
 $_LANG['skin']['trackback'] = 'Trackback';	// Show list of trackback
 $_LANG['skin']['unfreeze']  = '凍結解除';
 $_LANG['skin']['upload']    = '添付';	// Attach a file
+$_LANG['skin']['source']    = 'ソース';	// Show source
 
 ///////////////////////////////////////
 // Plug-in message

@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: default.skin.php,v 1.34.22 2005/05/06 11:23:43 miko Exp $
+// $Id: default.skin.php,v 1.34.24 2005/11/01 11:23:43 miko Exp $
 //
 if (!defined('DATA_DIR')) { exit; }
 
@@ -10,6 +10,7 @@ if (!defined('DATA_DIR')) { exit; }
 $css_charset = 'iso-8859-1';
 switch(UI_LANG){
 	case 'ja_JP': $css_charset = 'Shift_JIS'; break;
+	case 'ja':    $css_charset = 'Shift_JIS'; break;
 }
 // Output header
 pkwk_common_headers();

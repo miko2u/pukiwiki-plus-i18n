@@ -122,6 +122,7 @@ $_LANG['skin']['top']       = 'Front page';	// Top page
 $_LANG['skin']['trackback'] = 'Trackback';	// Show list of trackback
 $_LANG['skin']['unfreeze']  = 'Unfreeze';
 $_LANG['skin']['upload']    = 'Upload';	// Attach a file
+$_LANG['skin']['source']    = 'Source';	// Show source
 
 ///////////////////////////////////////
 // Plug-in message
