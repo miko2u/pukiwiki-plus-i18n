@@ -2,21 +2,44 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: navibar2.inc.php,v 0.1.4 2005/03/15 15:33:43 miko Exp $
+// $Id: navibar2.inc.php,v 0.1.9 2005/11/01 20:44:00 miko Exp $
 //
 function plugin_navibar2_convert()
 {
-	global $hr;
+	global $vars, $hr;
 
-	$menubarcount = -1;
-	$page = 'Navigation';
+	$page = strip_bracket($vars['page']);
 
-	if (!is_page($page)) {
-		exist_plugin('navibar');
-		return do_plugin_convert('navibar','top,list,search,recent,help,|,new,edit,upload,|,trackback') . $hr;
+	$navi_page = plugin_navibar2_search_navipage($page);
+	if (! empty($navi_page)) {
+		return plugin_navibar2_makehtml($navi_page);
 	}
 
-	foreach (get_source($page) as $line) {
+	exist_plugin('navibar');
+	return do_plugin_convert('navibar','top,list,search,recent,help,|,new,edit,upload,|,trackback') . $hr;
+}
+
+function plugin_navibar2_search_navipage($page)
+{
+	while (1) {
+		$navi_page = $page;
+		if (! empty($page)) $navi_page .= '/';
+		$navi_page .= 'Navigation';
+		if (is_page($navi_page)) return $navi_page;
+		if (empty($page)) break;
+		$page = substr($page,0,strrpos($page,'/'));
+	}
+	return '';
+}
+
+function plugin_navibar2_makehtml($page)
+{
+	$menubarcount = -1;
+
+	$lines = get_source($page);
+	convert_html( $lines ); // Processing for prior execution of plug-in.
+
+	foreach ($lines as $line) {
 		if ($line == '') continue;
 
 		$head  = $line{0};	// The first letter
@@ -177,10 +200,32 @@ function plugin_navibar2_keyword($name)
 		}
 		break;
 	case 'refer':
+//	case 'skeylist':
+//	case 'linklist':
 		if ($referer) {
-			return _navigator2($name);
+			if (!isset($refcount))
+				$refcount = tb_count($vars['page'],'.ref');
+			if ($refcount > 0) {
+				return _navigator2($name);
+			}
 		}
 		break;
+//	case 'log_browse':
+//		return _navigator2($name);
+//		if (log_exist('browse',$vars['page'])) {
+//			return _navigator2($name);
+//		}
+//		break;
+//	case 'log_update':
+//		if (log_exist('update',$vars['page'])) {
+//			return _navigator2($name);
+//		}
+//		break;
+//	case 'log_down':
+//		if (log_exist('download',$vars['page'])) {
+//			return _navigator2($name);	
+//		}
+//		break;
 	case 'new':
 	case 'edit':
 	case 'diff':
