@@ -98,7 +98,9 @@ function get_backup($page, $age = 0)
 
 	$_age = 0;
 	$retvars = $match = array();
-	$regex_splitter = '/^' . preg_quote(PKWK_SPLITTER) . '\s(\d+)$/';
+//	$regex_splitter = '/^' . preg_quote(PKWK_SPLITTER) . '\s(\d+)$/';
+	// Patch of official/plus backup data compatible by miko
+	$regex_splitter = '/^' . preg_quote(PKWK_SPLITTER) . '\s(\d+)(\s)$/';
 	// BugTrack/685 by UPK
 	$regex_splitter_new = '/^' . preg_quote(PKWK_SPLITTER) . '\s(\d+)\s(\d+)$/';
 	foreach($lines as $line) {
@@ -111,7 +113,7 @@ function get_backup($page, $age = 0)
 				return $retvars[$age];
 
 			$retvars[$_age] = array('time'=>$match[1], 'data'=>array());
-		} else {
+		} elseif ($_age > 0) {
 			$retvars[$_age]['data'][] = $line;
 		}
 	}
