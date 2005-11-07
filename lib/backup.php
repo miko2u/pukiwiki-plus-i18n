@@ -11,8 +11,9 @@
  * @access  public
  * @author
  * @create
- * @version $Id: backup.php,v 1.10.1 2005/09/24 01:05:49 miko Exp $
+ * @version $Id: backup.php,v 1.10.11 2005/11/07 01:05:49 miko Exp $
  * Copyright (C)
+ *   2005      Customized by Miko.Hoshina
  *   2002-2005 PukiWiki Developers Team
  *   2001-2002 Originally written by yu-ji
  * License: GPL v2 or (at your option) any later version
@@ -66,7 +67,7 @@ function make_backup($page, $delete = FALSE)
 		$body = preg_replace('/^(' . preg_quote(PKWK_SPLITTER) . "\s\d+(\s(\d+)|))$/", '$1 ', get_source($page));
 		// BugTrack/685 by UPK
 		// $body = PKWK_SPLITTER . ' ' . get_filetime($page) . "\n" . join('', $body);
-		$body = PKWK_SPLITTER . ' ' . get_filetime($page) . ' ' . UTIME. "\n" . join('', $body);
+		$body = PKWK_SPLITTER . ' ' . get_filetime($page) . ' ' . UTIME . "\n" . join('', $body);
 		$body = preg_replace("/\n*$/", "\n", $body);
 
 		$fp = _backup_fopen($page, 'wb')
@@ -100,7 +101,7 @@ function get_backup($page, $age = 0)
 	$retvars = $match = array();
 //	$regex_splitter = '/^' . preg_quote(PKWK_SPLITTER) . '\s(\d+)$/';
 	// Patch of official/plus backup data compatible by miko
-	$regex_splitter = '/^' . preg_quote(PKWK_SPLITTER) . '\s(\d+)(\s)$/';
+	$regex_splitter = '/^' . preg_quote(PKWK_SPLITTER) . '\s(\d+)\s*$/';
 	// BugTrack/685 by UPK
 	$regex_splitter_new = '/^' . preg_quote(PKWK_SPLITTER) . '\s(\d+)\s(\d+)$/';
 	foreach($lines as $line) {
@@ -112,7 +113,10 @@ function get_backup($page, $age = 0)
 			if ($age > 0 && $_age > $age)
 				return $retvars[$age];
 
-			$retvars[$_age] = array('time'=>$match[1], 'data'=>array());
+			// BugTrack/685 by UPK
+			// $retvars[$_age] = array('time'=>$match[1], 'data'=>array());
+			$now = (isset($match[2])) ? $match[2] : $match[1];
+			$retvars[$_age] = array('time'=>$match[1], 'real'=>$now, 'data'=>array());
 		} elseif ($_age > 0) {
 			$retvars[$_age]['data'][] = $line;
 		}
