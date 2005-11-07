@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: backup.inc.php,v 1.23.8 2005/09/22 13:45:02 miko Exp $
+// $Id: backup.inc.php,v 1.23.12 2005/11/07 13:45:02 miko Exp $
 //
 // Backup plugin
 
@@ -16,7 +16,7 @@ function plugin_backup_action()
 //	global $_title_backupdiff, $_title_backupnowdiff, $_title_backupsource;
 //	global $_title_backup, $_title_pagebackuplist, $_title_backuplist;
 
-$_title_backuplist     = _('Backup list');
+$_msg_backuplist       = _('Backup list');
 $_msg_diff             = _('diff');
 $_msg_nowdiff          = _('diff current');
 $_msg_source           = _('source');
@@ -158,10 +158,11 @@ function plugin_backup_delete($page)
 //	global $_msg_backup_adminpass, $_btn_delete, $_msg_invalidpass;
 
 $_title_backup_delete  = _('Deleting backup of $1');
+$_title_pagebackuplist = _('Backup list of $1');
 $_title_backuplist     = _('Backup list');
 $_msg_backup_deleted   = _('Backup of $1 has been deleted.');
 $_msg_backup_adminpass = _('Please input the password for deleting.');
-$_btn_delete    = _('Delete');
+$_btn_delete      = _('Delete');
 $_msg_invalidpass = _('Invalid password.');
 
 	if (! _backup_file_exists($page))
