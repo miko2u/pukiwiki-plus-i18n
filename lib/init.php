@@ -107,7 +107,7 @@ mb_http_output('pass');
 mb_detect_order('auto');
 
 // for SESSION Variables
-$use_session = 1;
+$use_session = intval(PLUS_ALLOW_SESSION);
 if ($_REQUEST['plugin'] == 'attach' && (isset($_REQUEST['openfile']) || $_REQUEST['pcmd'] == 'open')) {
 	$use_session = 0;
 }

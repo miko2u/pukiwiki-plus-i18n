@@ -163,6 +163,9 @@ $nofollow = 0; // 1 = Try hiding from search engines
 // PKWK_ALLOW_JAVASCRIPT - Allow / Prohibit using JavaScript
 define('PKWK_ALLOW_JAVASCRIPT', 1);
 
+// Allow / Prohibit using Session
+define('PLUS_ALLOW_SESSION', 1);
+
 /////////////////////////////////////////////////
 // TrackBack feature
 
