@@ -146,6 +146,7 @@ if (isset($retvars['body']) && $retvars['body'] != '') {
 	$lines = $source;
 	while (! empty($lines)) {
 		$line = array_shift($lines);
+		if (substr($line, 0, 2) == '//') continue;
 		if (preg_match("/^\#(partedit)(?:\((.*)\))?/", $line, $matches)) {
 			if ( !isset($matches[2]) || $matches[2] == '') {
 				$fixed_heading_edited = ($fixed_heading_edited ? 0:1);
@@ -166,12 +167,11 @@ if (isset($retvars['body']) && $retvars['body'] != '') {
 				} else {
 					$convert_cache = 0;
 				}
+			} elseif ($usedatetime) {
 				// 日付のリアルタイム処理はキャッシュ無効
-				if ($usedatetime) {
-					$convline = make_datetime_rules($line);
-					if ($convline != $line) {
-						$convert_cache = 0;
-					}
+				$convline = make_datetime_rules($line);
+				if ($convline != $line) {
+					$convert_cache = 0;
 				}
 			}
 		}
