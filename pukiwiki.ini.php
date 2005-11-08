@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: pukiwiki.ini.php,v 1.128.13 2005/08/24 14:52:25 miko Exp $
+// $Id: pukiwiki.ini.php,v 1.128.21 2005/08/24 14:52:25 miko Exp $
 // Copyright (C)
 //   2005      Customized/Patched by Miko.Hoshina
 //   2002-2005 PukiWiki Developers Team
@@ -163,7 +163,7 @@ $nofollow = 0; // 1 = Try hiding from search engines
 // PKWK_ALLOW_JAVASCRIPT - Allow / Prohibit using JavaScript
 define('PKWK_ALLOW_JAVASCRIPT', 1);
 
-// Allow / Prohibit using Session
+// PLUS_ALLOW_SESSION - Allow / Prohibit using Session
 define('PLUS_ALLOW_SESSION', 1);
 
 /////////////////////////////////////////////////

@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: pukiwiki.ini.php,v 1.128.13.5 2005/10/20 14:57:09 miko Exp $
+// $Id: pukiwiki.ini.php,v 1.128.21.5 2005/10/20 14:57:09 miko Exp $
 // Copyright (C)
 //   2005      Customized/Patched by Miko.Hoshina
 //   2002-2005 PukiWiki Developers Team
@@ -156,6 +156,10 @@ $nofollow = 0; // 1:サーチエンジンから見えないようにする
 
 // PKWK_ALLOW_JAVASCRIPT - JavaScriptの利用を許可/禁止する
 define('PKWK_ALLOW_JAVASCRIPT', 1);
+
+// PLUS_ALLOW_SESSION - Sessionの利用を許可/禁止する
+define('PLUS_ALLOW_SESSION', 1);
+
 
 /////////////////////////////////////////////////
 // TrackBack 機能
