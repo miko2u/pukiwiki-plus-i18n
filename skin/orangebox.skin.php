@@ -1,6 +1,6 @@
 <?php
 /////////////////////////////////////////////////
-// PukiWiki - Yet another WikiWikiWeb clone.
+// PukiWiki Plus! - Yet another WikiWikiWeb clone.
 //
 // $Id: orangebox.skin.php,v 1.18.3 2004/11/02 14:02:10 miko Exp $
 // Original is ari-
