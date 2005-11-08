@@ -107,12 +107,17 @@ mb_http_output('pass');
 mb_detect_order('auto');
 
 // for SESSION Variables
-if (!($_REQUEST['plugin'] != 'attach' && (isset($_REQUEST['openfile']) || $_REQUEST['pcmd'] != 'open'))) {
+$use_session = 1;
+if ($_REQUEST['plugin'] == 'attach' && (isset($_REQUEST['openfile']) || $_REQUEST['pcmd'] != 'open')) {
+	$use_session = 0;
+}
+if ($use_session > 0) {
 	if (ini_get('session.auto_start') != 1) {
 		session_name('pukiwiki');
 		session_start();
 	}
 }
+unset($use_session);
 
 /////////////////////////////////////////////////
 // INI_FILE: Require LANG_FILE
