@@ -108,7 +108,7 @@ mb_detect_order('auto');
 
 // for SESSION Variables
 $use_session = 1;
-if ($_REQUEST['plugin'] == 'attach' && (isset($_REQUEST['openfile']) || $_REQUEST['pcmd'] != 'open')) {
+if ($_REQUEST['plugin'] == 'attach' && (isset($_REQUEST['openfile']) || $_REQUEST['pcmd'] == 'open')) {
 	$use_session = 0;
 }
 if ($use_session > 0) {
