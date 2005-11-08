@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: html.php,v 1.46.14 2005/10/04 13:41:03 miko Exp $
+// $Id: html.php,v 1.46.17 2005/11/08 13:41:03 miko Exp $
 // Copyright (C)
 //   2005      Customized/Patched by Miko.Hoshina
 //   2002-2005 PukiWiki Developers Team
@@ -382,6 +382,22 @@ function make_line_rules($str)
 			'return \'/\' . $a . \'/\';'), array_keys($line_rules));
 		$replace = array_values($line_rules);
 		unset($line_rules);
+	}
+
+	return preg_replace($pattern, $replace, $str);
+}
+
+// User-defined datetime rules (convert without replacing source)
+function make_datetime_rules($str)
+{
+	global $datetime_rules;
+	static $pattern, $replace;
+
+	if (! isset($pattern)) {
+		$pattern = array_map(create_function('$a',
+			'return \'/\' . $a . \'/\';'), array_keys($datetime_rules));
+		$replace = array_values($datetime_rules);
+		unset($datetime_rules);
 	}
 
 	return preg_replace($pattern, $replace, $str);

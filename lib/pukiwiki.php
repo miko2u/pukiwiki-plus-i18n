@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: pukiwiki.php,v 1.11.4 2005/09/11 05:58:33 miko Exp $
+// $Id: pukiwiki.php,v 1.11.7 2005/11/07 05:58:33 miko Exp $
 //
 // PukiWiki 1.4.* Plus!
 //  Copyright (C) 2002-2005 by PukiWiki Plus Team
@@ -167,7 +167,11 @@ if (isset($retvars['body']) && $retvars['body'] != '') {
 					$convert_cache = 0;
 				}
 				// 日付のリアルタイム処理はキャッシュ無効
-				if ($usedatetime == 1) {
+				if ($usedatetime) {
+					$convline = make_datetime_rules($line);
+					if ($convline != $line) {
+						$convert_cache = 0;
+					}
 				}
 			}
 		}
