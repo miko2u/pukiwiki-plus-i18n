@@ -111,6 +111,9 @@ $use_session = intval(PLUS_ALLOW_SESSION);
 if ($_REQUEST['plugin'] == 'attach' && (isset($_REQUEST['openfile']) || $_REQUEST['pcmd'] == 'open')) {
 	$use_session = 0;
 }
+if ($_REQUEST['plugin'] == 'ref' && isset($_REQUEST['page']) && isset($_REQUEST['src'])) {
+	$use_session = 0;
+}
 if ($use_session > 0) {
 	if (ini_get('session.auto_start') != 1) {
 		session_name('pukiwiki');
