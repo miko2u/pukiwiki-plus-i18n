@@ -182,7 +182,7 @@ $convert_cache = 1;
 $convert_misscache_plugin = array(
 	'counter', 'online', 'popular',
 	'description', 'keywords', 'mediaplayer', 'navi',
-	'nomenubar', 'nosidebar', 'norelated', 'skin',
+	'nomenubar', 'nosidebar', 'norelated', 'nofollow', 'skin',
 );
 
 /////////////////////////////////////////////////

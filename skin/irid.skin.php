@@ -38,7 +38,7 @@ if (isset($pkwk_dtd)) {
  <meta http-equiv="content-type" content="application/xhtml+xml; charset=<?php echo CONTENT_CHARSET ?>" />
  <meta http-equiv="content-style-type" content="text/css" />
 <?php if (PKWK_ALLOW_JAVASCRIPT) { ?> <meta http-equiv="Content-Script-Type" content="text/javascript" /><?php } ?>
-<?php if (! $is_read)  { ?> <meta name="robots" content="NOINDEX,NOFOLLOW" /><?php } ?>
+<?php if ($nofollow || ! $is_read)  { ?> <meta name="robots" content="NOINDEX,NOFOLLOW" /><?php } ?>
 
  <title><?php echo $title ?> - <?php echo $page_title ?></title>
  <link rel="stylesheet" href="skin/<?php echo $irid_style_name ?>/<?php echo $irid_style_name ?>.css" title="<?php echo $irid_style_name ?>" type="text/css" charset="Shift_JIS" />

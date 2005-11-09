@@ -30,11 +30,7 @@ if (isset($pkwk_dtd)) {
  <meta http-equiv="content-type" content="application/xhtml+xml; charset=<?php echo(CONTENT_CHARSET); ?>" />
  <meta http-equiv="content-style-type" content="text/css" />
  <meta http-equiv="content-script-type" content="text/javascript" />
-
-<?php if (!$is_read) { ?>
- <meta name="robots" content="NOINDEX,NOFOLLOW" />
-<?php } ?>
-
+<?php if ($nofollow || ! $is_read)  { ?> <meta name="robots" content="NOINDEX,NOFOLLOW" /><?php } ?>
 <?php global $newtitle, $newbase; ?>
 <?php if ($title == $defaultpage) { ?>
  <title><?php echo "$page_title" ?></title>
