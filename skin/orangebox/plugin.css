@@ -372,7 +372,7 @@ div#navigator2 {
 	padding: 0px 4px;
 	left: 0px;
 	width: 100%;
-	background-color: #aaaacc;
+	background-color: #ccccee;
 	border: 1px #666e99 solid;
 	clear:both;
 	white-space: nowrap;
@@ -382,12 +382,12 @@ td.navimenu {
 	margin: 2px 5px 2px 5px;
 	padding: 2px;
 	font-size:84%;
-	background-color: #aaaacc;
+	background-color: #ccccee;
 }
 td.navimenu a {
 	color: #666e99;
 	padding: 1px 8px 1px;
-	border: 1px #aaaacc solid;
+	border: 1px #ccccee solid;
 	text-decoration: none;
 	display:block;
 }
@@ -411,9 +411,9 @@ td.navimenu a:hover {
 div.naviblock {
 	padding: 2px 5px 2px 5px;
 	border: 1px #ffcc99 solid;
-	border-top: #aaaacc 1px solid;
+	border-top: #ccccee 1px solid;
 	font-size:84%;
-	background-color: #aaaacc;
+	background-color: #ccccee;
 	visibility: hidden;
 	position: absolute;
 	z-index:10;
@@ -424,7 +424,7 @@ div.menuitem {
 div.naviblock a {
 	padding: 1px 8px;
 	color: #666e99;
-	border: 1px #aaaacc solid;
+	border: 1px #ccccee solid;
 	text-decoration: none;
 	display:block;
 }
