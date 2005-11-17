@@ -381,7 +381,7 @@ td.navimenu a {
 	display:block;
 }
 td.navimenu a:active {
-	border: 1px #ff9933 solid;
+	border: 1px #999 solid;
 	color: #a63d21;
 	background-color:transparent;
 	text-decoration:none;
@@ -391,9 +391,9 @@ td.navimenu a:visited {
 	text-decoration: none;
 }
 td.navimenu a:hover {
-	border: 1px #ff9933 solid;
+	border: 1px #999 solid;
 	color: #ff0000;
-	background-color: #ffeecc;
+	background-color: #eee;
 	text-decoration:none;
 }
 
@@ -418,7 +418,7 @@ div.naviblock a {
 	display:block;
 }
 div.naviblock a:active {
-	border: 1px #ff9933 solid;
+	border: 1px #999 solid;
 	color: #a63d21;
 	background-color:transparent;
 	text-decoration: none;
@@ -428,9 +428,9 @@ div.naviblock a:visited {
 	text-decoration: none;
 }
 div.naviblock a:hover {
-	border: 1px #ff9933 solid;
+	border: 1px #999 solid;
 	color: #ff0000;
-	background-color:#ffeecc;
+	background-color:#eee;
 	text-decoration: none;
 }
 
