@@ -62,6 +62,7 @@ if (isset($pkwk_dtd)) {
   echo '<div id="navigator">';
   echo convert_html(get_source('SiteNavigator'));
   echo '</div>';
+ }
 ?>
 </div>
 <!-- ¢¡ Content ¢¡ ========================================================= -->
