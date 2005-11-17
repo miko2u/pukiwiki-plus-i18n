@@ -55,22 +55,22 @@ if (isset($pkwk_dtd)) {
 <div id="logo"><a href="<?php echo $link_top ?>"><?php echo $page_title ?></a></div>
 </div>
 <!-- ¢¡ Navigator ¢¡ ======================================================= -->
-<div id="navigator">
-	<?php echo convert_html(get_source('SiteNavigator')) ?>
-</div>
-<!-- ¢¡ Content ¢¡ ========================================================= -->
-<div id="main"><!-- ¢£BEGIN id:main -->
-<div id="wrap_content"><!-- ¢£BEGIN id:wrap_content -->
-<div id="content"><!-- ¢£BEGIN id:content -->
 <?php
  if (exist_plugin('navibar2')) {
   echo do_plugin_convert('navibar2');
  } else {
-  echo '<div id="page_navigator">';
-  echo convert_html(get_source('PageNavigator'));
+  echo '<div id="navigator">';
+  echo convert_html(get_source('SiteNavigator'));
   echo '</div>';
  }
 ?>
+<!-- ¢¡ Content ¢¡ ========================================================= -->
+<div id="main"><!-- ¢£BEGIN id:main -->
+<div id="wrap_content"><!-- ¢£BEGIN id:wrap_content -->
+<div id="content"><!-- ¢£BEGIN id:content -->
+<div id="page_navigator">
+<?php echo convert_html(get_source('PageNavigator')); ?>
+</div>
 <h1 class="title"><?php echo $page ?></h1>
 <?php if ($lastmodified != '') { ?><!-- ¢£BEGIN id:lastmodified -->
 <div id="lastmodified">Last-modified: <?php echo $lastmodified ?></div>

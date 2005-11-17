@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: irid.skin.php,v 1.1.1 2005/11/07 14:02:10 miko Exp $
+// $Id: cloudwalk.skin.php,v 1.1.1 2005/11/17 14:02:10 miko Exp $
 // Original is ari-
 //
 // Warning: eucjp version only.
