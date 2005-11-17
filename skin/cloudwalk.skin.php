@@ -64,7 +64,6 @@ if (isset($pkwk_dtd)) {
   echo '</div>';
  }
 ?>
-</div>
 <!-- ¢¡ Content ¢¡ ========================================================= -->
 <div id="main"><!-- ¢£BEGIN id:main -->
 <div id="wrap_content"><!-- ¢£BEGIN id:wrap_content -->
