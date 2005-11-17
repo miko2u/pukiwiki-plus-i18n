@@ -62,9 +62,15 @@ if (isset($pkwk_dtd)) {
 <div id="main"><!-- ¢£BEGIN id:main -->
 <div id="wrap_content"><!-- ¢£BEGIN id:wrap_content -->
 <div id="content"><!-- ¢£BEGIN id:content -->
-<div id="page_navigator"><!-- ¢£BEGIN id:page_navigator -->
-	<?php echo convert_html(get_source('PageNavigator')) ?>
-</div><!-- ¢¢END id:PageNavigator -->
+<?php
+ if (exist_plugin('navibar2')) {
+  echo do_plugin_convert('navibar2');
+ } else {
+  echo '<div id="page_navigator">';
+  echo convert_html(get_source('PageNavigator'));
+  echo '</div>';
+ }
+?>
 <h1 class="title"><?php echo $page ?></h1>
 <?php if ($lastmodified != '') { ?><!-- ¢£BEGIN id:lastmodified -->
 <div id="lastmodified">Last-modified: <?php echo $lastmodified ?></div>
