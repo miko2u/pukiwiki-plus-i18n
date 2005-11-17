@@ -393,7 +393,7 @@ td.navimenu a:visited {
 td.navimenu a:hover {
 	border: 1px #999 solid;
 	color: #ff0000;
-	background-color: #eee;
+	background-color: #f8f8f8;
 	text-decoration:none;
 }
 
@@ -430,7 +430,7 @@ div.naviblock a:visited {
 div.naviblock a:hover {
 	border: 1px #999 solid;
 	color: #ff0000;
-	background-color:#eee;
+	background-color:#f8f8f8;
 	text-decoration: none;
 }
 
