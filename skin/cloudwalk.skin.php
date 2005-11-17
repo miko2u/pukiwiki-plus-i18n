@@ -8,7 +8,7 @@
 // Warning: eucjp version only.
 
 // 使用するスタイル
-$irid_style_name = "iridwire";
+$irid_style_name = "cloudwalk";
 
 // Prohibit direct access
 if (! defined('UI_LANG')) die('UI_LANG is not set');
