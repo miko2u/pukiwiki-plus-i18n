@@ -372,8 +372,8 @@ div#navigator2 {
 	padding: 0px 4px;
 	left: 0px;
 	width: 100%;
-	background-color: #ccccee;
-	border: 1px #666e99 solid;
+	background-color: #fff0dd;
+	border: 1px #ffcc99 solid;
 	clear:both;
 	white-space: nowrap;
 }
@@ -382,23 +382,23 @@ td.navimenu {
 	margin: 2px 5px 2px 5px;
 	padding: 2px;
 	font-size:84%;
-	background-color: #ccccee;
+	background-color: #fff0dd;
 }
 td.navimenu a {
-	color: #666e99;
+	color: #a63d21;
 	padding: 1px 8px 1px;
-	border: 1px #ccccee solid;
+	border: 1px #fff0dd solid;
 	text-decoration: none;
 	display:block;
 }
 td.navimenu a:active {
 	border: 1px #ff9933 solid;
-	color: #666e99;
+	color: #a63d21;
 	background-color:transparent;
 	text-decoration:none;
 }
 td.navimenu a:visited {
-	color: #666e99;
+	color: #a63d21;
 	text-decoration: none;
 }
 td.navimenu a:hover {
@@ -410,10 +410,10 @@ td.navimenu a:hover {
 
 div.naviblock {
 	padding: 2px 5px 2px 5px;
-	border: 1px #666e99 solid;
-	border-top: #ccccee 1px solid;
+	border: 1px #ffcc99 solid;
+	border-top: #fff0dd 1px solid;
 	font-size:84%;
-	background-color: #ccccee;
+	background-color: #fff0dd;
 	visibility: hidden;
 	position: absolute;
 	z-index:10;
@@ -423,19 +423,19 @@ div.menuitem {
 }
 div.naviblock a {
 	padding: 1px 8px;
-	color: #666e99;
-	border: 1px #ccccee solid;
+	color: #a63d21;
+	border: 1px #fff0dd solid;
 	text-decoration: none;
 	display:block;
 }
 div.naviblock a:active {
 	border: 1px #ff9933 solid;
-	color: #666e99;
+	color: #a63d21;
 	background-color:transparent;
 	text-decoration: none;
 }
 div.naviblock a:visited {
-	color: #666e99;
+	color: #a63d21;
 	text-decoration: none;
 }
 div.naviblock a:hover {
