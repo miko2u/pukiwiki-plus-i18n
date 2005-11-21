@@ -44,7 +44,13 @@ if (isset($pkwk_dtd)) {
  <link rel="stylesheet" href="skin/<?php echo $irid_style_name ?>/<?php echo $irid_style_name ?>.css" title="<?php echo $irid_style_name ?>" type="text/css" charset="Shift_JIS" />
  <link rel="alternate" type="application/rss+xml" title="RSS" href="<?php echo $link['rss'] ?>" />
 
-<?php if (PKWK_ALLOW_JAVASCRIPT && $trackback_javascript) { ?> <script type="text/javascript" src="skin/trackback.js"></script><?php } ?>
+<?php if (PKWK_ALLOW_JAVASCRIPT) { ?>
+ <script type="text/javascript" src="skin/default.js"></script>
+ <script type="text/javascript" src="skin/kanzaki.js"></script>
+<?php if ($trackback_javascript) { ?>
+ <script type="text/javascript" src="skin/trackback.js"></script>
+<?php } ?>
+<?php } ?>
 
 <?php echo $head_tag ?>
 </head>
@@ -179,5 +185,6 @@ Link: <?php echo $related ?>
 <!-- ¢¡ END ¢¡ ============================================================= -->
 </div><!-- ¢¢END id:wrapper -->
 
+<?php echo $foot_tag ?>
 </body>
 </html>
