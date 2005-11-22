@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: cloudwalk.skin.php,v 1.1.1 2005/11/17 14:02:10 miko Exp $
+// $Id: cloudwalk.skin.php,v 1.1.5 2005/11/22 14:02:10 miko Exp $
 // Original is ari-
 //
 // Warning: eucjp version only.
@@ -40,7 +40,14 @@ if (isset($pkwk_dtd)) {
 <?php if (PKWK_ALLOW_JAVASCRIPT) { ?> <meta http-equiv="Content-Script-Type" content="text/javascript" /><?php } ?>
 <?php if ($nofollow || ! $is_read)  { ?> <meta name="robots" content="NOINDEX,NOFOLLOW" /><?php } ?>
 
- <title><?php echo $title ?> - <?php echo $page_title ?></title>
+<?php global $newtitle, $newbase; ?>
+<?php if ($title == $defaultpage) { ?>
+ <title><?php echo "$page_title" ?></title>
+<?php } elseif ($newtitle != '' && $is_read) { ?>
+ <title><?php echo "$newtitle - $page_title" ?></title>
+<?php } else { ?>
+ <title><?php echo "$title - $page_title" ?></title>
+<?php } ?>
  <link rel="stylesheet" href="skin/<?php echo $irid_style_name ?>/<?php echo $irid_style_name ?>.css" title="<?php echo $irid_style_name ?>" type="text/css" charset="Shift_JIS" />
  <link rel="alternate" type="application/rss+xml" title="RSS" href="<?php echo $link['rss'] ?>" />
 
