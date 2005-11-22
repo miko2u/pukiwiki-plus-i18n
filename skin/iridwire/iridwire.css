@@ -125,7 +125,61 @@ div.side_bar div.jumpmenu{
 	background-color:#eee;
 }
 
-
-
-
-
+/* Popup Toc
+----------------------------------------------------------------------------- */
+#poptoc
+{
+	font-size:90%;
+	border:gray thin outset; padding:0.5em;
+	background:#fff8ee;
+	/*min-width:18em; max-width:25em;*/
+	/*width:22em;*/
+	margin-right:-10em;
+	z-index:1;
+	position:absolute;
+	display:none;
+}
+#poptoc a:hover
+{
+	background:#ccddee;
+}
+#poptoc a
+{
+	color:blue;
+}
+#poptoc h2
+{
+	color:navy;
+	background:#ffeecc;
+	font-size:small;
+	font-weight:normal;
+	padding:0.3em;
+	margin:0;
+	text-align:center;
+	border:silver solid 1px;
+}
+#poptoc h2 a
+{
+	font-size:90%;
+	color:navy;
+	text-decoration:none;
+}
+#poptoc h2 img
+{
+	margin-bottom:-3px;
+	margin-right: 2px;
+}
+#poptoc .nav
+{
+	border-top:1px gray solid;
+	padding-top:0.2em;
+	text-align:center;
+}
+#poptoc a.here
+{
+	color: #333333;
+	background: #fff8f8;
+	text-decoration: none;
+	border:1px dotted gray;
+/*	cursor:default;	*/
+}
