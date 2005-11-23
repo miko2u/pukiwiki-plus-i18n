@@ -84,7 +84,7 @@ if (isset($pkwk_dtd)) {
 <div id="page_navigator">
 <?php echo convert_html(get_source('PageNavigator')); ?>
 </div>
-<h1 class="title"><?php echo $page ?></h1>
+<h1 class="title"><?php echo(($newtitle!='' && $is_read)?$newtitle:$page) ?></h1>
 <?php if ($lastmodified != '') { ?><!-- ¢£BEGIN id:lastmodified -->
 <div id="lastmodified">Last-modified: <?php echo $lastmodified ?></div>
 <?php } ?><!-- ¢¢END id:lastmodified -->
