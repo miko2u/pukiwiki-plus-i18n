@@ -3,7 +3,7 @@
  * Robot
  *
  * @copyright   Copyright &copy; 2004-2005, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: robots.cls.php,v 0.2 2005/06/14 00:11:00 upk Exp $
+ * @version     $Id: robots.cls.php,v 0.3 2005/11/30 22:44:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License
  * 情報取得先
  * o Robot一覧
@@ -361,7 +361,9 @@ class robots
 		'zyborg'		=> 'Zyborg',			// Looksmart
 		# UPK Add
 		'OmniExplorer_Bot'	=> 'OmniExplorer Bot',
-
+		'Y!J-BSC\/'		=> 'Yahoo! JAPAN',
+		'Y!J-DSC\/'		=> 'Yahoo! JAPAN',
+		'ichiro\/'		=> 'goo',
 		# Generic root ID
 		'robot'			=> 'Unknown robot (identified by \'robot\')',
 		'crawl'			=> 'Unknown robot (identified by \'crawl\')',
