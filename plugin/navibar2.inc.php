@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: navibar2.inc.php,v 0.1.9 2005/11/01 20:44:00 miko Exp $
+// $Id: navibar2.inc.php,v 0.1.10 2005/12/05 20:44:00 miko Exp $
 //
 function plugin_navibar2_convert()
 {
@@ -97,13 +97,14 @@ EOD;
 	}
 	$menubarstr = join("\n",$menubar);
 	$menublkstr = join("\n",$naviblk);
+	$skin_dir = SKIN_DIR;
 
 	return <<<EOD
 <div id="navigator2"><table border="0" cellspacing="0" cellpadding="0"><tbody><tr>
 {$menubarstr}
 </tr></tbody></table></div>
 {$menublkstr}
-<script type="text/javascript" src="skin/navibar.js"></script>
+<script type="text/javascript" src="{$skin_dir}navibar.js"></script>
 <script type="text/javascript">
 <!-- <![CDATA[
 startNaviMenu( "navigator2", "navimenutd", "navimenu", "NaviMenuLink", "naviblock", "MenuItem");
