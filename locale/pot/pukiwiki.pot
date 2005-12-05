@@ -8,13 +8,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-05-10 02:35+0900\n"
+"POT-Creation-Date: 2005-12-06 00:35+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#: ../../lib/func.php:828
+msgid "Function sha1() not found and extension 'mhash' not exists"
+msgstr ""
 
 #: ../../lib/resource.php:12
 msgid "Sun"
@@ -52,7 +56,7 @@ msgstr ""
 msgid "Freeze"
 msgstr ""
 
-#: ../../lib/resource.php:19 ../../lib/resource.php:92
+#: ../../lib/resource.php:19 ../../lib/resource.php:93
 msgid "Unfreeze"
 msgstr ""
 
@@ -123,7 +127,7 @@ msgstr ""
 msgid "Add"
 msgstr ""
 
-#: ../../lib/resource.php:43 ../../lib/resource.php:87
+#: ../../lib/resource.php:43 ../../lib/resource.php:88
 msgid "Search"
 msgstr ""
 
@@ -208,47 +212,51 @@ msgid "New"
 msgstr ""
 
 #: ../../lib/resource.php:79
-msgid "RDF of recent changes"
+msgid "Lower page making"
 msgstr ""
 
 #: ../../lib/resource.php:80
-msgid "Recent changes"
+msgid "RDF of recent changes"
 msgstr ""
 
 #: ../../lib/resource.php:81
-msgid "Referer"
+msgid "Recent changes"
 msgstr ""
 
 #: ../../lib/resource.php:82
-msgid "Reload"
+msgid "Referer"
 msgstr ""
 
 #: ../../lib/resource.php:83
+msgid "Reload"
+msgstr ""
+
+#: ../../lib/resource.php:84
 msgid "Rename"
 msgstr ""
 
-#: ../../lib/resource.php:84 ../../lib/resource.php:85
-#: ../../lib/resource.php:86
+#: ../../lib/resource.php:85 ../../lib/resource.php:86
+#: ../../lib/resource.php:87
 msgid "RSS of recent changes"
 msgstr ""
 
-#: ../../lib/resource.php:88
+#: ../../lib/resource.php:89
 msgid "Source"
 msgstr ""
 
-#: ../../lib/resource.php:89
+#: ../../lib/resource.php:90
 msgid "Template"
 msgstr ""
 
-#: ../../lib/resource.php:90
+#: ../../lib/resource.php:91
 msgid "Front page"
 msgstr ""
 
-#: ../../lib/resource.php:91
+#: ../../lib/resource.php:92
 msgid "Trackback"
 msgstr ""
 
-#: ../../lib/resource.php:93
+#: ../../lib/resource.php:94
 msgid "Upload"
 msgstr ""
 
