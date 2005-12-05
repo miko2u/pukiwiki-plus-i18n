@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: default.skin.php,v 1.34.22 2005/05/06 14:23:43 miko Exp $
+// $Id: default.skin.php,v 1.34.23 2005/12/06 00:27:00 upk Exp $
 //
 if (!defined('DATA_DIR')) { exit; }
 
@@ -127,7 +127,7 @@ if (isset($pkwk_dtd)) {
 </div>
 <?php } else { ?>
 <?php if (exist_plugin('toolbar')) {
- echo do_plugin_convert('toolbar','reload,|,new,edit,freeze,diff,upload,copy,rename,|,top,list,search,recent,backup,refer,|,help,|,mixirss');
+ echo do_plugin_convert('toolbar','reload,|,new,newsub,edit,freeze,diff,upload,copy,rename,|,top,list,search,recent,backup,refer,|,help,|,mixirss');
 } ?>
 
 <?php if ($lastmodified) { ?>

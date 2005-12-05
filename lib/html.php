@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: html.php,v 1.46.18 2005/10/04 13:41:03 miko Exp $
+// $Id: html.php,v 1.46.19 2005/12/06 00:23:00 upk Exp $
 // Copyright (C)
 //   2005      PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
@@ -57,6 +57,7 @@ function catbody($title, $page, $body)
 	$_LINK['list']     = "$script?cmd=list";
 	$_LINK['menu']     = "$script?$menubar";
 	$_LINK['new']      = "$script?plugin=newpage&amp;refer=$r_page";
+	$_LINK['newsub']   = "$script?plugin=newpage_subdir&amp;directory=$r_page";
 	$_LINK['read']     = "$script?cmd=read&amp;page=$r_page";
 	$_LINK['rdf']      = "$script?cmd=rss&amp;ver=1.0";
 	$_LINK['recent']   = "$script?" . rawurlencode($whatsnew);
@@ -87,6 +88,7 @@ function catbody($title, $page, $body)
 	// Compat: Skins for 1.4.4 and before
 	$link_add       = & $_LINK['add'];
 	$link_new       = & $_LINK['new'];	// New!
+	$link_newsub    = & $_LINK['newsub'];
 	$link_edit      = & $_LINK['edit'];
 	$link_diff      = & $_LINK['diff'];
 	$link_top       = & $_LINK['top'];

@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: toolbar.php,v 0.1.1 2004/10/17 15:33:43 miko Exp $
+// $Id: toolbar.php,v 0.1.2 2005/12/06 00:21:00 upk Exp $
 //
 
 function plugin_toolbar_convert()
@@ -76,6 +76,7 @@ function plugin_toolbar_convert()
 			break;
 		case 'reload':
 		case 'new':
+		case 'newsub':
 		case 'edit':
 		case 'diff':
 		case 'copy':
@@ -98,6 +99,7 @@ function _toolbar($key, $x = 20, $y = 20)
 $_IMAGE['skin']['logo']     = 'pukiwiki.png';
 $_IMAGE['skin']['reload']   = 'reload.png';
 $_IMAGE['skin']['new']      = 'new.png';
+$_IMAGE['skin']['newsub']   = 'new_sub.png';
 $_IMAGE['skin']['edit']     = 'edit.png';
 $_IMAGE['skin']['freeze']   = 'freeze.png';
 $_IMAGE['skin']['unfreeze'] = 'unfreeze.png';

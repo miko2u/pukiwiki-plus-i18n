@@ -76,6 +76,7 @@ $_LANG['skin'] = array(
 	'help'      => _('Help'),
 	'list'      => _('List of pages'),
 	'new'       => _('New'),
+	'newsub'    => _('Lower page making'),
 	'rdf'       => _('RDF of recent changes'),
 	'recent'    => _('Recent changes'),
 	'refer'     => _('Referer'),
