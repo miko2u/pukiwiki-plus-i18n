@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: auth.php,v 1.19 2005/06/13 14:02:07 henoheno Exp $
+// $Id: auth.php,v 1.19.7 2005/12/07 14:02:07 miko Exp $
 // Copyright (C) 2003-2005 PukiWiki Developers Team
 // License: GPL v2 or (at your option) any later version
 //
@@ -207,7 +207,9 @@ function basic_auth($page, $auth_flag, $exit_flag, $auth_pages, $title_cannot)
 			) !== $auth_users[$_SERVER['PHP_AUTH_USER']])
 	{
 		// Auth failed
-		pkwk_common_headers();
+		if ($auth_flag || $exit_flag) {
+			pkwk_common_headers();
+		}
 		if ($auth_flag) {
 			header('WWW-Authenticate: Basic realm="' . $_msg_auth . '"');
 			header('HTTP/1.0 401 Unauthorized');
