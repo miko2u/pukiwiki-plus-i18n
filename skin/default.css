@@ -662,7 +662,79 @@ br.spacer
 {
 }
 
-/* calendar*.inc.php */
+/* calendar.inc.php */
+.calendar {
+	background-color:#E0E0E0;
+}
+
+#body .calendar {
+	width:15em;
+	margin:auto;
+}
+#menubar .calendar,
+#sidebar .calendar {
+	width:90%;
+	margin:auto;
+}
+
+.calendar_td_caltop {
+	background-color:#FFF5EE;
+	text-align:center;
+}
+
+.calendar_td_week {
+	background-color:#E0E0E0;
+	text-align:center;
+	font-size:small;
+	width:2em;
+}
+
+.calendar_td_blank {
+	background-color:#EEEEEE;
+	text-align:center;
+	height:1.6em;
+}
+.calendar_td_today {
+	color:#ddb;
+	background-color:#FFFFDD;
+	text-align:center;
+	height:1.6em;
+}
+.calendar_td_sun {
+	color:#dbb;
+	background-color:#fee;
+	text-align:center;
+	height:1.6em;
+}
+.calendar_td_day {
+	color:#bbb;
+	background-color:#EEF5FF;
+	text-align:center;
+	height:1.6em;
+}
+.calendar_td_sat {
+	color:#bbd;
+	background-color:#DDE5FF;
+	text-align:center;
+	height:1.6em;
+}
+.calendar_td_today a,
+.calendar_td_sun a,
+.calendar_td_day a,
+.calendar_td_sat a
+{
+	color:#664;
+	display:block;
+}
+.calendar_td_today a strong,
+.calendar_td_sun a strong,
+.calendar_td_day a strong,
+.calendar_td_sat a strong
+{
+	color:#332;
+}
+
+/* calendar2.inc.php */
 .style_calendar
 {
 	padding:0px;
