@@ -8,6 +8,8 @@ define('PLUGIN_CALENDAR_ACTION', 'minicalendar');
 
 function plugin_calendar_convert()
 {
+	global $vars;
+
 	$cal_week_labels = array(_('Su'),_('Mo'),_('Tu'),_('We'),_('Th'),_('Fr'),_('Sa'));
 
 	$script = get_script_uri();
