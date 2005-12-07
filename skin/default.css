@@ -743,7 +743,7 @@ br.spacer
 .clear
 {
 	display:block;
-	margin:0px;
+	clear:both;
 }
 
 /* counter.inc.php */
