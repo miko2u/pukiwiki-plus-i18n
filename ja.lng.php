@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: ja.lng.php,v 1.10.5 2005/06/15 15:57:11 miko Exp $
+// $Id: ja.lng.php,v 1.10.5 2005/11/29 08:13:54 miko Exp $
 // Copyright (C)
 //   2005      Customized/Patched by Miko.Hoshina
 //   2002-2005 PukiWiki Developers Team
@@ -384,6 +384,8 @@ $_msg_searching = 'Á´¤Æ¤Î¥Ú¡¼¥¸¤«¤éÃ±¸ì¤ò¸¡º÷¤·¤Þ¤¹¡£ÂçÊ¸»ú¾®Ê¸»ú¤Î¶èÊÌ¤Ï¤¢¤ê¤Þ¤
 $_btn_search    = '¸¡º÷';
 $_btn_and       = 'AND¸¡º÷';
 $_btn_or        = 'OR¸¡º÷';
+$_search_pages  = '$1 ¤«¤é»Ï¤Þ¤ë¥Ú¡¼¥¸¤ò¸¡º÷';
+$_search_all    = 'Á´¤Æ¤Î¥Ú¡¼¥¸¤ò¸¡º÷';
 
 ///////////////////////////////////////
 // source.inc.php

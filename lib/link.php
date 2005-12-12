@@ -252,6 +252,7 @@ function & links_get_objects($page, $refresh = FALSE)
 	if (! isset($obj) || $refresh)
 		$obj = & new InlineConverter(NULL, array('note'));
 
-	return $obj->get_objects(join('', preg_grep('/^(?!\/\/|\s)./', get_source($page))), $page);
+	$result = $obj->get_objects(join('', preg_grep('/^(?!\/\/|\s)./', get_source($page))), $page);
+	return $result;
 }
 ?>

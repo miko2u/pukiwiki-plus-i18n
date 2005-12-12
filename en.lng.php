@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: en.lng.php,v 1.11.1 2005/06/15 15:57:11 miko Exp $
+// $Id: en.lng.php,v 1.12.1 2005/11/29 08:13:54 miko Exp $
 // Copyright (C)
 //   2005      Customized/Patched by Miko.Hoshina
 //   2002-2005 PukiWiki Developers Team
@@ -377,6 +377,8 @@ $_msg_searching = 'Key words are case-insenstive, and are searched for in all pa
 $_btn_search    = 'Search';
 $_btn_and       = 'AND';
 $_btn_or        = 'OR';
+$_search_pages  = 'Search for page starts from $1';
+$_search_all    = 'Search for all pages';
 
 ///////////////////////////////////////
 // source.inc.php

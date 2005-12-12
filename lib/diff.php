@@ -1,15 +1,16 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: diff.php,v 1.5 2005/04/30 05:21:00 henoheno Exp $
+// $Id: diff.php,v 1.7 2005/12/10 12:48:02 henoheno Exp $
 // Copyright (C)
 //   2003-2005 PukiWiki Developers Team
 //   2001-2002 Originally written by yu-ji
 // License: GPL v2 or (at your option) any later version
 //
-//衝突時に対応表を出す
-define('DIFF_SHOW_TABLE',TRUE);
 
-// 差分の作成
+// Show more information when it conflicts
+define('PKWK_DIFF_SHOW_CONFLICT_DETAIL', 1);
+
+// Create diff-style data between arrays
 function do_diff($strlines1, $strlines2)
 {
 	$obj = new line_diff();
@@ -17,7 +18,19 @@ function do_diff($strlines1, $strlines2)
 	return $str;
 }
 
-// 差分の作成(更新の衝突)
+// Visualize diff-style-text to text-with-CSS
+//   '+Added'   => '<span added>Added</span>'
+//   '-Removed' => '<span removed>Removed</span>'
+//   ' Nothing' => 'Nothing'
+function diff_style_to_css($str = '')
+{
+	// Cut diff markers ('+' or '-' or ' ')
+	$str = preg_replace('/^\-(.*)$/m', '<span class="diff_removed">$1</span>', $str);
+	$str = preg_replace('/^\+(.*)$/m', '<span class="diff_added"  >$1</span>', $str);
+	return preg_replace('/^ (.*)$/m',  '$1', $str);
+}
+
+// Merge helper (when it conflicts)
 function do_update_diff($pagestr, $poststr, $original)
 {
 	$obj = new line_diff();
@@ -32,8 +45,7 @@ function do_update_diff($pagestr, $poststr, $original)
 
 	$arr = $obj->arr_compare('all', $diff1, $diff2);
 
-	if (DIFF_SHOW_TABLE)
-	{
+	if (PKWK_DIFF_SHOW_CONFLICT_DETAIL) {
 		global $do_update_diff_table;
 
 		$do_update_diff_table = <<<EOD
@@ -47,14 +59,15 @@ function do_update_diff($pagestr, $poststr, $original)
  </tr>
 EOD;
 		$tags = array('th', 'th', 'td');
-		foreach ($arr as $_obj)
-		{
+		foreach ($arr as $_obj) {
 			$do_update_diff_table .= '<tr>';
 			$params = array($_obj->get('left'), $_obj->get('right'), $_obj->text());
 			foreach ($params as $key=>$text) {
 				$text = htmlspecialchars($text);
 				if (trim($text) == '') $text = '&nbsp;';
-				$do_update_diff_table .= "<{$tags[$key]} class=\"style_{$tags[$key]}\">$text</{$tags[$key]}>";
+				$do_update_diff_table .= '<' . $tags[$key] . 
+                                           ' class="style_' . $tags[$key] . '">' . $text .
+                                           '</' . $tags[$key] . '>';
 			}
 			$do_update_diff_table .= '</tr>'."\n";
 		}
@@ -72,19 +85,12 @@ EOD;
 	return array(rtrim($body) . "\n", $auto);
 }
 
-/*
-line_diffクラス
-
-以下の情報を参考にして作成しました。
-
-S. Wu, <A HREF="http://www.cs.arizona.edu/people/gene/vita.html">
-E. Myers,</A> U. Manber, and W. Miller,
-<A HREF="http://www.cs.arizona.edu/people/gene/PAPERS/np_diff.ps">
-"An O(NP) Sequence Comparison Algorithm,"</A>
-Information Processing Letters 35, 6 (1990), 317-323.
-
-*/
-
+// References of this class:
+// S. Wu, <A HREF="http://www.cs.arizona.edu/people/gene/vita.html">
+// E. Myers,</A> U. Manber, and W. Miller,
+// <A HREF="http://www.cs.arizona.edu/people/gene/PAPERS/np_diff.ps">
+// "An O(NP) Sequence Comparison Algorithm,"</A>
+// Information Processing Letters 35, 6 (1990), 317-323.
 class line_diff
 {
 	var $arr1, $arr2, $m, $n, $pos, $key, $plus, $minus, $equal, $reverse;
@@ -111,8 +117,8 @@ class line_diff
 		$this->key  = $key;
 		$this->arr1 = array();
 		$this->arr2 = array();
-		$str1 = preg_replace("/\r/",'',$str1);
-		$str2 = preg_replace("/\r/",'',$str2);
+		$str1 = str_replace("\r", '', $str1);
+		$str2 = str_replace("\r", '', $str2);
 		foreach (explode("\n", $str1) as $line) {
 			$this->arr1[] = new DiffLine($line);
 		}
@@ -138,12 +144,12 @@ class line_diff
 		$this->m = count($this->arr1);
 		$this->n = count($this->arr2);
 
-		if ($this->m == 0 || $this->n == 0) { // no need compare.
+		if ($this->m == 0 || $this->n == 0) { // No need to compare
 			$this->result = array(array('x'=>0, 'y'=>0));
 			return;
 		}
 
-		// sentinel
+		// Sentinel
 		array_unshift($this->arr1, new DiffLine(''));
 		$this->m++;
 		array_unshift($this->arr2, new DiffLine(''));
@@ -246,7 +252,7 @@ class DiffLine
 
 	function DiffLine($text)
 	{
-		$this->text   = "$text\n";
+		$this->text   = $text . "\n";
 		$this->status = array();
 	}
 

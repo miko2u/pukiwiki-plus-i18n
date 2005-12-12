@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: make_link.php,v 1.29.8 2005/10/20 14:45:07 miko Exp $
+// $Id: make_link.php,v 1.30.8 2005/12/10 07:57:30 miko Exp $
 // Copyright (C)
 //   2005      Customized/Patched by Miko.Hoshina
 //   2003-2005 PukiWiki Developers Team
@@ -326,9 +326,18 @@ EOD;
 			'<span class="small">' . $note . '</span><br />';
 
 		// A hyperlink, content-body to footnote
+		if (! is_numeric(PKWK_FOOTNOTE_TITLE_MAX) || PKWK_FOOTNOTE_TITLE_MAX <= 0) {
+			$title = '';
+		} else {
+			$title = strip_tags($note);
+			$count = mb_strlen($title, SOURCE_ENCODING);
+			$title = mb_substr($title, 0, PKWK_FOOTNOTE_TITLE_MAX, SOURCE_ENCODING);
+			$abbr  = (mb_strlen($title) < $count) ? '...' : '';
+			$title = ' title="' . $title . $abbr . '"';
+		}
 		$name = '<a id="notetext_' . $id . '" href="' . $script .
-			'#notefoot_' . $id . '" class="note_super" title="' .
-			strip_tags($note) . '">*' . $id . '</a>';
+			'#notefoot_' . $id . '" class="note_super"' . $title .
+			'>*' . $id . '</a>';
 
 		return parent::setParam($page, $name, $body);
 	}

@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: html.php,v 1.46.17 2005/11/08 13:41:03 miko Exp $
+// $Id: html.php,v 1.47.17 2005/11/24 18:00:27 miko Exp $
 // Copyright (C)
 //   2005      Customized/Patched by Miko.Hoshina
 //   2002-2005 PukiWiki Developers Team
@@ -153,7 +153,7 @@ function catbody($title, $page, $body)
 		$id = 0;
 		foreach ($keys as $key=>$pattern) {
 			$s_key    = htmlspecialchars($key);
-			$pattern  = '/<[^>]*>|(' . $pattern . ')|&[^;]+;/';
+			$pattern  = '/<textarea[^>]*>.*?<\/textarea>|<[^>]*>|(' . $pattern . ')|&[^;]+;/s';
 			$callback = create_function(
 				'$arr',
 				'return (count($arr) > 1) ? \'<strong class="word' .

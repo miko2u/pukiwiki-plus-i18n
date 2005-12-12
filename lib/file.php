@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: file.php,v 1.40.3 2005/10/04 13:41:03 miko Exp $
+// $Id: file.php,v 1.42.3 2005/12/09 17:59:29 miko Exp $
 // Copyright (C)
 //   2005      Customized/Patched by Miko.Hoshina
 //   2002-2005 PukiWiki Developers Team
@@ -154,7 +154,7 @@ function file_write($dir, $page, $str, $notimestamp = FALSE)
 {
 	global $update_exec, $_msg_invalidiwn, $notify, $notify_diff_only, $notify_subject;
 	global $notify_exclude;
-	global $whatsdeleted, $maxshow_deleted;
+	global $non_list, $whatsdeleted, $maxshow_deleted;
 
 	if (PKWK_READONLY) return; // Do nothing
 
@@ -170,7 +170,10 @@ function file_write($dir, $page, $str, $notimestamp = FALSE)
 		if ($dir == DATA_DIR && file_exists($file)) {
 			// File deletion
 			unlink($file);
-			add_recent($page, $whatsdeleted, '', $maxshow_deleted); // RecentDeleted
+			$non_list_pattern = '/' . $non_list . '/';
+			if (!preg_match($non_list_pattern, $page)) {
+				add_recent($page, $whatsdeleted, '', $maxshow_deleted); // RecentDeleted
+			}
 		}
 	} else {
 		// File replacement (Edit)
