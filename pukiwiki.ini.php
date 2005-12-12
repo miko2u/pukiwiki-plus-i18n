@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: pukiwiki.ini.php,v 1.128.21 2005/08/24 14:52:25 miko Exp $
+// $Id: pukiwiki.ini.php,v 1.128.22 2005/12/12 14:52:25 miko Exp $
 // Copyright (C)
 //   2005      Customized/Patched by Miko.Hoshina
 //   2002-2005 PukiWiki Developers Team
@@ -180,7 +180,7 @@ $trackback_javascript = 0;
 $convert_cache = 1;
 
 $convert_misscache_plugin = array(
-	'counter', 'online', 'popular',
+	'counter', 'cvscheck', 'online', 'popular',
 	'description', 'keywords', 'mediaplayer', 'navi',
 	'nomenubar', 'nosidebar', 'norelated', 'nofollow', 'skin',
 );
