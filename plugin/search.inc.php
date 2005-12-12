@@ -9,6 +9,7 @@
 define('PLUGIN_SEARCH_DISABLE_GET_ACCESS', 0); // 1, 0
 
 define('PLUGIN_SEARCH_MAX_LENGTH', 80);
+define('PLUGIN_SEARCH_MAX_BASE',   16); // #search(1,2,3,...,15,16)
 
 // Show a search box on a page
 function plugin_search_convert()
@@ -40,6 +41,7 @@ function plugin_search_action()
 	}
 
 	$type = isset($vars['type']) ? $vars['type'] : '';
+	$base = isset($vars['base']) ? $vars['base'] : '';
 
 	if ($s_word != '') {
 		// Search
@@ -53,20 +55,49 @@ function plugin_search_action()
 	}
 
 	// Show search form
-	$body .= plugin_search_search_form($s_word, $type);
+	$bases = ($base == '') ? array() : array($base);
+	$body .= plugin_search_search_form($s_word, $type, $bases);
 
 	return array('msg'=>$msg, 'body'=>$body);
 }
 
-function plugin_search_search_form($s_word = '', $type = '')
+function plugin_search_search_form($s_word = '', $type = '', $bases = array())
 {
 	global $script, $_btn_and, $_btn_or, $_btn_search;
+	global $_search_pages, $_search_all;
 
 	$and_check = $or_check = '';
 	if ($type == 'OR') {
 		$or_check  = ' checked="checked"';
 	} else {
 		$and_check = ' checked="checked"';
+	}
+
+	$base_option = '';
+	if (!empty($bases)) {
+		$base_msg = '';
+		$_num = 0;
+		$check = ' checked="checked"';
+		foreach($bases as $base) {
+			++$_num;
+			if (PLUGIN_SEARCH_MAX_BASE < $_num) break;
+			$label_id = '_p_search_base_id_' . $_num;
+			$s_base   = htmlspecialchars($base);
+			$base_str = '<strong>' . $s_base . '</strong>';
+			$base_label = str_replace('$1', $base_str, $_search_pages);
+			$base_msg  .=<<<EOD
+ <div>
+  <input type="radio" name="base" id="$label_id" value="$s_base" $check />
+  <label for="$label_id">$base_label</label>
+ </div>
+EOD;
+			$check = '';
+		}
+		$base_msg .=<<<EOD
+  <input type="radio" name="base" id="_p_search_base_id_all" value="" />
+  <label for="_p_search_base_id_all">$_search_all</label>
+EOD;
+		$base_option = '<div class="small">' . $base_msg . '</div>';
 	}
 
 	if (! PLUGIN_SEARCH_DISABLE_GET_ACCESS) {
@@ -94,6 +125,7 @@ EOD;
   <label for="_p_search_OR">$_btn_or</label>
   &nbsp;<input type="submit" value="$_btn_search" />
  </div>
+$base_option
 </form>
 EOD;
 }
