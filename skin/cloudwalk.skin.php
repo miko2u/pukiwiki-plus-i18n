@@ -172,7 +172,7 @@ Link: <?php echo $related ?>
 </ul>
 </div><!-- ¢¢END id:page_action -->
 
-<?php if (exist_plugin_convert('menu')) { ?><!-- ¢£BEGIN id:menubar -->
+<?php if (arg_check('read') && exist_plugin_convert('menu') && do_plugin_convert('menu') != '') { ?><!-- ¢£BEGIN id:menubar -->
 <div id="menubar" class="bar">
 <?php echo do_plugin_convert('menu') ?>
 </div>
