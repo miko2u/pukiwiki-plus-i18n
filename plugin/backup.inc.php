@@ -1,6 +1,10 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: backup.inc.php,v 1.23.6 2005/09/22 13:45:02 miko Exp $
+// $Id: backup.inc.php,v 1.27.6 2005/09/22 13:45:02 miko Exp $
+// Copyright (C)
+//   2002-2005 PukiWiki Developers Team
+//   2001-2002 Originally written by yu-ji
+// License: GPL v2 or (at your option) any later version
 //
 // Backup plugin
 
@@ -35,7 +39,7 @@ function plugin_backup_action()
 	}
 
 	$s_age  = (isset($vars['age']) && is_numeric($vars['age'])) ? $vars['age'] : 0;
-	if ($s_age == 0) return array( 'msg'=>$_title_pagebackuplist, 'body'=>plugin_backup_get_list($page));
+	if ($s_age <= 0) return array( 'msg'=>$_title_pagebackuplist, 'body'=>plugin_backup_get_list($page));
 
 	$script = get_script_uri();
 
@@ -65,7 +69,7 @@ function plugin_backup_action()
 			'&amp;action=source">' . $_msg_source . '</a>',
 			$_msg_view) . '</li>' . "\n";
 
-	if ($action)
+	if (! PLUGIN_BACKUP_DISABLE_BACKUP_RENDERING && $action)
 		$body .= ' <li>' . str_replace('$1', '<a href="' . $href .
 			'">' . $_msg_backup . '</a>',
 			$_msg_view) . '</li>' . "\n";
@@ -79,7 +83,10 @@ function plugin_backup_action()
 	}
 
 	$backups = get_backup($page);
-	if (! empty($backups) && $action != 'visualdiff') {
+	$backups_count = count($backups);
+	if ($s_age > $backups_count) $s_age = $backups_count;
+
+	if ($backups_count > 0 && $action != 'visualdiff') {
 		$body .= '  <ul>' . "\n";
 		foreach($backups as $age => $val) {
 			$date = format_date($val['time'], TRUE);
@@ -175,22 +182,17 @@ EOD;
 
 function plugin_backup_diff($str)
 {
-	global $_msg_addline, $_msg_delline,$hr;
+	global $_msg_addline, $_msg_delline, $hr;
 
-	$str = htmlspecialchars($str);
-	$str = preg_replace('/^(\-)(.*)$/m', '<span class="diff_removed"> $2</span>', $str);
-	$str = preg_replace('/^(\+)(.*)$/m', '<span class="diff_added"> $2</span>', $str);
-	$str = trim($str);
-	$str = <<<EOD
+	$ul = <<<EOD
 $hr
 <ul>
  <li>$_msg_addline</li>
  <li>$_msg_delline</li>
 </ul>
-<pre>$str</pre>
 EOD;
 
-	return $str;
+	return $ul . '<pre>' . diff_style_to_css(htmlspecialchars($str)) . '</pre>' . "\n";
 }
 
 function plugin_backup_get_list($page)
