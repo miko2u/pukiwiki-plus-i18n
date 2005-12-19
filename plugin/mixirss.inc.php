@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: mixirss.inc.php,v 1.14.2 2005/07/03 00:39:45 miko Exp $
+// $Id: mixirss.inc.php,v 1.14.3 2005/12/20 01:02:00 upk Exp $
 //
 // Publishing RSS feed of RecentChanges
 // Usage: mixirss.inc.php?ver=[0.91|1.0(default)|2.0]
@@ -17,7 +17,7 @@ define('MIXIRSS_IGNORE_REGEX', 'Navigation|RecentDeleted|MenuBar|SideBar');
 
 function plugin_mixirss_action()
 {
-	global $vars, $rss_max, $page_title, $whatsnew, $trackback;
+	global $vars, $rss_max, $rss_description, $page_title, $whatsnew, $trackback;
 	global $modifier;
 
 	$version = isset($vars['ver']) ? $vars['ver'] : '';
@@ -54,6 +54,7 @@ function plugin_mixirss_action()
 	// Official Main routine ...
 	$page_title_utf8 = mb_convert_encoding($page_title, 'UTF-8', SOURCE_ENCODING);
 	$self  = get_script_uri();
+	$rss_description_utf8 = mb_convert_encoding( htmlspecialchars($rss_description),'UTF-8',SOURCE_ENCODING);
 
 	// Creating <item>
 	$items = $rdf_li = '';
@@ -89,8 +90,7 @@ EOD;
 			$trackback_ping = '';
 			if ($trackback) {
 				$tb_id = md5($r_page);
-				$trackback_ping = ' <trackback:ping>' .
-					"$self?tb_id=$tb_id" . '</trackback:ping>';
+				$trackback_ping = ' <trackback:ping rdf:resource="' . "$self?tb_id=$tb_id" . '"/>';
 			}
 			if (plugin_mixirss_isValidDate(substr($page,-10)) && check_readable($page,false,false)) {
 				// for Calendar/MiniCalendar
@@ -199,7 +199,7 @@ EOD;
  <channel>
   <title>$page_title_utf8</title>
   <link>$self?$r_whatsnew</link>
-  <description>PukiWiki RecentChanges</description>
+  <description>$rss_description_utf8</description>
   <language>ja</language>
 
 $items
@@ -221,7 +221,7 @@ $xmlns_trackback
  <channel rdf:about="$self?$r_whatsnew">
   <title>$page_title_utf8</title>
   <link>$self?$r_whatsnew</link>
-  <description>PukiWiki RecentChanges</description>
+  <description>$rss_description_utf8</description>
   <items>
    <rdf:Seq>
 $rdf_li

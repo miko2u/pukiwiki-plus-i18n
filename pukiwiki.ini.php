@@ -362,6 +362,8 @@ $time_format = 'H:i:s';
 /////////////////////////////////////////////////
 // Max number of RSS feed
 $rss_max = 15;
+// Description
+$rss_description = 'PukiWiki RecentChanges';
 
 /////////////////////////////////////////////////
 // Backup related settings

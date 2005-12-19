@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: rss.inc.php,v 1.17 2005/10/04 13:41:03 henoheno Exp $
+// $Id: rss.inc.php,v 1.17.1 2005/12/20 01:02:00 upk Exp $
 //
 // RSS plugin: Publishing RSS of RecentChanges
 //
@@ -13,7 +13,7 @@
 
 function plugin_rss_action()
 {
-	global $vars, $rss_max, $page_title, $whatsnew, $trackback;
+	global $vars, $rss_max, $rss_description, $page_title, $whatsnew, $trackback;
 
 	$version = isset($vars['ver']) ? $vars['ver'] : '';
 	switch($version){
@@ -32,6 +32,7 @@ function plugin_rss_action()
 	$lang = LANG;
 	$page_title_utf8 = mb_convert_encoding($page_title, 'UTF-8', SOURCE_ENCODING);
 	$self = get_script_uri();
+	$rss_description_utf8 = mb_convert_encoding( htmlspecialchars($rss_description),'UTF-8',SOURCE_ENCODING);
 
 	// Creating <item>
 	$items = $rdf_li = '';
@@ -70,8 +71,7 @@ EOD;
 			$trackback_ping = '';
 			if ($trackback) {
 				$tb_id = md5($r_page);
-				$trackback_ping = ' <trackback:ping>' . $self .
-					'?tb_id=' . $tb_id . '</trackback:ping>';
+				$trackback_ping = ' <trackback:ping rdf:resource="' . "$self?tb_id=$tb_id" . '"/>';
 			}
 			$items .= <<<EOD
 <item rdf:about="$self?$r_page">
@@ -105,7 +105,7 @@ EOD;
  <channel>
   <title>$page_title_utf8</title>
   <link>$self?$r_whatsnew</link>
-  <description>PukiWiki RecentChanges</description>
+  <description>$rss_description_utf8</description>
   <language>$lang</language>
 
 $items
@@ -127,7 +127,7 @@ $xmlns_trackback
  <channel rdf:about="$self?$r_whatsnew">
   <title>$page_title_utf8</title>
   <link>$self?$r_whatsnew</link>
-  <description>PukiWiki RecentChanges</description>
+  <description>$rss_description_utf8</description>
   <items>
    <rdf:Seq>
 $rdf_li
