@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: attach.inc.php,v 1.79.4 2005/08/08 14:54:15 miko Exp $
+// $Id: attach.inc.php,v 1.80.4 2005/12/18 15:27:43 miko Exp $
 // Copyright (C)
 //   2005      Customized/Patched by Miko.Hoshina
 //   2003-2005 PukiWiki Developers Team
@@ -858,8 +858,6 @@ class AttachPages
 
 	function toString($page = '', $flat = FALSE)
 	{
-		global $non_list;
-
 		if ($page != '') {
 			if (! isset($this->pages[$page])) {
 				return '';
@@ -872,10 +870,9 @@ class AttachPages
 		$pages = array_keys($this->pages);
 		sort($pages);
 
-		$non_list_pattern = '/' . $non_list . '/';
 		foreach ($pages as $page) {
-			if (preg_match($non_list_pattern, $page)) continue;
-			$ret .= '<li>' . $this->pages[$page]->toString($flat) . "</li>\n";
+			if (check_non_list($page)) continue;
+			$ret .= '<li>' . $this->pages[$page]->toString($flat) . '</li>' . "\n";
 		}
 		return "\n" . '<ul>' . "\n" . $ret . '</ul>' . "\n";
 	}

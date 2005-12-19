@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: func.php,v 1.51.2 2005/11/29 08:13:26 teanan Exp $
+// $Id: func.php,v 1.53.2 2005/12/18 15:16:10 miko Exp $
 // Copyright (C)
 //   2005      Customized/Patched by Miko.Hoshina
 //   2002-2005 PukiWiki Developers Team
@@ -91,6 +91,18 @@ function is_freeze($page, $clearcache = FALSE)
 		$is_freeze[$page] = ($buffer != FALSE && rtrim($buffer, "\r\n") == '#freeze');
 		return $is_freeze[$page];
 	}
+}
+
+// Handling $non_list 
+// $non_list will be preg_quote($str, '/') later. 
+function check_non_list($page = '')
+{
+	global $non_list;
+	static $regex;
+
+	if (! isset($regex)) $regex = '/' . $non_list . '/';
+
+	return preg_match($regex, $page);
 }
 
 // Auto template
@@ -198,7 +210,7 @@ function get_search_words($words = array(), $do_escape = FALSE)
 // 'Search' main function
 function do_search($word, $type = 'AND', $non_format = FALSE, $base = '')
 {
-	global $script, $whatsnew, $non_list, $search_non_list;
+	global $script, $whatsnew, $search_non_list;
 	global $_msg_andresult, $_msg_orresult, $_msg_notfoundresult;
 	global $search_auth;
 
@@ -213,9 +225,8 @@ function do_search($word, $type = 'AND', $non_format = FALSE, $base = '')
 	}
 	$pages = array();
 
-	$non_list_pattern = '/' . $non_list . '/';
 	foreach ($_pages as $page) {
-		if ($page == $whatsnew || (! $search_non_list && preg_match($non_list_pattern, $page)))
+		if ($page == $whatsnew || (! $search_non_list && check_non_list($page)))
 			continue;
 
 		// 検索対象ページの制限をかけ・E・匹Δ・(ページ名は制限外)
