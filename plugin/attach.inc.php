@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: attach.inc.php,v 1.79.10 2005/08/15 09:51:38 miko Exp $
+// $Id: attach.inc.php,v 1.80.10 2005/12/18 15:27:43 miko Exp $
 // Copyright (C)
 //   2005      PukiWiki Plus! Team
 //   2003-2005 PukiWiki Developers Team
@@ -950,8 +950,6 @@ class AttachPages
 
 	function toString($page = '', $flat = FALSE)
 	{
-		global $non_list;
-
 		if ($page != '') {
 			if (! isset($this->pages[$page])) {
 				return '';
@@ -964,18 +962,15 @@ class AttachPages
 		$pages = array_keys($this->pages);
 		sort($pages);
 
-		$non_list_pattern = '/' . $non_list . '/';
 		foreach ($pages as $page) {
-			if (preg_match($non_list_pattern, $page)) continue;
-			$ret .= '<li>' . $this->pages[$page]->toString($flat) . "</li>\n";
+			if (check_non_list($page)) continue;
+			$ret .= '<li>' . $this->pages[$page]->toString($flat) . '</li>' . "\n";
 		}
 		return "\n" . '<ul>' . "\n" . $ret . '</ul>' . "\n";
 	}
 
 	function toRender($page = '', $pattern = 0)
 	{
-		global $non_list;
-
 		if ($page != '') {
 			if (! isset($this->pages[$page])) {
 				return '';
@@ -988,10 +983,9 @@ class AttachPages
 		$pages = array_keys($this->pages);
 		sort($pages);
 
-		$non_list_pattern = '/' . $non_list . '/';
 		foreach ($pages as $page) {
-			if (preg_match($non_list_pattern, $page)) continue;
-			$ret .= '<tr><td>' . $this->pages[$page]->toRender($pattern) . "</td></tr>\n";
+			if (check_non_list($page)) continue;
+			$ret .= '<tr><td>' . $this->pages[$page]->toRender($pattern) . '</td></tr>' . "\n";
 		}
 		return "\n" . '<table>' . "\n" . $ret . '</table>' . "\n";
 	}

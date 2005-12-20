@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: html.php,v 1.46.19 2005/12/06 00:23:00 upk Exp $
+// $Id: html.php,v 1.48.19 2005/12/18 15:19:24 miko Exp $
 // Copyright (C)
 //   2005      PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
@@ -168,7 +168,7 @@ function catbody($title, $page, $body)
 		$id = 0;
 		foreach ($keys as $key=>$pattern) {
 			$s_key    = htmlspecialchars($key);
-			$pattern  = '/<[^>]*>|(' . $pattern . ')|&[^;]+;/';
+			$pattern  = '/<textarea[^>]*>.*?<\/textarea>|<[^>]*>|(' . $pattern . ')|&[^;]+;/s';
 			$callback = create_function(
 				'$arr',
 				'return (count($arr) > 1) ? \'<strong class="word' .
@@ -189,7 +189,7 @@ function catbody($title, $page, $body)
 function edit_form($page, $postdata, $digest = FALSE, $b_template = TRUE)
 {
 	global $script, $vars, $rows, $cols, $hr, $function_freeze;
-	global $whatsnew, $non_list, $load_template_func;
+	global $whatsnew, $load_template_func;
 	global $notimeupdate;
 	global $_button, $_string;
 	global $ajax;
@@ -211,9 +211,8 @@ function edit_form($page, $postdata, $digest = FALSE, $b_template = TRUE)
 
 	if($load_template_func && $b_template) {
 		$pages  = array();
-		$non_list_pattern = '/' . $non_list . '/';
 		foreach(get_existpages() as $_page) {
-			if ($_page == $whatsnew || preg_match($non_list_pattern, $_page))
+			if ($_page == $whatsnew || check_non_list($_page))
 				continue;
 			$s_page = htmlspecialchars($_page);
 			$pages[$_page] = '   <option value="' . $s_page . '">' .
@@ -360,7 +359,7 @@ EOD;
 // Related pages
 function make_related($page, $tag = '')
 {
-	global $script, $vars, $rule_related_str, $related_str, $non_list;
+	global $script, $vars, $rule_related_str, $related_str;
 	global $_ul_left_margin, $_ul_margin, $_list_pad_str;
 
 	$links = links_get_related($page);
@@ -372,9 +371,8 @@ function make_related($page, $tag = '')
 	}
 
 	$_links = array();
-	$non_list_pattern = '/' . $non_list . '/';
 	foreach ($links as $page=>$lastmod) {
-		if (preg_match($non_list_pattern, $page)) continue;
+		if (check_non_list($page)) continue;
 
 		$r_page   = rawurlencode($page);
 		$s_page   = htmlspecialchars($page);
