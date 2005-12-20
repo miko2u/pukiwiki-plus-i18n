@@ -236,7 +236,7 @@ function file_write($dir, $page, $str, $notimestamp = FALSE)
 // Update RecentDeleted
 function add_recent($page, $recentpage, $subject = '', $limit = 0)
 {
-	if (PKWK_READONLY || $limit == 0 || $page == '' || $recentpage == ''
+	if (PKWK_READONLY || $limit == 0 || $page == '' || $recentpage == '' ||
 		check_non_list($page)) return;
 
 	// Load
