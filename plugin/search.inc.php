@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: search.inc.php,v 1.8.2 2005/04/02 06:33:39 miko Exp $
+// $Id: search.inc.php,v 1.13.2 2005/11/29 18:19:51 teanan Exp $
 //
 // Search plugin
 
@@ -16,13 +16,12 @@ function plugin_search_convert()
 {
 	static $done;
 
-	if (func_get_args()) {
-		return '#search(): No argument<br />' . "\n";
-	} else if (isset($done)) {
+	if (isset($done)) {
 		return '#search(): You already view a search box<br />' . "\n";
 	} else {
 		$done = TRUE;
-		return plugin_search_search_form();
+		$args = func_get_args();
+		return plugin_search_search_form('', '', $args);
 	}
 }
 
@@ -46,7 +45,7 @@ function plugin_search_action()
 	if ($s_word != '') {
 		// Search
 		$msg  = str_replace('$1', $s_word, $_title_result);
-		$body = do_search($vars['word'], $type);
+		$body = do_search($vars['word'], $type, FALSE, $base);
 	} else {
 		// Init
 		unset($vars['word']); // Stop using $_msg_word at lib/html.php
