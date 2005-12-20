@@ -98,9 +98,9 @@ function get_cache($page, $source)
 	global $head_tags, $foot_explain;
 
 	if (version_compare(PHP_VERSION, '4.3.0', '>=')) {
-		$head_tags    = file_get_contents(get_cachename($page, '.head'));
-		$foot_explain = file_get_contents(get_cachename($page, '.note'));
-		$body         = file_get_contents(get_cachename($page, '.body'));
+		$head_tags = split("\x08", file_get_contents(get_cachename($page, '.head')));
+		$foot_explain = split("\x08", file_get_contents(get_cachename($page, '.note')));
+		$body = file_get_contents(get_cachename($page, '.body'));
 	} else {
 		$body = '';
 		$fp = @fopen(get_cachename($page, '.head'), 'rb');
