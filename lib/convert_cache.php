@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: convert_cache.php,v 1.11.1 2005/10/04 13:41:03 miko Exp $
+// $Id: convert_cache.php,v 1.12.1 2005/12/20 13:41:03 miko Exp $
 //
 // Copyright (C)
 //   2005      Customized/Patched by Miko.Hoshina
@@ -9,9 +9,33 @@
 
 function bodycache_default_process($page, $source)
 {
+	global $head_tags, $foot_explain;
+
     $body = convert_html($source);
 
-	$fp = fopen(get_cachename($page), 'ab');
+	$fp = fopen(get_cachename($page, '.head'), 'ab');
+	@flock($fp, LOCK_EX);
+	$last = ignore_user_abort(1);
+	ftruncate($fp, 0);
+	fwrite($fp, join("\x08", $head_tags));
+	fflush($fp);
+	ignore_user_abort($last);
+	@flock($fp, LOCK_UN);
+	fclose($fp);
+	if (connection_status()) exit;
+
+	$fp = fopen(get_cachename($page, '.note'), 'ab');
+	@flock($fp, LOCK_EX);
+	$last = ignore_user_abort(1);
+	ftruncate($fp, 0);
+	fwrite($fp, join("\x08", $foot_explain));
+	fflush($fp);
+	ignore_user_abort($last);
+	@flock($fp, LOCK_UN);
+	fclose($fp);
+	if (connection_status()) exit;
+
+	$fp = fopen(get_cachename($page, '.body'), 'ab');
 	@flock($fp, LOCK_EX);
 	$last = ignore_user_abort(1);
 	ftruncate($fp, 0);
@@ -39,9 +63,9 @@ function get_cachetime($page)
 }
 
 // Get physical file name of the cache
-function get_cachename($page)
+function get_cachename($page, $ext = '.body')
 {
-	return CACHE_DIR . encode($page) . '.body';
+	return CACHE_DIR . encode($page) . $ext;
 }
 
 // 
@@ -71,10 +95,37 @@ function get_cache($page, $source)
         return bodycache_default_process($page, $source);
     }
 
+	global $head_tags, $foot_explain;
+
 	if (version_compare(PHP_VERSION, '4.3.0', '>=')) {
-		$body = file_get_contents(get_cachename($page));
+		$head_tags    = file_get_contents(get_cachename($page, '.head'));
+		$foot_explain = file_get_contents(get_cachename($page, '.note'));
+		$body         = file_get_contents(get_cachename($page, '.body'));
 	} else {
-		$fp = @fopen(get_cachename($page), 'rb');
+		$body = '';
+		$fp = @fopen(get_cachename($page, '.head'), 'rb');
+		flock($fp, LOCK_SH);
+		do {
+			$tmp = fread($fp, 8192);
+			$body .= $tmp;
+		} while (strlen($tmp) != 0);
+		flock($fp, LOCK_UN);
+		@fclose($fp);
+		$head_tags = split("\x08", $body);
+
+		$body = '';
+		$fp = @fopen(get_cachename($page, '.note'), 'rb');
+		flock($fp, LOCK_SH);
+		do {
+			$tmp = fread($fp, 8192);
+			$body .= $tmp;
+		} while (strlen($tmp) != 0);
+		flock($fp, LOCK_UN);
+		@fclose($fp);
+		$foot_explain = split("\x08", $body);
+
+		$body = '';
+		$fp = @fopen(get_cachename($page, '.body'), 'rb');
 		flock($fp, LOCK_SH);
 		do {
 			$tmp = fread($fp, 8192);
