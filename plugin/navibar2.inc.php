@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: navibar2.inc.php,v 0.1.10 2005/12/05 20:44:00 miko Exp $
+// $Id: navibar2.inc.php,v 0.1.12 2005/12/21 20:44:00 miko Exp $
 //
 function plugin_navibar2_convert()
 {
@@ -124,11 +124,11 @@ function plugin_navibar2_convert_html($str)
 	// $regs[0] - HIT Strings
 	// $regs[1] - URL String
 	// $regs[2] - LinkName
-	if ( preg_match("'<a href=\"(.*?)\"[^>]*>(.*?)</a>'si", $conv, $regs) ) {
+	if ( preg_match('#<a href="(.*?)"[^>]*>(.*?)</a>#si', $conv, $regs) ) {
 		return array( TRUE, $regs[1], $regs[2], str_replace($regs[0], '__navibar2__', $conv) );
 	}
 
-	if ( preg_match("'<a class=\"ext\" href=\"(.*?)\" .*?>(.*?)<img src=\"./image/plus/ext.png\".*?</a>'si", $conv, $regs) ) {
+	if ( preg_match('#<a class="ext" href="(.*?)" .*?>(.*?)<img src="' . IMAGE_URI . '/plus/ext.png".*?</a>#si', $conv, $regs) ) {
 		return array( TRUE, $regs[1], $regs[2], str_replace($regs[0], '__navibar2__', $conv) );
 	}
 

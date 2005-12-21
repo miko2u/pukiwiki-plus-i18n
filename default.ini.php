@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: default.ini.php,v 1.24.3 2005/12/10 07:57:30 miko Exp $
+// $Id: default.ini.php,v 1.25.3 2005/12/20 14:04:40 miko Exp $
 // Copyright (C)
 //   2005      Customized/Patched by Miko.Hoshina
 //   2003-2005 PukiWiki Developers Team
@@ -169,8 +169,8 @@ $facemark_rules = array(
 	'(\(\^_-)'	=> ' <img alt="$1" src="' . IMAGE_URI . 'face/wink.png" />',
 	'(\(\^_-\))'	=> ' <img alt="$1" src="' . IMAGE_URI . 'face/wink.png" />',
 	'(\(--;)'	=> ' <img alt="$1" src="' . IMAGE_URI . 'face/sad.png" />',
-	'(\(\^\^;)'	=> ' <img alt="$1" src="' . IMAGE_URI . 'face/worried.png" />',
 	'(\(\^\^;\))'	=> ' <img alt="$1" src="' . IMAGE_URI . 'face/worried.png" />',
+	'(\(\^\^;)'	=> ' <img alt="$1" src="' . IMAGE_URI . 'face/worried.png" />',
 	'(\(\T-T)'	=> ' <img alt="$1" src="' . IMAGE_URI . 'face/tear.png" />',
 	'(\(\T-T\))'	=> ' <img alt="$1" src="' . IMAGE_URI . 'face/tear.png" />',
 	'(\(\;_;)'	=> ' <img alt="$1" src="' . IMAGE_URI . 'face/tear.png" />',

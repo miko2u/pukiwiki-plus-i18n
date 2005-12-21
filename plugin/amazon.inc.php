@@ -3,7 +3,7 @@
 //
 // Amazon プラグイン Ver.2.3
 //
-// $Id: amazon.inc.php,v 2.3.1 2004/07/01 00:00:00 raku/miko $
+// $Id: amazon.inc.php,v 2.3.2 2005/12/20 00:00:00 raku/miko $
 //
 // Copyright: 2003-2004 By 閑舎 <raku@rakunet.org>
 //
@@ -26,8 +26,8 @@ define('AMAZON_ALLOW_CONT', true); // true にすると、紹介本文取り込みが可能
 define('USE_CARGO', true); // true にすると買物かごを使用可能
 define('AMAZON_SIM', ''); // '' から '/ref=nosim' に変えると直接商品紹介ページにリンク('' がアマゾン推奨)。 
 // 写影なしの画像/買物かごのアイコン
-define('AMAZON_NO_IMAGE','./image/noimage.gif');
-define('AMAZON_CARGO','./image/remote-buy-jp.gif');
+define('AMAZON_NO_IMAGE', IMAGE_URI . 'noimage.gif');
+define('AMAZON_CARGO', IMAGE_URI . 'remote-buy-jp.gif');
 ///////////////////////////////////////////////// 変更してはならない箇所
 define('AMAZON_SHOP','http://www.amazon.co.jp/exec/obidos/ASIN/');
 define('AMAZON_LIB0','http://www.amazon.co.jp/exec/obidos/redirect-home?tag=' . AMAZON_AID);
