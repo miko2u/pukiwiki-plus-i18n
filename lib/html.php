@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: html.php,v 1.48.17 2005/12/18 15:19:24 miko Exp $
+// $Id: html.php,v 1.48.20 2005/12/18 15:19:24 miko Exp $
 // Copyright (C)
 //   2005      Customized/Patched by Miko.Hoshina
 //   2002-2005 PukiWiki Developers Team
@@ -319,10 +319,7 @@ function edit_form_assistant()
 </map>
 EOD;
 	}
-	return <<<EOD
-$map
-<script type="text/javascript" src="skin/assistant.js"></script>
-EOD;
+	return $map . "\n" . '<script type="text/javascript" src="' . SKIN_DIR . 'assistant.js"></script>' . "\n";
 }
 
 // Related pages
