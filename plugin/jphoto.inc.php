@@ -2,13 +2,13 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: jphoto.inc.php,v 0.1 2004/12/01 13:17:36 miko Exp $
+// $Id: jphoto.inc.php,v 0.2 2005/12/22 13:17:36 miko Exp $
 //
 // argument:
 // jphoto(pagename,[flashsize],[photosize],[zoom])
 // flashsize, photosize is '[width]x[height]'
 // zoom is percent
-// jphoto3p flash is (c)2003 hirax, plugin is (c)2004 miko
+// jphoto3p flash is (c)2003 hirax, plugin is (c)2004-2005 miko
 //
 define(JPHOTO_SCREENWIDTH,  400);
 define(JPHOTO_SCREENHEIGHT,  20);
@@ -72,7 +72,7 @@ function plugin_jphoto_convert()
 	$bgcolor = '#FFFFFF';
 	$quality = 'high';
 
-	$swf = 'skin/jphoto3p.swf';
+	$swf = SKIN_DIR . 'jphoto3p.swf';
 	$id = 'jphoto';
 	$wmode = 'opaque';
 
