@@ -2,8 +2,8 @@
 /**
  * PukiWiki Plus! ログインプラグイン
  *
- * @copyright	Copyright &copy; 2004-2005, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version	$Id: login.php,v 0.3 2005/06/11 21:59:00 upk Exp $
+ * @copyright	Copyright &copy; 2004-2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * @version	$Id: login.php,v 0.4 2006/01/11 20:42:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
@@ -82,6 +82,7 @@ function plugin_login_action()
 
 	if (!auth::auth_pw($auth_users))
 	{
+		unset($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']);
 		header( 'WWW-Authenticate: Basic realm="'.$_login_msg['msg_auth'].'"' );
 		header( 'HTTP/1.0 401 Unauthorized' );
 	} else {
