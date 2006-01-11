@@ -3,7 +3,7 @@
  * PukiWiki Plus! 認証処理
  *
  * @author	Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth.cls.php,v 0.4 2006/01/11 22:21:00 upk Exp $
+ * @version     $Id: auth.cls.php,v 0.5 2006/01/12 01:57:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
@@ -137,6 +137,7 @@ class auth
 
 		// 役割に応じた挙動の設定
 		$now_role = (int)auth::get_role_level();
+		if ($now_role == 0) return TRUE;
 		return ($now_role <= $chk_role) ? FALSE : TRUE;
 	}
 
