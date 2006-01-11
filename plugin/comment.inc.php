@@ -1,7 +1,8 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: comment.inc.php,v 1.35.7 2005/05/06 04:44:20 miko Exp $
+// $Id: comment.inc.php,v 1.35.8 2006/01/11 23:24:00 upk Exp $
 // Copyright (C)
+//   2006      PukiWiki Plus! Developers Team
 //   2005      Customized/Patched by Miko.Hoshina
 //   2002-2005 PukiWiki Developers Team
 //   2001-2002 Originally written by yu-ji
@@ -29,7 +30,8 @@ function plugin_comment_action()
 	$_msg_comment_collided   = _("It seems that someone has already updated the page you were editing.<br />") .
 	                           _("The comment was added, alhough it may be inserted in the wrong position.<br />");
 
-	if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
+	// if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
+	if (auth::check_role('readonly')) die_message('PKWK_READONLY prohibits editing');
 
 	if (! isset($vars['msg'])) return array('msg'=>'', 'body'=>''); // Do nothing
 
@@ -105,7 +107,8 @@ function plugin_comment_convert()
 	$_btn_comment = _("Post Comment");
 	$_msg_comment = _("Comment: ");
 
-	if (PKWK_READONLY) return ''; // Show nothing
+	// if (PKWK_READONLY) return ''; // Show nothing
+	if (auth::check_role('readonly')) return ''; // Show nothing
 	if (! isset($numbers[$vars['page']])) $numbers[$vars['page']] = 0;
 	$comment_no = $numbers[$vars['page']]++;
 

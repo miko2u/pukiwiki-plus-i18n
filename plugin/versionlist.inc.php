@@ -1,5 +1,5 @@
 <?php
-// $Id: versionlist.inc.php,v 1.15.2 2005/03/09 02:12:52 miko Exp $
+// $Id: versionlist.inc.php,v 1.15.3 2006/01/12 00:00:00 upk Exp $
 /*
  * PukiWiki versionlist plugin
  *
@@ -9,7 +9,8 @@
 
 function plugin_versionlist_action()
 {
-	if (PKWK_SAFE_MODE) die_message('PKWK_SAFE_MODE prohibits this');
+	// if (PKWK_SAFE_MODE) die_message('PKWK_SAFE_MODE prohibits this');
+	if (auth::check_role('safemode')) die_message('PKWK_SAFE_MODE prohibits this');
 
 	return array(
 		'msg' => _('version list'),
@@ -19,7 +20,8 @@ function plugin_versionlist_action()
 
 function plugin_versionlist_convert()
 {
-	if (PKWK_SAFE_MODE) return ''; // Show nothi
+	// if (PKWK_SAFE_MODE) return ''; // Show nothi
+	if (auth::check_role('safemode')) return ''; // Show nothi
 
 	/* 探索ディレクトリ設定 */
 	$SCRIPT_DIR = array('./');

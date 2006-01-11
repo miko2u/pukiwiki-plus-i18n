@@ -1,8 +1,8 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: pukiwiki.ini.php,v 1.128.18 2005/08/24 14:52:25 miko Exp $
+// $Id: pukiwiki.ini.php,v 1.128.19 2006/01/11 22:35:00 upk Exp $
 // Copyright (C)
-//   2005      PukiWiki Plus! Team
+//   2005-2006 PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
 //   2001-2002 Originally written by yu-ji
 // License: GPL v2 or (at your option) any later version
@@ -20,15 +20,20 @@ if (! defined('PKWK_OPTIMISE'))
 
 /////////////////////////////////////////////////
 // Security settings
+// 0 - 機能無効
+// 1 - 強制モード
+// 2 - サイト管理者以上は除く
+// 3 - コンテンツ管理者以上は除く
+// 4 - 認証者(未設定時のデフォルト)以上は除く
 
 // PKWK_READONLY - Prohibits editing and maintain via WWW
 //   NOTE: Counter-related functions will work now (counter, attach count, etc)
 if (! defined('PKWK_READONLY'))
-	define('PKWK_READONLY', 0); // 0 or 1
+	define('PKWK_READONLY', 0); // 0,1,2,3,4
 
 // PKWK_SAFE_MODE - Prohibits some unsafe(but compatible) functions 
 if (! defined('PKWK_SAFE_MODE'))
-	define('PKWK_SAFE_MODE', 0);
+	define('PKWK_SAFE_MODE', 0); // 0,1,2,3,4
 
 // PKWK_DISABLE_INLINE_IMAGE_FROM_URI - Disallow using inline-image-tag for URIs
 //   Inline-image-tag for URIs may allow leakage of Wiki readers' information
@@ -277,10 +282,16 @@ $pagereading_config_dict = ':config/PageReading/dict';
 
 /////////////////////////////////////////////////
 // User definition
+// 役割(ROLE)
+// 2 - サイト管理者
+// 3 - コンテンツ管理者
+// 4 - 認証者(未設定時のデフォルト)
 $auth_users = array(
-	'foo'	=> 'foo_passwd', // Cleartext
-	'bar'	=> '{x-php-md5}f53ae779077e987718cc285b14dfbe86', // md5('bar_passwd')
-	'hoge'	=> '{SMD5}OzJo/boHwM4q5R+g7LCOx2xGMkFKRVEx', // SMD5 'hoge_passwd'
+	'foo'	=> array('foo_passwd'), // Cleartext
+	'bar'	=> array('{x-php-md5}f53ae779077e987718cc285b14dfbe86'), // md5('bar_passwd')
+	'hoge'	=> array('{SMD5}OzJo/boHwM4q5R+g7LCOx2xGMkFKRVEx'), // SMD5 'hoge_passwd'
+	// 'hoge' => array('{SMD5}OzJo/boHwM4q5R+g7LCOx2xGMkFKRVEx',3), // SMD5 'hoge_passwd', コンテンツ管理者
+	// 'hoge' => array('{SMD5}OzJo/boHwM4q5R+g7LCOx2xGMkFKRVEx',2), // SMD5 'hoge_passwd', サイト管理者
 );
 
 /////////////////////////////////////////////////

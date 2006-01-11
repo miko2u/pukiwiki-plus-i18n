@@ -1,8 +1,8 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: file.php,v 1.44.10 2005/12/18 15:14:23 miko Exp $
+// $Id: file.php,v 1.44.11 2006/01/11 22:04:00 upk Exp $
 // Copyright (C)
-//   2005      PukiWiki Plus! Team
+//   2005-2006 PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
 //   2001-2002 Originally written by yu-ji
 // License: GPL v2 or (at your option) any later version
@@ -52,7 +52,8 @@ function page_write($page, $postdata, $notimestamp = FALSE)
 {
 	global $trackback;
 
-	if (PKWK_READONLY) return; // Do nothing
+	// if (PKWK_READONLY) return; // Do nothing
+	if (auth::check_role('readonly')) return; // Do nothing
 
 	$postdata = make_str_rules($postdata);
 
@@ -156,7 +157,8 @@ function file_write($dir, $page, $str, $notimestamp = FALSE)
 	global $whatsdeleted, $maxshow_deleted;
 	global $_string;
 
-	if (PKWK_READONLY) return; // Do nothing
+	// if (PKWK_READONLY) return; // Do nothing
+	if (auth::check_role('readonly')) return; // Do nothing
 
 	if (! is_pagename($page))
 		die_message(str_replace('$1', htmlspecialchars($page),
@@ -236,7 +238,8 @@ function file_write($dir, $page, $str, $notimestamp = FALSE)
 // Update RecentDeleted
 function add_recent($page, $recentpage, $subject = '', $limit = 0)
 {
-	if (PKWK_READONLY || $limit == 0 || $page == '' || $recentpage == '' ||
+	// if (PKWK_READONLY || $limit == 0 || $page == '' || $recentpage == '' ||
+	if (auth::check_role('readonly') || $limit == 0 || $page == '' || $recentpage == '' ||
 		check_non_list($page)) return;
 
 	// Load
@@ -278,7 +281,8 @@ function put_lastmodified()
 	global $maxshow, $whatsnew, $autolink;
 	global $autoalias, $autoglossary;
 
-	if (PKWK_READONLY) return; // Do nothing
+	// if (PKWK_READONLY) return; // Do nothing
+	if (auth::check_role('readonly')) return; // Do nothing
 
 	$pages = get_existpages();
 	$recent_pages = array();

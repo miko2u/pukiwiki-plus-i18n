@@ -1,7 +1,7 @@
 <?php
-// $Id: article.inc.php,v 1.25.4 2005/09/24 01:12:29 miko Exp $
+// $Id: article.inc.php,v 1.25.5 2006/01/11 23:17:00 upk Exp $
 // Copyright (C)
-//   2005      PukiWiki Plus! Team
+//   2005-2006 PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
 //   2002      Originally written by OKAWARA,Satoshi <kawara@dml.co.jp>
 //             http://www.dml.co.jp/~kawara/pukiwiki/pukiwiki.php
@@ -60,7 +60,8 @@ $_msg_collided = _('It seems that someone has already updated this page while yo
 $_msg_article_mail_sender = _('Author: ');
 $_msg_article_mail_page = _('Page: ');
 
-	if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
+	// if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
+	if (auth::check_role('readonly')) die_message('PKWK_READONLY prohibits editing');
 
 	if ($post['msg'] == '')
 		return array('msg'=>'','body'=>'');
@@ -159,7 +160,8 @@ function plugin_article_convert()
 	$_btn_name    = _('Name: ');
 	$_btn_article = _('Submit');
 	$_btn_subject = _('Subject: ');
-	if (PKWK_READONLY) return ''; // Show nothing
+	// if (PKWK_READONLY) return ''; // Show nothing
+	if (auth::check_role('readonly')) return ''; // Show nothing
 
 	if (! isset($numbers[$vars['page']])) $numbers[$vars['page']] = 0;
 

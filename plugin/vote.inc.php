@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: vote.inc.php,v 1.23.4 2005/04/02 06:33:39 miko Exp $
+// $Id: vote.inc.php,v 1.23.5 2006/01/11 23:48:00 upk Exp $
 //
 // Vote box plugin
 
@@ -19,7 +19,8 @@ $_msg_collided = _('It seems that someone has already updated this page while yo
  ! is placed at the beginning of a line that has possibly been updated.<br />
  Edit those lines, and submit again.');
 
-	if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
+	// if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
+	if (auth::check_role('readonly')) die_message('PKWK_READONLY prohibits editing');
 
 	$postdata_old  = get_source($vars['refer']);
 
@@ -108,7 +109,8 @@ function plugin_vote_convert()
 
 	if (! func_num_args()) return '#vote(): No arguments<br />' . "\n";
 
-	if (PKWK_READONLY) {
+	// if (PKWK_READONLY) {
+	if (auth::check_role('readonly')) {
 		$_script = '';
 		$_submit = 'hidden';
 	} else {

@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: edit.inc.php,v 1.19.37.3 2005/08/22 14:59:24 miko Exp $
+// $Id: edit.inc.php,v 1.19.37.4 2006/01/11 23:28:00 upk Exp $
 //
 // Edit plugin
 // cmd=edit
@@ -13,7 +13,8 @@ function plugin_edit_action()
 	// global $vars, $_title_edit, $load_template_func;
 	global $vars, $load_template_func;
 
-	if (PKWK_READONLY) die_message( _('PKWK_READONLY prohibits editing') );
+	// if (PKWK_READONLY) die_message( _('PKWK_READONLY prohibits editing') );
+	if (auth::check_role('readonly')) die_message( _('PKWK_READONLY prohibits editing') );
 
 	if (isset($vars['realview'])) {
 		return plugin_edit_realview();

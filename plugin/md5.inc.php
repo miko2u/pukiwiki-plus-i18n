@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: md5.inc.php,v 1.22.1 2005/06/12 10:13:43 miko Exp $
+// $Id: md5.inc.php,v 1.22.2 2006/01/11 23:32:00 upk Exp $
 //
 //  MD5 plugin
 
@@ -9,7 +9,8 @@ function plugin_md5_action()
 {
 	global $get, $post;
 
-	if (PKWK_SAFE_MODE || PKWK_READONLY) die_message(_('Prohibited'));
+	// if (PKWK_SAFE_MODE || PKWK_READONLY) die_message(_('Prohibited'));
+	if (auth::check_role('safemode') || auth::check_role('readonly')) die_message(_('Prohibited'));
 
 	// Wait POST
 	$phrase = isset($post['phrase']) ? $post['phrase'] : '';
@@ -48,7 +49,8 @@ function plugin_md5_action()
 // $value    = Default passphrase value
 function plugin_md5_show_form($nophrase = FALSE, $value = '')
 {
-	if (PKWK_SAFE_MODE || PKWK_READONLY) die_message(_('Prohibited'));
+	// if (PKWK_SAFE_MODE || PKWK_READONLY) die_message(_('Prohibited'));
+	if (auth::check_role('safemode') || auth::check_role('readonly')) die_message(_('Prohibited'));
 	if (strlen($value) > PKWK_PASSPHRASE_LIMIT_LENGTH)
 		die_message(_('Limit: malicious message length'));
 

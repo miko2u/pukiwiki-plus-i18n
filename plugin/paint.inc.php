@@ -1,7 +1,7 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
 //
-// $Id: paint.inc.php,v 1.18.1 2005/03/10 02:49:41 miko Exp $
+// $Id: paint.inc.php,v 1.18.2 2006/01/11 23:37:00 upk Exp $
 //
 // Paint plugin
 
@@ -58,7 +58,8 @@ function plugin_paint_action()
 {
 	global $script, $vars, $pkwk_dtd, $_paint_messages;
 
-	if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
+	// if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
+	if (auth::check_role('readonly')) die_message('PKWK_READONLY prohibits editing');
 	
 	//戻り値を初期化
 	$retval['msg'] = $_paint_messages['msg_title'];
@@ -174,7 +175,8 @@ function plugin_paint_convert()
 	global $_paint_messages;
 	static $numbers = array();
 
-	if (PKWK_READONLY) return ''; // Show nothing
+	// if (PKWK_READONLY) return ''; // Show nothing
+	if (auth::check_role('readonly')) return ''; // Show nothing
 
 	if (!array_key_exists($vars['page'],$numbers))
 	{

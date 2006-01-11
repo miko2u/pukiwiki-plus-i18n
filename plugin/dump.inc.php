@@ -1,5 +1,5 @@
 <?php
-// $Id: dump.inc.php,v 1.36.2 2005/03/27 12:16:50 miko Exp $
+// $Id: dump.inc.php,v 1.36.3 2006/01/11 23:26:00 upk Exp $
 //
 // Remote dump / restore plugin
 // Originated as tarfile.inc.php by teanan / Interfair Laboratory 2004.
@@ -44,7 +44,8 @@ function plugin_dump_action()
 {
 	global $vars;
 
-	if (PKWK_READONLY) die_message('PKWK_READONLY prohibits this');
+	// if (PKWK_READONLY) die_message('PKWK_READONLY prohibits this');
+	if (auth::check_role('readonly')) die_message('PKWK_READONLY prohibits this');
 
 	$pass = isset($_POST['pass']) ? $_POST['pass'] : NULL;
 	$act  = isset($vars['act'])   ? $vars['act']   : NULL;

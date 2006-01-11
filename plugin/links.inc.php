@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: links.inc.php,v 1.23 2005/02/27 09:43:12 henoheno Exp $
+// $Id: links.inc.php,v 1.23.1 2006/01/11 23:30:00 upk Exp $
 //
 // Update link cache plugin
 
@@ -32,7 +32,8 @@ function plugin_links_action()
 	global $script, $post, $vars, $foot_explain;
 	global $_links_messages;
 
-	if (PKWK_READONLY) die_message('PKWK_READONLY prohibits this');
+	// if (PKWK_READONLY) die_message('PKWK_READONLY prohibits this');
+	if (auth::check_role('readonly')) die_message('PKWK_READONLY prohibits this');
 
 	$msg = $body = '';
 	if (empty($vars['action']) || empty($post['adminpass']) || ! pkwk_login($post['adminpass'])) {

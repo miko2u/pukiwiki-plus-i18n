@@ -1,8 +1,8 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: diff.inc.php,v 1.18.2 2005/12/10 12:48:02 miko Exp $
+// $Id: diff.inc.php,v 1.18.3 2006/01/11 23:25:00 upk Exp $
 // Copyright (C)
-//   2005      PukiWiki Plus! Team
+//   2005-2006 PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
 //   2002      Originally written by yu-ji
 // License: GPL v2 or (at your option) any later version
@@ -30,6 +30,8 @@ function plugin_diff_view($page)
 //	global $_msg_notfound, $_msg_goto, $_msg_deleted, $_msg_addline, $_msg_delline;
 //	global $_title_diff, $_title_diff_delete;
 
+	if (auth::check_role('safemode')) die_message('PKWK_SAFE_MODE prohibits this');
+
 	$_msg_notfound       = _('The page was not found.');
 	$_msg_addline        = _('The added line is <span class="diff_added">THIS COLOR</span>.');
 	$_msg_delline        = _('The deleted line is <span class="diff_removed">THIS COLOR</span>.');
@@ -56,7 +58,8 @@ function plugin_diff_view($page)
 
 	$filename = DIFF_DIR . encode($page) . '.txt';
 	if (file_exists($filename)) {
-		if (! PKWK_READONLY) {
+		// if (! PKWK_READONLY) {
+		if (! auth::check_role('readonly')) {
 			$menu[] = '<li><a href="' . $script . '?cmd=diff&amp;action=delete&amp;page=' .
 				$r_page . '">' . str_replace('$1', $s_page, $_title_diff_delete) . '</a></li>';
 		}
@@ -84,6 +87,8 @@ function plugin_diff_delete($page)
 	global $script, $vars;
 //	global $_title_diff_delete, $_msg_diff_deleted;
 //	global $_msg_diff_adminpass, $_btn_delete, $_msg_invalidpass;
+
+	if (auth::check_role('readonly')) die_message('PKWK_READONLY prohibits editing');
 
 	$_title_diff_delete  = _('Deleting diff of $1');
 	$_msg_diff_deleted   = _('Diff of  $1 has been deleted.');

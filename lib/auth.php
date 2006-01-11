@@ -1,8 +1,8 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: auth.php,v 1.19.8 2005/12/07 14:02:07 miko Exp $
+// $Id: auth.php,v 1.19.9 2006/01/11 22:39:00 upk Exp $
 // Copyright (C)
-//   2005      PukiWiki Plus! Team
+//   2005-2006 PukiWiki Plus! Team
 //   2003-2005 PukiWiki Developers Team
 // License: GPL v2 or (at your option) any later version
 //
@@ -16,7 +16,8 @@ function pkwk_login($pass = '')
 {
 	global $adminpass;
 
-	if (! PKWK_READONLY && isset($adminpass) &&
+	// if (! PKWK_READONLY && isset($adminpass) &&
+	if (! auth::check_role('readonly') && isset($adminpass) &&
 		pkwk_hash_compute($pass, $adminpass) === $adminpass) {
 		return TRUE;
 	} else {
@@ -202,14 +203,16 @@ function basic_auth($page, $auth_flag, $exit_flag, $auth_pages, $title_cannot)
 			explode(':', base64_decode($matches[1]));
 	}
 
-	if (PKWK_READONLY ||
-		! isset($_SERVER['PHP_AUTH_USER']) ||
+	// if (PKWK_READONLY ||
+	// if (auth::check_role('readonly') ||
+	//	! isset($_SERVER['PHP_AUTH_USER']) ||
+	if (! isset($_SERVER['PHP_AUTH_USER']) ||
 		! in_array($_SERVER['PHP_AUTH_USER'], $user_list) ||
 		! isset($auth_users[$_SERVER['PHP_AUTH_USER']]) ||
 		pkwk_hash_compute(
 			$_SERVER['PHP_AUTH_PW'],
-			$auth_users[$_SERVER['PHP_AUTH_USER']]
-			) !== $auth_users[$_SERVER['PHP_AUTH_USER']])
+			$auth_users[$_SERVER['PHP_AUTH_USER']][0]
+			) !== $auth_users[$_SERVER['PHP_AUTH_USER']][0])
 	{
 		// Auth failed
 		if ($auth_flag || $exit_flag) {

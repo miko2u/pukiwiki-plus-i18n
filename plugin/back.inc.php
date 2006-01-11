@@ -1,14 +1,15 @@
 <?php
-// $Id: back.inc.php,v 1.9.1 2005/06/20 14:57:34 miko Exp $
+// $Id: back.inc.php,v 1.9.2 2006/01/11 23:52:00 upk Exp $
 // Copyright (C)
 //   2003-2004 PukiWiki Developers Team
-//   2002      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+//   2002,2006 Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
 //
 // back plugin
 
 // Allow specifying back link by page name and anchor, or
 // by relative or site-abusolute path
-define('PLUGIN_BACK_ALLOW_PAGELINK', PKWK_SAFE_MODE); // FALSE(Compat), TRUE
+// define('PLUGIN_BACK_ALLOW_PAGELINK', PKWK_SAFE_MODE); // FALSE(Compat), TRUE
+define('PLUGIN_BACK_ALLOW_PAGELINK', auth::check_role('safemode')); // FALSE(Compat), TRUE
 
 // Allow JavaScript (Compat)
 define('PLUGIN_BACK_ALLOW_JAVASCRIPT', TRUE); // TRUE(Compat), FALSE, PKWK_ALLOW_JAVASCRIPT

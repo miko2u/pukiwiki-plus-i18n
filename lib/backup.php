@@ -11,9 +11,9 @@
  * @access  public
  * @author
  * @create
- * @version $Id: backup.php,v 1.10.2 2005/09/24 01:05:49 miko Exp $
+ * @version $Id: backup.php,v 1.10.3 2006/01/11 23:03:00 upk Exp $
  * Copyright (C)
- *   2005      PukiWiki Plus! Team
+ *   2005-2006 PukiWiki Plus! Team
  *   2002-2005 PukiWiki Developers Team
  *   2001-2002 Originally written by yu-ji
  * License: GPL v2 or (at your option) any later version
@@ -35,7 +35,8 @@ function make_backup($page, $delete = FALSE)
 	global $cycle, $maxage;
 	global $do_backup, $del_backup;
 
-	if (PKWK_READONLY || ! $do_backup) return;
+	// if (PKWK_READONLY || ! $do_backup) return;
+	if (auth::check_role('readonly') || ! $do_backup) return;
 
 	if ($del_backup && $delete) {
 		_backup_delete($page);

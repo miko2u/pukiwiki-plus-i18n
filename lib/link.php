@@ -1,8 +1,8 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: link.php,v 1.8.1 2005/12/10 12:00:52 miko Exp $
+// $Id: link.php,v 1.8.2 2006/01/11 22:06:00 upk Exp $
 // Copyright (C)
-//   2005      PukiWiki Plus! Team
+//   2005-2006 PukiWiki Plus! Team
 //   2003-2005 PukiWiki Developers Team
 // License: GPL v2 or (at your option) any later version
 //
@@ -48,7 +48,8 @@ function links_get_related_db($page)
 //ページの関連を更新する
 function links_update($page)
 {
-	if (PKWK_READONLY) return; // Do nothing
+	// if (PKWK_READONLY) return; // Do nothing
+	if (auth::check_role('readonly')) return; // Do nothing
 
 	if (ini_get('safe_mode') == '0') set_time_limit(0);
 
@@ -133,7 +134,8 @@ function links_init()
 {
 	global $whatsnew;
 
-	if (PKWK_READONLY) return; // Do nothing
+	// if (PKWK_READONLY) return; // Do nothing
+	if (auth::check_role('readonly')) return; // Do nothing
 
 	if (ini_get('safe_mode') == '0') set_time_limit(0);
 
@@ -188,7 +190,8 @@ function links_init()
 
 function links_add($page, $add, $rel_auto)
 {
-	if (PKWK_READONLY) return; // Do nothing
+	// if (PKWK_READONLY) return; // Do nothing
+	if (auth::check_role('readonly')) return; // Do nothing
 
 	$rel_auto = array_flip($rel_auto);
 
@@ -217,7 +220,8 @@ function links_add($page, $add, $rel_auto)
 
 function links_delete($page, $del)
 {
-	if (PKWK_READONLY) return; // Do nothing
+	// if (PKWK_READONLY) return; // Do nothing
+	if (auth::check_role('readonly')) return; // Do nothing
 
 	foreach ($del as $_page) {
 		$ref_file = CACHE_DIR . encode($_page) . '.ref';

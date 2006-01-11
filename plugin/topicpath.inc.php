@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: topicpath.inc.php,v 1.6.1 2005/01/29 14:31:04 miko Exp $
+// $Id: topicpath.inc.php,v 1.6.2 2006/01/11 23:45:00 upk Exp $
 //
 // 'topicpath' plugin for PukiWiki, available under GPL
 
@@ -49,7 +49,8 @@ function plugin_topicpath_inline()
 			// This page ($_landing == $page)
 			$b_link = TRUE;
 			$topic_path[] = $element;
-		} else if (PKWK_READONLY && ! is_page($_landing)) {
+		// } else if (PKWK_READONLY && ! is_page($_landing)) {
+		} else if (auth::check_role('readonly') && ! is_page($_landing)) {
 			// Page not exists
 			$topic_path[] = $element;
 		} else {

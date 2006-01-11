@@ -1,9 +1,10 @@
 <?php
-// $Id: bugtrack.inc.php,v 1.25 2005/04/03 03:33:47 henoheno Exp $
+// $Id: bugtrack.inc.php,v 1.26 2006/01/11 23:20:00 upk Exp $
 //
 // PukiWiki BugTrack plugin
 //
 // Copyright:
+// 2005-2006 PukiWiki Plus! Developers Team
 // 2002-2005 PukiWiki Developers Team
 // 2002 Y.MASUI GPL2  http://masui.net/pukiwiki/ masui@masui.net
 
@@ -49,7 +50,8 @@ function plugin_bugtrack_convert()
 {
 	global $vars;
 
-	if (PKWK_READONLY) return ''; // Show nothing
+	// if (PKWK_READONLY) return ''; // Show nothing
+	if (auth::check_role('readonly')) return ''; // Show nothing
 
 	$base = $vars['page'];
 	$category = array();
@@ -169,7 +171,8 @@ function plugin_bugtrack_action()
 {
 	global $post;
 
-	if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
+	// if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
+	if (auth::check_role('readonly')) die_message('PKWK_READONLY prohibits editing');
 	if ($post['mode'] != 'submit') return FALSE;
 
 	$page = plugin_bugtrack_write($post['base'], $post['pagename'], $post['summary'],

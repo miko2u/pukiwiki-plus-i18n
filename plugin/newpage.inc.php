@@ -1,5 +1,5 @@
 <?php
-// $Id: newpage.inc.php,v 1.15.2 2005/02/27 09:35:16 miko Exp $
+// $Id: newpage.inc.php,v 1.15.3 2006/01/11 23:36:00 upk Exp $
 //
 // Newpage plugin
 
@@ -10,7 +10,8 @@ function plugin_newpage_convert()
 	$_btn_edit = _('Edit');
 	$_msg_newpage = _('New page');
 
-	if (PKWK_READONLY) return ''; // Show nothing
+	// if (PKWK_READONLY) return ''; // Show nothing
+	if (auth::check_role('readonly')) return ''; // Show nothing
 
 	$newpage = '';
 	if (func_num_args()) list($newpage) = func_get_args();
@@ -41,7 +42,8 @@ function plugin_newpage_action()
 	$_btn_edit = _('Edit');
 	$_msg_newpage = _('New page');
 
-	if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
+	// if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
+	if (auth::check_role('readonly')) die_message('PKWK_READONLY prohibits editing');
 
 	if ($vars['page'] == '') {
 		$retvars['msg']  = $_msg_newpage;

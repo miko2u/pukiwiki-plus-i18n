@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: source.inc.php,v 1.14.2 2005/03/10 03:07:58 miko Exp $
+// $Id: source.inc.php,v 1.14.3 2006/01/11 23:58:00 upk Exp $
 //
 // Source plugin
 
@@ -9,7 +9,8 @@ function plugin_source_action()
 {
 	global $vars; //, $_source_messages;
 
-	if (PKWK_SAFE_MODE) die_message('PKWK_SAFE_MODE prohibits this');
+	// if (PKWK_SAFE_MODE) die_message('PKWK_SAFE_MODE prohibits this');
+	if (auth::check_role('safemode')) die_message('PKWK_SAFE_MODE prohibits this');
 
 	$page = isset($vars['page']) ? $vars['page'] : '';
 	$vars['refer'] = $page;

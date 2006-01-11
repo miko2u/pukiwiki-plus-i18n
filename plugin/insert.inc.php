@@ -1,5 +1,5 @@
 <?php
-// $Id: insert.inc.php,v 1.13.2 2005/03/10 07:35:55 miko Exp $
+// $Id: insert.inc.php,v 1.13.3 2006/01/11 23:29:00 upk Exp $
 //
 // Text inserting box plugin
 
@@ -19,7 +19,8 @@ $_msg_collided = _('It seems that someone has already updated this page while yo
  ! is placed at the beginning of a line that has possibly been updated.<br />
  Edit those lines, and submit again.');
 
-	if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
+	// if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
+	if (auth::check_role('readonly')) die_message('PKWK_READONLY prohibits editing');
 	if (! isset($vars['msg']) || $vars['msg'] == '') return;
 
 	$vars['msg'] = preg_replace('/' . "\r" . '/', '', $vars['msg']);
@@ -80,7 +81,8 @@ function plugin_insert_convert()
 
 	$_btn_insert = _('add');
 
-	if (PKWK_READONLY) return ''; // Show nothing
+	// if (PKWK_READONLY) return ''; // Show nothing
+	if (auth::check_role('readonly')) return ''; // Show nothing
 
 	if (! isset($numbers[$vars['page']])) $numbers[$vars['page']] = 0;
 

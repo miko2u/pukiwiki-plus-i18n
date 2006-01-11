@@ -54,7 +54,8 @@ function plugin_code_action()
 	global $vars;
 	global $_source_messages;
 	
-	if (PKWK_SAFE_MODE) die_message('PKWK_SAFE_MODE prohibits this');
+	// if (PKWK_SAFE_MODE) die_message('PKWK_SAFE_MODE prohibits this');
+	if (auth::check_role('safemode')) die_message('PKWK_SAFE_MODE prohibits this');
 
 	$vars['refer'] = $vars['page'];
 

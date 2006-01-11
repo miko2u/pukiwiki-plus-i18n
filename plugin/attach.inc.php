@@ -1,8 +1,8 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: attach.inc.php,v 1.80.10 2005/12/18 15:27:43 miko Exp $
+// $Id: attach.inc.php,v 1.80.11 2006/01/11 23:18:00 upk Exp $
 // Copyright (C)
-//   2005      PukiWiki Plus! Team
+//   2005-2006 PukiWiki Plus! Team
 //   2003-2005 PukiWiki Developers Team
 //   2002-2003 PANDA <panda@arino.jp> http://home.arino.jp/
 //   2002      Y.MASUI <masui@hisec.co.jp> http://masui.net/pukiwiki/
@@ -157,7 +157,8 @@ function plugin_attach_action()
 		case 'delete':	/*FALLTHROUGH*/
 		case 'freeze':
 		case 'unfreeze':
-			if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
+			// if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
+			if (auth::check_role('readonly')) die_message('PKWK_READONLY prohibits editing');
 		}
 		switch ($pcmd) {
 		case 'info'     : return attach_info();
@@ -202,7 +203,8 @@ function attach_upload($file, $page, $pass = NULL)
 	global $_attach_messages, $notify, $notify_subject;
 	global $notify_exclude;
 
-	if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
+	// if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
+	if (auth::check_role('readonly')) die_message('PKWK_READONLY prohibits editing');
 
 	// Check query-string
 	$query = 'plugin=attach&amp;pcmd=info&amp;refer=' . rawurlencode($page) .

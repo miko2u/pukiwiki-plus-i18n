@@ -132,7 +132,8 @@ EOD;
 			$link = '<a href="' . $script . '?' . $r_page . '" title="' . $s_page .
 				'"><strong>' . $day . '</strong></a>';
 		} else {
-			if (PKWK_READONLY) {
+			// if (PKWK_READONLY) {
+			if (auth::check_role('readonly')) {
 				$link = '<span class="small">' . $day . '</small>';
 			} else {
 				$link = $script . '?cmd=edit&amp;page=' . $r_page . '&amp;refer=' . $r_base;

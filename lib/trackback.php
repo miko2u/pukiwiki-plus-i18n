@@ -1,7 +1,7 @@
 <?php
-// $Id: trackback.php,v 1.21.1 2005/07/05 12:51:08 upk Exp $
+// $Id: trackback.php,v 1.21.2 2006/01/11 23:08:00 upk Exp $
 // Copyright (C)
-//   2005      PukiWiki Plus! Team
+//   2005-2006 PukiWiki Plus! Team
 //   2003-2005 PukiWiki Developers Team
 //   2003      Originally written by Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
 // License: GPL v2 or (at your option) any later version
@@ -268,7 +268,8 @@ function ref_save($page)
 {
 	global $referer;
 
-	if (PKWK_READONLY || ! $referer || empty($_SERVER['HTTP_REFERER'])) return TRUE;
+	// if (PKWK_READONLY || ! $referer || empty($_SERVER['HTTP_REFERER'])) return TRUE;
+	if (auth::check_role('readonly') || ! $referer || empty($_SERVER['HTTP_REFERER'])) return TRUE;
 
 	$url = $_SERVER['HTTP_REFERER'];
 

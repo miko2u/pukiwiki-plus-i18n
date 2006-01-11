@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: update_entities.inc.php,v 1.9.1 2005/06/23 18:00:07 miko Exp $
+// $Id: update_entities.inc.php,v 1.9.2 2006/01/11 23:47:00 upk Exp $
 //
 // Update entities plugin - Update XHTML entities from DTD
 // (for admin)
@@ -35,7 +35,8 @@ function plugin_update_entities_action()
 	global $script, $vars;
 	global $_entities_messages;
 
-	if (PKWK_READONLY) die_message('PKWK_READONLY prohibits this');
+	// if (PKWK_READONLY) die_message('PKWK_READONLY prohibits this');
+	if (auth::check_role('readonly')) die_message('PKWK_READONLY prohibits this');
 
 	$msg = $body = '';
 	if (empty($vars['action']) || empty($vars['adminpass']) || ! pkwk_login($vars['adminpass'])) {

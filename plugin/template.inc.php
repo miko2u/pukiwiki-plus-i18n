@@ -1,5 +1,5 @@
 <?php
-// $Id: template.inc.php,v 1.21.1 2005/03/09 08:06:48 miko Exp $
+// $Id: template.inc.php,v 1.21.2 2006/01/11 23:43:00 upk Exp $
 //
 // Load template plugin
 
@@ -24,7 +24,8 @@ function plugin_template_action()
 	$_btn_template_create  = _('Create');
 	$_title_template       = _('create a new page, using  $1 as a template.');
 
-	if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
+	// if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
+	if (auth::check_role('readonly')) die_message('PKWK_READONLY prohibits editing');
 	if (! isset($vars['refer']) || ! is_page($vars['refer']))
 		return FALSE;
 

@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: read.inc.php,v 1.8 2005/01/15 13:57:07 henoheno Exp $
+// $Id: read.inc.php,v 1.8.1 2006/01/11 23:56:00 upk Exp $
 //
 // Read plugin: Show a page and InterWiki
 
@@ -16,7 +16,8 @@ function plugin_read_action()
 		header_lastmod($page);
 		return array('msg'=>'', 'body'=>'');
 
-	} else if (! PKWK_SAFE_MODE && is_interwiki($page)) {
+	// } else if (! PKWK_SAFE_MODE && is_interwiki($page)) {
+	} else if (! auth::check_role('safemode') && is_interwiki($page)) {
 		return do_plugin_action('interwiki'); // InterWikiNameを処理
 
 	} else if (is_pagename($page)) {

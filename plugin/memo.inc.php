@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: memo.inc.php,v 1.14.2 2005/03/10 08:01:29 miko Exp $
+// $Id: memo.inc.php,v 1.14.3 2006/01/11 23:34:00 upk Exp $
 //
 // Memo box plugin
 
@@ -19,7 +19,8 @@ $_msg_collided = _('It seems that someone has already updated this page while yo
  ! is placed at the beginning of a line that has possibly been updated.<br />
  Edit those lines, and submit again.');
 
-	if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
+	// if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
+	if (auth::check_role('readonly')) die_message('PKWK_READONLY prohibits editing');
 	if (! isset($vars['msg']) || $vars['msg'] == '') return;
 
 	$memo_body = preg_replace('/' . "\r" . '/', '', $vars['msg']);
@@ -88,7 +89,8 @@ function plugin_memo_convert()
 	$data = str_replace('&#x22;', '"', $data); // Unescape double quotes
 	$data = htmlspecialchars(str_replace('\n', "\n", $data));
 
-	if (PKWK_READONLY) {
+	// if (PKWK_READONLY) {
+	if (auth::check_role('readonly')) {
 		$_script = '';
 		$_submit = '';	
 	} else {

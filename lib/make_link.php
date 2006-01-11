@@ -1,8 +1,8 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: make_link.php,v 1.30.5 2005/12/10 07:57:30 miko Exp $
+// $Id: make_link.php,v 1.30.6 2006/01/11 23:07:00 upk Exp $
 // Copyright (C)
-//   2005      PukiWiki Plus! Team
+//   2005-2006 PukiWiki Plus! Team
 //   2003-2005 PukiWiki Developers Team
 //   2001-2002 Originally written by yu-ji
 // License: GPL v2 or (at your option) any later version
@@ -934,7 +934,8 @@ function make_pagelink($page, $alias = '', $anchor = '', $refer = '', $isautolin
 //			$s_alias . '</a>' . $al_right, 'make_pagelink');
 	} else {
 		// Dangling link
-		if (PKWK_READONLY) return $s_alias; // No dacorations
+		// if (PKWK_READONLY) return $s_alias; // No dacorations
+		if (auth::check_role('readonly')) return $s_alias; // No dacorations
 
 		$retval = $s_alias . '<a href="' .
 			$script . '?cmd=edit&amp;page=' . $r_page . $r_refer . '">' .

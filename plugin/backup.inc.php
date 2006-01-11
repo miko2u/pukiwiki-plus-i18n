@@ -1,8 +1,8 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: backup.inc.php,v 1.27.12 2005/12/10 12:48:02 miko Exp $
+// $Id: backup.inc.php,v 1.27.13 2006/01/11 23:19:00 upk Exp $
 // Copyright (C)
-//   2005      PukiWiki Plus! Team
+//   2005-2006 PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
 //   2001-2002 Originally written by yu-ji
 // License: GPL v2 or (at your option) any later version
@@ -10,7 +10,8 @@
 // Backup plugin
 
 // Prohibit rendering old wiki texts (suppresses load, transfer rate, and security risk)
-define('PLUGIN_BACKUP_DISABLE_BACKUP_RENDERING', PKWK_SAFE_MODE || PKWK_OPTIMISE);
+// define('PLUGIN_BACKUP_DISABLE_BACKUP_RENDERING', PKWK_SAFE_MODE || PKWK_OPTIMISE);
+define('PLUGIN_BACKUP_DISABLE_BACKUP_RENDERING', auth::check_role('safemode') || PKWK_OPTIMISE);
 
 function plugin_backup_action()
 {
@@ -119,11 +120,13 @@ $_title_backuplist     = _('Backup list');
 	$body .= '</ul>'  . "\n";
 
 	if ($action == 'diff') {
+		if (auth::check_role('safemode')) die_message('PKWK_SAFE_MODE prohibits this');
 		$title = & $_title_backupdiff;
 		$old = ($s_age > 1) ? join('', $backups[$s_age - 1]['data']) : '';
 		$cur = join('', $backups[$s_age]['data']);
 		$body .= plugin_backup_diff(do_diff($old, $cur));
 	} else if ($s_action == 'nowdiff') {
+		if (auth::check_role('safemode')) die_message('PKWK_SAFE_MODE prohibits this');
 		$title = & $_title_backupnowdiff;
 		$old = join('', $backups[$s_age]['data']);
 		$cur = join('', get_source($page));
@@ -142,6 +145,7 @@ $_title_backuplist     = _('Backup list');
 		$body = preg_replace('#&amp;spanend;#i', '</span>', $body);
 		$title = & $_title_backupnowdiff;
 	} else if ($s_action == 'source') {
+		if (auth::check_role('safemode')) die_message('PKWK_SAFE_MODE prohibits this');
 		$title = & $_title_backupsource;
 		$body .= '<pre>' . htmlspecialchars(join('', $backups[$s_age]['data'])) .
 			'</pre>' . "\n";
@@ -260,7 +264,8 @@ EOD;
 		return join('', $retval);
 	}
 
-	if (! PKWK_READONLY) {
+	// if (! PKWK_READONLY) {
+	if (! auth::check_role('readonly')) {
 		$retval[1] .= '   <li><a href="' . $script . '?cmd=backup&amp;action=delete&amp;page=' . $r_page . '">';
 		$retval[1] .= str_replace('$1', $s_page, $_title_backup_delete);
 		$retval[1] .= '</a></li>' . "\n";

@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: yetlist.inc.php,v 1.23.1 2005/06/18 10:44:00 miko Exp $
+// $Id: yetlist.inc.php,v 1.23.2 2006/01/11 23:50:00 upk Exp $
 //
 // Yet list plugin - Show a dangling link list (not yet created)
 
@@ -42,7 +42,8 @@ function plugin_yetlist_action()
 		}
 		$link_ref = join(' ', $link_refs);
 
-		if (PKWK_READONLY) {
+		// if (PKWK_READONLY) {
+		if (auth::check_role('readonly')) {
 			$href = $s_page;
 		} else {
 			// Show edit link

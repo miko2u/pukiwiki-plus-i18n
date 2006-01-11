@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: tracker.inc.php,v 1.34.2 2005/11/28 17:48:30 miko Exp $
+// $Id: tracker.inc.php,v 1.34.3 2006/01/11 23:46:00 upk Exp $
 //
 // Issue tracker plugin (See Also bugtrack plugin)
 
@@ -17,7 +17,8 @@ function plugin_tracker_convert()
 {
 	global $script,$vars;
 
-	if (PKWK_READONLY) return ''; // Show nothing
+	// if (PKWK_READONLY) return ''; // Show nothing
+	if (auth::check_role('readonly')) return ''; // Show nothing
 
 	$base = $refer = $vars['page'];
 
@@ -82,7 +83,8 @@ function plugin_tracker_action()
 {
 	global $post, $vars, $now;
 
-	if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
+	// if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
+	if (auth::check_role('readonly')) die_message('PKWK_READONLY prohibits editing');
 
 	$config_name = array_key_exists('_config',$post) ? $post['_config'] : '';
 
@@ -183,7 +185,8 @@ function plugin_tracker_inline()
 {
 	global $vars;
 
-	if (PKWK_READONLY) return ''; // Show nothing
+	// if (PKWK_READONLY) return ''; // Show nothing
+	if (auth::check_role('readonly')) return ''; // Show nothing
 
 	$args = func_get_args();
 	if (count($args) < 3)

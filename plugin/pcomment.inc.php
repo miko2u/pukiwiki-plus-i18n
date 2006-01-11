@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: pcomment.inc.php,v 1.43.2 2005/10/04 14:31:22 miko Exp $
+// $Id: pcomment.inc.php,v 1.43.3 2006/01/11 23:38:00 upk Exp $
 //
 // pcomment plugin - Show/Insert comments into specified (another) page
 //
@@ -43,7 +43,8 @@ function plugin_pcomment_action()
 {
 	global $vars;
 
-	if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
+	// if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
+	if (auth::check_role('readonly')) die_message('PKWK_READONLY prohibits editing');
 
 	if (! isset($vars['msg']) || $vars['msg'] == '') return array();
 	$refer = isset($vars['refer']) ? $vars['refer'] : '';
@@ -108,7 +109,8 @@ function plugin_pcomment_convert()
 
 	list($comments, $digest) = plugin_pcomment_get_comments($_page, $count, $dir, $params['reply']);
 
-	if (PKWK_READONLY) {
+	// if (PKWK_READONLY) {
+	if (auth::check_role('readonly')) {
 		$form_start = $form = $form_end = '';
 	} else {
 		// Show a form
@@ -335,7 +337,8 @@ function plugin_pcomment_get_comments($page, $count, $dir, $reply)
 	if (! check_readable($page, false, false))
 		return array(str_replace('$1', $page, _('Due to the blocking, no comments could be read from  $1 at all.')));
 
-	$reply = (! PKWK_READONLY && $reply); // Suprress radio-buttons
+	// $reply = (! PKWK_READONLY && $reply); // Suprress radio-buttons
+	$reply = (! auth::check_role('readonly') && $reply); // Suprress radio-buttons
 
 	$data = get_source($page);
 	$data = preg_replace('/^#pcomment\(?.*/i', '', $data);	// Avoid eternal recurse
