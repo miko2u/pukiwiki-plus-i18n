@@ -3,7 +3,7 @@
  * PukiWiki Plus! 認証処理
  *
  * @author	Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version	$Id: auth.cls.php,v 0.2 2005/05/27 01:06:00 upk Exp $
+ * @version	$Id: auth.cls.php,v 0.3 2006/10/11 18:28:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
@@ -27,7 +27,8 @@ class auth
 			if (isset($_SERVER[$x])) {
 				$ms = explode('\\', $_SERVER[$x]);
 				if (count($ms) == 3) return $ms[2]; // DOMAIN\\USERID
-				return $_SERVER[$x];
+				if (! empty($_SERVER['PHP_AUTH_PW'])) return $_SERVER[$x];
+				// return $_SERVER[$x];
 			}
 		}
 
@@ -136,7 +137,8 @@ class auth
 		$user = (isset($_SERVER['PHP_AUTH_USER'])) ? $_SERVER['PHP_AUTH_USER'] : '';
 		$pass = (isset($_SERVER['PHP_AUTH_PW']))   ? $_SERVER['PHP_AUTH_PW'] : '';
 		if (empty($user) && empty($pass)) return 0;
-		if ( pkwk_hash_compute($auth_users[$user], $pass) != $auth_users[$user]) return 0;
+		if (empty($auth_users[$user])) return 0;
+		if ( pkwk_hash_compute($pass, $auth_users[$user]) !== $auth_users[$user]) return 0;
 		// if ($auth_users[$user] != $pass) return 0;
 		return 1;
 	}
