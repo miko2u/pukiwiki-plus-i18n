@@ -3,7 +3,7 @@
  * PukiWiki Plus! 認証処理
  *
  * @author	Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth.cls.php,v 0.5 2006/01/12 01:57:00 upk Exp $
+ * @version     $Id: auth.cls.php,v 0.6 2006/01/12 23:52:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
@@ -51,24 +51,27 @@ class auth
 		global $auth_users, $adminpass;
 
 		$login = auth::check_auth();
-		if (empty($login)) return 0;			// 未認証者
-		if (! isset($auth_users[$login])) {
-			if ($login == 'admin') {
-				// return ( pkwk_hash_compute($_SERVER['PHP_AUTH_PW'], $adminpass) !== $adminpass) ? 0 : 3.1;
-				return 3.1;
-			} else {
-				// return ( auth::auth_pw($auth_users) ) ? 4.1 : 0;
-				return 4.1;
-			}
-		}
-		if (empty($auth_users[$login][1])) return 4;	// 認証者(pukiwiki)
+		if (empty($login)) return 0; // 未認証者
 
-		$role = $auth_users[$login][1];
+		// 管理者パスワードなのかどうか？
+		$temp_admin = ( pkwk_hash_compute($_SERVER['PHP_AUTH_PW'], $adminpass) !== $adminpass) ? FALSE : TRUE;
+
+		if (! isset($auth_users[$login])) {
+			// 未登録者の場合
+			// 管理者パスワードと偶然一致した場合でも見做し認証者(4.1)
+			return ($login == 'admin' && $temp_admin) ? 3.1 : 4.1;
+		}
+
+		// 設定されている役割を取得
+		$role = (empty($auth_users[$login][1])) ? 4 : $auth_users[$login][1];
 		switch ($role) {
 		case 2: // サイト管理者
 		case 3: // コンテンツ管理者
+			// パスワードまで一致していること
+			return (auth::auth_pw($auth_users)) ? $role : 4;
+			// return $role;
 		case 4: // 認証者(pukiwiki)
-			return $role;
+			return ($temp_admin) ? 3.1 : 4;
 		}
 		return 4;
 	}
@@ -114,19 +117,35 @@ class auth
 			$chk_role = (defined('PKWK_SAFE_MODE')) ? PKWK_SAFE_MODE : 0;
 			break;
 		case 'su':
-			$auth_temp = array('admin' => array($adminpass) );
+			$now_role = auth::get_role_level();
+			if ($now_role == 2 || (int)$now_role == 3) return FALSE; // 既に権限有
+			$chk_role = 3;
+			switch ($now_role) {
+			case 4.1:
+				// FIXME:
+				return TRUE;
+			case 0:
+				// 未認証者は、単に管理者パスワードを要求
+				$user = 'admin';
+				break;
+			case 4:
+				// 認証済ユーザは、ユーザ名を維持しつつ管理者パスワードを要求
+				$user = auth::check_auth();
+				break;
+			}
+			$auth_temp = array($user => array($adminpass) );
+
 			while(1) {
 				if (!auth::auth_pw($auth_temp))
 				{
 					unset($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']);
-					header( 'WWW-Authenticate: Basic realm="USER NAME is admin"' );
+					header( 'WWW-Authenticate: Basic realm="USER NAME is '.$user.'"' );
 					header( 'HTTP/1.0 401 Unauthorized' );
 					break;
 				}
-				// ESC
-				return FALSE;
+				// ESC : 認証失敗
+				return TRUE;
 			}
-			$chk_role = 3;
 			break;
 		default:
 			$chk_role = 0;
