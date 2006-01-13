@@ -3,7 +3,7 @@
  * PukiWiki Plus! 認証処理
  *
  * @author	Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth.cls.php,v 0.6 2006/01/12 23:52:00 upk Exp $
+ * @version     $Id: auth.cls.php,v 0.7 2006/01/13 00:00:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
@@ -27,18 +27,20 @@ class auth
 	 */
 	function check_auth()
 	{
-		foreach (array('PHP_AUTH_USER', 'REMOTE_USER', 'AUTH_USER') as $x) {
+		// foreach (array('PHP_AUTH_USER', 'AUTH_USER', 'REMOTE_USER', 'LOGON_USER') as $x) {
+		foreach (array('PHP_AUTH_USER', 'AUTH_USER') as $x) {
 			if (isset($_SERVER[$x])) {
 				$ms = explode('\\', $_SERVER[$x]);
 				if (count($ms) == 3) return $ms[2]; // DOMAIN\\USERID
-				foreach (array('PHP_AUTH_PW', 'HTTP_AUTHORIZATION') as $pw) {
+				// foreach (array('PHP_AUTH_PW', 'HTTP_AUTHORIZATION') as $pw) {
+				foreach (array('PHP_AUTH_PW', 'AUTH_PASSWORD', 'HTTP_AUTHORIZATION') as $pw) {
 					if (! empty($_SERVER[$pw])) return $_SERVER[$x];
 				}
 			}
 		}
 
 		// NTLM対応
-		list($domain, $login, $host) = auth::ntlm_decode();
+		list($domain, $login, $host, $pass) = auth::ntlm_decode();
 		return $login;
 	}
 
@@ -216,7 +218,7 @@ class auth
 	 */
 	function ntlm_decode()
 	{
-		$rc = array('','','');
+		$rc = array('','','','');
 		if (!function_exists('base64_decode')) return $rc;
 		if (!isset($_SERVER['HTTP_AUTHORIZATION'])) return $rc;
 		// if (substr($_SERVER['HTTP_AUTHORIZATION'],0,4) != 'MSSP') return $rc;
@@ -227,7 +229,7 @@ class auth
 		// IIS用 (http://homepage1.nifty.com/yito/namazu/gbook/20021127.1530.html)
 		case 'BASIC':     // 'Basic'
 			list($login, $pass) = explode(':', base64_decode(substr($_SERVER['HTTP_AUTHORIZATION'], 6)));
-			return array('',$login,'');
+			return array('',$login,'', $pass);
 		case 'NTLM':      // IIS 4.0
 			break;
 		case 'NEGOTIATE': // IIS 5.0 ('Negotiate')
@@ -248,7 +250,8 @@ class auth
 			$offset = (ord($x[$i+3])*256 + ord($x[$i+2]));	// 33,32  41,40 49,48
 			$rc[] = substr($x, $offset, $len);
 		}
-		return $rc; // domain, login, hostname
+		$rc[] = ''; // pass
+		return $rc; // domain, login, hostname, pass
 	}
 
 	/**
@@ -257,8 +260,36 @@ class auth
 	 */
 	function auth_pw($auth_users)
 	{
-		$user = (isset($_SERVER['PHP_AUTH_USER'])) ? $_SERVER['PHP_AUTH_USER'] : '';
-		$pass = (isset($_SERVER['PHP_AUTH_PW']))   ? $_SERVER['PHP_AUTH_PW'] : '';
+		$user = '';
+		foreach (array('PHP_AUTH_USER', 'AUTH_USER') as $x) {
+			if (isset($_SERVER[$x])) {
+				$ms = explode('\\', $_SERVER[$x]);
+				if (count($ms) == 3) {
+					$user = $ms[2]; // DOMAIN\\USERID
+				} else {
+					$user = $_SERVER[$x];
+				}
+				break;
+			}
+		}
+
+		$pass = '';
+		foreach (array('PHP_AUTH_PW', 'AUTH_PASSWORD', 'HTTP_AUTHORIZATION') as $x) {
+			if (! empty($_SERVER[$x])) {
+				if ($x == 'HTTP_AUTHORIZATION') {
+					// NTLM対応 (domain, login, host, pass)
+					$tmp_ntlm = auth::ntlm_decode();
+					if ($tmp_ntlm[3] == '') continue;
+					if (empty($user)) $user = $tmp_ntlm[1];
+					$pass = $tmp_ntlm[3];
+					unset($tmp_ntml);
+					break;
+				}
+				$pass = $_SERVER[$x];
+				break;
+			}
+		}
+
 		if (empty($user) && empty($pass)) return 0;
 		if (empty($auth_users[$user][0])) return 0;
 		if ( pkwk_hash_compute($pass, $auth_users[$user][0]) !== $auth_users[$user][0]) return 0;
