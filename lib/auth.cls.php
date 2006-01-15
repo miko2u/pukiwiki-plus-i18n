@@ -3,7 +3,7 @@
  * PukiWiki Plus! 認証処理
  *
  * @author	Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth.cls.php,v 0.7 2006/01/13 00:00:00 upk Exp $
+ * @version     $Id: auth.cls.php,v 0.8 2006/01/15 20:49:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
@@ -107,11 +107,11 @@ class auth
 	 * @return bool
 	 * @static
 	 */
-	function check_role($func='')
+	function check_role($val='')
 	{
 		global $adminpass;
 
-		switch($func) {
+		switch($val) {
 		case 'readonly':
 			$chk_role = (defined('PKWK_READONLY')) ? PKWK_READONLY : 0;
 			break;
@@ -148,6 +148,11 @@ class auth
 				// ESC : 認証失敗
 				return TRUE;
 			}
+			break;
+		case 2:
+		case 3:
+		case 4:
+			$chk_role = $val;
 			break;
 		default:
 			$chk_role = 0;
