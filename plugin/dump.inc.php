@@ -1,5 +1,5 @@
 <?php
-// $Id: dump.inc.php,v 1.36.4 2006/01/15 23:46:00 upk Exp $
+// $Id: dump.inc.php,v 1.36.5 2006/01/16 01:31:00 upk Exp $
 //
 // Remote dump / restore plugin
 // Originated as tarfile.inc.php by teanan / Interfair Laboratory 2004.
@@ -71,6 +71,7 @@ function plugin_dump_action()
 	}
 
 	$act  = isset($vars['act'])   ? $vars['act']   : NULL;
+	set_time_limit(0);
 
 	switch($act){
 	case PLUGIN_DUMP_DUMP:
