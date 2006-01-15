@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: list.inc.php,v 1.5.6 2005/06/02 08:16:28 miko Exp $
+// $Id: list.inc.php,v 1.5.7 2006/01/15 22:51:00 upk Exp $
 //
 // IndexPages plugin: Show a list of page names
 function plugin_list_action()
@@ -13,7 +13,13 @@ function plugin_list_action()
 	// Redirected from filelist plugin?
 	$filelist = (array_key_exists('cmd',$vars) and $vars['cmd']=='filelist');
 
-	if ($filelist && ! pkwk_login($vars['pass'])) $filelist = false;
+	if ($filelist) {
+		if (! auth::check_role('role_adm_contents'))
+			$filelist = TRUE;
+		else
+		if (! pkwk_login($vars['pass']))
+			$filelist = FALSE;
+	}
 
 	return array(
 		'msg'=>$filelist ? $_title_filelist : $_title_list,

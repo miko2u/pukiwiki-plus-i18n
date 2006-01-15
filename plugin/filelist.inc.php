@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: filelist.inc.php,v 1.3.5 2005/06/02 08:16:28 miko Exp $
+// $Id: filelist.inc.php,v 1.3.6 2006/01/15 22:50:00 upk Exp $
 //
 // Filelist plugin: redirect to list plugin
 // cmd=filelist
@@ -23,6 +23,10 @@ function plugin_filelist_init()
 function plugin_filelist_action()
 {
 	global $vars;
+
+
+	if (! auth::check_role('role_adm_contents'))
+		return do_plugin_action('list');
 
 	if (!isset($vars['pass'])) return filelist_adm('');
 
