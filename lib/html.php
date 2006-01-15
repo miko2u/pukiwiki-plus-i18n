@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: html.php,v 1.48.21 2005/12/18 15:19:24 miko Exp $
+// $Id: html.php,v 1.48.22 2006/01/16 02:29:00 upk Exp $
 // Copyright (C)
 //   2005      PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
@@ -253,7 +253,7 @@ EOD;
   <input type="checkbox" name="notimestamp" id="_edit_form_notimestamp" value="true"$checked_time />
   <label for="_edit_form_notimestamp"><span class="small">{$_button['notchangetimestamp']}</span></label>
 EOD;
-		if ( $notimeupdate == 2 ) {
+		if ( $notimeupdate == 2 && auth::check_role('role_adm_contents')) {
 			// enable only administrator
 			$add_notimestamp .= <<<EOD
   <input type="password" name="pass" size="12" />
