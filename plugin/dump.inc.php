@@ -1,5 +1,5 @@
 <?php
-// $Id: dump.inc.php,v 1.36.3 2006/01/11 23:26:00 upk Exp $
+// $Id: dump.inc.php,v 1.36.4 2006/01/15 23:46:00 upk Exp $
 //
 // Remote dump / restore plugin
 // Originated as tarfile.inc.php by teanan / Interfair Laboratory 2004.
@@ -42,49 +42,52 @@ $_STORAGE['BACKUP_DIR']['extract_filter'] =  '^' . preg_quote(BACKUP_DIR, '/') .
 // プラグイン本体
 function plugin_dump_action()
 {
-	global $vars;
+	global $vars, $auth_users, $_string;
 
 	// if (PKWK_READONLY) die_message('PKWK_READONLY prohibits this');
-	if (auth::check_role('readonly')) die_message('PKWK_READONLY prohibits this');
+	if (auth::check_role('readonly')) die_message( _("PKWK_READONLY prohibits this") );
 
-	$pass = isset($_POST['pass']) ? $_POST['pass'] : NULL;
-	$act  = isset($vars['act'])   ? $vars['act']   : NULL;
-
+	$msg = (PLUGIN_DUMP_ALLOW_RESTORE) ? _("dump & restore") : _("dump");
 	$body = '';
 
-	if ($pass !== NULL) {
-		if (! pkwk_login($pass)) {
+ 	while (auth::check_role('role_adm')) {
+		unset($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']);
+		if (!auth::auth_pw($auth_users))
+		{
+			header('WWW-Authenticate: Basic realm="'.$_string['realm'].'"');
+			header( 'HTTP/1.0 401 Unauthorized' );
+
 			$body = "<p><strong>" . _("The password is different.") . "</strong></p>\n";
-		} else {
-			switch($act){
-			case PLUGIN_DUMP_DUMP:
-				$body = plugin_dump_download();
-				break;
-			case PLUGIN_DUMP_RESTORE:
-				$retcode = plugin_dump_upload();
-				if ($retcode['code'] == TRUE) {
-					$msg = _("Up-loading was completed.");
-				} else {
-					$msg = _("It failed in up-loading.");
-				}
-				$body .= $retcode['msg'];
-				return array('msg' => $msg, 'body' => $body);
-				break;
-			}
+			return array('msg' => $msg, 'body' => $body);
+
 		}
 	}
 
-	// 入力フォームを表示
-	$body .= plugin_dump_disp_form();
+	// メニューを表示する必要があるか？
+	if (! isset($vars['menu'])) {
+		// 入力フォームを表示
+		$body = plugin_dump_disp_form();
+		return array('msg' => $msg, 'body' => $body);
+	}
 
-	$msg = '';
-	if (PLUGIN_DUMP_ALLOW_RESTORE) {
-		$msg = 'dump & restore';
-	} else {
-		$msg = 'dump';
+	$act  = isset($vars['act'])   ? $vars['act']   : NULL;
+
+	switch($act){
+	case PLUGIN_DUMP_DUMP:
+		$body = plugin_dump_download();
+		break;
+	case PLUGIN_DUMP_RESTORE:
+		$retcode = plugin_dump_upload();
+		$msg = ($retcode['code'] == TRUE) ? _("Up-loading was completed.") : _("It failed in up-loading.");
+		$body = $retcode['msg'];
+		break;
+	default:
+		// 無効な命令です。
+		$body = _("It is an invalid instruction.");
 	}
 
 	return array('msg' => $msg, 'body' => $body);
+
 }
 
 /////////////////////////////////////////////////
@@ -133,7 +136,7 @@ function plugin_dump_upload()
 	global $vars, $_STORAGE;
 
 	if (! PLUGIN_DUMP_ALLOW_RESTORE)
-		return array('code' => FALSE , 'msg' => 'Restoring function is not allowed');
+		return array('code' => FALSE , 'msg' => _("Restoring function is not allowed") );
 
 	$filename = $_FILES['upload_file']['name'];
 	$matches  = array();
@@ -146,11 +149,11 @@ function plugin_dump_upload()
 		case '.tar':    $arc_kind = 'tar'; break;
 		case '.tgz':    $arc_kind = 'tar'; break;
 		case '.tar.gz': $arc_kind = 'tgz'; break;
-		default: die_message('Invalid file suffix: ' . $matches[1]); }
+		default: die_message( _("Invalid file suffix: ") . $matches[1]); }
 	}
 
 	if ($_FILES['upload_file']['size'] >  PLUGIN_DUMP_MAX_FILESIZE * 1024)
-		die_message('Max file size exceeded: ' . PLUGIN_DUMP_MAX_FILESIZE . 'KB');
+		die_message( _("Max file size exceeded: ") . PLUGIN_DUMP_MAX_FILESIZE . 'KB');
 
 	// Create a temporary tar file
 	$uploadfile = tempnam(CACHE_DIR, 'tarlib_uploaded_');
@@ -221,12 +224,14 @@ function plugin_dump_disp_form()
 	$_dump_namedecode  = _("Virtual of page name encode is converted into the file name with the directory.") .
 		_("(The restoration that uses this data cannot be done.") .
 		_("Moreover, a part of character is substituted for '_'.)");
-	$_dump_admin   = _("Administrator password");
+	// $_dump_admin   = _("Administrator password");
 	$_dump_h3_store = _(" Restoration of data");
 	$_dump_caution = _("[IMPORTANCE]");
 	$_dump_write   = _("Attention: Please note that the data file of the same name is overwrited.");
 	$_dump_upload  = _("The size of the maximum file that can be up-loaded is up to $maxsize KByte.<br />");
 	$_dump_file = _("File");
+	$_dump_btn_down = _("Download execution");
+	$_dump_btn_up = _("Upload execution");
 
 	$data = <<<EOD
 <span class="small">
@@ -237,6 +242,7 @@ function plugin_dump_disp_form()
   <input type="hidden" name="cmd"  value="dump" />
   <input type="hidden" name="page" value="$defaultpage" />
   <input type="hidden" name="act"  value="$act_down" />
+  <input type="hidden" name="menu" value="1" />
 
 <p><strong>$_dump_arc</strong>
 <br />
@@ -259,9 +265,8 @@ function plugin_dump_disp_form()
   <input type="checkbox" name="namedecode" id="_p_dump_namedecode" />
   <label for="_p_dump_namedecode">$_dump_namedecode</label><br />
 </p>
-<p><label for="_p_dump_adminpass_dump"><strong>$_dump_admin</strong></label>
-  <input type="password" name="pass" id="_p_dump_adminpass_dump" size="12" />
-  <input type="submit"   name="ok"   value="OK" />
+<p>
+  <input type="submit" name="ok" value="$_dump_btn_down" />
 </p>
  </div>
 </form>
@@ -282,9 +287,8 @@ $_dump_upload
   <label for="_p_dump_upload_file">$_dump_file:</label>
   <input type="file" name="upload_file" id="_p_dump_upload_file" size="40" />
 </p>
-<p><label for="_p_dump_adminpass_restore"><strong>$_dump_admin</strong></label>
-  <input type="password" name="pass" id="_p_dump_adminpass_restore" size="12" />
-  <input type="submit"   name="ok"   value="OK" />
+<p>
+  <input type="submit" name="ok" value="$_dump_btn_up" />
 </p>
  </div>
 </form>
