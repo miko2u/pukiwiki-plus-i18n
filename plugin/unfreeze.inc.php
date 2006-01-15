@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: unfreeze.inc.php,v 1.10.3 2005/03/09 06:24:21 miko Exp $
+// $Id: unfreeze.inc.php,v 1.10.4 2006/01/15 23:29:00 upk Exp $
 //
 // Unfreeze(Unlock) plugin
 
@@ -30,7 +30,10 @@ function plugin_unfreeze_action()
 		$body = str_replace('$1', htmlspecialchars(strip_bracket($page)),
 			$_title_isunfreezed);
 
-	} else if ($pass !== NULL && pkwk_login($pass)) {
+	} else
+	if ( (! auth::check_role('role_adm_contents') ) ||
+	     ($pass !== NULL && pkwk_login($pass)) )
+	{
 		// Unfreeze
 		$postdata = get_source($page);
 		array_shift($postdata);

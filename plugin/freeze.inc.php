@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: freeze.inc.php,v 1.9.1 2005/03/09 07:32:19 miko Exp $
+// $Id: freeze.inc.php,v 1.9.2 2006/01/15 23:25:00 upk Exp $
 //
 // Freeze(Lock) plugin
 
@@ -30,7 +30,10 @@ function plugin_freeze_action()
 		$body = str_replace('$1', htmlspecialchars(strip_bracket($page)),
 			$_title_isfreezed);
 
-	} else if ($pass !== NULL && pkwk_login($pass)) {
+	} else
+	if ( (! auth::check_role('role_adm_contents') ) ||
+	     ($pass !== NULL && pkwk_login($pass) ) )
+	{
 		// Freeze
 		$postdata = get_source($page);
 		array_unshift($postdata, "#freeze\n");
