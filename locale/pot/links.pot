@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-04-02 15:01+0900\n"
+"POT-Creation-Date: 2006-01-17 02:16+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -61,10 +61,14 @@ msgid ""
 "\n"
 msgstr ""
 
-#: ../../plugin/links.inc.php:23
+#: ../../plugin/links.inc.php:24
 msgid "* EXEC\n"
 msgstr ""
 
-#: ../../plugin/links.inc.php:24
+#: ../../plugin/links.inc.php:25
 msgid "Please input the Administrator password, and click the [Exec] button.\n"
+msgstr ""
+
+#: ../../plugin/links.inc.php:37
+msgid "PKWK_READONLY prohibits this"
 msgstr ""
