@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: edit.inc.php,v 1.19.37.5 2006/01/16 02:27:00 upk Exp $
+// $Id: edit.inc.php,v 1.19.37.6 2006/01/18 01:56:00 upk Exp $
 //
 // Edit plugin
 // cmd=edit
@@ -221,12 +221,10 @@ function plugin_edit_write()
 		if ($postdata) {
 			$notimestamp = ($notimeupdate != 0) && (isset($vars['notimestamp']) && $vars['notimestamp'] != '');
 			// if($notimestamp && ($notimeupdate == 2) && !pkwk_login($vars['pass'])) {
-			if ($notimestamp && ($notimeupdate == 2) && auth::check_role('role_adm_contents')) {
-				if (!pkwk_login($vars['pass'])) {
-					// enable only administrator & password error
-					$retvars['body']  = "<p><strong>$_msg_invalidpass</strong></p>\n";
-					$retvars['body'] .= edit_form($page, $vars['msg'], $vars['digest'], FALSE);
-				}
+			if ($notimestamp && ($notimeupdate == 2) && auth::check_role('role_adm_contents') && !pkwk_login($vars['pass'])) {
+				// enable only administrator & password error
+				$retvars['body']  = "<p><strong>$_msg_invalidpass</strong></p>\n";
+				$retvars['body'] .= edit_form($page, $vars['msg'], $vars['digest'], FALSE);
 			} else {
 				page_write($page, $postdata, $notimestamp);
 				pkwk_headers_sent();
