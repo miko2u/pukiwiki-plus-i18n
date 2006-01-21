@@ -3,7 +3,7 @@
  * PukiWiki Plus! 認証処理
  *
  * @author	Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth.cls.php,v 0.10 2006/01/15 22:54:00 upk Exp $
+ * @version     $Id: auth.cls.php,v 0.11 2006/01/22 00:14:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
@@ -27,12 +27,11 @@ class auth
 	 */
 	function check_auth()
 	{
-		// foreach (array('PHP_AUTH_USER', 'AUTH_USER', 'REMOTE_USER', 'LOGON_USER') as $x) {
-		foreach (array('PHP_AUTH_USER', 'AUTH_USER') as $x) {
+		foreach (array('PHP_AUTH_USER', 'AUTH_USER', 'REMOTE_USER', 'LOGON_USER') as $x) {
 			if (isset($_SERVER[$x])) {
+				if (! empty($_SERVER['AUTH_TYPE']) && $_SERVER['AUTH_TYPE'] == 'Digest') return $_SERVER[$x];
 				$ms = explode('\\', $_SERVER[$x]);
 				if (count($ms) == 3) return $ms[2]; // DOMAIN\\USERID
-				// foreach (array('PHP_AUTH_PW', 'HTTP_AUTHORIZATION') as $pw) {
 				foreach (array('PHP_AUTH_PW', 'AUTH_PASSWORD', 'HTTP_AUTHORIZATION') as $pw) {
 					if (! empty($_SERVER[$pw])) return $_SERVER[$x];
 				}
