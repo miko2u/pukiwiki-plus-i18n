@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: minicalendar_viewer.inc.php,v 1.34.19 2006/01/11 23:34:00 upk Exp $
+// $Id: minicalendar_viewer.inc.php,v 1.34.20 2006/01/22 23:48:00 upk Exp $
 //
 // Calendar viewer plugin - List pages that calendar/calnedar2 plugin created
 // (Based on calendar and recent plugin)
@@ -201,7 +201,7 @@ function plugin_minicalendar_viewer_convert()
 		$s_page = htmlspecialchars($page);
 		if (PLUGIN_MINICALENDAR_VIEWER_DATE_FORMAT !== FALSE) {
 			$time = strtotime(basename($page)); // $date_sep must be assumed '-' or ''!
-			if ($time == -1) {
+			if ($time == -1 || $time == FALSE) {
 				$s_page = htmlspecialchars($page); // Failed. Why?
 			} else {
 				$week   = $weeklabels[date('w', $time)];
