@@ -2,7 +2,7 @@
 //////////////////////////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: replace.inc.php,v 1.1.4 2004/09/22 12:25:20 miko Exp $
+// $Id: replace.inc.php,v 1.1.5 2006/01/23 02:06:00 upk Exp $
 //
 // ファイル名一覧の表示
 // cmd=replace
@@ -17,6 +17,7 @@ function plugin_replace_init()
 	$messages = array(
 		'_replace_msg' => array(
 			'msg_input_pass'         => _('Please input the retrieval character string, the substitution character string, and the password for the Administrator.'),
+			'msg_input_str'          => _('Please input the retrieval character string, the substitution character string.'),
 			'msg_input_search_word'  => _('Retrieval character string:'),
 			'msg_input_replace_word' => _('Substitution character string:'),
 			'btn_exec'               => _('Exec'),
@@ -28,6 +29,8 @@ function plugin_replace_init()
 			'msg_H0_replace'         => _('All page character string substitution'),
 			'msg_no_replaced'        => _('There is no substituted character string.'),
 			'msg_replaced'           => _('The following pages were substituted.'),
+			'msg_H0_replaced'        => _('Replaced.'),
+			'msg_H0_no_data'         => _('No search data.'),
 		)
 	);
 	set_plugin_messages($messages);
@@ -36,17 +39,26 @@ function plugin_replace_init()
 function plugin_replace_action()
 {
 	global $post, $cycle, $cantedit;
-	global $_replace_msg;
 
 	$pass    = isset($post['pass'])    ? $post['pass']    : '__nopass__';
 	$search  = isset($post['search'])  ? $post['search']  : NULL;
 	$replace = isset($post['replace']) ? $post['replace'] : NULL;
+
+	if ($search != '' && ! auth::check_role('role_adm_contents')) return replace_do($search,$replace);
 
 	// パスワードと検索文字列がないと置換はできない。
 	if ($search == '' || !pkwk_login($pass) || $pass == 'pass') {
 		$vars['cmd'] = 'read';
 		return replace_adm($pass,$search);
 	}
+
+	return replace_do($search,$replace);
+}
+
+function replace_do($search,$replace)
+{
+	global $cycle, $cantedit;
+	global $_replace_msg;
 
 	// パスワードが合ってたらいよいよ置換
 	$pages = get_existpages();
@@ -84,12 +96,12 @@ function plugin_replace_action()
 	$vars['cmd'] = 'read';
 	if ( count($replaced_pages) == 0 ) {
 		return array(
-			'msg'  => 'No search data.',
+			'msg'  => $_replace_msg['msg_H0_no_data'],
 			'body' => '<p>' . $_replace_msg['msg_no_replaced'] . '</p>'
 		);
 	}
 	return array(
-		'msg'  => 'Replaced.',
+		'msg'  => $_replace_msg['msg_H0_replaced'],
 		'body' => '<p>' . $_replace_msg['msg_replaced'] . "</p>\n<p>" . join("<br />\n", $replaced_pages) . '</p>'
 	);
 }
@@ -102,15 +114,26 @@ function replace_adm($pass,$search)
 
 	$label1 = $_replace_msg['msg_input_search_word'];
 	$label2 = $_replace_msg['msg_input_replace_word'];
-	$msg = $_replace_msg['msg_input_pass'];
 	$btn = $_replace_msg['btn_exec'];
 	$body = "";
 
-	if ($pass == 'pass') {
-		$body .= "<p><strong>".$_replace_msg['msg_warn_pass']."</strong></p>\n";
-	} elseif ($pass != '__nopass__') {
-		$body .= "<p><strong>".$_replace_msg['msg_no_pass']."</strong></p>\n";
+	if (! auth::check_role('role_adm_contents')) {
+		$msg = $_replace_msg['msg_input_str'];
+		$body_pass = "<br />\n";
+	} else {
+		$msg = $_replace_msg['msg_input_pass'];
+		$body_pass = <<<EOD
+  Password<br />
+  <input type="password" name="pass" size="12" /> <br />
+
+EOD;
+		if ($pass == 'pass') {
+			$body .= "<p><strong>".$_replace_msg['msg_warn_pass']."</strong></p>\n";
+		} elseif ($pass != '__nopass__') {
+			$body .= "<p><strong>".$_replace_msg['msg_no_pass']."</strong></p>\n";
+		}
 	}
+
 	if ($search === '') {
 		$body .= "<p><strong>".$_replace_msg['msg_no_search']."</strong></p>\n";
 	}
@@ -124,8 +147,7 @@ function replace_adm($pass,$search)
   <input type="text" name="search" size="24" /> <br />
   $label2<br />
   <input type="text" name="replace" size="24" /> <br />
-  Password<br />
-  <input type="password" name="pass" size="12" /> <br />
+$body_pass
   <input type="submit" name="ok" value="$btn" />
  </div>
 </form>
