@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: showrss.inc.php,v 1.17.1 2005/06/04 21:21:00 upk Exp $
+// $Id: showrss.inc.php,v 1.17.2 2006/01/23 00:07:00 upk Exp $
 //  Id:showrss.inc.php,v 1.40 2003/03/18 11:52:58 hiro Exp
 //
 // Show RSS of remote site plugin
@@ -259,19 +259,21 @@ class ShowRSS_XML
 		$item = array_map(array(& $this, 'escape'), $this->item);
 		$this->item = array();
 
-		if (isset($item['DC:DATE'])) {
-			$time = plugin_showrss_get_timestamp($item['DC:DATE']);
-			
-		} else if (isset($item['PUBDATE'])) {
-			$time = plugin_showrss_get_timestamp($item['PUBDATE']);
-			
-		} else if (isset($item['DESCRIPTION']) &&
-			($description = trim($item['DESCRIPTION'])) != '' &&
-			($time = strtotime($description)) != -1) {
-				// $time -= LOCALZONE; FIXME:
-		} else {
-			$time = time();
+		$time = '';
+		foreach(array('DC:DATE','PUBDATE','DESCRIPTION') as $x) {
+			if (!isset($item[$x])) continue;
+			if ($x != 'DESCRIPTION') {
+				$time = plugin_showrss_get_timestamp($item[$x]);
+				break;
+			}
+			// DESCRIPTION
+			$description = trim($item['DESCRIPTION']);
+			if ($description == '') break;
+			$time = strtotime($description);
 		}
+
+		if ($time == '' || $time == -1 || $time == FALSE)
+			$time = time();
 		$item['_TIMESTAMP'] = $time;
 		$date = get_date('Y-m-d', $item['_TIMESTAMP']);
 
