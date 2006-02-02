@@ -1,8 +1,8 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: default.ini.php,v 1.24.3 2005/12/10 07:57:30 miko Exp $
+// $Id: default.ini.php,v 1.24.4 2006/02/02 01:25:00 upk Exp $
 // Copyright (C)
-//   2005      PukiWiki Plus! Team
+//   2005-2006 PukiWiki Plus! Team
 //   2003-2005 PukiWiki Developers Team
 //   2001-2002 Originally written by yu-ji
 // License: GPL v2 or (at your option) any later version
@@ -34,9 +34,9 @@ $list_index = 1;
 
 /////////////////////////////////////////////////
 // 特殊シンボル
-$_symbol_paraedit = '<img src="./image/plus/paraedit.png" width="9" height="9" alt="Edit" title="Edit" />';
-$_symbol_extanchor = '<img src="./image/plus/ext.png" alt="" title="" class="ext" onclick="return open_uri(\'$1\', \'$2\');" />';
-$_symbol_innanchor = '<img src="./image/plus/inn.png" alt="" title="" class="inn" onclick="return open_uri(\'$1\', \'$2\');" />';
+$_symbol_paraedit = '<img src="'. IMAGE_URI.'plus/paraedit.png" width="9" height="9" alt="Edit" title="Edit" />';
+$_symbol_extanchor = '<img src="'.IMAGE_URI.'plus/ext.png" alt="" title="" class="ext" onclick="return open_uri(\'$1\', \'$2\');" />';
+$_symbol_innanchor = '<img src="'.IMAGE_URI.'plus/inn.png" alt="" title="" class="inn" onclick="return open_uri(\'$1\', \'$2\');" />';
 
 /////////////////////////////////////////////////
 // リスト構造の左マージン
