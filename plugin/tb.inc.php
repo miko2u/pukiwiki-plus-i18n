@@ -1,9 +1,9 @@
 <?php
-// $Id: tb.inc.php,v 1.19.3 2005/06/05 03:52:00 upk Exp $
+// $Id: tb.inc.php,v 1.19.4 2006/02/02 01:30:00 upk Exp $
 /*
  * PukiWiki/TrackBack: TrackBack Ping receiver and viewer
  * (C) 2003-2004 PukiWiki Developers Team
- * (C) 2003,2005 Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * (C) 2003,2005-2006 Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * License: GPL
  *
  * plugin_tb_action()    action
@@ -209,7 +209,7 @@ function plugin_tb_mode_view_set($tb_id, $page)
 		$time = get_date($_tb_date, $time);
 
 		$body .= '<h4><a class="ext" href="' . $url . '" rel="nofollow">' . $title . 
-			 '<img src="./image/plus/ext.png" alt="" title="" class="ext" onclick="return open_uri(\'' .
+			 '<img src="'.IMAGE_URI.'plus/ext.png" alt="" title="" class="ext" onclick="return open_uri(\'' .
 			 $url . '\', \'_blank\');" /></a></h4>' . "\n";
 
 		$body .= '<p>' . $excerpt . "</p>\n";
@@ -222,7 +222,7 @@ function plugin_tb_mode_view_set($tb_id, $page)
 
 	$body .= '<div style="text-align:right">' .
 		 '<a href="' . $script . '?plugin=tb&amp;__mode=view">' . 'Trackback List' . 
-		 '<img src="./image/plus/trackback.png" alt="" title="" />' .
+		 '<img src="'.IMAGE_URI.'plus/trackback.png" alt="" title="" />' .
 		 '</a>'. "</div>\n";
 
 	return $body;
