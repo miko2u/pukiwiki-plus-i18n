@@ -3,7 +3,7 @@
  * Detect user's language, and show only messages written in that.  
  *
  * @copyright	Copyright &copy; 2005-2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version	$Id: multilang.inc.php,v 0.6 2006/02/04 18:15:00 upk Exp $
+ * @version	$Id: multilang.inc.php,v 0.7 2006/02/04 21:41:00 upk Exp $
  *
  */
 
@@ -52,7 +52,7 @@ function plugin_multilang_inline()
 		return plugin_multilang_inline_link($option, $args);
 	} else {
 	
-		if (plugin_multilang_accept($lang)) {
+		if (is_language_accept($lang)) {
 			return array_pop($args);
 		} else {
 			return '';
@@ -102,24 +102,6 @@ function plugin_multilang_inline_link($option, $args)
 	}
 }
 
-function plugin_multilang_accept($lang)
-{
-	global $language_considering_setting_level;
-	global $language;
-
-	// FIXME: level 4
-	if (isset($_COOKIE['lang'])) {
-		$env = $_COOKIE['lang'];
-		// 'none' shows everything. 
-		if ($env == 'none') { return TRUE; }
-	} else { 
-		$env = ($language_considering_setting_level == 0) ? get_language(4) : $language;
-		$l = accept_language::split_locale_str($env);
-	}
-
-	return $lang == $env || $lang == $l[1];
-}
-
 function plugin_multilang_convert()
 {
 	global $language_considering_setting_level;
@@ -134,7 +116,7 @@ function plugin_multilang_convert()
 		list($lang,$lines) = func_get_args();
 	}
 
-	if (plugin_multilang_accept($lang)) {
+	if (is_language_accept($lang)) {
 		$lines = preg_replace(array("[\\r|\\n]","[\\r]"), array("\n","\n"), $lines);
 		//return preg_replace(array("'<p>'si","'</p>'si"), array("",""), convert_html($lines) );
 		return convert_html($lines);

@@ -3,8 +3,8 @@
  * Plug-in that achieves gettext in PukiWiki page
  * PukiWiki ページ内で gettext を実現するプラグイン
  *
- * @copyright   Copyright &copy; 2005, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: _.inc.php,v 0.9 2005/05/14 00:54:00 upk Exp $
+ * @copyright   Copyright &copy; 2005-2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * @version     $Id: _.inc.php,v 0.10 2006/02/04 21:43:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License
  *
  * o :config/i18n/text/ja/text or :config/i18n/text/ja_JP is acceptable.
@@ -40,11 +40,7 @@ function plugin___inline()
 
 	$msg = strip_htmltag($msg);
 
-	// FIXME: level 4
-	$view_lang  = ($language_considering_setting_level == 0) ? get_language(4) : $language;
-	$view_lang_split = accept_language::split_locale_str($view_lang); // ja_JP なら ja に分割
-
-	if ($parm_lang == $view_lang || $parm_lang == $lang[1]) return $msg; // 指定言語と同じ
+	if (is_language_accept($parm_lang)) return $msg; // 指定言語と同じ
 
 	// 指定文字列が en 以外の場合は、ベース言語に変換後、他言語に変換する
 	$parm_lang_split = accept_language::split_locale_str($parm_lang);
