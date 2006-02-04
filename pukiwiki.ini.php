@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: pukiwiki.ini.php,v 1.128.19 2006/01/11 22:35:00 upk Exp $
+// $Id: pukiwiki.ini.php,v 1.128.20 2006/02/05 01:42:00 upk Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
@@ -70,17 +70,19 @@ if (! defined('DEFAULT_LANG'))
 
 // Effective making function switch (2 Then, it becomes a judgment of 1 and 2.)
 // 0) Invalidity
-// 1) Judgment with HTTP_ACCEPT_LANGUAGE
-// 2) Considering judgment to HTTP_USER_AGENT
-// 3) Considering judgment to HTTP_ACCEPT_CHARSET
-// 4) Considering judgment to REMOTE_ADDR
+// 1) Judgment with COOKIE['lang']
+// 2) Judgment with HTTP_ACCEPT_LANGUAGE
+// 3) Considering judgment to HTTP_USER_AGENT
+// 4) Considering judgment to HTTP_ACCEPT_CHARSET
+// 5) Considering judgment to REMOTE_ADDR
 // 機能有効化スイッチ (2 なら、1と2の判定となる)
 // 0) 無効
-// 1) HTTP_ACCEPT_LANGUAGE での判定
-// 2) HTTP_USER_AGENT までの見做し判定
-// 3) HTTP_ACCEPT_CHARSET までの見做し判定
-// 4) REMOTE_ADDR までの見做し判定
-$language_considering_setting_level = 1;
+// 1) COOKIE['lang'] での判定
+// 2) HTTP_ACCEPT_LANGUAGE での判定
+// 3) HTTP_USER_AGENT までの見做し判定
+// 4) HTTP_ACCEPT_CHARSET までの見做し判定
+// 5) REMOTE_ADDR までの見做し判定
+$language_considering_setting_level = 2;
 
 // Please define it when two or more TimeZone such as en_US exists.
 // Please refer to lib/timezone.php for the defined character string.
