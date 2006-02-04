@@ -1,5 +1,5 @@
 <?php
-// $Id: dump.inc.php,v 1.36.5 2006/01/16 01:31:00 upk Exp $
+// $Id: dump.inc.php,v 1.36.6 2006/02/04 17:58:00 upk Exp $
 //
 // Remote dump / restore plugin
 // Originated as tarfile.inc.php by teanan / Interfair Laboratory 2004.
@@ -157,7 +157,8 @@ function plugin_dump_upload()
 		die_message( _("Max file size exceeded: ") . PLUGIN_DUMP_MAX_FILESIZE . 'KB');
 
 	// Create a temporary tar file
-	$uploadfile = tempnam(CACHE_DIR, 'tarlib_uploaded_');
+	// dev:BugTrack2/122
+	$uploadfile = tempnam(realpath(CACHE_DIR), 'tarlib_uploaded_');
 	$tar = new tarlib();
 	if(! move_uploaded_file($_FILES['upload_file']['tmp_name'], $uploadfile) ||
 	   ! $tar->open($uploadfile, $arc_kind)) {
