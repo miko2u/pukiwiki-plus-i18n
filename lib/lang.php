@@ -2,8 +2,8 @@
 /**
  * Language judgment (言語判定)
  *
- * @copyright   Copyright &copy; 2005-2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: lang.php,v 0.19 2006/02/04 21:38:00 upk Exp $
+ * @copyright   Copyright &copy; 2005, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * @version     $Id: lang.php,v 0.18 2005/06/04 19:19:00 upk Exp $
  *
  */
 
@@ -116,28 +116,6 @@ function get_language($level = 0)
 		}
 	}
 	return DEFAULT_LANG;
-}
-
-/*
- * is_language_accept
- * @return	bool
- */
-function is_language_accept($lang)
-{
-	global $language_considering_setting_level;
-	global $language;
-
-	// FIXME: level 4
-	if (isset($_COOKIE['lang'])) {
-		$env = $_COOKIE['lang'];
-		// 'none' shows everything.
-		if ($env == 'none') { return TRUE; }
-	} else {
-		$env = ($language_considering_setting_level == 0) ? get_language(4) : $language;
-		$l = accept_language::split_locale_str($env);
-	}
-
-	return $lang == $env || $lang == $l[1];
 }
 
 /*
