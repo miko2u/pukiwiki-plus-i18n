@@ -2,8 +2,8 @@
 /**
  * Language judgment (言語判定)
  *
- * @copyright   Copyright &copy; 2005, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: lang.php,v 0.18 2005/06/04 19:19:00 upk Exp $
+ * @copyright   Copyright &copy; 2005-2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * @version     $Id: lang.php,v 0.19 2006/02/04 23:40:00 upk Exp $
  *
  */
 
@@ -87,10 +87,11 @@ function get_language($level = 0)
 	if ($level == 0) return DEFAULT_LANG;
 
 	$lng_func = array(
-		'get_accept_language',		// 1 return ja,ko
-		'get_user_agent_mozilla',	// 2 return ja,ja_JP
-		'get_accept_charset',		// 3 return ja_JP
-		'get_remote_addr',		// 4 return ja
+		'get_cookie_lang',		// 1 return ja,ja_JP
+		'get_accept_language',		// 2 return ja,ko
+		'get_user_agent_mozilla',	// 3 return ja,ja_JP
+		'get_accept_charset',		// 4 return ja_JP
+		'get_remote_addr',		// 5 return ja
 	);
 
 	$obj_lng = new accept_language();
@@ -192,10 +193,11 @@ function _lang_keyset($lang,$key)
  * accept_language
  * @abstract
  *
- * 1) HTTP_ACCEPT_LANGUAGE
- * 2) HTTP_USER_AGENT
- * 3) HTTP_ACCEPT_CHARSET
- * 4) REMOTE_ADDR
+ * 1) COOKIE['lang']
+ * 2) HTTP_ACCEPT_LANGUAGE
+ * 3) HTTP_USER_AGENT
+ * 4) HTTP_ACCEPT_CHARSET
+ * 5) REMOTE_ADDR
  */
 class accept_language
 {
@@ -346,6 +348,26 @@ class accept_language
 		'pn' => 'en',
 		'ck' => 'en',
 	);
+
+	/*
+	 * get_cookie_lang
+	 * @static
+	 * @return	array
+	 */
+	function get_cookie_lang()
+	{
+		if (isset($HTTP_COOKIE_VARS['lang'])) {
+			$cookie['lang'] = $HTTP_COOKIE_VARS['lang'];
+		} elseif (isset($_COOKIE['lang']) ) {
+			$cookie['lang'] = $_COOKIE['lang'];
+		} else {
+			return '';
+		}
+
+                if ($cookie['lang'] == 'none') return '';
+		$l = accept_language::split_locale_str($cookie['lang']);
+		return array(array($l[0],1));
+	}
 
 	/*
 	 * get_accept_language
