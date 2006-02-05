@@ -3,7 +3,7 @@
  * Detect user's language, and show only messages written in that.  
  *
  * @copyright	Copyright &copy; 2005-2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version	$Id: multilang.inc.php,v 0.7 2006/02/05 01:19:00 upk Exp $
+ * @version	$Id: multilang.inc.php,v 0.8 2006/02/05 17:01:00 upk Exp $
  *
  */
 
@@ -39,9 +39,11 @@ function plugin_multilang_action()
 		$language = get_language(1);
 	} 
 
-	if(exist_plugin_action('read')) {
-		return plugin_read_action();
-	} // if not? No way....
+	// Location ヘッダーで飛ばないような環境の場合は、この部分を
+	// 有効にして対応下さい。
+	// if(exist_plugin_action('read')) return plugin_read_action();
+	header('Location: ' . get_script_uri() . '?' . rawurlencode($page) );
+	exit;
 }
 
 function plugin_multilang_inline()
@@ -72,6 +74,7 @@ function plugin_multilang_inline_link($option, $args)
 	$page = $vars['page'];
 	$url = "$script?page=$page&amp;cmd=multilang&amp;lang";
 	$obj_l2c = new lang2country();
+
 	foreach( $args as $arg ) {
 		$arg = htmlspecialchars($arg);
 
@@ -80,7 +83,6 @@ function plugin_multilang_inline_link($option, $args)
 		list($style, $country) = split('=', $style);
 		
 		if($style != 'text') { // flag or text : default is flag
-			
 			if (empty($country)) {
 				list($lng, $country) = split('_', $lang); // en_US -> en, US
 				if(empty($country)) {
@@ -100,9 +102,9 @@ function plugin_multilang_inline_link($option, $args)
 	if($option == 'delim') { // default: nodelim
 		return PLUGIN_MULTILANG_INLINE_BEFORE . join(PLUGIN_MULTILANG_INLINE_DELIMITER, $body)
 			. PLUGIN_MULTILANG_INLINE_AFTER;
-	} else {
-		return join(' ', $body);
 	}
+
+	return join(' ', $body);
 }
 
 function plugin_multilang_accept($lang)
