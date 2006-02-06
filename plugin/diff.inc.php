@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: diff.inc.php,v 1.18.3 2006/01/11 23:25:00 upk Exp $
+// $Id: diff.inc.php,v 1.18.4 2006/02/06 20:52:00 upk Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
@@ -101,6 +101,14 @@ function plugin_diff_delete($page)
 	if (! is_pagename($page))     $body = 'Invalid page name';
 	if (! file_exists($filename)) $body = make_pagelink($page) . '\'s diff seems not found';
 	if ($body) return array('msg'=>$_title_diff_delete, 'body'=>$body);
+
+	if (! auth::check_role('role_adm_contents')) {
+		unlink($filename);
+		return array(
+			'msg'  => $_title_diff_delete,
+			'body' => str_replace('$1', make_pagelink($page), $_msg_diff_deleted)
+		);
+        }
 
 	if (isset($vars['pass'])) {
 		if (pkwk_login($vars['pass'])) {

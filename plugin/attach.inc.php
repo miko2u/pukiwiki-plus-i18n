@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: attach.inc.php,v 1.80.11 2006/01/11 23:18:00 upk Exp $
+// $Id: attach.inc.php,v 1.80.12 2006/02/06 21:17:00 upk Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2003-2005 PukiWiki Developers Team
@@ -226,7 +226,9 @@ function attach_upload($file, $page, $pass = NULL)
 		return array(
 			'result'=>FALSE,'
 			msg'=>$_attach_messages['err_noparm']);
-	} else if (PLUGIN_ATTACH_UPLOAD_ADMIN_ONLY && $pass !== TRUE &&
+
+	// } else if (PLUGIN_ATTACH_UPLOAD_ADMIN_ONLY && $pass !== TRUE &&
+	} else if (PLUGIN_ATTACH_UPLOAD_ADMIN_ONLY && auth::check_role('role_adm_contents') && $pass !== TRUE &&
 		  ($pass === NULL || ! pkwk_login($pass))) {
 		return array(
 			'result'=>FALSE,
@@ -486,8 +488,10 @@ EOD;
 
 	$pass = '';
 	if (PLUGIN_ATTACH_PASSWORD_REQUIRE || PLUGIN_ATTACH_UPLOAD_ADMIN_ONLY) {
-		$title = $_attach_messages[PLUGIN_ATTACH_UPLOAD_ADMIN_ONLY ? 'msg_adminpass' : 'msg_password'];
-		$pass = '<br />' . $title . ': <input type="password" name="pass" size="8" />';
+		if (auth::check_role('role_adm_contents')) {
+			$title = $_attach_messages[PLUGIN_ATTACH_UPLOAD_ADMIN_ONLY ? 'msg_adminpass' : 'msg_password'];
+			$pass = '<br />' . $title . ': <input type="password" name="pass" size="8" />';
+		}
 	}
 	$html = '';
 	if ($listview) {
@@ -625,11 +629,14 @@ class AttachFile
 		$s_file = htmlspecialchars($this->file);
 		$s_err = ($err == '') ? '' : '<p style="font-weight:bold">' . $_attach_messages[$err] . '</p>';
 
+		$role_adm_contents = auth::check_role('role_adm_contents');
+		$msg_require = ($role_adm_contents) ? $_attach_messages['msg_require'] : '';
+
 		if ($this->age) {
 			$msg_freezed = '';
 			$msg_delete  = '<input type="radio" name="pcmd" id="_p_attach_delete" value="delete" />' .
 				'<label for="_p_attach_delete">' .  $_attach_messages['msg_delete'] .
-				$_attach_messages['msg_require'] . '</label><br />';
+				$msg_require . '</label><br />';
 			$msg_freeze  = '';
 		} else {
 			if ($this->status['freeze']) {
@@ -637,17 +644,17 @@ class AttachFile
 				$msg_delete  = '';
 				$msg_freeze  = '<input type="radio" name="pcmd" id="_p_attach_unfreeze" value="unfreeze" />' .
 					'<label for="_p_attach_unfreeze">' .  $_attach_messages['msg_unfreeze'] .
-					$_attach_messages['msg_require'] . '</label><br />';
+					$msg_require . '</label><br />';
 			} else {
 				$msg_freezed = '';
 				$msg_delete = '<input type="radio" name="pcmd" id="_p_attach_delete" value="delete" />' .
 					'<label for="_p_attach_delete">' . $_attach_messages['msg_delete'];
 				if (PLUGIN_ATTACH_DELETE_ADMIN_ONLY || $this->age)
-					$msg_delete .= $_attach_messages['msg_require'];
+					$msg_delete .= $msg_require;
 				$msg_delete .= '</label><br />';
 				$msg_freeze  = '<input type="radio" name="pcmd" id="_p_attach_freeze" value="freeze" />' .
 					'<label for="_p_attach_freeze">' .  $_attach_messages['msg_freeze'] .
-					$_attach_messages['msg_require'] . '</label><br />';
+					$msg_require . '</label><br />';
 			}
 		}
 		$info = $this->toString(TRUE, FALSE);
@@ -661,6 +668,14 @@ class AttachFile
 			$_attach_setimage .= '" width="' . $w .'" height="' . $h . '" /></div>';
 		} else {
 			$_attach_setimage = '';
+		}
+
+		$msg_auth = '';
+		if ($role_adm_contents) {
+			$msg_auth = <<<EOD
+  <label for="_p_attach_password">{$_attach_messages['msg_password']}:</label>
+  <input type="password" name="pass" id="_p_attach_password" size="8" />
+EOD;
 		}
 
 		$retval = array('msg'=>sprintf($_attach_messages['msg_info'], htmlspecialchars($this->file)));
@@ -693,8 +708,7 @@ $s_err
   <input type="hidden" name="age" value="{$this->age}" />
   $msg_delete
   $msg_freeze
-  <label for="_p_attach_password">{$_attach_messages['msg_password']}:</label>
-  <input type="password" name="pass" id="_p_attach_password" size="8" />
+  $msg_auth
   <input type="submit" value="{$_attach_messages['btn_submit']}" />
  </div>
 </form>
@@ -708,7 +722,8 @@ EOD;
 
 		if ($this->status['freeze']) return attach_info('msg_isfreeze');
 
-		if (! pkwk_login($pass)) {
+		// if (! pkwk_login($pass)) {
+		if (auth::check_role('role_adm_contents') && ! pkwk_login($pass)) {
 			if (PLUGIN_ATTACH_DELETE_ADMIN_ONLY || $this->age) {
 				return attach_info('err_adminpass');
 			} else if (PLUGIN_ATTACH_PASSWORD_REQUIRE &&
@@ -758,7 +773,9 @@ EOD;
 	{
 		global $_attach_messages;
 
-		if (! pkwk_login($pass)) return attach_info('err_adminpass');
+		// if (! pkwk_login($pass))
+		if (auth::check_role('role_adm_contents') && ! pkwk_login($pass))
+			return attach_info('err_adminpass');
 
 		$this->getstatus();
 		$this->status['freeze'] = $freeze;

@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: rename.inc.php,v 1.27.2 2006/01/11 23:39:00 upk Exp $
+// $Id: rename.inc.php,v 1.27.3 2006/02/06 20:58:00 upk Exp $
 //
 // Rename plugin: Rename page-name and related data
 //
@@ -242,7 +242,7 @@ function plugin_rename_regex($arr_from, $arr_to)
 
 function plugin_rename_phase3($pages)
 {
-	global $script, $_rename_messages;
+	global $script, $_rename_messages, $vars;
 
 	$msg = $input = '';
 	$files = plugin_rename_get_files($pages);
@@ -252,6 +252,10 @@ function plugin_rename_phase3($pages)
 		foreach ($arr as $old=>$new)
 			if (file_exists($new))
 				$exists[$_page][$old] = $new;
+
+	if ( isset($vars['menu']) && ! auth::check_role('role_adm_contents') ) {
+		return plugin_rename_proceed($pages, $files, $exists);
+	}
 
 	$pass = plugin_rename_getvar('pass');
 	if ($pass != '' && pkwk_login($pass)) {
@@ -303,15 +307,22 @@ function plugin_rename_phase3($pages)
 	}
 
 	$ret = array();
+	$auth = '';
+	if (auth::check_role('role_adm_contents')) {
+		$auth = <<<EOD
+  <label for="_p_rename_adminpass">{$_rename_messages['msg_adminpass']}</label>
+  <input type="password" name="pass" id="_p_rename_adminpass" value="" />
+EOD;
+	}
 	$ret['msg'] = $_rename_messages['msg_title'];
 	$ret['body'] = <<<EOD
 <p>$msg</p>
 <form action="$script" method="post">
  <div>
   <input type="hidden" name="plugin" value="rename" />
+  <input type="hidden" name="menu"   value="1" />
   $input
-  <label for="_p_rename_adminpass">{$_rename_messages['msg_adminpass']}</label>
-  <input type="password" name="pass" id="_p_rename_adminpass" value="" />
+$auth
   <input type="submit" value="{$_rename_messages['btn_submit']}" />
  </div>
 </form>
