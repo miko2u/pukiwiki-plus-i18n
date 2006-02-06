@@ -2,7 +2,7 @@
 //////////////////////////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: replace.inc.php,v 1.1.5 2006/01/23 02:06:00 upk Exp $
+// $Id: replace.inc.php,v 1.1.6 2006/02/06 22:35:00 upk Exp $
 //
 // ファイル名一覧の表示
 // cmd=replace
@@ -40,11 +40,13 @@ function plugin_replace_action()
 {
 	global $post, $cycle, $cantedit;
 
-	$pass    = isset($post['pass'])    ? $post['pass']    : '__nopass__';
-	$search  = isset($post['search'])  ? $post['search']  : NULL;
+	$pass = isset($post['pass']) ? $post['pass'] : '__nopass__';
+	$search = isset($post['search']) ? $post['search'] : NULL;
 	$replace = isset($post['replace']) ? $post['replace'] : NULL;
+	$notimestamp = isset($post['notimestamp']) ? TRUE : FALSE;
 
-	if ($search != '' && ! auth::check_role('role_adm_contents')) return replace_do($search,$replace);
+	if ($search != '' && ! auth::check_role('role_adm_contents'))
+		return replace_do($search,$replace,$notimestamp);
 
 	// パスワードと検索文字列がないと置換はできない。
 	if ($search == '' || !pkwk_login($pass) || $pass == 'pass') {
@@ -52,10 +54,10 @@ function plugin_replace_action()
 		return replace_adm($pass,$search);
 	}
 
-	return replace_do($search,$replace);
+	return replace_do($search,$replace,$notimestamp);
 }
 
-function replace_do($search,$replace)
+function replace_do($search,$replace,$notimestamp)
 {
 	global $cycle, $cantedit;
 	global $_replace_msg;
@@ -88,7 +90,7 @@ function replace_do($search,$replace)
 			if ($postdata != join('',$postdata_old)) {
 				$cycle = 0;
 				set_time_limit(30);
-				page_write($page,$postdata);
+				page_write($page,$postdata,$notimestamp);
 				$replaced_pages[] = htmlspecialchars($page);
 			}
 		}
@@ -111,11 +113,13 @@ function replace_adm($pass,$search)
 {
 	global $_replace_msg;
 	global $script;
+	global $_button;
 
 	$label1 = $_replace_msg['msg_input_search_word'];
 	$label2 = $_replace_msg['msg_input_replace_word'];
 	$btn = $_replace_msg['btn_exec'];
-	$body = "";
+	$label3 = $_button['notchangetimestamp'];
+	$body = '';
 
 	if (! auth::check_role('role_adm_contents')) {
 		$msg = $_replace_msg['msg_input_str'];
@@ -128,14 +132,14 @@ function replace_adm($pass,$search)
 
 EOD;
 		if ($pass == 'pass') {
-			$body .= "<p><strong>".$_replace_msg['msg_warn_pass']."</strong></p>\n";
+			$body .= '<p><strong>'.$_replace_msg['msg_warn_pass']."</strong></p>\n";
 		} elseif ($pass != '__nopass__') {
-			$body .= "<p><strong>".$_replace_msg['msg_no_pass']."</strong></p>\n";
+			$body .= '<p><strong>'.$_replace_msg['msg_no_pass']."</strong></p>\n";
 		}
 	}
 
 	if ($search === '') {
-		$body .= "<p><strong>".$_replace_msg['msg_no_search']."</strong></p>\n";
+		$body .= '<p><strong>'.$_replace_msg['msg_no_search']."</strong></p>\n";
 	}
 
 	$body .= <<<EOD
@@ -148,6 +152,7 @@ EOD;
   $label2<br />
   <input type="text" name="replace" size="24" /> <br />
 $body_pass
+  <input type="checkbox" name="notimestamp" />$label3
   <input type="submit" name="ok" value="$btn" />
  </div>
 </form>
