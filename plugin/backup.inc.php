@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: backup.inc.php,v 1.27.13 2006/01/11 23:19:00 upk Exp $
+// $Id: backup.inc.php,v 1.27.14 2006/02/06 20:24:00 upk Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
@@ -181,6 +181,15 @@ $_msg_invalidpass = _('Invalid password.');
 		return array('msg'=>$_title_pagebackuplist, 'body'=>plugin_backup_get_list($page)); // Say "is not found"
 
 	$body = '';
+
+	if (! auth::check_role('role_adm_contents')) {
+		_backup_delete($page);
+		return array(
+			'msg'  => $_title_backup_delete,
+			'body' => str_replace('$1', make_pagelink($page), $_msg_backup_deleted)
+		);
+        }
+
 	if (isset($vars['pass'])) {
 		if (pkwk_login($vars['pass'])) {
 			_backup_delete($page);
