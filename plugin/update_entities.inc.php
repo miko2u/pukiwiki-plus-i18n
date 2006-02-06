@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: update_entities.inc.php,v 1.9.2 2006/01/11 23:47:00 upk Exp $
+// $Id: update_entities.inc.php,v 1.9.3 2006/02/06 20:02:00 upk Exp $
 //
 // Update entities plugin - Update XHTML entities from DTD
 // (for admin)
@@ -17,13 +17,14 @@ function plugin_update_entities_init()
 			'msg_adminpass' => _('Administrator password'),
 			'btn_submit'    => _('Exec'),
 			'msg_done'      => _('The update of cache was completed.'),
-			'msg_usage'     => 
+			'msg_usage1'    => 
 				_("* Content of processing\n\n") .
 				_(":The cache of the regular expression pattern that matches to the Character entity references is updated.|\n") .
 				_("The table of PHP and DTD of W3C are scanned, and it records in the cache.\n\n") .
 				_("* Processing object\n") .
 				_("The file displayed as `COLOR(red){not found.}` is not processed.\n") .
-				"-%s\n\n" .
+				"-%s\n\n",
+			'msg_usage2'    => 
 				_("* Execution\n") .
 				_("Please input the Administrator password, and click the [Exec] button.\n"),
 		));
@@ -39,29 +40,38 @@ function plugin_update_entities_action()
 	if (auth::check_role('readonly')) die_message('PKWK_READONLY prohibits this');
 
 	$msg = $body = '';
-	if (empty($vars['action']) || empty($vars['adminpass']) || ! pkwk_login($vars['adminpass'])) {
-		$msg   = & $_entities_messages['title_update'];
-		$items = plugin_update_entities_create();
-		$body  = convert_html(sprintf($_entities_messages['msg_usage'], join("\n" . '-', $items)));
-		$body .= <<<EOD
+	$admin_pass = (empty($vars['adminpass'])) ? '' : $vars['adminpass'];
+	if ( isset($vars['menu']) && (! auth::check_role('role_adm_contents') || pkwk_login($admin_pass) )) {
+		set_time_limit(0);
+		plugin_update_entities_create(TRUE);
+		$msg  = & $_entities_messages['title_update'];
+		$body = & $_entities_messages['msg_done'    ];
+		return array('msg'=>$msg, 'body'=>$body);
+	}
+
+	$msg   = & $_entities_messages['title_update'];
+	$items = plugin_update_entities_create();
+	$body  = convert_html(sprintf($_entities_messages['msg_usage1'], join("\n" . '-', $items)));
+	$body .= <<<EOD
 <form method="POST" action="$script">
  <div>
   <input type="hidden" name="plugin" value="update_entities" />
-  <input type="hidden" name="action" value="update" />
+  <input type="hidden" name="menu"   value="1" />
+EOD;
+
+	if (auth::check_role('role_adm_contents')) {
+		$body .= convert_html( sprintf($_entities_messages['msg_usage2']) );
+		$body .= <<<EOD
   <label for="_p_update_entities_adminpass">{$_entities_messages['msg_adminpass']}</label>
   <input type="password" name="adminpass" id="_p_update_entities_adminpass" size="20" value="" />
+EOD;
+	}
+	$body .= <<<EOD
   <input type="submit" value="{$_entities_messages['btn_submit']}" />
  </div>
 </form>
 EOD;
-	} else if ($vars['action'] == 'update') {
-		plugin_update_entities_create(TRUE);
-		$msg  = & $_entities_messages['title_update'];
-		$body = & $_entities_messages['msg_done'    ];
-	} else {
-		$msg  = & $_entities_messages['title_update'];
-		$body = & $_entities_messages['err_invalid' ];
-	}
+
 	return array('msg'=>$msg, 'body'=>$body);
 }
 
