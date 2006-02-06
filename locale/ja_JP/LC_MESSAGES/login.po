@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PukiWiki Plus! 1.4.5-u2-i18n\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-06-11 22:31+0900\n"
+"POT-Creation-Date: 2006-02-07 00:20+0900\n"
 "PO-Revision-Date: 2005-06-11 22:32+0900\n"
 "Last-Translator: Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>\n"
 "Language-Team: Japanese <ja@li.org>\n"
@@ -15,14 +15,10 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../plugin/login.inc.php:21
+#: ../../plugin/login.inc.php:19
 msgid "UserName"
 msgstr "ユーザ名"
 
-#: ../../plugin/login.inc.php:22
-msgid "Administrator Area"
-msgstr "Administrator Area"
-
-#: ../../plugin/login.inc.php:23
+#: ../../plugin/login.inc.php:20
 msgid "Login"
 msgstr "ログイン"

@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: resource.php,v 0.1 2005/03/15 03:29:34 miko Exp $
+// $Id: resource.php,v 0.2 2006/02/07 00:07:00 upk Exp $
 //
 // Resource of String
 // Warning: This file is PukiWiki "core" resource strings.
@@ -14,7 +14,6 @@ $weeklabels = array(
 
 $_string = array(
 	// Common core string(s)
-	'realm'     => _('PukiWikiAuth'),
 	'freeze'    => _('Freeze'),
 	'unfreeze'  => _('Unfreeze'),
 	'symbol'    => _('Symbols'),

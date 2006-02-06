@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: pukiwiki.ini.php,v 1.128.20 2006/02/05 01:42:00 upk Exp $
+// $Id: pukiwiki.ini.php,v 1.128.21 2006/02/07 00:00:00 upk Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
@@ -242,6 +242,10 @@ $function_freeze = 1;
 // Enable 'Do not change timestamp' at edit
 // (1:Enable, 2:Enable only administrator, 0:Disable)
 $notimeupdate = 1;
+
+/////////////////////////////////////////////////
+// Authentication Parameter REALM
+$realm = 'PukiWikiAuth';
 
 /////////////////////////////////////////////////
 // Admin password for this Wikisite

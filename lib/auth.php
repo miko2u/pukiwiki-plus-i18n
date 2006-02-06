@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: auth.php,v 1.19.9 2006/01/11 22:39:00 upk Exp $
+// $Id: auth.php,v 1.19.10 2006/02/07 00:06:00 upk Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2003-2005 PukiWiki Developers Team
@@ -174,7 +174,7 @@ function read_auth($page, $auth_flag = TRUE, $exit_flag = TRUE)
 function basic_auth($page, $auth_flag, $exit_flag, $auth_pages, $title_cannot)
 {
 	global $auth_users, $auth_method_type;
-	global $_string;
+	global $realm;
 
 	// Checked by:
 	$target_str = '';
@@ -219,7 +219,7 @@ function basic_auth($page, $auth_flag, $exit_flag, $auth_pages, $title_cannot)
 			pkwk_common_headers();
 		}
 		if ($auth_flag) {
-			header('WWW-Authenticate: Basic realm="'.$_string['realm'].'"');
+			header('WWW-Authenticate: Basic realm="'.$realm.'"');
 			header('HTTP/1.0 401 Unauthorized');
 		}
 		if ($exit_flag) {

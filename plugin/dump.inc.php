@@ -1,5 +1,5 @@
 <?php
-// $Id: dump.inc.php,v 1.36.6 2006/02/04 17:58:00 upk Exp $
+// $Id: dump.inc.php,v 1.36.7 2006/02/07 00:08:00 upk Exp $
 //
 // Remote dump / restore plugin
 // Originated as tarfile.inc.php by teanan / Interfair Laboratory 2004.
@@ -42,7 +42,7 @@ $_STORAGE['BACKUP_DIR']['extract_filter'] =  '^' . preg_quote(BACKUP_DIR, '/') .
 // プラグイン本体
 function plugin_dump_action()
 {
-	global $vars, $auth_users, $_string;
+	global $vars, $auth_users, $realm;
 
 	// if (PKWK_READONLY) die_message('PKWK_READONLY prohibits this');
 	if (auth::check_role('readonly')) die_message( _("PKWK_READONLY prohibits this") );
@@ -54,7 +54,7 @@ function plugin_dump_action()
 		unset($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']);
 		if (!auth::auth_pw($auth_users))
 		{
-			header('WWW-Authenticate: Basic realm="'.$_string['realm'].'"');
+			header('WWW-Authenticate: Basic realm="'.$realm.'"');
 			header( 'HTTP/1.0 401 Unauthorized' );
 
 			$body = "<p><strong>" . _("The password is different.") . "</strong></p>\n";
