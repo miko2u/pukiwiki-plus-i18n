@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: auth.php,v 1.19.10 2006/02/07 00:06:00 upk Exp $
+// $Id: auth.php,v 1.19.11 2006/02/07 20:22:00 upk Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2003-2005 PukiWiki Developers Team
@@ -159,6 +159,7 @@ function edit_auth($page, $auth_flag = TRUE, $exit_flag = TRUE)
 	global $edit_auth, $edit_auth_pages;
 	global $_title;
 
+	if (auth::check_role('readonly')) return FALSE;
 	return $edit_auth ? basic_auth($page, $auth_flag, $exit_flag, $edit_auth_pages, $_title['cannnotedit']) : TRUE;
 }
 
