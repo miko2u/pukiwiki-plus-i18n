@@ -3,7 +3,7 @@
  * Detect user's language, and show only messages written in that.  
  *
  * @copyright	Copyright &copy; 2005-2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version	$Id: multilang.inc.php,v 0.9 2006/02/06 23:23:00 upk Exp $
+ * @version	$Id: multilang.inc.php,v 0.10 2006/02/12 06:09:00 upk Exp $
  *
  */
 
@@ -92,7 +92,7 @@ function plugin_multilang_inline_link($option, $args)
 
 			if (! empty($country)) {
 				$country = strtolower($country);
-				$title = '<img src="' . IMAGE_URI . 'icon/flags/' . $country . '.png" title="'. $title . '" />';
+				$title = '<img src="' . IMAGE_URI . 'icon/flags/' . $country . '.png" alt="' . $title . ' title="'. $title . '" />';
 			}
 		}
 
