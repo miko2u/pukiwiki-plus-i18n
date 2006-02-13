@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: default.js,v 2.0.9 2006/02/13 23:29:00 upk Exp $
+// $Id: default.js,v 2.0.10 2006/02/14 01:26:00 upk Exp $
 // Original is nao-pon
 //
 
@@ -42,29 +42,29 @@ var pukiwiki_adv = pukiwiki_load_cookie("pwplus");
 // Helper image tag set
 var pukiwiki_adv_tag = '';
 if (pukiwiki_adv == "on") pukiwiki_adv_tag = '<span style="cursor:hand;">'+
-'<img src="image/plus/ncr.gif" width="22" height="16" border="0" title="'+pukiwiki_msg_to_ncr+'" alt="'+pukiwiki_msg_to_ncr+'" onClick="javascript:pukiwiki_charcode(); return false;" />'+
-'<img src="image/plus/br.gif" width="18" height="16" border="0" title="&amp;br;" alt="&amp;br;" onClick="javascript:pukiwiki_ins(\'&br;\'); return false;" />'+
+'<img src="'+IMAGE_DIR+'plus/ncr.gif" width="22" height="16" border="0" title="'+pukiwiki_msg_to_ncr+'" alt="'+pukiwiki_msg_to_ncr+'" onClick="javascript:pukiwiki_charcode(); return false;" />'+
+'<img src="'+IMAGE_DIR+'plus/br.gif" width="18" height="16" border="0" title="&amp;br;" alt="&amp;br;" onClick="javascript:pukiwiki_ins(\'&br;\'); return false;" />'+
 '<'+'/'+'span>&nbsp;';
 
-//'<img src="image/plus/iplugin.gif" width="18" height="16" border="0" title="Inline Plugin" alt="Inline Plugin" onClick="javascript:pukiwiki_ins(\'&(){};\'); return false;" />'+
+//'<img src="'+IMAGE_DIR+'plus/iplugin.gif" width="18" height="16" border="0" title="Inline Plugin" alt="Inline Plugin" onClick="javascript:pukiwiki_ins(\'&(){};\'); return false;" />'+
 
 var pukiwiki_helper_img = 
-'<img src="image/plus/buttons.gif" width="103" height="16" border="0" usemap="#map_button" tabindex="-1" />&nbsp;'+
+'<img src="'+IMAGE_DIR+'plus/buttons.gif" width="103" height="16" border="0" usemap="#map_button" tabindex="-1" />&nbsp;'+
 pukiwiki_adv_tag +
-'<img src="image/plus/colors.gif" width="64" height="16" border="0" usemap="#map_color" tabindex="-1" />&nbsp;'+
+'<img src="'+IMAGE_DIR+'plus/colors.gif" width="64" height="16" border="0" usemap="#map_color" tabindex="-1" />&nbsp;'+
 '<span style="cursor:hand;">'+
-'<img src="image/face/smile.png" width="15" height="15" border="0" title="(^^)" alt="(^^)" onClick="javascript:pukiwiki_face(\'(^^)\'); return false;" />'+
-'<img src="image/face/bigsmile.png" width="15" height="15" border="0" title="(^-^" alt="(^-^" onClick="javascript:pukiwiki_face(\'(^-^\'); return false;" />'+
-'<img src="image/face/huh.png" width="15" height="15" border="0" title="(^Q^" alt="(^Q^" onClick="javascript:pukiwiki_face(\'(^Q^\'); return false;" />'+
-'<img src="image/face/oh.png" width="15" height="15" border="0" title="(..;" alt="(..;" onClick="javascript:pukiwiki_face(\'(..;\'); return false;" />'+
-'<img src="image/face/wink.png" width="15" height="15" border="0" title="(^_-" alt="(^_-" onClick="javascript:pukiwiki_face(\'(^_-\'); return false;" />'+
-'<img src="image/face/sad.png" width="15" height="15" border="0" title="(--;" alt="(--;" onClick="javascript:pukiwiki_face(\'(--;\'); return false;" />'+
-'<img src="image/face/worried.png" width="15" height="15" border="0" title="(^^;" alt="(^^;" onclick="javascript:pukiwiki_face(\'(^^\;\'); return false;" />'+
-'<img src="image/face/tear.png" width="15" height="15" border="0" title="(T-T" alt="(T-T" onclick="javascript:pukiwiki_face(\'(T-T\'); return false;" />'+
-'<img src="image/face/heart.png" width="15" height="15" border="0" title="&amp;heart;" alt="&amp;heart;" onClick="javascript:pukiwiki_face(\'&amp;heart;\'); return false;" />'+
+'<img src="'+IMAGE_DIR+'face/smile.png" width="15" height="15" border="0" title="(^^)" alt="(^^)" onClick="javascript:pukiwiki_face(\'(^^)\'); return false;" />'+
+'<img src="'+IMAGE_DIR+'face/bigsmile.png" width="15" height="15" border="0" title="(^-^" alt="(^-^" onClick="javascript:pukiwiki_face(\'(^-^\'); return false;" />'+
+'<img src="'+IMAGE_DIR+'face/huh.png" width="15" height="15" border="0" title="(^Q^" alt="(^Q^" onClick="javascript:pukiwiki_face(\'(^Q^\'); return false;" />'+
+'<img src="'+IMAGE_DIR+'face/oh.png" width="15" height="15" border="0" title="(..;" alt="(..;" onClick="javascript:pukiwiki_face(\'(..;\'); return false;" />'+
+'<img src="'+IMAGE_DIR+'face/wink.png" width="15" height="15" border="0" title="(^_-" alt="(^_-" onClick="javascript:pukiwiki_face(\'(^_-\'); return false;" />'+
+'<img src="'+IMAGE_DIR+'face/sad.png" width="15" height="15" border="0" title="(--;" alt="(--;" onClick="javascript:pukiwiki_face(\'(--;\'); return false;" />'+
+'<img src="'+IMAGE_DIR+'face/worried.png" width="15" height="15" border="0" title="(^^;" alt="(^^;" onclick="javascript:pukiwiki_face(\'(^^\;\'); return false;" />'+
+'<img src="'+IMAGE_DIR+'face/tear.png" width="15" height="15" border="0" title="(T-T" alt="(T-T" onclick="javascript:pukiwiki_face(\'(T-T\'); return false;" />'+
+'<img src="'+IMAGE_DIR+'face/heart.png" width="15" height="15" border="0" title="&amp;heart;" alt="&amp;heart;" onClick="javascript:pukiwiki_face(\'&amp;heart;\'); return false;" />'+
 '<'+'/'+'span>';
 
-//'<img src="image/face/star.gif" width="15" height="15" border="0" title="&amp;star;" alt="&amp;star;" onClick="javascript:pukiwiki_face(\'&amp;star;\'); return false;" />'+
+//'<img src="'+IMAGE_DIR+'face/star.gif" width="15" height="15" border="0" title="&amp;star;" alt="&amp;star;" onClick="javascript:pukiwiki_face(\'&amp;star;\'); return false;" />'+
 
 // Helper function.
 function pukiwiki_show_fontset_img()
@@ -157,15 +157,15 @@ function pukiwiki_area_highlite(id,mode)
 // Branch.
 if (pukiwiki_WinIE)
 {
-	document.write ('<scr'+'ipt type="text/javascr'+'ipt" src="skin/winie.js"></scr'+'ipt>');
+	document.write ('<scr'+'ipt type="text/javascr'+'ipt" src="'+SKIN_DIR+'winie.js"></scr'+'ipt>');
 }
 else if (pukiwiki_Gecko)
 {
-	document.write ('<scr'+'ipt type="text/javascr'+'ipt" src="skin/gecko.js"></scr'+'ipt>');
+	document.write ('<scr'+'ipt type="text/javascr'+'ipt" src="'+SKIN_DIR+'gecko.js"></scr'+'ipt>');
 }
 else
 {
-	document.write ('<scr'+'ipt type="text/javascr'+'ipt" src="skin/other.js"></scr'+'ipt>');
+	document.write ('<scr'+'ipt type="text/javascr'+'ipt" src="'+SKIN_DIR+'other.js"></scr'+'ipt>');
 }
 
 var __default_onload_save = window.onload;

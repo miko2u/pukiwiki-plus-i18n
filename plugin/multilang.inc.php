@@ -3,7 +3,7 @@
  * Detect user's language, and show only messages written in that.  
  *
  * @copyright	Copyright &copy; 2005-2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version	$Id: multilang.inc.php,v 0.10 2006/02/12 06:09:00 upk Exp $
+ * @version	$Id: multilang.inc.php,v 0.11 2006/02/14 01:40:00 upk Exp $
  *
  */
 
@@ -72,7 +72,7 @@ function plugin_multilang_inline_link($option, $args)
 
 	$body = array();
 	$page = $vars['page'];
-	$url = "$script?page=$page&amp;cmd=multilang&amp;lang";
+	$url = $script.'?page='.rawurlencode($page).'&amp;cmd=multilang&amp;lang';
 	$obj_l2c = new lang2country();
 
 	foreach( $args as $arg ) {
