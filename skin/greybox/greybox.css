@@ -1,0 +1,62 @@
+#GB_overlay {
+  background-image: url(overlay.png); 
+  position: absolute;
+  margin: auto;
+  top: 0;
+  left: 0;
+  z-index: 100;
+}
+
+* html #GB_overlay {
+  background-color: #000;
+  background-color: transparent;
+  background-image: url(blank.gif);
+  /* JO1UPK : 2006-02-13
+  /* filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="greybox/overlay.png", sizingMethod="scale"); */
+  filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="skin/greybox/overlay.png", sizingMethod="scale");
+}
+
+#GB_window {
+  top: 22px;
+  left: 0;
+  position: absolute;
+  background-color: #fff;
+  border: 5px solid #aaa;
+  border-top: 0;
+  overflow: auto;
+  z-index: 150;
+}
+
+#GB_frame {
+  border: 0;
+  overflow: auto;
+}
+
+#GB_header {
+  margin: 0;
+  top: 0;
+  border-left: 5px solid #aaa;
+  border-right: 5px solid #aaa;
+  height: 22px;
+  position: absolute;
+  background-color: #888;
+  z-index: 151;
+}
+
+#GB_caption {
+  font-family: helvetica, verdana, sans-serif;
+  font-size: 12px;
+  color: #fff;
+  font-weight: bold;
+  padding: 4px 0 0 5px;
+  margin: 0;
+  text-align: left;
+}
+
+#GB_close {
+  padding: 2px 5px 0 0;
+  float: right;
+  cursor: pointer;
+  cursor: hand;
+}
+

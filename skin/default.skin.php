@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: default.skin.php,v 1.34.25 2006/02/13 02:41:00 upk Exp $
+// $Id: default.skin.php,v 1.34.26 2006/02/13 23:27:00 upk Exp $
 //
 if (!defined('DATA_DIR')) { exit; }
 
@@ -32,11 +32,9 @@ if (isset($pkwk_dtd)) {
  <meta http-equiv="content-type" content="application/xhtml+xml; charset=<?php echo(CONTENT_CHARSET); ?>" />
  <meta http-equiv="content-style-type" content="text/css" />
  <meta http-equiv="content-script-type" content="text/javascript" />
-
 <?php if (!$is_read) { ?>
  <meta name="robots" content="NOINDEX,NOFOLLOW" />
 <?php } ?>
-
 <?php global $newtitle, $newbase; ?>
 <?php if ($title == $defaultpage) { ?>
  <title><?php echo "$page_title" ?></title>
@@ -47,14 +45,22 @@ if (isset($pkwk_dtd)) {
 <?php } ?>
  <link rel="stylesheet" href="<?php echo SKIN_URI ?>default.css" type="text/css" media="screen" charset="<?php echo $css_charset ?>" />
  <link rel="stylesheet" href="<?php echo SKIN_URI ?>print.css" type="text/css" media="print" charset="<?php echo $css_charset ?>" />
+ <link rel="stylesheet" href="<?php echo SKIN_URI ?>greybox/greybox.css" type="text/css" media="all" charset="<?php echo $css_charset ?>" />
  <link rel="alternate" href="<?php echo $_LINK['mixirss'] ?>" type="application/rss+xml" title="RSS" />
  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+ <script type="text/javascript">
+ <!--
+<?php if (exist_plugin_convert('js_init')) echo do_plugin_convert('js_init'); ?>
+ // -->
+ </script>
 <?php global $language; ?>
  <script type="text/javascript" src="<?php echo SKIN_URI.'lang/'.$language ?>.js"></script>
  <script type="text/javascript" src="<?php echo SKIN_URI ?>default.js"></script>
  <script type="text/javascript" src="<?php echo SKIN_URI ?>kanzaki.js"></script>
  <script type="text/javascript" src="<?php echo SKIN_URI ?>ajax/textloader.js"></script>
  <script type="text/javascript" src="<?php echo SKIN_URI ?>ajax/glossary.js"></script>
+ <script type="text/javascript" src="<?php echo SKIN_URI ?>greybox/AmiJS.js"></script>
+ <script type="text/javascript" src="<?php echo SKIN_URI ?>greybox/greybox.js"></script>
 <?php
   global $trackback, $referer;
   if ($trackback) {
