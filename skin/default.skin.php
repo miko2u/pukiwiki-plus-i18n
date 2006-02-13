@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: default.skin.php,v 1.34.23 2005/12/06 00:27:00 upk Exp $
+// $Id: default.skin.php,v 1.34.24 2006/02/13 02:40:00 upk Exp $
 //
 if (!defined('DATA_DIR')) { exit; }
 
@@ -49,6 +49,8 @@ if (isset($pkwk_dtd)) {
  <link rel="stylesheet" href="<?php echo SKIN_URI ?>print.css" type="text/css" media="print" charset="<?php echo $css_charset ?>" />
  <link rel="alternate" href="<?php echo $_LINK['mixirss'] ?>" type="application/rss+xml" title="RSS" />
  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+<?php global $language; ?>
+ <script type="text/javascript" src="<?php echo SKIN_URI.'msg/'.$language ?>.js"></script>
  <script type="text/javascript" src="<?php echo SKIN_URI ?>default.js"></script>
  <script type="text/javascript" src="<?php echo SKIN_URI ?>kanzaki.js"></script>
  <script type="text/javascript" src="<?php echo SKIN_URI ?>ajax/textloader.js"></script>
