@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: pukiwiki.ini.php,v 1.128.21 2006/02/07 00:00:00 upk Exp $
+// $Id: pukiwiki.ini.php,v 1.128.22 2006/02/13 02:35:00 upk Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
@@ -60,6 +60,11 @@ define('PKWK_QUERY_STRING_MAX', 640); // Bytes, 0 = OFF
 //   }}
 //   #memo(This makes '#memo(foo)' to this)
 define('PKWKEXP_DISABLE_MULTILINE_PLUGIN_HACK', 0); // 1 = Disabled
+
+/////////////////////////////////////////////////
+// Is cookie used?
+// 1: TRUE 0:FALSE;
+$use_cookie = 0;
 
 /////////////////////////////////////////////////
 // Language / Encoding settings

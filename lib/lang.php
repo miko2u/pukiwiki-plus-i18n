@@ -3,7 +3,7 @@
  * Language judgment (言語判定)
  *
  * @copyright   Copyright &copy; 2005-2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: lang.php,v 0.20 2006/02/13 01:57:00 upk Exp $
+ * @version     $Id: lang.php,v 0.21 2006/02/13 02:30:00 upk Exp $
  *
  */
 
@@ -21,7 +21,7 @@ function set_language()
 	global $language_considering_setting_level;
 	global $language;
 	global $public_holiday_guest_view;
-	global $script;
+	global $script, $use_cookie;
 
 	$language = get_language($language_considering_setting_level);
 
@@ -29,13 +29,15 @@ function set_language()
 	define('LANG', $language);
 
 	// Set COOKIE['lang']
-	$parsed_url = parse_url($script);
-	$path = $parsed_url['path'];
-	if (($pos = strrpos($path, '/')) !== FALSE) {
-		$path = substr($path, 0, $pos + 1);
+	if ($use_cookie) {
+		$parsed_url = parse_url($script);
+		$path = $parsed_url['path'];
+		if (($pos = strrpos($path, '/')) !== FALSE) {
+			$path = substr($path, 0, $pos + 1);
+		}
+		setcookie('lang', $language, 0, $path);
+		$_COOKIE['lang'] = $language;
 	}
-	setcookie('lang', $language, 0, $path);
-	$_COOKIE['lang'] = $language;
 
 	// PUBLIC HOLIDAY
 	// Installation person's calendar is adopted.
