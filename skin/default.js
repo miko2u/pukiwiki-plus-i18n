@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: default.js,v 2.0.10 2006/02/14 01:26:00 upk Exp $
+// $Id: default.js,v 2.0.11 2006/02/15 02:15:00 upk Exp $
 // Original is nao-pon
 //
 
@@ -177,6 +177,7 @@ window.onload = function() {
 //GreyBox configuration
 //Use animation?
 var GB_ANIMATION = true;
+var GB_IMG_DIR = SKIN_DIR+"greybox/";
 //Clicking on the transparent overlay closes the GreyBox window?
 var GB_overlay_click_close = false;
 //Demo change headline - look more in demoiframe

@@ -4,7 +4,7 @@
  AUTHOR
    4mir Salihefendic (http://amix.dk) - amix@amix.dk
  VERSION
-	 1.31 (10/02/06 20:59:07)
+	 1.5 (14/02/06 22:40:53)
  LICENSE
   LGPL (read more in LGPL.txt)
  SITE
@@ -21,6 +21,9 @@ var GB_WIDTH = 400;
 
 var GB_caption = null;
 
+//The url that was visited last
+var GB_last_win_url = null;
+
 function GB_show(caption, url /* optional */, height, width) {
   if(height != 'undefined')
     GB_HEIGHT = height;
@@ -28,28 +31,26 @@ function GB_show(caption, url /* optional */, height, width) {
     GB_WIDTH = width;
 
   initIfNeeded();
+  GB_IFRAME.src = url;
+  GB_IFRAME.opener = this;
 
   GB_caption.innerHTML = caption;
 
+  GB_setPosition();
   if(GB_ANIMATION) {
-    //22 is for header height
-    GB_HEADER.style.top = -(GB_HEIGHT) + "px";
-    GB_WINDOW.style.top = -(GB_HEIGHT+22) + "px";
+    positionRightVertically(GB_HEADER, -(GB_HEIGHT));
+    positionRightVertically(GB_WINDOW, -(GB_HEIGHT+22));
   }
 
   showElement(GB_OVERLAY);
   showElement(GB_HEADER);
   showElement(GB_WINDOW);
 
-  GB_IFRAME.src = url;
-  GB_IFRAME.opener = this;
-
-  GB_position();
+  GB_setWidth();
 
   if(GB_ANIMATION) {
     GB_animateOut(-GB_HEIGHT);
   }
-
 }
 
 function GB_hide() {
@@ -59,21 +60,25 @@ function GB_hide() {
   hideElement(GB_OVERLAY);
 }
 
+function GB_setPosition() {
+  positionRightVertically(GB_HEADER, 0);
+  positionRightVertically(GB_WINDOW, 22);
+}
 
 function GB_animateOut(top) {
-  if(top < 0) {
-    GB_WINDOW.style.top = (top+22) + "px";
-    GB_HEADER.style.top = top + "px";
+  if(top+getScrollTop() < 0) {
+    positionRightVertically(GB_WINDOW, top+22);
+    positionRightVertically(GB_HEADER, top);
     GB_TIMEOUT = window.setTimeout(function() { GB_animateOut(top+50); }, 1);
   }
   else {
-    GB_WINDOW.style.top = 22 + "px";
-    GB_HEADER.style.top = 0 + "px";
+    GB_WINDOW.style.top = getScrollTop()+22+"px";
+    GB_HEADER.style.top = getScrollTop()+"px";
     clearTimeout(GB_TIMEOUT);
   }
 }
 
-function GB_position() {
+function GB_setWidth() {
   var array_page_size = GB_getWindowSize();
 
   //Set size
@@ -86,8 +91,8 @@ function GB_position() {
 
   GB_OVERLAY.style.width = array_page_size[0] + "px";
 
-  var max_height = Math.max(array_page_size[1], GB_HEIGHT+30);
-  GB_OVERLAY.style.height =  max_height + "px";
+  var max_height = Math.max(getScrollTop()+array_page_size[1], getScrollTop()+GB_HEIGHT+30);
+  GB_OVERLAY.style.height = max_height + "px";
 
   GB_WINDOW.style.left = ((array_page_size[0] - GB_WINDOW.offsetWidth) /2) + "px";
   GB_HEADER.style.left = ((array_page_size[0] - GB_HEADER.offsetWidth) /2) + "px";
@@ -109,9 +114,7 @@ function GB_init() {
   GB_HEADER = DIV({'id': 'GB_header'});
   GB_caption = DIV({'id': 'GB_caption'}, "");
 
-  // JO1UPK : 2006-02-13
-  // var close = DIV({'id': 'GB_close'}, IMG({'src': 'greybox/close.gif', 'alt': 'Close window'}));
-  var close = DIV({'id': 'GB_close'}, IMG({'src': SKIN_DIR+'greybox/close.gif', 'alt': 'Close window'}));
+  var close = DIV({'id': 'GB_close'}, IMG({'src': GB_IMG_DIR + 'close.gif', 'alt': 'Close window'}));
   close.onclick = GB_hide;
   ACN(GB_HEADER, close, GB_caption);
 
@@ -123,7 +126,8 @@ function GB_init() {
 function initIfNeeded() {
   if(GB_OVERLAY == null) {
     GB_init();
-    GB_addOnWinResize(GB_position);
+    GB_addOnWinResize(GB_setWidth);
+    window.onscroll = function() { GB_setPosition(); };
   } 
   new_stuff = IFRAME({'id': 'GB_frame', 'name': 'GB_frame'});
   RCN(GB_WINDOW, new_stuff);
@@ -157,4 +161,16 @@ function GB_addOnWinResize(func) {
   }
 }
 
+function positionRightVertically(elm, value) {
+  elm.style.top = getScrollTop()+value+"px";
+}
 
+function getScrollTop() {
+  //From: http://www.quirksmode.org/js/doctypes.html
+  var theTop;
+  if (document.documentElement && document.documentElement.scrollTop)
+      theTop = document.documentElement.scrollTop;
+  else if (document.body)
+      theTop = document.body.scrollTop;
+  return theTop;
+}

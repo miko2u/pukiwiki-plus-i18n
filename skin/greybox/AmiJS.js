@@ -9,7 +9,7 @@
     Copyright (c) 2005 Bob Ippolito. All rights reserved.
     http://www.opensource.org/licenses/mit-license.php
   VERSION
-    1.2 (08/02/06 19:08:47)
+    1.3 (13/02/06 10:04:02)
   SITE
     http://amix.dk/amijs
  ****/
@@ -109,7 +109,7 @@ function createDOM(name, attrs) {
   var i = 1;
   elm = document.createElement(name);
 
-  if(isDefined(attrs[0])) {
+  if(isDefined(attrs[0]) && typeof(attrs[0]) != "string") {
     for(k in attrs[0]) {
       if(k == "style")
         elm.style.cssText = attrs[0][k];
@@ -118,12 +118,20 @@ function createDOM(name, attrs) {
       else
         elm.setAttribute(k, attrs[0][k]);
     }
+    for(i; i < attrs.length; i++) {
+      var n = attrs[i];
+      if(isDefined(n)) {
+        if(typeof(n) == "string")
+          n = document.createTextNode(n);
+        elm.appendChild(n);
+      }
+    }
   }
-  for(i; i < attrs.length; i++) {
-    var n = attrs[i];
+  else {
+    //We have just a string...
+    var n = attrs[0];
     if(isDefined(n)) {
-      if(typeof(n) == "string")
-        n = document.createTextNode(n);
+      n = document.createTextNode(n);
       elm.appendChild(n);
     }
   }
