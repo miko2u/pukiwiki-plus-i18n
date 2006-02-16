@@ -3,8 +3,8 @@
  * GreyBox プラグイン
  *
  * @copyright   Copyright &copy; 2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: greybox.inc.php,v 0.1 2006/02/12 02:38:00 upk Exp $
- * @link	http://amix.dk/index.py/permanentLink?id=83
+ * @version     $Id: greybox.inc.php,v 0.2 2006/02/16 01:27:00 upk Exp $
+ * @link	http://amix.dk/projects/?page_id=5
  */
 
 function plugin_greybox_convert()
@@ -14,10 +14,10 @@ function plugin_greybox_convert()
 	$argv = func_get_args();
 	$argc = func_num_args();
 
-	// <a href="#" onclick="GB_show('caption', 'url', height, width)">caption</a>
+	// <a href="#" onclick="GB_show('caption', 'url', height, width);">caption</a>
 	$field = array('caption','url','img','height', 'width');
 	for($i=0; $i<$argc; $i++) {
-		$$field[$i] = $argv[$i];
+		$$field[$i] = htmlspecialchars($argv[$i], ENT_QUOTES);
 	}
 
 	if (empty($url)) return 'usage: #greybox(caption, url, img, height, width)';
@@ -33,18 +33,7 @@ function plugin_greybox_convert()
 		$caption2 = $caption;
 	}
 
-	/*
-	$link = $script.'?'.rawurlencode($vars['page']).'#';
-	return '<a href="'.$link.'" onclick="GB_show(\''.$caption.'\', \''.$url.'\', '.$height.', '.$width.')">'.$caption2."</a>\n";
-	*/
-
-	/*
-	$anchor = generate_fixed_heading_anchor_id($caption);
-	return '<a name="'.$anchor.'"></a>' .
-		'<a href="#'.$anchor.'" onclick="GB_show(\''.$caption.'\', \''.$url.'\', '.$height.', '.$width.')">'.$caption2."</a>\n";
-	*/
-
-	return '<a href="#" onclick="GB_show(\''.$caption.'\', \''.$url.'\', '.$height.', '.$width.')">'.$caption2."</a>\n";
+	return '<a href="#" onclick="GB_show(\''.$caption.'\', \''.$url.'\', '.$height.', '.$width.');">'.$caption2."</a>\n";
 }
 
 function plugin_greybox_inline()
@@ -54,7 +43,7 @@ function plugin_greybox_inline()
 
 	$field = array('caption','url','img','height', 'width');
 	for($i=0; $i<$argc; $i++) {
-		$$field[$i] = $argv[$i];
+		$$field[$i] = htmlspecialchars($argv[$i], ENT_QUOTES);
 	}
 
         if (empty($url)) return 'usage: &greybox(caption, url, img, height, width);';

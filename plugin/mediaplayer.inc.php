@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
 //
-// $Id: mediaplayer.inc.php,v 0.3 2004/09/15 15:41:57 miko Exp $
+// $Id: mediaplayer.inc.php,v 0.4 2006/02/16 01:20:00 upk Exp $
 //
 
 // Windows Media がサポートできるプロトコルか？
@@ -83,6 +83,7 @@ function plugin_mediaplayer_convert()
 	$head_tags[] = '<script type="text/javascript" src="'.SKIN_DIR.'mediaplayer.js"></script>';
 
 	// メディアプレイヤーの追加
+	$image_dir = constant('IMAGE_DIR');
 	return <<<EOD
 <div align="center">
 	<div class="playercontainer">
@@ -96,17 +97,17 @@ function plugin_mediaplayer_convert()
 			</object>
 			<table class="controlstable" cellpadding="0" cellspacing="0">
 				<tr>
-					<td nowrap><img alt="play video" class="mediaplayerbutton" onmouseover="hover(this);" onmouseout="out(this);" onclick="play('player',this);" src="image/player/play_n.gif" /></td>
-					<td nowrap width="46"><img alt="stop video" class="mediaplayerbutton" onmouseover="hover(this);" onmouseout="out(this);" onclick="stop('player',this);" src="image/player/stop_d.gif" /></td>
-					<td nowrap width="172" class="slider" onclick="slide('player',this);"><img align="middle" alt="indicator" height="3" class="indicator" src="image/player/indicator.gif" /><img alt="handle" onclick="handle('player', this);" class="indicatorhandle" src="image/player/handle.gif" /><img onclick="handle('player',this);" alt="amount downloaded" align="middle" class="downloadindicator" src="image/player/download_indicator.gif" /></td>
-					<td nowrap width="46" align="right"><img class="mediaplayerbutton" alt="toggle sound" onmouseover="hover(this);" onmouseout="out(this);" onclick="mute('player',this);" src="image/player/sound_on_n.gif" /></td>
-					<td nowrap><img alt="launch in external player" class="mediaplayerbutton" onmouseover="hover(this);" onmouseout="out(this);" onclick="openPlayer('player',this);" src="image/player/FullScreen_h.gif" /></td>
+					<td nowrap><img alt="play video" class="mediaplayerbutton" onmouseover="hover(this);" onmouseout="out(this);" onclick="play('player',this);" src="{$image_dir}player/play_n.gif" /></td>
+					<td nowrap width="46"><img alt="stop video" class="mediaplayerbutton" onmouseover="hover(this);" onmouseout="out(this);" onclick="stop('player',this);" src="{$image_dir}player/stop_d.gif" /></td>
+					<td nowrap width="172" class="slider" onclick="slide('player',this);"><img align="middle" alt="indicator" height="3" class="indicator" src="{$image_dir}player/indicator.gif" /><img alt="handle" onclick="handle('player', this);" class="indicatorhandle" src="{$image_dir}player/handle.gif" /><img onclick="handle('player',this);" alt="amount downloaded" align="middle" class="downloadindicator" src="{$image_dir}player/download_indicator.gif" /></td>
+					<td nowrap width="46" align="right"><img class="mediaplayerbutton" alt="toggle sound" onmouseover="hover(this);" onmouseout="out(this);" onclick="mute('player',this);" src="{$image_dir}player/sound_on_n.gif" /></td>
+					<td nowrap><img alt="launch in external player" class="mediaplayerbutton" onmouseover="hover(this);" onmouseout="out(this);" onclick="openPlayer('player',this);" src="{$image_dir}player/FullScreen_h.gif" /></td>
 				</tr>
 			</table>
 		</div>
 		<table class="controlstablenoscript" cellpadding="0" cellspacing="0">
 			<tr>
-				<td width="320" nowrap><a href="$wmv" title="Launch the streaming media file"><img alt="Launch the streaming media file" border="0" class="mediaplayerbutton" onmouseover="hover(this);" onmouseout="out(this);" onclick="play('player',this);" src="image/player/FullScreen_h.gif" /></a></td>
+				<td width="320" nowrap><a href="$wmv" title="Launch the streaming media file"><img alt="Launch the streaming media file" border="0" class="mediaplayerbutton" onmouseover="hover(this);" onmouseout="out(this);" onclick="play('player',this);" src="{$image_dir}player/FullScreen_h.gif" /></a></td>
 			</tr>
 		</table>
 	</div>
