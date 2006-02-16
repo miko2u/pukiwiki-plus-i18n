@@ -4,7 +4,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: default.css,v 1.32.15 2004/07/31 03:09:20 miko Exp $
+// $Id: default.css,v 1.32.16 2006/02/17 01:09:00 upk Exp $
 //
 */
 
@@ -1848,4 +1848,9 @@ div.naviblock a:hover {
         font-size: 84%;
         margin: 0px;
         padding: 0.15em;
+}
+
+/* for blikifooter */
+div.blikiFooter {
+	text-align:right;
 }
