@@ -1,8 +1,8 @@
 <?php
-// $Id: linklist.inc.php,v 0.3 2005/06/07 23:53:00 upk Exp $
+// $Id: linklist.inc.php,v 0.4 2006/02/16 01:31:00 upk Exp $
 /*
  * PukiWiki 自動相互リンク作成プラグイン
- * (C) 2004-2005, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * (C) 2004-2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * License: GPL
 */
 
@@ -29,15 +29,14 @@ function plugin_linklist_action()
 	global $_linklist_msg;
 	global $referer;
 
-	$retval['msg']  = sprintf($_linklist_msg['title'],$vars['page']);
+	$page = (empty($vars['page'])) ? '' : htmlspecialchars($vars['page'], ENT_QUOTES);
+	$retval['msg']  = sprintf($_linklist_msg['title'],$page);
 	if (! $referer) {
 		$retval['body'] = '<div>'.$_linklist_msg['not_effective']."</div>\n";
 		return $retval;
 	}
 
-	$page = (empty($vars['page'])) ? '' : $vars['page'];
-	$max  = (empty($vars['max']))  ? -1 : $vars['max'];
-
+	$max  = (empty($vars['max'])) ? -1 : htmlspecialchars($vars['max'], ENT_QUOTES);
 	$data = tb_get(tb_get_filename($page,'.ref'));
 
 	//  データ無し
@@ -68,7 +67,7 @@ function plugin_linklist_convert()
 
 	list($page,$max) = func_get_args();
 	if (empty($page)) $page = $vars['page'];
-	if (empty($max)) $max = -1;
+	$max  = (empty($max)) ? -1 : htmlspecialchars($max, ENT_QUOTES);
 
 	$data = tb_get(tb_get_filename($page,'.ref'));
 	if (count($data) == 0) return; //  データ無し

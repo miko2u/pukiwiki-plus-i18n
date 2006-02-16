@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: lastmod.php,v 0.1.1 2004/08/02 13:17:36 miko Exp $
+// $Id: lastmod.php,v 0.1.2 2006/02/16 01:31:00 upk Exp $
 //
 
 function plugin_lastmod_inline()

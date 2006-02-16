@@ -2,8 +2,8 @@
 /**
  * World Time プラグイン
  *
- * @copyright   Copyright &copy; 2005, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: worldtime.inc.php,v 0.3 2005/06/08 22:36:00 upk Exp $
+ * @copyright   Copyright &copy; 2005-2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * @version     $Id: worldtime.inc.php,v 0.4 2006/02/16 01:31:00 upk Exp $
  *
  */
 
@@ -14,6 +14,7 @@ function plugin_worldtime_inline()
 		return "&worldtime( timezone_name ){format};\n";
 	default:
 		list($code,$format) = func_get_args();
+		$format = htmlspecialchars($format, ENT_QUOTES);
 	}
 
 	if (empty($code)) return '';

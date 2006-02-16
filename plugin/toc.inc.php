@@ -2,8 +2,8 @@
 /**
  * PukiWiki Plus! 目次プラグイン
  *
- * @copyright	Copyright &copy; 2004-2005, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version	$Id: toc.php,v 0.10 2005/10/21 23:21:00 upk Exp $
+ * @copyright	Copyright &copy; 2004-2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * @version	$Id: toc.php,v 0.11 2006/02/16 01:31:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License
  * @link	http://jo1upk.blogdns.net/saito/
  */

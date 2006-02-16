@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: cvscheck.inc.php,v 0.17 2004/08/24 04:08:10 sha Exp $
+// $Id: cvscheck.inc.php,v 0.18 2006/02/16 01:31:00 upk Exp $
 /* 
 *プラグイン cvscheck
  cvsのversionと比較して異なるものを表示

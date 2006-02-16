@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: ajaxrss.inc.php,v 0.2 2005/04/11 03:18:06 miko Exp $
+// $Id: ajaxrss.inc.php,v 0.3 2006/02/16 01:31:00 upk Exp $
 //
 // Warning: this plugin is experimental.
 function plugin_ajaxrss_action()

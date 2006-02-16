@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: vote2.inc.php,v 0.12.3 2005/03/10 17:55:04 miko Exp $
+// $Id: vote2.inc.php,v 0.12.4 2006/02/16 01:31:00 upk Exp $
 // based on vote.inc.php v1.14
 //
 // v0.2はインラインのリンクにtitleを付けた。

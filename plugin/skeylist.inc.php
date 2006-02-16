@@ -31,15 +31,14 @@ function plugin_skeylist_action()
 	global $_skeylist_msg;
 	global $referer;
 
-	$retval['msg']  = sprintf($_skeylist_msg['title'],$vars['page']);
+	$page = (empty($vars['page'])) ? '' : htmlspecialchars($vars['page'], ENT_QUOTES);
+	$retval['msg']  = sprintf($_skeylist_msg['title'],$page);
 	if (! $referer) {
 		$retval['body'] = '<div>'.$_skeylist_msg['not_effective']."</div>\n";
 		return $retval;
 	}
 
-	$page = (empty($vars['page'])) ? '' : $vars['page'];
-	$max  = (empty($vars['max']))  ? -1 : $vars['max'];
-
+	$max  = (empty($vars['max']))  ? -1 : htmlspecialchars($vars['max'], ENT_QUOTES);
 	$data = tb_get(tb_get_filename($page,'.ref'));
 
 	//  データ無し
@@ -69,8 +68,8 @@ function plugin_skeylist_convert()
 	if (! $referer) return '';
 
 	list($page,$max) = func_get_args();
-	if (empty($page)) $page = $vars['page'];
-	if (empty($max)) $max = 10;
+	if (empty($page)) $page = htmlspecialchars($vars['page'], ENT_QUOTES);
+	$max = (empty($max)) ? 10 : htmlspecialchars($max, ENT_QUOTES);
 
 	$data = tb_get(tb_get_filename($page,'.ref'));
 	if (count($data) == 0) return ''; //  データ無し

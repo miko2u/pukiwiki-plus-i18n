@@ -2,8 +2,8 @@
 /**
  * PukiWiki Plus! ログリストプラグイン
  *
- * @copyright	Copyright &copy; 2004-2005, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version	$Id: loglist.php,v 0.3 2005/06/05 14:43:00 upk Exp $
+ * @copyright	Copyright &copy; 2004-2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * @version	$Id: loglist.php,v 0.4 2006/02/16 01:31:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
@@ -34,7 +34,7 @@ function plugin_loglist_convert()
 	global $_loglist_messages;
 
 	@list($kind) = func_get_args();
-	if (empty($kind)) $kind = 'update';
+	$kind = (empty($kind)) ? 'update' : htmlspecialchars($kind, ENT_QUOTES);
 
 	if (!$log[$kind]['use']) return $_loglist_messages['not_active'];
 	if (!empty($log[$kind]['file'])) {

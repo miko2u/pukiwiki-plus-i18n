@@ -2,8 +2,8 @@
 /**
  * PukiWiki Plus! ログ閲覧プラグイン
  *
- * @copyright	Copyright &copy; 2004-2005, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version	$Id: logview.php,v 0.4 2005/06/05 14:44:00 upk Exp $
+ * @copyright	Copyright &copy; 2004-2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * @version	$Id: logview.php,v 0.5 2006/02/16 01:31:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
@@ -137,17 +137,18 @@ function plugin_logview_action()
 				break;
 
 			case '@guess': // 推測
-				$body .= logview_guess_user($data, $guess);
+				$body .= htmlspecialchars(logview_guess_user($data, $guess), ENT_QUOTES);
 				break;
 
 			case 'ua': // ブラウザ情報 (USER-AGENT)
 				$os = $obj_ua->get_icon_os($data['ua']);
 				if (!empty($os))      $body .= '&img3('.$path_os.$os.'.png){'.$os.'};';
 				$browser = $obj_ua->get_icon_broeswes($data['ua']);
-				if (!empty($browser)) $body .= '&img3('.$path_browser.$browser.'.png){'.$data['ua'].'};';
+				if (!empty($browser))
+					$body .= '&img3('.$path_browser.$browser.'.png){'.htmlspecialchars($data['ua'], ENT_QUOTES).'};';
 				break;
 			default:
-				$body .= $data[$field];
+				$body .= htmlspecialchars($data[$field], ENT_QUOTES);
 			}
 		}
 		$body .= "|\n";

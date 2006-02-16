@@ -3,7 +3,7 @@
  * PukiWiki Plus! ログインプラグイン
  *
  * @copyright	Copyright &copy; 2004-2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version	$Id: login.php,v 0.5 2006/02/07 00:10:00 upk Exp $
+ * @version	$Id: login.php,v 0.6 2006/02/16 01:31:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
@@ -32,8 +32,7 @@ function plugin_login_convert()
 	global $_login_msg;
 
 	@list($type) = func_get_args();
-	if (!isset($type)) $type = '';
-
+	$type = (isset($type)) ? htmlspecialchars($type, ENT_QUOTES) : '';
 	$user = auth::check_auth();
 
 	if (!empty($user)) {
