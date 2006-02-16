@@ -4,7 +4,7 @@
  AUTHOR
    4mir Salihefendic (http://amix.dk) - amix@amix.dk
  VERSION
-	 1.5 (14/02/06 22:40:53)
+	 1.51 (15/02/06 23:49:32)
  LICENSE
   LGPL (read more in LGPL.txt)
  SITE

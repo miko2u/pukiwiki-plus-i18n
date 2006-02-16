@@ -23,7 +23,7 @@
   background-color: #fff;
   border: 5px solid #aaa;
   border-top: 0;
-  overflow: auto;
+  overflow: visible;
   z-index: 150;
 }
 
