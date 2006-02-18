@@ -4,7 +4,7 @@
  AUTHOR
    4mir Salihefendic (http://amix.dk) - amix@amix.dk
  VERSION
-	 1.51 (15/02/06 23:49:32)
+	 1.6 (17/02/06 17:55:45)
  LICENSE
   LGPL (read more in LGPL.txt)
  SITE
@@ -25,36 +25,43 @@ var GB_caption = null;
 var GB_last_win_url = null;
 
 function GB_show(caption, url /* optional */, height, width) {
-  if(height != 'undefined')
-    GB_HEIGHT = height;
-  if(width != 'undefined')
-    GB_WIDTH = width;
+  try {
+    if(height != 'undefined')
+      GB_HEIGHT = height;
+    if(width != 'undefined')
+      GB_WIDTH = width;
 
-  initIfNeeded();
-  GB_IFRAME.src = url;
-  GB_IFRAME.opener = this;
+    initIfNeeded();
+    GB_IFRAME.src = url;
+    GB_IFRAME.opener = this;
 
-  GB_caption.innerHTML = caption;
+    GB_caption.innerHTML = caption;
 
-  GB_setPosition();
-  if(GB_ANIMATION) {
-    positionRightVertically(GB_HEADER, -(GB_HEIGHT));
-    positionRightVertically(GB_WINDOW, -(GB_HEIGHT+22));
+    GB_setPosition();
+    if(GB_ANIMATION) {
+      positionRightVertically(GB_HEADER, -(GB_HEIGHT));
+      positionRightVertically(GB_WINDOW, -(GB_HEIGHT+22));
+    }
+
+    showElement(GB_OVERLAY);
+    showElement(GB_HEADER);
+    showElement(GB_WINDOW);
+
+    GB_setWidth();
+
+    if(GB_ANIMATION) {
+      GB_animateOut(-GB_HEIGHT);
+    }
+    return false;
   }
-
-  showElement(GB_OVERLAY);
-  showElement(GB_HEADER);
-  showElement(GB_WINDOW);
-
-  GB_setWidth();
-
-  if(GB_ANIMATION) {
-    GB_animateOut(-GB_HEIGHT);
+  catch (e) {
+    return false;
   }
 }
 
 function GB_hide() {
-  GB_IFRAME.href = "about:blank";
+  GB_IFRAME.src = "about:blank";
+  removeElement(GB_IFRAME);
   hideElement(GB_WINDOW);
   hideElement(GB_HEADER);
   hideElement(GB_OVERLAY);
@@ -129,9 +136,9 @@ function initIfNeeded() {
     GB_addOnWinResize(GB_setWidth);
     window.onscroll = function() { GB_setPosition(); };
   } 
-  new_stuff = IFRAME({'id': 'GB_frame', 'name': 'GB_frame'});
-  RCN(GB_WINDOW, new_stuff);
-  GB_IFRAME = new_stuff;
+  //Remove the old iFrame
+  GB_IFRAME = IFRAME({'id': 'GB_frame', 'name': 'GB_frame'});
+  ACN(GB_WINDOW, GB_IFRAME);
 }
 
 function GB_getWindowSize(){
