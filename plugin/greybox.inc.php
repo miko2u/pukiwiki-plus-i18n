@@ -3,7 +3,7 @@
  * GreyBox プラグイン
  *
  * @copyright   Copyright &copy; 2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: greybox.inc.php,v 0.2 2006/02/16 01:27:00 upk Exp $
+ * @version     $Id: greybox.inc.php,v 0.3 2006/02/20 01:56:00 upk Exp $
  * @link	http://amix.dk/projects/?page_id=5
  */
 
@@ -33,6 +33,7 @@ function plugin_greybox_convert()
 		$caption2 = $caption;
 	}
 
+	$caption2 = str_replace('&amp;#039;','\'',$caption2); // ' の対応
 	return '<a href="#" onclick="GB_show(\''.$caption.'\', \''.$url.'\', '.$height.', '.$width.');">'.$caption2."</a>\n";
 }
 
