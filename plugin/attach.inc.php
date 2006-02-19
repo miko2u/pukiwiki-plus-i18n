@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: attach.inc.php,v 1.80.12 2006/02/06 21:17:00 upk Exp $
+// $Id: attach.inc.php,v 1.80.13 2006/02/19 19:28:00 upk Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2003-2005 PukiWiki Developers Team
@@ -685,17 +685,38 @@ EOD;
  [<a href="$script?plugin=attach&amp;pcmd=list">{$_attach_messages['msg_listall']}</a>]
 </p>
 <dl>
- <dt>$info</dt>
- <dd>{$_attach_messages['msg_filename']}:{$this->filename}</dd>
+ <dt>$info (<a href="{$this->filename}" title="{$this->filename}">{$_attach_messages['msg_filename']}</a>)</dt>
 </dl>
 {$_attach_setimage}
 <dl>
- <dd>{$_attach_messages['msg_page']}:$s_page</dd>
- <dd>{$_attach_messages['msg_filesize']}:{$this->size_str} ({$this->size} bytes)</dd>
- <dd>Content-type:{$this->type}</dd>
- <dd>{$_attach_messages['msg_date']}:{$this->time_str}</dd>
- <dd>{$_attach_messages['msg_dlcount']}:{$this->status['count'][$this->age]}</dd>
- <dd>{$_attach_messages['msg_md5hash']}:{$this->md5hash}</dd>
+ <table class="style_table" cellspacing="1" border="0">
+  <tbody>
+   <tr>
+    <th class="style_th">{$_attach_messages['msg_page']}</th>
+    <td class="style_td">$s_page</td>
+   </tr>
+   <tr>
+    <th class="style_th">{$_attach_messages['msg_filesize']}</th>
+    <td class="style_td">{$this->size_str} ({$this->size} bytes)</td>
+   </tr>
+   <tr>
+    <th class="style_th">Content-type</th>
+    <td class="style_td">{$this->type}</td>
+   </tr>
+   <tr>
+    <th class="style_th">{$_attach_messages['msg_date']}</th>
+    <td class="style_td">{$this->time_str}</td>
+   </tr>
+   <tr>
+    <th class="style_th">{$_attach_messages['msg_dlcount']}</th>
+    <td class="style_td">{$this->status['count'][$this->age]}</td>
+   </tr>
+   <tr>
+    <th class="style_th">{$_attach_messages['msg_md5hash']}</th>
+    <td class="style_td">{$this->md5hash}</td>
+   </tr>
+  </tbody>
+ </table>
  $msg_freezed
 </dl>
 <div style="clear:right"><hr /></div>
