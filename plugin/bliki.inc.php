@@ -32,30 +32,36 @@
 
 // Keywordモード時に使う正規表現で設定（両端の「/」は不用）
 define('BLIKI_MORE', '^#blikimore');
-
 define('BLIKI_FOOTER', '#blikifooter');
 
 // 何ページ読みこむか？
-define('BLIKI_DEFAULT_PAGE_NUM', '10');
-
+if (!defined('BLIKI_DEFAULT_PAGE_NUM')) {
+	define('BLIKI_DEFAULT_PAGE_NUM', '10');
+}
 // キャッシュを使うか？
-define('BLIKI_CACHE_MODE', '1');
-
+if (!defined('BLIKI_CACHE_MODE')) {
+	define('BLIKI_CACHE_MODE', '1');
+}
 // テンプレート
-define('BLIKI_TEMPLATE', '<div>%s</div>');
-
+if (!defined('BLIKI_TEMPLATE')) {
+	define('BLIKI_TEMPLATE', '<div>%s</div>');
+}
 // 各エントリー用テンプレート(wiki記法) 置換用引数 => (タイトル, 日付, 本文, もっとよむ, blikifooter)
-define('BLIKI_PAGE_WIKI_TEMPLATE', "*%s\nRIGHT:%s %s\n\n%s\n\n%s\n\n%s\n");
-
+if (!defined('BLIKI_PAGE_WIKI_TEMPLATE')) {
+	define('BLIKI_PAGE_WIKI_TEMPLATE', "*%s\nRIGHT:%s %s\n\n%s\n\n%s\n\n%s\n");
+}
 // 各エントリー用テンプレート(HTML) BLIKI_PAGE_WIKI_TEMPLATEが収容される
-define('BLIKI_PAGE_TEMPLATE', "<div class='blikiEntry'>%s</div>");
-
+if (!defined('BLIKI_PAGE_TEMPLATE')) {
+	define('BLIKI_PAGE_TEMPLATE', "<div class='blikiEntry'>%s</div>");
+}
 // 子ディレクトリのドキュメントもインクルードするか
-define('BLIKI_CHILD', TRUE);
-
+if (!defined('BLIKI_CHILD')) {
+	define('BLIKI_CHILD', TRUE);
+}
 // blikifooterがないページをインクルードするか
-define('BLIKI_FOOTER_REQUIRED', TRUE);
-
+if (!defined('BLIKI_FOOTER_REQUIRED')) {
+	define('BLIKI_FOOTER_REQUIRED', TRUE);
+}
 
 function plugin_bliki_init()
 {
@@ -85,8 +91,8 @@ function plugin_bliki_init()
  *      Olorinさんありがとうございます。
  * 
  * 使用例
- *      #bliki(15,hoge,1)  → hoge/〜のページを更新順に15件表示
- *      #bliki(15,hoge,0)  → hoge/〜のページを更新順に15件表示(子ページであるhoge/helloは含むが孫ページであるhoge/hello/worldは含まない。)
+ *      #bliki(15,hoge,1)  → hoge/?のページを更新順に15件表示
+ *      #bliki(15,hoge,0)  → hoge/?のページを更新順に15件表示(子ページであるhoge/helloは含むが孫ページであるhoge/hello/worldは含まない。)
  *
  * @author Yuki SHIDA <shida@in3c.org>
  * @author Y.MASUI
