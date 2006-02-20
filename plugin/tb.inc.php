@@ -1,24 +1,42 @@
 <?php
-// $Id: tb.inc.php,v 1.19.4 2006/02/02 01:30:00 upk Exp $
+// $Id: tb.inc.php,v 1.19.5 2006/02/20 01:31:00 upk Exp $
 /*
  * PukiWiki/TrackBack: TrackBack Ping receiver and viewer
  * (C) 2003-2004 PukiWiki Developers Team
  * (C) 2003,2005-2006 Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * License: GPL
  *
+ * plugin_tb_convert()
  * plugin_tb_action()    action
  * plugin_tb_save($url, $tb_id) Save or update TrackBack Ping data
  * plugin_tb_return($rc, $msg)  Return TrackBack ping via HTTP/XML
  * plugin_tb_mode_rss($tb_id)   ?__mode=rss
  * plugin_tb_mode_view($tb_id)  ?__mode=view
+ * plugin_tb_recent($line)
  */
-
 
 function plugin_tb_convert()
 {
 	global $vars;
-	$tb_id = tb_get_id($vars['page']);
-	return plugin_tb_mode_view_set($tb_id, $vars['page']);
+
+	$argv = func_get_args();
+	$argc = func_num_args();
+
+	$field = array('cmd','line');
+	for($i=0; $i<$argc; $i++) {
+		$$field[$i] = htmlspecialchars($argv[$i], ENT_QUOTES);
+	}
+
+	if (empty($cmd)) $cmd = 'list';
+	if (empty($line)) $line = 0;
+
+	switch ( $cmd ) {
+	case 'recent':
+		return plugin_tb_recent($vars['page'],$line);
+	// case 'list':
+	default:
+		return plugin_tb_mode_view_set($vars['page']);
+	}
 }
 
 function plugin_tb_action()
@@ -178,13 +196,15 @@ function plugin_tb_mode_view($tb_id)
 	$vars['page'] = $page; // topicpath
 	$retval = array();
 	$retval['msg'] = sprintf( _('TrackBack: Discussion on TrackBack in %s'), $page);
-	$retval['body'] = plugin_tb_mode_view_set($tb_id, $page);
+	$retval['body'] = plugin_tb_mode_view_set($page);
 	return $retval;
 }
 
-function plugin_tb_mode_view_set($tb_id, $page)
+function plugin_tb_mode_view_set($page)
 {
 	global $script, $vars;
+
+	$tb_id = tb_get_id($page);
 
 	$body  = '<h3>' . _('TrackBack URL for this entry:') . "</h3>\n";
 	$body .= '<p>' . $script . '?tb_id=' . $tb_id . "</p>\n";
@@ -221,9 +241,44 @@ function plugin_tb_mode_view_set($tb_id, $page)
 	}
 
 	$body .= '<div style="text-align:right">' .
-		 '<a href="' . $script . '?plugin=tb&amp;__mode=view">' . 'Trackback List' . 
+		 '<a href="' . $script . '?plugin=tb&amp;__mode=view">' .
 		 '<img src="'.IMAGE_URI.'plus/trackback.png" alt="" title="" />' .
+		 'Trackback List' . 
 		 '</a>'. "</div>\n";
+
+	return $body;
+}
+
+function plugin_tb_recent($page,$line)
+{
+	$body = '';
+
+	$tb_id = tb_get_id($page);
+	$data = tb_get(tb_get_filename($page));
+	$ctr = count($data);
+	if ($ctr == 0) return '';
+
+	// Sort: The first is the latest
+	usort($data, create_function('$a,$b', 'return $b[0] - $a[0];'));
+
+	$body .= '<h5>' . _("RECENT TRACKBACK") . "</h5>\n";
+	$body .= "<div>\n<ul class=\"recent_list\">\n";
+	$i = 0;
+	foreach ($data as $x) {
+		if (count($x) != 5) continue; // Ignore incorrect record
+
+		list ($time, $url, $title, $excerpt, $blog_name) = $x;
+		if ($title == '') $title = 'no title';
+
+		$body .= '<li><a href="' . $url . '" title="' .
+			$blog_name . ' ' . get_passage($time) .
+			'" rel="nofollow">' . $title . '</a></li>'."\n";
+		$i++;
+		if ($line == 0) continue;
+		if ($i >= $line) break;
+	}
+
+	$body .= "</ul>\n</div>\n";
 
 	return $body;
 }

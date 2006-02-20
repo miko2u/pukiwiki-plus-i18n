@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-04-02 18:29+0900\n"
+"POT-Creation-Date: 2006-02-20 15:20+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,36 +16,35 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../plugin/tb.inc.php:167
+#: ../../plugin/tb.inc.php:198
 #, php-format
 msgid "TrackBack: Discussion on TrackBack in %s"
 msgstr ""
 
-#: ../../plugin/tb.inc.php:168
-msgid "Continuing the discussion..."
-msgstr ""
-
-#: ../../plugin/tb.inc.php:169
+#: ../../plugin/tb.inc.php:209
 msgid "TrackBack URL for this entry:"
 msgstr ""
 
-#: ../../plugin/tb.inc.php:170
-#, php-format
-msgid " Listed below are links to weblogs that reference %s from %s."
+#: ../../plugin/tb.inc.php:211
+msgid "Continuing the discussion..."
 msgstr ""
 
-#: ../../plugin/tb.inc.php:171
+#: ../../plugin/tb.inc.php:213
 msgid "Summary:"
 msgstr ""
 
-#: ../../plugin/tb.inc.php:172
+#: ../../plugin/tb.inc.php:214
 msgid "Weblog:"
 msgstr ""
 
-#: ../../plugin/tb.inc.php:173
+#: ../../plugin/tb.inc.php:215
 msgid "Tracked:"
 msgstr ""
 
-#: ../../plugin/tb.inc.php:174
+#: ../../plugin/tb.inc.php:216
 msgid "F j, Y, g:i A"
+msgstr ""
+
+#: ../../plugin/tb.inc.php:264
+msgid "RECENT TRACKBACK"
 msgstr ""

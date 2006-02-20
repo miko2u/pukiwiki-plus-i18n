@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PukiWiki Plus! 1.4.5-u2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-04-02 18:29+0900\n"
+"POT-Creation-Date: 2006-02-20 15:20+0900\n"
 "PO-Revision-Date: 2005-04-02 18:30+0900\n"
 "Last-Translator: Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>\n"
 "Language-Team: Japanese <ja@li.org>\n"
@@ -15,36 +15,35 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../plugin/tb.inc.php:167
+#: ../../plugin/tb.inc.php:198
 #, php-format
 msgid "TrackBack: Discussion on TrackBack in %s"
 msgstr "TrackBack: %s への議論は継続される..."
 
-#: ../../plugin/tb.inc.php:168
-msgid "Continuing the discussion..."
-msgstr "ディスカッションの継続..."
-
-#: ../../plugin/tb.inc.php:169
+#: ../../plugin/tb.inc.php:209
 msgid "TrackBack URL for this entry:"
 msgstr "このエントリの TrackBack URL:"
 
-#: ../../plugin/tb.inc.php:170
-#, php-format
-msgid " Listed below are links to weblogs that reference %s from %s."
-msgstr " この一覧は、次のエントリを参照しています: %s, %s."
+#: ../../plugin/tb.inc.php:211
+msgid "Continuing the discussion..."
+msgstr "ディスカッションの継続..."
 
-#: ../../plugin/tb.inc.php:171
+#: ../../plugin/tb.inc.php:213
 msgid "Summary:"
 msgstr "要約:"
 
-#: ../../plugin/tb.inc.php:172
+#: ../../plugin/tb.inc.php:214
 msgid "Weblog:"
 msgstr "Weblog:"
 
-#: ../../plugin/tb.inc.php:173
+#: ../../plugin/tb.inc.php:215
 msgid "Tracked:"
 msgstr "日時:"
 
-#: ../../plugin/tb.inc.php:174
+#: ../../plugin/tb.inc.php:216
 msgid "F j, Y, g:i A"
 msgstr "Y年n月j日 H:i:s"
+
+#: ../../plugin/tb.inc.php:264
+msgid "RECENT TRACKBACK"
+msgstr "最新のTrackBack"
