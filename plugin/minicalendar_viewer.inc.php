@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: minicalendar_viewer.inc.php,v 1.34.21 2006/02/21 18:07:00 upk Exp $
+// $Id: minicalendar_viewer.inc.php,v 1.34.22 2006/02/21 18:21:00 upk Exp $
 //
 // Calendar viewer plugin - List pages that calendar/calnedar2 plugin created
 // (Based on calendar and recent plugin)
@@ -261,7 +261,7 @@ function plugin_minicalendar_viewer_convert()
 			if ($trackback) {
 		        $tb_id = tb_get_id($page);
 		        $tail .= '<a href="' . $script . '?plugin=tb&amp;__mode=view&amp;tb_id=' . $tb_id . '">'
-		               . '<img src="' . IMAGE_URI . 'plus/trackback.png" width="15" height="15" alt="" title="" />Trackback("' . tb_count($page) . '")'
+		               . '<img src="' . IMAGE_URI . 'plus/trackback.png" width="15" height="15" alt="" title="" />Trackback(' . tb_count($page) . ')'
 		               . '</a>' . "\n";
 			}
 		}
