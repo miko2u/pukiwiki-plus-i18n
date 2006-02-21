@@ -4,7 +4,7 @@
  AUTHOR
    4mir Salihefendic (http://amix.dk) - amix@amix.dk
  VERSION
-	 1.6 (17/02/06 17:55:45)
+	 1.61 (19/02/06 20:35:54)
  LICENSE
   LGPL (read more in LGPL.txt)
  SITE
@@ -60,8 +60,7 @@ function GB_show(caption, url /* optional */, height, width) {
 }
 
 function GB_hide() {
-  GB_IFRAME.src = "about:blank";
-  removeElement(GB_IFRAME);
+  GB_IFRAME.src = "";
   hideElement(GB_WINDOW);
   hideElement(GB_HEADER);
   hideElement(GB_OVERLAY);
@@ -137,8 +136,11 @@ function initIfNeeded() {
     window.onscroll = function() { GB_setPosition(); };
   } 
   //Remove the old iFrame
-  GB_IFRAME = IFRAME({'id': 'GB_frame', 'name': 'GB_frame'});
-  ACN(GB_WINDOW, GB_IFRAME);
+  var new_frame = IFRAME({'id': 'GB_frame', 'name': 'GB_frame'});
+  if (GB_IFRAME != null)
+    removeElement(GB_IFRAME);
+  ACN(GB_WINDOW, new_frame);
+  GB_IFRAME = new_frame;
 }
 
 function GB_getWindowSize(){

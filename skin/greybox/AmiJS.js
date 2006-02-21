@@ -9,7 +9,7 @@
     Copyright (c) 2005 Bob Ippolito. All rights reserved.
     http://www.opensource.org/licenses/mit-license.php
   VERSION
-    1.3 (13/02/06 10:04:02)
+    1.31 (20/02/06 22:41:35)
   SITE
     http://amix.dk/amijs
  ****/
@@ -163,6 +163,7 @@ var SELECT = function() { return createDOM.apply(this, ["select", arguments]); }
 var OPTION = function() { return createDOM.apply(this, ["option", arguments]); };
 var TN = function(text) { return document.createTextNode(text); };
 var IFRAME = function() { return createDOM.apply(this, ["iframe", arguments]); };
+var SCRIPT = function() { return createDOM.apply(this, ["script", arguments]); };
 
 
 /**** 
