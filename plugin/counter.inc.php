@@ -1,9 +1,9 @@
 <?php
-// $Id: counter.inc.php,v 1.17.5 2005/10/04 14:31:22 miko Exp $
+// $Id: counter.inc.php,v 1.17.6 2006/02/21 10:42:00 miko Exp $
 //
 // PukiWiki counter plugin
 //
-// (C) 2002-2005 PukiWiki Plus! Team
+// (C) 2002-2006 PukiWiki Plus! Team
 // (C) 2002-2005 PukiWiki Developers Team
 // (C) 2002 Y.MASUI GPL2 http://masui.net/pukiwiki/ masui@masui.net
 
@@ -113,7 +113,7 @@ function plugin_counter_get_count($page)
 function get_server_date($format, $timestamp = NULL)
 {
 	static $zone = '';
-	static $timezone = '';
+	static $zonetime = '';
 
 	if ($zone == '') {
 		list($zone, $zonetime) = set_timezone(DEFAULT_LANG);
