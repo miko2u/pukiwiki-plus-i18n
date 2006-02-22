@@ -25,7 +25,7 @@ function plugin_counter_inline()
 	case 'yesterday':
 		$counter = plugin_counter_get_count($vars['page']);
 		return $counter[$arg];
-	// BugTrack/527, —~‚µ‚¢ƒvƒ‰ƒOƒCƒ“/42
+	// BugTrack/527, æ¬²ã—ã„ãƒ—ãƒ©ã‚°ã‚¤ãƒ³/42
 	case 'none':
 		$counter = plugin_counter_get_count($vars['page']);
 		return '';
@@ -65,7 +65,7 @@ function plugin_counter_get_count($page)
 	if (! isset($default)) {
 		$default = array(
 			'total'     => 0,
-			'date'      => gmdate('Y/m/d', $localtime);
+			'date'      => gmdate('Y/m/d', $localtime),
 			'today'     => 0,
 			'yesterday' => 0,
 			'ip'        => '');
