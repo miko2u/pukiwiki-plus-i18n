@@ -1,5 +1,5 @@
 <?php
-// $Id: counter.inc.php,v 1.17.6 2006/02/21 10:42:00 miko Exp $
+// $Id: counter.inc.php,v 1.17.7 2006/02/22 01:12:00 upk Exp $
 //
 // PukiWiki counter plugin
 //
@@ -25,8 +25,12 @@ function plugin_counter_inline()
 	case 'yesterday':
 		$counter = plugin_counter_get_count($vars['page']);
 		return $counter[$arg];
+	// BugTrack/527, —~‚µ‚¢ƒvƒ‰ƒOƒCƒ“/42
+	case 'none':
+		$counter = plugin_counter_get_count($vars['page']);
+		return '';
 	default:
-		return '&counter([total|today|yesterday]);';
+		return '&counter([total|today|yesterday|none]);';
 	}
 }
 
@@ -51,11 +55,17 @@ function plugin_counter_get_count($page)
 	global $vars;
 	static $counters = array();
 	static $default;
+	static $localtime;
+
+	if (! isset($localtime)) {
+		list($zone, $zonetime) = set_timezone(DEFAULT_LANG);
+		$localtime = UTIME + $zonetime;
+	}
 
 	if (! isset($default)) {
 		$default = array(
 			'total'     => 0,
-			'date'      => get_server_date('Y/m/d'),
+			'date'      => gmdate('Y/m/d', $localtime);
 			'today'     => 0,
 			'yesterday' => 0,
 			'ip'        => '');
@@ -72,17 +82,19 @@ function plugin_counter_get_count($page)
 	$fp = fopen($file, file_exists($file) ? 'r+' : 'w+')
 		or die('counter.inc.php: Cannot open COUTER_DIR/' . basename($file));
 	set_file_buffer($fp, 0);
-	flock($fp, LOCK_EX);
+	@flock($fp, LOCK_EX);
 	rewind($fp);
 	foreach ($default as $key=>$val) {
 		// Update
 		$counters[$page][$key] = rtrim(fgets($fp, 256));
 		if (feof($fp)) break;
 	}
+
 	if ($counters[$page]['date'] != $default['date']) {
 		// New day
 		$modify = TRUE;
-		$is_yesterday = ($counters[$page]['date'] == get_server_date('Y/m/d', strtotime('yesterday', UTIME)));
+		$yesterday = gmmktime(0,0,0, gmdate('m',$localtime), gmdate('d',$localtime)-1, gmdate('Y',$localtime));
+		$is_yesterday = ($counters[$page]['date'] == gmdate('Y/m/d', $yesterday);
 		$counters[$page]['ip']        = $_SERVER['REMOTE_ADDR'];
 		$counters[$page]['date']      = $default['date'];
 		$counters[$page]['yesterday'] = $is_yesterday ? $counters[$page]['today'] : 0;
@@ -96,6 +108,7 @@ function plugin_counter_get_count($page)
 		$counters[$page]['today']++;
 		$counters[$page]['total']++;
 	}
+
 	// Modify
 	if ($modify && $vars['cmd'] == 'read') {
 		rewind($fp);
@@ -103,31 +116,9 @@ function plugin_counter_get_count($page)
 		foreach (array_keys($default) as $key)
 			fputs($fp, $counters[$page][$key] . "\n");
 	}
-	flock($fp, LOCK_UN);
+	@flock($fp, LOCK_UN);
 	fclose($fp);
 
 	return $counters[$page];
-}
-
-// Get the server-depend date
-function get_server_date($format, $timestamp = NULL)
-{
-	static $zone = '';
-	static $zonetime = '';
-
-	if ($zone == '') {
-		list($zone, $zonetime) = set_timezone(DEFAULT_LANG);
-	}
-
-	$format = preg_replace('/(?<!\\\)T/', preg_replace('/(.)/', '\\\$1', $zone), $format);
-
-	$time = $zonetime + (($timestamp !== NULL) ? $timestamp : UTIME);
-
-	$str = gmdate($format, $time);
-	if ($zonetime == 0) return $str;
-
-	$zonetime = get_zonetime_offset($zonetime);
-
-	return str_replace('+0000', $zonetime, $str);
 }
 ?>
