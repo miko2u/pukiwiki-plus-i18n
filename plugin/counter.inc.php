@@ -94,7 +94,7 @@ function plugin_counter_get_count($page)
 		// New day
 		$modify = TRUE;
 		$yesterday = gmmktime(0,0,0, gmdate('m',$localtime), gmdate('d',$localtime)-1, gmdate('Y',$localtime));
-		$is_yesterday = ($counters[$page]['date'] == gmdate('Y/m/d', $yesterday);
+		$is_yesterday = ($counters[$page]['date'] == gmdate('Y/m/d', $yesterday));
 		$counters[$page]['ip']        = $_SERVER['REMOTE_ADDR'];
 		$counters[$page]['date']      = $default['date'];
 		$counters[$page]['yesterday'] = $is_yesterday ? $counters[$page]['today'] : 0;
