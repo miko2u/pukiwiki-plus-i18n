@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: file.php,v 1.44.12 2006/02/04 18:02:00 upk Exp $
+// $Id: file.php,v 1.44.13 2006/02/26 19:03:00 upk Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
@@ -74,8 +74,10 @@ function page_write($page, $postdata, $notimestamp = FALSE)
 		$plus  = join("\n", preg_replace('/^\+/', '', preg_grep('/^\+/', $_diff)));
 		$minus = join("\n", preg_replace('/^-/',  '', preg_grep('/^-/',  $_diff)));
 		tb_send($page, $plus, $minus);
+		unset($_diff,$plus,$minus);
 	}
 
+	unset($oldpostdata,$diffdata);
 	links_update($page);
 	log_write('update',$page);
 }

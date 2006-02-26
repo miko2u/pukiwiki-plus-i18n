@@ -11,7 +11,7 @@
  * @access  public
  * @author
  * @create
- * @version $Id: backup.php,v 1.10.3 2006/01/11 23:03:00 upk Exp $
+ * @version $Id: backup.php,v 1.10.4 2006/02/26 17:58:00 upk Exp $
  * Copyright (C)
  *   2005-2006 PukiWiki Plus! Team
  *   2002-2005 PukiWiki Developers Team
@@ -61,6 +61,8 @@ function make_backup($page, $delete = FALSE)
 			//$strout .= PKWK_SPLITTER . ' ' . $data['time'] . "\n"; // Splitter format
 			$strout .= PKWK_SPLITTER . ' ' . $data['time'] . ' ' . $data['real'] . "\n"; // Splitter format
 			$strout .= join('', $data['data']);
+			// BugTrack2/159 
+			unset($backups[$age]);
 		}
 		$strout = preg_replace("/([^\n])\n*$/", "$1\n", $strout);
 
@@ -103,7 +105,8 @@ function get_backup($page, $age = 0)
 	$regex_splitter = '/^' . preg_quote(PKWK_SPLITTER) . '\s(\d+)$/';
 	// BugTrack/685 by UPK
 	$regex_splitter_new = '/^' . preg_quote(PKWK_SPLITTER) . '\s(\d+)\s(\d+)$/';
-	foreach($lines as $line) {
+	// BugTrack2/159
+	foreach($lines as $index=>$line) {
 		// BugTrack/685 by UPK
 		// if (preg_match($regex_splitter, $line, $match)) {
 		if (preg_match($regex_splitter, $line, $match) ||
@@ -119,6 +122,8 @@ function get_backup($page, $age = 0)
 		} else {
 			$retvars[$_age]['data'][] = $line;
 		}
+		// BugTrack2/159
+		unset($lines[$index]);
 	}
 
 	return $retvars;
