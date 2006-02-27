@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: vote2.inc.php,v 0.12.5 2006/02/27 17:25:00 upk Exp $
+// $Id: vote2.inc.php,v 0.12.6 2006/02/27 21:57:00 upk Exp $
 // based on vote.inc.php v1.14
 //
 // v0.2はインラインのリンクにtitleを付けた。
@@ -345,7 +345,7 @@ function plugin_vote2_convert()
 			$Percentage = (int)(($cnt / $total) * 100);
 			$bar->setCurrPoint($Percentage);
 			$getBar = $bar->getBar();
-			$barchart_style = 'style="width:100%;"';
+			$barchart_style = 'style="width:95%;"';
 		} else {
 			$barchart_style = '';
 		}
