@@ -1,4 +1,4 @@
-<?
+<?php
 /*
  * Class produce HTML code to display a'la bar chart.
  * Author: Viatcheslav Ivanov, E-Witness Inc., Canada;
