@@ -1,10 +1,12 @@
 /****
+Last Modified: Sun 26 Feb 2006 09:24:10 PM CET
+
  GreyBox - The pop-up window thingie
    Copyright Amir Salihefendic 2006
  AUTHOR
    4mir Salihefendic (http://amix.dk) - amix@amix.dk
  VERSION
-	 1.61 (19/02/06 20:35:54)
+	 1.62
  LICENSE
   LGPL (read more in LGPL.txt)
  SITE
@@ -133,7 +135,7 @@ function initIfNeeded() {
   if(GB_OVERLAY == null) {
     GB_init();
     GB_addOnWinResize(GB_setWidth);
-    window.onscroll = function() { GB_setPosition(); };
+    window.onscroll = function() { GB_setPosition(); GB_setWidth(); };
   } 
   //Remove the old iFrame
   var new_frame = IFRAME({'id': 'GB_frame', 'name': 'GB_frame'});
