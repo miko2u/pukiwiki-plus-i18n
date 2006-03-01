@@ -1,6 +1,11 @@
 <?php
-// PukiWiki - Yet another WikiWikiWeb clone
-// $Id: pukiwiki.ini.php,v 1.119.15 2005/04/26 16:34:50 miko Exp $
+// PukiWiki Plus! - Yet another WikiWikiWeb clone
+// $Id: pukiwiki.ini.php,v 1.128.23 2006/03/01 01:27:00 upk Exp $
+// Copyright (C)
+//   2005-2006 PukiWiki Plus! Team
+//   2002-2005 PukiWiki Developers Team
+//   2001-2002 Originally written by yu-ji
+// License: GPL v2 or (at your option) any later version
 //
 // PukiWiki main setting file
 
@@ -15,20 +20,51 @@ if (! defined('PKWK_OPTIMISE'))
 
 /////////////////////////////////////////////////
 // Security settings
+// 0 - 機能無効
+// 1 - 強制モード
+// 2 - サイト管理者以上は除く
+// 3 - コンテンツ管理者以上は除く
+// 4 - 認証者(未設定時のデフォルト)以上は除く
 
 // PKWK_READONLY - Prohibits editing and maintain via WWW
 //   NOTE: Counter-related functions will work now (counter, attach count, etc)
 if (! defined('PKWK_READONLY'))
-	define('PKWK_READONLY', 0); // 0 or 1
+	define('PKWK_READONLY', 0); // 0,1,2,3,4
 
 // PKWK_SAFE_MODE - Prohibits some unsafe(but compatible) functions 
 if (! defined('PKWK_SAFE_MODE'))
-	define('PKWK_SAFE_MODE', 0);
+	define('PKWK_SAFE_MODE', 0); // 0,1,2,3,4
+
+// PKWK_DISABLE_INLINE_IMAGE_FROM_URI - Disallow using inline-image-tag for URIs
+//   Inline-image-tag for URIs may allow leakage of Wiki readers' information
+//   (in short, 'Web bug') or external malicious CGI (looks like an image's URL)
+//   attack to Wiki readers, but easy way to show images.
+if (! defined('PKWK_DISABLE_INLINE_IMAGE_FROM_URI'))
+	define('PKWK_DISABLE_INLINE_IMAGE_FROM_URI', 0);
 
 // PKWK_QUERY_STRING_MAX
 //   Max length of GET method, prohibits some worm attack ASAP
 //   NOTE: Keep (page-name + attach-file-name) <= PKWK_QUERY_STRING_MAX
 define('PKWK_QUERY_STRING_MAX', 640); // Bytes, 0 = OFF
+
+/////////////////////////////////////////////////
+// Experimental features
+
+// Multiline plugin hack (See BugTrack2/84)
+// EXAMPLE(with a known BUG):
+//   #plugin(args1,args2,...,argsN){{
+//   argsN+1
+//   argsN+1
+//   #memo(foo)
+//   argsN+1
+//   }}
+//   #memo(This makes '#memo(foo)' to this)
+define('PKWKEXP_DISABLE_MULTILINE_PLUGIN_HACK', 0); // 1 = Disabled
+
+/////////////////////////////////////////////////
+// Is cookie used?
+// 1: TRUE 0:FALSE;
+$use_cookie = 0;
 
 /////////////////////////////////////////////////
 // Language / Encoding settings
@@ -37,19 +73,26 @@ define('PKWK_QUERY_STRING_MAX', 640); // Bytes, 0 = OFF
 if (! defined('DEFAULT_LANG'))
 	define('DEFAULT_LANG', 'ja_JP');
 
+// It conforms at the time of server installation location (DEFAULT_LANG).
+// (1: Conforming, 0: Language dependence)
+// サーバ設置場所(DEFAULT_LANG)の時刻に準拠する。(1:準拠, 0:言語依存)
+$use_local_time = 0;
+
 // Effective making function switch (2 Then, it becomes a judgment of 1 and 2.)
 // 0) Invalidity
-// 1) Judgment with HTTP_ACCEPT_LANGUAGE
-// 2) Considering judgment to HTTP_USER_AGENT
-// 3) Considering judgment to HTTP_ACCEPT_CHARSET
-// 4) Considering judgment to REMOTE_ADDR
+// 1) Judgment with COOKIE['lang']
+// 2) Judgment with HTTP_ACCEPT_LANGUAGE
+// 3) Considering judgment to HTTP_USER_AGENT
+// 4) Considering judgment to HTTP_ACCEPT_CHARSET
+// 5) Considering judgment to REMOTE_ADDR
 // 機能有効化スイッチ (2 なら、1と2の判定となる)
 // 0) 無効
-// 1) HTTP_ACCEPT_LANGUAGE での判定
-// 2) HTTP_USER_AGENT までの見做し判定
-// 3) HTTP_ACCEPT_CHARSET までの見做し判定
-// 4) REMOTE_ADDR までの見做し判定
-$language_considering_setting_level = 1;
+// 1) COOKIE['lang'] での判定
+// 2) HTTP_ACCEPT_LANGUAGE での判定
+// 3) HTTP_USER_AGENT までの見做し判定
+// 4) HTTP_ACCEPT_CHARSET までの見做し判定
+// 5) REMOTE_ADDR までの見做し判定
+$language_considering_setting_level = 2;
 
 // Please define it when two or more TimeZone such as en_US exists.
 // Please refer to lib/timezone.php for the defined character string.
@@ -75,8 +118,12 @@ define('CACHE_DIR',     DATA_HOME . 'cache/'    ); // Some sort of caches
 define('UPLOAD_DIR',    DATA_HOME . 'attach/'   ); // Attached files and logs
 define('COUNTER_DIR',   DATA_HOME . 'counter/'  ); // Counter plugin's counts
 define('TRACKBACK_DIR', DATA_HOME . 'trackback/'); // TrackBack logs
-define('PLUGIN_DIR',    DATA_HOME . 'plugin/'   ); // Plugin directory
-define('LANG_DIR',      DATA_HOME . 'locale/'   ); // Language file
+define('LOG_DIR',       DATA_HOME . 'log/'      ); // Logging file
+define('INIT_DIR',      DATA_HOME . 'init/'     ); // Initial value (Contents)
+
+define('PLUGIN_DIR',    SITE_HOME . 'plugin/'   ); // Plugin directory
+define('LANG_DIR',      SITE_HOME . 'locale/'   ); // Language file
+define('SITE_INIT_DIR', SITE_HOME . 'init/'     ); // Initial value (Site)
 
 /////////////////////////////////////////////////
 // Directory settings II (ended with '/')
@@ -138,6 +185,11 @@ $footarea     = ':Footer';
 //$pkwk_dtd = PKWK_DTD_HTML_4_01_TRANSITIONAL;
 
 /////////////////////////////////////////////////
+// Always output "nofollow,noindex" attribute
+
+$nofollow = 0; // 1 = Try hiding from search engines
+
+/////////////////////////////////////////////////
 
 // PKWK_ALLOW_JAVASCRIPT - Allow / Prohibit using JavaScript
 define('PKWK_ALLOW_JAVASCRIPT', 1);
@@ -145,22 +197,39 @@ define('PKWK_ALLOW_JAVASCRIPT', 1);
 // Javascript Async Library Extenstion
 $ajax = 1;
 
+// LOG
+require_once('config-log.ini.php');
+
 /////////////////////////////////////////////////
 // TrackBack feature
 
 // Enable Trackback
-$trackback = 1;
+// 0: off
+// 1: on
+//    Only the reception of ping.
+//    Ping is not transmitted by the automatic operation.
+// 2: on
+//    Function in the past. Automatic ping transmission.
+$trackback = 2;
 
 // Show trackbacks with an another window (using JavaScript)
 $trackback_javascript = 0;
 
 /////////////////////////////////////////////////
 // Referer list feature
+// 0: off
+// 1: on
+// 2: on
+//    IGNORE is not having a look displayed.
 $referer = 1;
 
 /////////////////////////////////////////////////
 // _Disable_ WikiName auto-linking
 $nowikiname = 1;
+
+/////////////////////////////////////////////////
+// Symbol of not exists WikiName/BracketName
+$_symbol_noexists = '?';
 
 /////////////////////////////////////////////////
 // AutoLink feature
@@ -185,10 +254,17 @@ $function_freeze = 1;
 $notimeupdate = 1;
 
 /////////////////////////////////////////////////
+// Authentication Parameter REALM
+$realm = 'PukiWikiAuth';
+
+/////////////////////////////////////////////////
 // Admin password for this Wikisite
 
 // CHANGE THIS
 $adminpass = '{x-php-md5}1a1dc91c907325c69271ddf0c944bc72'; // md5('pass')
+//$adminpass = '{CRYPT}$1$AR.Gk94x$uCe8fUUGMfxAPH83psCZG/'; // CRYPT 'pass'
+//$adminpass = '{MD5}Gh3JHJBzJcaScd3wyUS8cg==';             // MD5   'pass'
+//$adminpass = '{SMD5}o7lTdtHFJDqxFOVX09C8QnlmYmZnd2Qx';    // SMD5  'pass'
 
 /////////////////////////////////////////////////
 // Page-reading feature settings
@@ -222,17 +298,23 @@ $pagereading_config_dict = ':config/PageReading/dict';
 
 /////////////////////////////////////////////////
 // User definition
+// 役割(ROLE)
+// 2 - サイト管理者
+// 3 - コンテンツ管理者
+// 4 - 認証者(未設定時のデフォルト)
 $auth_users = array(
-	'foo'	=> 'foo_passwd', // Cleartext
-	'bar'	=> '{x-php-md5}f53ae779077e987718cc285b14dfbe86', // md5('bar_passwd')
-	'hoge'	=> '{SMD5}OzJo/boHwM4q5R+g7LCOx2xGMkFKRVEx', // SMD5 'hoge_passwd'
+	'foo'	=> array('foo_passwd'), // Cleartext
+	'bar'	=> array('{x-php-md5}f53ae779077e987718cc285b14dfbe86'), // md5('bar_passwd')
+	'hoge'	=> array('{SMD5}OzJo/boHwM4q5R+g7LCOx2xGMkFKRVEx'), // SMD5 'hoge_passwd'
+	// 'hoge' => array('{SMD5}OzJo/boHwM4q5R+g7LCOx2xGMkFKRVEx',3), // SMD5 'hoge_passwd', コンテンツ管理者
+	// 'hoge' => array('{SMD5}OzJo/boHwM4q5R+g7LCOx2xGMkFKRVEx',2), // SMD5 'hoge_passwd', サイト管理者
 );
 
 /////////////////////////////////////////////////
 // Authentication method
 
-$auth_method_type = 'contents'; // By Page contents
-//$auth_method_type = 'pagename'; // By Page name
+//$auth_method_type = 'contents'; // By Page contents
+$auth_method_type = 'pagename'; // By Page name
 
 /////////////////////////////////////////////////
 // Read auth (0:Disable, 1:Enable)
@@ -240,6 +322,7 @@ $read_auth = 0;
 
 // Read auth regex
 $read_auth_pages = array(
+	'/:log/'		=> 'hoge',
 	'#ひきこもるほげ#'	=> 'hoge',
 	'#(ネタバレ|ねたばれ)#'	=> 'foo,bar,hoge',
 );
@@ -262,10 +345,23 @@ $edit_auth_pages = array(
 $search_auth = 0;
 
 /////////////////////////////////////////////////
-// Fuzzy Search (for Japanese EUC-JP Only)
+// Exclude plugin for this site-policy.
+$exclude_plugin = array(
+	'server',
+	'version',
+	'versionlist',
+);
+
+/////////////////////////////////////////////////
+// Fuzzy Search (for Japanese EUC-JP Version Only)
 // 0: Disabled
 // 1: Enabled
 $search_fuzzy = 0;
+
+/////////////////////////////////////////////////
+// Fast Tracker(Sortable Tracker)
+//
+$sortable_tracker = 1;
 
 /////////////////////////////////////////////////
 // $whatsnew: Max number of RecentChanges
@@ -293,6 +389,8 @@ $time_format = 'H:i:s';
 /////////////////////////////////////////////////
 // Max number of RSS feed
 $rss_max = 15;
+// Description
+$rss_description = 'PukiWiki RecentChanges';
 
 /////////////////////////////////////////////////
 // Backup related settings
@@ -362,8 +460,8 @@ $notify_from = 'from@example.com';	// From:
 $notify_subject = '[PukiWiki] $page';
 
 // Mail header
-$notify_header = "From: $notify_from\r\n" .
-	'X-Mailer: PukiWiki/' .  S_VERSION . ' PHP/' . phpversion();
+// NOTE: Multiple items must be divided by "\r\n", not "\n".
+$notify_header = '';
 
 // No Mail for Remote Host.
 $notify_exclude = array(
@@ -433,25 +531,25 @@ $use_open_uri_in_new_window  = 1;
 
 // 同一サーバーとしてみなすホストのURI
 $open_uri_in_new_window_servername = array(
-      "http://localhost/",
-      "http://localhost.localdomain/",
+      'http://localhost/',
+      'http://localhost.localdomain/',
 );
 // URIの種類によって開く動作を設定。
 // "_blank"で別窓へ表示、falseを指定すると無効
-$open_uri_in_new_window_opis  = "_blank";     // pukiwikiの外で同一サーバー内
+$open_uri_in_new_window_opis  = '_blank';     // pukiwikiの外で同一サーバー内
 $open_uri_in_new_window_opisi = false;        // pukiwikiの外で同一サーバー内(InterWikiLink)
-$open_uri_in_new_window_opos  = "_blank";     // pukiwikiの外で外部サーバー
-$open_uri_in_new_window_oposi = "_blank";     // pukiwikiの外で外部サーバー(InterWikiLink)
-// (注意：あえて拡張しやすいようにしていますが、"_blank"以外は指定しないでください)
+$open_uri_in_new_window_opos  = '_blank';     // pukiwikiの外で外部サーバー
+$open_uri_in_new_window_oposi = '_blank';     // pukiwikiの外で外部サーバー(InterWikiLink)
+// (注意：あえて拡張しやすいようにしていますが、'_blank'以外は指定しないでください)
 
 /////////////////////////////////////////////////
 // User-Agent settings
 //
 // If you want to ignore embedded browsers for rich-content-wikisite,
-// remove (or comment-out) all 'keitai' settings.
+// remove (or comment-out) all 'mobile' settings.
 //
 // If you want to to ignore desktop-PC browsers for simple wikisite,
-// copy keitai.ini.php to default.ini.php and customize it.
+// copy mobile.ini.php to default.ini.php and customize it.
 
 $agents = array(
 // pattern: A regular-expression that matches device(browser)'s name and version
@@ -473,57 +571,57 @@ $agents = array(
 
 	// Windows CE (the others)
 	// Sample: "Mozilla/2.0 (compatible; MSIE 3.02; Windows CE; 240x320 )" (GFORT, NTT DoCoMo)
-	array('pattern'=>'#\b(Windows CE)\b#', 'profile'=>'keitai'),
+	array('pattern'=>'#\b(Windows CE)\b#', 'profile'=>'mobile'),
 
 	// ACCESS "NetFront" / "Compact NetFront" and thier OEM
 	// Sample: "Mozilla/3.0 (AveFront/2.6)" ("SUNTAC OnlineStation", USB-Modem for PlayStation 2)
 	// Sample: "Mozilla/3.0(DDIPOCKET;JRC/AH-J3001V,AH-J3002V/1.0/0100/c50)CNF/2.0" (DDI Pocket: AirH" Phone by JRC)
-	array('pattern'=>'#\b(NetFront)/([0-9\.]+)#',	'profile'=>'keitai'),
-	array('pattern'=>'#\b(CNF)/([0-9\.]+)#',	'profile'=>'keitai'),
-	array('pattern'=>'#\b(AveFront)/([0-9\.]+)#',	'profile'=>'keitai'),
-	array('pattern'=>'#\b(AVE-Front)/([0-9\.]+)#',	'profile'=>'keitai'), // The same?
+	array('pattern'=>'#\b(NetFront)/([0-9\.]+)#',	'profile'=>'mobile'),
+	array('pattern'=>'#\b(CNF)/([0-9\.]+)#',	'profile'=>'mobile'),
+	array('pattern'=>'#\b(AveFront)/([0-9\.]+)#',	'profile'=>'mobile'),
+	array('pattern'=>'#\b(AVE-Front)/([0-9\.]+)#',	'profile'=>'mobile'), // The same?
 
 	// NTT-DoCoMo, i-mode (embeded Compact NetFront) and FOMA (embedded NetFront) phones
 	// Sample: "DoCoMo/1.0/F501i", "DoCoMo/1.0/N504i/c10/TB/serXXXX" // c以降は可変
 	// Sample: "DoCoMo/2.0 MST_v_SH2101V(c100;TB;W22H12;serXXXX;iccxxxx)" // ()の中は可変
-	array('pattern'=>'#^(DoCoMo)/([0-9\.]+)#',	'profile'=>'keitai'),
+	array('pattern'=>'#^(DoCoMo)/([0-9\.]+)#',	'profile'=>'mobile'),
 
 	// Vodafone's embedded browser
 	// Sample: "J-PHONE/2.0/J-T03"	// 2.0は"ブラウザの"バージョン
 	// Sample: "J-PHONE/4.0/J-SH51/SNxxxx SH/0001a Profile/MIDP-1.0 Configuration/CLDC-1.0 Ext-Profile/JSCL-1.1.0"
-	array('pattern'=>'#^(J-PHONE)/([0-9\.]+)#',	'profile'=>'keitai'),
+	array('pattern'=>'#^(J-PHONE)/([0-9\.]+)#',	'profile'=>'mobile'),
 
 	// Openwave(R) Mobile Browser (EZweb, WAP phone, etc)
 	// Sample: "OPWV-SDK/62K UP.Browser/6.2.0.5.136 (GUI) MMP/2.0"
-	array('pattern'=>'#\b(UP\.Browser)/([0-9\.]+)#',	'profile'=>'keitai'),
+	array('pattern'=>'#\b(UP\.Browser)/([0-9\.]+)#',	'profile'=>'mobile'),
 
 	// Opera, dressing up as other embedded browsers
-	// Sample: "Mozilla/3.0(DDIPOCKET;KYOCERA/AH-K3001V/1.4.1.67.000000/0.1/C100) Opera 7.0" (Like CNF at 'keitai'-mode)
-	array('pattern'=>'#\bDDIPOCKET\b.+\b(Opera) ([0-9\.]+)\b#',	'profile'=>'keitai'),
+	// Sample: "Mozilla/3.0(DDIPOCKET;KYOCERA/AH-K3001V/1.4.1.67.000000/0.1/C100) Opera 7.0" (Like CNF at 'mobile'-mode)
+	array('pattern'=>'#\bDDIPOCKET\b.+\b(Opera) ([0-9\.]+)\b#',	'profile'=>'mobile'),
 
 	// Planetweb http://www.planetweb.com/
 	// Sample: "Mozilla/3.0 (Planetweb/v1.07 Build 141; SPS JP)" ("EGBROWSER", Web browser for PlayStation 2)
-	array('pattern'=>'#\b(Planetweb)/v([0-9\.]+)#', 'profile'=>'keitai'),
+	array('pattern'=>'#\b(Planetweb)/v([0-9\.]+)#', 'profile'=>'mobile'),
 
 	// DreamPassport, Web browser for SEGA DreamCast
 	// Sample: "Mozilla/3.0 (DreamPassport/3.0)"
-	array('pattern'=>'#\b(DreamPassport)/([0-9\.]+)#',	'profile'=>'keitai'),
+	array('pattern'=>'#\b(DreamPassport)/([0-9\.]+)#',	'profile'=>'mobile'),
 
 	// Palm "Web Pro" http://www.palmone.com/us/support/accessories/webpro/
 	// Sample: "Mozilla/4.76 [en] (PalmOS; U; WebPro)"
-	array('pattern'=>'#\b(WebPro)\b#',	'profile'=>'keitai'),
+	array('pattern'=>'#\b(WebPro)\b#',	'profile'=>'mobile'),
 
 	// ilinx "Palmscape" / "Xiino" http://www.ilinx.co.jp/
 	// Sample: "Xiino/2.1SJ [ja] (v. 4.1; 153x130; c16/d)"
-	array('pattern'=>'#^(Palmscape)/([0-9\.]+)#',	'profile'=>'keitai'),
-	array('pattern'=>'#^(Xiino)/([0-9\.]+)#',	'profile'=>'keitai'),
+	array('pattern'=>'#^(Palmscape)/([0-9\.]+)#',	'profile'=>'mobile'),
+	array('pattern'=>'#^(Xiino)/([0-9\.]+)#',	'profile'=>'mobile'),
 
 	// SHARP PDA Browser (SHARP Zaurus)
 	// Sample: "sharp pda browser/6.1[ja](MI-E1/1.0) "
-	array('pattern'=>'#^(sharp [a-z]+ browser)/([0-9\.]+)#',	'profile'=>'keitai'),
+	array('pattern'=>'#^(sharp [a-z]+ browser)/([0-9\.]+)#',	'profile'=>'mobile'),
 
 	// WebTV
-	array('pattern'=>'#^(WebTV)/([0-9\.]+)#',	'profile'=>'keitai'),
+	array('pattern'=>'#^(WebTV)/([0-9\.]+)#',	'profile'=>'mobile'),
 
     // Desktop-PC browsers
 

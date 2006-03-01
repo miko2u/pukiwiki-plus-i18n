@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: pukiwiki.ini.php,v 1.128.22 2006/02/13 02:35:00 upk Exp $
+// $Id: pukiwiki.ini.php,v 1.128.23 2006/03/01 01:27:00 upk Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
@@ -72,6 +72,11 @@ $use_cookie = 0;
 // ja_JP, ko_KR, en_US, zh_TW ...
 if (! defined('DEFAULT_LANG'))
 	define('DEFAULT_LANG', 'ja_JP');
+
+// It conforms at the time of server installation location (DEFAULT_LANG).
+// (1: Conforming, 0: Language dependence)
+// サーバ設置場所(DEFAULT_LANG)の時刻に準拠する。(1:準拠, 0:言語依存)
+$use_local_time = 0;
 
 // Effective making function switch (2 Then, it becomes a judgment of 1 and 2.)
 // 0) Invalidity

@@ -1,6 +1,11 @@
 <?php
-// PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: rules.ini.php,v 1.4.2 2005/03/05 14:20:11 miko Exp $
+// PukiWiki Plus! - Yet another WikiWikiWeb clone.
+// $Id: rules.ini.php,v 1.9.5 2005/10/02 16:15:05 miko Exp $
+// Copyright (C)
+//   2005      Customized/Patched by Miko.Hoshina
+//   2003-2005 PukiWiki Developers Team
+//   2001-2002 Originally written by yu-ji
+// License: GPL v2 or (at your option) any later version
 //
 // PukiWiki setting file
 if (!defined('DATA_HOME')) { exit; }
@@ -45,7 +50,7 @@ $str_rules = array(
 	'&now;' 	=> format_date(UTIME),
 	'&date;'	=> get_date($date_format),
 	'&time;'	=> get_date($time_format),
-	'&page;'	=> array_pop(explode('/', $vars['page'])),
+	'&page;'	=> get_short_pagename($vars['page']),
 	'&fpage;'	=> $vars['page'],
 	'&t;'   	=> "\t",
 );

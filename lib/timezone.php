@@ -2,8 +2,8 @@
 /**
  * TimeZone
  *
- * @copyright   Copyright &copy; 2005, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: timezone.php,v 0.8 2005/06/04 19:16:00 upk Exp $
+ * @copyright   Copyright &copy; 2005-2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * @version     $Id: timezone.php,v 0.9 2006/03/01 01:30:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
@@ -13,10 +13,16 @@
  */
 function set_time()
 {
-	global $language;
+	global $language, $use_local_time;
 
 	define('UTIME', time());
 	define('MUTIME', getmicrotime());
+
+	if ($use_local_time) {
+		list($zone, $zonetime) = set_timezone( DEFAULT_LANG );
+	} else {
+		list($zone, $zonetime) = set_timezone( $language );
+	}
 
 	list($zone, $zonetime) = set_timezone( $language );
 	define('ZONE', $zone);

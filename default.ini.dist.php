@@ -1,8 +1,11 @@
 <?php
-/////////////////////////////////////////////////
-// PukiWiki - Yet another WikiWikiWeb clone.
-//
-// $Id: default.ini.php,v 1.18.2 2005/04/02 03:04:14 miko Exp $
+// PukiWiki Plus! - Yet another WikiWikiWeb clone.
+// $Id: default.ini.php,v 1.24.4 2006/02/02 01:25:00 upk Exp $
+// Copyright (C)
+//   2005-2006 PukiWiki Plus! Team
+//   2003-2005 PukiWiki Developers Team
+//   2001-2002 Originally written by yu-ji
+// License: GPL v2 or (at your option) any later version
 //
 // PukiWiki setting file (user agent:default)
 
@@ -10,10 +13,10 @@
 // Skin file
 if (defined('TDIARY_THEME')) { 
 //	define('SKIN_FILE', DATA_HOME . SKIN_DIR . 'tdiary.skin.php');
-	define('SKIN_FILE_DEFAULT', DATA_HOME . SKIN_DIR . 'tdiary.skin.php'); 
+	define('SKIN_FILE_DEFAULT', SKIN_DIR . 'tdiary.skin.php'); 
 } else {
 //	define('SKIN_FILE', DATA_HOME . SKIN_DIR . 'pukiwiki.skin.php');
-	define('SKIN_FILE_DEFAULT', DATA_HOME . SKIN_DIR . 'default.skin.php');
+	define('SKIN_FILE_DEFAULT', SKIN_DIR . 'default.skin.php');
 }
 $skin_file = SKIN_FILE_DEFAULT;
 
@@ -31,9 +34,9 @@ $list_index = 1;
 
 /////////////////////////////////////////////////
 // 特殊シンボル
-$_symbol_paraedit = '<img src="./image/plus/paraedit.png" width="9" height="9" alt="Edit" title="Edit" />';
-$_symbol_extanchor = '<img src="./image/plus/ext.png" alt="" title="" class="ext" onclick="return open_uri(\'$1\', \'$2\');" />';
-$_symbol_innanchor = '<img src="./image/plus/inn.png" alt="" title="" class="inn" onclick="return open_uri(\'$1\', \'$2\');" />';
+$_symbol_paraedit = '<img src="'. IMAGE_URI.'plus/paraedit.png" width="9" height="9" alt="Edit" title="Edit" />';
+$_symbol_extanchor = '<img src="'.IMAGE_URI.'plus/ext.png" alt="" title="" class="ext" onclick="return open_uri(\'$1\', \'$2\');" />';
+$_symbol_innanchor = '<img src="'.IMAGE_URI.'plus/inn.png" alt="" title="" class="inn" onclick="return open_uri(\'$1\', \'$2\');" />';
 
 /////////////////////////////////////////////////
 // リスト構造の左マージン
@@ -58,11 +61,17 @@ $rows = 20;
 $top = $_msg_content_back_to_top;
 
 /////////////////////////////////////////////////
-// 関連ページ表示のページ名の区切り文字
-$related_str = "\n ";
+// 添付ファイルの一覧を常に表示する (負担がかかります)
+$attach_link = 1;
 
 /////////////////////////////////////////////////
-// 整形ルールでの関連ページ表示のページ名の区切り文字
+// 関連するページのリンク一覧を常に表示する(負担がかかります)
+$related_link = 1;
+
+// リンク一覧の区切り文字
+$related_str = "\n ";
+
+// (#relatedプラグインが表示する) リンク一覧の区切り文字
 $rule_related_str = "</li>\n<li>";
 
 /////////////////////////////////////////////////
@@ -72,18 +81,17 @@ $hr = '<hr class="full_hr" />';
 /////////////////////////////////////////////////
 // 脚注機能関連
 
+// 脚注のアンカーに埋め込む本文の最大長
+define('PKWK_FOOTNOTE_TITLE_MAX', 16); // Characters
+
 // 脚注のアンカーを相対パスで表示する (0 = 絶対パス)
 //  * 相対パスの場合、以前のバージョンのOperaで問題になることがあります
 //  * 絶対パスの場合、calendar_viewerなどで問題になることがあります
 // (詳しくは: BugTrack/698)
 define('PKWK_ALLOW_RELATIVE_FOOTNOTE_ANCHOR', 1);
 
-// 文末の注釈の直前に表示するタグ
+// 文末の脚注の直前に表示するタグ
 $note_hr = '<hr class="note_hr" />';
-
-/////////////////////////////////////////////////
-// 関連するリンクを常に表示する(負担がかかります)
-$related_link = 1;
 
 /////////////////////////////////////////////////
 // WikiName,BracketNameに経過時間を付加する
@@ -91,6 +99,8 @@ $show_passage = 1;
 
 /////////////////////////////////////////////////
 // リンク表示をコンパクトにする
+// * ページに対するハイパーリンクからタイトルを外す
+// * Dangling linkのCSSを外す
 $link_compact = 0;
 
 /////////////////////////////////////////////////
@@ -148,6 +158,7 @@ $facemark_rules = array(
 	'&amp;(worried);'=>' <img alt="[$1]" src="' . IMAGE_URI . 'face/worried.png" />',
 	'&amp;(sweat);'	=> ' <img alt="[$1]" src="' . IMAGE_URI . 'face/worried.png" />',
 	'&amp;(tear);'	=> ' <img alt="[$1]" src="' . IMAGE_URI . 'face/tear.png" />',
+	'&amp;(umm);'	=> ' <img alt="[$1]" src="' . IMAGE_URI . 'face/umm.png" />',
 	'&amp;(star);'	=> ' <img alt="[$1]" src="' . IMAGE_URI . 'face/star.gif" />',
 
 	// Face marks, Japanese style
@@ -164,6 +175,7 @@ $facemark_rules = array(
 	'(\(\T-T\))'	=> ' <img alt="$1" src="' . IMAGE_URI . 'face/tear.png" />',
 	'(\(\;_;)'	=> ' <img alt="$1" src="' . IMAGE_URI . 'face/tear.png" />',
 	'(\(\;_;\))'	=> ' <img alt="$1" src="' . IMAGE_URI . 'face/tear.png" />',
+	'(\(__;)'	=> ' <img alt="$1" src="' . IMAGE_URI . 'face/umm.png" />',
 
 	// Push buttons, 0-9 and sharp (Compatibility with cell phones)
 	'&amp;(pb1);'	=> '[1]',
