@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: make_link.php,v 1.30.6 2006/01/11 23:07:00 upk Exp $
+// $Id: make_link.php,v 1.30.7 2006/03/02 21:12:00 upk Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2003-2005 PukiWiki Developers Team
@@ -857,7 +857,7 @@ class Link_glossary_a extends Link_glossary
 }
 
 // Plus! tooltips function(w/ajax)
-function make_tooltips($term,$glossarypage='')
+function make_tooltips($term,$glossary_page='')
 {
 	global $script, $ajax;
 	static $tooltip_initialized = FALSE;

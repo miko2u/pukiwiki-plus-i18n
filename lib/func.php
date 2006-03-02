@@ -1,8 +1,8 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: func.php,v 1.53.3 2005/12/18 15:16:10 miko Exp $
+// $Id: func.php,v 1.53.4 2006/03/02 20:56:00 upk Exp $
 // Copyright (C)
-//   2005      PukiWiki Plus! Team
+//   2005-2006 PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
 //   2001-2002 Originally written by yu-ji
 // License: GPL v2 or (at your option) any later version
@@ -226,8 +226,15 @@ function do_search($word, $type = 'AND', $non_format = FALSE, $base = '')
 	}
 	$pages = array();
 
+	// SAFE_MODE の場合は、コンテンツ管理者以上のみ、カテゴリページ(:)も検索可能
+	$role_adm_contents = (auth::check_role('safemode')) ? auth::check_role('role_adm_contents') : FALSE;
+
 	foreach ($_pages as $page) {
 		if ($page == $whatsnew || (! $search_non_list && check_non_list($page)))
+			continue;
+
+		// カテゴリページ(:)は、コンテンツ管理者以上のみ表示
+		if (substr($page,0,1) == ':' && $role_adm_contents)
 			continue;
 
 		// 検索対象ページの制限をかけるかどうか (ページ名は制限外)
@@ -247,7 +254,9 @@ function do_search($word, $type = 'AND', $non_format = FALSE, $base = '')
 			if ($b_match xor $b_type) break;
 		}
 		if ($b_match) $pages[$page] = get_filetime($page);
+		unset($source);
 	}
+	unset($role_adm_contents);
 	if ($non_format) return array_keys($pages);
 
 	$r_word = rawurlencode($word);
