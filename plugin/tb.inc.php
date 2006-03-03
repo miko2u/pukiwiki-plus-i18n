@@ -1,13 +1,14 @@
 <?php
-// $Id: tb.inc.php,v 1.19.5 2006/02/20 01:31:00 upk Exp $
+// $Id: tb.inc.php,v 1.19.6 2006/03/04 04:17:00 upk Exp $
 /*
  * PukiWiki/TrackBack: TrackBack Ping receiver and viewer
  * (C) 2003-2004 PukiWiki Developers Team
  * (C) 2003,2005-2006 Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * License: GPL
  *
- * plugin_tb_convert()
- * plugin_tb_action()    action
+ * plugin_tb_convert()          block plugin
+ * plugin_tb_action()           action plugin
+ * plugin_tb_inline()           inline plugin
  * plugin_tb_save($url, $tb_id) Save or update TrackBack Ping data
  * plugin_tb_return($rc, $msg)  Return TrackBack ping via HTTP/XML
  * plugin_tb_mode_rss($tb_id)   ?__mode=rss
@@ -68,6 +69,26 @@ function plugin_tb_action()
 			return array('msg'=>'', 'body'=>'');
 		}
 	}
+}
+
+function plugin_tb_inline()
+{
+	global $vars, $trackback, $script;
+
+	if (! $trackback) return '';
+
+	$argv = func_get_args();
+	$argc = func_num_args();
+
+	$field = array('page');
+	for($i=0; $i<$argc; $i++) {
+		$$field[$i] = htmlspecialchars($argv[$i], ENT_QUOTES);
+	}
+	if (empty($page)) $page = $vars['page'];
+
+	$tb_id = tb_get_id($page);
+
+	return $script . '?tb_id=' . $tb_id;
 }
 
 // Save or update TrackBack Ping data
@@ -258,8 +279,10 @@ function plugin_tb_recent($page,$line)
 	$ctr = count($data);
 	if ($ctr == 0) return '';
 
-	// Sort: The first is the latest
-	usort($data, create_function('$a,$b', 'return $b[0] - $a[0];'));
+	if ($ctr > 1) {
+		// Sort: The first is the latest
+		usort($data, create_function('$a,$b', 'return $b[0] - $a[0];'));
+	}
 
 	$body .= '<h5>' . _("RECENT TRACKBACK") . "</h5>\n";
 	$body .= "<div>\n<ul class=\"recent_list\">\n";
@@ -277,6 +300,8 @@ function plugin_tb_recent($page,$line)
 		if ($line == 0) continue;
 		if ($i >= $line) break;
 	}
+
+	if ($i == 0) return '';
 
 	$body .= "</ul>\n</div>\n";
 
