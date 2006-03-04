@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: adsense.inc.php,v 1.2 2004/06/19 05:08:01 miko Exp $
+// $Id: adsense.inc.php,v 1.2.1 2006/03/04 17:06:00 upk Exp $
 //
 // Google AdSize : 728x90, 468x60, 234x60
 // 125x125, 120x600, 160x600, 120x240
@@ -21,6 +21,22 @@ if (!defined('GOOGLE_DEF_TYPE')) {
 	define('GOOGLE_DEF_TYPE', 'text');
 }
 
+if (!defined('GOOGLE_COLOR_BORDER')) {
+	define('GOOGLE_COLOR_BORDER', 'FF4433');
+}
+if (!defined('GOOGLE_COLOR_BG')) {
+	define('GOOGLE_COLOR_BG', 'FFFFCC');
+}
+if (!defined('GOOGLE_COLOR_LINK')) {
+	define('GOOGLE_COLOR_LINK', 'DE7008');
+}
+if (!defined('GOOGLE_COLOR_URL')) {
+	define('GOOGLE_COLOR_URL', 'E0AD12');
+}
+if (!defined('GOOGLE_COLOR_TEXT')) {
+	define('GOOGLE_COLOR_TEXT', '8B4513');
+}
+
 function plugin_adsense_action()
 {
 	global $get;
@@ -31,17 +47,17 @@ function plugin_adsense_action()
 	$type = $get['type'];
 	if ($type != 'text' && $type != 'text_image') { $type = GOOGLE_DEF_TYPE; }
 
-	$body .= "google_ad_client = \"".GOOGLE_ACCOUNT."\";";
+	$body .= 'google_ad_client = "' . GOOGLE_ACCOUNT . '";';
 	$body .= 'google_ad_width = ' . $width . ';'."\n";
 	$body .= 'google_ad_height = ' . $height . ';'."\n";
 	$body .= 'google_ad_format = "' . $width . 'x' . $height . '_as";'."\n";
 	$body .= 'google_ad_channel = "";'."\n";
 	$body .= 'google_ad_type = "'. $type .'";'."\n";
-	$body .= 'google_color_border = "FF4433";'."\n";
-	$body .= 'google_color_bg     = "FFFFCC";'."\n";
-	$body .= 'google_color_link   = "DE7008";'."\n";
-	$body .= 'google_color_url    = "E0AD12";'."\n";
-	$body .= 'google_color_text   = "8B4513";'."\n";
+	$body .= 'google_color_border = "' . GOOGLE_COLOR_BORDER . '";'."\n";
+	$body .= 'google_color_bg     = "' . GOOGLE_COLOR_BG     . '";'."\n";
+	$body .= 'google_color_link   = "' . GOOGLE_COLOR_LINK   . '";'."\n";
+	$body .= 'google_color_url    = "' . GOOGLE_COLOR_URL    . '";'."\n";
+	$body .= 'google_color_text   = "' . GOOGLE_COLOR_TEXT   . '";'."\n";
 	echo $body;
 	die();
 }
@@ -50,10 +66,9 @@ function plugin_adsense_convert()
 {
 	global $script;
 
-        if (func_num_args() < 1)
-        {
-                return FALSE;
-        }
+	if (func_num_args() < 1) {
+		return FALSE;
+	}
 
 	$args = func_get_args();
 
