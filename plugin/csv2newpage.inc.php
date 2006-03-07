@@ -1,9 +1,9 @@
 <?php
-// $Id: csv2newpage.inc.php,v 0.14.1 2006/02/18 02:07:00 upk Exp $
+// $Id: csv2newpage.inc.php,v 0.14.3 2006/03/08 00:32:00 upk Exp $
 
 /*
 *プラグイン csv2newpage
- CSVファイルからページを新規作成 for PukiWiki1.4.3
+ CSVファイルからページを新規作成 for PukiWiki Plus! I18N
 
 *Usage
 #csv2newpage(tracker_configname,[upload,<start line_no>],[date|_page|name|...])
@@ -22,9 +22,8 @@ if (!defined('CSV2NEWPAGE_PASSWORD_REQUIRE')) {
 	define('CSV2NEWPAGE_PASSWORD_REQUIRE',FALSE); // FALSE or TRUE
 }
 
-define('TRACKER_LIB', PLUGIN_DIR.'tracker.inc.php');
-define('ATTACH_LIB',  PLUGIN_DIR.'attach.inc.php');
-define('MBSTRING_LIB', 'mbstring.php');
+// define('TRACKER_LIB', PLUGIN_DIR.'tracker.inc.php');
+// define('ATTACH_LIB',  PLUGIN_DIR.'attach.inc.php');
 
 function plugin_csv2newpage_init()
 {
@@ -47,8 +46,10 @@ function plugin_csv2newpage_convert()
 {
 	global $script, $vars, $_csv2newpage_messages;
 	static $numbers = array();
+
 	$page = $vars['page'];
-	if (!array_key_exists($page,$numbers))	$numbers[$page] = 0;
+
+	if (! isset($numbers[$page])) $numbers[$page] = 0;
 	$csv2newpage_no = $numbers[$page]++;
 	
 	$newpage = '';
@@ -72,8 +73,9 @@ function plugin_csv2newpage_convert()
 	}
 	$config->config_name = $config_name;
 
-	if ( plugin_csv2newpage_libcheck(TRACKER_LIB) ) 
-		return '<p>required file, '. TARACKER_LIB .', not found.</p>';
+
+	if (! exist_plugin('tracker'))
+		return '<p>The tracker plugin is not found.</p>';
 
 	$fields = plugin_tracker_get_fields($page,$page,$config);
 
@@ -82,13 +84,13 @@ function plugin_csv2newpage_convert()
 	foreach ( $args as $name ) {
 		$ct ++;
 		$s_name = htmlspecialchars($name);
-		$retval .= "<input type=\"hidden\" name=\"csv_field$ct\" value=\"$s_name\" />\n";
+		$retval .= '<input type="hidden" name="csv_field' . $ct . '" value="' . $s_name . '" />'."\n";
 	}
 
-	$s_title = htmlspecialchars($_csv2newpage_messages['btn_submit']);
-	$s_page = htmlspecialchars($page);
+	$s_title  = htmlspecialchars($_csv2newpage_messages['btn_submit']);
+	$s_page   = htmlspecialchars($page);
 	$s_config = htmlspecialchars($config->config_name);
-	$s_text  = htmlspecialchars($_csv2newpage_messages['title_text']);
+	$s_text   = htmlspecialchars($_csv2newpage_messages['title_text']);
 
 	$retval .=<<<EOD
 <input type="hidden" name="plugin" value="csv2newpage" />
@@ -120,29 +122,29 @@ function plugin_csv2newpage_action()
 {
 	global $vars,$num;
 
-	$config_name = array_key_exists('_config',$vars) ? $vars['_config'] : '';
+	$config_name = (empty($vars['_config'])) ? '' : $vars['_config'];
 	$config = new Config('plugin/tracker/'.$config_name);
 	if (!$config->read()) {
-		return "<p>config file '".htmlspecialchars($config_name)."' not found.</p>";
+		return '<p>config file (' . htmlspecialchars($config_name) .') not found.</p>';
 	}
 	$config->config_name = $config_name;
 	$source = $config->page.'/page';
 	
-	$refer = array_key_exists('_refer',$vars) ? $vars['_refer'] : '';
+	$refer = (empty($vars['_refer'])) ? '' : $vars['_refer'];
 	if (!is_pagename($refer)) {
 		return array(
-			'msg'=>'cannot write',
-			'body'=>'page name ('.htmlspecialchars($refer).') is not valid.'
+			'msg'  => 'cannot write',
+			'body' => 'page name ('.htmlspecialchars($refer).') is not valid.'
 		);
 	}
 	if (!is_page($source)) {
 		return array(
-			'msg'=>'cannot write',
-			'body'=>'page template ('.htmlspecialchars($source).') is not exist.'
+			'msg'  => 'cannot write',
+			'body' => 'page template ('.htmlspecialchars($source).') is not exist.'
 		);
 	}
 
-	$upload =  array_key_exists('_upload',$vars) ?  $vars['_upload'] : 0;
+	$upload =  (empty($vars['_upload'])) ? 0 : $vars['_upload'];
 	if ( $upload ) {
 		$csvlines = plugin_csv2newpage_upload($refer);
 	} else {
@@ -171,10 +173,11 @@ function plugin_csv2newpage_action()
 	    $line = join(',',$csv_field);
 	    array_push($np, '+' . '[[' . $np_name . ']] ---' . $line);
 	}
-	$retvars['msg']  = 'csv2newpage complete';
-	$retvars['body'] = convert_html( $np );
 
-	return $retvars;
+	return array(
+		'msg'  => 'csv2newpage complete',
+		'body' => convert_html( $np )
+	);
 }
 
 // Excel2000とほぼ同じ仕様にしよう。
@@ -226,12 +229,13 @@ function plugin_csv2newpage_from_page($refer)
 {
 	global $vars;
 
-	$csv2newpage_no = array_key_exists('_csv2newpage_no',$vars) ? $vars['_csv2newpage_no'] : 0;
+	$csv2newpage_no = (empty($vars['_csv2newpage_no'])) ? 0 : $vars['_csv2newpage_no'];
 	$postdata_old = get_source($refer);
 	$postdata = '';
 	$csvlines = array();
 	$csv2newpage_ct = 0;
 	$target_flag = 0;
+
 	foreach ( $postdata_old as $line ) {
 		$found_plugin = preg_match('/^#csv2newpage/',$line);
 		if ( $found_plugin and $csv2newpage_ct++ == $csv2newpage_no ) {
@@ -256,6 +260,7 @@ function plugin_csv2newpage_from_page($refer)
   		$postdata .= '//' . $line;
 		$csvlines[] = substr($line,1);
 	}
+
 	// 書き込み
 	page_write($refer,$postdata);
 	return $csvlines;
@@ -265,8 +270,8 @@ function plugin_csv2newpage_upload($refer)
 {
 	global $vars;
 
-	$start_line_no = array_key_exists('start_line_no', $vars) ? $vars['start_line_no']:0;
-	if ( !array_key_exists('attach_file',$_FILES) ) {
+	$start_line_no = (empty($vars['start_line_no'])) ? 0 : $vars['start_line_no'];
+	if ( empty($_FILES['attach_file']) ) {
 		return array('msg'=>'no attach_file', 'body'=>'Set attach file' );
 	}
 	$file = $_FILES['attach_file'];
@@ -280,15 +285,16 @@ function plugin_csv2newpage_upload($refer)
 	}
 	$file['name'] = $attachname;
 
-	if ( plugin_csv2newpage_libcheck(ATTACH_LIB) )
-		return array('msg'=>'library not found', 'body'=> ATTACH_LIB.' not found');
 
-	$pass = array_key_exists('pass',$vars) ? md5($vars['pass']) : NULL;
+	if (! exist_plugin('attach'))
+		return array('msg'=>'plugin not found', 'body'=> 'The attach plugin is not found.');
+
+	$pass = (empty($vars['pass'])) ? NULL : md5($vars['pass']);
         $retval = attach_upload($file,$refer,$pass);
 	if ($retval['result'] != TRUE) {
 		return array(
-			'msg'=>'cannot upload',
-			'body'=>"cannot upload: $attachname, $retval"
+			'msg'  => 'cannot upload',
+			'body' => 'cannot upload: '.$attachname.','.$retval
 		);
 	}
 	$realfile = UPLOAD_DIR.encode($refer).'_'.encode($attachname);
@@ -298,10 +304,7 @@ function plugin_csv2newpage_upload($refer)
 			'body' => "The attached file:'$attachname' does not exist in '$refer'.<br />($realfile)",
 		);
 	}
-	if (!extension_loaded('mbstring')) {
-	    if ( plugin_csv2newpage_libcheck(MBSTRING_LIB) )
-		 return array('msg'=>'library not found', 'body'=> MBSTRING_LIB .' not found');
-	}
+
 	$postdata_old = file($realfile);
 	$line = join('', $postdata_old);
 	$code = mb_detect_encoding($line);
@@ -317,19 +320,21 @@ function plugin_csv2newpage_write($ary,$base,$postdata,$config)
 {
 	global $vars,$now,$num;
 
-	$name = (array_key_exists('_name',$vars)) ? $vars['_name'] : '';
-	if (array_key_exists('_page',$vars)) {
-		$page = $real = $vars['_page'];
-		$page = "$base/$page";
+	$name = (empty($ary['_name'])) ? '' : $ary['_name'];
+
+	if (! empty($ary['_page'])) {
+		$page = $real = $ary['_page'];
+		$page = $base.'/'.$page;
 	} else {
 		$real = is_pagename($name) ? $name : ++$num;
 		$page = get_fullname('./'.$real,$base);
 	}
+
 	if (!is_pagename($page)) $page = $base;
 	
 	while (is_page($page)) {
 		$real = ++$num;
-		$page = "$base/$real";
+		$page = $base.'/'.$real;
 	}
 	
 	// 規定のデータ
@@ -339,9 +344,10 @@ function plugin_csv2newpage_write($ary,$base,$postdata,$config)
 	$_post['_name'] = $name;
 	$_post['_real'] = $real;
 	// $_post['_refer'] = $_post['refer'];
-	
-	if ( plugin_csv2newpage_libcheck(TRACKER_LIB) )
-		array('msg'=>'library not found', 'body'=> TRACKER_LIB .' not found');
+
+
+	if (! exist_plugin('tracker'))
+		return array('msg'=>'plugin not found', 'body'=> 'The tracker plugin is not found.'); 
 	$fields = plugin_tracker_get_fields($base,$page,$config);
 	
 	foreach ($fields as $key=>$class) {
@@ -350,7 +356,7 @@ function plugin_csv2newpage_write($ary,$base,$postdata,$config)
 		} else {
 			$val = $class->default_value;
 		}
-		$postdata = str_replace("[$key]", $val, $postdata);
+		$postdata = str_replace('['.$key.']', $val, $postdata);
 	}
 	// 書き込み
 	page_write($page,$postdata);
@@ -361,8 +367,9 @@ function plugin_csv2newpage_write($ary,$base,$postdata,$config)
 function plugin_csv2newpage_showform($retval)
 {
 	global $script, $_csv2newpage_messages;
-	if ( plugin_csv2newpage_libcheck(ATTACH_LIB) )
-		return array('msg'=>'library not found', 'body'=> ATTACH_LIB.' not found');
+
+	if (! exist_plugin('attach'))
+		return array('msg'=>'plugin not found', 'body'=> 'The attach plugin is not found.');
 	
 	if (!(bool)ini_get('file_uploads')) return 'file_uploads disabled.';
 
@@ -395,12 +402,4 @@ EOD;
 
 }
 
-function plugin_csv2newpage_libcheck($lib)
-{
-    if ( file_exists($lib) ) {
-	    require_once($lib);
-	    return 0;
-    }
-    return 1;
-}
 ?>
