@@ -1,5 +1,5 @@
 <?php
-// $Id: trackback.php,v 1.21.2 2006/01/11 23:08:00 upk Exp $
+// $Id: trackback.php,v 1.21.3 2006/03/16 23:00:00 upk Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2003-2005 PukiWiki Developers Team
@@ -18,7 +18,7 @@
  * tb_get_filename($page)  Get file name of TrackBack ping data
  * tb_count($page)         Count the number of TrackBack pings included for the page
  *                         // pukiwiki.skin.php
- * tb_send($page, $data)   Send TrackBack ping(s) automatically // file.php
+ * tb_send($page, $links)  Send TrackBack ping(s) automatically // file.php
  * tb_delete($page)        Remove TrackBack ping data // edit.inc.php
  * tb_get($file, $key = 1) Import TrackBack ping data from file
  * tb_get_rdf($page)       Get a RDF comment to bury TrackBack-ping-URI under HTML(XHTML) output
@@ -30,7 +30,7 @@
  * ref_save($page)         Save or update referer data // lib/pukiwiki.php
  */
 
-define('PLUGIN_TRACKBACK_VERSION', 'PukiWiki/TrackBack 0.3');
+define('PLUGIN_TRACKBACK_VERSION', 'PukiWiki/TrackBack 0.4');
 
 // Get TrackBack ID from page name
 function tb_get_id($page)
@@ -80,38 +80,19 @@ function tb_count($page, $ext = '.txt')
 // Send TrackBack ping(s) automatically
 // $plus  = Newly added lines may include URLs
 // $minus = Removed lines may include URLs
-function tb_send($page, $plus, $minus = '')
+function tb_send($page, $links)
 {
 	global $trackback, $page_title;
 
 	if (! $trackback) return;
 
+	// No link, END
+	if (! is_array($links) || empty($links)) return;
+
 	$script = get_script_uri();
 
 	// Disable 'max execution time' (php.ini: max_execution_time)
 	if (ini_get('safe_mode') == '0') set_time_limit(0);
-
-	// Get URLs from <a>(anchor) tag from convert_html()
-	$links = array();
-	$plus  = convert_html($plus); // WARNING: heavy and may cause side-effect
-	preg_match_all('#href="(https?://[^"]+)"#', $plus, $links, PREG_PATTERN_ORDER);
-	$links = array_unique($links[1]);
-
-	// Reject from minus list
-	if ($minus != '') {
-		$links_m = array();
-		$minus = convert_html($minus); // WARNING: heavy and may cause side-effect
-		preg_match_all('#href="(https?://[^"]+)"#', $minus, $links_m, PREG_PATTERN_ORDER);
-		$links_m = array_unique($links_m[1]);
-
-		$links = array_diff($links, $links_m);
-	}
-
-	// Reject own URL (Pattern _NOT_ started with '$script' and '?')
-	$links = preg_grep('/^(?!' . preg_quote($script, '/') . '\?)./', $links);
-
-	// No link, END
-	if (! is_array($links) || empty($links)) return;
 
 	$r_page  = rawurlencode($page);
 	$excerpt = strip_htmltag(convert_html(get_source($page)));
@@ -301,7 +282,7 @@ function ref_save($page)
 	$data[$d_url][2]++;
 
 	$fp = fopen($filename, 'w');
-	if ($fp === FALSE) return FALSE;	
+	if ($fp === FALSE) return FALSE;
 	set_file_buffer($fp, 0);
 	flock($fp, LOCK_EX);
 	rewind($fp);

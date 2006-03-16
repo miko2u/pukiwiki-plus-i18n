@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: file.php,v 1.44.13 2006/02/26 19:03:00 upk Exp $
+// $Id: file.php,v 1.44.14 2006/03/16 23:00:00 upk Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
@@ -60,6 +60,10 @@ function page_write($page, $postdata, $notimestamp = FALSE)
 	// Create and write diff
 	$oldpostdata = is_page($page) ? join('', get_source($page)) : '';
 	$diffdata    = do_diff($oldpostdata, $postdata);
+
+	// FIXME: SPAM CHECK
+	// $links = get_link_list($diffdata);
+
 	file_write(DIFF_DIR, $page, $diffdata);
 
 	// Create backup
@@ -70,16 +74,55 @@ function page_write($page, $postdata, $notimestamp = FALSE)
 
 	if ($trackback > 1) {
 		// TrackBack Ping
-		$_diff = explode("\n", $diffdata);
-		$plus  = join("\n", preg_replace('/^\+/', '', preg_grep('/^\+/', $_diff)));
-		$minus = join("\n", preg_replace('/^-/',  '', preg_grep('/^-/',  $_diff)));
-		tb_send($page, $plus, $minus);
-		unset($_diff,$plus,$minus);
+		$links = get_link_list($diffdata);
+		tb_send($page, $links);
+		unset($links);
 	}
 
 	unset($oldpostdata,$diffdata);
 	links_update($page);
 	log_write('update',$page);
+}
+
+function get_link_list($diffdata)
+{
+	$links = array();
+
+	list($plus, $minus) = get_diff_lines($diffdata);
+
+	// Get URLs from <a>(anchor) tag from convert_html()
+	$plus  = convert_html($plus); // WARNING: heavy and may cause side-effect
+	preg_match_all('#href="(https?://[^"]+)"#', $plus, $links, PREG_PATTERN_ORDER);
+	$links = array_unique($links[1]);
+
+	// Reject from minus list
+	if ($minus != '') {
+		$links_m = array();
+		$minus = convert_html($minus); // WARNING: heavy and may cause side-effect
+		preg_match_all('#href="(https?://[^"]+)"#', $minus, $links_m, PREG_PATTERN_ORDER);
+		$links_m = array_unique($links_m[1]);
+
+		$links = array_diff($links, $links_m);
+	}
+
+	unset($plus,$minus);
+
+	// Reject own URL (Pattern _NOT_ started with '$script' and '?')
+	$links = preg_grep('/^(?!' . preg_quote($script, '/') . '\?)./', $links);
+
+	// No link, END
+	if (! is_array($links) || empty($links)) return;
+
+	return $links;
+}
+
+function get_diff_lines($diffdata)
+{
+	$_diff = explode("\n", $diffdata);
+	$plus  = join("\n", preg_replace('/^\+/', '', preg_grep('/^\+/', $_diff)));
+	$minus = join("\n", preg_replace('/^-/',  '', preg_grep('/^-/',  $_diff)));
+	unset($_diff);
+	return array($plus, $minus);
 }
 
 // Modify ogirinal text with user-defined / system-defined rules
