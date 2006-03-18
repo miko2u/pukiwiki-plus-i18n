@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: rename.inc.php,v 1.27.3 2006/02/06 20:58:00 upk Exp $
+// $Id: rename.inc.php,v 1.27.4 2006/03/18 18:22:00 upk Exp $
 //
 // Rename plugin: Rename page-name and related data
 //
@@ -341,10 +341,16 @@ EOD;
 
 function plugin_rename_get_files($pages)
 {
+	global $log,$trackback,$referer;
+
 	$files = array();
 	$dirs  = array(BACKUP_DIR, DIFF_DIR, DATA_DIR);
 	if (exist_plugin_convert('attach'))  $dirs[] = UPLOAD_DIR;
 	if (exist_plugin_convert('counter')) $dirs[] = COUNTER_DIR;
+	if ($trackback > 0 || $referer > 0) $dirs[] = TRACKBACK_DIR;
+	foreach(array('update','download','browse') as $log_subdir) {
+		if ($log[$log_subdir]['use']) $dirs[] = LOG_DIR.$log_subdir.'/';
+	}
 	// and more ...
 
 	$matches = array();
