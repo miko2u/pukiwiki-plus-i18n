@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: file.php,v 1.44.14 2006/03/16 23:00:00 upk Exp $
+// $Id: file.php,v 1.44.15 2006/03/20 02:11:00 upk Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
@@ -50,7 +50,7 @@ function get_filename($page)
 // Put a data(wiki text) into a physical file(diff, backup, text)
 function page_write($page, $postdata, $notimestamp = FALSE)
 {
-	global $trackback;
+	global $trackback, $use_spam_check;
 
 	// if (PKWK_READONLY) return; // Do nothing
 	if (auth::check_role('readonly')) return; // Do nothing
@@ -61,8 +61,15 @@ function page_write($page, $postdata, $notimestamp = FALSE)
 	$oldpostdata = is_page($page) ? join('', get_source($page)) : '';
 	$diffdata    = do_diff($oldpostdata, $postdata);
 
-	// FIXME: SPAM CHECK
-	// $links = get_link_list($diffdata);
+	// Blocking SPAM
+	if (auth::check_role('role_adm_contents')) {
+		if ($use_spam_check['page_remote_addr'] && SpamCheck($_SERVER['REMOTE_ADDR'],'ip')) {
+			die_message('Writing was limited by IPBL (Blocking SPAM).');
+		}
+		if ($use_spam_check['page_contents'] && SpamCheck(get_link_list($diffdata))) {
+			die_message('Writing was limited by DNSBL (Blocking SPAM).');
+		}
+	}
 
 	file_write(DIFF_DIR, $page, $diffdata);
 

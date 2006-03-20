@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: pukiwiki.ini.php,v 1.128.23 2006/03/01 01:27:00 upk Exp $
+// $Id: pukiwiki.ini.php,v 1.128.24 2006/03/20 01:47:00 upk Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
@@ -199,6 +199,15 @@ $ajax = 1;
 
 // LOG
 require_once('config-log.ini.php');
+
+/////////////////////////////////////////////////
+// Blocking SPAM
+$use_spam_check = array(
+	'page_remote_addr'	=> 0,
+	'page_contents'		=> 0,
+	'trackback'		=> 0,
+	'referer'		=> 0,
+);
 
 /////////////////////////////////////////////////
 // TrackBack feature

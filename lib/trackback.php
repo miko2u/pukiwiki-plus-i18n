@@ -1,5 +1,5 @@
 <?php
-// $Id: trackback.php,v 1.21.3 2006/03/16 23:00:00 upk Exp $
+// $Id: trackback.php,v 1.21.4 2006/03/20 02:03:00 upk Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2003-2005 PukiWiki Developers Team
@@ -247,7 +247,7 @@ class TrackBack_XML
 // Save or update referer data
 function ref_save($page)
 {
-	global $referer;
+	global $referer, $use_spam_check;
 
 	// if (PKWK_READONLY || ! $referer || empty($_SERVER['HTTP_REFERER'])) return TRUE;
 	if (auth::check_role('readonly') || ! $referer || empty($_SERVER['HTTP_REFERER'])) return TRUE;
@@ -257,6 +257,10 @@ function ref_save($page)
 	// Validate URI (Ignore own)
 	$parse_url = parse_url($url);
 	if (empty($parse_url['host']) || $parse_url['host'] == $_SERVER['HTTP_HOST'])
+		return TRUE;
+
+	// Blocking SPAM
+	if ($use_spam_check['referer'] && SpamCheck($parse_url['host']))
 		return TRUE;
 
 	if (! is_dir(TRACKBACK_DIR))      die('No such directory: TRACKBACK_DIR');

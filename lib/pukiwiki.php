@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: pukiwiki.php,v 1.11.4 2005/09/11 05:58:33 miko Exp $
+// $Id: pukiwiki.php,v 1.11.5 2006/03/21 02:00:00 upk Exp $
 //
 // PukiWiki 1.4.*
 //  Copyright (C) 2002-2005 by PukiWiki Developers Team
@@ -53,6 +53,7 @@ require(LIB_DIR . 'proxy.php');
 require(LIB_DIR . 'lang.php');
 require(LIB_DIR . 'timezone.php');
 require(LIB_DIR . 'log.php');
+require(LIB_DIR . 'spam.php');
 require(LIB_DIR . 'proxy.cls.php');
 require(LIB_DIR . 'auth.cls.php');
 require(LIB_DIR . 'netbios.cls.php');

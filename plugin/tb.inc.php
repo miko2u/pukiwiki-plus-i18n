@@ -1,5 +1,5 @@
 <?php
-// $Id: tb.inc.php,v 1.19.6 2006/03/04 04:17:00 upk Exp $
+// $Id: tb.inc.php,v 1.19.7 2006/03/20 01:59:00 upk Exp $
 /*
  * PukiWiki/TrackBack: TrackBack Ping receiver and viewer
  * (C) 2003-2004 PukiWiki Developers Team
@@ -94,7 +94,7 @@ function plugin_tb_inline()
 // Save or update TrackBack Ping data
 function plugin_tb_save($url, $tb_id)
 {
-	global $vars, $trackback;
+	global $vars, $trackback, $use_spam_check;
 	static $fields = array( /* UTIME, */ 'url', 'title', 'excerpt', 'blog_name');
 
 	$die = '';
@@ -124,6 +124,10 @@ function plugin_tb_save($url, $tb_id)
 			$value = '"' . str_replace('"', '""', $value) . '"';
 		$items[$key] = $value;
 	}
+
+	// Blocking SPAM
+	if ($use_spam_check['trackback'] && SpamCheck($items['url'])) plugin_tb_return(1, 'Writing is prohibited.');
+
 	$data[rawurldecode($items['url'])] = $items;
 
 	$fp = fopen($filename, 'w');
