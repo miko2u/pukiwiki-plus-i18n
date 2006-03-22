@@ -3,7 +3,7 @@
  * PukiWiki Plus! Blocking SPAM
  *
  * @copyright   Copyright &copy; 2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: log.php,v 0.1 2006/03/20 01:22:00 upk Exp $
+ * @version     $Id: log.php,v 0.2 2006/03/22 00:43:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License
  *
  * Plus! - lib/file.php, lib/func.php, lib/config.php
@@ -77,7 +77,9 @@ function SpamCheckIPBL($bl,$ip)
 	unset($config);
 	$dynm_ip = array();
 	foreach($dynm_host as $host){
-		$dynm_ip[] = gethostbyname($host);
+		$tmp = gethostbyname($host);
+		if ($host == $tmp) continue; // IPが求まらない
+		$dynm_ip[] = $tmp;
 	}
 
 	if (! empty($log_common['nolog_ip'])) {
