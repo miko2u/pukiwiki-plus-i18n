@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: funcplus.php,v 0.1.4 2004/10/13 13:17:36 miko Exp $
+// $Id: funcplus.php,v 0.1.5 2006/03/22 01:25:00 upk Exp $
 //
 
 // インクルードで余計なものはソースから削除する
@@ -114,5 +114,61 @@ function load_init_value($name,$must=0)
 	}
 
 	return FALSE;
+}
+
+function is_ignore_page($page)
+{
+	global $defaultpage,$whatsnew,$whatsdeleted,$interwiki,$menubar,$sidebar,$headarea,$footarea;
+
+	$ignore_regrex = '(Navigation$)|('.$defaultpage.'$)|('.$whatsnew.')|('.$whatsdeleted.'$)|('.
+		$interwiki.'$)|'.$menubar.'$)|('.$sidebar.'$)|('.$headarea.'$)|('.$footarea.'$)';
+	return (ereg($ignore_regrex, $page)) ? TRUE : FALSE;
+}
+
+function is_localIP($ip)
+{
+	static $localIP = array('127.0.0.0/8','10.0.0.0/8','172.16.0.0/12','192.168.0.0/16');
+	if (is_ipaddr($ip) === FALSE) return FALSE;
+	return ip_scope_check($ip,$localIP);
+}
+
+function is_ipaddr($ip)
+{
+	$valid = ip2long($ip);
+	return ($valid == -1 || $valid == FALSE) ? FALSE : $valid;
+}
+
+// IP の判定
+function ip_scope_check($ip,$networks)
+{
+	// $l_ip = ip2long( ip2arrangement($ip) );
+	$l_ip = ip2long($ip);
+	foreach($networks as $network) {
+		$range = explode('/', $network);
+		// $l_network = ip2long( ip2arrangement($range[0]) );
+		$l_network = ip2long( $range[0] );
+		if (empty($range[1])) $range[1] = 0;
+		$subnetmask = pow(2,32) - pow(2,32 - $range[1]);
+		if (($l_ip & $subnetmask) == $l_network) return TRUE;
+	}
+	return FALSE;
+}
+
+// ex. 10 -> 10.0.0.0, 192.168 -> 192.168.0.0
+function ip2arrangement($ip)
+{
+	$x = explode('.', $ip);
+	if (count($x) == 4) return $ip;
+	for($i=0;$i<4;$i++) { if (empty($x[$i])) $x[$i] =0; }
+	return sprintf('%d.%d.%d.%d',$x[0],$x[1],$x[2],$x[3]);
+}
+
+// 予約されたドメイン
+function is_ReservedTLD($host)
+{
+	// RFC2606
+	static $ReservedTLD = array('example' =>'','invalid' =>'','localhost'=>'','test'=>'',);
+	$x = array_reverse(explode('.', strtolower($host) ));
+	return (isset($ReservedTLD[$x[0]])) ? TRUE : FALSE;
 }
 ?>

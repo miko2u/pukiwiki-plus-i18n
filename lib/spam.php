@@ -3,7 +3,7 @@
  * PukiWiki Plus! Blocking SPAM
  *
  * @copyright   Copyright &copy; 2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: log.php,v 0.2 2006/03/22 00:43:00 upk Exp $
+ * @version     $Id: log.php,v 0.3 2006/03/22 01:10:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License
  *
  * Plus! - lib/file.php, lib/func.php, lib/config.php
@@ -117,11 +117,6 @@ class DNSBL
 		// ccTLD は、2 とする
 	);
 
-	// RFC2606
-	var $ReservedTLD = array(
-		'example' => '', 'invalid' => '', 'localhost' => '', 'test' => '',
-	);
-
 	// function DNSBL() { }
 
 	function setName($host)
@@ -142,13 +137,10 @@ class DNSBL
 		return $data;
 	}
 
-	// 予約されたドメインを使用(不正)
-	function isReservedTLD() { return (isset($this->ReservedTLD[$this->reverse[0]])) ? TRUE : FALSE; }
-
 	function getDomain()
 	{
 		// 予約されたドメインを使用(不正)
-		if ($this->isReservedTLD()) return '';
+		if (is_ReservedTLD($this->host)) return '';
 
 		$idx = (isset($this->TLD[$this->reverse[0]])) ? $this->TLD[$this->reverse[0]] : 2;
 		// 本来あるべき長さに達していない
@@ -198,13 +190,12 @@ class DNSBL
 
 class IPBL extends DNSBL
 {
-	var $praivateIP = array('127.0.0.0/8','10.0.0.0/8','172.16.0.0/12','192.168.0.0/16');
-
 	// function IPBL() { }
 
 	function isListed()
 	{
-		if ($this->isPraivate($this->host, array_merge($this->praivateIP,$this->MyNetList)) ) return FALSE;
+		if (is_localIP($this->host)) return FALSE;
+		if (ip_scope_check($this->host,$this->MyNetList)) return FALSE;
 		// reverse ip を生成
 		$host = implode('.', $this->reverse);
 
@@ -221,32 +212,6 @@ class IPBL extends DNSBL
 		}
 		return FALSE;
 	}
-
-	// Private IP の判定
-	function isPraivate($ip,$networks)
-	{
-		// $l_ip = ip2long( $this->ip2arrangement($ip) );
-		$l_ip = ip2long($ip);
-		foreach($networks as $network) {
-			$range = explode('/', $network);
-			// $l_network = ip2long( $this->ip2arrangement($range[0]) );
-			$l_network = ip2long( $range[0] );
-			if (empty($range[1])) $range[1] = 0;
-			$subnetmask = pow(2,32) - pow(2,32 - $range[1]);
-			if (($l_ip & $subnetmask) == $l_network) return TRUE;
-		}
-		return FALSE;
-	}
-
-	// ex. 10 -> 10.0.0.0, 192.168 -> 192.168.0.0
-	function ip2arrangement($ip)
-	{
-		$x = explode('.', $ip);
-		if (count($x) == 4) return $ip;
-		for($i=0;$i<4;$i++) { if (empty($x[$i])) $x[$i] =0; }
-		return sprintf('%d.%d.%d.%d',$x[0],$x[1],$x[2],$x[3]);
-	}
-
 }
 
 ?>

@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: mixirss.inc.php,v 1.14.3 2005/12/20 01:02:00 upk Exp $
+// $Id: mixirss.inc.php,v 1.14.4 2006/03/22 01:27:00 upk Exp $
 //
 // Publishing RSS feed of RecentChanges
 // Usage: mixirss.inc.php?ver=[0.91|1.0(default)|2.0]
@@ -9,7 +9,8 @@
 define('MIXIRSS_DESCRIPTION_LENGTH', 256);
 define('MIXIRSS_LANG', 'ja_JP');
 
-define('MIXIRSS_IGNORE_REGEX', 'Navigation|RecentDeleted|MenuBar|SideBar');
+// upk 2006-03-22
+// define('MIXIRSS_IGNORE_REGEX', 'Navigation|RecentDeleted|MenuBar|SideBar');
 
 // XSLT extra parameters
 //define('LOGO', 'http://pukiwiki.cafelounge.net/image/plus.gif');
@@ -157,7 +158,9 @@ $trackback_ping
 
 EOD;
 				}
-			} else if (check_readable($page,false,false) && !ereg(MIXIRSS_IGNORE_REGEX, $page)) {
+			// upk 2006-03-22
+			// } else if (check_readable($page,false,false) && !ereg(MIXIRSS_IGNORE_REGEX, $page)) {
+			} else if (check_readable($page,false,false) && !is_ignore_page($page)) {
 //miko added
 				$description = strip_htmltag(convert_html(get_source($page)));
 				$description = mb_strimwidth(preg_replace("/[\r\n]/",' ',$description),0,MIXIRSS_DESCRIPTION_LENGTH,'...');

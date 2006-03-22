@@ -1,5 +1,5 @@
 <?php
-// $Id: trackback.php,v 1.21.4 2006/03/20 02:03:00 upk Exp $
+// $Id: trackback.php,v 1.21.5 2006/03/22 02:01:00 upk Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2003-2005 PukiWiki Developers Team
@@ -90,6 +90,15 @@ function tb_send($page, $links)
 	if (! is_array($links) || empty($links)) return;
 
 	$script = get_script_uri();
+
+	// PROHIBITION OF INVALID TRANSMISSION
+	$url = parse_url($script);
+	$host = (empty($url['host'])) ? $script : $url['host'];
+	if (is_ipaddr($host)) {
+		if (is_localIP($host)) return;
+	} else {
+		if (is_ReservedTLD($host)) return;
+	}
 
 	// Disable 'max execution time' (php.ini: max_execution_time)
 	if (ini_get('safe_mode') == '0') set_time_limit(0);
