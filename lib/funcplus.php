@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: funcplus.php,v 0.1.5 2006/03/22 01:25:00 upk Exp $
+// $Id: funcplus.php,v 0.1.6 2006/03/22 01:30:00 upk Exp $
 //
 
 // インクルードで余計なものはソースから削除する
@@ -118,9 +118,9 @@ function load_init_value($name,$must=0)
 
 function is_ignore_page($page)
 {
-	global $defaultpage,$whatsnew,$whatsdeleted,$interwiki,$menubar,$sidebar,$headarea,$footarea;
+	global $whatsnew,$whatsdeleted,$interwiki,$menubar,$sidebar,$headarea,$footarea;
 
-	$ignore_regrex = '(Navigation$)|('.$defaultpage.'$)|('.$whatsnew.')|('.$whatsdeleted.'$)|('.
+	$ignore_regrex = '(Navigation$)|('.$whatsnew.'$)|('.$whatsdeleted.'$)|('.
 		$interwiki.'$)|'.$menubar.'$)|('.$sidebar.'$)|('.$headarea.'$)|('.$footarea.'$)';
 	return (ereg($ignore_regrex, $page)) ? TRUE : FALSE;
 }
