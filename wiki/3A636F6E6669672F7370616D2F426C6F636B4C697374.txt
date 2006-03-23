@@ -16,7 +16,7 @@
 |Zone                 |Use|Listing|WebSite|h
 |rbl.bulkfeeds.jp     |  1||http://bulkfeeds.net/app/blacklist|
 |psbl.surriel.com     |  0|Spamtrap Driven or Automated|http://psbl.surriel.com/|
-|spamtrap.surriel.com |  1|Spamtrap Driven or Automated|http://psbl.surriel.com/|
+|spamtrap.surriel.com |  0|Spamtrap Driven or Automated|http://psbl.surriel.com/|
 |sbl-xbl.spamhaus.org |  1|Spam Source & Open Proxy|http://www.spamhaus.org/|
 |sbl.spamhaus.org     |  0|Spam Source|http://www.spamhaus.org/|
 |xbl.spamhaus.org     |  0|Open Proxy|http://www.spamhaus.org/|
