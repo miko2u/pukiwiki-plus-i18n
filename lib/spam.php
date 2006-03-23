@@ -3,7 +3,7 @@
  * PukiWiki Plus! Blocking SPAM
  *
  * @copyright   Copyright &copy; 2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: log.php,v 0.3 2006/03/22 01:10:00 upk Exp $
+ * @version     $Id: log.php,v 0.4 2006/03/23 22:09:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License
  *
  * Plus! - lib/file.php, lib/func.php, lib/config.php
@@ -157,7 +157,9 @@ class DNSBL
 	function isListed()
 	{
 		// 指定されたホスト名でチェック
-		if (isset($this->MyNetList[$this->host])) return FALSE;
+		foreach($this->MyNetList as $My) {
+			if (strpos($this->host,$My) === 0) return FALSE;
+		}
 		// ドメイン名のレベル合わせ
 		$host = $this->getDomain();
 		if (empty($host)) return FALSE;
