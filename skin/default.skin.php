@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: default.skin.php,v 1.34.27 2006/03/24 00:42:00 upk Exp $
+// $Id: default.skin.php,v 1.34.28 2006/03/24 01:29:00 upk Exp $
 //
 if (!defined('DATA_DIR')) { exit; }
 
@@ -188,6 +188,7 @@ if (isset($pkwk_dtd)) {
 </table>
 </div>
 <?php } ?>
+<?php if (exist_plugin_convert('tz')) echo do_plugin_convert('tz'); ?>
 <?php echo $foot_tag ?>
 </body>
 </html>
