@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: funcplus.php,v 0.1.6 2006/03/22 01:30:00 upk Exp $
+// $Id: funcplus.php,v 0.1.7 2006/03/23 00:52:00 upk Exp $
 //
 
 // インクルードで余計なものはソースから削除する
@@ -170,5 +170,31 @@ function is_ReservedTLD($host)
 	static $ReservedTLD = array('example' =>'','invalid' =>'','localhost'=>'','test'=>'',);
 	$x = array_reverse(explode('.', strtolower($host) ));
 	return (isset($ReservedTLD[$x[0]])) ? TRUE : FALSE;
+}
+
+function path_check($url1,$url2)
+{
+	$u1 = parse_url(strtolower($url1));
+	$u2 = parse_url(strtolower($url2));
+
+	// http = https とする
+	if (!empty($u1['scheme']) && $u1['scheme'] == 'https') $u1['scheme'] = 'http';
+	if (!empty($u2['scheme']) && $u2['scheme'] == 'https') $u2['scheme'] = 'http';
+
+	// path の手当て
+	if (!empty($u1['path'])) {
+		$u1['path'] = substr($u1['path'],0,strrpos($u1['path'],'/'));
+	}
+	if (!empty($u2['path'])) {
+		$u2['path'] = substr($u2['path'],0,strrpos($u2['path'],'/'));
+	}
+
+	foreach(array('scheme','host','path') as $x) {
+		$u1[$x] = (empty($u1[$x])) ? '' : $u1[$x];
+		$u2[$x] = (empty($u2[$x])) ? '' : $u2[$x];
+		if ($u1[$x] == $u2[$x]) continue;
+		return FALSE;
+	}
+	return TRUE;
 }
 ?>

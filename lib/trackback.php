@@ -1,5 +1,5 @@
 <?php
-// $Id: trackback.php,v 1.21.6 2006/03/22 02:02:00 upk Exp $
+// $Id: trackback.php,v 1.21.7 2006/03/23 00:58:00 upk Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2003-2005 PukiWiki Developers Team
@@ -117,6 +117,7 @@ function tb_send($page, $links)
 	);
 
 	foreach ($links as $link) {
+		if (path_check($script, $link)) continue; // Same Site
 		$tb_id = tb_get_url($link);  // Get Trackback ID from the URL
 		if (empty($tb_id)) continue; // Trackback is not supported
 
