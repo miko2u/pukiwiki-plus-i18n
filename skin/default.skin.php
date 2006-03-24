@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: default.skin.php,v 1.34.28 2006/03/24 01:29:00 upk Exp $
+// $Id: default.skin.php,v 1.34.29 2006/03/24 01:42:00 upk Exp $
 //
 if (!defined('DATA_DIR')) { exit; }
 
@@ -53,13 +53,15 @@ if (isset($pkwk_dtd)) {
 <?php if (exist_plugin_convert('js_init')) echo do_plugin_convert('js_init'); ?>
  // -->
  </script>
-<?php global $language; ?>
+<?php global $language,$use_local_time; ?>
  <script type="text/javascript" src="<?php echo SKIN_URI.'lang/'.$language ?>.js"></script>
  <script type="text/javascript" src="<?php echo SKIN_URI ?>default.js"></script>
  <script type="text/javascript" src="<?php echo SKIN_URI ?>kanzaki.js"></script>
  <script type="text/javascript" src="<?php echo SKIN_URI ?>ajax/textloader.js"></script>
  <script type="text/javascript" src="<?php echo SKIN_URI ?>ajax/glossary.js"></script>
+<?php if (! $use_local_time) { ?>
  <script type="text/javascript" src="<?php echo SKIN_URI ?>tzCalculation_LocalTimeZone.js"></script>
+<?php } ?>
  <script type="text/javascript" src="<?php echo SKIN_URI ?>greybox/AmiJS.js"></script>
  <script type="text/javascript" src="<?php echo SKIN_URI ?>greybox/greybox.js"></script>
 <?php
