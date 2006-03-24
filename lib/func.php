@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: func.php,v 1.53.4 2006/03/02 20:56:00 upk Exp $
+// $Id: func.php,v 1.53.5 2006/03/24 01:27:00 upk Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
@@ -484,8 +484,15 @@ function getmicrotime()
 // Get the date
 function get_date($format, $timestamp = NULL)
 {
-	$format = preg_replace('/(?<!\\\)T/',
-		preg_replace('/(.)/', '\\\$1', ZONE), $format);
+	$esc = '';
+	$i = strlen(ZONE) - 1;
+	for($j=0; $j<$i; $j++) { $esc .= '\\'; }
+
+	$format = preg_replace('/(?<!'.$esc.')T/',
+		preg_replace('/(.)/', $esc.'$1', ZONE), $format);
+
+	//$format = preg_replace('/(?<!\\\)T/',
+	//	preg_replace('/(.)/', '\\\$1', ZONE), $format);
 
 	$time = ZONETIME + (($timestamp !== NULL) ? $timestamp : UTIME);
 

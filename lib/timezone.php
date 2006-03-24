@@ -3,7 +3,7 @@
  * TimeZone
  *
  * @copyright   Copyright &copy; 2005-2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: timezone.php,v 0.10 2006/03/01 01:31:00 upk Exp $
+ * @version     $Id: timezone.php,v 0.11 2006/03/24 01:12:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
@@ -22,6 +22,11 @@ function set_time()
 		list($zone, $zonetime) = set_timezone( DEFAULT_LANG );
 	} else {
 		list($zone, $zonetime) = set_timezone( $language );
+		list($l_zone, $l_zonetime) = get_localtimezone();
+		if ($l_zonetime != '' && $zonetime != $l_zonetime) {
+			$zone = $l_zone;
+			$zonetime = $l_zonetime;
+		}
 	}
 
 	define('ZONE', $zone);
@@ -67,6 +72,35 @@ function set_timezone($lang='')
 	}
 
 	return array($zone, $zonetime);
+}
+
+function get_localtimezone()
+{
+	if (isset($_COOKIE['timezone'])) {
+		$tz = $_COOKIE['timezone'];
+	} else {
+		return array('','');
+	}
+
+	$tz = trim($tz);
+
+	$offset = substr($tz,0,1);
+	switch ($offset) {
+	case '-':
+	case '+':
+		$tz = substr($tz,1);
+		break;
+	default:
+		$offset = '+';
+	}
+
+	$h = substr($tz,0,2);
+	$i = substr($tz,2,2);
+
+	$zonetime = ($h * 3600) + ($i * 60);
+	$zonetime = ($offset == '-') ? $zonetime * -1 : $zonetime;
+
+	return array($offset.$tz, $zonetime);
 }
 
 /**
