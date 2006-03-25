@@ -1,12 +1,12 @@
 /****
-Last Modified: Sat 04 Mar 2006 12:01:58 PM CET
+Last Modified: Sun 26 Feb 2006 09:24:10 PM CET
 
  GreyBox - The pop-up window thingie
    Copyright Amir Salihefendic 2006
  AUTHOR
    4mir Salihefendic (http://amix.dk) - amix@amix.dk
  VERSION
-	 1.63
+	 1.62
  LICENSE
   LGPL (read more in LGPL.txt)
  SITE
@@ -17,8 +17,6 @@ var GB_WINDOW = null;
 var GB_IFRAME = null;
 var GB_OVERLAY = null;
 var GB_TIMEOUT = null;
-
-var GB_URL;
 
 var GB_HEIGHT = 400;
 var GB_WIDTH = 400;
@@ -36,6 +34,8 @@ function GB_show(caption, url /* optional */, height, width) {
       GB_WIDTH = width;
 
     initIfNeeded();
+    GB_IFRAME.src = url;
+    GB_IFRAME.opener = this;
 
     GB_caption.innerHTML = caption;
 
@@ -53,13 +53,7 @@ function GB_show(caption, url /* optional */, height, width) {
 
     if(GB_ANIMATION) {
       GB_animateOut(-GB_HEIGHT);
-      GB_URL = url;
     }
-    else {
-      GB_IFRAME.src = url;
-      GB_IFRAME.opener = this;
-    }
-
     return false;
   }
   catch (e) {
@@ -86,8 +80,6 @@ function GB_animateOut(top) {
     GB_TIMEOUT = window.setTimeout(function() { GB_animateOut(top+50); }, 1);
   }
   else {
-    GB_IFRAME.src = GB_URL;
-    GB_IFRAME.opener = this;
     GB_WINDOW.style.top = getScrollTop()+22+"px";
     GB_HEADER.style.top = getScrollTop()+"px";
     clearTimeout(GB_TIMEOUT);
@@ -105,10 +97,7 @@ function GB_setWidth() {
   GB_WINDOW.style.height = GB_HEIGHT + "px";
   GB_IFRAME.style.height = GB_HEIGHT - 5 + "px";
 
-  if((navigator.userAgent.toLowerCase().indexOf("firefox") != -1))
-    GB_OVERLAY.style.width = "100%";
-  else
-    GB_OVERLAY.style.width = array_page_size[0] + "px";
+  GB_OVERLAY.style.width = array_page_size[0] + "px";
 
   var max_height = Math.max(getScrollTop()+array_page_size[1], getScrollTop()+GB_HEIGHT+30);
   GB_OVERLAY.style.height = max_height + "px";

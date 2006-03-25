@@ -1,4 +1,6 @@
 /****
+Last Modified: Sun 26 Feb 2006 09:22:53 PM CET
+
   AmiJs library
     A very small library with DOM and Ajax functions.
     For a much larger script look on http://www.mochikit.com/
@@ -9,7 +11,7 @@
     Copyright (c) 2005 Bob Ippolito. All rights reserved.
     http://www.opensource.org/licenses/mit-license.php
   VERSION
-    1.31 (20/02/06 22:41:35)
+    1.31
   SITE
     http://amix.dk/amijs
  ****/
