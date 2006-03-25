@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: file.php,v 1.44.15 2006/03/20 02:11:00 upk Exp $
+// $Id: file.php,v 1.44.16 2006/03/26 03:56:00 upk Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
@@ -61,12 +61,18 @@ function page_write($page, $postdata, $notimestamp = FALSE)
 	$oldpostdata = is_page($page) ? join('', get_source($page)) : '';
 	$diffdata    = do_diff($oldpostdata, $postdata);
 
+	$role_adm_contents = auth::check_role('role_adm_contents');
+	$links = array();
+	if ( ($trackback > 1) || ( $role_adm_contents && $use_spam_check['page_contents']) ) {
+		$links = get_this_time_links($postdata, $diffdata);
+	}
+
 	// Blocking SPAM
-	if (auth::check_role('role_adm_contents')) {
+	if ($role_adm_contents) {
 		if ($use_spam_check['page_remote_addr'] && SpamCheck($_SERVER['REMOTE_ADDR'],'ip')) {
 			die_message('Writing was limited by IPBL (Blocking SPAM).');
 		}
-		if ($use_spam_check['page_contents'] && SpamCheck(get_link_list($diffdata))) {
+		if ($use_spam_check['page_contents'] && SpamCheck($links)) {
 			die_message('Writing was limited by DNSBL (Blocking SPAM).');
 		}
 	}
@@ -81,12 +87,10 @@ function page_write($page, $postdata, $notimestamp = FALSE)
 
 	if ($trackback > 1) {
 		// TrackBack Ping
-		$links = get_link_list($diffdata);
 		tb_send($page, $links);
-		unset($links);
 	}
 
-	unset($oldpostdata,$diffdata);
+	unset($oldpostdata,$diffdata,$links);
 	links_update($page);
 	log_write('update',$page);
 }
@@ -130,6 +134,42 @@ function get_diff_lines($diffdata)
 	$minus = join("\n", preg_replace('/^-/',  '', preg_grep('/^-/',  $_diff)));
 	unset($_diff);
 	return array($plus, $minus);
+}
+
+function replace_plugin_link2null($data)
+{
+	global $exclude_link_plugin;
+
+	$pattern = $replacement = array();
+	foreach($exclude_link_plugin as $plugin) {
+		$pattern[] = '/^#'.$plugin.'\(/i';
+		$replacement[] = '#null(';
+	}
+
+	$exclude = preg_replace($pattern,$replacement, explode("\n", $data));
+	$html = convert_html($exclude);
+	preg_match_all('#href="(https?://[^"]+)"#', $html, $links, PREG_PATTERN_ORDER);
+	$links = array_unique($links[1]);
+	unset($except, $html);
+	return $links;
+}
+
+function get_this_time_links($post,$diff)
+{
+	$links = array();
+	$post_links = replace_plugin_link2null($post);
+	$diff_links = get_link_list($diff);
+
+	foreach($diff_links as $d) {
+		foreach($post_links as $p) {
+			if ($p == $d) {
+				$links[] = $p;
+				break;
+			}
+		}
+	}
+	unset($post_links, $diff_links);
+	return $links;
 }
 
 // Modify ogirinal text with user-defined / system-defined rules
