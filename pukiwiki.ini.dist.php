@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: pukiwiki.ini.php,v 1.128.23 2006/03/01 01:27:00 upk Exp $
+// $Id: pukiwiki.ini.php,v 1.128.25 2006/03/26 03:25:00 upk Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
@@ -201,6 +201,15 @@ $ajax = 1;
 require_once('config-log.ini.php');
 
 /////////////////////////////////////////////////
+// Blocking SPAM
+$use_spam_check = array(
+	'page_remote_addr'	=> 0,
+	'page_contents'		=> 0,
+	'trackback'		=> 0,
+	'referer'		=> 0,
+);
+
+/////////////////////////////////////////////////
 // TrackBack feature
 
 // Enable Trackback
@@ -350,6 +359,19 @@ $exclude_plugin = array(
 	'server',
 	'version',
 	'versionlist',
+);
+
+/////////////////////////////////////////////////
+// Exclude Link plugin.
+//
+// When TrackBack Ping and SPAM Check are processed,
+// it is substituted for null plugin.
+//
+// TrackBack Ping および SPAMチェックの処理の際に、
+// null プラグインに置換されます。
+$exclude_link_plugin = array(
+	'showrss',
+	'rssreader',
 );
 
 /////////////////////////////////////////////////
