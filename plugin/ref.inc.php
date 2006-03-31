@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: ref.inc.php,v 1.49.8 2006/02/24 01:04:00 upk Exp $
+// $Id: ref.inc.php,v 1.49.9 2006/03/31 23:34:00 upk Exp $
 //
 // Image refernce plugin
 // Include an attached image-file as an inline-image
@@ -371,7 +371,7 @@ function plugin_ref_body($args)
 			if ($rawwidth > 0 && $rawheight > 0 && $rawwidth <= 128 && $rawheight <= 128 && PLUGIN_REF_SHOW_IMAGE_TO_MOBILEPHONE) {
 				$params['_body'] = "<img src=\"$url\" alt=\"$title\" title=\"keitai\" $info/>";
 			} else {
-				$params['_body'] = "<a href=\"$url\" title=\"keitai\">[PHOTO:$title]<a>";
+				$params['_body'] = "<a href=\"$url\" title=\"keitai\">[PHOTO:$title]</a>";
 			}
 		} else {
 			$params['_body'] = "<img src=\"$url\" alt=\"$title\" title=\"$title\" $info/>";
