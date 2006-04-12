@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: attach.inc.php,v 1.80.14 2006/02/19 17:49:00 upk Exp $
+// $Id: attach.inc.php,v 1.81.1 2006/04/13 00:30:00 upk Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2003-2005 PukiWiki Developers Team
@@ -32,6 +32,9 @@ define('PLUGIN_ATTACH_DELETE_ADMIN_NOBACKUP', FALSE); // FALSE or TRUE
 
 // アップロード/削除時にパスワードを要求する(ADMIN_ONLYが優先)
 define('PLUGIN_ATTACH_PASSWORD_REQUIRE', FALSE); // FALSE or TRUE
+
+// 添付ファイル名を変更できるようにする
+define('PLUGIN_ATTACH_RENAME_ENABLE', TRUE); // FALSE or TRUE
 
 // ファイルのアクセス権
 define('PLUGIN_ATTACH_FILE_MODE', 0644);
@@ -67,7 +70,10 @@ function plugin_attach_init()
 			'msg_delete'   => _('Delete file.'),
 			'msg_freeze'   => _('Freeze file.'),
 			'msg_unfreeze' => _('Unfreeze file.'),
+			'msg_renamed'  => _('The file has been renamed'),
 			'msg_isfreeze' => _('File is frozen.'),
+			'msg_rename'   => _('Rename'),
+			'msg_newname'  => _('New file name'),
 			'msg_require'  => _('(require administrator password)'),
 			'msg_filesize' => _('size'),
 			'msg_type'     => _('type'),
@@ -82,6 +88,7 @@ function plugin_attach_init()
 			'err_notfound' => _('Could not find the file in $1'),
 			'err_noexist'  => _('File does not exist.'),
 			'err_delete'   => _('Cannot delete file in  $1'),
+			'err_rename'   => _('Cannot rename this file'),
 			'err_password' => _('Wrong password.'),
 			'err_adminpass'=> _('Wrong administrator password'),
 			'btn_upload'   => _('Upload'),
@@ -167,6 +174,7 @@ function plugin_attach_action()
 		case 'list'     : return attach_list();
 		case 'freeze'   : return attach_freeze(TRUE);
 		case 'unfreeze' : return attach_freeze(FALSE);
+		case 'rename'   : return attach_rename();
 		case 'upload'   : return attach_showform();
 		}
 		if ($page == '' || ! is_page($page)) {
@@ -380,6 +388,25 @@ function attach_freeze($freeze)
 			$obj->freeze($freeze, $pass) :
 			array('msg'=>$_attach_messages['err_notfound']);
 	}
+}
+
+// リネーム
+function attach_rename()
+{
+	global $vars, $_attach_messages;
+
+	foreach (array('refer', 'file', 'age', 'pass', 'newname') as $var) {
+		${$var} = isset($vars[$var]) ? $vars[$var] : '';
+	}
+
+	if (is_freeze($refer) || ! is_editable($refer)) {
+		return array('msg'=>$_attach_messages['err_noparm']);
+	}
+	$obj = & new AttachFile($refer, $file, $age);
+	if (! $obj->getstatus())
+		return array('msg'=>$_attach_messages['err_notfound']);
+
+	return $obj->rename($pass, $newname);
 }
 
 // ダウンロード
@@ -632,6 +659,7 @@ class AttachFile
 		$role_adm_contents = auth::check_role('role_adm_contents');
 		$msg_require = ($role_adm_contents) ? $_attach_messages['msg_require'] : '';
 
+		$msg_rename  = '';
 		if ($this->age) {
 			$msg_freezed = '';
 			$msg_delete  = '<input type="radio" name="pcmd" id="_p_attach_delete" value="delete" />' .
@@ -655,6 +683,15 @@ class AttachFile
 				$msg_freeze  = '<input type="radio" name="pcmd" id="_p_attach_freeze" value="freeze" />' .
 					'<label for="_p_attach_freeze">' .  $_attach_messages['msg_freeze'] .
 					$msg_require . '</label><br />';
+				if (PLUGIN_ATTACH_RENAME_ENABLE) {
+					$msg_rename  = '<input type="radio" name="pcmd" id="_p_attach_rename" value="rename" />' .
+						'<label for="_p_attach_rename">' .  $_attach_messages['msg_rename'] .
+						$msg_require . '</label><br />&nbsp;&nbsp;&nbsp;&nbsp;' .
+						'<label for="_p_attach_newname">' . $_attach_messages['msg_newname'] .
+						':</label> ' .
+						'<input type="test" name="newname" id="_p_attach_newname" size="40" value="' .
+						$this->file . '" /><br />';
+				}
 			}
 		}
 		$info = $this->toString(TRUE, FALSE);
@@ -707,6 +744,7 @@ $s_err
   <input type="hidden" name="age" value="{$this->age}" />
   $msg_delete
   $msg_freeze
+  $msg_rename
   $msg_auth
   <input type="submit" value="{$_attach_messages['btn_submit']}" />
  </div>
@@ -766,6 +804,26 @@ EOD;
 		}
 
 		return array('msg'=>$_attach_messages['msg_deleted']);
+	}
+
+	function rename($pass, $newname)
+	{
+		global $_attach_messages, $notify, $notify_subject;
+
+		if ($this->status['freeze']) return attach_info('msg_isfreeze');
+
+		if (auth::check_role('role_adm_contents') && ! pkwk_login($pass))
+			return attach_info('err_adminpass');
+
+		$newbase = UPLOAD_DIR . encode($this->page) . '_' . encode($newname);
+		if (file_exists($newbase)) {
+			return array('msg'=>$_attach_messages['err_exists']);
+		}
+		if (! PLUGIN_ATTACH_RENAME_ENABLE || ! rename($this->basename, $newbase)) {
+			return array('msg'=>$_attach_messages['err_rename']);
+		}
+
+		return array('msg'=>$_attach_messages['msg_renamed']);
 	}
 
 	function freeze($freeze, $pass)

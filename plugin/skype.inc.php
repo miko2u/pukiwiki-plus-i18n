@@ -3,7 +3,7 @@
  * Skype プラグイン
  *
  * @copyright   Copyright &copy; 2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: skype.inc.php,v 0.1 2006/03/26 22:11:00 upk Exp $
+ * @version     $Id: skype.inc.php,v 0.2 2006/04/13 00:57:00 upk Exp $
  *
  */
 
@@ -24,7 +24,7 @@ function plugin_skype_convert()
 	}
 
 	if (empty($user)) return '';
-	$func = (skype::is_function($func)) ? $func : 'add';
+	$func = (skype::is_function($func)) ? $func : 'userinfo';
 	$size_info = skype::size_info($size);
 
 	$link = 'skype:'.$user.'?'.$func;
