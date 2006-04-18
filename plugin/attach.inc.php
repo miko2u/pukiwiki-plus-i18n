@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: attach.inc.php,v 1.81.2 2006/04/18 20:49:00 upk Exp $
+// $Id: attach.inc.php,v 1.81.3 2006/04/18 21:16:00 upk Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2003-2005 PukiWiki Developers Team
@@ -15,30 +15,47 @@
 //    This feature is disabled at newer version of PHP.
 //    Set this at php.ini if you want.
 // Max file size for upload on PHP (PHP default: 2MB)
-ini_set('upload_max_filesize', '4M');
+if (!defined('PLUGIN_ATTACH_UPLOAD_MAX_FILESIZE')) {
+	define('PLUGIN_ATTACH_UPLOAD_MAX_FILESIZE', '4M'); // default: 1MB
+}
+ini_set('upload_max_filesize', PLUGIN_ATTACH_UPLOAD_MAX_FILESIZE);
 
 // Max file size for upload on script of PukiWikiX_FILESIZE
-define('PLUGIN_ATTACH_MAX_FILESIZE', (2048 * 1024)); // default: 1MB
+if (!defined('PLUGIN_ATTACH_MAX_FILESIZE')) {
+	define('PLUGIN_ATTACH_MAX_FILESIZE', (2048 * 1024)); // default: 1MB
+}
 
 // 管理者だけが添付ファイルをアップロードできるようにする
-define('PLUGIN_ATTACH_UPLOAD_ADMIN_ONLY', FALSE); // FALSE or TRUE
+if (!defined('PLUGIN_ATTACH_UPLOAD_ADMIN_ONLY')) {
+	define('PLUGIN_ATTACH_UPLOAD_ADMIN_ONLY', FALSE); // FALSE or TRUE
+}
 
 // 管理者だけが添付ファイルを削除できるようにする
-define('PLUGIN_ATTACH_DELETE_ADMIN_ONLY', FALSE); // FALSE or TRUE
+if (!defined('PLUGIN_ATTACH_DELETE_ADMIN_ONLY')) {
+	define('PLUGIN_ATTACH_DELETE_ADMIN_ONLY', FALSE); // FALSE or TRUE
+}
 
 // 管理者が添付ファイルを削除するときは、バックアップを作らない
 // PLUGIN_ATTACH_DELETE_ADMIN_ONLY=TRUEのとき有効
-define('PLUGIN_ATTACH_DELETE_ADMIN_NOBACKUP', FALSE); // FALSE or TRUE
+if (!defined('PLUGIN_ATTACH_DELETE_ADMIN_NOBACKUP')) {
+	define('PLUGIN_ATTACH_DELETE_ADMIN_NOBACKUP', FALSE); // FALSE or TRUE
+}
 
 // アップロード/削除時にパスワードを要求する(ADMIN_ONLYが優先)
-define('PLUGIN_ATTACH_PASSWORD_REQUIRE', FALSE); // FALSE or TRUE
+if (!defined('PLUGIN_ATTACH_PASSWORD_REQUIRE')) {
+	define('PLUGIN_ATTACH_PASSWORD_REQUIRE', FALSE); // FALSE or TRUE
+}
 
 // 添付ファイル名を変更できるようにする
-define('PLUGIN_ATTACH_RENAME_ENABLE', TRUE); // FALSE or TRUE
+if (!defined('PLUGIN_ATTACH_RENAME_ENABLE')) {
+	define('PLUGIN_ATTACH_RENAME_ENABLE', TRUE); // FALSE or TRUE
+}
 
 // ファイルのアクセス権
-define('PLUGIN_ATTACH_FILE_MODE', 0644);
-//define('PLUGIN_ATTACH_FILE_MODE', 0604); // for XREA.COM
+if (!defined('PLUGIN_ATTACH_FILE_MODE')) {
+	define('PLUGIN_ATTACH_FILE_MODE', 0644);
+	//define('PLUGIN_ATTACH_FILE_MODE', 0604); // for XREA.COM
+}
 
 // File icon image
 define('PLUGIN_ATTACH_FILE_ICON', '<img src="' . IMAGE_DIR .  'file.png"' .
