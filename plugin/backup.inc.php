@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: backup.inc.php,v 1.27.14 2006/02/06 20:24:00 upk Exp $
+// $Id: backup.inc.php,v 1.27.15 2006/04/20 00:27:00 upk Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
@@ -305,6 +305,8 @@ EOD;
 function plugin_backup_get_list_all($withfilename = FALSE)
 {
 	global $cantedit;
+
+	if (auth::check_role('safemode')) die_message('PKWK_SAFE_MODE prohibits this');
 
 	$pages = array_diff(get_existpages(BACKUP_DIR, BACKUP_EXT), $cantedit);
 
