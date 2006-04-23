@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: default.skin.php,v 1.34.29 2006/03/24 01:42:00 upk Exp $
+// $Id: default.skin.php,v 1.34.30 2006/04/23 17:07:00 upk Exp $
 //
 if (!defined('DATA_DIR')) { exit; }
 
@@ -103,14 +103,15 @@ if (isset($pkwk_dtd)) {
 <div id="contents">
 <table class="contents" width="100%" border="0" cellspacing="0" cellpadding="0">
  <tr>
-<?php if (arg_check('read') && exist_plugin_convert('menu') && do_plugin_convert('menu') != '') { ?>
+<?php global $always_menu_displayed; if (arg_check('read')) $always_menu_displayed = 1; ?>
+<?php if ($always_menu_displayed && exist_plugin_convert('menu') && do_plugin_convert('menu') != '') { ?>
   <td class="ltable" valign="top"><div id="menubar"><?php echo do_plugin_convert('menu') ?></div></td>
 <?php } ?>
   <td class="ctable" valign="top">
    <?php if ($is_page and exist_plugin_convert('topicpath')) { echo do_plugin_convert('topicpath'); } ?>
    <div id="body"><?php echo $body ?></div>
   </td>
-<?php if (arg_check('read') && exist_plugin_convert('side') && do_plugin_convert('side') != '') { ?>
+<?php if ($always_menu_displayed && exist_plugin_convert('side') && do_plugin_convert('side') != '') { ?>
   <td class="rtable" valign="top"><div id="sidebar"><?php echo do_plugin_convert('side') ?></div></td>
 <?php } ?>
  </tr>
