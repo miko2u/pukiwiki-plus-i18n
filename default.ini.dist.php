@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: default.ini.php,v 1.24.4 2006/02/02 01:25:00 upk Exp $
+// $Id: default.ini.php,v 1.24.5 2006/04/23 17:05:00 upk Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2003-2005 PukiWiki Developers Team
@@ -19,6 +19,10 @@ if (defined('TDIARY_THEME')) {
 	define('SKIN_FILE_DEFAULT', SKIN_DIR . 'default.skin.php');
 }
 $skin_file = SKIN_FILE_DEFAULT;
+
+/////////////////////////////////////////////////
+// メニューバー/サイドバーを常に表示する
+$always_menu_displayed = 0;
 
 /////////////////////////////////////////////////
 // 雛形とするページの読み込みを可能にする
