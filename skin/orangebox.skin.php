@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
 //
-// $Id: orangebox.skin.php,v 1.18.4 2006/04/25 01:53:00 upk Exp $
+// $Id: orangebox.skin.php,v 1.18.5 2006/04/25 01:53:00 upk Exp $
 // Original is ari-
 
 // Prohibit direct access
@@ -97,19 +97,15 @@ if (isset($pkwk_dtd)) {
 <div id="header">
 <div id="logo"><a href="<?php echo $link_top ?>"><?php echo $page_title ?></a></div>
 </div>
-<div id="navigator">
- <?php echo convert_html(get_source('SiteNavigator')) ?>
-</div>
 <?php
  if (exist_plugin('navibar2')) {
   echo do_plugin_convert('navibar2');
  } else {
-  echo '<div id="page_navigator">';
-  echo convert_html(get_source('PageNavigator'));
+  echo '<div id="navigator">';
+  echo convert_html(get_source('SiteNavigator'));
   echo '</div>';
  }
 ?>
-
 <div id="main">
 <div id="center_bar">
 <div id="content">
