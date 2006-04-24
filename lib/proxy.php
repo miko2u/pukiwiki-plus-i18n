@@ -202,7 +202,7 @@ function http_request($url, $method = 'GET', $headers = array(), $post = array()
 //		'header' => $resp[0], // Header
 //		'data'   => $resp[1]  // Data
 		'header' => $head, // Header
-		'data'   => $body  // Data
+		'data'   => $body, // Data
 		'timeout' => $status['timeout'],
 	);
 }
