@@ -1,9 +1,9 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: keitai.skin.php,v 1.14.13 2005/07/05 14:41:33 miko Exp $
+// $Id: keitai.skin.php,v 1.16.13 2006/04/23 10:37:05 miko Exp $
 // Copyright (C)
-//   2005      Customized/Patched by Miko.Hoshina
-//   2003-2005 PukiWiki Developers Team
+//   2005-2006 Customized/Patched by Miko.Hoshina
+//   2003-2006 PukiWiki Developers Team
 // License: GPL v2 or (at your option) any later version
 //
 // Skin for Embedded devices

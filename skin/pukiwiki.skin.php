@@ -1,8 +1,9 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: pukiwiki.skin.php,v 1.46.1 2005/05/23 14:22:30 miko Exp $
+// $Id: pukiwiki.skin.php,v 1.48.1 2006/04/22 14:03:02 miko Exp $
 // Copyright (C)
-//   2002-2005 PukiWiki Developers Team
+//   2005-2006 PukiWiki Plus! Team
+//   2002-2006 PukiWiki Developers Team
 //   2001-2002 Originally written by yu-ji
 // License: GPL v2 or (at your option) any later version
 //
@@ -11,8 +12,9 @@
 // ------------------------------------------------------------
 // Settings (define before here, if you want)
 
-// Set site logo
+// Set site identities
 $_IMAGE['skin']['logo']     = 'pukiwiki.png';
+$_IMAGE['skin']['favicon']  = ''; // Sample: 'image/favicon.ico';
 
 // SKIN_DEFAULT_DISABLE_TOPICPATH
 //   1 = Show reload URL
@@ -73,6 +75,8 @@ if (isset($pkwk_dtd)) {
 <?php if (PKWK_ALLOW_JAVASCRIPT && isset($javascript)) { ?> <meta http-equiv="Content-Script-Type" content="text/javascript" /><?php } ?>
 
  <title><?php echo $title ?> - <?php echo $page_title ?></title>
+
+ <link rel="SHORTCUT ICON" href="<?php echo $image['favicon'] ?>" />
  <link rel="stylesheet" type="text/css" media="screen" href="skin/pukiwiki.css.php?charset=<?php echo $css_charset ?>" charset="<?php echo $css_charset ?>" />
  <link rel="stylesheet" type="text/css" media="print"  href="skin/pukiwiki.css.php?charset=<?php echo $css_charset ?>&amp;media=print" charset="<?php echo $css_charset ?>" />
  <link rel="alternate" type="application/rss+xml" title="RSS" href="<?php echo $link['rss'] ?>" /><?php // RSS auto-discovery ?>

@@ -1,8 +1,8 @@
 <?php
-// PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: ja.lng.php,v 1.11.5 2005/11/29 08:13:54 miko Exp $
+// PukiWiki - Yet another WikiWikiWeb clone.
+// $Id: ja.lng.php,v 1.14.5 2006/04/22 17:36:56 miko Exp $
 // Copyright (C)
-//   2005      Customized/Patched by Miko.Hoshina
+//   2002-2006 PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
 //   2001-2002 Originally written by yu-ji
 // License: GPL v2 or (at your option) any later version
@@ -82,9 +82,9 @@ $_title_cannotread = '$1 は閲覧できません';
 $_msg_auth         = 'PukiWikiAuth';
 
 ///////////////////////////////////////
-// Help 'wiki format rule'.
-$rule_page = '整形ルール';
-$help_page = 'ヘルプ';
+// Page name
+$rule_page = 'FormattingRules';	// Formatting rules
+$help_page = 'Help';		// Help
 
 ///////////////////////////////////////
 // TrackBack (REMOVED)
@@ -120,7 +120,7 @@ $_LANG['skin']['rename']    = '名前変更';	// Rename a page (and related)
 $_LANG['skin']['rss']       = '最終更新のRSS';	// RSS of RecentChanges
 $_LANG['skin']['rss10']     = & $_LANG['skin']['rss'];
 $_LANG['skin']['rss20']     = & $_LANG['skin']['rss'];
-$_LANG['skin']['mixirss']   = & $_LANG['skin']['rss']; 
+$_LANG['skin']['mixirss']   = & $_LANG['skin']['rss'];
 $_LANG['skin']['search']    = '単語検索';
 $_LANG['skin']['top']       = 'ホーム';	// Top page
 $_LANG['skin']['trackback'] = 'Trackback';	// Show list of trackback
@@ -151,6 +151,7 @@ $_attach_messages = array(
 	'msg_deleted'  => '$1 からファイルを削除しました',
 	'msg_freezed'  => '添付ファイルを凍結しました。',
 	'msg_unfreezed'=> '添付ファイルを凍結解除しました。',
+	'msg_renamed'  => '添付ファイルの名前を変更しました。',
 	'msg_upload'   => '$1 への添付',
 	'msg_info'     => '添付ファイルの情報',
 	'msg_confirm'  => '<p>%s を削除します。</p>',
@@ -166,6 +167,8 @@ $_attach_messages = array(
 	'msg_freeze'   => 'このファイルを凍結します。',
 	'msg_unfreeze' => 'このファイルを凍結解除します。',
 	'msg_isfreeze' => 'このファイルは凍結されています。',
+	'msg_rename'   => '名前を変更します。',
+	'msg_newname'  => '新しい名前',
 	'msg_require'  => '(管理者パスワードが必要です)',
 	'msg_filesize' => 'サイズ',
 	'msg_date'     => '登録日時',
@@ -179,6 +182,7 @@ $_attach_messages = array(
 	'err_notfound' => '$1 にそのファイルは見つかりません',
 	'err_noexist'  => '添付ファイルがありません。',
 	'err_delete'   => '$1 からファイルを削除できませんでした',
+	'err_rename'   => 'ファイル名を変更できませんでした',
 	'err_password' => 'パスワードが一致しません。',
 	'err_adminpass'=> '管理者パスワードが一致しません。',
 	'btn_upload'   => 'アップロード',
