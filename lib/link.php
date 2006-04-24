@@ -1,9 +1,9 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: link.php,v 1.8.1 2005/04/29 11:24:20 miko Exp $
+// $Id: link.php,v 1.11.1 2006/04/23 11:24:20 miko Exp $
 // Copyright (C)
-//   2005      Customized/Patched by Miko.Hoshina
-//   2003-2005 PukiWiki Developers Team
+//   2005-2006 Customized/Patched by Miko.Hoshina
+//   2003-2006 PukiWiki Developers Team
 // License: GPL v2 or (at your option) any later version
 //
 // Backlinks / AutoLinks related functions
@@ -144,10 +144,8 @@ function links_init()
 	foreach (get_existfiles(CACHE_DIR, '.rel') as $cache)
 		unlink($cache);
 
-	$pages = get_existpages();
 	$ref   = array(); // 参照元
-	$ref_notauto = array();
-	foreach ($pages as $page) {
+	foreach (get_existpages() as $page) {
 		if ($page == $whatsnew) continue;
 
 		$rel   = array(); // 参照先
@@ -158,10 +156,10 @@ function links_init()
 				continue;
 
 			$rel[] = $_obj->name;
-			if (! is_a($_obj, 'Link_autolink')) {
-				$ref_notauto[$_obj->name][$page] = TRUE;
-			}
-			$ref[$_obj->name][] = $page;
+			if (! isset($ref[$_obj->name][$page]))
+				$ref[$_obj->name][$page] = 1;
+			if (! is_a($_obj, 'Link_autolink'))
+				$ref[$_obj->name][$page] = 0;
 		}
 		$rel = array_unique($rel);
 		if (! empty($rel)) {
@@ -173,16 +171,10 @@ function links_init()
 	}
 
 	foreach ($ref as $page=>$arr) {
-		if (empty($arr)) continue;
-
-		$arr = array_unique($arr);
 		$fp  = fopen(CACHE_DIR . encode($page) . '.ref', 'w')
 			or die_message('cannot write ' . htmlspecialchars(CACHE_DIR . encode($page) . '.ref'));
-		foreach ($arr as $ref_page) {
-			$ref_auto = (isset($ref_notauto[$page])
-				&& isset($ref_notauto[$page][$ref_page])) ? 0 : 1;
-			fputs($fp, "$ref_page\t$ref_auto\n");
-		}
+		foreach ($arr as $ref_page=>$ref_auto)
+			fputs($fp, $ref_page . "\t" . $ref_auto . "\n");
 		fclose($fp);
 	}
 }
@@ -236,7 +228,7 @@ function links_delete($page, $del)
 			}
 		}
 		unlink($ref_file);
-		if ($is_page && ! $all_auto && $ref != '') {
+		if (($is_page || ! $all_auto) && $ref != '') {
 			$fp = fopen($ref_file, 'w')
 				or die_message('cannot write ' . htmlspecialchars($ref_file));
 			fputs($fp, $ref);

@@ -1,30 +1,43 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: file.php,v 1.44.3 2005/12/18 15:14:23 miko Exp $
+// $Id: file.php,v 1.63.3 2006/04/23 00:18:37 miko Exp $
 // Copyright (C)
-//   2005      Customized/Patched by Miko.Hoshina
-//   2002-2005 PukiWiki Developers Team
+//   2005-2006 PukiWiki Plus! Team
+//   2002-2006 PukiWiki Developers Team
 //   2001-2002 Originally written by yu-ji
 // License: GPL v2 or (at your option) any later version
 //
 // File related functions
 
+// RecentChanges
+define('PKWK_MAXSHOW_ALLOWANCE', 10);
+define('PKWK_MAXSHOW_CACHE', 'recent.dat');
+
+// AutoLink
+define('PKWK_AUTOLINK_REGEX_CACHE', 'autolink.dat');
+
 // Get source(wiki text) data of the page
-function get_source($page = NULL, $lock = TRUE)
+function get_source($page = NULL, $lock = TRUE, $join = FALSE)
 {
-	$array = array();
+	$result = $join ? '' : array();
 
 	if (is_page($page)) {
 		$path  = get_filename($page);
 
 		if ($lock) {
 			$fp = @fopen($path, 'r');
-			if ($fp == FALSE) return $array;
+			if ($fp == FALSE) return $result;
 			flock($fp, LOCK_SH);
 		}
 
-		// Removing line-feeds: Because file() doesn't remove them.
-		$array = str_replace("\r", '', file($path));
+		if ($join) {
+			// Returns a value
+			$result = str_replace("\r", '', fread($fp, filesize($path)));
+		} else {
+			// Returns an array
+			// Removing line-feeds: Because file() doesn't remove them.
+			$result = str_replace("\r", '', file($path));
+		}
 
 		if ($lock) {
 			flock($fp, LOCK_UN);
@@ -32,7 +45,7 @@ function get_source($page = NULL, $lock = TRUE)
 		}
 	}
 
-	return $array;
+	return $result;
 }
 
 // Get last-modified filetime of the page
@@ -81,7 +94,7 @@ function page_write($page, $postdata, $notimestamp = FALSE)
 	links_update($page);
 }
 
-// Modify ogirinal text with user-defined / system-defined rules
+// Modify original text with user-defined / system-defined rules
 function make_str_rules($source)
 {
 	global $str_rules, $fixed_heading_anchor;
@@ -149,6 +162,29 @@ function generate_fixed_heading_anchor_id($seed)
 		mt_rand(0, 24), 7);
 }
 
+// Read top N lines as an array
+// (Use PHP file() function if you want to get ALL lines)
+function file_head($file, $count = 1, $lock = TRUE, $buffer = 8192)
+{
+	$array = array();
+
+	$fp = @fopen($file, 'r');
+	if ($fp === FALSE) return FALSE;
+	set_file_buffer($fp, 0);
+	if ($lock) flock($fp, LOCK_SH);
+	rewind($fp);
+	$index = 0;
+	while (! feof($fp)) {
+		$line = fgets($fp, $buffer);
+		if ($line != FALSE) $array[] = $line;
+		if (++$index >= $count) break;
+	}
+	if ($lock) flock($fp, LOCK_UN);
+	if (! fclose($fp)) return FALSE;
+
+	return $array;
+}
+
 // Output to a file
 function file_write($dir, $page, $str, $notimestamp = FALSE)
 {
@@ -157,90 +193,111 @@ function file_write($dir, $page, $str, $notimestamp = FALSE)
 	global $whatsdeleted, $maxshow_deleted;
 
 	if (PKWK_READONLY) return; // Do nothing
+	if ($dir != DATA_DIR && $dir != DIFF_DIR) die('file_write(): Invalid directory');
+
+	$page = strip_bracket($page);
+	$file = $dir . encode($page) . '.txt';
+	$file_exists = file_exists($file);
+
+	// ----
+	// Delete?
+
+	if ($dir == DATA_DIR && $str === '') {
+		// Page deletion
+		if (! $file_exists) return; // Ignore null posting for DATA_DIR
+
+		// Update RecentDeleted (Add the $page)
+		add_recent($page, $whatsdeleted, '', $maxshow_deleted);
+
+		unlink($file);
+
+		// Update RecentChanges (Remove the $page from RecentChanges)
+		put_lastmodified();
+//@miko
+		// Clear page cache
+		if ($dir == DATA_DIR && is_cache($page)) { // cleanup bodycache.
+			unlink(get_cachename($page));
+		}
+//@miko
+		// Clear is_page() cache
+		is_page($page, TRUE);
+
+		return;
+
+	} else if ($dir == DIFF_DIR && $str === " \n") {
+		return; // Ignore null posting for DIFF_DIR
+	}
+
+	// ----
+	// File replacement (Edit)
 
 	if (! is_pagename($page))
 		die_message(str_replace('$1', htmlspecialchars($page),
 		            str_replace('$2', 'WikiName', $_msg_invalidiwn)));
 
-	$page      = strip_bracket($page);
-	$file      = $dir . encode($page) . '.txt';
-	$timestamp = FALSE;
+	$str = rtrim(preg_replace('/' . "\r" . '/', '', $str)) . "\n";
+	$timestamp = ($file_exists && $notimestamp) ? filemtime($file) : FALSE;
 
-	if ($str === '') {
-		if ($dir == DATA_DIR && file_exists($file)) {
-			// File deletion
-			unlink($file);
-			add_recent($page, $whatsdeleted, '', $maxshow_deleted); // RecentDeleted
-		}
-	} else {
-		// File replacement (Edit)
-		$str = rtrim(preg_replace('/' . "\r" . '/', '', $str)) . "\n";
+	$fp = fopen($file, 'a') or die('fopen() failed: ' .
+		htmlspecialchars(basename($dir) . '/' . encode($page) . '.txt') .	
+		'<br />' . "\n" .
+		'Maybe permission is not writable or filename is too long');
+	set_file_buffer($fp, 0);
+	flock($fp, LOCK_EX);
+	ftruncate($fp, 0);
+	rewind($fp);
+	fputs($fp, $str);
+	flock($fp, LOCK_UN);
+	fclose($fp);
 
-		if ($notimestamp && file_exists($file))
-			$timestamp = filemtime($file) - LOCALZONE;
+	if ($timestamp) pkwk_touch_file($file, $timestamp);
 
-		$fp = fopen($file, 'a') or die('fopen() failed: ' .
-			htmlspecialchars(basename($dir) . '/' . encode($page) . '.txt') .	
-			'<br />' . "\n" .
-			'Maybe permission is not writable or filename is too long');
-		set_file_buffer($fp, 0);
-
-		flock($fp, LOCK_EX);
-
-		// Write
-		ftruncate($fp, 0);
-		rewind($fp);
-		fputs($fp, $str);
-
-		flock($fp, LOCK_UN);
-
-		fclose($fp);
-
-		if ($timestamp) pkwk_touch_file($file, $timestamp + LOCALZONE);
-	}
-
+//@miko
 	// Clear page cache
 	if ($dir == DATA_DIR && is_cache($page)) { // cleanup bodycache.
 		unlink(get_cachename($page));
 	}
+//@miko
 
-	// Clear is_page() cache
-	is_page($page, TRUE);
+	// Optional actions
+	if ($dir == DATA_DIR) {
+		// Update RecentChanges (Add or renew the $page)
+		if ($timestamp === FALSE) lastmodified_add($page);
 
-	if (! $timestamp && $dir == DATA_DIR)
-		put_lastmodified();
+		// Execute $update_exec here
+		if ($update_exec) system($update_exec . ' > /dev/null &');
 
-	// Execute $update_exec here
-	if ($update_exec && $dir == DATA_DIR)
-		system($update_exec . ' > /dev/null &');
-
-	// notify_exclude
-	foreach ($notify_exclude as $exclude) {
-		$exclude = preg_quote($exclude);
-		if (substr($exclude, -1) == ".")
-			$exclude = $exclude . "*";
-		if (preg_match("/^" . $exclude . "/", $_SERVER["REMOTE_ADDR"]))
-			return;
+	} else if ($dir == DIFF_DIR && $notify) {
+		$notify_exec = TRUE;
+		foreach ($notify_exclude as $exclude) {
+			$exclude = preg_quote($exclude);
+			if (substr($exclude, -1) == ".")
+				$exclude = $exclude . "*";
+			if (preg_match("/^" . $exclude . "/", $_SERVER["REMOTE_ADDR"])) {
+				$notify_exec = FALSE;
+			}
+		}
+		if ($notify_exec !== FALSE) {
+			if ($notify_diff_only) $str = preg_replace('/^[^-+].*\n/m', '', $str);
+			$footer['ACTION'] = 'Page update';
+			$footer['PAGE']   = & $page;
+			$footer['URI']    = get_script_uri() . '?' . rawurlencode($page);
+			$footer['USER_AGENT']  = TRUE;
+			$footer['REMOTE_ADDR'] = TRUE;
+			pkwk_mail_notify($notify_subject, $str, $footer);
+//			pkwk_mail_notify($notify_subject, $str, $footer) or
+//				die('pkwk_mail_notify(): Failed');
+		}
 	}
 
-	if ($notify && $dir == DIFF_DIR) {
-		if ($notify_diff_only) $str = preg_replace('/^[^-+].*\n/m', '', $str);
-
-		$footer['ACTION'] = 'Page update';
-		$footer['PAGE']   = & $page;
-		$footer['URI']    = get_script_uri() . '?' . rawurlencode($page);
-		$footer['USER_AGENT']  = TRUE;
-		$footer['REMOTE_ADDR'] = TRUE;
-
-		pkwk_mail_notify($notify_subject, $str, $footer) or
-			die('pkwk_mail_notify(): Failed');
-	}
+	is_page($page, TRUE); // Clear is_page() cache
 }
 
 // Update RecentDeleted
 function add_recent($page, $recentpage, $subject = '', $limit = 0)
 {
-	if (PKWK_READONLY || $limit == 0 || $page == '' || $recentpage == '' || check_non_list($page)) return;
+	if (PKWK_READONLY || $limit == 0 || $page == '' || $recentpage == '' ||
+	    check_non_list($page)) return;
 
 	// Load
 	$lines = $matches = array();
@@ -275,7 +332,74 @@ function add_recent($page, $recentpage, $subject = '', $limit = 0)
 	fclose($fp);
 }
 
-// Update RecentChanges
+// Update PKWK_MAXSHOW_CACHE itself (Add or renew about the $page) (Light)
+// Use without $autolink
+function lastmodified_add($page = '')
+{
+	global $maxshow, $whatsnew, $autolink;
+	global $autoalias, $autoglossary;
+
+	$file = CACHE_DIR . PKWK_MAXSHOW_CACHE;
+	if ($autolink || ! file_exists($file)) {
+		put_lastmodified(); // Try to (re)create ALL
+		return;
+	}
+
+	// Open
+	pkwk_touch_file($file);
+	$fp = fopen($file, 'r+') or
+		die_message('Cannot open ' . 'CACHE_DIR/' . PKWK_MAXSHOW_CACHE);
+	set_file_buffer($fp, 0);
+	flock($fp, LOCK_EX);
+
+	// Read
+	$recent_pages = $matches = array();
+	foreach(file_head($file, $maxshow + PKWK_MAXSHOW_ALLOWANCE, FALSE) as $line)
+		if (preg_match('/^([0-9]+)\t(.+)/', $line, $matches))
+			$recent_pages[$matches[2]] = $matches[1];
+
+	// Remove if exists
+	if (isset($recent_pages[$page])) unset($recent_pages[$page]);
+
+	// Add: array_unshift()
+	$recent_pages = array($page => get_filetime($page)) + $recent_pages;
+
+	// Write
+	ftruncate($fp, 0);
+	rewind($fp);
+	foreach ($recent_pages as $_page=>$time)
+		fputs($fp, $time . "\t" . $_page . "\n");
+
+	flock($fp, LOCK_UN);
+	fclose($fp);
+
+
+	// ----
+	// Update the page 'RecentChanges'
+
+	$recent_pages = array_splice($recent_pages, 0, $maxshow);
+	$file = get_filename($whatsnew);
+
+	// Open
+	pkwk_touch_file($file);
+	$fp = fopen($file, 'r+') or
+		die_message('Cannot open ' . htmlspecialchars($whatsnew));
+	set_file_buffer($fp, 0);
+	flock($fp, LOCK_EX);
+
+	// Write
+	ftruncate($fp, 0);
+	rewind($fp);
+	foreach ($recent_pages as $_page=>$time)
+		fputs($fp, '-' . htmlspecialchars(format_date($time)) .
+			' - ' . '[[' . htmlspecialchars($_page) . ']]' . "\n");
+	fputs($fp, '#norelated' . "\n"); // :)
+
+	flock($fp, LOCK_UN);
+	fclose($fp);
+}
+
+// Re-create PKWK_MAXSHOW_CACHE (Heavy)
 function put_lastmodified()
 {
 	global $maxshow, $whatsnew, $autolink;
@@ -283,23 +407,29 @@ function put_lastmodified()
 
 	if (PKWK_READONLY) return; // Do nothing
 
+	// Get WHOLE page list
 	$pages = get_existpages();
+
+	// Check ALL filetime
 	$recent_pages = array();
 	foreach($pages as $page)
-		if ($page != $whatsnew && !check_non_list($page))
+		if ($page != $whatsnew && ! check_non_list($page))
 			$recent_pages[$page] = get_filetime($page);
 
 	// Sort decending order of last-modification date
 	arsort($recent_pages, SORT_NUMERIC);
 
-	// Create recent.dat (for recent.inc.php)
-	$fp = fopen(CACHE_DIR . 'recent.dat', 'w') or
-		die_message('Cannot write cache file ' .
-		CACHE_DIR . 'recent.dat' .
-		'<br />Maybe permission is not writable or filename is too long');
+	// Cut unused lines
+	$recent_pages = array_splice($recent_pages, 0, $maxshow + PKWK_MAXSHOW_ALLOWANCE);
 
+	// Re-create PKWK_MAXSHOW_CACHE
+	$file = CACHE_DIR . PKWK_MAXSHOW_CACHE;
+	pkwk_touch_file($file);
+	$fp = fopen($file, 'r+') or
+		die_message('Cannot open' . 'CACHE_DIR/' . PKWK_MAXSHOW_CACHE);
 	set_file_buffer($fp, 0);
 	flock($fp, LOCK_EX);
+	ftruncate($fp, 0);
 	rewind($fp);
 	foreach ($recent_pages as $page=>$time)
 		fputs($fp, $time . "\t" . $page . "\n");
@@ -307,19 +437,15 @@ function put_lastmodified()
 	fclose($fp);
 
 	// Create RecentChanges
-	$fp = fopen(get_filename($whatsnew), 'w') or
-		die_message('Cannot write page file ' .
-		htmlspecialchars($whatsnew) .
-		'<br />Maybe permission is not writable or filename is too long');
-
+	$file = get_filename($whatsnew);
+	pkwk_touch_file($file);
+	$fp = fopen($file, 'r+') or
+		die_message('Cannot open ' . htmlspecialchars($whatsnew));
 	set_file_buffer($fp, 0);
 	flock($fp, LOCK_EX);
+	ftruncate($fp, 0);
 	rewind($fp);
-
-	// BugTrack2/106: Only variables can be passed by reference from PHP 5.0.5
-	$tmp_array = array_keys($recent_pages); // with array_splice()
-
-	foreach (array_splice($tmp_array, 0, $maxshow) as $page) {
+	foreach (array_keys($recent_pages) as $page) {
 		$time      = $recent_pages[$page];
 		$s_lastmod = htmlspecialchars(format_date($time));
 		$s_page    = htmlspecialchars($page);
@@ -334,12 +460,13 @@ function put_lastmodified()
 		list($pattern, $pattern_a, $forceignorelist) =
 			get_autolink_pattern($pages);
 
-		$fp = fopen(CACHE_DIR . 'autolink.dat', 'w') or
-			die_message('Cannot write autolink file ' .
-			CACHE_DIR . '/autolink.dat' .
-			'<br />Maybe permission is not writable');
+		$file = CACHE_DIR . PKWK_AUTOLINK_REGEX_CACHE;
+		pkwk_touch_file($file);
+		$fp = fopen($file, 'r+') or
+			die_message('Cannot open ' . 'CACHE_DIR/' . PKWK_AUTOLINK_REGEX_CACHE);
 		set_file_buffer($fp, 0);
 		flock($fp, LOCK_EX);
+		ftruncate($fp, 0);
 		rewind($fp);
 		fputs($fp, $pattern   . "\n");
 		fputs($fp, $pattern_a . "\n");
@@ -348,7 +475,7 @@ function put_lastmodified()
 		fclose($fp);
 	}
 
-	// for autoalias
+	// for AutoAlias
 	if ($autoalias) {
 		$linkpages = array();
 		$pattern = <<<EOD
@@ -378,7 +505,7 @@ EOD;
 		fclose($fp);
 	}
 
-	// for autoglossary
+	// for Glossary
 	if ($autoglossary) {
 		list($pattern, $pattern_a, $forceignorelist) = get_glossary_pattern();
 
@@ -397,7 +524,7 @@ EOD;
 	}
 }
 
-// Get elapsed date of the pate
+// Get elapsed date of the page
 function get_pg_passage($page, $sw = TRUE)
 {
 	global $show_passage;
@@ -489,7 +616,7 @@ function get_readings()
 				if(! file_exists($pagereading_chasen_path))
 					die_message('ChaSen not found: ' . $pagereading_chasen_path);
 
-				$tmpfname = tempnam(CACHE_DIR, 'PageReading');
+				$tmpfname = tempnam(realpath(CACHE_DIR), 'PageReading');
 				$fp = fopen($tmpfname, 'w') or
 					die_message('Cannot write temporary file "' . $tmpfname . '".' . "\n");
 				foreach ($readings as $page => $reading) {
@@ -525,7 +652,7 @@ function get_readings()
 				if(! file_exists($pagereading_kakasi_path))
 					die_message('KAKASI not found: ' . $pagereading_kakasi_path);
 
-				$tmpfname = tempnam(CACHE_DIR, 'PageReading');
+				$tmpfname = tempnam(realpath(CACHE_DIR), 'PageReading');
 				$fp       = fopen($tmpfname, 'w') or
 					die_message('Cannot write temporary file "' . $tmpfname . '".' . "\n");
 				foreach ($readings as $page => $reading) {

@@ -11,10 +11,10 @@
  * @access  public
  * @author
  * @create
- * @version $Id: backup.php,v 1.10.11 2005/11/07 01:05:49 miko Exp $
+ * @version $Id: backup.php,v 1.12.11 2006/04/23 01:05:49 miko Exp $
  * Copyright (C)
- *   2005      Customized by Miko.Hoshina
- *   2002-2005 PukiWiki Developers Team
+ *   2005-2006 Customized by Miko.Hoshina
+ *   2002-2006 PukiWiki Developers Team
  *   2001-2002 Originally written by yu-ji
  * License: GPL v2 or (at your option) any later version
  **/
@@ -60,6 +60,7 @@ function make_backup($page, $delete = FALSE)
 			//$strout .= PKWK_SPLITTER . ' ' . $data['time'] . "\n"; // Splitter format
 			$strout .= PKWK_SPLITTER . ' ' . $data['time'] . ' ' . $data['real'] . "\n"; // Splitter format
 			$strout .= join('', $data['data']);
+			unset($backups[$age]);
 		}
 		$strout = preg_replace("/([^\n])\n*$/", "$1\n", $strout);
 
@@ -104,11 +105,12 @@ function get_backup($page, $age = 0)
 	$regex_splitter = '/^' . preg_quote(PKWK_SPLITTER) . '\s(\d+)\s*$/';
 	// BugTrack/685 by UPK
 	$regex_splitter_new = '/^' . preg_quote(PKWK_SPLITTER) . '\s(\d+)\s(\d+)$/';
-	foreach($lines as $line) {
+	foreach($lines as $index => $line) {
 		// BugTrack/685 by UPK
 		// if (preg_match($regex_splitter, $line, $match)) {
 		if (preg_match($regex_splitter, $line, $match) ||
 		    preg_match($regex_splitter_new, $line, $match)) {
+			// A splitter, tells new data of backup will come
 			++$_age;
 			if ($age > 0 && $_age > $age)
 				return $retvars[$age];
@@ -116,10 +118,13 @@ function get_backup($page, $age = 0)
 			// BugTrack/685 by UPK
 			// $retvars[$_age] = array('time'=>$match[1], 'data'=>array());
 			$now = (isset($match[2])) ? $match[2] : $match[1];
+			// Allocate
 			$retvars[$_age] = array('time'=>$match[1], 'real'=>$now, 'data'=>array());
 		} elseif ($_age > 0) {
+			// The first ... the last line of the data
 			$retvars[$_age]['data'][] = $line;
 		}
+		unset($lines[$index]);
 	}
 
 	return $retvars;
