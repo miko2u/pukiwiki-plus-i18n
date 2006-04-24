@@ -1,10 +1,10 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: ja.lng.php,v 1.8.5 2005/04/29 11:26:28 miko Exp $
+// $Id: ja.lng.php,v 1.11.5 2005/11/29 08:13:54 miko Exp $
 // Copyright (C)
 //   2005      Customized/Patched by Miko.Hoshina
 //   2002-2005 PukiWiki Developers Team
-//   2001      Originally written by yu-ji
+//   2001-2002 Originally written by yu-ji
 // License: GPL v2 or (at your option) any later version
 //
 // PukiWiki message file (japanese)
@@ -87,14 +87,7 @@ $rule_page = 'À°·Á¥ë¡¼¥ë';
 $help_page = '¥Ø¥ë¥×';
 
 ///////////////////////////////////////
-// TrackBack
-$_tb_title  = 'TrackBack: %s ¤Ø¤ÎµÄÏÀ¤Ï·ÑÂ³¤µ¤ì¤ë...';
-$_tb_header = '¥Ç¥£¥¹¥«¥Ã¥·¥ç¥ó¤Î·ÑÂ³...';
-$_tb_entry  = '¤³¤Î¥¨¥ó¥È¥ê¤Î TrackBack URL:';
-$_tb_refer  = ' ¤³¤Î°ìÍ÷¤Ï¡¢¼¡¤Î¥¨¥ó¥È¥ê¤ò»²¾È¤·¤Æ¤¤¤Þ¤¹: %s, %s.';
-$_tb_header_Excerpt = 'Í×Ìó:';
-$_tb_header_Weblog  = 'Weblog:';
-$_tb_header_Tracked = 'Æü»þ:';
+// TrackBack (REMOVED)
 $_tb_date  = 'YÇ¯n·îjÆü H:i:s';
 
 /////////////////////////////////////////////////
@@ -133,6 +126,7 @@ $_LANG['skin']['top']       = '¥Û¡¼¥à';	// Top page
 $_LANG['skin']['trackback'] = 'Trackback';	// Show list of trackback
 $_LANG['skin']['unfreeze']  = 'Åà·ë²ò½ü';
 $_LANG['skin']['upload']    = 'ÅºÉÕ';	// Attach a file
+$_LANG['skin']['source']    = '¥½¡¼¥¹';	// Show source
 
 ///////////////////////////////////////
 // Plug-in message
@@ -390,6 +384,8 @@ $_msg_searching = 'Á´¤Æ¤Î¥Ú¡¼¥¸¤«¤éÃ±¸ì¤ò¸¡º÷¤·¤Þ¤¹¡£ÂçÊ¸»ú¾®Ê¸»ú¤Î¶èÊÌ¤Ï¤¢¤ê¤Þ¤
 $_btn_search    = '¸¡º÷';
 $_btn_and       = 'AND¸¡º÷';
 $_btn_or        = 'OR¸¡º÷';
+$_search_pages  = '$1 ¤«¤é»Ï¤Þ¤ë¥Ú¡¼¥¸¤ò¸¡º÷';
+$_search_all    = 'Á´¤Æ¤Î¥Ú¡¼¥¸¤ò¸¡º÷';
 
 ///////////////////////////////////////
 // source.inc.php

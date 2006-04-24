@@ -1,10 +1,10 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: en.lng.php,v 1.9.1 2005/04/29 11:26:28 miko Exp $
+// $Id: en.lng.php,v 1.12.1 2005/11/29 08:13:54 miko Exp $
 // Copyright (C)
 //   2005      Customized/Patched by Miko.Hoshina
 //   2002-2005 PukiWiki Developers Team
-//   2001      Originally written by yu-ji
+//   2001-2002 Originally written by yu-ji
 // License: GPL v2 or (at your option) any later version
 //
 // PukiWiki message file (English)
@@ -84,14 +84,7 @@ $rule_page = 'Text Formatting Rules';
 $help_page = 'Help';
 
 ///////////////////////////////////////
-// TrackBack
-$_tb_title  = 'TrackBack: Discussion on TrackBack in %s';
-$_tb_header = 'Continuing the discussion...';
-$_tb_entry  = 'TrackBack URL for this entry:';
-$_tb_refer  = ' Listed below are links to weblogs that reference %s from %s.';
-$_tb_header_Excerpt = 'Summary:';
-$_tb_header_Weblog  = 'Weblog:';
-$_tb_header_Tracked = 'Tracked:';
+// TrackBack (REMOVED)
 $_tb_date   = 'F j, Y, g:i A';
 
 /////////////////////////////////////////////////
@@ -129,6 +122,7 @@ $_LANG['skin']['top']       = 'Front page';	// Top page
 $_LANG['skin']['trackback'] = 'Trackback';	// Show list of trackback
 $_LANG['skin']['unfreeze']  = 'Unfreeze';
 $_LANG['skin']['upload']    = 'Upload';	// Attach a file
+$_LANG['skin']['source']    = 'Source';	// Show source
 
 ///////////////////////////////////////
 // Plug-in message
@@ -383,6 +377,8 @@ $_msg_searching = 'Key words are case-insenstive, and are searched for in all pa
 $_btn_search    = 'Search';
 $_btn_and       = 'AND';
 $_btn_or        = 'OR';
+$_search_pages  = 'Search for page starts from $1';
+$_search_all    = 'Search for all pages';
 
 ///////////////////////////////////////
 // source.inc.php
