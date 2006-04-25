@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: cloudwalk.skin.php,v 1.1.6 2006/04/25 01:50:00 upk Exp $
+// $Id: cloudwalk.skin.php,v 1.1.7 2006/04/25 22:56:00 upk Exp $
 // Original is ari-
 //
 
@@ -84,19 +84,15 @@ if (isset($pkwk_dtd)) {
 <?php
  if (exist_plugin('navibar2')) {
   echo do_plugin_convert('navibar2');
- } else {
-  echo '<div id="navigator">';
-  echo convert_html(get_source('SiteNavigator'));
-  echo '</div>';
+ } else if (exist_plugin('navibar')) {
+  echo do_plugin_convert('navibar','top,list,search,recent,help,|,new,edit,upload,|,trackback');
+  echo $hr;
  }
 ?>
 <!-- ◆ Content ◆ ========================================================= -->
 <div id="main"><!-- ■BEGIN id:main -->
 <div id="wrap_content"><!-- ■BEGIN id:wrap_content -->
 <div id="content"><!-- ■BEGIN id:content -->
-<div id="page_navigator">
-<?php echo convert_html(get_source('PageNavigator')); ?>
-</div>
 <h1 class="title"><?php echo(($newtitle!='' && $is_read)?$newtitle:$page) ?></h1>
 <?php if ($lastmodified != '') { ?><!-- ■BEGIN id:lastmodified -->
 <div id="lastmodified">Last-modified: <?php echo $lastmodified ?></div>
