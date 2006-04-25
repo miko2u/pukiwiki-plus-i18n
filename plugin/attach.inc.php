@@ -1,9 +1,9 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: attach.inc.php,v 1.80.4 2005/12/18 15:27:43 miko Exp $
+// $Id: attach.inc.php,v 1.82.4 2006/04/23 23:51:12 miko Exp $
 // Copyright (C)
-//   2005      Customized/Patched by Miko.Hoshina
-//   2003-2005 PukiWiki Developers Team
+//   2005-2006 PukiWiki Plus! Team
+//   2003-2006 PukiWiki Developers Team
 //   2002-2003 PANDA <panda@arino.jp> http://home.arino.jp/
 //   2002      Y.MASUI <masui@hisec.co.jp> http://masui.net/pukiwiki/
 //   2001-2002 Originally written by yu-ji
@@ -18,7 +18,7 @@
 ini_set('upload_max_filesize', '4M');
 
 // Max file size for upload on script of PukiWikiX_FILESIZE
-define('PLUGIN_ATTACH_MAX_FILESIZE', (2048 * 1024)); // default: 1MB
+define('PLUGIN_ATTACH_MAX_FILESIZE', (2048 * 1024)); // default: 2MB
 
 // 管理者だけが添付ファイルをアップロードできるようにする
 define('PLUGIN_ATTACH_UPLOAD_ADMIN_ONLY', FALSE); // FALSE or TRUE
@@ -32,6 +32,9 @@ define('PLUGIN_ATTACH_DELETE_ADMIN_NOBACKUP', FALSE); // FALSE or TRUE
 
 // アップロード/削除時にパスワードを要求する(ADMIN_ONLYが優先)
 define('PLUGIN_ATTACH_PASSWORD_REQUIRE', FALSE); // FALSE or TRUE
+
+// 添付ファイル名を変更できるようにする
+define('PLUGIN_ATTACH_RENAME_ENABLE', TRUE); // FALSE or TRUE
 
 // ファイルのアクセス権
 define('PLUGIN_ATTACH_FILE_MODE', 0644);
@@ -119,6 +122,7 @@ function plugin_attach_action()
 		case 'list'     : return attach_list();
 		case 'freeze'   : return attach_freeze(TRUE);
 		case 'unfreeze' : return attach_freeze(FALSE);
+		case 'rename'   : return attach_rename();
 		case 'upload'   : return attach_showform();
 		}
 		if ($page == '' || ! is_page($page)) {
@@ -202,15 +206,18 @@ function attach_upload($file, $page, $pass = NULL)
 	$obj->putstatus();
 
 	// notify_exclude
+	$temp_notify = $notify;
 	foreach ($notify_exclude as $exclude) {
 		$exclude = preg_quote($exclude);
 		if (substr($exclude, -1) == ".")
 			$exclude = $exclude . "*";
-		if (preg_match("/^" . $exclude . "/", $_SERVER["REMOTE_ADDR"]))
-			return;
+		if (preg_match("/^" . $exclude . "/", $_SERVER["REMOTE_ADDR"])) {
+			$temp_notify = FALSE;
+			break;
+		}
 	}
 
-	if ($notify) {
+	if ($temp_notify) {
 		$footer['ACTION']   = 'File attached';
 		$footer['FILENAME'] = & $file['name'];
 		$footer['FILESIZE'] = & $file['size'];
@@ -228,8 +235,9 @@ function attach_upload($file, $page, $pass = NULL)
 		$footer['USER_AGENT']  = TRUE;
 		$footer['REMOTE_ADDR'] = TRUE;
 
-		pkwk_mail_notify($notify_subject, "\n", $footer) or
-			die('pkwk_mail_notify(): Failed');
+		pkwk_mail_notify($notify_subject, "\n", $footer);
+//		pkwk_mail_notify($notify_subject, "\n", $footer) or
+//			die('pkwk_mail_notify(): Failed');
 	}
 
 	return array(
@@ -286,6 +294,26 @@ function attach_freeze($freeze)
 			$obj->freeze($freeze, $pass) :
 			array('msg'=>$_attach_messages['err_notfound']);
 	}
+}
+
+// リネーム
+function attach_rename()
+{
+	global $vars, $_attach_messages;
+
+	foreach (array('refer', 'file', 'age', 'pass', 'newname') as $var) {
+		${$var} = isset($vars[$var]) ? $vars[$var] : '';
+	}
+
+	if (is_freeze($refer) || ! is_editable($refer)) {
+		return array('msg'=>$_attach_messages['err_noparm']);
+	}
+	$obj = & new AttachFile($refer, $file, $age);
+	if (! $obj->getstatus())
+		return array('msg'=>$_attach_messages['err_notfound']);
+
+	return $obj->rename($pass, $newname);
+
 }
 
 // ダウンロード
@@ -447,7 +475,7 @@ class AttachFile
 	function AttachFile($page, $file, $age = 0)
 	{
 		$this->page = $page;
-//miko		$this->file = preg_replace('#^.*/#','',$file);
+//@miko	$this->file = preg_replace('#^.*/#','',$file);
 		$this->file = basename($file);
 		$this->age  = is_numeric($age) ? $age : 0;
 
@@ -533,6 +561,7 @@ class AttachFile
 		$s_file = htmlspecialchars($this->file);
 		$s_err = ($err == '') ? '' : '<p style="font-weight:bold">' . $_attach_messages[$err] . '</p>';
 
+		$msg_rename  = '';
 		if ($this->age) {
 			$msg_freezed = '';
 			$msg_delete  = '<input type="radio" name="pcmd" id="_p_attach_delete" value="delete" />' .
@@ -556,6 +585,16 @@ class AttachFile
 				$msg_freeze  = '<input type="radio" name="pcmd" id="_p_attach_freeze" value="freeze" />' .
 					'<label for="_p_attach_freeze">' .  $_attach_messages['msg_freeze'] .
 					$_attach_messages['msg_require'] . '</label><br />';
+
+				if (PLUGIN_ATTACH_RENAME_ENABLE) {
+					$msg_rename  = '<input type="radio" name="pcmd" id="_p_attach_rename" value="rename" />' .
+						'<label for="_p_attach_rename">' .  $_attach_messages['msg_rename'] .
+						$_attach_messages['msg_require'] . '</label><br />&nbsp;&nbsp;&nbsp;&nbsp;' .
+						'<label for="_p_attach_newname">' . $_attach_messages['msg_newname'] .
+						':</label> ' .
+						'<input type="text" name="newname" id="_p_attach_newname" size="40" value="' .
+						$this->file . '" /><br />';
+				}
 			}
 		}
 		$info = $this->toString(TRUE, FALSE);
@@ -584,6 +623,8 @@ class AttachFile
 {$_attach_setimage}
 <dl>
  <dd>{$_attach_messages['msg_page']}:$s_page</dd>
+ <dd>{$_attach_messages['msg_filename']}:{$this->filename}</dd>
+ <dd>{$_attach_messages['msg_md5hash']}:{$this->md5hash}</dd>
  <dd>{$_attach_messages['msg_filesize']}:{$this->size_str} ({$this->size} bytes)</dd>
  <dd>Content-type:{$this->type}</dd>
  <dd>{$_attach_messages['msg_date']}:{$this->time_str}</dd>
@@ -601,6 +642,8 @@ $s_err
   <input type="hidden" name="age" value="{$this->age}" />
   $msg_delete
   $msg_freeze
+  $msg_rename
+  <br />
   <label for="_p_attach_password">{$_attach_messages['msg_password']}:</label>
   <input type="password" name="pass" id="_p_attach_password" size="8" />
   <input type="submit" value="{$_attach_messages['btn_submit']}" />
@@ -660,6 +703,31 @@ EOD;
 		}
 
 		return array('msg'=>$_attach_messages['msg_deleted']);
+	}
+
+	function rename($pass, $newname)
+	{
+		global $_attach_messages, $notify, $notify_subject;
+
+		if ($this->status['freeze']) return attach_info('msg_isfreeze');
+
+		if (! pkwk_login($pass)) {
+			if (PLUGIN_ATTACH_DELETE_ADMIN_ONLY || $this->age) {
+				return attach_info('err_adminpass');
+			} else if (PLUGIN_ATTACH_PASSWORD_REQUIRE &&
+				md5($pass) != $this->status['pass']) {
+				return attach_info('err_password');
+			}
+		}
+		$newbase = UPLOAD_DIR . encode($this->page) . '_' . encode($newname);
+		if (file_exists($newbase)) {
+			return array('msg'=>$_attach_messages['err_exists']);
+		}
+		if (! PLUGIN_ATTACH_RENAME_ENABLE || ! rename($this->basename, $newbase)) {
+			return array('msg'=>$_attach_messages['err_rename']);
+		}
+
+		return array('msg'=>$_attach_messages['msg_renamed']);
 	}
 
 	function freeze($freeze, $pass)

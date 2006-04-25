@@ -1,9 +1,9 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: html.php,v 1.48.20 2005/12/18 15:19:24 miko Exp $
+// $Id: html.php,v 1.57.20 2006/04/15 17:33:35 miko Exp $
 // Copyright (C)
-//   2005      Customized/Patched by Miko.Hoshina
-//   2002-2005 PukiWiki Developers Team
+//   2005-2006 PukiWiki Plus! Team
+//   2002-2006 PukiWiki Developers Team
 //   2001-2002 Originally written by yu-ji
 // License: GPL v2 or (at your option) any later version
 //
@@ -54,7 +54,7 @@ function catbody($title, $page, $body)
 	$_LINK['freeze']   = "$script?cmd=freeze&amp;page=$r_page";
 	$_LINK['help']     = "$script?cmd=help";
 	$_LINK['list']     = "$script?cmd=list";
-	$_LINK['menu']     = "$script?$menubar";
+	$_LINK['menu']     = "$script?" . rawurlencode($menubar);
 	$_LINK['new']      = "$script?plugin=newpage&amp;refer=$r_page";
 	$_LINK['read']     = "$script?cmd=read&amp;page=$r_page";
 	$_LINK['rdf']      = "$script?cmd=rss&amp;ver=1.0";
@@ -115,7 +115,7 @@ function catbody($title, $page, $body)
 	$is_freeze = is_freeze($_page);
 
 	// Last modification date (string) of the page
-	$lastmodified = $is_read ? format_date(get_filetime($_page)) .
+	$lastmodified = $is_read ?  format_date(get_filetime($_page)) .
 		' ' . get_pg_passage($_page, FALSE) : '';
 
 	// List of attached files to the page
@@ -142,9 +142,10 @@ function catbody($title, $page, $body)
 			'</div>' . $hr . "\n" . $body;
 
 		// BugTrack2/106: Only variables can be passed by reference from PHP 5.0.5
-		$tmp_array = preg_split('/\s+/', $vars['word'], -1, PREG_SPLIT_NO_EMPTY);
-		$tmp_array = array_splice($tmp_array, 0, 10);
-		$words = array_flip($tmp_array);
+		// with array_splice(), array_flip()
+		$words = preg_split('/\s+/', $vars['word'], -1, PREG_SPLIT_NO_EMPTY);
+		$words = array_splice($words, 0, 10); // Max: 10 words
+		$words = array_flip($words);
 
 		$keys = array();
 		foreach ($words as $word=>$id) $keys[$word] = strlen($word);
@@ -153,14 +154,23 @@ function catbody($title, $page, $body)
 		$id = 0;
 		foreach ($keys as $key=>$pattern) {
 			$s_key    = htmlspecialchars($key);
-			$pattern  = '/<textarea[^>]*>.*?<\/textarea>|<[^>]*>|(' . $pattern . ')|&[^;]+;/s';
-			$callback = create_function(
-				'$arr',
-				'return (count($arr) > 1) ? \'<strong class="word' .
-					$id++ . '">\' . $arr[1] . \'</strong>\' : $arr[0];'
+			$pattern  = '/' .
+				'<textarea[^>]*>.*?<\/textarea>' .	// Ignore textareas
+				'|' . '<[^>]*>' .			// Ignore tags
+				'|' . '&[^;]+;' .			// Ignore entities
+				'|' . '(' . $pattern . ')' .		// $matches[1]: Regex for a search word
+				'/sS';
+			$decorate_Nth_word = create_function(
+				'$matches',
+				'return (isset($matches[1])) ? ' .
+					'\'<strong class="word' .
+						$id .
+					'">\' . $matches[1] . \'</strong>\' : ' .
+					'$matches[0];'
 			);
-			$body  = preg_replace_callback($pattern, $callback, $body);
-			$notes = preg_replace_callback($pattern, $callback, $notes);
+			$body  = preg_replace_callback($pattern, $decorate_Nth_word, $body);
+			$notes = preg_replace_callback($pattern, $decorate_Nth_word, $notes);
+			++$id;
 		}
 	}
 
@@ -174,24 +184,26 @@ function catbody($title, $page, $body)
 function edit_form($page, $postdata, $digest = FALSE, $b_template = TRUE)
 {
 	global $script, $vars, $rows, $cols, $hr, $function_freeze;
-	global $_btn_addtop, $_btn_preview, $_btn_repreview, $_btn_update, $_btn_cancel,
-		$_msg_help, $_btn_notchangetimestamp;
+	global $_btn_preview, $_btn_repreview, $_btn_update, $_btn_cancel, $_msg_help;
 	global $whatsnew, $_btn_template, $_btn_load, $load_template_func;
 	global $notimeupdate;
 
 	// Newly generate $digest or not
 	if ($digest === FALSE) $digest = md5(join('', get_source($page)));
 
-	$refer = $template = $addtag = $add_top = '';
-
-	$checked_top  = isset($vars['add_top'])     ? ' checked="checked"' : '';
-	$checked_time = isset($vars['notimestamp']) ? ' checked="checked"' : '';
-
+	$refer = $template = '';
+ 
+ 	// Add plugin
+	$addtag = $add_top = '';
 	if(isset($vars['add'])) {
-		$addtag  = '<input type="hidden" name="add" value="true" />';
-		$add_top = '<input type="checkbox" name="add_top" value="true"' .
-			$checked_top . ' /><span class="small">' .
-			$_btn_addtop . '</span>';
+		global $_btn_addtop;
+		$addtag  = '<input type="hidden" name="add"    value="true" />';
+		$add_top = isset($vars['add_top']) ? ' checked="checked"' : '';
+		$add_top = '<input type="checkbox" name="add_top" ' .
+			'id="_edit_form_add_top" value="true"' . $add_top . ' />' . "\n" .
+			'  <label for="_edit_form_add_top">' .
+				'<span class="small">' . $_btn_addtop . '</span>' .
+			'</label>';
 	}
 
 	if($load_template_func && $b_template) {
@@ -227,27 +239,32 @@ EOD;
 	$b_preview   = isset($vars['preview']); // TRUE when preview
 	$btn_preview = $b_preview ? $_btn_repreview : $_btn_preview;
 
+	// Checkbox 'do not change timestamp'
 	$add_notimestamp = '';
-	if ( $notimeupdate != 0 ) {
-		// enable 'do not change timestamp'
-		$add_notimestamp = <<<EOD
-  <input type="checkbox" name="notimestamp" id="_edit_form_notimestamp" value="true"$checked_time />
-  <label for="_edit_form_notimestamp"><span class="small">$_btn_notchangetimestamp</span></label>
-EOD;
-		if ( $notimeupdate == 2 ) {
-			// enable only administrator
-			$add_notimestamp .= <<<EOD
-  <input type="password" name="pass" size="12" />
-EOD;
+	if ($notimeupdate != 0) {
+		global $_btn_notchangetimestamp;
+		$checked_time = isset($vars['notimestamp']) ? ' checked="checked"' : '';
+		// Only for administrator
+		if ($notimeupdate == 2) {
+			$add_notimestamp = '   ' .
+				'<input type="password" name="pass" size="12" />' . "\n";
 		}
-		$add_notimestamp .= '&nbsp;';
+		$add_notimestamp = '<input type="checkbox" name="notimestamp" ' .
+			'id="_edit_form_notimestamp" value="true"' . $checked_time . ' />' . "\n" .
+			'   ' . '<label for="_edit_form_notimestamp"><span class="small">' .
+			$_btn_notchangetimestamp . '</span></label>' . "\n" .
+			$add_notimestamp .
+			'&nbsp;';
 	}
 	$refpage = htmlspecialchars($vars['refpage']);
 	$add_assistant = edit_form_assistant();
 
+	// 'margin-bottom', 'float:left', and 'margin-top'
+	// are for layout of 'cancel button'
 	$body = <<<EOD
-<form action="$script" method="post">
- <div class="edit_form" onmouseup="pukiwiki_pos()" onkeyup="pukiwiki_pos()">
+<div class="edit_form">
+ <form action="$script" method="post" style="margin-bottom:0px;">
+  <div class="editform_inner" onmouseup="pukiwiki_pos()" onkeyup="pukiwiki_pos()">
 $template
   $addtag
   <input type="hidden" name="cmd"    value="edit" />
@@ -256,16 +273,23 @@ $template
   <input type="hidden" name="id"     value="$s_id" />
   <textarea name="msg" rows="$rows" cols="$cols">$s_postdata</textarea>
   <br />
-  $add_assistant
+  $add_assistant;
   <br />
-  <input type="submit" name="preview" value="$btn_preview" accesskey="p" />
-  <input type="submit" name="write"   value="$_btn_update" accesskey="s" />
-  $add_top
-  $add_notimestamp
-  <input type="submit" name="cancel"  value="$_btn_cancel" accesskey="c" />
+  <div style="float:left;">
+   <input type="submit" name="preview" value="$btn_preview" accesskey="p" />
+   <input type="submit" name="write"   value="$_btn_update" accesskey="s" />
+   $add_top
+   $add_notimestamp
+  </div>
   <textarea name="original" rows="1" cols="1" style="display:none">$s_original</textarea>
- </div>
-</form>
+  </div>
+ </form>
+ <form action="$script" method="post" style="margin-top:0px;">
+  <input type="hidden" name="cmd"    value="edit" />
+  <input type="hidden" name="page"   value="$s_page" />
+  <input type="submit" name="cancel" value="$_btn_cancel" accesskey="c" />
+ </form>
+</div>
 EOD;
 
 	if (isset($vars['help'])) {
@@ -278,6 +302,7 @@ EOD;
 
 	return $body;
 }
+
 // Input Assistant
 function edit_form_assistant()
 {
@@ -410,18 +435,17 @@ function strip_htmltag($str, $all = TRUE)
 
 	// Strip Dagnling-Link decoration (Tags and "$_symbol_noexists")
 	$str = preg_replace($noexists_pattern, '$1', $str);
-	//$str = preg_replace('/<a[^>]+>\?<\/a>/', '', $str);
 
 	if ($all) {
 		// All other HTML tags
-		return preg_replace('#<[^>]+>#', '', $str);
+		return preg_replace('#<[^>]+>#',        '', $str);
 	} else {
 		// All other anchor-tags only
 		return preg_replace('#<a[^>]+>|</a>#i', '', $str);
 	}
 }
 
-// Remove AutoLink marker with AutoLink itself
+// Remove AutoLink marker with AutLink itself
 function strip_autolink($str)
 {
 	return preg_replace('#<!--autolink--><a [^>]+>|</a><!--/autolink-->#', '', $str);

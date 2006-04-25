@@ -1,9 +1,9 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: func.php,v 1.53.2 2005/12/18 15:16:10 miko Exp $
+// $Id: func.php,v 1.70.2 2006/04/16 14:45:49 miko Exp $
 // Copyright (C)
-//   2005      Customized/Patched by Miko.Hoshina
-//   2002-2005 PukiWiki Developers Team
+//   2005-2006 PukiWiki Plus! Team
+//   2002-2006 PukiWiki Developers Team
 //   2001-2002 Originally written by yu-ji
 // License: GPL v2 or (at your option) any later version
 //
@@ -93,8 +93,8 @@ function is_freeze($page, $clearcache = FALSE)
 	}
 }
 
-// Handling $non_list 
-// $non_list will be preg_quote($str, '/') later. 
+// Handling $non_list
+// $non_list will be preg_quote($str, '/') later.
 function check_non_list($page = '')
 {
 	global $non_list;
@@ -212,39 +212,57 @@ function do_search($word, $type = 'AND', $non_format = FALSE, $base = '')
 {
 	global $script, $whatsnew, $search_non_list;
 	global $_msg_andresult, $_msg_orresult, $_msg_notfoundresult;
-	global $search_auth;
+	global $search_auth, $show_passage;
 
 	$retval = array();
 
 	$b_type = ($type == 'AND'); // AND:TRUE OR:FALSE
 	$keys = get_search_words(preg_split('/\s+/', $word, -1, PREG_SPLIT_NO_EMPTY));
-
-	$_pages = get_existpages();
-	if ($base != '') {
-		$_pages = preg_grep('/^' . $base . '/', $_pages);
+	foreach ($keys as $key=>$value) {
+		$keys[$key] = '/' . $value . '/S';
 	}
-	$pages = array();
 
-	foreach ($_pages as $page) {
-		if ($page == $whatsnew || (! $search_non_list && check_non_list($page)))
-			continue;
+	$pages = get_existpages();
 
-		// 検索対象ページの制限をかけ・E・匹Δ・(ページ名は制限外)
-		if ($search_auth && ! check_readable($page, false, false)) {
-			$source = get_source(); // Empty
-		} else {
-			$source = get_source($page);
+	// Avoid
+	if ($base != '') {
+		$pages = preg_grep('/^' . preg_quote('/', $base) . '/S', $pages);
+	}
+	$pages = array_flip($pages);
+	unset($pages[$whatsnew]);
+
+	$count = count($pages);
+	foreach (array_keys($pages) as $page) {
+		if (! $search_non_list && check_non_list($page)) {
+			unset($pages[$page]);
+			--$count;
 		}
-		if (! $non_format)
-			array_unshift($source, $page); // ページ名も検索対象に
 
 		$b_match = FALSE;
-		foreach ($keys as $key) {
-			$tmp     = preg_grep('/' . $key . '/', $source);
-			$b_match = ! empty($tmp);
-			if ($b_match xor $b_type) break;
+
+		// Search for page name
+		if (! $non_format) {
+			foreach ($keys as $key) {
+				$b_match = preg_match($key, $page);
+				if ($b_type xor $b_match) break; // OR
+			}
+			if ($b_match) continue;
 		}
-		if ($b_match) $pages[$page] = get_filetime($page);
+
+		// Search auth for page contents
+		if ($search_auth && ! check_readable($page, false, false)) {
+			unset($pages[$page]);
+			--$count;
+		}
+
+		// Search for page contents
+		foreach ($keys as $key) {
+			$b_match = preg_match($key, get_source($page, TRUE, TRUE));
+			if ($b_type xor $b_match) break; // OR
+		}
+		if ($b_match) continue;
+
+		unset($pages[$page]); // Miss
 	}
 	if ($non_format) return array_keys($pages);
 
@@ -254,11 +272,12 @@ function do_search($word, $type = 'AND', $non_format = FALSE, $base = '')
 		return str_replace('$1', $s_word, $_msg_notfoundresult);
 
 	ksort($pages);
+
 	$retval = '<ul>' . "\n";
-	foreach ($pages as $page=>$time) {
+	foreach (array_keys($pages) as $page) {
 		$r_page  = rawurlencode($page);
 		$s_page  = htmlspecialchars($page);
-		$passage = get_passage($time);
+		$passage = $show_passage ? ' ' . get_passage(get_filetime($page)) : '';
 		$retval .= ' <li><a href="' . $script . '?cmd=read&amp;page=' .
 			$r_page . '&amp;word=' . $r_word . '">' . $s_page .
 			'</a>' . $passage . '</li>' . "\n";
@@ -266,7 +285,7 @@ function do_search($word, $type = 'AND', $non_format = FALSE, $base = '')
 	$retval .= '</ul>' . "\n";
 
 	$retval .= str_replace('$1', $s_word, str_replace('$2', count($pages),
-		str_replace('$3', count($_pages), $b_type ? $_msg_andresult : $_msg_orresult)));
+		str_replace('$3', $count, $b_type ? $_msg_andresult : $_msg_orresult)));
 
 	return $retval;
 }
@@ -512,6 +531,7 @@ function drop_submit($str)
 		'<input$1type="hidden"', $str);
 }
 
+// Generate Glossary patterns
 function get_glossary_pattern()
 {
 	global $WikiName, $autoglossary;
@@ -523,7 +543,7 @@ function get_glossary_pattern()
 	unset($config);
 	$auto_pages = array_merge($ignorepages, $forceignorepages);
 
-	// ここでキーワードを調べる
+	// Get "Glossary" keyword list
 	$source = get_source('Glossary');
 	foreach ( $source as $line ){
 		if ( preg_match('/^[:|]([^|]+)\|([^|]+)\|?$/', $line, $match)) {
@@ -534,53 +554,18 @@ function get_glossary_pattern()
 		}
 	}
 
-	if (count($auto_pages) == 0) {
-		return array('(?!)','PukiWiki','');
-	}
-
-	$auto_pages = array_unique($auto_pages);
-	sort($auto_pages, SORT_STRING);
-
-	$auto_pages_a = array_values(preg_grep('/^[A-Z]+$/i', $auto_pages));
-	$auto_pages   = array_values(array_diff($auto_pages, $auto_pages_a));
-
-	$result   = get_autolink_pattern_sub($auto_pages,   0, count($auto_pages),   0);
-	$result_a = get_autolink_pattern_sub($auto_pages_a, 0, count($auto_pages_a), 0);
-
-	return array($result, $result_a, $forceignorepages);
-}
-
-// Generate AutoAlias patterns
-function get_autoalias_pattern(& $pages)
-{
-	global $WikiName, $autoalias, $nowikiname;
-
-	$config = &new Config('AutoLink');
-	$config->read();
-	$ignorepages      = $config->get('IgnoreList');
-	$forceignorepages = $config->get('ForceIgnoreList');
-	unset($config);
-	$auto_pages = array_merge($ignorepages, $forceignorepages);
-
-	foreach ($pages as $page) {
-		if (preg_match("/^$WikiName$/", $page) ?
-		    $nowikiname : mb_strlen($page) >= $autoalias)
-			$auto_pages[] = $page;
-	}
-
-	if (empty($auto_pages)) {
-		$result = $result_a = $nowikiname ? '(?!)' : $WikiName;
+	if (empty($auto_pages) == 0) {
+		return array('(?!)', 'PukiWiki', '');
 	} else {
 		$auto_pages = array_unique($auto_pages);
 		sort($auto_pages, SORT_STRING);
 
 		$auto_pages_a = array_values(preg_grep('/^[A-Z]+$/i', $auto_pages));
-		$auto_pages   = array_values(array_diff($auto_pages,  $auto_pages_a));
+		$auto_pages   = array_values(array_diff($auto_pages, $auto_pages_a));
 
 		$result   = get_autolink_pattern_sub($auto_pages,   0, count($auto_pages),   0);
 		$result_a = get_autolink_pattern_sub($auto_pages_a, 0, count($auto_pages_a), 0);
 	}
-
 	return array($result, $result_a, $forceignorepages);
 }
 
@@ -813,14 +798,9 @@ if (! function_exists('md5_file')) {
 // (PHP 4 >= 4.3.0, PHP5)
 if (! function_exists('sha1')) {
 	if (extension_loaded('mhash')) {
-		function sha1($str, $raw_output = FALSE)
+		function sha1($str)
 		{
-			if ($raw_output) {
-				// PHP 5.0.0 or lator only :)
-				return mhash(MHASH_SHA1, $str);
-			} else {
-				return bin2hex(mhash(MHASH_SHA1, $str));
-			}
+			return bin2hex(mhash(MHASH_SHA1, $str));
 		}
 	} else {
 		function sha1($str, $raw_output = FALSE)
