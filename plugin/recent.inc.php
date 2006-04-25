@@ -1,7 +1,8 @@
 <?php
-// $Id: recent.inc.php,v 1.18.1 2005/10/04 13:41:03 miko Exp $
+// $Id: recent.inc.php,v 1.23.1 2006/04/23 14:59:29 miko Exp $
 // Copyright (C)
-//   2002-2005 PukiWiki Developers Team
+//   2005-2006 PukiWiki Plus! Team
+//   2002-2006 PukiWiki Developers Team
 //   2002      Y.MASUI http://masui.net/pukiwiki/ masui@masui.net
 // License: GPL version 2
 //
@@ -24,7 +25,7 @@ define('PLUGIN_RECENT_CACHE', CACHE_DIR . 'recent.dat');
 
 function plugin_recent_convert()
 {
-	global $vars, $date_format, $_recent_plugin_frame;
+	global $vars, $date_format, $_recent_plugin_frame, $show_passage;
 	static $exec_count = 1;
 
 	$recent_lines = PLUGIN_RECENT_DEFAULT_LINES;
@@ -44,14 +45,12 @@ function plugin_recent_convert()
 		++$exec_count;
 	}
 
-	// Get latest N changes
-	if (file_exists(PLUGIN_RECENT_CACHE)) {
-		// BugTrack2/106: Only variables can be passed by reference from PHP 5.0.5
-		$file_array = file(PLUGIN_RECENT_CACHE); // with array_splice()
-		$lines      = array_splice($file_array, 0, $recent_lines);
-	} else {
+	if (! file_exists(PLUGIN_RECENT_CACHE))
 		return '#recent(): Cache file of RecentChanges not found' . '<br />';
-	}
+
+	// Get latest N changes
+	$lines = file_head(PLUGIN_RECENT_CACHE, $recent_lines);
+	if ($lines == FALSE) return '#recent(): File can not open' . '<br />' . "\n";
 
 	$script = get_script_uri();
 	$date = $items = '';
@@ -71,13 +70,13 @@ function plugin_recent_convert()
 
 		$s_page = htmlspecialchars($page);
 		if($page == $vars['page']) {
-			// No need to link to the page now you read, notifies where you just read
+			// No need to link to the page you just read, or notify where you just read
 			$items .= ' <li>' . $s_page . '</li>' . "\n";
 		} else {
 			$r_page = rawurlencode($page);
-			$pg_passage = get_pg_passage($page, FALSE);
-			$items .= ' <li><a href="' . $script . '?' . $r_page . '" title="' .
-				$s_page . ' ' . $pg_passage . '">' . $s_page . '</a></li>' . "\n";
+			$passage = $show_passage ? ' ' . get_passage($time) : '';
+			$items .= ' <li><a href="' . $script . '?' . $r_page . '"' . 
+				' title="' . $s_page . $passage . '">' . $s_page . '</a></li>' . "\n";
 		}
 	}
 	// End of the day
