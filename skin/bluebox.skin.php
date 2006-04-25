@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: bluebox.skin.php,v 1.18.4 2006/04/25 01:49:00 upk Exp $
+// $Id: bluebox.skin.php,v 1.18.5 2006/04/25 20:02:00 upk Exp $
 // Original is ari-
 
 // Prohibit direct access
@@ -97,12 +97,15 @@ if (isset($pkwk_dtd)) {
 <div id="header">
 <div id="logo"><a href="<?php echo $link_top ?>"><?php echo $page_title ?></a></div>
 </div>
-<div id="navigator">
- <?php echo convert_html(get_source('SiteNavigator')) ?>
-</div>
-<div id="page_navigator">
- <?php echo convert_html(get_source('PageNavigator')) ?>
-</div>
+
+<?php
+ if (exist_plugin('navibar2')) {
+  echo do_plugin_convert('navibar2');
+ } else if (exist_plugin('navibar')) {
+  echo do_plugin_convert('navibar','top,list,search,recent,help,|,new,edit,upload,|,trackback');
+  echo $hr;
+ }
+?>
 
 <div id="main">
 <div id="center_bar">
@@ -171,16 +174,19 @@ if (isset($pkwk_dtd)) {
 <?php } ?>
 </ul>
 </div>
-<?php if (get_source('RightBar')) { ?>
+
+<?php global $always_menu_displayed; if (arg_check('read')) $always_menu_displayed = 1; ?>
+<?php if ($always_menu_displayed && exist_plugin_convert('side') && do_plugin_convert('side') != '') { ?>
 <div id="rightbar3" class="side_bar">
-	<?php echo convert_html(get_source('RightBar')) ?>
-</div>
+<?php echo do_plugin_convert('side') ?></div>
 <?php } ?>
 </div>
 </div>
 
 <div id="left_bar">
-<div id="menubar" class="side_bar"><?php echo convert_html(get_source('MenuBar')) ?></div>
+<?php if ($always_menu_displayed && exist_plugin_convert('menu') && do_plugin_convert('menu') != '') { ?>
+<div id="menubar" class="side_bar"><?php echo do_plugin_convert('menu') ?></div>
+<?php } ?>
 </div>
 
 <div id="footer">
