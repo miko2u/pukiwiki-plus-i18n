@@ -1,6 +1,8 @@
 <?php
-// $Id: proxy.php,v 1.9.2 2005/09/15 14:03:29 miko Exp $
-// Copyright (C) 2003-2005 PukiWiki Developers Team
+// $Id: proxy.php,v 2.1.1 2006/04/16 14:03:29 miko Exp $
+// Copyright (C)
+//   2005      PukiWiki Plus! Team
+//   2003-2005 PukiWiki Developers Team
 // License: GPL v2 or (at your option) any later version
 //
 // HTTP-Proxy related functions
@@ -8,18 +10,22 @@
 // Max number of 'track' redirection message with 301 or 302 response
 define('PKWK_HTTP_REQUEST_URL_REDIRECT_MAX', 2);
 define('PKWK_HTTP_REQUEST_TIMEOUT', 8);
+define('PKWK_HTTP_CONNECT_TIMEOUT', 2);
+define('PKWK_HTTP_VERSION', '1.1');
+define('PKWK_HTTP_CLIENT', 'PukiWiki/' . S_VERSION);
 
 /*
  * http_request($url)
  *     Get / Send data via HTTP request
  * $url     : URI started with http:// (http://user:pass@host:port/path?query)
- * $method  : GET, POST, or HEAD
+ * $method  : HTTP method(GET/POST/HEAD/PUT/DELETE/OPTIONS/TRACE/CONNECT/PATCH/LINK/UNLINK)
+ *            in additional method(webdav), COPY/MOVE/MKCOL/PROPFIND/PROPPATCH/LOCK/UNLOCK
  * $headers : Additional HTTP headers, ended with "\r\n"
  * $post    : An array of data to send via POST method ('key'=>'value')
  * $redirect_max : Max number of HTTP redirect
  * $content_charset : Content charset. Use '' or CONTENT_CHARSET
 */
-function http_request($url, $method = 'GET', $headers = '', $post = array(),
+function http_request($url, $method = 'GET', $headers = array(), $post = array(),
 	$redirect_max = PKWK_HTTP_REQUEST_URL_REDIRECT_MAX, $content_charset = '')
 {
 	global $use_proxy, $no_proxy, $proxy_host, $proxy_port;
@@ -30,18 +36,18 @@ function http_request($url, $method = 'GET', $headers = '', $post = array(),
 
 	$via_proxy = $use_proxy ? ! in_the_net($no_proxy, $arr['host']) : FALSE;
 
-	// query
 	$arr['query'] = isset($arr['query']) ? '?' . $arr['query'] : '';
-	// port
 	$arr['port']  = isset($arr['port'])  ? $arr['port'] : 80;
 
 	$url_base = $arr['scheme'] . '://' . $arr['host'] . ':' . $arr['port'];
 	$url_path = isset($arr['path']) ? $arr['path'] : '/';
 	$url = ($via_proxy ? $url_base : '') . $url_path . $arr['query'];
 
-	$query = $method . ' ' . $url . ' HTTP/1.0' . "\r\n";
+	// HTTP request method
+	$query = $method . ' ' . $url . ' HTTP/' . PKWK_HTTP_VERSION . "\r\n";
 	$query .= 'Host: ' . $arr['host'] . "\r\n";
-	$query .= 'User-Agent: PukiWiki/' . S_VERSION . "\r\n";
+	$query .= 'User-Agent: ' . PKWK_HTTP_CLIENT . "\r\n";
+	$query .= 'Connection: close' . "\r\n";
 
 	// Basic-auth for HTTP proxy server
 	if ($need_proxy_auth && isset($proxy_auth_user) && isset($proxy_auth_pass))
@@ -53,12 +59,26 @@ function http_request($url, $method = 'GET', $headers = '', $post = array(),
 		$query .= 'Authorization: Basic '.
 			base64_encode($arr['user'] . ':' . $arr['pass']) . "\r\n";
 
-	$query .= $headers;
+//@miko added
+	// Gzipped encoding
+	if (PKWK_HTTP_VERSION == '1.1' && extension_loaded('zlib') && (ini_get('mbstring.func_overload') & 2) == 0) {
+		$query .= 'Accept-Encoding: gzip' . "\r\n";
+	}
+
+	// Add Headers
+	if (is_array($headers)) {
+		foreach($headers as $key=>$val)
+			$query .= $key . ': ' . $val . "\r\n";
+	} else {
+		$query .= $headers;
+	}
+//@miko added
 
 	if (strtoupper($method) == 'POST') {
 		// 'application/x-www-form-urlencoded', especially for TrackBack ping
 		$POST = array();
-		foreach ($post as $name=>$val) $POST[] = $name . '=' . urlencode($val);
+//		foreach ($post as $name=>$val) $POST[] = $name . '=' . urlencode($val);
+		foreach ($post as $name=>$val) $POST[] = urlencode($name) . '=' . urlencode($val);
 		$data = join('&', $POST);
 
 		if (preg_match('/^[a-zA-Z0-9_-]+$/', $content_charset)) {
@@ -73,6 +93,25 @@ function http_request($url, $method = 'GET', $headers = '', $post = array(),
 		$query .= 'Content-Length: ' . strlen($data) . "\r\n";
 		$query .= "\r\n";
 		$query .= $data;
+//@miko_patched
+//@for use propfind, use "Depth:infinity, noroot"
+	} elseif (strtoupper($method) == 'PROPFIND') {
+		// 'text/xml', especially for svn
+		$data = implode('', $post);
+
+		if (preg_match('/^[a-zA-Z0-9_-]+$/', $content_charset)) {
+			// Legacy but simple
+			$query .= 'Content-Type: text/xml' . "\r\n";
+		} else {
+			// With charset (NOTE: Some implementation may hate this)
+			$query .= 'Content-Type: text/xml' .
+				'; charset=' . strtolower($content_charset) . "\r\n";
+		}
+
+		$query .= 'Content-Length: ' . strlen($data) . "\r\n";
+		$query .= "\r\n";
+		$query .= $data;
+//@miko_patched
 	} else {
 		$query .= "\r\n";
 	}
@@ -82,7 +121,7 @@ function http_request($url, $method = 'GET', $headers = '', $post = array(),
 	$fp = fsockopen(
 		$via_proxy ? $proxy_host : $arr['host'],
 		$via_proxy ? $proxy_port : $arr['port'],
-		$errno, $errstr, PKWK_HTTP_REQUEST_TIMEOUT);
+		$errno, $errstr, PKWK_HTTP_CONNECT_TIMEOUT);
 	if ($fp === FALSE) {
 		return array(
 			'query'  => $query, // Query string
@@ -91,22 +130,61 @@ function http_request($url, $method = 'GET', $headers = '', $post = array(),
 			'data'   => $errstr // Error message
 		);
 	}
-	fputs($fp, $query);
-	$response = '';
-	while (! feof($fp)) $response .= fread($fp, 4096);
+	socket_set_timeout($fp, PKWK_HTTP_REQUEST_TIMEOUT, 0);
+	fwrite($fp, $query);
+
+	// Get a Head
+	while(!feof($fp)) {
+		$line = rtrim(fgets($fp, 4096));
+		$status = socket_get_status($fp);
+		if ($status['timed_out']) break;
+		if ($line == '') break;
+		if ($head != '') {
+			$r = explode(':', $line, 2);
+			$response[strtolower(trim($r[0]))] = strtolower(trim($r[1]));
+		}
+		$head .= $line . "\r\n";
+	}
+
+	// Get a Body
+	$chunked = isset($response['transfer-encoding']) && ($response['transfer-encoding'] == 'chunked');
+	$gzipped = isset($response['content-encoding']) && ($response['content-encoding'] == 'gzip');
+	$body = '';
+	$length = 0;
+	$status = array();
+	if (!isset($response['content-length']) || $response['content-length'] != 0) {
+		while(!feof($fp)) {
+			if ($chunked) {
+				$body .= fread_chunked($fp, $length);
+			} else {
+				$body .= fread($fp, 4096);
+			}
+			$status = socket_get_status($fp);
+			if ($status['timed_out']) break;
+		}
+	}
+//	fputs($fp, $query);
+//	$response = '';
+//	while (! feof($fp)) $response .= fread($fp, 4096);
 	fclose($fp);
 
-	$resp = explode("\r\n\r\n", $response, 2);
-	$rccd = explode(' ', $resp[0], 3); // array('HTTP/1.1', '200', 'OK\r\n...')
+//@miko added
+	if ($body != '' && $gzipped) {
+		$body = gzinflate(substr($body,10));
+	}
+//@miko added
+
+//	$resp = explode("\r\n\r\n", $response, 2);
+//	$rccd = explode(' ', $resp[0], 3); // array('HTTP/1.1', '200', 'OK\r\n...')
+	$rccd = explode(' ', $head, 3); // array('HTTP/1.1', '200', 'OK\r\n...')
 	$rc   = (integer)$rccd[1];
 
 	switch ($rc) {
 	case 301: // Moved Permanently
 	case 302: // Moved Temporarily
 		$matches = array();
-		if (preg_match('/^Location: (.+)$/m', $resp[0], $matches)
-			&& --$redirect_max > 0)
-		{
+//		if (preg_match('/^Location: (.+)$/m', $resp[0], $matches)
+		if (preg_match('/^Location: (.+)$/m', $head, $matches) && --$redirect_max > 0) {
 			$url = trim($matches[1]);
 			if (! preg_match('/^https?:\//', $url)) {
 				// Relative path to Absolute
@@ -121,9 +199,36 @@ function http_request($url, $method = 'GET', $headers = '', $post = array(),
 	return array(
 		'query'  => $query,   // Query String
 		'rc'     => $rc,      // Response Code
-		'header' => $resp[0], // Header
-		'data'   => $resp[1]  // Data
+//		'header' => $resp[0], // Header
+//		'data'   => $resp[1]  // Data
+		'header' => $head, // Header
+		'data'   => $body, // Data
+		'timeout' => $status['timeout'],
 	);
+}
+
+// Read from Chunked Encoding
+function fread_chunked($fp, &$length)
+{
+	if ($length == 0) {
+		$line = rtrim(fgets($fp, 4096));
+		$matches = array();
+		if (preg_match('/^([0-9a-f]+)/i', $line, $matches)) {
+			$length = hexdec($matches[1]);
+			if ($length == 0) {
+				$line = rtrim(fgets($fp, 4096)); // make eof
+				return '';
+			}
+		} else {
+			return '';
+		}
+	}
+	$data = fread($fp, $length);
+	$length -= strlen($data);
+	if ($length == 0) {
+		fgets($fp, 4096);	// trailing crlf
+	}
+	return $data;
 }
 
 // Separate IPv4 network-address and its netmask
