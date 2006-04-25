@@ -1,7 +1,8 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: pukiwiki.skin.php,v 1.46.1 2005/05/23 14:22:30 miko Exp $
+// $Id: pukiwiki.skin.php,v 1.46.2 2006/04/26 00:14:00 upk Exp $
 // Copyright (C)
+//   2005-2006 PukiWiki Plus! Developers Team
 //   2002-2005 PukiWiki Developers Team
 //   2001-2002 Originally written by yu-ji
 // License: GPL v2 or (at your option) any later version
@@ -276,7 +277,7 @@ function _toolbar($key, $x = 20, $y = 20){
 <?php } ?>
 
 <div id="footer">
- Site admin: <a href="<?php echo $modifierlink ?>"><?php echo $modifier ?></a><p />
+ Webmaster: <a href="<?php echo $modifierlink ?>"><?php echo $modifier ?></a><p />
  <?php echo S_COPYRIGHT ?>.
  Powered by PHP <?php echo PHP_VERSION ?>. HTML convert time: <?php echo $taketime ?> sec.
 </div>

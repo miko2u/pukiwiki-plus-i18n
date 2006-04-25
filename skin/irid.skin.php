@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: irid.skin.php,v 1.1.7 2006/04/25 23:01:00 upk Exp $
+// $Id: irid.skin.php,v 1.1.8 2006/04/26 00:20:00 upk Exp $
 // Original is ari-
 //
 
@@ -17,6 +17,13 @@ if (! defined('PKWK_READONLY')) die('PKWK_READONLY is not set');
 $link  = & $_LINK;
 $image = & $_IMAGE['skin'];
 $rw    = ! PKWK_READONLY;
+
+// Decide charset for CSS
+// $css_charset = 'iso-8859-1';
+$css_charset = 'utf-8';
+switch(UI_LANG){
+        case 'ja_JP': $css_charset = 'Shift_JIS'; break;
+}
 
 // Output HTTP headers
 pkwk_common_headers();
@@ -193,7 +200,7 @@ Link: <?php echo $related ?>
 <!-- ◆ Footer ◆ ========================================================== -->
 <div id="footer"><!-- ■BEGIN id:footer -->
 <div id="copyright"><!-- ■BEGIN id:copyright -->
- Site admin: <a href="<?php echo $modifierlink ?>"><?php echo $modifier ?></a><p />
+ Webmaster: <a href="<?php echo $modifierlink ?>"><?php echo $modifier ?></a><br />
  Powered by PukiWiki Plus! <?php echo S_VERSION ?> with PHP <?php echo PHP_VERSION ?>.
  HTML convert time: <?php echo $taketime ?> sec.
 </div><!-- □END id:copyright -->

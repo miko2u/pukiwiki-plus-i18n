@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: bluebox.skin.php,v 1.18.5 2006/04/25 20:02:00 upk Exp $
+// $Id: bluebox.skin.php,v 1.18.6 2006/04/26 00:21:00 upk Exp $
 // Original is ari-
 
 // Prohibit direct access
@@ -32,10 +32,12 @@ $link  = $_LINK;
 $image = $_IMAGE['skin'];
 
 // Decide charset for CSS
-$css_charset = 'iso-8859-1';
+// $css_charset = 'iso-8859-1';
+$css_charset = 'utf-8';
 switch(UI_LANG){
-	case 'ja_JP': $css_charset = 'Shift_JIS'; break;
+        case 'ja_JP': $css_charset = 'Shift_JIS'; break;
 }
+
 // Output header
 pkwk_common_headers();
 header('Cache-Control: no-cache');
