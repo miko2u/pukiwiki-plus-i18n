@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: default.ini.php,v 1.24.5 2006/04/23 17:05:00 upk Exp $
+// $Id: default.ini.php,v 1.24.6 2006/04/25 19:13:00 upk Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2003-2005 PukiWiki Developers Team
@@ -15,8 +15,13 @@ if (defined('TDIARY_THEME')) {
 //	define('SKIN_FILE', DATA_HOME . SKIN_DIR . 'tdiary.skin.php');
 	define('SKIN_FILE_DEFAULT', SKIN_DIR . 'tdiary.skin.php'); 
 } else {
-//	define('SKIN_FILE', DATA_HOME . SKIN_DIR . 'pukiwiki.skin.php');
+	// define('SKIN_FILE', DATA_HOME . SKIN_DIR . 'pukiwiki.skin.php');
 	define('SKIN_FILE_DEFAULT', SKIN_DIR . 'default.skin.php');
+	// define('SKIN_FILE_DEFAULT', SKIN_DIR . 'bluebox.skin.php');
+	// define('SKIN_FILE_DEFAULT', SKIN_DIR . 'cloudwalk.skin.php');
+	// define('SKIN_FILE_DEFAULT', SKIN_DIR . 'irid.skin.php');
+	// define('SKIN_FILE_DEFAULT', SKIN_DIR . 'iridorange.skin.php');
+	// define('SKIN_FILE_DEFAULT', SKIN_DIR . 'orangebox.skin.php');
 }
 $skin_file = SKIN_FILE_DEFAULT;
 
