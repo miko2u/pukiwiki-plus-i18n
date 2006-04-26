@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
 //
-// $Id: orangebox.skin.php,v 1.18.7 2006/04/26 00:20:00 upk Exp $
+// $Id: orangebox.skin.php,v 1.18.8 2006/04/27 03:02:00 upk Exp $
 // Original is ari-
 
 // Prohibit direct access
@@ -110,7 +110,7 @@ if (isset($pkwk_dtd)) {
 <div id="main">
 <div id="center_bar">
 <div id="content">
-<h1 class="title"><?php echo $page ?></h1>
+<h1 class="title"><?php echo(($newtitle!='' && $is_read)?$newtitle:$page) ?></h1>
 <?php if ($lastmodified) { ?>
 <div id="lastmodified"><?php echo $lastmodified ?></div>
 <?php } ?>

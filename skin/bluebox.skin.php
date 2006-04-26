@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: bluebox.skin.php,v 1.18.6 2006/04/26 00:21:00 upk Exp $
+// $Id: bluebox.skin.php,v 1.18.7 2006/04/27 03:01:00 upk Exp $
 // Original is ari-
 
 // Prohibit direct access
@@ -112,7 +112,7 @@ if (isset($pkwk_dtd)) {
 <div id="main">
 <div id="center_bar">
 <div id="content">
-<h1 class="title"><?php echo $page ?></h1>
+<h1 class="title"><?php echo(($newtitle!='' && $is_read)?$newtitle:$page) ?></h1>
 <?php if ($lastmodified) { ?>
 <div id="lastmodified"><?php echo $lastmodified ?></div>
 <?php } ?>
