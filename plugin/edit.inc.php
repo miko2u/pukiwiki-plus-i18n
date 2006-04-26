@@ -1,9 +1,12 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: edit.inc.php,v 1.19.37 2005/08/22 14:59:24 miko Exp $
+// $Id: edit.inc.php,v 1.19.40 2006/04/25 14:59:24 miko Exp $
+// Copyright (C)
+//   2005-2006 PukiWiki Plus! Team
+//   2001-2006 PukiWiki Developers Team
+// License: GPL v2 or (at your option) any later version
 //
-// Edit plugin
-// cmd=edit
+// Edit plugin (cmd=edit)
 
 // Remove #freeze written by hand
 define('PLUGIN_EDIT_FREEZE_REGEX', '/^(?:#freeze(?!\w)\s*)+/im');
@@ -71,10 +74,10 @@ function plugin_edit_preview()
 		}
 	}
 
-	$body = "$_msg_preview<br />\n";
+	$body = $_msg_preview . '<br />' . "\n";
 	if ($postdata == '')
-		$body .= "<strong>$_msg_preview_delete</strong>";
-	$body .= "<br />\n";
+		$body .= '<strong>' . $_msg_preview_delete . '</strong>';
+	$body .= '<br />' . "\n";
 
 	if ($postdata) {
 		$postdata = make_str_rules($postdata);
@@ -99,11 +102,12 @@ function plugin_edit_inline()
 		return '';
 	}
 
+	// Arguments
 	$args = func_get_args();
 
-	$s_label = strip_htmltag(array_pop($args), FALSE); // {label}. Strip anchor tags only
-	if ($s_label == '')
-	{
+	// {label}. Strip anchor tags only
+	$s_label = strip_htmltag(array_pop($args), FALSE);
+	if ($s_label == '') {
 		$s_label = $_symbol_paraedit;
 	}
 
@@ -125,13 +129,17 @@ function plugin_edit_write()
 {
 	global $vars, $trackback;
 	global $_title_collided, $_msg_collided_auto, $_msg_collided, $_title_deleted;
-	global $notimeupdate, $_msg_invalidpass;
+	global $notimeupdate, $_msg_invalidpass, $do_update_diff_table;
 
 	$page = isset($vars['page']) ? $vars['page'] : '';
-	$retvars = array();
+	$add    = isset($vars['add'])    ? $vars['add']    : '';
+	$digest = isset($vars['digest']) ? $vars['digest'] : '';
 
 	// 手書きの#freezeを削除
 	$vars['msg'] = preg_replace('/^#freeze\s*$/im','',$vars['msg']);
+	$msg = & $vars['msg']; // Reference
+	$retvars = array();
+
 	$postdata = $postdata_input = $vars['msg'];
 
 	if (isset($vars['add']) && $vars['add']) {
@@ -152,59 +160,71 @@ function plugin_edit_write()
 		}
 	}
 
+	// Collision Detection
 	$oldpagesrc = join('', get_source($page));
 	$oldpagemd5 = md5($oldpagesrc);
+	if ($digest != $oldpagemd5) {
+		$vars['digest'] = $oldpagemd5; // Reset
 
-	if (! isset($vars['digest']) || $vars['digest'] != $oldpagemd5) {
-		$vars['digest'] = $oldpagemd5;
+		$original = isset($vars['original']) ? $vars['original'] : '';
+		list($postdata_input, $auto) = do_update_diff($oldpagesrc, $msg, $original);
 
 		$retvars['msg'] = $_title_collided;
-		list($postdata_input, $auto) = do_update_diff($oldpagesrc, $postdata_input, $vars['original']);
-
 		$retvars['body'] = ($auto ? $_msg_collided_auto : $_msg_collided)."\n";
+		$retvars['body'] .= $do_update_diff_table;
 
-		if (TRUE) {
-			global $do_update_diff_table;
-			$retvars['body'] .= $do_update_diff_table;
-		}
-
-		unset($vars['id']);	// 更新が衝突したら全文編集に切り替え
+		unset($vars['id']);	// Change edit all-text of pages(from para-edit)
 		$retvars['body'] .= edit_form($page, $postdata_input, $oldpagemd5, FALSE);
-	}
-	else {
-		if ($postdata) {
-			$notimestamp = ($notimeupdate != 0) && (isset($vars['notimestamp']) && $vars['notimestamp'] != '');
-			if($notimestamp && ($notimeupdate == 2) && !pkwk_login($vars['pass'])) {
-				// enable only administrator & password error
-				$retvars['body']  = "<p><strong>$_msg_invalidpass</strong></p>\n";
-				$retvars['body'] .= edit_form($page, $vars['msg'], $vars['digest'], FALSE);
-			} else {
-				page_write($page, $postdata, $notimestamp);
-				pkwk_headers_sent();
-				if ($vars['refpage'] != '') {
-					if ($vars['id'] != '') {
-						header('Location: ' . get_script_uri() . '?' . rawurlencode($vars['refpage'])) . '#' . rawurlencode($vars['id']);
-					} else {
-						header('Location: ' . get_script_uri() . '?' . rawurlencode($vars['refpage']));
-					}
-				} else {
-					if ($vars['id'] != '') {
-						header('Location: ' . get_script_uri() . '?' . rawurlencode($page)) . '#' . rawurlencode($vars['id']);
-					} else {
-						header('Location: ' . get_script_uri() . '?' . rawurlencode($page));
-					}
-				}
-				exit;
-			}
-		} else {
-			page_write($page, $postdata);
-			$retvars['msg'] = $_title_deleted;
-			$retvars['body'] = str_replace('$1', htmlspecialchars($page), $_title_deleted);
-			if ($trackback) tb_delete($page);
-		}
+		return $retvars;
 	}
 
-	return $retvars;
+	// Action?
+	if ($add) {
+		// Add
+		if (isset($vars['add_top']) && $vars['add_top']) {
+			$postdata  = $msg . "\n\n" . @join('', get_source($page));
+		} else {
+			$postdata  = @join('', get_source($page)) . "\n\n" . $msg;
+		}
+	} else {
+		// Edit or Remove
+		$postdata = & $msg; // Reference
+	}
+
+	// NULL POSTING, OR removing existing page
+	if ($postdata == '') {
+		page_write($page, $postdata);
+		$retvars['msg'] = $_title_deleted;
+		$retvars['body'] = str_replace('$1', htmlspecialchars($page), $_title_deleted);
+		if ($trackback) tb_delete($page);
+		return $retvars;
+	}
+
+	// $notimeupdate: Checkbox 'Do not change timestamp'
+	$notimestamp = isset($vars['notimestamp']) && $vars['notimestamp'] != '';
+	if ($notimeupdate > 1 && $notimestamp && ! pkwk_login($vars['pass'])) {
+		// Enable only administrator & password error
+		$retvars['body']  = '<p><strong>' . $_msg_invalidpass . '</strong></p>' . "\n";
+		$retvars['body'] .= edit_form($page, $msg, $digest, FALSE);
+		return $retvars;
+	}
+
+	page_write($page, $postdata, $notimestamp);
+	pkwk_headers_sent();
+	if ($vars['refpage'] != '') {
+		if ($vars['id'] != '') {
+			header('Location: ' . get_script_uri() . '?' . rawurlencode($vars['refpage'])) . '#' . rawurlencode($vars['id']);
+		} else {
+			header('Location: ' . get_script_uri() . '?' . rawurlencode($vars['refpage']));
+		}
+	} else {
+		if ($vars['id'] != '') {
+			header('Location: ' . get_script_uri() . '?' . rawurlencode($page)) . '#' . rawurlencode($vars['id']);
+		} else {
+			header('Location: ' . get_script_uri() . '?' . rawurlencode($page));
+		}
+	}
+	exit;
 }
 
 // Cancel (Back to the page / Escape edit page)
