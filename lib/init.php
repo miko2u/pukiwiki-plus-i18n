@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: init.php,v 1.41.8 2006/03/06 22:22:00 upk Exp $
+// $Id: init.php,v 1.43.8 2006/04/27 14:01:33 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
@@ -11,7 +11,7 @@
 
 // PukiWiki version / Copyright / Licence
 
-define('S_VERSION', '1.4.6-u1-i18n');
+define('S_VERSION', '1.4.6-u2-i18n');
 define('S_COPYRIGHT',
 	'<strong>PukiWiki Plus!' . S_VERSION . '</strong>' .
 	' Copyright &copy; 2001-2006' .

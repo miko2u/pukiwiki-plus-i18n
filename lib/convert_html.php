@@ -1,9 +1,9 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: convert_html.php,v 1.16.11 2005/07/19 15:38:35 miko Exp $
+// $Id: convert_html.php,v 1.17.11 2006/04/27 15:38:35 miko Exp $
 // Copyright (C)
-//   2005      PukiWiki Plus! Team
-//   2002-2005 PukiWiki Developers Team
+//   2005-2006 PukiWiki Plus! Team
+//   2002-2006 PukiWiki Developers Team
 //   2001-2002 Originally written by yu-ji
 // License: GPL v2 or (at your option) any later version
 //
@@ -892,7 +892,7 @@ class Body extends Element
 				$line = $matches[2];
 			}
 
-			$line = preg_replace("/[\r\n]*$/", '', $line);
+			$line = rtrim($line, "\r\n");
 
 			// Empty
 			if ($line == '') {
