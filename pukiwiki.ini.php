@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: pukiwiki.ini.php,v 1.128.25 2006/03/26 03:25:00 upk Exp $
+// $Id: pukiwiki.ini.php,v 1.129.25 2006/04/27 03:25:00 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
@@ -258,8 +258,8 @@ $autoglossary = 2;
 $function_freeze = 1;
 
 /////////////////////////////////////////////////
-// Enable 'Do not change timestamp' at edit
-// (1:Enable, 2:Enable only administrator, 0:Disable)
+// Allow to use 'Do not change timestamp' checkbox
+// (0:Disable, 1:For everyone,  2:Only for the administrator)
 $notimeupdate = 1;
 
 /////////////////////////////////////////////////

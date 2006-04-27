@@ -1,19 +1,22 @@
 <?php
-// PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: index.php,v 1.7.1 2005/10/02 15:28:47 miko Exp $
+// PukiWiki Plus! - Yet another WikiWikiWeb clone.
+// $Id: index.php,v 1.8.1 2006/04/27 15:28:47 miko Exp $
 // Copyright (C)
-//   2005      PukiWiki Plus! Team
-//   2004-2005 PukiWiki Developers Team
+//   2005-2006 PukiWiki Plus! Team
+//   2001-2006 PukiWiki Developers Team
 // License: GPL v2 or (at your option) any later version
 
-/////////////////////////////////////////////////
 // Error reporting
-
 // error_reporting(0); // Nothing
 error_reporting(E_ERROR | E_PARSE); // Avoid E_WARNING, E_NOTICE, etc
-// error_reporting(E_ALL);
+//error_reporting(E_ALL); // Debug purpose
 
-/////////////////////////////////////////////////
+// Special
+//define('PKWK_READONLY', 1);  // Obsolete - Plus! not used
+//define('PKWK_SAFE_MODE', 1); // Obsolete - Plus! not used
+//define('PKWK_OPTIMISE', 1);  // Obsolete - Plus! not used
+//define('TDIARY_THEME', 'digital_gadgets');
+
 // Directory definition
 // (Ended with a slash like '../path/to/pkwk/', or '')
 //
@@ -23,6 +26,5 @@ define('SITE_HOME',	'');
 define('DATA_HOME',	'');
 define('LIB_DIR',	SITE_HOME . 'lib/');
 
-/////////////////////////////////////////////////
 require(LIB_DIR . 'pukiwiki.php');
 ?>
