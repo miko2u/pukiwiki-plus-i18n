@@ -1,6 +1,11 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: ref.inc.php,v 1.49.9 2006/03/31 23:34:00 upk Exp $
+// $Id: ref.inc.php,v 1.50.9 2006/04/27 23:34:00 miko Exp $
+// Copyright (C)
+//   2005-2006 PukiWiki Plus! Team
+//   2002-2006 PukiWiki Developers Team
+//   2001-2002 Originally written by yu-ji
+// License: GPL v2 or (at your option) any later version
 //
 // Image refernce plugin
 // Include an attached image-file as an inline-image

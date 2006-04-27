@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: comment.inc.php,v 1.35.8 2006/01/11 23:24:00 upk Exp $
+// $Id: comment.inc.php,v 1.36.8 2006/04/27 23:24:00 miko Exp $
 // Copyright (C)
 //   2006      PukiWiki Plus! Developers Team
 //   2005      Customized/Patched by Miko.Hoshina
@@ -68,8 +68,7 @@ function plugin_comment_action()
 					"\n";  // Insert one blank line above #commment, to avoid indentation
 			} else {
 				$postdata = rtrim($postdata) . "\n" .
-					"\n" . // Insert one blank line below #commment, too (only by design)
-					$comment; // "\n" is already there or EOF
+					$comment . "\n"; // Insert one blank line below #commment
 			}
 		}
 		if ($above) $postdata .= $line;
