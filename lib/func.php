@@ -1,9 +1,9 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: func.php,v 1.53.5 2006/03/24 01:27:00 upk Exp $
+// $Id: func.php,v 1.71.5 2006/04/27 01:27:00 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
-//   2002-2005 PukiWiki Developers Team
+//   2002-2006 PukiWiki Developers Team
 //   2001-2002 Originally written by yu-ji
 // License: GPL v2 or (at your option) any later version
 //
@@ -210,8 +210,8 @@ function get_search_words($words, $do_escape = FALSE)
 // 'Search' main function
 function do_search($word, $type = 'AND', $non_format = FALSE, $base = '')
 {
-	global $script, $whatsnew, $search_non_list;
- 	global $search_auth;
+	global $script, $whatsnew, $non_list, $search_non_list;
+ 	global $search_auth, $show_passage;
 //	global $_msg_andresult, $_msg_orresult, $_msg_notfoundresult;
 	global $_string;
 
@@ -219,43 +219,61 @@ function do_search($word, $type = 'AND', $non_format = FALSE, $base = '')
 
 	$b_type = ($type == 'AND'); // AND:TRUE OR:FALSE
 	$keys = get_search_words(preg_split('/\s+/', $word, -1, PREG_SPLIT_NO_EMPTY));
+	foreach ($keys as $key=>$value)
+		$keys[$key] = '/' . $value . '/S';
 
-	$_pages = get_existpages();
+	$pages = get_existpages();
+
+	// Avoid
 	if ($base != '') {
-		$_pages = preg_grep('/^' . $base . '/', $_pages);
+		$pages = preg_grep('/^' . preg_quote('/', $base) . '/S', $pages);
 	}
-	$pages = array();
+	if (! $search_non_list) {
+		$pages = array_diff($pages, preg_grep('/' . $non_list . '/S', $pages));
+	}
+	$pages = array_flip($pages);
+	unset($pages[$whatsnew]);
 
 	// SAFE_MODE の場合は、コンテンツ管理者以上のみ、カテゴリページ(:)も検索可能
 	$role_adm_contents = (auth::check_role('safemode')) ? auth::check_role('role_adm_contents') : FALSE;
 
-	foreach ($_pages as $page) {
-		if ($page == $whatsnew || (! $search_non_list && check_non_list($page)))
-			continue;
-
-		// カテゴリページ(:)は、コンテンツ管理者以上のみ表示
-		if (substr($page,0,1) == ':' && $role_adm_contents)
-			continue;
-
-		// 検索対象ページの制限をかけるかどうか (ページ名は制限外)
-		if ($search_auth && ! check_readable($page, false, false)) {
-			$source = get_source(); // Empty
-		} else {
-			$source = get_source($page);
-		}
-		if (! $non_format)
-			array_unshift($source, $page); // ページ名も検索対象に
-
+	$count = count($pages);
+	foreach (array_keys($pages) as $page) {
 		$b_match = FALSE;
 
-		foreach ($keys as $key) {
-			$tmp     = preg_grep('/' . $key . '/', $source);
-			$b_match = ! empty($tmp);
-			if ($b_match xor $b_type) break;
+		// Search hidden for page name
+		if (substr($page, 0, 1) == ':' && $role_adm_contents) {
+			unset($pages[$page]);
+			--$count;
+			continue;
+		} 
+
+		// Search for page name
+		if (! $non_format) {
+			foreach ($keys as $key) {
+				$b_match = preg_match($key, $page);
+				if ($b_type xor $b_match) break; // OR
+			}
+			if ($b_match) continue;
 		}
-		if ($b_match) $pages[$page] = get_filetime($page);
-		unset($source);
+
+		// Search auth for page contents
+		if ($search_auth && ! check_readable($page, false, false)) {
+			unset($pages[$page]);
+			--$count;
+			continue;
+		}
+
+		// Search for page contents
+		foreach ($keys as $key) {
+			$b_match = preg_match($key, get_source($page, TRUE, TRUE));
+			if ($b_match xor $b_type) break; // OR
+		}
+		if ($b_match) continue;
+
+		unset($pages[$page]); // Miss
 	}
+
 	unset($role_adm_contents);
 	if ($non_format) return array_keys($pages);
 
@@ -265,11 +283,12 @@ function do_search($word, $type = 'AND', $non_format = FALSE, $base = '')
 		return str_replace('$1', $s_word, $_string['notfoundresult']);
 
 	ksort($pages);
+
 	$retval = '<ul>' . "\n";
-	foreach ($pages as $page=>$time) {
+	foreach (array_keys($pages) as $page) {
 		$r_page  = rawurlencode($page);
 		$s_page  = htmlspecialchars($page);
-		$passage = get_passage($time);
+		$passage = $show_passage ? ' ' . get_passage(get_filetime($page)) : '';
 //		$retval .= ' <li>' . '<span class="tooltip" onmouseover="showGlossaryPopup(\'' . $script . '?cmd=preview&amp;page=' .
 //			$r_page . '&amp;word=' . $r_word . '\',event,0.2);" onmouseout="hideGlossaryPopup();">[x]</span> ' .
 //			'<a href="' . $script . '?cmd=read&amp;page=' .
@@ -283,7 +302,7 @@ function do_search($word, $type = 'AND', $non_format = FALSE, $base = '')
 	$retval .= '</ul>' . "\n";
 
 	$retval .= str_replace('$1', $s_word, str_replace('$2', count($pages),
-		str_replace('$3', count($_pages), $b_type ? $_string['andresult'] : $_string['orresult'])));
+		str_replace('$3', $count, $b_type ? $_string['andresult'] : $_string['orresult'])));
 
 	return $retval;
 }
@@ -857,17 +876,12 @@ if (! function_exists('md5_file')) {
 // (PHP 4 >= 4.3.0, PHP5)
 if (! function_exists('sha1')) {
 	if (extension_loaded('mhash')) {
-		function sha1($str, $raw_output = FALSE)
+		function sha1($str)
 		{
-			if ($raw_output) {
-				// PHP 5.0.0 or lator only :)
-				return mhash(MHASH_SHA1, $str);
-			} else {
-				return bin2hex(mhash(MHASH_SHA1, $str));
-			}
+			return bin2hex(mhash(MHASH_SHA1, $str));
 		}
 	} else {
-		function sha1($str, $raw_output = FALSE)
+		function sha1($str)
 		{
 			die(_("Function sha1() not found and extension 'mhash' not exists"));
 		}
