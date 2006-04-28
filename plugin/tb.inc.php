@@ -1,9 +1,9 @@
 <?php
-// $Id: tb.inc.php,v 1.19.7 2006/03/20 01:59:00 upk Exp $
+// $Id: tb.inc.php,v 1.19.21 2006/04/27 01:59:00 miko Exp $
 /*
  * PukiWiki/TrackBack: TrackBack Ping receiver and viewer
- * (C) 2003-2004 PukiWiki Developers Team
  * (C) 2003,2005-2006 Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * (C) 2003-2005 PukiWiki Developers Team
  * License: GPL
  *
  * plugin_tb_convert()          block plugin
@@ -15,6 +15,9 @@
  * plugin_tb_mode_view($tb_id)  ?__mode=view
  * plugin_tb_recent($line)
  */
+
+define('PLUGIN_TB_OK',      0); 
+define('PLUGIN_TB_ERROR',   1); 
 
 function plugin_tb_convert()
 {
@@ -63,7 +66,7 @@ function plugin_tb_action()
 		// Show List of pages that TrackBacks reached
 		$pages = get_existpages(TRACKBACK_DIR, '.txt');
 		if (! empty($pages)) {
-			return array('msg'=>'trackback list',
+			return array('msg'=>'Trackback list',
 				'body'=>page_list($pages, 'read', FALSE));
 		} else {
 			return array('msg'=>'', 'body'=>'');
@@ -101,17 +104,17 @@ function plugin_tb_save($url, $tb_id)
 	if (! $trackback) $die .= 'TrackBack feature disabled. ';
 	if ($url   == '') $die .= 'URL parameter is not set. ';
 	if ($tb_id == '') $die .= 'TrackBack Ping ID is not set. ';
-	if ($die != '') plugin_tb_return(1, $die);
+	if ($die != '') plugin_tb_return(PLUGIN_TB_ERROR, $die);
 
-	if (! file_exists(TRACKBACK_DIR)) plugin_tb_return(1, 'No such directory: TRACKBACK_DIR');
-	if (! is_writable(TRACKBACK_DIR)) plugin_tb_return(1, 'Permission denied: TRACKBACK_DIR');
+	if (! file_exists(TRACKBACK_DIR)) plugin_tb_return(PLUGIN_TB_ERROR, 'No such directory: TRACKBACK_DIR');
+	if (! is_writable(TRACKBACK_DIR)) plugin_tb_return(PLUGIN_TB_ERROR, 'Permission denied: TRACKBACK_DIR');
 
 	$page = tb_id2page($tb_id);
-	if ($page === FALSE) plugin_tb_return(1, 'TrackBack ID is invalid.');
+	if ($page === FALSE) plugin_tb_return(PLUGIN_TB_ERROR, 'TrackBack ID is invalid.');
 
 	// URL validation (maybe worse of processing time limit)
 	$result = http_request($url, 'HEAD');
-	if ($result['rc'] !== 200) plugin_tb_return(1, 'URL is fictitious.');
+	if ($result['rc'] !== 200) plugin_tb_return(PLUGIN_TB_ERROR, 'URL is fictitious.');
 
 	// Update TrackBack Ping data
 	$filename = tb_get_filename($page);
@@ -141,23 +144,29 @@ function plugin_tb_save($url, $tb_id)
 	flock($fp, LOCK_UN);
 	fclose($fp);
 
-	plugin_tb_return(0); // Return OK
+	plugin_tb_return(PLUGIN_TB_OK); // Return OK
 }
 
-// Return TrackBack ping via HTTP/XML
+// Show a response code of the ping via HTTP/XML (then exit)
 function plugin_tb_return($rc, $msg = '')
 {
+	if ($rc == PLUGIN_TB_OK) {
+		$rc = 0; // for PLUGIN_TB_OK
+	} else {
+		$rc = 1; // for PLUGIN_TB_ERROR
+	}
+
 	pkwk_common_headers();
 	header('Content-Type: text/xml');
 	echo '<?xml version="1.0" encoding="iso-8859-1"?>';
 	echo '<response>';
 	echo ' <error>' . $rc . '</error>';
-	if ($rc !== 0) echo '<message>' . $msg . '</message>';
+	if ($rc) echo '<message>' . $msg . '</message>';
 	echo '</response>';
 	exit;
 }
 
-// ?__mode=rss
+// Show pings for the page via RSS (?__mode=rss)
 function plugin_tb_mode_rss($tb_id)
 {
 	global $script, $vars, $entity_pattern, $language;
@@ -204,13 +213,14 @@ EOD;
 </response>
 EOD;
 
+	// ToDo: response encoding must equal request encoding.(from trackback reference.)
 	pkwk_common_headers();
 	header('Content-Type: text/xml');
 	echo mb_convert_encoding($rc, 'UTF-8', SOURCE_ENCODING);
 	exit;
 }
 
-// ?__mode=view
+// Show pings for the page via XHTML (?__mode=view)
 function plugin_tb_mode_view($tb_id)
 {
 	global $script, $vars;
