@@ -1,8 +1,8 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: pukiwiki.ini.php,v 1.129.22 2006/04/23 14:52:25 miko Exp $
+// $Id: pukiwiki.ini.php,v 1.131.22 2006/04/27 14:52:25 miko Exp $
 // Copyright (C)
-//   2005-2006 Customized/Patched by Miko.Hoshina
+//   2005-2006 PukiWiki Plus! Team
 //   2002-2006 PukiWiki Developers Team
 //   2001-2002 Originally written by yu-ji
 // License: GPL v2 or (at your option) any later version
@@ -534,7 +534,7 @@ $agents = array(
 
 	// Opera, dressing up as other embedded browsers
 	// Sample: "Mozilla/3.0(DDIPOCKET;KYOCERA/AH-K3001V/1.4.1.67.000000/0.1/C100) Opera 7.0" (Like CNF at 'keitai'-mode)
-	array('pattern'=>'#\bDDIPOCKET\b.+\b(Opera) ([0-9\.]+)\b#',	'profile'=>'keitai'),
+	array('pattern'=>'#\b(?:DDIPOCKET|WILLCOM)\b.+\b(Opera) ([0-9\.]+)\b#', 'profile'=>'keitai'),
 
 	// Planetweb http://www.planetweb.com/
 	// Sample: "Mozilla/3.0 (Planetweb/v1.07 Build 141; SPS JP)" ("EGBROWSER", Web browser for PlayStation 2)
