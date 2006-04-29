@@ -1,5 +1,5 @@
 <?php
-// $Id: stationary.inc.php,v 1.8.1 2006/04/27 06:26:42 miko Exp $
+// $Id: stationary.inc.php,v 1.8.2 2006/04/29 17:50:00 upk Exp $
 //
 // Stationary plugin
 // License: The same as PukiWiki
@@ -49,7 +49,8 @@ function plugin_stationary_convert()
 // In-line type plugin: &stationary; or &stationary(foo); , or &stationary(foo){bar};
 function plugin_stationary_inline()
 {
-	if (PKWK_SAFE_MODE || PKWK_READONLY) return ''; // See above
+	// if (PKWK_SAFE_MODE || PKWK_READONLY) return ''; // See above
+	if (auth::check_role('safemode') || auth::check_role('readonly')) return ''; // See above
 
 	// {bar} is always exists, and already sanitized
 	$args = func_get_args();

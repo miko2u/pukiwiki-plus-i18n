@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: index.php,v 1.8.1 2006/04/27 15:28:47 miko Exp $
+// $Id: index.php,v 1.8.2 2006/04/29 17:57:00 upk Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2001-2006 PukiWiki Developers Team
@@ -12,9 +12,10 @@ error_reporting(E_ERROR | E_PARSE); // Avoid E_WARNING, E_NOTICE, etc
 //error_reporting(E_ALL); // Debug purpose
 
 // Special
-//define('PKWK_READONLY', 1);  // Obsolete - Plus! not used
-//define('PKWK_SAFE_MODE', 1); // Obsolete - Plus! not used
-//define('PKWK_OPTIMISE', 1);  // Obsolete - Plus! not used
+//define('PKWK_READONLY', 1); // 0,1,2,3,4
+//define('PKWK_SAFE_MODE', 1); // 0,1,2,3,4
+//
+//define('PKWK_OPTIMISE', 1); // Obsolete - Plus! not used 
 //define('TDIARY_THEME', 'digital_gadgets');
 
 // Directory definition
