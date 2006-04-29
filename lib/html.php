@@ -273,7 +273,7 @@ $template
   <input type="hidden" name="id"     value="$s_id" />
   <textarea name="msg" rows="$rows" cols="$cols">$s_postdata</textarea>
   <br />
-  $add_assistant;
+  $add_assistant
   <br />
   <div style="float:left;">
    <input type="submit" name="preview" value="$btn_preview" accesskey="p" />
