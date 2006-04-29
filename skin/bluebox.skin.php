@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: bluebox.skin.php,v 1.18.7 2006/04/27 03:01:00 upk Exp $
+// $Id: bluebox.skin.php,v 1.18.8 2006/04/30 04:46:00 upk Exp $
 // Original is ari-
 
 // Prohibit direct access
@@ -12,6 +12,7 @@ if (! defined('UI_LANG')) exit;
 $_IMAGE['skin']['logo']     = 'pukiwiki.png';
 $_IMAGE['skin']['reload']   = 'reload.png';
 $_IMAGE['skin']['new']      = 'new.png';
+$_IMAGE['skin']['newsub']   = 'new_sub.png';
 $_IMAGE['skin']['edit']     = 'edit.png';
 $_IMAGE['skin']['freeze']   = 'freeze.png';
 $_IMAGE['skin']['unfreeze'] = 'unfreeze.png';
@@ -26,6 +27,11 @@ $_IMAGE['skin']['recent']   = 'recentchanges.png';
 $_IMAGE['skin']['backup']   = 'backup.png';
 $_IMAGE['skin']['help']     = 'help.png';
 $_IMAGE['skin']['rss']      = 'rss.png';
+$_IMAGE['skin']['top']      = 'plus/home.png';
+$_IMAGE['skin']['trackback']= 'plus/trackback.png';
+$_IMAGE['skin']['refer']    = 'plus/referer.png';
+$_IMAGE['skin']['skeylist'] = 'plus/skeylist.png';
+$_IMAGE['skin']['linklist'] = 'plus/linklist.png';
 
 $lang  = $_LANG['skin'];
 $link  = $_LINK;
