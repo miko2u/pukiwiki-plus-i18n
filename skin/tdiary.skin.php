@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: tdiary.skin.php,v 1.30.2 2006/04/27 14:03:02 miko Exp $
+// $Id: tdiary.skin.php,v 1.30.3 2006/04/30 02:27:00 upk Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
@@ -575,19 +575,37 @@ if (isset($pkwk_dtd)) {
  <?php echo $meta_content_type ?>
  <meta http-equiv="content-style-type" content="text/css" />
 <?php if ($nofollow || ! $is_read)  { ?> <meta name="robots" content="NOINDEX,NOFOLLOW" /><?php } ?>
-<?php if (PKWK_ALLOW_JAVASCRIPT && isset($javascript)) { ?> <meta http-equiv="Content-Script-Type" content="text/javascript" /><?php } ?>
-
  <title><?php echo $title ?> - <?php echo $page_title ?></title>
-
  <link rel="shortcut icon" href="<?php echo $image['favicon'] ?>" />
- <link rel="stylesheet" type="text/css" media="all" href="skin/theme/base.css" />
- <link rel="stylesheet" type="text/css" media="all" href="skin/theme/<?php echo $theme ?>/<?php echo $theme ?>.css" />
- <link rel="stylesheet" type="text/css" media="screen" href="skin/tdiary.css.php?charset=<?php echo $css_charset ?>&amp;color=<?php echo $css_theme ?>" charset="<?php echo $css_charset ?>" />
- <link rel="stylesheet" type="text/css" media="print"  href="skin/tdiary.css.php?charset=<?php echo $css_charset ?>&amp;color=<?php echo $css_theme ?>&amp;media=print" charset="<?php echo $css_charset ?>" />
- <link rel="alternate" type="application/rss+xml" title="RSS" href="<?php echo $link['rss'] ?>" /><?php // RSS auto-discovery ?>
-
-<?php if (PKWK_ALLOW_JAVASCRIPT && $trackback_javascript) { ?> <script type="text/javascript" src="skin/trackback.js"></script><?php } ?>
-
+ <link rel="stylesheet" type="text/css" media="all" href="<?php echo SKIN_URI ?>theme/base.css" />
+ <link rel="stylesheet" type="text/css" media="all" href="<?php echo SKIN_URI ?>theme/<?php echo $theme ?>/<?php echo $theme ?>.css" />
+ <link rel="stylesheet" type="text/css" media="screen" href="<?php echo SKIN_URI ?>tdiary.css.php?charset=<?php echo $css_charset ?>&amp;color=<?php echo $css_theme ?>" charset="<?php echo $css_charset ?>" />
+ <link rel="stylesheet" type="text/css" media="print"  href="<?php echo SKIN_URI ?>tdiary.css.php?charset=<?php echo $css_charset ?>&amp;color=<?php echo $css_theme ?>&amp;media=print" charset="<?php echo $css_charset ?>" />
+ <link rel="stylesheet" href="<?php echo SKIN_URI ?>greybox/greybox.css" type="text/css" media="all" charset="<?php echo $css_charset ?>" />
+ <link rel="alternate" href="<?php echo $_LINK['mixirss'] ?>" type="application/rss+xml" title="RSS" />
+ <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+ <script type="text/javascript">
+ <!--
+<?php if (exist_plugin_convert('js_init')) echo do_plugin_convert('js_init'); ?>
+ // -->
+ </script>
+<?php global $language,$use_local_time; ?>
+ <script type="text/javascript" src="<?php echo SKIN_URI.'lang/'.$language ?>.js"></script>
+ <script type="text/javascript" src="<?php echo SKIN_URI ?>default.js"></script>
+ <script type="text/javascript" src="<?php echo SKIN_URI ?>kanzaki.js"></script>
+ <script type="text/javascript" src="<?php echo SKIN_URI ?>ajax/textloader.js"></script>
+ <script type="text/javascript" src="<?php echo SKIN_URI ?>ajax/glossary.js"></script>
+<?php if (! $use_local_time) { ?>
+ <script type="text/javascript" src="<?php echo SKIN_URI ?>tzCalculation_LocalTimeZone.js"></script>
+<?php } ?>
+ <script type="text/javascript" src="<?php echo SKIN_URI ?>greybox/AmiJS.js"></script>
+ <script type="text/javascript" src="<?php echo SKIN_URI ?>greybox/greybox.js"></script>
+<?php
+  global $trackback, $referer;
+  if ($trackback) {
+?>
+ <script type="text/javascript" src="<?php echo SKIN_URI ?>trackback.js"></script>
+<?php } ?>
 <?php echo $head_tag ?>
 </head>
 <body><!-- Theme:<?php echo htmlspecialchars($theme) . ' Sidebar:' . $sidebar ?> -->
