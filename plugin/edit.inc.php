@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: edit.inc.php,v 1.19.40 2006/04/25 14:59:24 miko Exp $
+// $Id: edit.inc.php,v 1.40.19 2006/04/25 14:59:24 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2001-2006 PukiWiki Developers Team
@@ -30,8 +30,8 @@ function plugin_edit_action()
 	}
 
 	$source = get_source($page);
-	$postdata = $vars['original'] = join('', $source);
-	if (!empty($vars['id'])) {
+	$postdata = $vars['original'] = @join('', $source);
+	if (isset($vars['id']) && $vars['id'] != '') {
 		$postdata = plugin_edit_parts($vars['id'], $source);
 		if ($postdata === FALSE) {
 			unset($vars['id']);
@@ -46,7 +46,7 @@ function plugin_edit_action()
 // Preview
 function plugin_edit_preview()
 {
-	global $vars, $notimeupdate;
+	global $vars;
 	global $_title_preview, $_msg_preview, $_msg_preview_delete;
 
 	$page = isset($vars['page']) ? $vars['page'] : '';
@@ -89,9 +89,10 @@ function plugin_edit_preview()
 }
 
 // Inline: Show edit (or unfreeze text) link
+// NOTE: Plus! is not compatible for 1.4.4+ style(compatible for 1.4.3 style)
 function plugin_edit_inline()
 {
-	static $usage = '&edit(pagename#anchor[[,noicon],nolabel])[{label}];';
+	static $usage = '&edit(pagename,anchor);';
 
 	global $script, $vars, $fixed_heading_edited;
 	global $_symbol_paraedit;
@@ -109,12 +110,12 @@ function plugin_edit_inline()
 		$s_label = $_symbol_paraedit;
 	}
 
-	list($page,$id) = array_pad($args,2,'');
+	list($page, $id) = array_pad($args, 2, '');
 	if (!is_page($page)) {
 		$page = $vars['page'];
 	}
 	if ($id != '') {
-		$id = '&amp;id='.rawurlencode($id);
+		$id = '&amp;id=' . rawurlencode($id);
 	}
 	$r_page = rawurlencode($page);
 	return "<a class=\"anchor_super\" href=\"$script?cmd=edit&amp;page=$r_page$id\">$s_label</a>";
@@ -132,13 +133,21 @@ function plugin_edit_write()
 	$digest = isset($vars['digest']) ? $vars['digest'] : '';
 	$partid = isset($vars['id'])     ? $vars['id']     : '';
 
+	// Paragraph edit mode
+	if ($partid) {
+		$source = preg_split('/([^\n]*\n)/', $vars['original'], -1, PREG_SPLIT_NO_EMPTY|PREG_SPLIT_DELIM_CAPTURE);
+		if (plugin_edit_parts($partid, $source, $vars['msg']) !== FALSE) {
+			$vars['msg'] = @join('', $source);
+		} else {
+			$vars['msg'] = rtrim($vars['original']) . "\n\n" . $vars['msg'];
+		}
+	}
+
 	// Delete "#freeze" command
 	$vars['msg'] = preg_replace('/^#freeze\s*$/im', '', $vars['msg']);
 	$msg = & $vars['msg']; // Reference
 
 	$retvars = array();
-
-	$postdata = $postdata_input = $vars['msg'];
 
 	// Collision Detection
 	$oldpagesrc = join('', get_source($page));
@@ -165,13 +174,6 @@ function plugin_edit_write()
 			$postdata = $msg . "\n\n" . @join('', get_source($page));
 		} else {
 			$postdata = @join('', get_source($page)) . "\n\n" . $msg;
-		}
-	} elseif ($partid) {
-		$source = preg_split('/([^\n]*\n)/', $vars['original'], -1, PREG_SPLIT_NO_EMPTY|PREG_SPLIT_DELIM_CAPTURE);
-		if (plugin_edit_parts($partid, $source, $vars['msg']) !== FALSE) {
-			$postdata = @join('', $source);
-		} else {
-			$postdata = rtrim($vars['original']) . "\n\n" . $vars['msg'];
 		}
 	} else {
 		// Edit or Remove
