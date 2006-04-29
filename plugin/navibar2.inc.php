@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: navibar2.inc.php,v 0.1.11 2006/02/02 01:26:00 upk Exp $
+// $Id: navibar2.inc.php,v 0.1.12 2006/04/30 01:38:00 upk Exp $
 //
 function plugin_navibar2_convert()
 {
@@ -77,7 +77,7 @@ function plugin_navibar2_makehtml($page)
 				} else {
 					$interkey = plugin_navibar2_keyword(trim($line));
 					if (isset($interkey['url'])) {
-						$menublk[$menubarcount][] = ' <div class="MenuItem"><a href="' . $interkey['url'] . '" class="MenuItem">' . $interkey['text'] . '</a></div>';
+						$menublk[$menubarcount][] = ' <div class="MenuItem"><a href="' . $interkey['url'] . '" class="MenuItem">' . $interkey['img'] . $interkey['text'] . '</a></div>';
 					}
 				}
 			}
@@ -250,10 +250,13 @@ function _navigator2($key, $val = '')
 	if (!isset($link[$key])) { return array('text'=>'<!--LINK NOT FOUND-->'); }
 	if (!isset($lang[$key])) { return array('text'=>'<!--LANG NOT FOUND-->'); }
 
-	return array(
-		'url' => $link[$key],
-		'img' => '<img src="' . IMAGE_DIR . $image[$key] . '" style="vertical-align:middle;" />',
-		'text' => (($val === '') ? $lang[$key] : $val),
-	);
+	$text = ($val === '') ? $lang[$key] : $val;
+	if (! empty($image[$key])) {
+		$img = '<img src="' . IMAGE_DIR . $image[$key] . '" style="vertical-align:middle;" alt="'. $text . '"/>';
+	} else {
+		$img = '';
+	}
+
+	return array('url' => $link[$key], 'img' => $img, 'text' => $text);
 }
 ?>
