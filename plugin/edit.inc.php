@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: edit.inc.php,v 1.19.40.6 2006/04/25 14:59:24 miko Exp $
+// $Id: edit.inc.php,v 1.40.20 2006/04/25 14:59:24 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2001-2006 PukiWiki Developers Team
@@ -92,7 +92,7 @@ function plugin_edit_preview()
 		$vars['msg'] = preg_replace('/^(\*{1,3}.*)\[#[A-Za-z][\w-]+\](.*)$/m', '$1$2', $vars['msg']);
 	}
 
-	// 手書きの#freezeを削除
+	// Delete "#freeze" command for form edit.
 	$vars['msg'] = preg_replace(PLUGIN_EDIT_FREEZE_REGEX, '' ,$vars['msg']);
 	$postdata = $vars['msg'];
 
@@ -123,9 +123,10 @@ function plugin_edit_preview()
 }
 
 // Inline: Show edit (or unfreeze text) link
+// NOTE: Plus! is not compatible for 1.4.4+ style(compatible for 1.4.3 style)
 function plugin_edit_inline()
 {
-	static $usage = '&edit(pagename#anchor[[,noicon],nolabel])[{label}];';
+	static $usage = '&edit(pagename,anchor);';
 
 	global $script, $vars, $fixed_heading_edited;
 	global $_symbol_paraedit;
@@ -144,12 +145,10 @@ function plugin_edit_inline()
 	}
 
 	list($page,$id) = array_pad($args,2,'');
-	if (!is_page($page))
-	{
+	if (!is_page($page)) {
 		$page = $vars['page'];
 	}
-	if ($id != '')
-	{
+	if ($id != '') {
 		$id = '&amp;id='.rawurlencode($id);
 	}
 	$r_page = rawurlencode($page);
@@ -166,34 +165,26 @@ function plugin_edit_write()
 	$_title_deleted = _(' $1 was deleted');
 	$_msg_invalidpass = _('Invalid password.');
 
-	$page = isset($vars['page']) ? $vars['page'] : '';
+	$page   = isset($vars['page']) ? $vars['page']     : '';
 	$add    = isset($vars['add'])    ? $vars['add']    : '';
 	$digest = isset($vars['digest']) ? $vars['digest'] : '';
+	$partid = isset($vars['id'])     ? $vars['id']     : '';
 
-	// 手書きの#freezeを削除
-	$vars['msg'] = preg_replace('/^#freeze\s*$/im','',$vars['msg']);
-	$msg = & $vars['msg']; // Reference
-	$retvars = array();
-
-	$postdata = $postdata_input = $vars['msg'];
-
-	if (isset($vars['add']) && $vars['add']) {
-		if (isset($vars['add_top']) && $vars['add_top']) {
-			$postdata  = $postdata . "\n\n" . @join('', get_source($page));
+	// Paragraph edit mode
+	if ($partid) {
+		$source = preg_split('/([^\n]*\n)/', $vars['original'], -1, PREG_SPLIT_NO_EMPTY|PREG_SPLIT_DELIM_CAPTURE);
+		if (plugin_edit_parts($partid, $source, $vars['msg']) !== FALSE) {
+			$vars['msg'] = join('', $source);
 		} else {
-			$postdata  = @join('', get_source($page)) . "\n\n" . $postdata;
-		}
-	} else {
-		if (isset($vars['id']) && $vars['id']) {
-			$source = preg_split('/([^\n]*\n)/',$vars['original'],-1,PREG_SPLIT_NO_EMPTY|PREG_SPLIT_DELIM_CAPTURE);
-			if (plugin_edit_parts($vars['id'],$source,$vars['msg']) !== FALSE) {
-				$postdata = $postdata_input = join('',$source);
-			} else {
-				// $post['msg']だけがページに書き込まれてしまうのを防ぐ。
-				$postdata = $postdata_input = rtrim($vars['original'])."\n\n".$vars['msg'];
-			}
+			$vars['msg'] = rtrim($vars['original']) . "\n\n" . $vars['msg'];
 		}
 	}
+
+	// Delete "#freeze" command for form edit.
+	$vars['msg'] = preg_replace('/^#freeze\s*$/im', '', $vars['msg']);
+	$msg = & $vars['msg']; // Reference
+
+	$retvars = array();
 
 	// Collision Detection
 	$oldpagesrc = join('', get_source($page));
@@ -259,14 +250,14 @@ function plugin_edit_write()
 	page_write($page, $postdata, $notimestamp);
 	pkwk_headers_sent();
 	if ($vars['refpage'] != '') {
-		if ($vars['id'] != '') {
-			header('Location: ' . get_script_uri() . '?' . rawurlencode($vars['refpage'])) . '#' . rawurlencode($vars['id']);
+		if ($partid) {
+			header('Location: ' . get_script_uri() . '?' . rawurlencode($vars['refpage'])) . '#' . rawurlencode($partid);
 		} else {
 			header('Location: ' . get_script_uri() . '?' . rawurlencode($vars['refpage']));
 		}
 	} else {
-		if ($vars['id'] != '') {
-			header('Location: ' . get_script_uri() . '?' . rawurlencode($page)) . '#' . rawurlencode($vars['id']);
+		if ($partid) {
+			header('Location: ' . get_script_uri() . '?' . rawurlencode($page)) . '#' . rawurlencode($partid);
 		} else {
 			header('Location: ' . get_script_uri() . '?' . rawurlencode($page));
 		}
@@ -283,21 +274,18 @@ function plugin_edit_cancel()
 	exit;
 }
 
-// ソースの一部を抽出/置換する
-function plugin_edit_parts($id,&$source,$postdata='')
+// Replace/Pickup a part of source
+function plugin_edit_parts($id, &$source, $postdata='')
 {
-	$postdata = rtrim($postdata)."\n";
-	$heads = preg_grep('/^\*{1,3}.+$/',$source);
+	$postdata = rtrim($postdata) . "\n";
+	$heads = preg_grep('/^\*{1,3}.+$/', $source);
 	$heads[count($source)] = ''; // sentinel
-	while (list($start,$line) = each($heads))
-	{
-		if (preg_match("/\[#$id\]/",$line))
-		{
-			list($end,$line) = each($heads);
-			return join('',array_splice($source,$start,$end - $start,$postdata));
+	while (list($start, $line) = each($heads)) {
+		if (preg_match("/\[#$id\]/", $line)) {
+			list($end, $line) = each($heads);
+			return join('', array_splice($source, $start, $end - $start, $postdata));
 		}
 	}
 	return FALSE;
 }
-
 ?>
