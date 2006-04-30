@@ -1,8 +1,8 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: plugin.php,v 1.15.6 2005/07/03 14:16:23 miko Exp $
+// $Id: plugin.php,v 1.15.7 2006/04/30 17:13:00 upk Exp $
 // Copyright (C)
-//   2005      PukiWiki Plus! Team
+//   2005-2006 PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
 //   2001-2002 Originally written by yu-ji
 // License: GPL v2 or (at your option) any later version
@@ -22,7 +22,7 @@ function set_plugin_messages($messages)
 // Check plugin '$name' is here
 function exist_plugin($name)
 {
-	global $vars, $exclude_plugin;
+	global $vars, $exclude_plugin, $plugin_lang_path;
 	static $exist = array(), $count = array();
 
 	$name = strtolower($name);
@@ -45,13 +45,17 @@ function exist_plugin($name)
 	}
 //miko
 
-	if (preg_match('/^\w{1,64}$/', $name) &&
-	    file_exists(PLUGIN_DIR . $name . '.inc.php')) {
-	    	$exist[$name] = TRUE;
-	    	$count[$name] = 1;
-		load_init_value($name);
-		require_once(PLUGIN_DIR . $name . '.inc.php');
-		return TRUE;
+	if (preg_match('/^\w{1,64}$/', $name)) {
+		foreach(array(EXT_PLUGIN_DIR,PLUGIN_DIR) as $p_dir){
+			if (file_exists($p_dir . $name . '.inc.php')) {
+				$plugin_lang_path[$name] = (PLUGIN_DIR == $p_dir) ? LANG_DIR : EXT_LANG_DIR;
+				$exist[$name] = TRUE;
+				$count[$name] = 1;
+				load_init_value($name);
+				require_once($p_dir . $name . '.inc.php');
+				return TRUE;
+			}
+		}
 	} else {
 	    	$exist[$name] = FALSE;
 	    	$count[$name] = 1;
@@ -80,11 +84,16 @@ function exist_plugin_inline($name) {
 // Do init the plugin
 function do_plugin_init($name)
 {
+	global $plugin_lang_path;
 	static $checked = array();
 
 	if (isset($checked[$name])) return $checked[$name];
 
-	bindtextdomain($name, LANG_DIR);
+	if (empty($plugin_lang_path[$name])) {
+		bindtextdomain($name, LANG_DIR);
+	} else {
+		bindtextdomain($name, $plugin_lang_path[$name]);
+	}
 	bind_textdomain_codeset($name, SOURCE_ENCODING);
 	$func = 'plugin_' . $name . '_init';
 	if (function_exists($func)) {

@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: pukiwiki.ini.php,v 1.128.25 2006/03/26 03:25:00 upk Exp $
+// $Id: pukiwiki.ini.php,v 1.131.26 2006/04/30 16:19:00 upk Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
@@ -124,6 +124,10 @@ define('INIT_DIR',      DATA_HOME . 'init/'     ); // Initial value (Contents)
 define('PLUGIN_DIR',    SITE_HOME . 'plugin/'   ); // Plugin directory
 define('LANG_DIR',      SITE_HOME . 'locale/'   ); // Language file
 define('SITE_INIT_DIR', SITE_HOME . 'init/'     ); // Initial value (Site)
+
+define('EXTEND_DIR',    SITE_HOME . 'extend/'   ); // Extend directory
+define('EXT_PLUGIN_DIR',EXTEND_DIR. 'plugin/'   ); // Extend Plugin directory
+define('EXT_LANG_DIR',  EXTEND_DIR. 'locale/'   ); // Extend Language file
 
 /////////////////////////////////////////////////
 // Directory settings II (ended with '/')
@@ -258,8 +262,8 @@ $autoglossary = 2;
 $function_freeze = 1;
 
 /////////////////////////////////////////////////
-// Enable 'Do not change timestamp' at edit
-// (1:Enable, 2:Enable only administrator, 0:Disable)
+// Allow to use 'Do not change timestamp' checkbox
+// (0:Disable, 1:For everyone,  2:Only for the administrator)
 $notimeupdate = 1;
 
 /////////////////////////////////////////////////
@@ -619,7 +623,7 @@ $agents = array(
 
 	// Opera, dressing up as other embedded browsers
 	// Sample: "Mozilla/3.0(DDIPOCKET;KYOCERA/AH-K3001V/1.4.1.67.000000/0.1/C100) Opera 7.0" (Like CNF at 'mobile'-mode)
-	array('pattern'=>'#\bDDIPOCKET\b.+\b(Opera) ([0-9\.]+)\b#',	'profile'=>'mobile'),
+	array('pattern'=>'#\b(?:DDIPOCKET|WILLCOM)\b.+\b(Opera) ([0-9\.]+)\b#', 'profile'=>'keitai'),
 
 	// Planetweb http://www.planetweb.com/
 	// Sample: "Mozilla/3.0 (Planetweb/v1.07 Build 141; SPS JP)" ("EGBROWSER", Web browser for PlayStation 2)
