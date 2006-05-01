@@ -209,10 +209,11 @@ function file_write($dir, $page, $str, $notimestamp = FALSE)
 		// Update RecentDeleted (Add the $page)
 		add_recent($page, $whatsdeleted, '', $maxshow_deleted);
 
+		// Remove the page
 		unlink($file);
 
-		// Update RecentChanges (Remove the $page from RecentChanges)
-		put_lastmodified();
+		// Update RecentDeleted, and remove the page from RecentChanges
+		lastmodified_add($whatsdeleted, $page);
 //@miko
 		// Clear page cache
 		if ($dir == DATA_DIR && is_cache($page)) { // cleanup bodycache.
@@ -334,7 +335,7 @@ function add_recent($page, $recentpage, $subject = '', $limit = 0)
 
 // Update PKWK_MAXSHOW_CACHE itself (Add or renew about the $page) (Light)
 // Use without $autolink
-function lastmodified_add($page = '')
+function lastmodified_add($update = '', $remove = '')
 {
 	global $maxshow, $whatsnew, $autolink;
 	global $autoalias, $autoglossary;
@@ -345,7 +346,8 @@ function lastmodified_add($page = '')
 		return;
 	}
 
-	if (check_non_list($page)) return; // no need
+	if (($update == '' || check_non_list($update)) && $remove == '')
+		return; // No need
 
 	$file = CACHE_DIR . PKWK_MAXSHOW_CACHE;
 	if (! file_exists($file)) {
@@ -366,20 +368,30 @@ function lastmodified_add($page = '')
 			$recent_pages[$matches[2]] = $matches[1];
 
 	// Remove if it exists inside
-	if (isset($recent_pages[$page])) unset($recent_pages[$page]);
+	if (isset($recent_pages[$update])) unset($recent_pages[$update]);
+	if (isset($recent_pages[$remove])) unset($recent_pages[$remove]);
 
 	// Add to the top: like array_unshift()
-	if ($page != '') $recent_pages = array($page => get_filetime($page)) + $recent_pages;
+	if ($update != '')
+		$recent_pages = array($update => get_filetime($update)) + $recent_pages;
 
-	// Recreate
-	ftruncate($fp, 0);
-	rewind($fp);
-	foreach ($recent_pages as $_page=>$time)
-		fputs($fp, $time . "\t" . $_page . "\n");
+	// Check
+	$abort = count($recent_pages) < $maxshow;
+	if (! $abort) {
+		// Write
+		ftruncate($fp, 0);
+		rewind($fp);
+		foreach ($recent_pages as $_page=>$time)
+			fputs($fp, $time . "\t" . $_page . "\n");
+	}
 
 	flock($fp, LOCK_UN);
 	fclose($fp);
 
+	if ($abort) {
+		put_lastmodified(); // Try to (re)create ALL
+		return;
+	}
 
 	// ----
 	// Update the page 'RecentChanges'
@@ -394,7 +406,7 @@ function lastmodified_add($page = '')
 	set_file_buffer($fp, 0);
 	flock($fp, LOCK_EX);
 
-	// Write
+	// Recreate
 	ftruncate($fp, 0);
 	rewind($fp);
 	foreach ($recent_pages as $_page=>$time)
