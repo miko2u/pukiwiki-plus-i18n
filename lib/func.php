@@ -833,11 +833,6 @@ if (! function_exists('sha1')) {
 		{
 			return bin2hex(mhash(MHASH_SHA1, $str));
 		}
-	} else {
-		function sha1($str, $raw_output = FALSE)
-		{
-			die('Function sha1() not found and extension \'mhash\' not exists');
-		}
 	}
 }
 ?>

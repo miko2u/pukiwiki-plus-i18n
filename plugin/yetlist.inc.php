@@ -1,62 +1,72 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: yetlist.inc.php,v 1.23 2005/06/18 10:44:00 teanan Exp $
+// $Id: yetlist.inc.php,v 1.27 2006/05/05 03:22:34 henoheno Exp $
+// Copyright (C) 2001-2006 PukiWiki Developers Team
+// License: GPL v2 or (at your option) any later version
 //
-// Yet list plugin - Show a dangling link list (not yet created)
+// Yet list plugin - Show a list of dangling links (not yet created)
 
 function plugin_yetlist_action()
 {
-	global $script;
-	global $_title_yetlist, $_err_notexist;
+	global $_title_yetlist, $_err_notexist, $_symbol_noexists, $non_list;
 
-	$retval = array(
-		'msg' => $_title_yetlist,
-		'body' => ''
-	);
+	$retval = array('msg' => $_title_yetlist, 'body' => '');
 
-	$refer = array();
-	$pages = array_diff(get_existpages(CACHE_DIR, '.ref'), get_existpages());
-	foreach ($pages as $page) {
-		foreach (file(CACHE_DIR . encode($page) . '.ref') as $line) {
-			list($_page) = explode("\t", rtrim($line));
-			$refer[$page][] = $_page;
-		}
-	}
-
-	if (empty($refer)) {
+	// Diff
+	$pages = get_existpages(CACHE_DIR, '.ref');
+	$pages = array_diff($pages, preg_grep('/' . $non_list . '/S', $pages), get_existpages());
+	if (empty($pages)) {
 		$retval['body'] = $_err_notexist;
 		return $retval;
 	}
 
-	ksort($refer, SORT_STRING);
+	$empty = TRUE;
 
-	foreach ($refer as $page=>$refs) {
-		$r_page = rawurlencode($page);
-		$s_page = htmlspecialchars($page);
-
-		$link_refs = array();
-		foreach (array_unique($refs) as $_refer) {
-			$r_refer = rawurlencode($_refer);
-			$s_refer = htmlspecialchars($_refer);
-
-			$link_refs[] = "<a href=\"$script?$r_refer\">$s_refer</a>";
+	// Load .ref files and Output
+	$script = get_script_uri();
+	asort($pages, SORT_STRING);
+	foreach ($pages as $file=>$page) {
+		$refer = array();
+		foreach (file(CACHE_DIR . $file) as $line) {
+			list($_page) = explode("\t", rtrim($line));
+			$refer[] = $_page;
 		}
-		$link_ref = join(' ', $link_refs);
+		if (! empty($refer)) {
+			$empty = FALSE;
+			$refer = array_unique($refer);
+			sort($refer, SORT_STRING);
 
-		if (PKWK_READONLY) {
-			$href = $s_page;
-		} else {
-			// Show edit link
-			// 参照元ページが複数あった場合、referは最後のページを指す(いいのかな)
-			$href = '<a href="' . $script . '?cmd=edit&amp;page=' . $r_page .
-				'&amp;refer=' . $r_refer . '">' . $s_page . '</a>';
+			$r_refer = '';
+			$link_refs = array();
+			foreach ($refer as $_refer) {
+				$r_refer = rawurlencode($_refer);
+				$link_refs[] = '<a href="' . $script . '?' . $r_refer . '">' .
+					htmlspecialchars($_refer) . '</a>';
+			}
+			$link_ref = join(' ', $link_refs);
+			unset($link_refs);
+
+			$s_page = htmlspecialchars($page);
+			if (PKWK_READONLY) {
+				$href = $s_page;
+			} else {
+				// Dangling link
+				$href = '<span class="noexists">' . $s_page . '<a href="' .
+					$script . '?cmd=edit&amp;page=' . rawurlencode($page) .
+					'&amp;refer=' . $r_refer . '">' . $_symbol_noexists .
+					'</a></span>';
+			}
+			$retval['body'] .= '<li>' . $href . ' <em>(' . $link_ref . ')</em></li>' . "\n";
 		}
-		$retval['body'] .= '<li>' . $href . ' <em>(' . $link_ref . ')</em></li>' . "\n";
 	}
 
-	if ($retval['body'] != '') {
-		$retval['body'] = "<ul>\n" . $retval['body'] . "</ul>\n";
+	if ($empty) {
+		$retval['body'] = $_err_notexist;
+		return $retval;
 	}
+
+	if ($retval['body'] != '')
+		$retval['body'] = '<ul>' . "\n" . $retval['body'] . '</ul>' . "\n";
 
 	return $retval;
 }
