@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: func.php,v 1.71.5 2006/04/27 01:27:00 miko Exp $
+// $Id: func.php,v 1.72.5 2006/05/04 09:30:58 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2006 PukiWiki Developers Team
@@ -879,11 +879,6 @@ if (! function_exists('sha1')) {
 		function sha1($str)
 		{
 			return bin2hex(mhash(MHASH_SHA1, $str));
-		}
-	} else {
-		function sha1($str)
-		{
-			die(_("Function sha1() not found and extension 'mhash' not exists"));
 		}
 	}
 }
