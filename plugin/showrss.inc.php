@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: showrss.inc.php,v 1.21.2 2006/05/05 04:32:09 miko Exp $
+// $Id: showrss.inc.php,v 1.21.3 2006/05/08 23:46:00 upk Exp $
 //  Id:showrss.inc.php,v 1.40 2003/03/18 11:52:58 hiro Exp
 // Copyright (C):
 //     2002-2006 PukiWiki Developers Team
@@ -18,7 +18,8 @@ define('PLUGIN_SHOWRSS_USAGE', '#showrss(URI-to-RSS[,default|menubar|recent[,Cac
 // Show related extensions are found or not
 function plugin_showrss_action()
 {
-	if (PKWK_SAFE_MODE) die_message('PKWK_SAFE_MODE prohibit this');
+	// if (PKWK_SAFE_MODE) die_message('PKWK_SAFE_MODE prohibit this');
+	if (auth::check_role('safemode')) die_message('PKWK_SAFE_MODE prohibits this');
 
 	$body = '';
 	foreach(array('xml', 'mbstring') as $extension){
