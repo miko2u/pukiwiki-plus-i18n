@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: pukiwiki.ini.php,v 1.131.26 2006/04/30 16:19:00 upk Exp $
+// $Id: pukiwiki.ini.php,v 1.131.27 2006/05/11 01:32:00 upk Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
@@ -34,6 +34,10 @@ if (! defined('PKWK_READONLY'))
 // PKWK_SAFE_MODE - Prohibits some unsafe(but compatible) functions 
 if (! defined('PKWK_SAFE_MODE'))
 	define('PKWK_SAFE_MODE', 0); // 0,1,2,3,4
+
+// PKWK_USE_REDIRECT - When linking outside, Referer is removed.
+if (! defined('PKWK_USE_REDIRECT'))
+        define('PKWK_USE_REDIRECT', 0);
 
 // PKWK_DISABLE_INLINE_IMAGE_FROM_URI - Disallow using inline-image-tag for URIs
 //   Inline-image-tag for URIs may allow leakage of Wiki readers' information
