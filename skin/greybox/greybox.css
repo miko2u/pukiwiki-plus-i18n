@@ -1,9 +1,19 @@
 #GB_overlay {
+  background-image: url(overlay.png); 
   position: absolute;
   margin: auto;
   top: 0;
   left: 0;
   z-index: 100;
+}
+
+* html #GB_overlay {
+  background-color: #000;
+  background-color: transparent;
+  background-image: url(blank.gif);
+  /* JO1UPK : 2006-02-13
+  /* filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="greybox/overlay.png", sizingMethod="scale"); */
+  filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="skin/greybox/overlay.png", sizingMethod="scale");
 }
 
 #GB_window {
