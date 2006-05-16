@@ -15,7 +15,7 @@ defined('PLUGIN_EDIT_SPAMLOG') or define('PLUGIN_EDIT_SPAMLOG', FALSE);
 function plugin_edit_action()
 {
 	// global $vars, $_title_edit, $load_template_func;
-	global $vars, $load_template_func;
+	global $vars, $post, $load_template_func;
 
 	// if (PKWK_READONLY) die_message( _('PKWK_READONLY prohibits editing') );
 	if (auth::check_role('readonly')) die_message( _('PKWK_READONLY prohibits editing') );
