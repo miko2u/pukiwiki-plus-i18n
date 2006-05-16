@@ -178,8 +178,12 @@ function plugin_edit_write()
 	$digest = isset($vars['digest']) ? $vars['digest'] : '';
 	$partid = isset($vars['id'])     ? $vars['id']     : '';
 	$ticket = isset($vars['ticket']) ? $vars['ticket'] : '';
+	$notimestamp = isset($vars['notimestamp']) && $vars['notimestamp'] != '';
 
-	// Check Ticket
+	// Check Validate and Ticket
+	if ($notimestamp && !is_page($page)) {
+		return plugin_edit_honeypot();
+	}
 	if (md5(get_ticket() . str_replace("\r", '', htmlspecialchars($vars['original']))) != $ticket) {
 		return plugin_edit_honeypot();
 	}
@@ -252,7 +256,7 @@ function plugin_edit_write()
 	}
 
 	// $notimeupdate: Checkbox 'Do not change timestamp'
-	$notimestamp = isset($vars['notimestamp']) && $vars['notimestamp'] != '';
+//	$notimestamp = isset($vars['notimestamp']) && $vars['notimestamp'] != '';
 //	if ($notimeupdate > 1 && $notimestamp && ! pkwk_login($vars['pass'])) {
 	if ($notimeupdate > 1 && $notimestamp && auth::check_role('role_adm_contents') && !pkwk_login($vars['pass'])) {
 		// Enable only administrator & password error
