@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: edit.inc.php,v 1.40.20 2006/04/25 14:59:24 miko Exp $
+// $Id: edit.inc.php,v 1.40.22 2006/05/16 12:49:24 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2001-2006 PukiWiki Developers Team
@@ -10,6 +10,7 @@
 
 // Remove #freeze written by hand
 define('PLUGIN_EDIT_FREEZE_REGEX', '/^(?:#freeze(?!\w)\s*)+/im');
+defined('PLUGIN_EDIT_SPAMLOG') or define('PLUGIN_EDIT_SPAMLOG', FALSE);
 
 function plugin_edit_action()
 {
@@ -29,7 +30,14 @@ function plugin_edit_action()
 	if (isset($vars['preview']) || ($load_template_func && isset($vars['template']))) {
 		return plugin_edit_preview();
 	} else if (isset($vars['write'])) {
-		return plugin_edit_write();
+		// Petit SPAM Check (Client(Browser)-Server Ticket Check)
+		if (!isset($post['encode_hint']) && PKWK_ENCODING_HINT == '') {
+			return plugin_edit_write();
+		} elseif (isset($post['encode_hint']) && $post['encode_hint'] == PKWK_ENCODING_HINT) {
+			return plugin_edit_write();
+		} else {
+			return plugin_edit_honeypot();
+		}
 	} else if (isset($vars['cancel'])) {
 		return plugin_edit_cancel();
 	}
@@ -272,6 +280,24 @@ function plugin_edit_cancel()
 	pkwk_headers_sent();
 	header('Location: ' . get_script_uri() . '?' . rawurlencode($vars['page']));
 	exit;
+}
+
+// Cancel (Back to the page / Escape edit page)
+function plugin_edit_honeypot()
+{
+	global $get, $post, $vars;
+
+	// Logging for SPAM Report
+	// NOTE: Not recommended use Rental Server
+	if (PLUGIN_EDIT_SPAMLOG === TRUE && version_compare(PHP_VERSION, '4.2.0', '>=')) {
+		error_log("----" . date('Y-m-d H:i:s', time()) . "\n", 3, CACHE_DIR . 'honeypot.log');
+		error_log("[GET]\n"  . var_export($get,  TRUE) . "\n", 3, CACHE_DIR . 'honeypot.log');
+		error_log("[POST]\n" . var_export($post, TRUE) . "\n", 3, CACHE_DIR . 'honeypot.log');
+		error_log("[VARS]\n" . var_export($vars, TRUE) . "\n", 3, CACHE_DIR . 'honeypot.log');
+	}
+
+	// Same as "Cancel" action
+	return plugin_edit_cancel();
 }
 
 // Replace/Pickup a part of source
