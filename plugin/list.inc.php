@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: list.inc.php,v 1.5.4 2005/06/02 08:16:28 miko Exp $
+// $Id: list.inc.php,v 1.6.4 2006/05/13 07:36:41 miko Exp $
 //
 // IndexPages plugin: Show a list of page names
 function plugin_list_action()
@@ -24,7 +24,7 @@ function plugin_list_getlist($withfilename = FALSE)
 
 	$pages = array_diff(get_existpages(),array($whatsnew));
 	if (!$withfilename)
-		$pages = array_diff($pages, preg_grep('/' . $non_list . '/', $pages));
+		$pages = array_diff($pages, preg_grep('/' . $non_list . '/S', $pages));
 	if (empty($pages)) return '';
 
 	return page_list($pages,'read',$withfilename);
