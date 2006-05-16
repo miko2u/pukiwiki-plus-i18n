@@ -257,7 +257,7 @@ EOD;
 	}
 
 	$add_notimestamp = '';
-	if ( $notimeupdate != 0 ) {
+	if ($notimeupdate != 0 && is_page($page)) {
 		// enable 'do not change timestamp'
 		$add_notimestamp = <<<EOD
   <input type="checkbox" name="notimestamp" id="_edit_form_notimestamp" value="true"$checked_time />
