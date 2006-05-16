@@ -1,8 +1,8 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: fileplus.php,v 1.1 2005/04/30 05:21:00 miko Exp $
+// $Id: fileplus.php,v 1.2 2006/05/15 05:21:00 miko Exp $
 // Copyright (C)
-//   2005      PukiWiki Plus! Team
+//   2005-2006 PukiWiki Plus! Team
 // License: GPL v2 or (at your option) any later version
 //
 // File related functions - extra functions
@@ -10,11 +10,14 @@
 // Get Ticket
 function get_ticket($newticket = FALSE)
 {
-	if (file_exists(CACHE_DIR . 'ticket.dat') && $newticket !== TRUE) {
+	$file = CACHE_DIR . 'ticket.dat';
+
+	if (file_exists($file) && $newticket !== TRUE) {
+		$fp = fopen($file, 'r') or die_message('Cannot open ' . 'CACHE_DIR/' . 'ticket.dat');
 		$ticket = trim(fread($fp, filesize($path)));
+		fclose($fp);
 	} else {
 		$ticket = md5(mt_rand());
-		$file = CACHE_DIR . 'ticket.dat';
 		pkwk_touch_file($file);
 		$fp = fopen($file, 'r+') or die_message('Cannot open ' . 'CACHE_DIR/' . 'ticket.dat');
 		set_file_buffer($fp, 0);
