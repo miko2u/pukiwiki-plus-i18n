@@ -14,7 +14,7 @@ function get_ticket($newticket = FALSE)
 
 	if (file_exists($file) && $newticket !== TRUE) {
 		$fp = fopen($file, 'r') or die_message('Cannot open ' . 'CACHE_DIR/' . 'ticket.dat');
-		$ticket = trim(fread($fp, filesize($path)));
+		$ticket = trim(fread($fp, filesize($file)));
 		fclose($fp);
 	} else {
 		$ticket = md5(mt_rand());

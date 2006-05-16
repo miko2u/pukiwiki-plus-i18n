@@ -180,7 +180,7 @@ function plugin_edit_write()
 	$ticket = isset($vars['ticket']) ? $vars['ticket'] : '';
 
 	// Check Ticket
-	if (md5(get_ticket() . $vars['original']) != $ticket) {
+	if (md5(get_ticket() . str_replace("\r\n", "\n", $vars['original'])) != $ticket) {
 		return plugin_edit_honeypot();
 	}
 
