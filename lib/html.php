@@ -247,7 +247,7 @@ EOD;
 	$s_digest    = htmlspecialchars($digest);
 	$s_postdata  = htmlspecialchars($refer . $postdata);
 	$s_original  = isset($vars['original']) ? htmlspecialchars($vars['original']) : $s_postdata;
-	$s_ticket    = md5(get_ticket() . $s_original);
+	$s_ticket    = md5(get_ticket() . str_replace("\r", '', rtrim($s_original)));
 	$s_id        = isset($vars['id']) ? htmlspecialchars($vars['id']) : '';
 	$b_preview   = isset($vars['preview']); // TRUE when preview
 	$btn_preview = $b_preview ? $_button['repreview'] : $_button['preview'];
