@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: html.php,v 1.49.57 2006/04/27 14:29:00 miko Exp $
+// $Id: html.php,v 1.49.57 2006/05/15 14:29:00 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2006 PukiWiki Developers Team
@@ -247,6 +247,7 @@ EOD;
 	$s_digest    = htmlspecialchars($digest);
 	$s_postdata  = htmlspecialchars($refer . $postdata);
 	$s_original  = isset($vars['original']) ? htmlspecialchars($vars['original']) : $s_postdata;
+	$s_ticket    = md5(get_ticket() . $s_original);
 	$s_id        = isset($vars['id']) ? htmlspecialchars($vars['id']) : '';
 	$b_preview   = isset($vars['preview']); // TRUE when preview
 	$btn_preview = $b_preview ? $_button['repreview'] : $_button['preview'];
@@ -282,6 +283,7 @@ $template
   <input type="hidden" name="cmd"    value="edit" />
   <input type="hidden" name="page"   value="$s_page" />
   <input type="hidden" name="digest" value="$s_digest" />
+  <input type="hidden" name="ticket" value="$s_ticket" />
   <input type="hidden" name="id"     value="$s_id" />
   <textarea id="msg" name="msg" rows="$rows" cols="$cols" onselect="pukiwiki_apv(this.form.page.value,this)" onfocus="pukiwiki_apv(this.form.page.value,this)" onkeyup="pukiwiki_apv(this.form.page.value,this)" onmouseup="pukiwiki_apv(this.form.page.value,this)">$s_postdata</textarea>
   <br />
@@ -310,7 +312,6 @@ EOD;
 	if ($ajax) {
 		global $head_tags;
 		$head_tags[] = ' <script type="text/javascript" charset="utf-8" src="' . SKIN_URI . 'ajax/msxml.js"></script>';
-//		$head_tags[] = ' <script type="text/javascript" charset="utf-8" src="' . SKIN_URI . 'ajax/textloader.js"></script>';
 		$head_tags[] = ' <script type="text/javascript" charset="utf-8" src="' . SKIN_URI . 'ajax/realedit.js"></script>';
 	}
 

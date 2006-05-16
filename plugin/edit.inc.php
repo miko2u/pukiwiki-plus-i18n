@@ -177,6 +177,12 @@ function plugin_edit_write()
 	$add    = isset($vars['add'])    ? $vars['add']    : '';
 	$digest = isset($vars['digest']) ? $vars['digest'] : '';
 	$partid = isset($vars['id'])     ? $vars['id']     : '';
+	$ticket = isset($vars['ticket']) ? $vars['ticket'] : '';
+
+	// Check Ticket
+	if (md5(get_ticket() . $vars['original']) != $ticket) {
+		return plugin_edit_honeypot();
+	}
 
 	// Paragraph edit mode
 	if ($partid) {

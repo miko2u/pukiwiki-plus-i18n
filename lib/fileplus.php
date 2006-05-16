@@ -7,7 +7,28 @@
 //
 // File related functions - extra functions
 
-// Get EXIF data.
+// Get Ticket
+function get_ticket($newticket = FALSE)
+{
+	if (file_exists(CACHE_DIR . 'ticket.dat') && $newticket !== TRUE) {
+		$ticket = trim(fread($fp, filesize($path)));
+	} else {
+		$ticket = md5(mt_rand());
+		$file = CACHE_DIR . 'ticket.dat';
+		pkwk_touch_file($file);
+		$fp = fopen($file, 'r+') or die_message('Cannot open ' . 'CACHE_DIR/' . 'ticket.dat');
+		set_file_buffer($fp, 0);
+		flock($fp, LOCK_EX);
+		ftruncate($fp, 0);
+		rewind($fp);
+		fputs($fp, $ticket . "\n");
+		flock($fp, LOCK_UN);
+		fclose($fp);
+	}
+	return $ticket;
+}
+
+// Get EXIF data
 function get_exif_data($file)
 {
 	if (!extension_loaded('exif')) { return FALSE; }
