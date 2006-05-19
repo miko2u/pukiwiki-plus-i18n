@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: convert_html.php,v 1.18.11 2006/05/15 07:29:58 miko Exp $
+// $Id: convert_html.php,v 1.18.14 2006/05/15 07:29:58 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2006 PukiWiki Developers Team
@@ -912,7 +912,7 @@ class Body extends Element
 				$len = strlen($matches[1]);
 				$line .= "\r"; // Delimiter
 				while (! empty($lines)) {
-					$next_line = preg_replace("/[\r\n]*$/", '', array_shift($lines));
+					$next_line = rtrim(array_shift($lines), "\r\n");
 					if (preg_match('/\}{' . $len . '}/', $next_line)) {
 						$line .= $next_line;
 						break;
