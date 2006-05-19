@@ -253,8 +253,11 @@ EOD;
 	$btn_preview = $b_preview ? $_button['repreview'] : $_button['preview'];
 
 	if ($ajax) {
-		$add_ajax = '<input type="button" name="add_ajax" value="'.$btn_preview.'" accesskey="p" onclick="pukiwiki_apx(this.form.page.value)" />';
+		$add_ajax = '<input type="button" name="add_ajax" value="' . $btn_preview . '" accesskey="p" onclick="pukiwiki_apx(this.form.page.value)" />';
+	} else {
+		$add_ajax = '<input type="submit" name="preview" value="' . $btn_preview . '" accesskey="p" />';
 	}
+
 
 	$add_notimestamp = '';
 	if ($notimeupdate != 0 && is_page($page)) {
@@ -298,8 +301,6 @@ $template
  </div>
 </form>
 EOD;
-
-//  <input type="submit" name="preview" value="$btn_preview" accesskey="p" />
 
 //	if (isset($vars['help'])) {
 //		$body .= $hr . catrule();
