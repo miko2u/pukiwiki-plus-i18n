@@ -10,9 +10,12 @@
 //
 // Comment plugin
 
-define('PLUGIN_COMMENT_DIRECTION_DEFAULT', '1'); // 1: above 0: below
-define('PLUGIN_COMMENT_SIZE_MSG',  68);
-define('PLUGIN_COMMENT_SIZE_NAME', 15);
+defined('PLUGIN_COMMENT_SPAMLOG') or define('PLUGIN_COMMENT_SPAMLOG', FALSE);
+
+// ----
+defined('PLUGIN_COMMENT_DIRECTION_DEFAULT') or define('PLUGIN_COMMENT_DIRECTION_DEFAULT', '1'); // 1: above 0: below
+defined('PLUGIN_COMMENT_SIZE_MSG') or define('PLUGIN_COMMENT_SIZE_MSG',  68);
+defined('PLUGIN_COMMENT_SIZE_NAME') or define('PLUGIN_COMMENT_SIZE_NAME', 15);
 
 // ----
 define('PLUGIN_COMMENT_FORMAT_MSG',  '$msg');
@@ -22,6 +25,24 @@ define('PLUGIN_COMMENT_FORMAT_STRING', "\x08MSG\x08 -- \x08NAME\x08 \x08NOW\x08"
 
 function plugin_comment_action()
 {
+	global $vars, $post;
+
+	// if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
+	if (auth::check_role('readonly')) die_message('PKWK_READONLY prohibits editing');
+
+	// Petit SPAM Check (Client(Browser)-Server Ticket Check)
+	if (!isset($post['encode_hint']) && PKWK_ENCODING_HINT == '') {
+		return plugin_comment_write();
+	} elseif (isset($post['encode_hint']) && $post['encode_hint'] == PKWK_ENCODING_HINT) {
+		return plugin_comment_write();
+	}
+
+	// If SPAM, goto jail.
+	return plugin_comment_honeypot();
+}
+
+function plugin_comment_write()
+{
 	global $script, $vars, $now;
 	global $_no_name;
 //	global $_msg_comment_collided, $_title_comment_collided, $_title_updated;
@@ -29,9 +50,6 @@ function plugin_comment_action()
 	$_title_comment_collided = _("On updating  $1, a collision has occurred.");
 	$_msg_comment_collided   = _("It seems that someone has already updated the page you were editing.<br />") .
 	                           _("The comment was added, alhough it may be inserted in the wrong position.<br />");
-
-	// if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
-	if (auth::check_role('readonly')) die_message('PKWK_READONLY prohibits editing');
 
 	if (! isset($vars['msg'])) return array('msg'=>'', 'body'=>''); // Do nothing
 
@@ -94,6 +112,24 @@ function plugin_comment_action()
 	$vars['page'] = $vars['refer'];
 
 	return $retvars;
+}
+
+// Cancel (Back to the page / Escape edit page)
+function plugin_comment_honeypot()
+{
+	global $get, $post, $vars;
+
+	// Logging for SPAM Report
+	// NOTE: Not recommended use Rental Server
+	if (PLUGIN_COMMENT_SPAMLOG === TRUE && version_compare(PHP_VERSION, '4.2.0', '>=')) {
+		error_log("----" . date('Y-m-d H:i:s', time()) . "\n", 3, CACHE_DIR . 'honeypot.log');
+		error_log("[GET]\n"  . var_export($get,  TRUE) . "\n", 3, CACHE_DIR . 'honeypot.log');
+		error_log("[POST]\n" . var_export($post, TRUE) . "\n", 3, CACHE_DIR . 'honeypot.log');
+		error_log("[VARS]\n" . var_export($vars, TRUE) . "\n", 3, CACHE_DIR . 'honeypot.log');
+	}
+
+	// Same as "Cancel" action
+	return array('msg'=>'', 'body'=>''); // Do nothing
 }
 
 function plugin_comment_convert()
