@@ -2,14 +2,14 @@
 /*
  * Operating System
  *
- * @copyright   Copyright &copy; 2004-2005, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: ua_operating_systems.cls.php,v 0.1 2005/06/14 00:10:00 upk Exp $
+ * @copyright   Copyright &copy; 2004-2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * @version     $Id: ua_operating_systems.cls.php,v 0.2 2006/05/21 05:29:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License
  *
  * o 参考にしたコード(AWStats)
  *   http://awstats.sourceforge.net/
- *   Copyright (C) 2000-2005 - Laurent Destailleur - eldy@users.sourceforge.net
- *   awstats-6.5/wwwroot/cgi-bin/lib/operating_systems.pm
+ *   Copyright (C) 2000-2006 - Laurent Destailleur - eldy@users.sourceforge.net
+ *   awstats-6.6/wwwroot/cgi-bin/lib/operating_systems.pm
  */
 
 class ua_operating_systems
@@ -39,27 +39,41 @@ class ua_operating_systems
 		array('mac[_+ ]?p',			'macintosh'),	// macintosh.png
 		array('mac[_+ ]68',			'macintosh'),	
 		array('macweb',				'macintosh'),	
-		array('macintosh',			'macintosh'),	
-		# Unix like OS
-		array('linux',				'linux'),	// linux.png
+		array('macintosh',			'macintosh'),
+		# Linux family
+		array('linux(.*)centos',		'linuxcentos'),
+		array('linux(.*)debian',		'linuxdebian'),
+		array('linux(.*)fedora',		'linuxfedora'),
+		array('linux(.*)mandr',			'linuxmandr'),
+		array('linux(.*)red[_+ ]hat',		'linuxredhat'),
+		array('linux(.*)suse',			'linuxsuse'),
+		array('linux(.*)ubuntu',		'linuxubuntu'),
+		array('linux',				'linux'),
+		# Hurd family
+		array('gnu.hurd',			'gnu'),
+		# BSDs family
+		array('bsdi',				'bsdi'),        // bsdi.png
+		array('gnu.kfreebsd',			'bsdkfreebsd'),	// Must be before freebsd
+		array('freebsd',			'freebsd'),     // freebsd.png
+		array('openbsd',			'openbsd'),     // openbsd.png
+		array('netbsd',				'netbsd'),      // netbsd.png
+		# Other Unix, Unix-like
 		array('aix',				'aix'),		// aix.png
 		array('sunos',				'sunos'),	// sunos.png
 		array('irix',				'irix'),	// irix.png
 		array('osf',				'osf'),		// osf.png
-		array('hp-ux',				'hpux'),	// hpux.png
-		array('netbsd',				'netbsd'),	// netbsd.png
-		array('bsdi',				'bsdi'),	// bsdi.png
-		array('freebsd',			'freebsd'),	// freebsd.png
-		array('openbsd',			'openbsd'),	// openbsd.png
-		array('gnu',				'gnu'),		// gnu.png
+		array('hp\-ux',				'hpux'),	// hpux.png
+		//array('gnu',				'gnu'),		// gnu.png
 		array('unix',				'unix'),	// unix.png
 		array('x11',				'unix'),	
+		array('gnome\-vfs',			''),
 		# Other famous OS
 		array('beos',				'beos'),	// beos.png
 		array('os/2',				'os2'),		// os2.png
 		array('amiga',				'amigaos'),	// amigaos.png
 		array('atari',				'atari'),	// atari.png
 		array('vms',				'vms'),		// vms.png
+		array('commodore',			'commodore'),	// commodore.png
 		# Miscellanous OS
 		array('cp/m',				'cpm'),		// cpm.png
 		array('crayos',				'crayos'),	
@@ -67,6 +81,8 @@ class ua_operating_systems
 		array('risc[_+ ]?os',			'riscos'),	// riscos.png
 		array('symbian',			'symbian'),	// symbian.png
 		array('webtv',				'webtv'),	// webtv.png
+		array('playstation\sportable',		'psp'),		// psp.png
+		array('xbox',				'xbox'),	// xbox.png
 	);
 
 	function get_icon($ua)

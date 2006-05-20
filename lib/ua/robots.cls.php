@@ -2,8 +2,8 @@
 /*
  * Robot
  *
- * @copyright   Copyright &copy; 2004-2005, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: robots.cls.php,v 0.3 2005/11/30 22:44:00 upk Exp $
+ * @copyright   Copyright &copy; 2004-2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * @version     $Id: robots.cls.php,v 0.4 2006/05/21 05:13:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License
  * 情報取得先
  * o Robot一覧
@@ -12,8 +12,8 @@
  *   http://www.jafsoft.com/searchengines/webbots.html
  * o 参考にしたコード(AWStats)
  *   http://awstats.sourceforge.net/
- *   Copyright (C) 2000-2005 - Laurent Destailleur - eldy@users.sourceforge.net
- *   awstats-6.5/wwwroot/cgi-bin/lib/robots.pm
+ *   Copyright (C) 2000-2006 - Laurent Destailleur - eldy@users.sourceforge.net
+ *   awstats-6.6/wwwroot/cgi-bin/lib/robots.pm
  */
 
 class robots
@@ -44,9 +44,11 @@ class robots
 
 		# Common robots (Not in robot file)
 		'antibot'		=> 'Antibot',
+		'bruinbot'		=> 'The web archive',
 		'digout4u'		=> 'Digout4u',
 		'echo'			=> 'EchO!',
 		'fast\-webcrawler'	=> 'Fast-Webcrawler',		// AllTheWeb
+		'ia_archiver\-web\.archive\.org' => '', # Must be before ia_archiver to avoid confusion with alexa
 		'ia_archiver'		=> 'Alexa (IA Archiver)',
 		'jennybot'		=> 'JennyBot',
 		'mercator'		=> 'Mercator',
@@ -56,6 +58,9 @@ class robots
 		'unlost_web_crawler'	=> 'Unlost Web Crawler',
 		'voila'			=> 'Voila',
 		'webbase'		=> 'WebBase',
+		'webcollage'		=> 'WebCollage',
+		'cfetch'		=> 'cfetch',
+		'zyborg'		=> 'ZyBorg',			// Must be before wisenut
 		'wisenutbot'		=> 'WISENutbot',		// Looksmart
 
 		# Less common robots (In robot file)
@@ -70,6 +75,7 @@ class robots
 		'araneo'		=> 'Araneo',
 		'aretha'		=> 'Aretha',
 		'ariadne'		=> 'ARIADNE',
+		'powermarks'		=> '',
 		'arks'			=> 'arks',
 		'aspider'		=> 'ASpider (Associative Spider)',
 		'atn\.txt'		=> 'ATN Worldwide',
@@ -260,6 +266,7 @@ class robots
 		'spiderman'		=> 'SpiderMan',
 		'spiderview'		=> 'SpiderView(tm)',
 		'spry'			=> 'Spry Wizard Robot',
+		'sqworm'		=> 'Sqworm',
 		'ssearcher'		=> 'Site Searcher',
 		'suke'			=> 'Suke',
 		'suntek'		=> 'suntek search engine',
@@ -317,57 +324,122 @@ class robots
 		'xget'			=> 'XGET',
 
 		# Other robots reported by users
+		'almaden'		=> 'IBM Almaden',
 		'aport'			=> 'Aport',
+		'argus'			=> 'Argus',		// Must be before nutch
+		'asterias'		=> 'Asterias',
 		'awbot'			=> 'AWBot',
 		'baiduspider'		=> 'BaiDuSpider',
+		'becomebot'		=> 'BecomeBot',
+		'bender'		=> 'bender',
+		'bloglines'		=> 'Bloglines',
+		'blogpulse'		=> 'BlogPulse ISSpider intelliseek.com',
+		'blogshares'		=> 'Blogshares Spiders',
+		'blogslive'		=> 'Blogslive',
+		'blogssay'		=> 'BlogsSay :: RSS Search Crawler',
 		'bobby'			=> 'Bobby', 
 		'boris'			=> 'Boris',
 		'bumblebee'		=> 'Bumblebee (relevare.com)',
+		'converacrawler'	=> 'ConveraCrawler',
 		'cscrawler'		=> 'CsCrawler',
 		'daviesbot'		=> 'DaviesBot',
+		'daypopbot'		=> 'DayPop',
+		'dipsie\.bot'		=> 'Dipsie',
+		'domainsdb\.net'	=> 'DomainsDB.net',
 		'exactseek'		=> 'ExactSeek Crawler',
 		'ezresult'		=> 'Ezresult',
+		'everbeecrawler'	=> 'EverbeeCrawler',
+		'ezresult'		=> 'Ezresult',
+		'enteprise'		=> 'Fast Enteprise Crawler',
+		'feedburner'		=> 'Feedburner',
+		'feedfetcher\-google'	=> 'Feedfetcher-Google',
+		'feedster'		=> 'Feedster',
+		'findlinks'		=> 'findlinks',
+		'gaisbot'		=> 'Gaisbot',
+		'geniebot'		=> 'geniebot',
 		'gigabot'		=> 'GigaBot',
+		'girafabot'		=> 'Girafabot',
 		'gnodspider'		=> 'GNOD Spider',
 		'grub'			=> 'Grub.org',
 		'henrythemiragorobot'	=> 'Mirago',
 		'holmes'		=> 'Holmes',
+		'infomine'		=> 'INFOMINE VLCrawler',
 		'internetseer'		=> 'InternetSeer',
 		'justview'		=> 'JustView',
+		'keyoshid'		=> 'Yahoo! Japan keyoshid robot study',		// Must come before Y!J
+		'kinjabot'		=> 'Yahoo! Japan keyoshid robot study',
+		'kinja\-imagebot'	=> 'Kinja Imagebot',
 		'linkbot'		=> 'LinkBot',
-		'linkchecker'		=> 'LinkChecker',
-		'mediapartners\-google'	=> 'Google AdSense',
-		'metager\-linkchecker'	=> 'MetaGer LinkChecker',
-		'microsoft_url_control'	=> 'Microsoft URL Control',
-		'nagios'		=> 'Nagios',
+		'metager\-linkchecker'  => 'MetaGer LinkChecker',
+		'linkchecker'           => 'LinkChecker',
+		'livejournal\.com'	=> 'LiveJournal.com',
+		'lmspider'		=> 'lmspider',
+		'magpierss'		=> 'MagpieRSS',
+		'mediapartners\-google' => 'Google AdSense',
+		'microsoft_url_control' => 'Microsoft URL Control',
+		'mj12bot'		=> 'MJ12bot',
 		'msiecrawler'		=> 'MSIECrawler',
-		'perman'		=> 'Perman surfer',
-		'pompos'		=> 'Pompos',
+		'nagios'		=> 'Nagios',
+		'newsgatoronline'	=> 'NewsGator Online',
+		'noxtrumbot'		=> 'noxtrumbot',
+		'nutch'			=> 'Nutch',
+		'opentaggerbot'		=> 'OpenTaggerBot',
+		'outfoxbot'		=> 'OutfoxBot',
+                'perman'		=> 'Perman surfer',
+		'pluckfeedcrawler'	=> 'PluckFeedCrawler',
+                'pompos'		=> 'Pompos',
+		'popdexter'		=> 'Popdexter',
 		'rambler'		=> 'StackRambler',
 		'redalert'		=> 'Red Alert',
+		'rojo'			=> 'RoJo',
+		'rssimagesbot'		=> 'rssImagesBot',
+		'ruffle'		=> 'ruffle SemanticWeb crawler',
+		'rufusbot'		=> 'RufusBot Rufus Web Miner',
+		'sandcrawler'		=> 'SandCrawler (Microsoft)',
+		'sbider'		=> 'SBIder',
+		'seekbot'		=> 'Seekbot',
+		'seznambot'		=> 'SeznamBot',
 		'shoutcast'		=> 'Shoutcast Directory Service',
 		'slysearch'		=> 'SlySearch',
+		'sohu-search'		=> 'sohu-search',
 		'surveybot'		=> 'SurveyBot',
+		'syndic8'		=> 'Syndic8',
+		'technoratibot'		=> 'Technoratibot',
+		't\-h\-u\-n\-d\-e\-r\-s\-t\-o\-n\-e' => 'T-H-U-N-D-E-R-S-T-O-N-E',
+		'topicblogs'		=> 'topicblogs',
 		'turnitinbot'		=> 'Turn It In',
+		'turtlescanner'		=> 'Turtle',			// Must be before turtle
 		'turtle'		=> 'Turtle',
-		'turtlescanner'		=> 'Turtle',
 		'ultraseek'		=> 'Ultraseek',
+		'w3c\-checklink'	=> 'W3C Link Checker',
+		'w3c_css_validator_jfouffa' => 'W3C jigsaw CSS Validator',
+		'w3c_validator'		=> 'W3C Validator',
 		'webclipping\.com'	=> 'WebClipping.com',
 		'webcompass'		=> 'webcompass',
+		'webvulncrawl'		=> 'WebVulnCrawl',
 		'wonderer'		=> 'Web Wombat Redback Spider',
+		'y!j'			=> 'Y!J Yahoo Japan',		// Must come after keyoshid Y!J
+		'yacy'			=> 'yacy',
+		'yahoo\-blogs'		=> 'Yahoo-Blogs',
 		'yahoo\-verticalcrawler'=> 'Yahoo Vertical Crawler',	// Yahoo
+		'yahoofeedseeker'	=> 'Yahoo Feed Seeker',
+		'yahooseeker\-testing'	=> 'YahooSeeker-Testing',
+		'yahooseeker'		=> 'YahooSeeker Yahoo! Blog crawler',
+		'yahoo\-mmcrawler'	=> 'Yahoo-MMCrawler',
 		'yandex'		=> 'Yandex bot',
 		'zealbot'		=> 'ZealBot',
 		'zyborg'		=> 'Zyborg',			// Looksmart
+		'ng\/1\.'		=> 'NG 1.x (Exalead)', 		// put at end to avoid false positive
+		'ng\/2\.'		=> 'NG 2.x (Exalead)',		// put at end to avoid false positive
 		# UPK Add
 		'OmniExplorer_Bot'	=> 'OmniExplorer Bot',
-		'Y!J-BSC\/'		=> 'Yahoo! JAPAN',
-		'Y!J-DSC\/'		=> 'Yahoo! JAPAN',
 		'ichiro\/'		=> 'goo',
+		'moewe'			=> 'doko.jp',
 		# Generic root ID
 		'robot'			=> 'Unknown robot (identified by \'robot\')',
 		'crawl'			=> 'Unknown robot (identified by \'crawl\')',
 		'spider'		=> 'Unknown robot (identified by \'spider\')',
+		'\wbot[\/\-]'		=> 'Unknown robot (identified by \'bot/\' or \'bot-\')',
 
 		# Unknown robots identified by hit on robots.txt
 		'unknown'		=> 'Unknown robot (identified by hit on \'robots.txt\')',

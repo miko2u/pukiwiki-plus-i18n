@@ -2,15 +2,15 @@
 /*
  * Browser
  *
- * @copyright   Copyright &copy; 2004-2005, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: ua_browsers.cls.php,v 0.2 2005/06/14 00:10:00 upk Exp $
+ * @copyright   Copyright &copy; 2004-2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * @version     $Id: ua_browsers.cls.php,v 0.3 2006/05/21 03:45:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License
  *
  * o 参考にしたコード(AWStats)
  *   http://awstats.sourceforge.net/
- *   Copyright (C) 2000-2005 - Laurent Destailleur - eldy@users.sourceforge.net
- *   awstats-6.5/wwwroot/cgi-bin/awstats.pl
- *   awstats-6.5/wwwroot/cgi-bin/lib/browsers.pm
+ *   Copyright (C) 2000-2006 - Laurent Destailleur - eldy@users.sourceforge.net
+ *   awstats-6.6/wwwroot/cgi-bin/awstats.pl
+ *   awstats-6.6/wwwroot/cgi-bin/lib/browsers.pm
  */
 
 class ua_browsers
@@ -34,12 +34,6 @@ class ua_browsers
 		'turnitinbot',
 		'Yahoo!.\bSlurp',
 
-		# PDA/携帯電話 I-Mode ブラウザ
-		'docomo',
-		'portalmmm',
-		'j\-phone',			# add upk
-		'ddipocket',			# Opera 対応 で前出 // add upk
-
 		# 有名なブラウザは、最初に定義しておけばヒット率があがる
 		'firebird',
 		'firefox',
@@ -62,15 +56,22 @@ class ua_browsers
 		'chimera',
 		'cyberdog',
 		'dillo',
+		'doris',
 		'dreamcast',
+		'xbox',
 		'downloadagent',
 		'ecatch',
 		'emailsiphon',
 		'encompass',
+		'epiphany',
 		'friendlyspider',
 		'fresco',
 		'galeon',
+		'flashget',
+		'freshdownload',
 		'getright',
+		'leechget',
+		'netants',
 		'headdump',
 		'hotjava',
 		'ibrowse',
@@ -81,13 +82,13 @@ class ua_browsers
 		'lotus\-notes',
 		'macweb',
 		'multizilla',
-		'ncsa_mosaic',
+		'ncsa\smosaic',
 		'netcaptor',
-		'netnewswire',
 		'netpositive',
 		'nutscrape',
 		'msfrontpageexpress',
 		'phoenix',
+		'shiira',		# Must be before safari
 		'safari',
 		'tzgeturl',
 		'viking',
@@ -109,42 +110,26 @@ class ua_browsers
 		'freeamp',
 		'itunes',
 		'jetaudio',
-		'mint_audio',
+		'mint\saudio',
 		'mpg123',
+		'mplayer',
 		'nsplayer',
+		'qts',
 		'sonique',
 		'uplayer',
-		'xmms',
 		'xaudio',
+		'xine',
+		'xmms',
 		
-		# PDA/携帯電話 ブラウザ
-		'alcatel',			# Alcatel
-		'lg\-',				# LG
-		'mot\-',			# Motorola
-		'nokia',			# Nokia
-		'panasonic',			# Panasonic
-		'philips',			# Philips
-		'sagem',			# Sagem
-		'samsung',			# Samsung
-		'sie\-',			# SIE
-		'sec\-',			# SonyEricsson
-		'sonyericsson',			# SonyEricsson
-		'ericsson',			# Ericsson (sonyericsson の後に定義すること)
-		'mmef',
-		'mspie',
-		'wapalizer',
-		'wapsilon',
-		'webcollage',
-		'up\.',				# これは、UP.Browser および UP.Link に左右する
-		
-		# Others (TV)
-		'webtv',
-
 		# RSS Readers
+		'abilon',
 		'aggrevator',
+		'akregator',
+		'betanews\sreader',
 		'feeddemon',
 		'feedreader',
-		'jetbrains_omea_reader',
+		'jetbrains\somea\sreader',
+		'jetbrains\somea\spro',
 		'netnewswire',
 		'newsfire',
 		'newsgator',
@@ -154,23 +139,68 @@ class ua_browsers
 		'rssbandit',
 		'rssreader',
 		'rssowl',
+		'rss\sxpress',
+		'rssxpress',
 		'sage',
 		'sharpreader',
 		'shrook',
 		'straw',
 		'syndirella',
+		'wizz\srss\snews\sreader',
+
+		# PDA/携帯電話 ブラウザ
+		'alcatel',                      # Alcatel
+		'lg\-',                         # LG
+		'mot\-',                        # Motorola
+		'nokia',                        # Nokia
+		'panasonic',                    # Panasonic
+		'philips',                      # Philips
+		'sagem',                        # Sagem
+		'samsung',                      # Samsung
+		'sie\-',                        # SIE
+		'sec\-',                        # SonyEricsson
+		'sonyericsson',                 # SonyEricsson
+		'ericsson',                     # Ericsson (sonyericsson の後に定義すること)
+		'mmef',
+		'mspie',
+		'wapalizer',
+		'wapsilon',
+		'webcollage',
+		'up\.',                         # これは、UP.Browser および UP.Link に左右する
+
+		# PDA/携帯電話 I-Mode ブラウザ
+		'docomo',
+		'portalmmm',
+		'j\-phone',                     # add upk
+		'ddipocket',                    # Opera 対応 で前出 // add upk
+
+		# Others (TV)
+		'webtv',
 
 		# Other kind of browsers
+		'gnome\-vfs',
+		'neon',
 		'apt',
+		'analogx\sproxy',
 		'curl',
 		'csscheck',
+		'httrack',
+		'webreaper',
 		'wget',
+		'chilkat',
+		'webdownloader\sfor\sx',
 		'w3m',
-		'w3c_css_validator',
-		'w3c_validator',
-		'wdg_validator',
+		'wdg\svalidator',
 		'webzip',
 		'staroffice',
+		'gnus',
+		'liferea',
+		'nikto',
+		'microsoft\-webdav\-miniredir',
+		'microsoft\sdata\saccess\sinternet\spublishing\sprovider\scache\smanager',
+		'microsoft\sdata\saccess\sinternet\spublishing\sprovider\sdav',
+		'microsoft\sdata\saccess\sinternet\spublishing\sprovider\sprotocol\sdiscovery',
+		'POE\-Component\-Client\-HTTP',
 
 		# UPK
 		'harbot.\bgatestation',
@@ -179,7 +209,8 @@ class ua_browsers
 		
 		# 一番最後に定義すべきもの
 		'mozilla',			# 大多数のブラウザは、mozila 文字列を含んでいる
-		'libwww'			# libwww を利用するブラウザは、ブラウザ識別子と libwww の両方を含むため
+		'libwww',			# libwww を利用するブラウザは、ブラウザ識別子と libwww の両方を含むため
+		'lwp',
 	);
 
 	// ブラウザ分類後のアイコン設定用
@@ -207,12 +238,18 @@ class ua_browsers
 		'chimera'			=> 'chimera',
 		'cyberdog'			=> 'cyberdog',
 		'dillo'				=> 'dillo',
+		'doris'				=> 'doris',
 		'dreamcast'			=> 'dreamcast',
+		'xbox'				=> 'winxbox',
 		'ecatch'			=> 'ecatch',
 		'encompass'			=> 'encompass',
+		'epiphany'			=> 'epiphany',
 		'fresco'			=> 'fresco',
 		'galeon'			=> 'galeon',
+		'flashget'			=> 'flashget',
+		'freshdownload'			=> 'freshdownload',
 		'getright'			=> 'getright',
+		'leechget'			=> 'leechget',
 		'hotjava'			=> 'hotjava',
 		'ibrowse'			=> 'ibrowse',
 		'k\-meleon'			=> 'kmeleon',
@@ -220,7 +257,7 @@ class ua_browsers
 		'macweb'			=> 'macweb',
 		'multizilla'			=> 'multizilla',
 		'msfrontpageexpress'		=> 'fpexpress',
-		'ncsa_mosaic'			=> 'ncsa_mosaic',
+		'ncsa\smosaic'			=> 'ncsa\smosaic',
 		'netpositive'			=> 'netpositive',
 		'phoenix'			=> 'phoenix',
 		'safari'			=> 'safari',
@@ -238,17 +275,21 @@ class ua_browsers
 		'freeamp'			=> 'mediaplayer',
 		'itunes'			=> 'mediaplayer',
 		'jetaudio'			=> 'mediaplayer',
-		'mint_audio'			=> 'mediaplayer',
+		'mint\saudio'			=> 'mediaplayer',
 		'mpg123'			=> 'mediaplayer',
+		'mplayer'			=> 'mediaplayer',
 		'nsplayer'			=> 'mediaplayer',
+		'qts'				=> 'mediaplayer',
 		'sonique'			=> 'mediaplayer',
 		'uplayer'			=> 'mediaplayer',
-		'xmms'				=> 'mediaplayer',
 		'xaudio'			=> 'mediaplayer',
-		
+		'xine'				=> 'mediaplayer',
+		'xmms'				=> 'mediaplayer',
+
 		# PDA/Phonecell browsers
 		'alcatel'			=> 'pdaphone',
 		'lg\-'				=> 'pdaphone',
+		'ericsson'			=> 'pdaphone', # Ericsson
 		'mot\-'				=> 'pdaphone',
 		'nokia'				=> 'pdaphone',
 		'panasonic'			=> 'pdaphone',
@@ -274,16 +315,57 @@ class ua_browsers
 		
 		# Others (TV)
 		'webtv'				=> 'webtv',
-		
+
+		# RSS Readers
+		'aggrevator'			=> 'rss',
+		'akregator'			=> 'akregator',
+		'abilon'			=> 'abilon',
+		'betanews\sreader'		=> 'rss',
+		'feeddemon'			=> 'rss',
+		'feedreader'			=> 'rss',
+		'jetbrains\somea\sreader'	=> 'rss',
+		'jetbrains\somea\spro'		=> 'rss',
+		'netnewswire'			=> 'rss',
+		'newsfire'			=> 'rss',
+		'newsgator'			=> 'rss',
+		'newzcrawler'			=> 'rss',
+		'pluck'				=> 'rss',
+		'pulpfiction'			=> 'rss',
+		'rssbandit'			=> 'rss',
+		'rssreader'			=> 'rss',
+		'rssowl'			=> 'rss',
+		'rss\sxpress'			=> 'rss',
+		'rssxpress'			=> 'rss',
+		'sage'				=> 'rss',
+		'sharpreader'			=> 'rss',
+		'shrook'			=> 'rss',
+		'straw'				=> 'rss',
+		'syndirella'			=> 'rss',
+		'wizz\srss\snews\sreader'	=> 'wizz',
+
 		# Other kind of browsers
 		'apt'				=> 'apt',
+		'analogx\sproxy'		=> 'analogx',
+		'svn'				=> 'subversion',
+		'microsoft\-webdav\-miniredir'	=> 'frontpage',
+		'microsoft\sdata\saccess\sinternet\spublishing\sprovider\scache\smanager'	=> 'frontpage',
+		'microsoft\sdata\saccess\sinternet\spublishing\sprovider\sdav'			=> 'frontpage',
+		'microsoft\sdata\saccess\sinternet\spublishing\sprovider\sprotocol\sdiscovery'	=> 'frontpage',
+		'gnome\-vfs'			=> 'gnome',
+		'neon'				=> 'neon',
+		'javaws'			=> 'java',
 		'webzip'			=> 'webzip',
+		'webreaper'			=> 'webreaper',
+		'httrack'			=> 'httrack',
 		'staroffice'			=> 'staroffice',
+		'gnus'				=> 'gnus',
 		'mozilla'			=> 'mozilla'
 	);
 
+	//  $regvermsie     =qr/msie([+_ ]|)([\d\.]*)/i; // ex
 	var $regvermsie     = "'msie([+_ ]|)([\d\.]*)'si";
 	var $regverfirefox  = "'firefox\/([\d\.]*)'si";
+	var $regversvn      = "'svn\/([\d\.]*)'si";
 	var $regnotie       = "'webtv|omniweb|opera'si";
 	var $regvernetscape = "'netscape.?\/([\d\.]*)'si";
 	var $regvermozilla  = "'mozilla(\/|)([\d\.]*)'si";
@@ -331,6 +413,11 @@ class ua_browsers
 		# Firefox ?
 		if (preg_match($this->regverfirefox,$ua,$regs)) {
 			return $this->browsers_icon['firefox'];
+		}
+
+		# Subversion ?
+		if (preg_match($this->regversvn,$ua,$regs)) {
+			return $this->browsers_icon['svn'];
 		}
 
 		# Netscape 6.x, 7.x ... ?
