@@ -1,5 +1,5 @@
 <?php
-// $Id: memo.inc.php,v 1.14 2005/01/23 08:01:29 henoheno Exp $
+// $Id: memo.inc.php,v 1.15 2005/05/22 01:05:29 miko Exp $
 //
 // Memo box plugin
 
@@ -23,7 +23,7 @@ function plugin_memo_action()
 	$postdata = '';
 	$memo_no = 0;
 	foreach($postdata_old as $line) {
-		if (preg_match("/^#memo\(?.*\)?$/i", $line)) {
+		if (preg_match('/^#memo\(?.*\)?$/i', $line)) {
 			if ($memo_no == $vars['memo_no']) {
 				$postdata .= '#memo(' . $memo_body . ')' . "\n";
 				$line = '';
