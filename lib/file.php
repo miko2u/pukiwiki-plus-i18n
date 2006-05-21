@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: file.php,v 1.67.16 2006/04/30 03:58:35 miko Exp $
+// $Id: file.php,v 1.70.16 2006/05/19 15:16:59 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2006 PukiWiki Developers Team
@@ -345,8 +345,11 @@ function file_write($dir, $page, $str, $notimestamp = FALSE)
 	if ($dir == DATA_DIR) {
 		if ($timestamp === FALSE) lastmodified_add($page);
 
-		// Execute $update_exec here
-		if ($update_exec) system($update_exec . ' > /dev/null &');
+		// Command execution per update
+		if (defined(PKWK_UPDATE_EXEC))
+			system(PKWK_UPDATE_EXEC . ' > /dev/null &');
+		elseif ($update_exec)
+			system($update_exec . ' > /dev/null &');
 
 	} else if ($dir == DIFF_DIR && $notify) {
 		$notify_exec = TRUE;
@@ -523,7 +526,15 @@ function put_lastmodified()
 	arsort($recent_pages, SORT_NUMERIC);
 
 	// Cut unused lines
-	$recent_pages = array_splice($recent_pages, 0, $maxshow + PKWK_MAXSHOW_ALLOWANCE);
+	// BugTrack2/179: array_splice() will break integer keys in hashtable
+	$count   = $maxshow + PKWK_MAXSHOW_ALLOWANCE;
+	$_recent = array();
+	foreach($recent_pages as $key=>$value) {
+		unset($recent_pages[$key]);
+		$_recent[$key] = $value;
+		if (--$count < 1) break;
+	}
+	$recent_pages = & $_recent;
 
 	// Re-create PKWK_MAXSHOW_CACHE
 	$file = CACHE_DIR . PKWK_MAXSHOW_CACHE;
