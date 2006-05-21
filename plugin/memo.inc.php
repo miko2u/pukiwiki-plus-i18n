@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: memo.inc.php,v 1.14.3 2006/01/11 23:34:00 upk Exp $
+// $Id: memo.inc.php,v 1.15.3 2006/01/11 23:34:00 miko Exp $
 //
 // Memo box plugin
 
@@ -32,7 +32,7 @@ $_msg_collided = _('It seems that someone has already updated this page while yo
 	$postdata = '';
 	$memo_no = 0;
 	foreach($postdata_old as $line) {
-		if (preg_match("/^#memo\(?.*\)?$/i", $line)) {
+		if (preg_match('/^#memo\(?.*\)?$/i', $line)) {
 			if ($memo_no == $vars['memo_no']) {
 				$postdata .= '#memo(' . $memo_body . ')' . "\n";
 				$line = '';
