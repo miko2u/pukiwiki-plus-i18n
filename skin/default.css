@@ -964,20 +964,20 @@ td.vote_td2
 td.ltable
 {
 	width:160px;
-	vartical-align:top;
+	vertical-align:top;
 	background-color: #FFFCEE;
 }
 
 td.rtable
 {
 	width:160px;
-	vartical-align:top;
+	vertical-align:top;
 	background-color: #FFFCEE;
 }
 
 td.ctable
 {
-	vartical-align:top;
+	vertical-align:top;
 	padding-left:28px;
 	padding-right:28px;
 }
@@ -990,20 +990,20 @@ div#floattable
 div#ltable
 {
 	width:160px;
-	vartical-align:top;
+	vertical-align:top;
 	float:left;
 }
 
 div#rtable
 {
 	width:160px;
-	vartical-align:top;
+	vertical-align:top;
 	float:right;
 }
 
 div#ctablelr
 {
-	vartical-align:top;
+	vertical-align:top;
 	padding-left:1%;
 	padding-right:1%;
 	margin-left:180px;
@@ -1012,7 +1012,7 @@ div#ctablelr
 
 div#ctablel
 {
-	vartical-align:top;
+	vertical-align:top;
 	padding-left:1%;
 	padding-right:1%;
 	margin-left:180px;
@@ -1021,7 +1021,7 @@ div#ctablel
 
 div#ctabler
 {
-	vartical-align:top;
+	vertical-align:top;
 	padding-left:1%;
 	padding-right:1%;
 	margin-left:20px;
@@ -1030,7 +1030,7 @@ div#ctabler
 
 div#ctable
 {
-	vartical-align:top;
+	vertical-align:top;
 	padding-left:1%;
 	padding-right:1%;
 	margin-left:20px;
