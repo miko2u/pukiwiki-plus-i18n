@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: make_link.php,v 1.30.8 2006/05/11 01:21:00 upk Exp $
+// $Id: make_link.php,v 1.30.10 2006/05/23 12:21:00 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2003-2005 PukiWiki Developers Team
@@ -876,7 +876,7 @@ function make_tooltips($term,$glossary_page='')
 		$glossary = plugin_tooltip_get_page_title($term);
 		if ( $glossary === FALSE ) $glossary = "";
 	}
-	$s_term = htmlspecialchars($term);
+	$s_term = str_replace("'", "\\'", htmlspecialchars($term));
 	$s_glossary = htmlspecialchars($glossary);
 
 	$page = strip_bracket($term);
