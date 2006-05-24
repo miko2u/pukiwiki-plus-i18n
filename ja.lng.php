@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: ja.lng.php,v 1.14.5 2006/04/22 17:36:56 miko Exp $
+// $Id: ja.lng.php,v 1.14.6 2006/05/25 01:36:56 miko Exp $
 // Copyright (C)
 //   2002-2006 PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
@@ -332,6 +332,8 @@ $_msg_pcomment_restrict = '±ÜÍ÷À©¸Â¤¬¤«¤«¤Ã¤Æ¤¤¤ë¤¿¤á¡¢$1¤«¤é¤Ï¥³¥á¥ó¥È¤òÆÉ¤ß¤³¤
 // popular.inc.php
 $_popular_plugin_frame       = '<h5>¿Íµ¤¤Î%d·ï</h5><div>%s</div>';
 $_popular_plugin_today_frame = '<h5>º£Æü¤Î%d·ï</h5><div>%s</div>';
+$_popular_plugin_yesterday_frame = '<h5>ºòÆü¤Î%d·ï</h5><div>%s</div>';
+$_popular_plugin_recent_frame = '<h5>ºÇ¶á¤Î%d·ï</h5><div>%s</div>';
 
 ///////////////////////////////////////
 // recent.inc.php
