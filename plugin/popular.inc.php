@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: popular.inc.php,v 1.16.1 2005/12/18 15:28:01 miko Exp $
+// $Id: popular.inc.php,v 1.16.2 2006/05/25 15:28:01 miko Exp $
 //
 // Popular pages plugin: Show an access ranking of this wiki
 // -- like recent plugin, using counter plugin's count --
@@ -10,7 +10,7 @@
  * (C) 2003-2005 PukiWiki Developers Team
  * (C) 2002 Kazunori Mizushima <kazunori@uc.netyou.jp>
  *
- * 通算および今日に別けて一覧を作ることができます。
+ * 通算および今日に分けて一覧を作ることができます。
  *
  * [Usage]
  *   #popular
@@ -43,29 +43,35 @@ function plugin_popular_convert()
 //	$_popular_plugin_today_frame   = sprintf('<h5>%s</h5><div>%%s</div>', $_popular_plugin_today_frame_s);
 //	$_popular_plugin_yesterday_frame = sprintf('<h5>%s</h5><div>%%s</div>', $_popular_plugin_yesterday_frame_s);
 //	$_popular_plugin_recent_frame    = sprintf('<h5>%s</h5><div>%%s</div>', $_popular_plugin_recent_frame_s);
+	$view   = 'total';
 	$max    = PLUGIN_POPULAR_DEFAULT;
 	$except = '';
 
+//	list($zone, $zonetime) = set_timezone(DEFAULT_LANG);
+//	$localtime = UTIME + $zonetime;
+	$localtime = UTIME + date('Z');
+
+	$today = gmdate('Y/m/d', $localtime);
+	$yesterday = gmdate('Y/m/d', strtotime('yesterday', $localtime));
+
 	$array = func_get_args();
-	$today = $yesterday = FALSE;
 	switch (func_num_args()) {
-	case 3: 
+	case 3:
 		switch ($array[2]) {
 		case 'today':
 		case 'true' :
-			$today = get_date('Y/m/d');
+			$view = 'today';
 			break;
 		case 'yesterday':
-			$yesterday = get_date('Y/m/d',strtotime('yesterday',UTIME));
+			$view = 'yesterday';
 			break;
 		case 'recent':
-			$today = get_date('Y/m/d');
-			$yesterday = get_date('Y/m/d',strtotime('yesterday',UTIME));
+			$view = 'recent';
 			break;
 		case 'total':
 		case 'false':
-			break;
 		default:
+			$view = 'total';
 			break;
 		}
 	case 2: $except = $array[1];
@@ -86,23 +92,23 @@ function plugin_popular_convert()
 		$yesterday_count = rtrim($array[3]);
 
 		$counters['_' . $page] = 0;
-		if ($today) {
+		if ($view == 'today' || $view == 'recent') {
 			// $pageが数値に見える(たとえばencode('BBS')=424253)とき、
 			// array_splice()によってキー値が変更されてしまうのを防ぐ
 			// ため、キーに '_' を連結する
 			if ($today == $date) $counters['_' . $page] = $today_count;
 		} 
-		if ($yesterday) {
+		if ($view == 'yesterday' || $view == 'recent') {
 			if ($today == $date) {
-				$counters["_$page"] += $yesterday_count;
+				$counters['_' . $page] += $yesterday_count;
 			} elseif ($yesterday == $date) {
-				$counters["_$page"] += $today_count;
+				$counters['_' . $page] += $today_count;
 			}
-		} elseif (! $today) {
+		}
+		if ($view == 'total') {
 			$counters['_' . $page] = $count;
 		}
 	}
-
 	asort($counters, SORT_NUMERIC);
 
 	// BugTrack2/106: Only variables can be passed by reference from PHP 5.0.5
@@ -132,9 +138,21 @@ function plugin_popular_convert()
 		$items .= '</ul>' . "\n";
 	}
 
-	$frame = $today ? 
-		($yesterday ? $_popular_plugin_recent_frame    : $_popular_plugin_today_frame) :
-		($yesterday ? $_popular_plugin_yesterday_frame : $_popular_plugin_frame);
+	switch ($view) {
+	case 'today':
+		$frame = $_popular_plugin_today_frame;
+		break;
+	case 'yesterday':
+		$frame = $_popular_plugin_yesterday_frame;
+		break;
+	case 'recent':
+		$frame = $_popular_plugin_recent_frame;
+		break;
+	case 'total':
+	default:
+		$frame = $_popular_plugin_frame;
+		break;
+	}
 	return sprintf($frame, count($counters), $items);
 }
 ?>
