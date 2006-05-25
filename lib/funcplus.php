@@ -1,36 +1,37 @@
 <?php
-/////////////////////////////////////////////////
-// PukiWiki - Yet another WikiWikiWeb clone.
+// PukiWiki Plus! - Yet another WikiWikiWeb clone.
+// $Id: funcplus.php,v 0.1.8 2006/05/25 00:52:00 miko Exp $
+// Copyright (C)
+//   2005-2006 PukiWiki Plus! Team
+// License: GPL v2 or (at your option) any later version
 //
-// $Id: funcplus.php,v 0.1.7 2006/03/23 00:52:00 upk Exp $
-//
+// Plus! extension function(s)
 
 // インクルードで余計なものはソースから削除する
 function convert_filter($str)
 {
 	global $filter_rules;
-	static $patternf,$replacef;
+	static $patternf, $replacef;
 
-	if (!isset($patternf))
-	{
-		$patternf = array_map(create_function('$a','return "/$a/";'),array_keys($filter_rules));
+	if (!isset($patternf)) {
+		$patternf = array_map(create_function('$a','return "/$a/";'), array_keys($filter_rules));
 		$replacef = array_values($filter_rules);
 		unset($filter_rules);
 	}
-	return preg_replace($patternf,$replacef,$str);
+	return preg_replace($patternf, $replacef, $str);
 }
 
 function get_fancy_uri()
 {
-        $script  = (SERVER_PORT == 443 ? 'https://' : 'http://');       // scheme
-        $script .= SERVER_NAME; // host
-        $script .= (SERVER_PORT == 80 ? '' : ':' . SERVER_PORT); // port
+	$script  = (SERVER_PORT == 443 ? 'https://' : 'http://'); // scheme
+	$script .= SERVER_NAME; // host
+	$script .= (SERVER_PORT == 80 ? '' : ':' . SERVER_PORT); // port
 
-        // SCRIPT_NAME が'/'で始まっていない場合(cgiなど) REQUEST_URIを使ってみる
-        $path    = SCRIPT_NAME;
-        $script .= $path;       // path
+	// SCRIPT_NAME が'/'で始まっていない場合(cgiなど) REQUEST_URIを使ってみる
+	$path    = SCRIPT_NAME;
+	$script .= $path; // path
 
-        return $script;
+	return $script;
 }
 
 function mb_ereg_quote($str)
@@ -196,5 +197,124 @@ function path_check($url1,$url2)
 		return FALSE;
 	}
 	return TRUE;
+}
+
+// get "GD" extension version
+function get_gdversion()
+{
+	if (!extension_loaded('gd')) { return 0; }
+	if (!function_exists('gd_info')) { return 0; }
+	$gd_info = gd_info();
+	$matches = array();
+	preg_match('/\d/', $gd_info['GD Version'], $matches);
+	return $matches[0];
+}
+
+// create thumbnail (required "GD" extension)
+function make_thumbnail($ofile, $sfile, $maxw, $maxh, $refresh=FALSE, $zoom='10,90', $quality='75')
+{
+	static $gdversion = FALSE;
+	if ($gdversion === FALSE) {
+		$gdversion = get_gdversion();
+	}
+
+	if (!$refresh && file_exists($sfile)) return $sfile;
+	if ($gdversion < 1 || !function_exists('imagecreate')) return $ofile; // Not Supported
+
+	$imagecreate = ($gdversion >= 2)? 'imagecreatetruecolor' : 'imagecreate';
+	$imageresize = ($gdversion >= 2)? 'imagecopyresampled' : 'imagecopyresized';
+
+	$imagesiz = @getimagesize($ofile);
+	if (!$imagesiz) return $ofile; // Not Picture
+
+	$orgw = $imagesiz[0];
+	$orgh = $imagesiz[1];
+	if ($maxw >= $orgw && $maxh >= $orgh) return $ofile; // so big. why?
+
+	list($minz, $maxz) = explode(",", $zoom);
+	$zoom = min(($maxw/$orgw),($maxh/$orgh));
+	if (!$zoom || $zoom < $minz/100 || $zoom > $maxz/100) return $ofile; // Invalid Zoom value
+	$w = $orgw * $zoom;
+	$h = $orgh * $zoom;
+
+	// defined thumbnail file-type?(.jpg)
+	$s_ext = '';
+	$s_ext = preg_replace('/\.([^\.]+)$/', '$1', $sfile);
+
+	// Create image.
+	switch($imagesiz[2]) {
+	case '1': // gif
+		if (function_exists('imagecreatefromgif')) {
+			$imsrc = imagecreatefromgif($ofile);
+			$colortransparent = imagecolortransparent($imsrc);
+			if ($s_ext != 'jpg' && $colortransparent > -1) {
+				// Use transparent
+				$imdst = $imagecreate($w, $h);
+				imagepalettecopy($imdst, $imsrc);
+				imagefill($imdst, 0, 0, $colortransparent);
+				imagecolortransparent($imdst, $colortransparent);
+				imagecopyresized($imdst, $imsrc, 0, 0, 0, 0, $w, $h, $orgw, $orgh);
+			} else {
+				// Unuse transparent
+				$imdst = $imagecreate($w, $h);
+				$imageresize($imdst, $imsrc, 0, 0, 0, 0, $w, $h, $orgw, $orgh);
+				imagetruecolortopalette($dst_im, imagecolorstotal($imsrc));
+			}
+			touch($sfile);
+			if ($s_ext == 'jpg') {
+				imagejpeg($imdst, $sfile, $quality);
+			} elseif (function_exists('imagegif')) {
+				imagegif($imdst, $sfile);
+			} else {
+				imagepng($imdst, $sfile);
+			}
+			$ofile = $sfile;
+		}
+		break;
+	case '2': // jpg
+		$imsrc = imagecreatefromjpeg($ofile);
+		$imdst = $imagecreate($w, $h);
+		$imageresize($imdst, $imsrc, 0, 0, 0, 0, $w, $h, $orgw, $orgh);
+		touch($sfile);
+		imagejpeg($imdst, $sfile, $quality);
+		$ofile = $sfile;
+		break;
+	case '3': // png
+		$imsrc = imagecreatefrompng($ofile);
+		if (imagecolorstotal($imsrc)) {
+			// PaletteColor
+			$colortransparent = imagecolortransparent($imsrc);
+			if ($s_ext != 'jpg' && $colortransparent > -1) {
+				// Use transparent
+				$imdst = $imagecreate($w, $h);
+				imagepalettecopy($imdst, $imsrc);
+				imagefill($imdst, 0, 0, $colortransparent);
+				imagecolortransparent($imdst, $colortransparent);
+				imagecopyresized($imdst, $imsrc, 0, 0, 0, 0, $w, $h, $orgw, $orgh);
+			} else {
+				// Unuse transparent
+				$imdst = $imagecreate($w, $h);
+				$imageresize($imdst, $imsrc, 0, 0, 0, 0, $w, $h, $orgw, $orgh);
+				imagetruecolortopalette($dst_im, imagecolorstotal($imsrc));
+			}
+		} else {
+			// TrueColor
+			$imdst = $imagecreate($w, $h);
+			$imageresize($imdst, $imsrc, 0, 0, 0, 0, $w, $h, $orgw, $orgh);
+		}
+		touch($sfile);
+		if ($s_ext == 'jpg') {
+			imagejpeg($imdst, $sfile, $quality);
+		} else {
+			imagepng($imdst, $sfile);
+		}
+		$ofile = $sfile;
+		break;
+	default:
+		break;
+	}
+	@imagedestroy($imdst);
+	@imagedestroy($imsrc);
+	return $ofile;
 }
 ?>
