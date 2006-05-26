@@ -184,9 +184,9 @@ function plugin_edit_write()
 	if ($notimestamp && !is_page($page)) {
 		return plugin_edit_honeypot();
 	}
-	if (md5(get_ticket() . str_replace("\r", '', rtrim(htmlspecialchars($vars['original'])))) != $ticket) {
-		return plugin_edit_honeypot();
-	}
+//	if (md5(get_ticket() . str_replace("\r", '', rtrim(htmlspecialchars($vars['original'])))) != $ticket) {
+//		return plugin_edit_honeypot();
+//	}
 
 	// Paragraph edit mode
 	if ($partid) {
