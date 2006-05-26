@@ -2,8 +2,7 @@
 // PukiWiki - Yet another WikiWikiWeb clone
 // $Id: comment.inc.php,v 1.36.8 2006/04/27 23:24:00 miko Exp $
 // Copyright (C)
-//   2006      PukiWiki Plus! Developers Team
-//   2005      Customized/Patched by Miko.Hoshina
+//   2005-2006 PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
 //   2001-2002 Originally written by yu-ji
 // License: GPL v2 or (at your option) any later version
