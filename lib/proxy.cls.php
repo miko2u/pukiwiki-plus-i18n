@@ -2,8 +2,8 @@
 /**
  * PukiWiki Plus! Proxy判定クラス
  *
- * @copyright	Copyright &copy; 2004-2005, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version	$Id: proxy.cls.php,v 0.4 2005/06/12 14:22:00 upk Exp $
+ * @copyright	Copyright &copy; 2004-2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * @version	$Id: proxy.cls.php,v 0.5 2006/05/28 19:00:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
@@ -60,6 +60,7 @@ class check_proxy
 		foreach ($this->proxy as $x) {
 			if (!$x[2]) continue; // IP取得利用
 			// 専用関数処理
+			if (empty($x[3])) continue;
 			if (function_exists($this->$x[3])) {
 				$rc = $this->$x[3]($x[0]);
 				if (!empty($rc)) return $rc;
