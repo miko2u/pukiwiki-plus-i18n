@@ -1,5 +1,5 @@
 <?php
-// $Id: trackback.php,v 1.21.7 2006/03/23 00:58:00 upk Exp $
+// $Id: trackback.php,v 1.21.8 2006/05/28 16:46:00 upk Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2003-2005 PukiWiki Developers Team
@@ -141,13 +141,14 @@ function tb_get($file, $key = 1)
 	$result = array();
 	$fp = @fopen($file, 'r');
 	set_file_buffer($fp, 0);
-	flock($fp, LOCK_EX);
+	@flock($fp, LOCK_EX);
 	rewind($fp);
-	while ($data = @fgetcsv($fp, 8192, ',')) {
+	while ($data = @fgets($fp, 8192)) {
 		// $data[$key] = URL
+		$data = csv_explode(',', $data);
 		$result[rawurldecode($data[$key])] = $data;
 	}
-	flock($fp, LOCK_UN);
+	@flock($fp, LOCK_UN);
 	fclose ($fp);
 
 	return $result;
@@ -299,11 +300,11 @@ function ref_save($page)
 	$fp = fopen($filename, 'w');
 	if ($fp === FALSE) return FALSE;
 	set_file_buffer($fp, 0);
-	flock($fp, LOCK_EX);
+	@flock($fp, LOCK_EX);
 	rewind($fp);
 	foreach ($data as $line)
 		fwrite($fp, join(',', $line) . "\n");
-	flock($fp, LOCK_UN);
+	@flock($fp, LOCK_UN);
 	fclose($fp);
 
 	return TRUE;
