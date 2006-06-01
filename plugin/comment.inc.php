@@ -10,6 +10,8 @@
 // Comment plugin
 
 defined('PLUGIN_COMMENT_SPAMLOG') or define('PLUGIN_COMMENT_SPAMLOG', FALSE);
+defined('PLUGIN_COMMENT_SPAMREGEX') or defined('PLUGIN_COMMENT_SPAMREGEX', '/a\s+href=/i');
+defined('PLUGIN_COMMENT_SPAMCOUNT') or defined('PLUGIN_COMMENT_SPAMCOUNT', 2);
 
 // ----
 defined('PLUGIN_COMMENT_DIRECTION_DEFAULT') or define('PLUGIN_COMMENT_DIRECTION_DEFAULT', '1'); // 1: above 0: below
@@ -51,6 +53,10 @@ function plugin_comment_write()
 	                           _("The comment was added, alhough it may be inserted in the wrong position.<br />");
 
 	if (! isset($vars['msg'])) return array('msg'=>'', 'body'=>''); // Do nothing
+
+	$matches = array();
+	if (preg_match_all(PLUGIN_COMMENT_SPAMREGEX, $vars['msg'], $matches) >= PLUGIN_COMMENT_SPAMCOUNT)
+		return plugin_comment_honeypot();
 
 	$vars['msg'] = str_replace("\n", '', $vars['msg']); // Cut LFs
 	$head = '';
