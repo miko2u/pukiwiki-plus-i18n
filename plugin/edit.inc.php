@@ -10,7 +10,6 @@
 
 // Remove #freeze written by hand
 define('PLUGIN_EDIT_FREEZE_REGEX', '/^(?:#freeze(?!\w)\s*)+/im');
-defined('PLUGIN_EDIT_SPAMLOG') or define('PLUGIN_EDIT_SPAMLOG', FALSE);
 
 function plugin_edit_action()
 {
@@ -295,16 +294,8 @@ function plugin_edit_cancel()
 // Cancel (Back to the page / Escape edit page)
 function plugin_edit_honeypot()
 {
-	global $get, $post, $vars;
-
-	// Logging for SPAM Report
-	// NOTE: Not recommended use Rental Server
-	if (PLUGIN_EDIT_SPAMLOG === TRUE && version_compare(PHP_VERSION, '4.2.0', '>=')) {
-		error_log("----" . date('Y-m-d H:i:s', time()) . "\n", 3, CACHE_DIR . 'honeypot.log');
-		error_log("[GET]\n"  . var_export($get,  TRUE) . "\n", 3, CACHE_DIR . 'honeypot.log');
-		error_log("[POST]\n" . var_export($post, TRUE) . "\n", 3, CACHE_DIR . 'honeypot.log');
-		error_log("[VARS]\n" . var_export($vars, TRUE) . "\n", 3, CACHE_DIR . 'honeypot.log');
-	}
+	// SPAM Logging
+	honeypot_write();
 
 	// Same as "Cancel" action
 	return plugin_edit_cancel();

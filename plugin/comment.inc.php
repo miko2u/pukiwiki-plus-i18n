@@ -9,10 +9,6 @@
 //
 // Comment plugin
 
-defined('PLUGIN_COMMENT_SPAMLOG') or define('PLUGIN_COMMENT_SPAMLOG', FALSE);
-defined('PLUGIN_COMMENT_SPAMREGEX') or define('PLUGIN_COMMENT_SPAMREGEX', '/a\s+href=/i');
-defined('PLUGIN_COMMENT_SPAMCOUNT') or define('PLUGIN_COMMENT_SPAMCOUNT', 2);
-
 // ----
 defined('PLUGIN_COMMENT_DIRECTION_DEFAULT') or define('PLUGIN_COMMENT_DIRECTION_DEFAULT', '1'); // 1: above 0: below
 defined('PLUGIN_COMMENT_SIZE_MSG') or define('PLUGIN_COMMENT_SIZE_MSG',  68);
@@ -54,8 +50,8 @@ function plugin_comment_write()
 
 	if (! isset($vars['msg'])) return array('msg'=>'', 'body'=>''); // Do nothing
 
-	$matches = array();
-	if (preg_match_all(PLUGIN_COMMENT_SPAMREGEX, $vars['msg'], $matches) >= PLUGIN_COMMENT_SPAMCOUNT)
+	// Validate
+	if (is_spampost(array('msg')))
 		return plugin_comment_honeypot();
 
 	$vars['msg'] = str_replace("\n", '', $vars['msg']); // Cut LFs
@@ -122,16 +118,8 @@ function plugin_comment_write()
 // Cancel (Back to the page / Escape edit page)
 function plugin_comment_honeypot()
 {
-	global $get, $post, $vars;
-
 	// Logging for SPAM Report
-	// NOTE: Not recommended use Rental Server
-	if (PLUGIN_COMMENT_SPAMLOG === TRUE && version_compare(PHP_VERSION, '4.2.0', '>=')) {
-		error_log("----" . date('Y-m-d H:i:s', time()) . "\n", 3, CACHE_DIR . 'honeypot.log');
-		error_log("[GET]\n"  . var_export($get,  TRUE) . "\n", 3, CACHE_DIR . 'honeypot.log');
-		error_log("[POST]\n" . var_export($post, TRUE) . "\n", 3, CACHE_DIR . 'honeypot.log');
-		error_log("[VARS]\n" . var_export($vars, TRUE) . "\n", 3, CACHE_DIR . 'honeypot.log');
-	}
+	honeypot_write();
 
 	// Same as "Cancel" action
 	return array('msg'=>'', 'body'=>''); // Do nothing

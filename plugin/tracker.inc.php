@@ -86,6 +86,11 @@ function plugin_tracker_action()
 	// if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
 	if (auth::check_role('readonly')) die_message('PKWK_READONLY prohibits editing');
 
+	if (is_spampost(array('body'))) {
+		honeypot_write();
+		return '<p>prohibits editing</p>';
+	}
+
 	$config_name = array_key_exists('_config',$post) ? $post['_config'] : '';
 
 	$config = new Config('plugin/tracker/'.$config_name);
