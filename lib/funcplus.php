@@ -7,6 +7,38 @@
 //
 // Plus! extension function(s)
 
+defined('FUNC_SPAMLOG')   or define('FUNC_SPAMLOG', FALSE);
+defined('FUNC_SPAMREGEX') or define('FUNC_SPAMREGEX', '/a\s+href=/i');
+defined('FUNC_SPAMCOUNT') or define('FUNC_SPAMCOUNT', 3);
+
+// SPAM check
+function is_spampost($array)
+{
+	global $vars;
+
+	$matches = array();
+	foreach($array as $idx) {
+		if (preg_match_all(FUNC_SPAMREGEX, $vars[$idx], $matches) >= FUNC_SPAMCOUNT)
+			return TRUE;
+	}
+	return FALSE;
+}
+
+// SPAM logging
+function honeypot_write()
+{
+	global $get, $post, $vars;
+
+	// Logging for SPAM Report
+	// NOTE: Not recommended use Rental Server
+	if (FUNC_SPAMLOG === TRUE && version_compare(PHP_VERSION, '4.2.0', '>=')) {
+		error_log("----" . date('Y-m-d H:i:s', time()) . "\n", 3, CACHE_DIR . 'honeypot.log');
+		error_log("[GET]\n"  . var_export($get,  TRUE) . "\n", 3, CACHE_DIR . 'honeypot.log');
+		error_log("[POST]\n" . var_export($post, TRUE) . "\n", 3, CACHE_DIR . 'honeypot.log');
+		error_log("[VARS]\n" . var_export($vars, TRUE) . "\n", 3, CACHE_DIR . 'honeypot.log');
+	}
+}
+
 // インクルードで余計なものはソースから削除する
 function convert_filter($str)
 {
