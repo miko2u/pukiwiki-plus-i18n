@@ -3,7 +3,7 @@
  * Browser
  *
  * @copyright   Copyright &copy; 2004-2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: ua_browsers.cls.php,v 0.3 2006/05/21 03:45:00 upk Exp $
+ * @version     $Id: ua_browsers.cls.php,v 0.4 2006/06/04 05:14:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License
  *
  * o 参考にしたコード(AWStats)
@@ -130,6 +130,7 @@ class ua_browsers
 		'feedreader',
 		'jetbrains\somea\sreader',
 		'jetbrains\somea\spro',
+		'livedoorCheckers',		# add upk
 		'netnewswire',
 		'newsfire',
 		'newsgator',
@@ -325,6 +326,7 @@ class ua_browsers
 		'feedreader'			=> 'rss',
 		'jetbrains\somea\sreader'	=> 'rss',
 		'jetbrains\somea\spro'		=> 'rss',
+		'livedoorCheckers'		=> 'rss',
 		'netnewswire'			=> 'rss',
 		'newsfire'			=> 'rss',
 		'newsgator'			=> 'rss',

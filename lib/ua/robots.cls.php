@@ -3,7 +3,7 @@
  * Robot
  *
  * @copyright   Copyright &copy; 2004-2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: robots.cls.php,v 0.4 2006/05/21 05:13:00 upk Exp $
+ * @version     $Id: robots.cls.php,v 0.5 2006/06/04 01:08:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License
  * 情報取得先
  * o Robot一覧
@@ -36,6 +36,7 @@ class robots
 		'moget'			=> 'moget',
 		'muscatferret'		=> 'Muscat Ferret',
 		'myweb'			=> 'Internet Shinchakubin',
+		'nextgensearchbot'	=> 'ZoomInfo Crawler',		// Add UPK
 		'nomad'			=> 'Nomad',
 		'scooter'		=> 'Scooter',			// AltaVista
 		'slurp'			=> 'Inktomi Slurp',
