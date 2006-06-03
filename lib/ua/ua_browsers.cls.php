@@ -3,7 +3,7 @@
  * Browser
  *
  * @copyright   Copyright &copy; 2004-2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: ua_browsers.cls.php,v 0.4 2006/06/04 05:14:00 upk Exp $
+ * @version     $Id: ua_browsers.cls.php,v 0.5 2006/06/04 05:33:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License
  *
  * o 参考にしたコード(AWStats)
@@ -126,6 +126,7 @@ class ua_browsers
 		'aggrevator',
 		'akregator',
 		'betanews\sreader',
+		'Bookmark\sRenewal\sCheck\sAgent', # add upk
 		'feeddemon',
 		'feedreader',
 		'jetbrains\somea\sreader',
@@ -322,6 +323,7 @@ class ua_browsers
 		'akregator'			=> 'akregator',
 		'abilon'			=> 'abilon',
 		'betanews\sreader'		=> 'rss',
+		'Bookmark\sRenewal\sCheck\sAgent'=> 'rss',
 		'feeddemon'			=> 'rss',
 		'feedreader'			=> 'rss',
 		'jetbrains\somea\sreader'	=> 'rss',
