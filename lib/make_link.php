@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: make_link.php,v 1.30.10 2006/05/23 12:21:00 miko Exp $
+// $Id: make_link.php,v 1.30.11 2006/06/04 16:14:00 upk Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2003-2005 PukiWiki Developers Team
@@ -395,7 +395,8 @@ EOD;
 		}
 
 //		return '<a href="' . $this->name . '">' . $this->alias . '</a>';
-		return open_uri_in_new_window('<a href="' . $this->redirect.$this->name . '"' . $rel . '>' . $this->alias . '</a>', get_class($this));
+		$target = (empty($this->redirect)) ? $this->name : $this->redirect.rawurlencode($this->name);
+		return open_uri_in_new_window('<a href="' . $target . '"' . $rel . '>' . $this->alias . '</a>', get_class($this));
 	}
 }
 
@@ -435,7 +436,8 @@ EOD;
 	{
 		$rel = ( FALSE ? '': ' rel="nofollow"');
 //		return '<a href="' . $this->name . '" rel="nofollow">' . $this->alias . '</a>';
-		return open_uri_in_new_window('<a href="' . $this->redirect.$this->name . '"' . $rel . '>' . $this->alias . '</a>', get_class($this));
+		$target = (empty($this->redirect)) ? $this->name : $this->redirect.rawurlencode($this->name);
+		return open_uri_in_new_window('<a href="' . $target . '"' . $rel . '>' . $this->alias . '</a>', get_class($this));
 	}
 }
 
@@ -548,7 +550,8 @@ EOD;
 		$rel = ( FALSE ? '': ' rel="nofollow"');
 //		return '<a href="' . $this->url . $this->anchor . '" title="' .
 //			$this->name . '" rel="nofollow">' . $this->alias . '</a>';
-		return open_uri_in_new_window('<a href="' . $this->redirect.$this->url . $this->anchor .
+		$target = (empty($this->redirect)) ? $this->url : $this->redirect.rawurlencode($this->url);
+		return open_uri_in_new_window('<a href="' . $target . $this->anchor .
 			'" title="' . $this->name . '"' . $rel . '>' . $this->alias . '</a>', get_class($this));
 	}
 }
