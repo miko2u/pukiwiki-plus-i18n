@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: popular.inc.php,v 1.16.1 2005/12/18 15:28:01 miko Exp $
+// $Id: popular.inc.php,v 1.16.3 2006/06/05 15:28:01 miko Exp $
 //
 // Popular pages plugin: Show an access ranking of this wiki
 // -- like recent plugin, using counter plugin's count --
@@ -15,12 +15,15 @@
  *   #popular
  *   #popular(20)
  *   #popular(20,FrontPage|MenuBar)
- *   #popular(20,FrontPage|MenuBar,true)
+ *   #popular(20,FrontPage|MenuBar,today)
+ *   #popular(20,FrontPage|MenuBar,total)
+ *   #popular(20,FrontPage|MenuBar,yesterday)
+ *   #popular(20,FrontPage|MenuBar,recent)
  *
  * [Arguments]
  *   1 - 表示する件数                             default 10
  *   2 - 表示させないページの正規表現             default なし
- *   3 - 通算(true)か今日(false)の一覧かのフラグ  default false
+ *   3 - 通算(total)か今日(today)か昨日(yesterday)か最近(recent)かのフラグ  default total
  */
 
 define('PLUGIN_POPULAR_DEFAULT', 10);
@@ -29,18 +32,48 @@ function plugin_popular_convert()
 {
 	global $vars, $whatsnew;
 //	global $_popular_plugin_frame, $_popular_plugin_today_frame;
+	static $localtime;
 
 	$_popular_plugin_frame_s       = _('popular(%d)');
 	$_popular_plugin_today_frame_s = _('today\'s(%d)');
+	$_popular_plugin_yesterday_frame_s = _('yesterday\'s(%d)');
+	$_popular_plugin_recent_frame_s    = _('recent\'s(%d)');
 	$_popular_plugin_frame         = sprintf('<h5>%s</h5><div>%%s</div>', $_popular_plugin_frame_s);
 	$_popular_plugin_today_frame   = sprintf('<h5>%s</h5><div>%%s</div>', $_popular_plugin_today_frame_s);
+	$_popular_plugin_yesterday_frame = sprintf('<h5>%s</h5><div>%%s</div>', $_popular_plugin_yesterday_frame_s);
+	$_popular_plugin_recent_frame    = sprintf('<h5>%s</h5><div>%%s</div>', $_popular_plugin_recent_frame_s);
+	$view   = 'total';
 	$max    = PLUGIN_POPULAR_DEFAULT;
 	$except = '';
 
+	if (! isset($localtime)) {
+		list($zone, $zonetime) = set_timezone(DEFAULT_LANG);
+		$localtime = UTIME + $zonetime;
+	}
+
+	$today = gmdate('Y/m/d', $localtime);
+	$yesterday = gmdate('Y/m/d', strtotime('yesterday', $localtime));
+
 	$array = func_get_args();
-	$today = FALSE;
 	switch (func_num_args()) {
-	case 3: if ($array[2]) $today = get_date('Y/m/d');
+	case 3:
+		switch ($array[2]) {
+		case 'today':
+		case 'true' :
+			$view = 'today';
+			break;
+		case 'yesterday':
+			$view = 'yesterday';
+			break;
+		case 'recent':
+			$view = 'recent';
+			break;
+		case 'total':
+		case 'false':
+		default:
+			$view = 'total';
+			break;
+		}
 	case 2: $except = $array[1];
 	case 1: $max    = $array[0];
 	}
@@ -56,17 +89,26 @@ function plugin_popular_convert()
 		$count = rtrim($array[0]);
 		$date  = rtrim($array[1]);
 		$today_count = rtrim($array[2]);
+		$yesterday_count = rtrim($array[3]);
 
-		if ($today) {
+		$counters['_' . $page] = 0;
+		if ($view == 'today' or $view == 'recent') {
 			// $pageが数値に見える(たとえばencode('BBS')=424253)とき、
 			// array_splice()によってキー値が変更されてしまうのを防ぐ
 			// ため、キーに '_' を連結する
 			if ($today == $date) $counters['_' . $page] = $today_count;
-		} else {
+		} 
+		if ($view == 'yesterday' or $view == 'recent') {
+			if ($today == $date) {
+				$counters['_' . $page] += $yesterday_count;
+			} elseif ($yesterday == $date) {
+				$counters['_' . $page] += $today_count;
+			}
+		}
+		if ($view == 'total') {
 			$counters['_' . $page] = $count;
 		}
 	}
-
 	asort($counters, SORT_NUMERIC);
 
 	// BugTrack2/106: Only variables can be passed by reference from PHP 5.0.5
@@ -96,6 +138,21 @@ function plugin_popular_convert()
 		$items .= '</ul>' . "\n";
 	}
 
-	return sprintf($today ? $_popular_plugin_today_frame : $_popular_plugin_frame, count($counters), $items);
+	switch ($view) {
+	case 'today':
+		$frame = $_popular_plugin_today_frame;
+		break;
+	case 'yesterday':
+		$frame = $_popular_plugin_yesterday_frame;
+		break;
+	case 'recent':
+		$frame = $_popular_plugin_recent_frame;
+		break;
+	case 'total':
+	default:
+		$frame = $_popular_plugin_frame;
+		break;
+	}
+	return sprintf($frame, count($counters), $items);
 }
 ?>
