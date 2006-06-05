@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: pukiwiki.ini.php,v 1.131.27 2006/05/11 01:32:00 upk Exp $
+// $Id: pukiwiki.ini.php,v 1.139.27 2006/06/05 01:32:00 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
@@ -320,6 +320,7 @@ $pagereading_config_dict = ':config/PageReading/dict';
 // 3 - コンテンツ管理者
 // 4 - 認証者(未設定時のデフォルト)
 $auth_users = array(
+	// Username => password
 	'foo'	=> array('foo_passwd'), // Cleartext
 	'bar'	=> array('{x-php-md5}f53ae779077e987718cc285b14dfbe86'), // md5('bar_passwd')
 	'hoge'	=> array('{SMD5}OzJo/boHwM4q5R+g7LCOx2xGMkFKRVEx'), // SMD5 'hoge_passwd'
@@ -330,15 +331,15 @@ $auth_users = array(
 /////////////////////////////////////////////////
 // Authentication method
 
-//$auth_method_type = 'contents'; // By Page contents
 $auth_method_type = 'pagename'; // By Page name
+//$auth_method_type = 'contents'; // By Page contents
 
 /////////////////////////////////////////////////
 // Read auth (0:Disable, 1:Enable)
 $read_auth = 0;
 
-// Read auth regex
 $read_auth_pages = array(
+	// Regex                   Username
 	'/:log/'		=> 'hoge',
 	'#ひきこもるほげ#'	=> 'hoge',
 	'#(ネタバレ|ねたばれ)#'	=> 'foo,bar,hoge',
@@ -348,8 +349,8 @@ $read_auth_pages = array(
 // Edit auth (0:Disable, 1:Enable)
 $edit_auth = 0;
 
-// Edit auth regex
 $edit_auth_pages = array(
+	// Regex                   Username
 	'#Barの公開日記#'	=> 'bar',
 	'#ひきこもるほげ#'	=> 'hoge',
 	'#(ネタバレ|ねたばれ)#'	=> 'foo,bar,hoge',
@@ -443,8 +444,17 @@ define('PKWK_SPLITTER', '>>>>>>>>>>');
 
 /////////////////////////////////////////////////
 // Command executed per update
-$update_exec = '';
-//$update_exec = '/usr/bin/mknmz --media-type=text/pukiwiki -O /var/lib/namazu/index/ -L ja -c -K /var/www/wiki/';
+
+define('PKWK_UPDATE_EXEC', '');
+$update_exec = PKWK_UPDATE_EXEC;
+
+// Sample: Namazu (Search engine)
+//$target     = '/var/www/wiki/';
+//$mknmz      = '/usr/bin/mknmz';
+//$output_dir = '/var/lib/namazu/index/';
+//define('PKWK_UPDATE_EXEC',
+//	$mknmz . ' --media-type=text/pukiwiki' .
+//	' -O ' . $output_dir . ' -L ja -c -K ' . $target);
 
 /////////////////////////////////////////////////
 // HTTP proxy setting (for TrackBack etc)

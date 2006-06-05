@@ -1,11 +1,12 @@
 <?php
-// $Id: counter.inc.php,v 1.17.7 2006/02/22 01:12:00 upk Exp $
-//
-// PukiWiki counter plugin
+// PukiWiki - Yet another WikiWikiWeb clone
+// $Id: counter.inc.php,v 1.18.7 2006/05/27 13:31:11 miko Exp $
 //
 // (C) 2002-2006 PukiWiki Plus! Team
 // (C) 2002-2005 PukiWiki Developers Team
 // (C) 2002 Y.MASUI GPL2 http://masui.net/pukiwiki/ masui@masui.net
+//
+// Counter plugin
 
 // Counter file's suffix
 define('PLUGIN_COUNTER_SUFFIX', '.count');
@@ -25,7 +26,6 @@ function plugin_counter_inline()
 	case 'yesterday':
 		$counter = plugin_counter_get_count($vars['page']);
 		return $counter[$arg];
-	// BugTrack/527, 欲しいプラグイン/42
 	case 'none':
 		$counter = plugin_counter_get_count($vars['page']);
 		return '';
