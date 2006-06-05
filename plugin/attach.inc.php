@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: attach.inc.php,v 1.82.4 2006/04/23 23:51:12 miko Exp $
+// $Id: attach.inc.php,v 1.82.5 2006/04/23 23:51:12 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2003-2006 PukiWiki Developers Team
@@ -475,8 +475,7 @@ class AttachFile
 	function AttachFile($page, $file, $age = 0)
 	{
 		$this->page = $page;
-//@miko	$this->file = preg_replace('#^.*/#','',$file);
-		$this->file = basename($file);
+		$this->file = basepagename($file);
 		$this->age  = is_numeric($age) ? $age : 0;
 
 		$this->basename = UPLOAD_DIR . encode($page) . '_' . encode($this->file);

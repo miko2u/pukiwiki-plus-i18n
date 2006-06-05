@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: skin.inc.php,v 1.1.3 2004/12/27 23:38:46 miko Exp $
+// $Id: skin.inc.php,v 1.1.4 2006/06/05 23:38:46 miko Exp $
 //
 function plugin_skin_convert()
 {
@@ -13,14 +13,14 @@ function plugin_skin_convert()
 	}
 	list($skin_name) = func_get_args();
 
-	$skin_temp = DATA_HOME . SKIN_DIR . basename($skin_name) . '.skin.php';
+	$skin_temp = DATA_HOME . SKIN_DIR . basepagename($skin_name) . '.skin.php';
 	if (file_exists($skin_temp) && is_readable($skin_temp)) {
 		$skin_file = $skin_temp;
 		return '';
 	}
 
 	// Back compat for Pukiwiki Plus!(1.4.4plus-u2)
-	$skin_temp = DATA_HOME . SKIN_DIR . basename($skin_name) . '.skin.' . LANG . '.php';
+	$skin_temp = DATA_HOME . SKIN_DIR . basepagename($skin_name) . '.skin.' . LANG . '.php';
 	if (file_exists($skin_temp) && is_readable($skin_temp)) {
 		$skin_file = $skin_temp;
 		return '';

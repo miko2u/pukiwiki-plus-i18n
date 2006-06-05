@@ -5,6 +5,18 @@
 // $Id: funcplus.php,v 0.1.4 2004/10/13 13:17:36 miko Exp $
 //
 
+// same as 'basename' for page
+function basepagename($str)
+{
+	return mb_basename($str)
+}
+
+// multibyte supported 'basename' function
+function mb_basename($str)
+{
+	return preg_replace('#^.*/#', '', $str);
+}
+
 // インクルードで余計なものはソースから削除する
 function convert_filter($str)
 {
