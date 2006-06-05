@@ -67,8 +67,8 @@ if ($die) die_message(nl2br("\n\n" . $die));
 switch (LANG){
 // CONTENT_CHARSET: Internal content encoding = Output content charset (for skin)
 //   'UTF-8', 'iso-8859-1', 'EUC-JP' or ...
-case 'en':	define('MB_LANGUAGE',     'English');
-case 'ja':	define('MB_LANGUAGE',     'Japanese');
+case 'en':	define('MB_LANGUAGE',     'English'); break;
+case 'ja':	define('MB_LANGUAGE',     'Japanese'); break;
 //UTF-8:case 'ko': define('MB_LANGUAGE', 'Korean'  ); break;
 //UTF-8:        // See BugTrack2/13 for all hack about Korean support,
 //UTF-8:        // and give us your report!

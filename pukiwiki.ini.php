@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: pukiwiki.ini.php,v 1.131.22 2006/04/27 14:52:25 miko Exp $
+// $Id: pukiwiki.ini.php,v 1.139.22 2006/06/03 11:32:18 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2006 PukiWiki Developers Team
