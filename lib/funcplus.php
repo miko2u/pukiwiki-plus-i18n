@@ -11,6 +11,18 @@ defined('FUNC_SPAMLOG')   or define('FUNC_SPAMLOG', FALSE);
 defined('FUNC_SPAMREGEX') or define('FUNC_SPAMREGEX', '/a\s+href=/i');
 defined('FUNC_SPAMCOUNT') or define('FUNC_SPAMCOUNT', 3);
 
+// same as 'basename' for page
+function basepagename($str)
+{
+	return mb_basename($str)
+}
+
+// multibyte supported 'basename' function
+function mb_basename($str)
+{
+	return preg_replace('#^.*/#', '', $str);
+}
+
 // SPAM check
 function is_spampost($array)
 {
