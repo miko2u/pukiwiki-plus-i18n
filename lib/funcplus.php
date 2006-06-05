@@ -8,7 +8,7 @@
 // same as 'basename' for page
 function basepagename($str)
 {
-	return mb_basename($str)
+	return mb_basename($str);
 }
 
 // multibyte supported 'basename' function
