@@ -50,12 +50,21 @@ if (! file_exists(INI_FILE) || ! is_readable(INI_FILE)) {
 if ($die) die_message(nl2br("\n\n" . $die));
 
 // for SESSION Variables
-if (!($_REQUEST['plugin'] != 'attach' && $_REQUEST['pcmd'] != 'open')) {
+$use_session = PLUS_ALLOW_SESSION;
+if (isset($_REQUEST['plugin']) && $_REQUEST['plugin'] != '') {
+	if ($_REQUEST['plugin'] == 'attach' && (isset($_REQUEST['openfile']) || $_REQUEST['pcmd'] == 'open'))
+		$use_session = 0;
+	if ($_REQUEST['plugin'] != 'ref' && isset($_REQUEST['page']) && isset($_REQUEST['src']))
+		$use_session = 0;
+}
+
+if ($use_session > 0) {
 	if (ini_get('session.auto_start') != 1) {
 		session_name('pukiwiki');
 		session_start();
 	}
 }
+unset($use_session);
 
 /////////////////////////////////////////////////
 // I18N

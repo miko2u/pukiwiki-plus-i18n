@@ -199,6 +199,9 @@ $nofollow = 0; // 1 = Try hiding from search engines
 
 /////////////////////////////////////////////////
 
+// PLUS_ALLOW_SESSION - Allow / Prohibit using Session
+define('PLUS_ALLOW_SESSION', 1);
+
 // PKWK_ALLOW_JAVASCRIPT - Allow / Prohibit using JavaScript
 define('PKWK_ALLOW_JAVASCRIPT', 1);
 
