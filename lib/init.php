@@ -1,6 +1,6 @@
 <?php
-// PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: init.php,v 1.44.45 2006/06/05 14:01:33 miko Exp $
+// PukiWiki Plus! - Yet another WikiWikiWeb clone.
+// $Id: init.php,v 1.44.45.19 2006/06/06 14:01:33 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2006 PukiWiki Developers Team
@@ -13,7 +13,7 @@
 
 define('S_VERSION', '1.4.6-u2-i18n');
 define('S_COPYRIGHT',
-	'<strong>PukiWiki Plus!' . S_VERSION . '</strong>' .
+	'<strong>PukiWiki Plus! ' . S_VERSION . '</strong>' .
 	' Copyright &copy; 2001-2006' .
 	' <a href="http://pukiwiki.cafelounge.net/plus/">PukiWiki Plus! Team</a>.' .
 	' License is <a href="http://www.gnu.org/licenses/gpl.html">GPL</a>.<br />' .
@@ -50,7 +50,7 @@ if (! file_exists(INI_FILE) || ! is_readable(INI_FILE)) {
 if ($die) die_message(nl2br("\n\n" . $die));
 
 // for SESSION Variables
-$use_session = PLUS_ALLOW_SESSION;
+$use_session = intval(PLUS_ALLOW_SESSION);
 if (isset($_REQUEST['plugin']) && $_REQUEST['plugin'] != '') {
 	if ($_REQUEST['plugin'] == 'attach' && (isset($_REQUEST['openfile']) || $_REQUEST['pcmd'] == 'open'))
 		$use_session = 0;
