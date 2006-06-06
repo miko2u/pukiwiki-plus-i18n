@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: func.php,v 1.73.5 2006/06/06 16:41:39 miko Exp $
+// $Id: func.php,v 1.73.7 2006/06/06 16:41:39 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2006 PukiWiki Developers Team
@@ -448,6 +448,11 @@ function die_message($msg)
 <h3>Runtime error</h3>
 <strong>Error message : $msg</strong>
 EOD;
+
+	// @miko:recover: $trackback is unused.
+	global $trackback;
+	$trackback = 0;
+	// @miko
 
 	pkwk_common_headers();
 	if(defined('SKIN_FILE') && file_exists(SKIN_FILE) && is_readable(SKIN_FILE)) {
