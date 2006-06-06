@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: init.php,v 1.45.14 2006/05/30 14:53:39 miko Exp $
+// $Id: init.php,v 1.45.16 2006/06/06 14:53:39 miko Exp $
 // Copyright (C)
 //   2005-2006 Customized/Patched by Miko.Hoshina
 //   2002-2006 PukiWiki Developers Team
@@ -100,11 +100,11 @@ mb_detect_order('auto');
 
 // for SESSION Variables
 $use_session = intval(PLUS_ALLOW_SESSION);
-if ($_REQUEST['plugin'] == 'attach' && (isset($_REQUEST['openfile']) || $_REQUEST['pcmd'] == 'open')) {
-	$use_session = 0;
-}
-if ($_REQUEST['plugin'] == 'ref' && isset($_REQUEST['page']) && isset($_REQUEST['src'])) {
-	$use_session = 0;
+if (isset($_REQUEST['plugin']) && $_REQUEST['plugin'] != '') {
+	if ($_REQUEST['plugin'] == 'attach' && (isset($_REQUEST['openfile']) || $_REQUEST['pcmd'] == 'open'))
+		$use_session = 0;
+	if ($_REQUEST['plugin'] == 'ref' && isset($_REQUEST['page']) && isset($_REQUEST['src']))
+		$use_session = 0;
 }
 if ($use_session > 0) {
 	if (ini_get('session.auto_start') != 1) {

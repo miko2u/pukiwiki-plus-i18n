@@ -1,5 +1,5 @@
 <?php
-// $Id: proxy.php,v 2.1.1 2006/04/16 14:03:29 miko Exp $
+// $Id: proxy.php,v 2.1.2 2006/06/06 14:03:29 miko Exp $
 // Copyright (C)
 //   2005      PukiWiki Plus! Team
 //   2003-2005 PukiWiki Developers Team
@@ -12,7 +12,7 @@ define('PKWK_HTTP_REQUEST_URL_REDIRECT_MAX', 2);
 define('PKWK_HTTP_REQUEST_TIMEOUT', 8);
 define('PKWK_HTTP_CONNECT_TIMEOUT', 2);
 define('PKWK_HTTP_VERSION', '1.1');
-define('PKWK_HTTP_CLIENT', 'PukiWiki/' . S_VERSION);
+define('PKWK_HTTP_CLIENT', 'PukiWiki/1.4');
 
 /*
  * http_request($url)
