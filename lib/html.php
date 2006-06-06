@@ -32,7 +32,7 @@ function catbody($title, $page, $body)
 		if (! file_exists($skin_file) || ! is_readable($skin_file)) {
 			die_message(SKIN_FILE.'(skin file) is not found.');
 		} else {
-			define(SKIN_FILE,$skin_file);
+			define('SKIN_FILE',$skin_file);
 		}
 	}
 

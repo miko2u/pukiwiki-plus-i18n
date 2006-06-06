@@ -473,7 +473,7 @@ EOD;
 	if(defined('SKIN_FILE') && file_exists(SKIN_FILE) && is_readable(SKIN_FILE)) {
 		catbody($title, $page, $body);
 	} elseif ($skin_file != '' && file_exists($skin_file) && is_readable($skin_file)) {
-		define(SKIN_FILE, $skin_file);
+		define('SKIN_FILE', $skin_file);
 		catbody($title, $page, $body);
 	} else {
 		header('Content-Type: text/html; charset=euc-jp');
