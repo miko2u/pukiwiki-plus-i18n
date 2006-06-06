@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: popular.inc.php,v 1.16.3 2006/06/05 15:28:01 miko Exp $
+// $Id: popular.inc.php,v 1.16.4 2006/06/06 15:28:01 miko Exp $
 //
 // Popular pages plugin: Show an access ranking of this wiki
 // -- like recent plugin, using counter plugin's count --
@@ -107,6 +107,9 @@ function plugin_popular_convert()
 		}
 		if ($view == 'total') {
 			$counters['_' . $page] = $count;
+		}
+		if ($counters['_' . $page] == 0) {
+			unset($counters['_' . $page]);
 		}
 	}
 	asort($counters, SORT_NUMERIC);
