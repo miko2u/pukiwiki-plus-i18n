@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: html.php,v 1.57.20 2006/04/15 17:33:35 miko Exp $
+// $Id: html.php,v 1.57.22 2006/06/06 17:33:35 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2006 PukiWiki Developers Team
@@ -31,7 +31,7 @@ function catbody($title, $page, $body)
 		if (! file_exists($skin_file) || ! is_readable($skin_file)) {
 			die_message(SKIN_FILE.'(skin file) is not found.');
 		} else {
-			define(SKIN_FILE,$skin_file);
+			define('SKIN_FILE', $skin_file);
 		}
 	}
 

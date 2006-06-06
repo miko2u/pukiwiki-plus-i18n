@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: func.php,v 1.73.3 2006/05/15 16:41:39 miko Exp $
+// $Id: func.php,v 1.73.5 2006/06/06 16:41:39 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2006 PukiWiki Developers Team
@@ -453,7 +453,7 @@ EOD;
 	if(defined('SKIN_FILE') && file_exists(SKIN_FILE) && is_readable(SKIN_FILE)) {
 		catbody($title, $page, $body);
 	} elseif ($skin_file != '' && file_exists($skin_file) && is_readable($skin_file)) {
-		define(SKIN_FILE, $skin_file);
+		define('SKIN_FILE', $skin_file);
 		catbody($title, $page, $body);
 	} else {
 		header('Content-Type: text/html; charset=euc-jp');
