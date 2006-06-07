@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: tracker.inc.php,v 1.34.3 2006/01/11 23:46:00 upk Exp $
+// $Id: tracker.inc.php,v 1.34.4 2006/06/07 23:46:00 miko Exp $
 //
 // Issue tracker plugin (See Also bugtrack plugin)
 
@@ -90,7 +90,7 @@ function plugin_tracker_action()
 	if (!isset($post['encode_hint']) && PKWK_ENCODING_HINT == '') {
 		honeypot_write();
 		return '<p>prohibits editing</p>';
-	} elseif (isset($post['encode_hint']) && $post['encode_hint'] == PKWK_ENCODING_HINT) {
+	} elseif (isset($post['encode_hint']) && $post['encode_hint'] != PKWK_ENCODING_HINT) {
 		honeypot_write();
 		return '<p>prohibits editing</p>';
 	} elseif (is_spampost(array('body'))) {
