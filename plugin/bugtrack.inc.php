@@ -178,13 +178,13 @@ function plugin_bugtrack_action()
 	// Petit SPAM Check (Client(Browser)-Server Ticket Check)
 	if (!isset($post['encode_hint']) && PKWK_ENCODING_HINT == '') {
 		honeypot_write();
-		return '<p>prohibits editing</p>';
+		return array('msg'=>'cannot write', 'body'=>'<p>prohibits editing</p>');
 	} elseif (isset($post['encode_hint']) && $post['encode_hint'] != PKWK_ENCODING_HINT) {
 		honeypot_write();
-		return '<p>prohibits editing</p>';
+		return array('msg'=>'cannot write', 'body'=>'<p>prohibits editing</p>');
 	} elseif (is_spampost(array('body'))) {
 		honeypot_write();
-		return '<p>prohibits editing</p>';
+		return array('msg'=>'cannot write', 'body'=>'<p>prohibits editing</p>');
 	}
 
 	$page = plugin_bugtrack_write($post['base'], $post['pagename'], $post['summary'],
