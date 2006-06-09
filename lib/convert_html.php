@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: convert_html.php,v 1.18.14 2006/05/15 07:29:58 miko Exp $
+// $Id: convert_html.php,v 1.18.15 2006/06/09 07:29:58 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2006 PukiWiki Developers Team
@@ -991,7 +991,7 @@ class Body extends Element
 		// Add 'page contents' link to its heading
 		$this->contents_last = & $this->contents_last->add(new Contents_UList($text, $level, $id));
 
-		// Add heding
+		// Add heading
 		return array($text . $anchor, $this->count > 1 ? "\n" . $top : '', $autoid);
 	}
 
