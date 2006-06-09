@@ -7,6 +7,7 @@
 //          Please Without customizing it. 
 
 $help_page = 'Help';
+$rule_page = 'FormattingRules';
 
 $weeklabels = array(
 	_('Sun'),_('Mon'),_('Tue'),_('Wed'),_('Thu'),_('Fri'),_('Sat'),
