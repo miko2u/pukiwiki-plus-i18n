@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: edit.inc.php,v 1.40.22 2006/05/16 12:49:24 miko Exp $
+// $Id: edit.inc.php,v 1.40.23 2006/06/09 12:49:24 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2001-2006 PukiWiki Developers Team
@@ -10,6 +10,9 @@
 
 // Remove #freeze written by hand
 define('PLUGIN_EDIT_FREEZE_REGEX', '/^(?:#freeze(?!\w)\s*)+/im');
+
+// Define part-edit area - 'compat':1.4.4compat, 'level':level
+defined('PLUGIN_EDIT_PARTAREA') or define('PLUGIN_EDIT_PARTAREA', 'compat');
 
 function plugin_edit_action()
 {
@@ -305,12 +308,33 @@ function plugin_edit_honeypot()
 function plugin_edit_parts($id, &$source, $postdata='')
 {
 	$postdata = rtrim($postdata) . "\n";
-	$heads = preg_grep('/^\*{1,3}.+$/', $source);
-	$heads[count($source)] = ''; // sentinel
-	while (list($start, $line) = each($heads)) {
-		if (preg_match("/\[#$id\]/", $line)) {
-			list($end, $line) = each($heads);
-			return join('', array_splice($source, $start, $end - $start, $postdata));
+	if (PLUGIN_EDIT_PARTAREA == 'level') {
+		$start = -1;
+		$final = count($source);
+		foreach ($source as $i=>$line) {
+	        if ($start === -1) {
+	            if (preg_match('/^(\*{1,3})(.*?)\[#($id)\](.*?)$/m', $line, $matches)) {
+	                $start = $i;
+	                $hlen = strlen($matches[1]);
+	            }
+	        } else {
+	            if (preg_match('/^(\*{1,3})/m', $line, $matches) && strlen($matches[1]) <= $hlen) {
+	                $final = $i;
+	                break;
+	            }
+	        }
+	    }
+	    if ($start !== -1) {
+	        return join('', array_splice($source, $start, $final - $start, $postdata));
+		}
+	} else {
+		$heads = preg_grep('/^\*{1,3}.+$/', $source);
+		$heads[count($source)] = ''; // sentinel
+		while (list($start, $line) = each($heads)) {
+			if (preg_match("/\[#$id\]/", $line)) {
+				list($final, $line) = each($heads);
+				return join('', array_splice($source, $start, $final - $start, $postdata));
+			}
 		}
 	}
 	return FALSE;
