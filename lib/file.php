@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: file.php,v 1.70.16 2006/05/19 15:16:59 miko Exp $
+// $Id: file.php,v 1.72.16 2006/06/11 14:42:09 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2006 PukiWiki Developers Team
@@ -346,7 +346,7 @@ function file_write($dir, $page, $str, $notimestamp = FALSE)
 		if ($timestamp === FALSE) lastmodified_add($page);
 
 		// Command execution per update
-		if (defined(PKWK_UPDATE_EXEC))
+		if (defined('PKWK_UPDATE_EXEC') && PKWK_UPDATE_EXEC)
 			system(PKWK_UPDATE_EXEC . ' > /dev/null &');
 		elseif ($update_exec)
 			system($update_exec . ' > /dev/null &');
