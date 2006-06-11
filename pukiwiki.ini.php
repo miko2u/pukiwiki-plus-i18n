@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: pukiwiki.ini.php,v 1.139.22 2006/06/03 11:32:18 miko Exp $
+// $Id: pukiwiki.ini.php,v 1.139.140 2006/06/11 14:35:39 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2006 PukiWiki Developers Team
@@ -95,7 +95,7 @@ define('IMAGE_DIR', 'image/');
 // Keep this directory shown via web browsers like
 // ./IMAGE_DIR from index.php.
 
-// for Fancy URL
+// for Fancy URL(Plus! experimental)
 define('ROOT_URI', '');
 define('SKIN_URI', ROOT_URI . SKIN_DIR);
 define('IMAGE_URI', ROOT_URI . IMAGE_DIR);
@@ -177,8 +177,11 @@ $trackback_javascript = 0;
 
 /////////////////////////////////////////////////
 // Convert cache feature
+
+// Enable convert-cache
 $convert_cache = 1;
 
+// Disable convert-cache plugin.
 $convert_misscache_plugin = array(
 	'counter', 'cvscheck', 'online', 'popular',
 	'description', 'keywords', 'mediaplayer', 'navi',

@@ -1,8 +1,8 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: pukiwiki.ini.php,v 1.128.21.5 2005/10/20 14:57:09 miko Exp $
+// $Id: pukiwiki.ini.php,v 1.139.140.7 2006/06/11 14:57:09 miko Exp $
 // Copyright (C)
-//   2005      Customized/Patched by Miko.Hoshina
+//   2005-2006 PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
 //   2001-2002 Originally written by yu-ji
 // License: GPL v2 or (at your option) any later version
@@ -31,12 +31,33 @@ if (! defined('PKWK_READONLY'))
 if (! defined('PKWK_SAFE_MODE'))
 	define('PKWK_SAFE_MODE', 0);
 
+// PKWK_DISABLE_INLINE_IMAGE_FROM_URI - Disallow using inline-image-tag for URIs
+//   Inline-image-tag for URIs may allow leakage of Wiki readers' information
+//   (in short, 'Web bug') or external malicious CGI (looks like an image's URL)
+//   attack to Wiki readers, but easy way to show images.
+if (! defined('PKWK_DISABLE_INLINE_IMAGE_FROM_URI'))
+	define('PKWK_DISABLE_INLINE_IMAGE_FROM_URI', 0);
+
 // PKWK_QUERY_STRING_MAX
 //   GETメソッドの最大長を制限することにより、ある種のウイルス(ワーム)
 //   からのアクセスを直ちに禁止する
 //   注意: ページ名と添付ファイル名を足した長さより大きい必要があります
 //        (page-name + attach-file-name) <= PKWK_QUERY_STRING_MAX
 define('PKWK_QUERY_STRING_MAX', 640); // Bytes, 0 = OFF
+
+/////////////////////////////////////////////////
+// 実験的な設定
+
+// 複数行ブロック型プラグインの設定(See official:BugTrack2/84)
+// 例(with a known BUG):
+//   #plugin(args1,args2,...,argsN){{
+//   argsN+1
+//   argsN+1
+//   #memo(foo)
+//   argsN+1
+//   }}
+//   #memo(This makes '#memo(foo)' to this)
+define('PKWKEXP_DISABLE_MULTILINE_PLUGIN_HACK', 0); // 0:有効, 1:無効
 
 /////////////////////////////////////////////////
 // 言語 / エンコーディング方式の設定
@@ -79,16 +100,10 @@ define('IMAGE_DIR', 'image/');
 //  場所(index.php から見て ./IMAGE_DIR にあたる場所)に配置して
 //  下さい
 
-/////////////////////////////////////////////////
-// 実験的な設定
-
 // 仮想URLのための記述(Plus! experimental)
 define('ROOT_URI', '');
 define('SKIN_URI', ROOT_URI . SKIN_DIR);
 define('IMAGE_URI', ROOT_URI . IMAGE_DIR);
-
-// 複数行ブロック型プラグインの設定(See official:BugTrack2/84)
-define('PKWKEXP_DISABLE_MULTILINE_PLUGIN_HACK', 0); // 0:有効, 1:無効
 
 /////////////////////////////////////////////////
 // ローカル時刻設定
@@ -169,6 +184,21 @@ $trackback = 1;
 
 // トラックバックの一覧を別画面で表示する (JavaScriptを利用する)
 $trackback_javascript = 0;
+
+/////////////////////////////////////////////////
+// HTMLキャッシュ 機能
+
+// HTMLキャッシュを有効にする
+$convert_cache = 1;
+
+// HTMLキャッシュを無効にするプラグイン
+// 内部パラメータを使用するプラグインはキャッシュできないので
+// ここにプラグイン名を登録してください。
+$convert_misscache_plugin = array(
+	'counter', 'cvscheck', 'online', 'popular',
+	'description', 'keywords', 'mediaplayer', 'navi',
+	'nomenubar', 'nosidebar', 'norelated', 'nofollow', 'skin',
+);
 
 /////////////////////////////////////////////////
 // リファラの一覧を表示する
@@ -293,8 +323,8 @@ $auth_users = array(
 /////////////////////////////////////////////////
 // 認証方法
 
-$auth_method_type = 'contents';	// ページの内容による認証
-//$auth_method_type = 'pagename';	// ページ名による認証
+$auth_method_type = 'pagename';	// ページ名による認証
+//$auth_method_type = 'contents';	// ページの内容による認証
 
 /////////////////////////////////////////////////
 // 閲覧認証 (0:無効、1:有効)
@@ -378,8 +408,16 @@ define('PKWK_SPLITTER', '>>>>>>>>>>');
 
 /////////////////////////////////////////////////
 // 更新される度に実行するコマンド
-$update_exec = '';
-//$update_exec = '/usr/bin/mknmz --media-type=text/pukiwiki -O /var/lib/namazu/index/ -L ja -c -K /var/www/wiki/';
+define('PKWK_UPDATE_EXEC', '');
+$update_exec = PKWK_UPDATE_EXEC;
+
+// 設定サンプル: Namazu の設定
+//$target     = '/var/www/wiki/';
+//$mknmz      = '/usr/bin/mknmz';
+//$output_dir = '/var/lib/namazu/index/';
+//define('PKWK_UPDATE_EXEC',
+//	$mknmz . ' --media-type=text/pukiwiki' .
+//	' -O ' . $output_dir . ' -L ja -c -K ' . $target);
 
 /////////////////////////////////////////////////
 // プロキシの設定 (TrackBackなどが用いる)
@@ -564,7 +602,7 @@ $agents = array(
 
 	// Opera, dressing up as other embedded browsers
 	// Sample: "Mozilla/3.0(DDIPOCKET;KYOCERA/AH-K3001V/1.4.1.67.000000/0.1/C100) Opera 7.0" (Like CNF at 'keitai'-mode)
-	array('pattern'=>'#\bDDIPOCKET\b.+\b(Opera) ([0-9\.]+)\b#',	'profile'=>'keitai'),
+	array('pattern'=>'#\b(?:DDIPOCKET|WILLCOM)\b.+\b(Opera) ([0-9\.]+)\b#', 'profile'=>'keitai'),
 
 	// Planetweb http://www.planetweb.com/
 	// Sample: "Mozilla/3.0 (Planetweb/v1.07 Build 141; SPS JP)" ("EGBROWSER", Web browser for PlayStation 2)
