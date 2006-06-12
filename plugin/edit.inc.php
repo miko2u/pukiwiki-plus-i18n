@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: edit.inc.php,v 1.40.23 2006/06/09 12:49:24 miko Exp $
+// $Id: edit.inc.php,v 1.40.25 2006/06/12 12:49:24 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2001-2006 PukiWiki Developers Team
@@ -310,22 +310,38 @@ function plugin_edit_parts($id, &$source, $postdata='')
 	$postdata = rtrim($postdata) . "\n";
 	if (PLUGIN_EDIT_PARTAREA == 'level') {
 		$start = -1;
-		$final = count($source);
-		foreach ($source as $i=>$line) {
-	        if ($start === -1) {
-	            if (preg_match('/^(\*{1,3})(.*?)\[#($id)\](.*?)$/m', $line, $matches)) {
-	                $start = $i;
-	                $hlen = strlen($matches[1]);
-	            }
-	        } else {
-	            if (preg_match('/^(\*{1,3})/m', $line, $matches) && strlen($matches[1]) <= $hlen) {
-	                $final = $i;
-	                break;
-	            }
-	        }
-	    }
-	    if ($start !== -1) {
-	        return join('', array_splice($source, $start, $final - $start, $postdata));
+        $final = count($source);
+        $multiline = 0;
+        $matches = array();
+        foreach ($source as $i => $line) {
+			// multiline plugin. refer lib/convert_html
+			if(defined('PKWKEXP_DISABLE_MULTILINE_PLUGIN_HACK') && PKWKEXP_DISABLE_MULTILINE_PLUGIN_HACK === 0) {
+				if ($multiline < 2) {
+					if(preg_match('/^#([^\(\{]+)(?:\(([^\r]*)\))?(\{\*)/', $line, $matches)) {
+						$multiline  = strlen($matches[3]);
+					}
+				} else {
+					if (preg_match('/^\}{' . $multiline . '}/', $line, $matches)) {
+						$multiline = 0;
+					}
+					continue;
+				}
+			}
+
+			if ($start === -1) {
+				if (preg_match('/^(\*{1,3})(.*?)\[#(' . preg_quote($id) . ')\](.*?)$/m', $line, $matches)) {
+					$start = $i;
+					$hlen = strlen($matches[1]);
+				}
+			} else {
+				if (preg_match('/^(\*{1,3})/m', $line, $matches) && strlen($matches[1]) <= $hlen) {
+					$final = $i;
+					break;
+				}
+			}
+        }
+		if ($start !== -1) {
+			return join('', array_splice($source, $start, $final - $start, $postdata));
 		}
 	} else {
 		$heads = preg_grep('/^\*{1,3}.+$/', $source);
