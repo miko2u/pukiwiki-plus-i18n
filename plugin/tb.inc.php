@@ -94,6 +94,13 @@ function plugin_tb_save($url, $tb_id)
 	}
 	$data[rawurldecode($items['url'])] = $items;
 
+	// minimum checking from SPAM
+	$matches = array();
+	if (preg_match_all('/a\s+href=/i', $items['excerpt'], $matches) >= 1) {
+		honeypot_write();
+		plugin_tb_return(PLUGIN_TB_ERROR, 'Writing is prohibited.');
+	}
+
 	$fp = fopen($filename, 'w');
 	set_file_buffer($fp, 0);
 	flock($fp, LOCK_EX);
