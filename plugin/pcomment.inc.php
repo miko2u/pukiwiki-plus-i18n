@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: pcomment.inc.php,v 1.43.1 2005/10/04 14:31:22 miko Exp $
+// $Id: pcomment.inc.php,v 1.43.2 2006/06/14 14:31:22 miko Exp $
 //
 // pcomment plugin - Show/Insert comments into specified (another) page
 //
@@ -49,6 +49,12 @@ function plugin_pcomment_action()
 	if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
 
 	if (! isset($vars['msg']) || $vars['msg'] == '') return array();
+
+	// Validate
+	if (is_spampost(array('msg'))) {
+		return plugin_pcomment_honeypot();
+	}
+
 	$refer = isset($vars['refer']) ? $vars['refer'] : '';
 
 	$retval = plugin_pcomment_insert();
@@ -168,6 +174,16 @@ EOD;
 			'<p>' . $recent . ' ' . $link . '</p>' . "\n" .
 			'</div>' . "\n";
 	}
+}
+
+// Cancel (Back to the page / Escape edit page)
+function plugin_pcomment_honeypot()
+{
+	// Logging for SPAM Report
+	honeypot_write();
+
+	// Same as "Cancel" action
+	return array('msg'=>'', 'body'=>''); // Do nothing
 }
 
 function plugin_pcomment_insert()
