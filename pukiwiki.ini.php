@@ -179,7 +179,7 @@ $trackback_javascript = 0;
 // Convert cache feature
 
 // Enable convert-cache
-$convert_cache = 1;
+$convert_cache = 0;
 
 // Disable convert-cache plugin.
 $convert_misscache_plugin = array(

@@ -189,7 +189,7 @@ $trackback_javascript = 0;
 // HTMLキャッシュ 機能
 
 // HTMLキャッシュを有効にする
-$convert_cache = 1;
+$convert_cache = 0;
 
 // HTMLキャッシュを無効にするプラグイン
 // 内部パラメータを使用するプラグインはキャッシュできないので
