@@ -128,6 +128,13 @@ function plugin_tb_save($url, $tb_id)
 		$items[$key] = $value;
 	}
 
+	// minimum checking from SPAM
+	$matches = array();
+	if (preg_match_all('/a\s+href=/i', $items['excerpt'], $matches) >= 1) {
+		honeypot_write();
+		plugin_tb_return(PLUGIN_TB_ERROR, 'Writing is prohibited.');
+	}
+
 	// Blocking SPAM
 	if ($use_spam_check['trackback'] && SpamCheck($items['url'])) plugin_tb_return(1, 'Writing is prohibited.');
 
