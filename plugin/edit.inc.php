@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: edit.inc.php,v 1.40.19 2006/04/25 14:59:24 miko Exp $
+// $Id: edit.inc.php,v 1.40.21 2006/04/25 14:59:24 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2001-2006 PukiWiki Developers Team
@@ -132,6 +132,12 @@ function plugin_edit_write()
 	$add    = isset($vars['add'])    ? $vars['add']    : '';
 	$digest = isset($vars['digest']) ? $vars['digest'] : '';
 	$partid = isset($vars['id'])     ? $vars['id']     : '';
+	$notimestamp = isset($vars['notimestamp']) && $vars['notimestamp'] != '';
+
+	// Check Validate and Ticket
+	if ($notimestamp && !is_page($page)) {
+		return plugin_edit_honeypot();
+	}
 
 	// Paragraph edit mode
 	if ($partid) {
@@ -190,7 +196,6 @@ function plugin_edit_write()
 	}
 
 	// $notimeupdate: Checkbox 'Do not change timestamp'
-	$notimestamp = isset($vars['notimestamp']) && $vars['notimestamp'] != '';
 	if ($notimeupdate > 1 && $notimestamp && ! pkwk_login($vars['pass'])) {
 		// Enable only administrator & password error
 		$retvars['body']  = '<p><strong>' . $_msg_invalidpass . '</strong></p>' . "\n";
@@ -223,6 +228,16 @@ function plugin_edit_cancel()
 	pkwk_headers_sent();
 	header('Location: ' . get_script_uri() . '?' . rawurlencode($vars['page']));
 	exit;
+}
+
+// Cancel (Back to the page / Escape edit page)
+function plugin_edit_honeypot()
+{
+	// SPAM Logging
+	honeypot_write();
+
+	// Same as "Cancel" action
+	return plugin_edit_cancel();
 }
 
 // Replace/Pickup a part of source

@@ -1,9 +1,15 @@
 <?php
-/////////////////////////////////////////////////
-// PukiWiki - Yet another WikiWikiWeb clone.
+// PukiWiki Plus! - Yet another WikiWikiWeb clone.
+// $Id: funcplus.php,v 0.1.8 2006/05/25 00:52:00 miko Exp $
+// Copyright (C)
+//   2005-2006 PukiWiki Plus! Team
+// License: GPL v2 or (at your option) any later version
 //
-// $Id: funcplus.php,v 0.1.4 2004/10/13 13:17:36 miko Exp $
-//
+// Plus! extension function(s)
+
+defined('FUNC_SPAMLOG')   or define('FUNC_SPAMLOG', FALSE);
+defined('FUNC_SPAMREGEX') or define('FUNC_SPAMREGEX', '/a\s+href=/i');
+defined('FUNC_SPAMCOUNT') or define('FUNC_SPAMCOUNT', 3);
 
 // same as 'basename' for page
 function basepagename($str)
@@ -17,11 +23,39 @@ function mb_basename($str)
 	return preg_replace('#^.*/#', '', $str);
 }
 
+// SPAM check
+function is_spampost($array)
+{
+	global $vars;
+
+	$matches = array();
+	foreach($array as $idx) {
+		if (preg_match_all(FUNC_SPAMREGEX, $vars[$idx], $matches) >= FUNC_SPAMCOUNT)
+			return TRUE;
+	}
+	return FALSE;
+}
+
+// SPAM logging
+function honeypot_write()
+{
+	global $get, $post, $vars;
+
+	// Logging for SPAM Report
+	// NOTE: Not recommended use Rental Server
+	if (FUNC_SPAMLOG === TRUE && version_compare(PHP_VERSION, '4.2.0', '>=')) {
+		error_log("----" . date('Y-m-d H:i:s', time()) . "\n", 3, CACHE_DIR . 'honeypot.log');
+		error_log("[GET]\n"  . var_export($get,  TRUE) . "\n", 3, CACHE_DIR . 'honeypot.log');
+		error_log("[POST]\n" . var_export($post, TRUE) . "\n", 3, CACHE_DIR . 'honeypot.log');
+		error_log("[VARS]\n" . var_export($vars, TRUE) . "\n", 3, CACHE_DIR . 'honeypot.log');
+	}
+}
+
 // インクルードで余計なものはソースから削除する
 function convert_filter($str)
 {
 	global $filter_rules;
-	static $patternf,$replacef;
+	static $patternf, $replacef;
 
 	if (!isset($patternf))
 	{
@@ -34,15 +68,15 @@ function convert_filter($str)
 
 function get_fancy_uri()
 {
-        $script  = (SERVER_PORT == 443 ? 'https://' : 'http://');       // scheme
-        $script .= SERVER_NAME; // host
-        $script .= (SERVER_PORT == 80 ? '' : ':' . SERVER_PORT); // port
+	$script  = (SERVER_PORT == 443 ? 'https://' : 'http://');       // scheme
+	$script .= SERVER_NAME; // host
+	$script .= (SERVER_PORT == 80 ? '' : ':' . SERVER_PORT); // port
 
-        // SCRIPT_NAME が'/'で始まっていない場合(cgiなど) REQUEST_URIを使ってみる
-        $path    = SCRIPT_NAME;
-        $script .= $path;       // path
+	// SCRIPT_NAME が'/'で始まっていない場合(cgiなど) REQUEST_URIを使ってみる
+	$path    = SCRIPT_NAME;
+	$script .= $path;       // path
 
-        return $script;
+	return $script;
 }
 
 function mb_ereg_quote($str)
