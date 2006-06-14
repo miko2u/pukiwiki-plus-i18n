@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: tracker.inc.php,v 1.34 2005/11/28 17:48:30 henoheno Exp $
+// $Id: tracker.inc.php,v 1.34.1 2006/06/11 17:48:30 miko Exp $
 //
 // Issue tracker plugin (See Also bugtrack plugin)
 
