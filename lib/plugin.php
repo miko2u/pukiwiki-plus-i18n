@@ -20,7 +20,7 @@ function set_plugin_messages($messages)
 }
 
 // Same as getopt for plugins
-function get_plugin_option($args, &$params, $separator='=')
+function get_plugin_option($args, &$params, $separator=':')
 {
 	if (empty($args)) {
 		$params['_done'] = TRUE;
