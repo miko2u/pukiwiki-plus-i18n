@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: plugin.php,v 1.15.4 2005/07/03 14:16:23 miko Exp $
+// $Id: plugin.php,v 1.15.6 2006/06/15 14:16:23 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
@@ -20,7 +20,7 @@ function set_plugin_messages($messages)
 }
 
 // Same as getopt for plugins
-function get_plugin_option($args, &$params, $separator='=')
+function get_plugin_option($args, &$params, $separator=':')
 {
 	if (empty($args)) {
 		$params['_done'] = TRUE;
