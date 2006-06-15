@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another wikiwikiweb clone.
-// $Id: siteimage.inc.php,v 1.8 2006/06/15 01:06:00 miko Exp $
+// $Id: siteimage.inc.php,v 1.8.1 2006/06/15 01:06:00 miko Exp $
 // Copyright (C)
 //   2006      PukiWiki Plus! Team
 //   2006      by nao-pon http://hypweb.net/
@@ -15,6 +15,9 @@ function plugin_siteimage_inline()
 	global $link_target;
 	$args = func_get_args();
 	$url = array_shift($args);
+	if (!is_url($url))
+		return 'Usage: &amp;siteimage([url],[option(s),...]);';
+
 	$options = array('nolink'=>false);
 	get_plugin_option($args, &$options);
 	return plugin_siteimage_make($url, $options['nolink']);
@@ -26,10 +29,13 @@ function plugin_siteimage_convert()
 	global $link_target;
 	$args = func_get_args();
 	$url = array_shift($args);
+	if (!is_url($url))
+		return '<p>Usage: #siteimage([url],[option(s),...]);</p>';
+
 	$options = array('nolink'=>false,'around'=>false,'left'=>false,'right'=>false,'center'=>false);
 	get_plugin_option($args, &$options);
-	$style = 'width:128px;height:128px;margin:10px;';
 
+	$style = 'width:128px;height:128px;margin:10px;';
 	if ($options['around']) {
 		if ($options['right']) {
 			$style .= 'float:right;margin-right:5px;';
