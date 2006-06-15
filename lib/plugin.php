@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: plugin.php,v 1.15.7 2006/04/30 17:13:00 upk Exp $
+// $Id: plugin.php,v 1.15.7 2006/06/15 17:13:00 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
@@ -17,6 +17,29 @@ function set_plugin_messages($messages)
 	foreach ($messages as $name=>$val)
 		if (! isset($GLOBALS[$name]))
 			$GLOBALS[$name] = $val;
+}
+
+// Same as getopt for plugins
+function get_plugin_option($args, &$params, $separator='=')
+{
+	if (empty($args)) {
+		$params['_done'] = TRUE;
+		return TRUE;
+	}
+	$keys = array_keys($params);
+
+	foreach($args as $val) {
+		list($_key, $_val) = array_pad(split($separator, $val, 2), 2, TRUE);
+		$_key = trim($_key);
+		$_val = trim($_val);
+		if (in_array($_key, $keys)) {
+			$params[$_key] = $_val;    // Exist keys
+		} else {
+			$params['_args'][] = $val; // Not exist keys, in '_args'
+		}
+	}
+	$params['_done'] = TRUE;
+	return TRUE;
 }
 
 // Check plugin '$name' is here
