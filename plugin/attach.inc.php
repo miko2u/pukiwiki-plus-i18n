@@ -225,8 +225,7 @@ function attach_filelist()
 // $pass = TRUE : アップロード許可
 function attach_upload($file, $page, $pass = NULL)
 {
-	global $_attach_messages, $notify, $notify_subject;
-	global $notify_exclude;
+	global $_attach_messages;
 
 	// if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
 	if (auth::check_role('readonly')) die_message('PKWK_READONLY prohibits editing');
@@ -259,7 +258,15 @@ function attach_upload($file, $page, $pass = NULL)
 			'result'=>FALSE,
 			'msg'=>$_attach_messages['err_adminpass']);
 	}
-//miko 4.3.3 or upper only
+
+	return attach_doupload($file, $page, $pass);
+}
+
+function attach_doupload(&$file, $page, $pass=NULL, $temp='', $copyright=FALSE, $notouch=FALSE)
+{
+	global $_attach_messages;
+	global $notify, $notify_subject, $notify_exclude;
+
 	$must_compress = 0;
 	if (function_exists('mime_content_type')) {
 		$type = mime_content_type($file['tmp_name']);
@@ -313,22 +320,21 @@ function attach_upload($file, $page, $pass = NULL)
 	$obj->putstatus();
 
 	if ($notify) {
-		$notify_flag = TRUE;
-		// notify_exclude
+		$notify_exec = TRUE;
 		foreach ($notify_exclude as $exclude) {
 			$exclude = preg_quote($exclude);
-			if (substr($exclude, -1) == ".")
-				$exclude = $exclude . "*";
-			if (preg_match("/^" . $exclude . "/", $_SERVER["REMOTE_ADDR"])) {
-				$notify_flag = FALSE;
+			if (substr($exclude, -1) == '.')
+				$exclude = $exclude . '*';
+			if (preg_match('/^' . $exclude . '/', $_SERVER['REMOTE_ADDR'])) {
+				$notify_exec = FALSE;
 				break;
 			}
 		}
 	} else {
-		$notify_flag = FALSE;
+		$notify_exec = FALSE;
 	}
 
-	if ($notify_flag) {
+	if ($notify_exec !== FALSE) {
 		$footer['ACTION']   = 'File attached';
 		$footer['FILENAME'] = & $file['name'];
 		$footer['FILESIZE'] = & $file['size'];
@@ -347,8 +353,6 @@ function attach_upload($file, $page, $pass = NULL)
 		$footer['REMOTE_ADDR'] = TRUE;
 
 		pkwk_mail_notify($notify_subject, "\n", $footer);
-//@plus-comment why die on notify-failed?
-//		or die('pkwk_mail_notify(): Failed');
 	}
 
 	return array(
