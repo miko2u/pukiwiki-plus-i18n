@@ -20,7 +20,7 @@ function set_plugin_messages($messages)
 }
 
 // Same as getopt for plugins
-function get_plugin_option($args, &$params, $separator=':')
+function get_plugin_option($args, &$params, $tolower=TRUE, $separator=':')
 {
 	if (empty($args)) {
 		$params['_done'] = TRUE;
@@ -30,6 +30,7 @@ function get_plugin_option($args, &$params, $separator=':')
 
 	foreach($args as $val) {
 		list($_key, $_val) = array_pad(split($separator, $val, 2), 2, TRUE);
+		if ($tolower === TRUE) $_key = strtolower($_key);
 		$_key = trim($_key);
 		$_val = trim($_val);
 		if (in_array($_key, $keys)) {
