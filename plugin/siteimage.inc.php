@@ -6,9 +6,9 @@
 //   2006      by nao-pon http://hypweb.net/
 // License: GPL v2 or (at your option) any later version
 
-function plugin_siteimage_init()
-{
-}
+// ågë—ìdòbÇ≈ÇÃè¨Ç≥Ç¢âÊëúÇÃï\é¶
+defined('PLUGIN_SITEIMAGE_SHOW_IMAGE_TO_MOBILEPHONE')
+	or define('PLUGIN_SITEIMAGE_SHOW_IMAGE_TO_MOBILEPHONE', FALSE); // FALSE, TRUE
 
 function plugin_siteimage_inline()
 {
