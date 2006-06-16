@@ -60,7 +60,16 @@ function plugin_siteimage_make($url, $nolink, $target='')
 {
 	$url = htmlspecialchars($url);
 	$target = htmlspecialchars($target);
-	$ret = '<img src="http://img.simpleapi.net/small/' . $url . '" width="128" height="128" alt="' . $url . '">';
+	if (defined('UA_MOBILE') && UA_MOBILE != 0) {
+		if (defined('PLUGIN_SITEIMAGE_SHOW_IMAGE_TO_MOBILEPHONE') && PLUGIN_SITEIMAGE_SHOW_IMAGE_TO_MOBILEPHONE) {
+			$ret = '<img src="http://img.simpleapi.net/small/' . $url . '" width="128" height="128" alt="' . $url . '" title="keitai" />';
+		} else {
+			$ret = '<a href="http://img.simpleapi.net/small/' . $url . '">[' . $url . ']</a>';
+		}
+	} else {
+		$ret = '<img src="http://img.simpleapi.net/small/' . $url . '" width="128" height="128" alt="' . $url . '" />';
+	}
+
 	if (!$nolink) {
 //		$ret = '<a href="' . $url . '" target="' . $target . '" title="' . $url . '">' . $ret . '</a>';
 		$ret = '<a href="' . $url . '" title="' . $url . '">' . $ret . '</a>';
