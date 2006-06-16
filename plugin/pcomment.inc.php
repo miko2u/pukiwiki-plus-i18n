@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: pcomment.inc.php,v 1.43.5 2006/06/16 23:38:00 miko Exp $
+// $Id: pcomment.inc.php,v 1.43.7 2006/06/16 23:38:00 miko Exp $
 //
 // pcomment plugin - Show/Insert comments into specified (another) page
 //
@@ -41,14 +41,32 @@ define('PLUGIN_PCOMMENT_FORMAT_STRING',
 
 function plugin_pcomment_action()
 {
-	global $vars;
+	global $post, $vars;
 
 	// if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
 	if (auth::check_role('readonly')) die_message('PKWK_READONLY prohibits editing');
 
-	if (! isset($vars['msg']) || $vars['msg'] == '') return array();
-	$refer = isset($vars['refer']) ? $vars['refer'] : '';
+	// Petit SPAM Check (Client(Browser)-Server Ticket Check)
+	$b = FALSE;
+	if (!isset($post['encode_hint']) && PKWK_ENCODING_HINT == '') {
+		$b = TRUE;
+	} elseif (isset($post['encode_hint']) && $post['encode_hint'] == PKWK_ENCODING_HINT) {
+		$b = TRUE;
+	}
+	if ($b === FALSE) {
+		honeypot_write();
+		return array('msg'=>'', 'body'=>''); // Do nothing
+	}
 
+	if (! isset($vars['msg']) || $vars['msg'] == '') return array();
+
+	// Validate
+	if (is_spampost(array('msg'))) {
+		honeypot_write();
+		return array('msg'=>'', 'body'=>''); // Do nothing
+	}
+
+	$refer = isset($vars['refer']) ? $vars['refer'] : '';
 	$retval = plugin_pcomment_insert();
 	if ($retval['collided']) {
 		$vars['page'] = $refer;
