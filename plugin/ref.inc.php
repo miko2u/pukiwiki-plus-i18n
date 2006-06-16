@@ -40,6 +40,12 @@ define('PLUGIN_REF_DIRECT_ACCESS', FALSE); // FALSE or TRUE
 
 // 携帯電話での小さい画像の表示
 define('PLUGIN_REF_SHOW_IMAGE_TO_MOBILEPHONE', FALSE); // FALSE, TRUE
+
+// ダウンロードするときは他ウィンドウにする
+define('PLUGIN_REF_DOWNLOAD_OTHERWINDOW', FALSE); // FALSE, TRUE
+// 主に MSIE5.5 などでダウンロードが停止してしまう場合に使用します。
+// http://support.microsoft.com/kb/266305/ja
+
 /////////////////////////////////////////////////
 
 // Image suffixes allowed
@@ -385,8 +391,11 @@ function plugin_ref_body($args)
 		}
 	} else {
 		$icon = $params['noicon'] ? '' : FILE_ICON;
-		$params['_body'] = '<a href="' . $url . '" title="' . $info . '">' . $icon . $title .  '</a>';
-//		$params['_body'] = "<a href=\"$url\" title=\"$info\" onclick=\"return open_attach_uri('$url', '_blank');\">$icon$title</a>";
+		if (defined('PLUGIN_REF_DOWNLOAD_OTHER_WINDOW') && PLUGIN_REF_DOWNLOAD_OTHER_WINDOW) {
+			$params['_body'] = '<a href="' . $url . '" title="' . $info . '" onclick="return open_attach_uri(' . "'" . $url . "', '_blank'" . ');">' . $icon . $title . '</a>';
+		} else {
+			$params['_body'] = '<a href="' . $url . '" title="' . $info . '">' . $icon . $title .  '</a>';
+		}
 	}
 
 	return $params;
