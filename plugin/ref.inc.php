@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: ref.inc.php,v 1.50.9 2006/04/27 23:34:00 miko Exp $
+// $Id: ref.inc.php,v 1.50.9 2006/06/16 23:34:00 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2006 PukiWiki Developers Team
@@ -232,9 +232,9 @@ function plugin_ref_body($args)
 	}
 
 	// 残りの引数の処理
-	if (! empty($args))
-		foreach ($args as $arg)
-			ref_check_arg($arg, $params);
+	if (! empty($args)) {
+		get_plugin_option($args, $params);
+	}
 
 /*
  $nameをもとに以下の変数を設定
@@ -390,27 +390,6 @@ function plugin_ref_body($args)
 	}
 
 	return $params;
-}
-
-// オプションを解析する
-function ref_check_arg($val, & $params)
-{
-	if ($val == '') {
-		$params['_done'] = TRUE;
-		return;
-	}
-
-	if (! $params['_done']) {
-		foreach (array_keys($params) as $key) {
-			if (strpos($key, strtolower($val)) === 0) {
-				$params[$key] = TRUE;
-				return;
-			}
-		}
-		$params['_done'] = TRUE;
-	}
-
-	$params['_args'][] = $val;
 }
 
 // Output an image (fast, non-logging <==> attach plugin)
