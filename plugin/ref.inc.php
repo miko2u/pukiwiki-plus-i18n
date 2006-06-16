@@ -357,10 +357,10 @@ function plugin_ref_body($args)
 			$width  = (int)($width  * $params['_%'] / 100);
 			$height = (int)($height * $params['_%'] / 100);
 		}
-		if ($width && $height) $info = "width=\"$width\" height=\"$height\" ";
+		if ($width && $height) $info = 'width="' . $width . '" height="' . $height .'" ';
 	}
 
-	// アラインメント判定
+	// Check alignment
 	$params['_align'] = PLUGIN_REF_DEFAULT_ALIGN;
 	foreach (array('right', 'left', 'center') as $align) {
 		if ($params[$align])  {
@@ -374,18 +374,18 @@ function plugin_ref_body($args)
 		// http://www.nttdocomo.co.jp/p_s/imode/xhtml/s1.html#1_4_2
 		if (defined('UA_MOBILE') && UA_MOBILE != 0) {
 			if ($rawwidth > 0 && $rawheight > 0 && $rawwidth <= 128 && $rawheight <= 128 && PLUGIN_REF_SHOW_IMAGE_TO_MOBILEPHONE) {
-				$params['_body'] = "<img src=\"$url\" alt=\"$title\" title=\"keitai\" $info/>";
+				$params['_body'] = '<img src="' . $url . '" alt="' . $title . '" title="keitai" ' . $info . '/>';
 			} else {
-				$params['_body'] = "<a href=\"$url\" title=\"keitai\">[PHOTO:$title]</a>";
+				$params['_body'] = '<a href="' . $url . '" title="keitai">[PHOTO:' . $title . ']</a>';
 			}
 		} else {
-			$params['_body'] = "<img src=\"$url\" alt=\"$title\" title=\"$title\" $info/>";
+			$params['_body'] = '<img src="' . $url . '" alt="' . $title . '" title="' . $title . '" ' . $info . '/>';
 			if (! $params['nolink'] && $url2)
-				$params['_body'] = "<a href=\"$url2\" title=\"$title\">{$params['_body']}</a>";
+				$params['_body'] = '<a href="' . $url2 . '" title="' . $title . '">' . $params['_body'] . '</a>';
 		}
 	} else {
 		$icon = $params['noicon'] ? '' : FILE_ICON;
-		$params['_body'] = "<a href=\"$url\" title=\"$info\">$icon$title</a>";
+		$params['_body'] = '<a href="' . $url . '" title="' . $info . '">' . $icon . $title .  '</a>';
 //		$params['_body'] = "<a href=\"$url\" title=\"$info\" onclick=\"return open_attach_uri('$url', '_blank');\">$icon$title</a>";
 	}
 
