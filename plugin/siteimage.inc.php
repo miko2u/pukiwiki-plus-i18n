@@ -6,7 +6,7 @@
 //   2006      by nao-pon http://hypweb.net/
 // License: GPL v2 or (at your option) any later version
 
-// �g�ѓd�b�ł̏������摜�̕\��
+// 携帯電話での小さい画像の表示
 defined('PLUGIN_SITEIMAGE_SHOW_IMAGE_TO_MOBILEPHONE')
 	or define('PLUGIN_SITEIMAGE_SHOW_IMAGE_TO_MOBILEPHONE', FALSE); // FALSE, TRUE
 
