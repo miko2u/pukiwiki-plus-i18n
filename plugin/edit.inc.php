@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: edit.inc.php,v 1.40.25 2006/06/12 12:49:24 miko Exp $
+// $Id: edit.inc.php,v 1.40.27 2006/06/21 12:49:24 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2001-2006 PukiWiki Developers Team
@@ -317,7 +317,7 @@ function plugin_edit_parts($id, &$source, $postdata='')
 			// multiline plugin. refer lib/convert_html
 			if(defined('PKWKEXP_DISABLE_MULTILINE_PLUGIN_HACK') && PKWKEXP_DISABLE_MULTILINE_PLUGIN_HACK === 0) {
 				if ($multiline < 2) {
-					if(preg_match('/^#([^\(\{]+)(?:\(([^\r]*)\))?(\{\*)/', $line, $matches)) {
+					if (preg_match('/^#([^\(\{]+)(?:\(([^\r]*)\))?(\{*)/', $line, $matches)) {
 						$multiline  = strlen($matches[3]);
 					}
 				} else {
