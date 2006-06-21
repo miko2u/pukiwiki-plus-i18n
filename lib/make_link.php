@@ -312,6 +312,9 @@ EOD;
 
 		list(, $body) = $this->splice($arr);
 
+		// Recover of notes(miko)
+		if ($foot_explain === array()) { $note_id = 0; }
+
 		if (PKWK_ALLOW_RELATIVE_FOOTNOTE_ANCHOR) {
 			$script = '';
 		} else {

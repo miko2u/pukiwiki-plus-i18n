@@ -111,6 +111,8 @@ if ($plugin != '') {
 		} else {
 			$base = isset($vars['refer']) ? $vars['refer'] : '';
 		}
+		// Recover of notes(miko)
+		$foot_explain = array();
 	} else {
 		// Not found
 		$msg = 'plugin=' . htmlspecialchars($plugin) .
