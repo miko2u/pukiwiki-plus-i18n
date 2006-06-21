@@ -1,29 +1,32 @@
 <?php
-// PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: attachref.inc.php,v 0.14.7 2005/04/27 04:10:29 miko Exp $
-// Original is sha
+// PukiWiki Plus! - Yet another WikiWikiWeb clone.
+// $Id: attachref.inc.php,v 0.14.11 2005/06/21 04:10:29 miko Exp $
+// Copyright (C)
+//   2005-2006 PukiWiki Plus! Team
+//   2002-2004 sha
 //
+// File attach & ref plugin
 
 // max file size for upload on PHP(PHP default 2MB)
 ini_set('upload_max_filesize','4M');
 
 // max file size for upload on script of PukiWiki(default 1MB)
-define('MAX_FILESIZE',(2048 * 1024));
+define('ATTACHREF_MAX_FILESIZE',(2048 * 1024));
 
-// 管理者だけが添付ファイルをアップロードできるようにする
-define('ATTACHREF_UPLOAD_ADMIN_ONLY',FALSE); // FALSE or TRUE
+// Admin Only for upload/delete
+define('ATTACHREF_UPLOAD_ADMIN_ONLY', FALSE); // FALSE or TRUE
 
-// アップロード/削除時にパスワードを要求する(ATTACHREF_UPLOAD_ADMIN_ONLYが優先)
-define('ATTACHREF_PASSWORD_REQUIRE',FALSE); // FALSE or TRUE
+// Requied password for upload/delete (ATTACHREF_UPLOAD_ADMIN_ONLY gives priority)
+define('ATTACHREF_PASSWORD_REQUIRE', FALSE);  // FALSE or TRUE
 
 // Text wrapping
-define('PLUGIN_ATTACHREF_WRAP_TABLE', FALSE); // TRUE, FALSE
+define('PLUGIN_ATTACHREF_WRAP_TABLE', FALSE); // FALSE or TRUE
 
 function plugin_attachref_init()
 {
 	$messages = array(
 		'_attachref_messages' => array(
-			// copy for attach.inc.php
+			// copy of attach.inc.php
 			'msg_upload'   => _("Upload to $1"),
 			'msg_maxsize'  => _("Maximum file size is %s."),
 			'msg_adminpass'=> _("Administrator password"),
@@ -41,31 +44,28 @@ function plugin_attachref_init()
 	set_plugin_messages($messages);
 }
 
-function plugin_attachref_options(&$extra_options,$args)
+function plugin_attachref_options(&$extra_options, $args)
 {
 	global $vars;
 	static $numbers = array();
 	static $no_flag = 0;
 	$button = 0;
 
-	if (!array_key_exists($vars['page'],$numbers))
-	{
+	if (!isset($numbers[$vars['page']])) {
 		$numbers[$vars['page']] = 0;
 	}
+
 	$attachref_no = $numbers[$vars['page']]++;
 
     $options = array();
-    foreach ( $args as $opt ){
-	    if ( $opt === 'button' ){
+    foreach ($args as $opt) {
+	    if ($opt === 'button') {
 	        $button = 1;
-	    }
-	    else if ( $opt === 'number' ) {
+	    } else if ($opt === 'number') {
 			$no_flag = 1;
-	    }
-	    else if ( $opt === 'nonumber' ) {
+	    } else if ($opt === 'nonumber') {
 			$no_flag = 0;
-	    }
-	    else {
+	    } else {
 	        array_push($options, $opt);
 	    }
 	}
@@ -83,10 +83,10 @@ function plugin_attachref_convert()
 
 	$extra_options = array();
 	$args = func_get_args();
-#   $btn_text = array_pop($args);
-#   $btn_text = $btn_text ? $btn_text : $_attachref_messages['btn_submit'];
+//	$btn_text = array_pop($args);
+//	$btn_text = $btn_text ? $btn_text : $_attachref_messages['btn_submit'];
 	$btn_text = $_attachref_messages['btn_submit'];
-	$options = plugin_attachref_options($extra_options,$args);
+	$options = plugin_attachref_options($extra_options, $args);
 	$button = $extra_options['button'];
 	$attachref_no = $extra_options['refnum'];
 	$btn_text .= $extra_options['text'];
@@ -102,7 +102,7 @@ function plugin_attachref_convert()
 			$ret = $params['_error'];
 			$dispattach = 1;
 		} else {
-			// ↓ここからはplugin_ref_convert()の抜粋
+			// start --- copy of plugin_ref_convert()
 			if ((PLUGIN_ATTACHREF_WRAP_TABLE && ! $params['nowrap']) || $params['wrap']) {
 				$margin = ($params['around'] ? '0px' : 'auto');
 				$margin_align = ($params['_align'] == 'center') ? '' : ";margin-{$params['_align']}:0px";
@@ -117,16 +117,16 @@ EOD;
 			if ($params['around']) {
 				$style = ($params['_align'] == 'right') ? 'float:right' : 'float:left';
 			} else {
-				$style = "text-align:{$params['_align']}";
+				$style = 'text-align:' . $params['_align'];
 			}
-			// divで包む
-			$ret = "<div class=\"img_margin\" style=\"$style\">{$params['_body']}</div>\n";
-			// ↑ここまではplugin_ref_convert()の抜粋
+			// wrapped "div"
+			$ret = '<div class="' . $img_margin . '" style="' . $style . '">' . $params['_body'] . "</div>\n";
+			// final --- copy of plugin_ref_convert()
 			$dispattach = 0;
 		}
 	}
 	if ( $dispattach ) {
-	    // Escape forign value
+	    // Escape foreign value
 	    $s_args = trim(join(",", $args));
 	    if ( $button ){
 		} else {
@@ -144,7 +144,7 @@ EOD;
 
 function plugin_attachref_inline()
 {
-	global $script,$vars,$digest;
+	global $script, $vars, $digest;
 	global $_attachref_messages;
 #	static $numbers = array();
 #	static $no_flag = 0;
@@ -154,8 +154,7 @@ function plugin_attachref_inline()
 #		$numbers[$vars['page']] = 0;
 #	}
 #	$attachref_no = $numbers[$vars['page']]++;
-	
-	//戻り値
+
 	$ret = '';
 	$dispattach = 1;
 
@@ -163,7 +162,7 @@ function plugin_attachref_inline()
 	$args = func_get_args();
     $btn_text = array_pop($args);
     $btn_text = $btn_text ? $btn_text : $_attachref_messages['btn_submit'];
-	$options = plugin_attachref_options($extra_options,$args);
+	$options = plugin_attachref_options($extra_options, $args);
 	$button = $extra_options['button'];
 	$attachref_no = $extra_options['refnum'];
 	$btn_text .= $extra_options['text'];
@@ -190,10 +189,9 @@ function plugin_attachref_inline()
 #	}
 #   if ( $no_flag == 1 ) $btn_text .= "[$attachref_no]";
 	$args = $options;
-	if ( count($args) and $args[0]!='' )
-	{
-		require_once(PLUGIN_DIR."ref.inc.php");
-	    $params = plugin_ref_body($args,$vars['page']);
+	if (count($args) && $args[0] != '') {
+		require_once(PLUGIN_DIR . 'ref.inc.php');
+	    $params = plugin_ref_body($args, $vars['page']);
 	    if ($params['_error'] != '') {
 			$ret = $params['_error'];
 			$dispattach = 1;
@@ -202,10 +200,11 @@ function plugin_attachref_inline()
 			$dispattach = 0;
 	    }
 	}
-	if ( $dispattach ) {
-	    //XSS脆弱性問題 - 外部から来た変数をエスケープ
+
+	if ($dispattach) {
+	    // Escape foreign value
 	    $s_args = trim(join(",", $args));
-	    if ( $button ){
+	    if ($button) {
 			$s_args .= ",button";
 			$f_page = htmlspecialchars($vars['page']);
 			$f_args = htmlspecialchars($s_args);
@@ -223,10 +222,8 @@ function plugin_attachref_inline()
   </div>
   </form>
 EOD;
-	    }
-	    else {
-			$f_btn_text = preg_replace('/<[^<>]+>/','',$btn_text);
-//		echo '[debug]btn=',$f_btn_text;
+	    } else {
+			$f_btn_text = preg_replace('/<[^<>]+>/', '', $btn_text);
 			$f_page = rawurlencode($vars['page']);
 			$f_args = rawurlencode($s_args);
 			$ret = <<<EOD
@@ -243,19 +240,15 @@ function plugin_attachref_action()
 	global $_attachref_messages;
 	global $pkwk_dtd;
 
-	//戻り値を初期化
 	$retval['msg'] = $_attachref_messages['msg_title'];
 	$retval['body'] = '';
-	
-	if (array_key_exists('attach_file',$_FILES)
-		and array_key_exists('refer',$vars)
-		and is_page($vars['refer']))
-	{
+
+	if (isset($_FILES['attach_file']) && isset($vars['refer']) && is_page($vars['refer'])) {
 		$file = $_FILES['attach_file'];
 		$attachname = $file['name'];
 		$filename = preg_replace('/\..+$/','', $attachname,1);
 
-		//すでに存在した場合、 ファイル名に'_0','_1',...を付けて回避(姑息)
+		// If exist file, add a name '_0', '_1', ...
 		$count = '_0';
 		while (file_exists(UPLOAD_DIR .encode($vars['refer']).'_'.encode($attachname)))
 		{
@@ -269,10 +262,9 @@ function plugin_attachref_action()
 		{
 			return array('msg'=>'attach.inc.php not found or not correct version.');
 		}
-		$pass = array_key_exists('pass',$vars) ? md5($vars['pass']) : NULL;
-	    $retval = attach_upload($file,$vars['refer'],$pass);
-		if ($retval['result'] == TRUE)
-		{
+		$pass = isset($vars['pass']) ? md5($vars['pass']) : NULL;
+	    $retval = attach_upload($file, $vars['refer'], $pass);
+		if ($retval['result'] == TRUE) {
 			$retval = attachref_insert_ref($file['name']);
 		}
 	}
@@ -288,17 +280,16 @@ function plugin_attachref_action()
 
 function attachref_insert_ref($filename)
 {
-	global $script,$vars,$now,$do_backup;
+	global $script, $vars, $now, $do_backup;
 	global $_attachref_messages;
-	
+
 	$ret['msg'] = $_attachref_messages['msg_title'];
-	
-	$args = split(",", $vars['attachref_opt']);
-	if ( count($args) ){
-	    $args[0] = './' . $filename;//array_shift,unshiftって要するにこれね
+
+	$args = split(',', $vars['attachref_opt']);
+	if (count($args)) {
+	    $args[0] = './' . $filename;
 	    $s_args = join(",", $args);
-	}
-	else {
+	} else {
 	    $s_args = './' . $filename;
 	}
 	$msg = "&attachref($s_args)";
@@ -310,12 +301,12 @@ function attachref_insert_ref($filename)
 	$thedigest = md5(join('',$postdata_old));
 
 	$postdata = '';
-	$attachref_ct = 0; //'#attachref'の出現回数
+	$attachref_ct = 0; // count of '#attachref'
 	$attachref_no = $vars['attachref_no'];
 	$skipflag = 0;
 	$postdata_tmp = array();
 
-	// まずインラインから調査する(番号はインライン→ブロック型とつく)
+	// Numbering inline plugin
 	foreach ($postdata_old as $line)
 	{
 		if ( $skipflag || substr($line,0,1) == ' ' || substr($line,0,2) == '//' ){
@@ -341,7 +332,7 @@ function attachref_insert_ref($filename)
 		array_push($postdata_tmp, $line);
 	}
 
-	// 次にブロック型を調査する(番号はインライン→ブロック型とつく)
+	// Numbering block-type plugin
 	foreach($postdata_tmp as $line) {
 		if ( $skipflag || substr($line,0,1) == ' ' || substr($line,0,2) == '//' ){
 			$postdata .= $line;
@@ -364,57 +355,53 @@ function attachref_insert_ref($filename)
 		$postdata .= $line;
 	}
 
-	// 更新の衝突を検出
-	if ( $thedigest != $digest )
-	{
-		$ret['msg'] = $_attachref_messages['msg_title_collided'];
+	// Detect conflict of update
+	if ( $thedigest != $digest ) {
+		$ret['msg']  = $_attachref_messages['msg_title_collided'];
 		$ret['body'] = $_attachref_messages['msg_collided'];
 	}
-/*
-	$postdata .= "<hr />$refer, " . join('/',array_keys($vars)) . ", " . join("/",array_values($vars)) . ", s_args=$s_args";
-	$ret['body'] = $postdata;
-*/
-	page_write($vars['refer'],$postdata);
-	
+
+//	$postdata .= "<hr />$refer, " . join('/',array_keys($vars)) . ", " . join("/",array_values($vars)) . ", s_args=$s_args";
+//	$ret['body'] = $postdata;
+
+	page_write($vars['refer'], $postdata);
+
 	return $ret;
 }
-//アップロードフォームを表示
+
+// Show upload form
 function attachref_showform()
 {
 	global $vars;
 	global $_attachref_messages;
 
 	$vars['page'] = $vars['refer'];
-	$body = ini_get('file_uploads') ? attachref_form($vars['page']) : 'file_uploads disabled.';
+	$body = ini_get('file_uploads') ? attachref_form($vars['page']) : _('file_uploads disabled.');
 
-	return array('msg'=>$_attachref_messages['msg_upload'],'body'=>$body);
+	return array('msg'=>$_attachref_messages['msg_upload'], 'body'=>$body);
 }
-//アップロードフォーム
+
+// Create html of upload form
 function attachref_form($page)
 {
-	global $script,$vars;
+	global $script, $vars;
 	global $_attachref_messages;
-	
+
+	if (!(bool)ini_get('file_uploads')) return '';
+
 	$s_page = htmlspecialchars($page);
 
-	$f_digest = array_key_exists('digest',$vars) ? $vars['digest'] : '';
-	$f_no = (array_key_exists('attachref_no',$vars) and is_numeric($vars['attachref_no'])) ?
+	$f_digest = isset($vars['digest']) ? $vars['digest'] : '';
+	$f_no = (isset($vars['attachref_no']) && is_numeric($vars['attachref_no'])) ?
 		$vars['attachref_no'] + 0 : 0;
 
-
-	if (!(bool)ini_get('file_uploads'))
-	{
-		return "";
-	}
-	
-	$maxsize = MAX_FILESIZE;
+	$maxsize = ATTACHREF_MAX_FILESIZE;
 	$msg_maxsize = sprintf($_attachref_messages['msg_maxsize'],number_format($maxsize/1000)."KB");
 
 	$pass = '';
-	if (ATTACHREF_PASSWORD_REQUIRE or ATTACHREF_UPLOAD_ADMIN_ONLY)
-	{
+	if (ATTACHREF_PASSWORD_REQUIRE or ATTACHREF_UPLOAD_ADMIN_ONLY) {
 		$title = $_attachref_messages[ATTACHREF_UPLOAD_ADMIN_ONLY ? 'msg_adminpass' : 'msg_password'];
-		$pass = '<br />'.$title.': <input type="password" name="pass" size="8" />';
+		$pass = '<br />' . $title . ': <input type="password" name="pass" size="8" />';
 	}
 	return <<<EOD
 <form enctype="multipart/form-data" action="$script" method="post">
