@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: file.php,v 1.72.16 2006/06/11 14:42:09 miko Exp $
+// $Id: file.php,v 1.72.17 2006/06/21 14:42:09 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2006 PukiWiki Developers Team
@@ -355,10 +355,11 @@ function file_write($dir, $page, $str, $notimestamp = FALSE)
 		$notify_exec = TRUE;
 		foreach ($notify_exclude as $exclude) {
 			$exclude = preg_quote($exclude);
-			if (substr($exclude, -1) == ".")
-				$exclude = $exclude . "*";
-			if (preg_match("/^" . $exclude . "/", $_SERVER["REMOTE_ADDR"])) {
+			if (substr($exclude, -1) == '.')
+				$exclude = $exclude . '*';
+			if (preg_match('/^' . $exclude . '/', $_SERVER["REMOTE_ADDR"])) {
 				$notify_exec = FALSE;
+				break;
 			}
 		}
 		if ($notify_exec !== FALSE) {
