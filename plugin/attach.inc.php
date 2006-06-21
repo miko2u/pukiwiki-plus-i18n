@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: attach.inc.php,v 1.82.5 2006/06/05 23:51:12 miko Exp $
+// $Id: attach.inc.php,v 1.82.7 2006/06/21 23:51:12 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2003-2005 PukiWiki Developers Team
@@ -16,7 +16,7 @@
 //    Set this at php.ini if you want.
 // Max file size for upload on PHP (PHP default: 2MB)
 if (!defined('PLUGIN_ATTACH_UPLOAD_MAX_FILESIZE')) {
-	define('PLUGIN_ATTACH_UPLOAD_MAX_FILESIZE', '4M'); // default: 1MB
+	define('PLUGIN_ATTACH_UPLOAD_MAX_FILESIZE', '4M'); // default: 4MB
 }
 ini_set('upload_max_filesize', PLUGIN_ATTACH_UPLOAD_MAX_FILESIZE);
 

@@ -8,9 +8,9 @@
 // File attach & ref plugin
 
 // max file size for upload on PHP(PHP default 2MB)
-ini_set('upload_max_filesize','4M');
+ini_set('upload_max_filesize', '4M'); // default: 4MB
 
-// max file size for upload on script of PukiWiki(default 1MB)
+// max file size for upload on script of PukiWiki(default 2MB)
 define('ATTACHREF_MAX_FILESIZE',(2048 * 1024));
 
 // Admin Only for upload/delete
@@ -96,7 +96,7 @@ function plugin_attachref_convert()
 
 	$args = $options;
 	if ( count($args) and $args[0] != '' ) {
-		require_once(PLUGIN_DIR."ref.inc.php");
+		require_once(PLUGIN_DIR . 'ref.inc.php');
 		$params = plugin_ref_body(func_get_args());
 		if (isset($params['_error']) && $params['_error'] != '') {
 			$ret = $params['_error'];
@@ -105,7 +105,7 @@ function plugin_attachref_convert()
 			// start --- copy of plugin_ref_convert()
 			if ((PLUGIN_ATTACHREF_WRAP_TABLE && ! $params['nowrap']) || $params['wrap']) {
 				$margin = ($params['around'] ? '0px' : 'auto');
-				$margin_align = ($params['_align'] == 'center') ? '' : ";margin-{$params['_align']}:0px";
+				$margin_align = ($params['_align'] == 'center') ? '' : ';margin-' . $params['_align'] . ':0px';
 				$params['_body'] = <<<EOD
 <table class="style_table" style="margin:$margin$margin_align">
  <tr>
