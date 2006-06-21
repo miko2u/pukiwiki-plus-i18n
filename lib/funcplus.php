@@ -8,6 +8,7 @@
 // Plus! extension function(s)
 
 defined('FUNC_SPAMLOG')   or define('FUNC_SPAMLOG', FALSE);
+defined('FUNC_BLACKLIST') or define('FUNC_BLACKLIST', FALSE);
 defined('FUNC_SPAMREGEX') or define('FUNC_SPAMREGEX', '/a\s+href=/i');
 defined('FUNC_SPAMCOUNT') or define('FUNC_SPAMCOUNT', 3);
 
@@ -41,10 +42,17 @@ function honeypot_write()
 {
 	global $get, $post, $vars;
 
+	// Logging for SPAM Address
+	// NOTE: Not recommended use Rental Server
+	if ((FUNC_SPAMLOG === TRUE || FUNC_BLACKLIST === TRUE) && version_compare(PHP_VERSION, '4.2.0', '>=')) {
+		error_log($_SERVER['REMOTE_ADDR'] . "\t" . $_SERVER['HTTP_USER_AGENT'] . "\n", 3, CACHE_DIR . 'blacklist.log');
+	}
+
 	// Logging for SPAM Report
 	// NOTE: Not recommended use Rental Server
 	if (FUNC_SPAMLOG === TRUE && version_compare(PHP_VERSION, '4.2.0', '>=')) {
 		error_log("----" . date('Y-m-d H:i:s', time()) . "\n", 3, CACHE_DIR . 'honeypot.log');
+		error_log("[ADDR]" . $_SERVER['REMOTE_ADDR'] . "\t" . $_SERVER['HTTP_USER_AGENT'] . "\n", 3, CACHE_DIR . 'honeypot.log');
 		error_log("[GET]\n"  . var_export($get,  TRUE) . "\n", 3, CACHE_DIR . 'honeypot.log');
 		error_log("[POST]\n" . var_export($post, TRUE) . "\n", 3, CACHE_DIR . 'honeypot.log');
 		error_log("[VARS]\n" . var_export($vars, TRUE) . "\n", 3, CACHE_DIR . 'honeypot.log');
