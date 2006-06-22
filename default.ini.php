@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: default.ini.php,v 1.25.6 2006/04/27 19:13:00 upk Exp $
+// $Id: default.ini.php,v 1.25.8 2006/06/22 19:13:00 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2003-2005 PukiWiki Developers Team
@@ -26,19 +26,19 @@ if (defined('TDIARY_THEME')) {
 $skin_file = SKIN_FILE_DEFAULT;
 
 /////////////////////////////////////////////////
-// メニューバー/サイドバーを常に表示する
+// メニューバー/サイドバーを常に表示する(1:する 0:しない)
 $always_menu_displayed = 0;
 
 /////////////////////////////////////////////////
-// 雛形とするページの読み込みを可能にする
+// 雛形とするページの読み込みを可能にする(1:する 0:しない)
 $load_template_func = 0;
 
 /////////////////////////////////////////////////
-// 検索文字列を色分けする
+// 検索文字列を色分けする(1:する 0:しない)
 $search_word_color = 1;
 
 /////////////////////////////////////////////////
-// 一覧ページに頭文字インデックスをつける
+// 一覧ページに頭文字インデックスをつける(1:つける 0:つけない)
 $list_index = 1;
 
 /////////////////////////////////////////////////
@@ -46,6 +46,11 @@ $list_index = 1;
 $_symbol_paraedit = '<img src="'. IMAGE_URI.'plus/paraedit.png" width="9" height="9" alt="Edit" title="Edit" />';
 $_symbol_extanchor = '<img src="'.IMAGE_URI.'plus/ext.png" alt="" title="" class="ext" onclick="return open_uri(\'$1\', \'$2\');" />';
 $_symbol_innanchor = '<img src="'.IMAGE_URI.'plus/inn.png" alt="" title="" class="inn" onclick="return open_uri(\'$1\', \'$2\');" />';
+
+/////////////////////////////////////////////////
+// 先頭・最後へジャンプ
+$_msg_content_back_to_top = '';
+//$_msg_content_back_to_top = '<div class="jumpmenu"><a href="#header">▲</a>&nbsp;<a href="#footer">▼</a></div>';
 
 /////////////////////////////////////////////////
 // リスト構造の左マージン
