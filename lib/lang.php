@@ -3,7 +3,7 @@
  * Language judgment (言語判定)
  *
  * @copyright   Copyright &copy; 2005-2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: lang.php,v 0.22 2006/06/24 22:35:00 upk Exp $
+ * @version     $Id: lang.php,v 0.23 2006/06/24 22:48:00 upk Exp $
  *
  */
 
@@ -139,7 +139,7 @@ function get_language_header_vary()
 {
 	global $language_considering_setting_level, $use_cookie;
 
-	if ($language_considering_setting_level < 2) return '';
+	if ($language_considering_setting_level < 1) return '';
 
 	$rc = 'Negotiate';
 	$Cookie = ($use_cookie) ? 'Cookie' : '';
