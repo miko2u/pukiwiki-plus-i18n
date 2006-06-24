@@ -3,12 +3,19 @@
  * PukiWiki Plus! ログ閲覧プラグイン
  *
  * @copyright	Copyright &copy; 2004-2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version	$Id: logview.php,v 0.5 2006/02/16 01:31:00 upk Exp $
+ * @version	$Id: logview.php,v 0.6 2006/06/22 23:46:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
-define('MAX_LINE',      200);
-define('VIEW_ROBOTS',   '0'); // robots は表示しない
+if (!defined('MAX_LINE')) {
+	define('MAX_LINE', 200);
+}
+if (!defined('VIEW_ROBOTS')) {
+	define('VIEW_ROBOTS', '0'); // robots は表示しない
+}
+if (!defined('USE_UA_OPTION')) {
+	define('USE_UA_OPTION', '0'); // オプション
+}
 
 /**
  * 初期処理
@@ -77,15 +84,17 @@ function plugin_logview_action()
 	$body .= "|h\n";
 
 	// データを取得
-	$data = @file( log::set_filename($kind,$page) );
+	$fld = logview_get_data(log::set_filename($kind,$page), $name);
 
-	$fld = array();
-	foreach($data as $_line) { $fld[] = log::line2field($_line,$name); }
-	unset($data);
-	rsort($fld); // 逆順にソート(最新順になる)
+	if (empty($fld)) {
+		return array(
+			'msg'  => $title,
+			'body' => 'no data',
+		);
+	}
 
 	// USER-AGENT クラス
-	$obj_ua = new user_agent();
+	$obj_ua = new user_agent(USE_UA_OPTION);
 
 	$path_flag    = IMAGE_DIR .'icon/flags/';
 	$path_browser = IMAGE_DIR .'icon/browser/';
@@ -93,7 +102,6 @@ function plugin_logview_action()
 	$path_domain  = IMAGE_DIR .'icon/option/domain/';
 
 	$guess = ($log['guess_user']['use']) ? log::read_guess() : log::summary_signature();
-	$ctr_line = 0;
 
 	// データの編集
 	foreach($fld as $data) {
@@ -152,24 +160,43 @@ function plugin_logview_action()
 			}
 		}
 		$body .= "|\n";
-
-		$ctr_line++;
-		if ($kind != 'update' && $ctr_line >= MAX_LINE) break;
 	}
 
 	unset($obj_ua);
-
-	if ($ctr_line == 0) {
-		return array(
-			'msg'  => $title,
-			'body' => 'no data',
-		);
-	}
 
 	return array(
 		'msg'  => $title,
 		'body' => convert_html($body),
 	);
+}
+
+function logview_get_data($filename,$name)
+{
+	if (! file_exists($filename)) {
+		return array();
+	}
+
+	$rc = array();
+	$fp = @fopen($filename, 'r');
+	if ($fp == FALSE) return $rc;
+	@flock($fp, LOCK_SH);
+
+	$count = 0;
+	while (! feof($fp)) {
+		$line = fgets($fp, 512);
+		if ($line === FALSE) continue;
+		$rc[] = log::line2field($line,$name);
+                ++$count;
+		if ($count > MAX_LINE) {
+			// 古いデータを捨てる
+			array_shift($rc);
+		}
+	}
+
+	@flock($fp, LOCK_UN);
+	if(! fclose($fp)) return array();
+	rsort($rc); // 逆順にソート(最新順になる)
+	return $rc;
 }
 
 /**

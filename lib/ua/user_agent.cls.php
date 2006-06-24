@@ -2,8 +2,8 @@
 /*
  * USER-AGENT クラス(ラッパー)
  *
- * @copyright   Copyright &copy; 2004-2005, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: user_agent.cls.php,v 0.2 2005/06/14 00:11:00 upk Exp $
+ * @copyright   Copyright &copy; 2004-2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * @version     $Id: user_agent.cls.php,v 0.3 2006/06/25 00:47:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
@@ -16,7 +16,7 @@ class user_agent
 {
 	var $obj_flag, $obj_os, $obj_browsers, $obj_domain, $obj_robots;
 
-	function user_agent()
+	function user_agent($opt='')
 	{
 		$this->obj_flag	    = new ccTLD();
 		$this->path_flag    = IMAGE_DIR.'icon/flags/';
