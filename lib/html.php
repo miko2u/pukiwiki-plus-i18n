@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: html.php,v 1.49.57 2006/05/15 14:29:00 miko Exp $
+// $Id: html.php,v 1.49.58 2006/06/24 22:44:00 upk Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2006 PukiWiki Developers Team
@@ -532,6 +532,8 @@ function pkwk_common_headers()
 {
 	if (! PKWK_OPTIMISE) pkwk_headers_sent();
 
+	$vary = get_language_header_vary();
+
 	if(defined('PKWK_ZLIB_LOADABLE_MODULE')) {
 		$matches = array();
 		if(ini_get('zlib.output_compression') &&
@@ -539,8 +541,13 @@ function pkwk_common_headers()
 		    	// Bug #29350 output_compression compresses everything _without header_ as loadable module
 		    	// http://bugs.php.net/bug.php?id=29350
 			header('Content-Encoding: ' . $matches[1]);
-			header('Vary: Accept-Encoding');
+			if (! empty($vary)) $vary .= ',';
+			$vary .= 'Accept-Encoding';
 		}
+	}
+
+	if (! empty($vary)) {
+		header('Vary: '.$vary);
 	}
 }
 

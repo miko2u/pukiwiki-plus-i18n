@@ -3,7 +3,7 @@
  * Language judgment (言語判定)
  *
  * @copyright   Copyright &copy; 2005-2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: lang.php,v 0.21 2006/02/13 02:30:00 upk Exp $
+ * @version     $Id: lang.php,v 0.22 2006/06/24 22:35:00 upk Exp $
  *
  */
 
@@ -129,6 +129,30 @@ function get_language($level = 0)
 		}
 	}
 	return DEFAULT_LANG;
+}
+
+/*
+ * get_language_header_vary
+ *
+ */
+function get_language_header_vary()
+{
+	global $language_considering_setting_level, $use_cookie;
+
+	if ($language_considering_setting_level < 2) return '';
+
+	$rc = 'Negotiate';
+	$Cookie = ($use_cookie) ? 'Cookie' : '';
+	$vary = array(1=>$Cookie,2=>'Accept-Language',3=>'User-Agent',4=>'Accept-Charset');
+
+	for($i=1;$i<=$language_considering_setting_level;$i++) {
+		if (empty($vary[$i])) continue;
+		if ($rc != '') {
+			$rc .= ',';
+		}
+		$rc .= $vary[$i];
+	}
+	return $rc;
 }
 
 /*
