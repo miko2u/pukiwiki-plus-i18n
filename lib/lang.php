@@ -3,7 +3,7 @@
  * Language judgment (言語判定)
  *
  * @copyright   Copyright &copy; 2005-2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: lang.php,v 0.23 2006/06/24 22:48:00 upk Exp $
+ * @version     $Id: lang.php,v 0.24 2006/06/24 23:05:00 upk Exp $
  *
  */
 
@@ -21,7 +21,7 @@ function set_language()
 	global $language_considering_setting_level;
 	global $language;
 	global $public_holiday_guest_view;
-	global $script, $use_cookie;
+	global $script;
 
 	$language = get_language($language_considering_setting_level);
 
@@ -29,15 +29,13 @@ function set_language()
 	define('LANG', $language);
 
 	// Set COOKIE['lang']
-	if ($use_cookie) {
-		$parsed_url = parse_url($script);
-		$path = $parsed_url['path'];
-		if (($pos = strrpos($path, '/')) !== FALSE) {
-			$path = substr($path, 0, $pos + 1);
-		}
-		setcookie('lang', $language, 0, $path);
-		$_COOKIE['lang'] = $language;
+	$parsed_url = parse_url($script);
+	$path = $parsed_url['path'];
+	if (($pos = strrpos($path, '/')) !== FALSE) {
+		$path = substr($path, 0, $pos + 1);
 	}
+	setcookie('lang', $language, 0, $path);
+	$_COOKIE['lang'] = $language;
 
 	// PUBLIC HOLIDAY
 	// Installation person's calendar is adopted.
@@ -137,16 +135,15 @@ function get_language($level = 0)
  */
 function get_language_header_vary()
 {
-	global $language_considering_setting_level, $use_cookie;
+	global $language_considering_setting_level;
 
 	if ($language_considering_setting_level < 1) return '';
 
 	$rc = 'Negotiate';
-	$Cookie = ($use_cookie) ? 'Cookie' : '';
-	$vary = array(1=>$Cookie,2=>'Accept-Language',3=>'User-Agent',4=>'Accept-Charset');
+	$vary = array(1=>'Cookie',2=>'Accept-Language',3=>'User-Agent',4=>'Accept-Charset');
 
 	for($i=1;$i<=$language_considering_setting_level;$i++) {
-		if (empty($vary[$i])) continue;
+		if (empty($vary[$i])) break;
 		if ($rc != '') {
 			$rc .= ',';
 		}
