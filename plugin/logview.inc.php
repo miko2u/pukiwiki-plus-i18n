@@ -3,7 +3,7 @@
  * PukiWiki Plus! ログ閲覧プラグイン
  *
  * @copyright	Copyright &copy; 2004-2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version	$Id: logview.php,v 0.6 2006/06/22 23:46:00 upk Exp $
+ * @version	$Id: logview.php,v 0.7 2006/06/26 2:22:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
@@ -103,6 +103,7 @@ function plugin_logview_action()
 
 	$guess = ($log['guess_user']['use']) ? log::read_guess() : log::summary_signature();
 
+	$ctr = 0;
 	// データの編集
 	foreach($fld as $data) {
 		if (!VIEW_ROBOTS && $obj_ua->is_robots($data['ua'])) continue;	// ロボットは対象外
@@ -160,9 +161,17 @@ function plugin_logview_action()
 			}
 		}
 		$body .= "|\n";
+		$ctr++;
 	}
 
 	unset($obj_ua);
+
+	if ($ctr == 0) {
+		return array(
+			'msg'  => $title,
+			'body' => 'no data',
+		);
+	}
 
 	return array(
 		'msg'  => $title,
