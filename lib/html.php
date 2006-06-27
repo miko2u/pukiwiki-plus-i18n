@@ -1,6 +1,6 @@
 <?php
-// PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: html.php,v 1.49.58 2006/06/24 22:44:00 upk Exp $
+// PukiWiki Plus! - Yet another WikiWikiWeb clone.
+// $Id: html.php,v 1.49.58.2 2006/06/27 22:44:00 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2006 PukiWiki Developers Team
@@ -198,7 +198,7 @@ function catbody($title, $page, $body)
 function edit_form($page, $postdata, $digest = FALSE, $b_template = TRUE)
 {
 	global $script, $vars, $rows, $cols, $hr, $function_freeze;
-	global $whatsnew, $load_template_func;
+	global $whatsnew, $load_template_func, $load_refer_related;
 	global $notimeupdate;
 	global $_button, $_string;
 	global $ajax;
@@ -237,9 +237,10 @@ $s_pages
   <input type="submit" name="template" value="{$_button['load']}" accesskey="r" />
   <br />
 EOD;
-
-		if (isset($vars['refer']) && $vars['refer'] != '')
-			$refer = '[[' . strip_bracket($vars['refer']) . ']]' . "\n\n";
+		if ($load_refer_related) {
+			if (isset($vars['refer']) && $vars['refer'] != '')
+				$refer = '[[' . strip_bracket($vars['refer']) . ']]' . "\n\n";
+		}
 	}
 
 	$r_page      = rawurlencode($page);

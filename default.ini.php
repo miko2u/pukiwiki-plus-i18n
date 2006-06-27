@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: default.ini.php,v 1.25.8 2006/06/22 19:13:00 miko Exp $
+// $Id: default.ini.php,v 1.25.10 2006/06/22 19:13:00 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2003-2005 PukiWiki Developers Team
@@ -32,6 +32,10 @@ $always_menu_displayed = 0;
 /////////////////////////////////////////////////
 // 雛形とするページの読み込みを可能にする(1:する 0:しない)
 $load_template_func = 0;
+
+/////////////////////////////////////////////////
+// 元ページのリンクを自動的に先頭につける(1:つける 0:つけない)
+$load_refer_related = 0;
 
 /////////////////////////////////////////////////
 // 検索文字列を色分けする(1:する 0:しない)
