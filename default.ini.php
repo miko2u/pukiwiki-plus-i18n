@@ -1,8 +1,8 @@
 <?php
-// PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: default.ini.php,v 1.25.3 2005/12/20 14:04:40 miko Exp $
+// PukiWiki Plus! - Yet another WikiWikiWeb clone.
+// $Id: default.ini.php,v 1.25.5 2006/06/27 14:04:40 miko Exp $
 // Copyright (C)
-//   2005      Customized/Patched by Miko.Hoshina
+//   2005-2006 PukiWiki Plus! Team
 //   2003-2005 PukiWiki Developers Team
 //   2001-2002 Originally written by yu-ji
 // License: GPL v2 or (at your option) any later version
@@ -21,15 +21,19 @@ if (defined('TDIARY_THEME')) {
 $skin_file = SKIN_FILE_DEFAULT;
 
 /////////////////////////////////////////////////
-// 雛形とするページの読み込みを可能にする
+// 雛形とするページの読み込みを可能にする(1:する 0:しない)
 $load_template_func = 0;
 
 /////////////////////////////////////////////////
-// 検索文字列を色分けする
+// 元ページのリンクを自動的に先頭につける(1:つける 0:つけない)
+$load_refer_related = 0;
+
+/////////////////////////////////////////////////
+// 検索文字列を色分けする(1:する 0:しない)
 $search_word_color = 1;
 
 /////////////////////////////////////////////////
-// 一覧ページに頭文字インデックスをつける
+// 一覧ページに頭文字インデックスをつける(1:つける 0:つけない)
 $list_index = 1;
 
 /////////////////////////////////////////////////

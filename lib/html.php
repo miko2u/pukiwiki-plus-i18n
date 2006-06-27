@@ -1,6 +1,6 @@
 <?php
-// PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: html.php,v 1.57.22 2006/06/06 17:33:35 miko Exp $
+// PukiWiki Plus! - Yet another WikiWikiWeb clone.
+// $Id: html.php,v 1.57.24 2006/06/27 17:33:35 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2006 PukiWiki Developers Team
@@ -185,7 +185,7 @@ function edit_form($page, $postdata, $digest = FALSE, $b_template = TRUE)
 {
 	global $script, $vars, $rows, $cols, $hr, $function_freeze;
 	global $_btn_preview, $_btn_repreview, $_btn_update, $_btn_cancel, $_msg_help;
-	global $whatsnew, $_btn_template, $_btn_load, $load_template_func;
+	global $whatsnew, $_btn_template, $_btn_load, $load_template_func, $load_refer_related;
 	global $notimeupdate;
 
 	// Newly generate $digest or not
@@ -225,9 +225,10 @@ $s_pages
   <input type="submit" name="template" value="$_btn_load" accesskey="r" />
   <br />
 EOD;
-
-		if (isset($vars['refer']) && $vars['refer'] != '')
-			$refer = '[[' . strip_bracket($vars['refer']) . ']]' . "\n\n";
+		if ($load_refer_related) {
+			if (isset($vars['refer']) && $vars['refer'] != '')
+				$refer = '[[' . strip_bracket($vars['refer']) . ']]' . "\n\n";
+		}
 	}
 
 	$r_page      = rawurlencode($page);
