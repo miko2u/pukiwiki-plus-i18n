@@ -9,7 +9,7 @@
 
 defined('FUNC_SPAMLOG')   or define('FUNC_SPAMLOG', FALSE);
 defined('FUNC_BLACKLIST') or define('FUNC_BLACKLIST', FALSE);
-defined('FUNC_SPAMREGEX') or define('FUNC_SPAMREGEX', '/a\s+href=/i');
+defined('FUNC_SPAMREGEX') or define('FUNC_SPAMREGEX', '#(?:<a\s+href=|\[/link\]|\[/url\])#i');
 defined('FUNC_SPAMCOUNT') or define('FUNC_SPAMCOUNT', 3);
 
 // same as 'basename' for page
