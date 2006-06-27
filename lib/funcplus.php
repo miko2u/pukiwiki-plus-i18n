@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: funcplus.php,v 0.1.8 2006/05/25 00:52:00 miko Exp $
+// $Id: funcplus.php,v 0.1.11 2006/06/27 00:52:00 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 // License: GPL v2 or (at your option) any later version
@@ -9,7 +9,7 @@
 
 defined('FUNC_SPAMLOG')   or define('FUNC_SPAMLOG', FALSE);
 defined('FUNC_BLACKLIST') or define('FUNC_BLACKLIST', FALSE);
-defined('FUNC_SPAMREGEX') or define('FUNC_SPAMREGEX', '#(?:<a\s+href=|\[/link\]|\[/url\])#i');
+defined('FUNC_SPAMREGEX') or define('FUNC_SPAMREGEX', '#(?:a\s+href=|\[/link\]|\[/url\])#i');
 defined('FUNC_SPAMCOUNT') or define('FUNC_SPAMCOUNT', 3);
 
 // same as 'basename' for page
