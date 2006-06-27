@@ -170,6 +170,7 @@ EOD;
 function plugin_bugtrack_action()
 {
 	global $post;
+	global $_plugin_bugtrack;
 
 	// if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
 	if (auth::check_role('readonly')) die_message('PKWK_READONLY prohibits editing');
@@ -183,6 +184,11 @@ function plugin_bugtrack_action()
 		if (PKWK_ENCODING_HINT != '') $spam = TRUE;
 	}
 	if (is_spampost(array('body'))) $spam = TRUE;
+
+	// Vaildation foreign values(by miko)
+	if (!in_array($post['priority'], $_plugin_bugtrack['priority_list'])) $spam = TRUE;
+	if (!in_array($post['state'], $_plugin_bugtrack['state_list'])) $spam = TRUE;
+
 	if ($spam) {
 		honeypot_write();
 		return array('msg'=>'cannot write', 'body'=>'<p>prohibits editing</p>');
