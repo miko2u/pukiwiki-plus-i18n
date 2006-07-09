@@ -3,7 +3,7 @@
  * Browser
  *
  * @copyright   Copyright &copy; 2004-2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: ua_browsers.cls.php,v 0.5 2006/06/04 05:33:00 upk Exp $
+ * @version     $Id: ua_browsers.cls.php,v 0.6 2006/07/09 16:12:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License
  *
  * o 参考にしたコード(AWStats)
@@ -148,6 +148,7 @@ class ua_browsers
 		'shrook',
 		'straw',
 		'syndirella',
+		'webpatrol',			# add upk
 		'wizz\srss\snews\sreader',
 
 		# PDA/携帯電話 ブラウザ
@@ -345,6 +346,7 @@ class ua_browsers
 		'shrook'			=> 'rss',
 		'straw'				=> 'rss',
 		'syndirella'			=> 'rss',
+		'webpatrol'			=> 'rss',
 		'wizz\srss\snews\sreader'	=> 'wizz',
 
 		# Other kind of browsers
