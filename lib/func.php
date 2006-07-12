@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: func.php,v 1.73.7 2006/06/06 16:41:39 miko Exp $
+// $Id: func.php,v 1.73.9 2006/07/12 16:41:39 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2006 PukiWiki Developers Team
@@ -556,7 +556,7 @@ function get_glossary_pattern()
 		}
 	}
 
-	if (empty($auto_pages) == 0) {
+	if (empty($auto_pages)) {
 		return array('(?!)', 'PukiWiki', '');
 	} else {
 		$auto_pages = array_unique($auto_pages);

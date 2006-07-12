@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: file.php,v 1.72.5 2006/06/11 14:42:09 miko Exp $
+// $Id: file.php,v 1.72.7 2006/07/12 14:42:09 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2006 PukiWiki Developers Team
@@ -344,7 +344,7 @@ function lastmodified_add($update = '', $remove = '')
 	global $autoalias, $autoglossary;
 
 	// AutoLink implimentation needs everything, for now
-	if ($autolink) {
+	if ($autolink || $autoalias || $autoglossary) {
 		put_lastmodified(); // Try to (re)create ALL
 		return;
 	}
