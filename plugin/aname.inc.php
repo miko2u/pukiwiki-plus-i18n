@@ -105,12 +105,16 @@ function plugin_aname_tag($args = array(), $convert = TRUE)
 	$class   = $f_super ? 'anchor_super' : 'anchor';
 //miko
 	// Moblie Phone is not xhtml. umm...
-	if (isset($pkwk_dtd) && $pkwk_dtd < PKWK_DTD_XHTML_1_1) {
-		$attr_id = $f_noid  ? '' : ' id="' . $id . '" name ="' . $id . '"';
+	if ($f_noid) {
+		$attr_id = '';
+	} elseif (isset($pkwk_dtd) && $pkwk_dtd < PKWK_DTD_XHTML_1_1) {
+		// Compatible of XHTML1/HTML4
+		$attr_id = ' id="' . $id . '" name="' . $id . '"';
 	} elseif (defined('UA_MOBILE') && UA_MOBILE != 0) {
-		$attr_id = $f_noid  ? '' : ' id="' . $id . '"';
+		// Mobile-phone is Force XHTML1
+		$attr_id = ' id="' . $id . '" name="' . $id . '"';
 	} else {
-		$attr_id = $f_noid  ? '' : ' id="' . $id . '" name ="' . $id . '"';
+		$attr_id = ' id="' . $id . '"';
 	}
 //miko
 	$url     = $f_full  ? get_script_uri() . '?' . rawurlencode($vars['page']) : '';
