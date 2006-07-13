@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: plugin.php,v 1.15.7 2006/06/15 17:13:00 miko Exp $
+// $Id: plugin.php,v 1.15.9 2006/07/13 17:13:00 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
@@ -35,7 +35,7 @@ function get_plugin_option($args, &$params, $tolower=TRUE, $separator=':')
 		$_val = trim($_val);
 		if (in_array($_key, $keys)) {
 			$params[$_key] = $_val;    // Exist keys
-		} else {
+		} elseif ($val != '') {
 			$params['_args'][] = $val; // Not exist keys, in '_args'
 		}
 	}
