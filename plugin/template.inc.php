@@ -1,5 +1,5 @@
 <?php
-// $Id: template.inc.php,v 1.21.2 2006/01/11 23:43:00 upk Exp $
+// $Id: template.inc.php,v 1.21.3 2006/07/17 18:19:00 upk Exp $
 //
 // Load template plugin
 
@@ -25,9 +25,16 @@ function plugin_template_action()
 	$_title_template       = _('create a new page, using  $1 as a template.');
 
 	// if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
-	if (auth::check_role('readonly')) die_message('PKWK_READONLY prohibits editing');
+	// if (auth::check_role('readonly')) die_message('PKWK_READONLY prohibits editing');
+	if (auth::check_role('safemode') || auth::check_role('readonly')) die_message(_('Prohibited'));
 	if (! isset($vars['refer']) || ! is_page($vars['refer']))
 		return FALSE;
+
+        if (! is_page($vars['refer']) || ! check_readable($vars['refer'], false, false))
+                return array(
+                        'msg' => _(' $1 was not found.'),
+                        'body' => _('cannot display the page source.')
+                );
 
 	$lines = get_source($vars['refer']);
 
