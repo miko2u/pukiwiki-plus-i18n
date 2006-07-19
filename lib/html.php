@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: html.php,v 1.49.58.2 2006/06/27 22:44:00 miko Exp $
+// $Id: html.php,v 1.49.58.3 2006/07/19 23:56:00 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2006 PukiWiki Developers Team
@@ -634,15 +634,17 @@ function pkwk_output_dtd($pkwk_dtd = PKWK_DTD_XHTML_1_1, $charset = CONTENT_CHAR
 		'">' . "\n";
 
 	// Output <html> start tag
+	$lang_code = str_replace('_','-',LANG); // RFC3066
 	echo '<html';
 	if ($type == PKWK_DTD_TYPE_XHTML) {
 		echo ' xmlns="http://www.w3.org/1999/xhtml"'; // dir="ltr" /* LeftToRight */
-		echo ' xml:lang="' . LANG . '"';
-		if ($version == '1.0') echo ' lang="' . LANG . '"'; // Only XHTML 1.0
+		echo ' xml:lang="' . $lang_code . '"';
+		if ($version == '1.0') echo ' lang="' . $lang_code . '"'; // Only XHTML 1.0
 	} else {
-		echo ' lang="' . LANG . '"'; // HTML
+		echo ' lang="' . $lang_code . '"'; // HTML
 	}
 	echo '>' . "\n"; // <html>
+	unset($lang_code);
 
 	// Return content-type (with MIME type)
 	if ($type == PKWK_DTD_TYPE_XHTML) {
