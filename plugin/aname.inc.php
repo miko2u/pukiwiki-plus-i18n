@@ -104,7 +104,7 @@ function plugin_aname_tag($args = array(), $convert = TRUE)
 	$id = htmlspecialchars($id); // Insurance
 	$class   = $f_super ? 'anchor_super' : 'anchor';
 //miko
-	// Moblie Phone is not xhtml. umm...
+	// Mobile Phone is not xhtml. umm...
 	if ($f_noid) {
 		$attr_id = '';
 	} elseif (isset($pkwk_dtd) && $pkwk_dtd < PKWK_DTD_XHTML_1_1) {
