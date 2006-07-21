@@ -1,8 +1,8 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: aname.inc.php,v 1.27.4 2005/09/18 09:32:55 miko Exp $
+// $Id: aname.inc.php,v 1.27.6 2006/07/21 09:32:55 miko Exp $
 // Copyright (C)
-//   2005      PukiWiki Plus! Team
+//   2005-2006 PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
 //   2001-2002 Originally written by yu-ji
 // License: GPL v2 or (at your option) any later version
@@ -104,7 +104,7 @@ function plugin_aname_tag($args = array(), $convert = TRUE)
 	$id = htmlspecialchars($id); // Insurance
 	$class   = $f_super ? 'anchor_super' : 'anchor';
 //miko
-	// Moblie Phone is not xhtml. umm...
+	// Mobile Phone is not xhtml. umm...
 	if ($f_noid) {
 		$attr_id = '';
 	} elseif (isset($pkwk_dtd) && $pkwk_dtd < PKWK_DTD_XHTML_1_1) {
