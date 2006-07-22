@@ -3,13 +3,17 @@
  * htdigest plugin.
  *
  * @copyright   Copyright &copy; 2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: googlemap.inc.php,v 0.1 2006/07/23 03:49:00 upk Exp $
+ * @version     $Id: googlemap.inc.php,v 0.2 2006/07/23 05:26:00 upk Exp $
  *
  * $A1 = md5($data['username'] . ':' . $realm . ':' . $auth_users[$data['username']]);
  */
 
-if (!defined('USE_HTACCESS')) {
-	define('USE_HTACCESS', FALSE);
+if (!defined('USE_HTDIGEST')) {
+	define('USE_HTDIGEST', FALSE);
+}
+
+if (!defined('HTDIGEST_FILE')) {
+	define('HTDIGEST_FILE', '.htdigest');
 }
 
 function plugin_htdigest_init()
@@ -60,7 +64,7 @@ function plugin_htdigest_action()
 		return array('msg'=>$msg,'body'=>htdigest_menu());
 	}
 
-	if (! USE_HTACCESS) {
+	if (! USE_HTDIGEST) {
 		return array('msg'=>$_htdigest_msg['err_not_use'],'body'=>htdigest_menu());
 	}
 
@@ -210,10 +214,10 @@ function htdigest_save($username,$p_realm,$hash)
 	if ($realm != $p_realm)
 		return $_htdigest_msg['msg_realm'];
 
-	if (file_exists('.htdigest')) {
-		$lines = file('.htdigest');
+	if (file_exists(HTDIGEST_FILE)) {
+		$lines = file(HTDIGEST_FILE);
 	} else {
-		$fp = fopen('.htdigest','w');
+		$fp = fopen(HTDIGEST_FILE,'w');
 		@flock($fp, LOCK_EX);
 		fputs($fp, $username.':'.$realm.':'.$hash."\n");
 		@flock($fp, LOCK_UN);
@@ -236,7 +240,7 @@ function htdigest_save($username,$p_realm,$hash)
 	}
 
 	if (! $sw) {
-		$fp = fopen('.htdigest','a');
+		$fp = fopen(HTDIGEST_FILE,'a');
 		@flock($fp, LOCK_EX);
 		fputs($fp, $username.':'.$p_realm.':'.$hash."\n");
 		@flock($fp, LOCK_UN);
@@ -244,7 +248,7 @@ function htdigest_save($username,$p_realm,$hash)
 		return $_htdigest_msg['msg_add'];
 	}
 
-	$fp = fopen('.htdigest','w');
+	$fp = fopen(HTDIGEST_FILE,'w');
 	@flock($fp, LOCK_EX);
 	foreach($lines as $line) {
 		fwrite($fp, $line);
