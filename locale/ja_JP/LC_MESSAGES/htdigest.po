@@ -75,7 +75,7 @@ msgstr ".htdigest を新規作成しました。"
 
 #: ../../plugin/htdigest.inc.php:48
 msgid "Because the password was the same, it did not update it."
-msgstr "パスワードが同一なため、更新しませんでした"
+msgstr "パスワードが同一なため、更新されませんでした。"
 
 #: ../../plugin/htdigest.inc.php:50
 msgid "It updated .htdigest."
