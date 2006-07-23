@@ -3,17 +3,23 @@
  * htdigest plugin.
  *
  * @copyright   Copyright &copy; 2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: googlemap.inc.php,v 0.2 2006/07/23 05:26:00 upk Exp $
+ * @version     $Id: googlemap.inc.php,v 0.3 2006/07/24 00:03:00 upk Exp $
  *
  * $A1 = md5($data['username'] . ':' . $realm . ':' . $auth_users[$data['username']]);
  */
 
-if (!defined('USE_HTDIGEST')) {
-	define('USE_HTDIGEST', FALSE);
+if (!defined('HTDIGEST_USE_FUNC_WRITE')) {
+	define('HTDIGEST_USE_FUNC_WRITE', FALSE);
 }
 
+if (!defined('HTDIGEST_FILE_PATH')) {
+	define('HTDIGEST_FILE_PATH', '');
+}
+if (!defined('HTDIGEST_FILE_NAME')) {
+	define('HTDIGEST_FILE_NAME', '.htdigest');
+}
 if (!defined('HTDIGEST_FILE')) {
-	define('HTDIGEST_FILE', '.htdigest');
+	define('HTDIGEST_FILE', HTDIGEST_FILE_PATH.HTDIGEST_FILE_NAME);
 }
 
 function plugin_htdigest_init()
@@ -27,10 +33,12 @@ function plugin_htdigest_init()
 		'CALC'		=> _("CALC"),
 		'Update'	=> _("Update"),
 		'Result'	=> _("Result"),
+		'Result_Plus'	=> _("For Plus!"),
+		'Result_Apache'	=> _("For Apache"),
 				// マイクロソフト社のIISには、対応しておりません。
 		'msg_iis'	=> _("It doesn't correspond to IIS of Microsoft Corporation."),
-				// .htaccess を利用した更新は、許可されません。
-		'err_not_use'	=> _("The update using .htaccess is not permitted."),
+				// 書き込み機能は、制限されています。
+		'err_not_use'	=> _("The writing function is limited."),
 				// 更新するためには、サイト管理者以上の権限が必要です。
 		'err_role'	=> _("The authority more than Webmaster for World Wide Web Site is necessary to update it."),
 		'msg_realm'	=> _("Realm is not corresponding."),
@@ -60,14 +68,17 @@ function plugin_htdigest_action()
 		return array('msg'=>$msg,'body'=>$_htdigest_msg['msg_iis']);
 	}
 
+	// 初回起動時
 	if (empty($func)) {
 		return array('msg'=>$msg,'body'=>htdigest_menu());
 	}
 
-	if (! USE_HTDIGEST) {
+	// プラグインによる書き込み制限の場合
+	if (! HTDIGEST_USE_FUNC_WRITE) {
 		return array('msg'=>$_htdigest_msg['err_not_use'],'body'=>htdigest_menu());
 	}
 
+	// サイト管理者権限が無い場合
 	if (auth::check_role('role_adm')) {
 		return array('msg'=>$_htdigest_msg['err_role'],'body'=>htdigest_menu());
 	}
@@ -108,24 +119,30 @@ function htdigest_menu()
 	$head_tags[] = ' <script type="text/javascript" src="'.SKIN_DIR.'crypt/md5.js"></script>';
 	$head_tags[] = ' <script type="text/javascript" src="'.SKIN_DIR.'crypt/sha1.js"></script>';
 
+	// 使用する場合は、変更させることもコピーさせることも不要なので、抑止する
+	$disabled = (HTDIGEST_USE_FUNC_WRITE) ? 'disabled="disabled"' : '';
+
 $x = <<<EOD
 <script type="text/javascript">
 <!-- <![CDATA[
 
 function set_hash()
 {
- var a1,ctr;
+ var a1,ctr,pref;
  var fn = function(){
    switch(objForm.algorithm.value) {
    case 'MD4':
      objForm.hash.value = hex_md4(a1);
+     pref = "{x-digest-md4}";
      break;
    case 'SHA-1':
      objForm.hash.value = hex_sha1(a1);
+     pref = "{x-digest-sha1}";
      break;
    default:
      objForm.submit.disabled = false;
      objForm.hash.value = hex_md5(a1);
+     pref = "{x-digest-md5}";
    }
  };
 
@@ -148,8 +165,13 @@ function set_hash()
    objForm.passwd.value = "";
  }
 
- objForm.hash_view.value = objForm.hash.value;
- objForm.algorithm_view.value = objForm.algorithm.value;
+ if (objForm.hash.value == "") {
+   objForm.plus_view.value = "";
+   objForm.apache_view.value = "";
+ } else {
+   objForm.plus_view.value = pref+objForm.hash.value;
+   objForm.apache_view.value = objForm.username.value+':'+objForm.realm.value+':'+objForm.hash.value;
+ }
 
  /* Windows ClipBord Copy */
  /* window.clipboardData.setData('text', objForm.hash.value); */
@@ -191,9 +213,12 @@ function set_hash()
       </td>
     </tr>
     <tr>
-      <th>{$_htdigest_msg['Result']}</th>
-      <td><input type="text" name="hash_view" size="60" /></td>
-      <td><input type="text" name="algorithm_view" size="5" disabled="disabled" /></td>
+      <th>{$_htdigest_msg['Result_Plus']}</th>
+      <td><input type="text" name="plus_view" size="80" /></td>
+    </tr>
+    <tr>
+      <th>{$_htdigest_msg['Result_Apache']}</th>
+      <td><input type="text" name="apache_view" size="80" {$disabled} /></td>
     </tr>
     <tr>
       <td><input type="submit" name="submit" value="{$_htdigest_msg['Update']}" disabled="disabled" /></td>

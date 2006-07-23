@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-07-23 04:57+0900\n"
+"POT-Creation-Date: 2006-07-24 00:33+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,68 +16,76 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../plugin/htdigest.inc.php:19
+#: ../../plugin/htdigest.inc.php:29
 msgid "realm"
 msgstr ""
 
-#: ../../plugin/htdigest.inc.php:20
+#: ../../plugin/htdigest.inc.php:30
 msgid "UserName"
 msgstr ""
 
-#: ../../plugin/htdigest.inc.php:21
+#: ../../plugin/htdigest.inc.php:31
 msgid "Passwd"
 msgstr ""
 
-#: ../../plugin/htdigest.inc.php:22
+#: ../../plugin/htdigest.inc.php:32
 msgid "Calculate"
 msgstr ""
 
-#: ../../plugin/htdigest.inc.php:23
+#: ../../plugin/htdigest.inc.php:33
 msgid "CALC"
 msgstr ""
 
-#: ../../plugin/htdigest.inc.php:24
+#: ../../plugin/htdigest.inc.php:34
 msgid "Update"
 msgstr ""
 
-#: ../../plugin/htdigest.inc.php:25
+#: ../../plugin/htdigest.inc.php:35
 msgid "Result"
 msgstr ""
 
-#: ../../plugin/htdigest.inc.php:27
+#: ../../plugin/htdigest.inc.php:36
+msgid "For Plus!"
+msgstr ""
+
+#: ../../plugin/htdigest.inc.php:37
+msgid "For Apache"
+msgstr ""
+
+#: ../../plugin/htdigest.inc.php:39
 msgid "It doesn't correspond to IIS of Microsoft Corporation."
 msgstr ""
 
-#: ../../plugin/htdigest.inc.php:29
-msgid "The update using .htaccess is not permitted."
+#: ../../plugin/htdigest.inc.php:41
+msgid "The writing function is limited."
 msgstr ""
 
-#: ../../plugin/htdigest.inc.php:31
+#: ../../plugin/htdigest.inc.php:43
 msgid ""
 "The authority more than Webmaster for World Wide Web Site is necessary to "
 "update it."
 msgstr ""
 
-#: ../../plugin/htdigest.inc.php:32
+#: ../../plugin/htdigest.inc.php:44
 msgid "Realm is not corresponding."
 msgstr ""
 
-#: ../../plugin/htdigest.inc.php:34
+#: ../../plugin/htdigest.inc.php:46
 msgid "It newly made .htdigest."
 msgstr ""
 
-#: ../../plugin/htdigest.inc.php:36
+#: ../../plugin/htdigest.inc.php:48
 msgid "Because the password was the same, it did not update it."
 msgstr ""
 
-#: ../../plugin/htdigest.inc.php:38
+#: ../../plugin/htdigest.inc.php:50
 msgid "It updated .htdigest."
 msgstr ""
 
-#: ../../plugin/htdigest.inc.php:40
+#: ../../plugin/htdigest.inc.php:52
 msgid "One was added."
 msgstr ""
 
-#: ../../plugin/htdigest.inc.php:41
+#: ../../plugin/htdigest.inc.php:53
 msgid "ERROR."
 msgstr ""

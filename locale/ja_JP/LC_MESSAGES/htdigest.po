@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PukiWiki Plus! 1.4.5-u2-i18n\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-07-23 04:57+0900\n"
+"POT-Creation-Date: 2006-07-24 00:33+0900\n"
 "PO-Revision-Date: 2006-07-23 05:00+0900\n"
 "Last-Translator: Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>\n"
 "Language-Team: Japanese <ja@li.org>\n"
@@ -15,68 +15,76 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../plugin/htdigest.inc.php:19
+#: ../../plugin/htdigest.inc.php:29
 msgid "realm"
 msgstr "realm"
 
-#: ../../plugin/htdigest.inc.php:20
+#: ../../plugin/htdigest.inc.php:30
 msgid "UserName"
 msgstr "ユーザ名"
 
-#: ../../plugin/htdigest.inc.php:21
+#: ../../plugin/htdigest.inc.php:31
 msgid "Passwd"
 msgstr "パスワード"
 
-#: ../../plugin/htdigest.inc.php:22
+#: ../../plugin/htdigest.inc.php:32
 msgid "Calculate"
 msgstr "Calculate"
 
-#: ../../plugin/htdigest.inc.php:23
+#: ../../plugin/htdigest.inc.php:33
 msgid "CALC"
 msgstr "計算"
 
-#: ../../plugin/htdigest.inc.php:24
+#: ../../plugin/htdigest.inc.php:34
 msgid "Update"
 msgstr "更新"
 
-#: ../../plugin/htdigest.inc.php:25
+#: ../../plugin/htdigest.inc.php:35
 msgid "Result"
 msgstr "結果"
 
-#: ../../plugin/htdigest.inc.php:27
+#: ../../plugin/htdigest.inc.php:36
+msgid "For Plus!"
+msgstr "Plus!用"
+
+#: ../../plugin/htdigest.inc.php:37
+msgid "For Apache"
+msgstr "Apache用"
+
+#: ../../plugin/htdigest.inc.php:39
 msgid "It doesn't correspond to IIS of Microsoft Corporation."
 msgstr "マイクロソフト社のIISには、対応しておりません。"
 
-#: ../../plugin/htdigest.inc.php:29
-msgid "The update using .htaccess is not permitted."
-msgstr ".htaccess を利用した更新は、許可されません。"
+#: ../../plugin/htdigest.inc.php:41
+msgid "The writing function is limited."
+msgstr "書き込み機能は、制限されています。"
 
-#: ../../plugin/htdigest.inc.php:31
+#: ../../plugin/htdigest.inc.php:43
 msgid ""
 "The authority more than Webmaster for World Wide Web Site is necessary to "
 "update it."
 msgstr "更新するためには、サイト管理者以上の権限が必要です。"
 
-#: ../../plugin/htdigest.inc.php:32
+#: ../../plugin/htdigest.inc.php:44
 msgid "Realm is not corresponding."
 msgstr "Realm と一致しません。"
 
-#: ../../plugin/htdigest.inc.php:34
+#: ../../plugin/htdigest.inc.php:46
 msgid "It newly made .htdigest."
 msgstr ".htdigest を新規作成しました。"
 
-#: ../../plugin/htdigest.inc.php:36
+#: ../../plugin/htdigest.inc.php:48
 msgid "Because the password was the same, it did not update it."
 msgstr "パスワードが同一なため、更新しませんでした"
 
-#: ../../plugin/htdigest.inc.php:38
+#: ../../plugin/htdigest.inc.php:50
 msgid "It updated .htdigest."
 msgstr ".htdigest を更新しました。"
 
-#: ../../plugin/htdigest.inc.php:40
+#: ../../plugin/htdigest.inc.php:52
 msgid "One was added."
 msgstr "１件追加しました。"
 
-#: ../../plugin/htdigest.inc.php:41
+#: ../../plugin/htdigest.inc.php:53
 msgid "ERROR."
 msgstr "エラー。"
