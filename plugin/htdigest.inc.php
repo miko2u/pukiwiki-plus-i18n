@@ -3,13 +3,17 @@
  * htdigest plugin.
  *
  * @copyright   Copyright &copy; 2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: googlemap.inc.php,v 0.3 2006/07/24 00:03:00 upk Exp $
+ * @version     $Id: googlemap.inc.php,v 0.4 2006/07/24 22:52:00 upk Exp $
  *
  * $A1 = md5($data['username'] . ':' . $realm . ':' . $auth_users[$data['username']]);
  */
 
-if (!defined('HTDIGEST_USE_FUNC_WRITE')) {
-	define('HTDIGEST_USE_FUNC_WRITE', FALSE);
+if (!defined('USE_APACHE_WRITE_FUNC')) {
+	define('USE_APACHE_WRITE_FUNC', FALSE);
+}
+
+if (!defined('USE_PKWK_WRITE_FUNC')) {
+	define('USE_PKWK_WRITE_FUNC', FALSE);
 }
 
 if (!defined('HTDIGEST_FILE_PATH')) {
@@ -22,6 +26,10 @@ if (!defined('HTDIGEST_FILE')) {
 	define('HTDIGEST_FILE', HTDIGEST_FILE_PATH.HTDIGEST_FILE_NAME);
 }
 
+if (!defined('PKWK_AUTH_FILE')) {
+	define('PKWK_AUTH_FILE', DATA_HOME . 'auth_users.ini.php');
+}
+
 function plugin_htdigest_init()
 {
 	$msg = array(
@@ -30,6 +38,7 @@ function plugin_htdigest_init()
 		'UserName'	=> _("UserName"),
 		'Passwd'	=> _("Passwd"),
 		'Calculate'	=> _("Calculate"),
+		'AuthType'	=> _("Auth Type"),
 		'CALC'		=> _("CALC"),
 		'Update'	=> _("Update"),
 		'Result'	=> _("Result"),
@@ -74,22 +83,42 @@ function plugin_htdigest_action()
 	}
 
 	// プラグインによる書き込み制限の場合
-	if (! HTDIGEST_USE_FUNC_WRITE) {
-		return array('msg'=>$_htdigest_msg['err_not_use'],'body'=>htdigest_menu());
-	}
-
-	// サイト管理者権限が無い場合
-	if (auth::check_role('role_adm')) {
-		return array('msg'=>$_htdigest_msg['err_role'],'body'=>htdigest_menu());
+	if (! USE_APACHE_WRITE_FUNC && ! USE_PKWK_WRITE_FUNC) {
+		return array('msg'=>$msg,'body'=>htdigest_menu($_htdigest_msg['err_not_use']));
 	}
 
 	switch ($func) {
 	case 'save':
-		// $algorithm = $vars['algorithm'];
-		$msg = htdigest_save($vars['username'], $vars['realm'], $vars['hash']);
-		return array('msg'=>$msg,'body'=>htdigest_menu());
+        	// サイト管理者権限が無い場合
+		if (auth::check_role('role_adm')) {
+			return array('msg'=>$msg,'body'=>htdigest_menu($_htdigest_msg['err_role']));
+		}
 
-		break;
+		if (USE_APACHE_WRITE_FUNC) {
+			$rc_msg = htdigest_save($vars['username'], $vars['realm'], $vars['hash']);
+		}
+		if (USE_PKWK_WRITE_FUNC) {
+			$rc_msg = htdigest_auth_file_save($vars['username'],$vars['authtype'],$vars['algorithm'],$vars['hash'],'');
+		}
+
+		return array('msg'=>$msg,'body'=>htdigest_menu($rc_msg));
+
+	case 'update':
+		// サイト管理者未満は、自分のパスワードのみ更新ができる
+		$role_level = auth::get_role_level();
+		if ($role_level < 2) {
+			return array('msg'=>$msg,'body'=>htdigest_menu($_htdigest_msg['err_role']));
+		}
+		global $realm;
+		$user = auth::check_auth();
+		if (USE_APACHE_WRITE_FUNC) {
+			$rc_msg = htdigest_save($user, $realm, $vars['hash']);
+		}
+		if (USE_PKWK_WRITE_FUNC) {
+			$rc_msg = htdigest_auth_file_save($user,$vars['authtype'],$vars['algorithm'],$vars['hash'],'');
+		}
+		return array('msg'=>$msg,'body'=>htdigest_menu($rc_msg));
+
 	default:
 		$body = $_htdigest_msg['msg_err'];
 	}
@@ -111,7 +140,7 @@ function htdigest_is_ie()
 	return ($obj->set_browsers_icon($log_ua) == 'msie') ? TRUE : FALSE;
 }
 
-function htdigest_menu()
+function htdigest_menu($msg='&nbsp;')
 {
 	global $script, $realm, $head_tags, $_htdigest_msg;
 
@@ -122,27 +151,38 @@ function htdigest_menu()
 	// 使用する場合は、変更させることもコピーさせることも不要なので、抑止する
 	$disabled = (HTDIGEST_USE_FUNC_WRITE) ? 'disabled="disabled"' : '';
 
+	$func = 'save';
+
+	$role_level = auth::get_role_level();
+	if ($role_level > 2) {
+		$user_disabled = 'disabled="disabled"';
+		$user = auth::check_auth();
+		$func = 'update';
+	} else {
+		$user_disabled = $user = '';
+	}
+
 $x = <<<EOD
 <script type="text/javascript">
 <!-- <![CDATA[
 
 function set_hash()
 {
- var a1,ctr,pref;
+ var a1,ctr,pref,authtype;
  var fn = function(){
    switch(objForm.algorithm.value) {
    case 'MD4':
      objForm.hash.value = hex_md4(a1);
-     pref = "{x-digest-md4}";
+     pref = "{x-"+authtype+"-md4}";
      break;
    case 'SHA-1':
      objForm.hash.value = hex_sha1(a1);
-     pref = "{x-digest-sha1}";
+     pref = "{x-"+authtype+"-sha1}";
      break;
    default:
      objForm.submit.disabled = false;
      objForm.hash.value = hex_md5(a1);
-     pref = "{x-digest-md5}";
+     pref = "{x-"+authtype+"-md5}";
    }
  };
 
@@ -153,6 +193,7 @@ function set_hash()
    objForm.hash.value = "";
    objForm.algorithm.value = "";
  } else {
+
    ctr = objForm.scheme.length;
    for (i=0; i<ctr; i++) {
      if (objForm.scheme[i].checked) {
@@ -160,7 +201,23 @@ function set_hash()
        break;
      }
    }
-   a1 = objForm.username.value+':'+objForm.realm.value+':'+objForm.passwd.value;
+
+   ctr = objForm.authtype.length;
+   for (i=0; i<ctr; i++) {
+     if (objForm.authtype[i].checked) {
+       objForm.authtype.value = objForm.authtype[i].value;
+       break;
+     }
+   }
+
+   if (objForm.authtype.value == "basic") {
+     authtype = "php";
+     a1 = objForm.passwd.value;
+   } else {
+     authtype = objForm.authtype.value;
+     a1 = objForm.username.value+':'+objForm.realm.value+':'+objForm.passwd.value;
+   }
+
    fn();
    objForm.passwd.value = "";
  }
@@ -170,7 +227,11 @@ function set_hash()
    objForm.apache_view.value = "";
  } else {
    objForm.plus_view.value = pref+objForm.hash.value;
-   objForm.apache_view.value = objForm.username.value+':'+objForm.realm.value+':'+objForm.hash.value;
+   if (objForm.authtype.value == "basic") {
+     objForm.apache_view.value = "";
+   } else {
+     objForm.apache_view.value = objForm.username.value+':'+objForm.realm.value+':'+objForm.hash.value;
+   }
  }
 
  /* Windows ClipBord Copy */
@@ -184,19 +245,28 @@ function set_hash()
 
 <h2>htdigest</h2>
 
+<div>$msg</div>
+
 <form name="htdigest" action="$script" method="post">
   <input type="hidden" name="plugin" value="htdigest" />
-  <input type="hidden" name="func" value="save" />
+  <input type="hidden" name="func" value="$func" />
   <input type="hidden" name="algorithm" />
   <input type="hidden" name="hash" />
   <table class="indented">
+    <tr>
+      <th>{$_htdigest_msg['AuthType']}</th>
+      <td>
+        <input type="radio" name="authtype" value="digest" checked="checked" /> <label>Digest</label>
+        <input type="radio" name="authtype" value="basic" /> <label>Basic</label>
+      </td>
+    </tr>
     <tr>
       <th>{$_htdigest_msg['realm']}</th>
       <td><input type="text" name="realm" size="30" value="$realm" /></td>
     </tr>
     <tr>
       <th>{$_htdigest_msg['UserName']}</th>
-      <td><input type="text" name="username" size="10" /></td>
+      <td><input type="text" name="username" size="10" value="$user" $user_disabled /></td>
     </tr>
     <tr>
       <th>{$_htdigest_msg['Passwd']}</th>
@@ -218,7 +288,7 @@ function set_hash()
     </tr>
     <tr>
       <th>{$_htdigest_msg['Result_Apache']}</th>
-      <td><input type="text" name="apache_view" size="80" {$disabled} /></td>
+      <td><input type="text" name="apache_view" size="80" $disabled /></td>
     </tr>
     <tr>
       <td><input type="submit" name="submit" value="{$_htdigest_msg['Update']}" disabled="disabled" /></td>
@@ -281,6 +351,131 @@ function htdigest_save($username,$p_realm,$hash)
 	@flock($fp, LOCK_UN);
 	@fclose($fp);
 	return $_htdigest_msg['msg_update'];
+}
+
+function htdigest_auth_file_save($username,$authtype,$algorithm,$passwd,$role='')
+{
+	global $_htdigest_msg;
+
+	$obj = new auth_file(PKWK_AUTH_FILE);
+
+	$type = ($authtype == 'basic') ? 'php' : 'digest';
+
+	$scheme = '{x-'.$type;
+	switch ($algorithm) {
+	case 'SHA-1':
+		$scheme .= '-sha1}';
+		break;
+	case 'MD4':
+		$scheme .= '-md4}';
+		break;
+	case 'MD5':
+	default:
+		$scheme .= '-md5}';
+	}
+
+	// 0:変更なし, 1:追加, 2:変更あり
+	$rc = $obj->set_passwd($username,$scheme.$passwd,$role);
+	if ($rc == 0) return $_htdigest_msg['msg_not_update'];
+
+	$obj->write_auth_file();
+
+	if ($rc == 1) {
+		return $_htdigest_msg['msg_add'];
+	}
+	return $_htdigest_msg['msg_update'];
+}
+
+class auth_file
+{
+	var $auth_users, $file;
+	var $exist, $write;
+
+	function auth_file($file)
+	{
+		$this->file = $file;
+		$this->write = FALSE;
+
+		if (file_exists($this->file)) {
+			$this->exist = TRUE;
+			include($this->file);
+			$this->auth_users = $auth_users;
+		} else {
+			$this->exist = FALSE;
+			$this->auth_users = array();
+		}
+	}
+
+	function write_auth_file()
+	{
+		if (! $this->write) return;
+		if ($this->auth_users == array()) return;
+
+		// 念のためバックアップをとっておく
+		//if ($this->exist) {
+		//	rename($this->file, $this->file.'.bak');
+		//}
+
+		$fp = fopen($this->file,'w');
+		@flock($fp, LOCK_EX);
+		fputs($fp, "<?php\n\$auth_users = array(\n");
+
+		foreach($this->auth_users as $user=>$val) {
+			fputs($fp, "\t'".$user.'\' => array(\''.$val[0].'\'');
+
+			for ($i=1;$i<count($val);$i++){
+				if (! empty($val[$i])) {
+					fputs($fp, ','.$val[$i]);
+				}
+			}
+
+			fputs($fp, "),\n");
+		}
+
+		fputs($fp, ");\n?>\n");
+		@flock($fp, LOCK_UN);
+		@fclose($fp);
+	}
+
+	function set_passwd($user,$passwd,$role='')
+	{
+		// 追加
+		if (empty($this->auth_users[$user])) {
+			$this->write = TRUE;
+			$this->auth_users[$user][0] = $passwd;
+			if ($role != '') {
+				$this->auth_users[$user][1] = $role;
+			}
+			return 1;
+		}
+
+		$tmp_role = (empty($this->auth_users[$user][1])) ? '' : $this->auth_users[$user][1];
+
+		// 変更なし
+		if ($this->auth_users[$user][0] == $passwd && $tmp_role == $role) return 0;
+
+		// 変更あり
+		$this->write = TRUE;
+		$this->auth_users[$user][0] = $passwd;
+		if ($role != '') {
+			$this->auth_users[$user][1] = $role;
+		}
+		return 2;
+	}
+
+	function get_data($user) 
+	{
+		if (empty($this->auth_users[$user])) {
+			// scheme, salt, role
+			return array('','','');
+		}
+		$role = (empty($this->auth_users[$user][1])) ? '' : $this->auth_users[$user][1];
+		$regs = array();
+		if (preg_match('/^(\{.+\})(.*)$/', $this->auth_users[$user][0], $regs)) {
+			return array($regs[1], $regs[2], $role);
+		}
+		return array('','','');
+	}
 }
 
 ?>
