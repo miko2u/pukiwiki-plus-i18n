@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: pukiwiki.ini.php,v 1.139.141 2006/06/24 23:08:00 upk Exp $
+// $Id: pukiwiki.ini.php,v 1.139.142 2006/07/28 01:57:00 upk Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
@@ -268,18 +268,8 @@ $function_freeze = 1;
 // (0:Disable, 1:For everyone,  2:Only for the administrator)
 $notimeupdate = 1;
 
-/////////////////////////////////////////////////
-// Authentication Parameter REALM
-$realm = 'PukiWikiAuth';
-
-/////////////////////////////////////////////////
-// Admin password for this Wikisite
-
-// CHANGE THIS
-$adminpass = '{x-php-md5}1a1dc91c907325c69271ddf0c944bc72'; // md5('pass')
-//$adminpass = '{CRYPT}$1$AR.Gk94x$uCe8fUUGMfxAPH83psCZG/'; // CRYPT 'pass'
-//$adminpass = '{MD5}Gh3JHJBzJcaScd3wyUS8cg==';             // MD5   'pass'
-//$adminpass = '{SMD5}o7lTdtHFJDqxFOVX09C8QnlmYmZnd2Qx';    // SMD5  'pass'
+// Authentication
+require_once('auth.ini.php');
 
 /////////////////////////////////////////////////
 // Page-reading feature settings
@@ -310,55 +300,6 @@ $pagereading_config_page = ':config/PageReading';
 
 // Page name of default pronouncing dictionary, used when converter = 'none'
 $pagereading_config_dict = ':config/PageReading/dict';
-
-/////////////////////////////////////////////////
-// User definition
-// 役割(ROLE)
-// 2 - サイト管理者
-// 3 - コンテンツ管理者
-// 4 - 認証者(未設定時のデフォルト)
-$auth_users = array(
-	// Username => password
-	'foo'	=> array('foo_passwd'), // Cleartext
-	'bar'	=> array('{x-php-md5}f53ae779077e987718cc285b14dfbe86'), // md5('bar_passwd')
-	'hoge'	=> array('{SMD5}OzJo/boHwM4q5R+g7LCOx2xGMkFKRVEx'), // SMD5 'hoge_passwd'
-	// 'hoge' => array('{SMD5}OzJo/boHwM4q5R+g7LCOx2xGMkFKRVEx',3), // SMD5 'hoge_passwd', コンテンツ管理者
-	// 'hoge' => array('{SMD5}OzJo/boHwM4q5R+g7LCOx2xGMkFKRVEx',2), // SMD5 'hoge_passwd', サイト管理者
-);
-
-/////////////////////////////////////////////////
-// Authentication method
-
-$auth_method_type = 'pagename'; // By Page name
-//$auth_method_type = 'contents'; // By Page contents
-
-/////////////////////////////////////////////////
-// Read auth (0:Disable, 1:Enable)
-$read_auth = 0;
-
-$read_auth_pages = array(
-	// Regex                   Username
-	'/:log/'		=> 'hoge',
-	'#ひきこもるほげ#'	=> 'hoge',
-	'#(ネタバレ|ねたばれ)#'	=> 'foo,bar,hoge',
-);
-
-/////////////////////////////////////////////////
-// Edit auth (0:Disable, 1:Enable)
-$edit_auth = 0;
-
-$edit_auth_pages = array(
-	// Regex                   Username
-	'#Barの公開日記#'	=> 'bar',
-	'#ひきこもるほげ#'	=> 'hoge',
-	'#(ネタバレ|ねたばれ)#'	=> 'foo,bar,hoge',
-);
-
-/////////////////////////////////////////////////
-// Search auth
-// 0: Disabled (Search read-prohibited page contents)
-// 1: Enabled  (Search only permitted pages for the user)
-$search_auth = 0;
 
 /////////////////////////////////////////////////
 // Exclude plugin for this site-policy.
