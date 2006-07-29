@@ -3,7 +3,7 @@
  * auth_file.cls.php
  *
  * @copyright   Copyright &copy; 2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth_file.cls.php,v 0.1 2006/07/28 02:00:00 upk Exp $
+ * @version     $Id: auth_file.cls.php,v 0.2 2006/07/30 01:58:00 upk Exp $
  *
  */
 
@@ -78,9 +78,7 @@ class auth_file
 		// 変更あり
 		$this->write = TRUE;
 		$this->auth_users[$user][0] = $passwd;
-		if ($role != '') {
-			$this->auth_users[$user][1] = $role;
-		}
+		$this->auth_users[$user][1] = $role;
 		return 2;
 	}
 
