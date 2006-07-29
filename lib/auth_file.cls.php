@@ -3,7 +3,7 @@
  * auth_file.cls.php
  *
  * @copyright   Copyright &copy; 2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth_file.cls.php,v 0.3 2006/07/30 04:39:00 upk Exp $
+ * @version     $Id: auth_file.cls.php,v 0.4 2006/07/30 04:57:00 upk Exp $
  *
  */
 
@@ -55,7 +55,7 @@ class auth_file
 
 	function set_passwd($user,$passwd,$role='')
 	{
-		// 追加
+		// 1:追加
 		if (empty($this->auth_users[$user])) {
 			$this->write = TRUE;
 			$this->auth_users[$user][0] = $passwd;
@@ -67,18 +67,16 @@ class auth_file
 
 		$tmp_role = (empty($this->auth_users[$user][1])) ? '' : $this->auth_users[$user][1];
 
-		// 変更なし
+		// 0:変更なし
 		if ($this->auth_users[$user][0] == $passwd && $tmp_role == $role) return 0;
 
-		// 変更あり
+		// 2:パスワード変更あり 3:変更あり
 		$this->write = TRUE;
+		$rc = ($this->auth_users[$user][0] != $passwd) ? 2 : 3;
+
 		$this->auth_users[$user][0] = $passwd;
 		$this->auth_users[$user][1] = $role;
-
-		// パスワードの変更あり
-		if ($this->auth_users[$user][0] != $passwd) return 2;
-		// その他
-		return 3;
+		return $rc;
 	}
 
 	function get_data($user) 
