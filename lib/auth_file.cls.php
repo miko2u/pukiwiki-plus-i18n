@@ -3,7 +3,7 @@
  * auth_file.cls.php
  *
  * @copyright   Copyright &copy; 2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth_file.cls.php,v 0.2 2006/07/30 01:58:00 upk Exp $
+ * @version     $Id: auth_file.cls.php,v 0.3 2006/07/30 04:39:00 upk Exp $
  *
  */
 
@@ -31,11 +31,6 @@ class auth_file
 	{
 		if (! $this->write) return;
 		if ($this->auth_users == array()) return;
-
-		// 念のためバックアップをとっておく
-		//if ($this->exist) {
-		//	rename($this->file, $this->file.'.bak');
-		//}
 
 		$fp = fopen($this->file,'w');
 		@flock($fp, LOCK_EX);
@@ -79,7 +74,11 @@ class auth_file
 		$this->write = TRUE;
 		$this->auth_users[$user][0] = $passwd;
 		$this->auth_users[$user][1] = $role;
-		return 2;
+
+		// パスワードの変更あり
+		if ($this->auth_users[$user][0] != $passwd) return 2;
+		// その他
+		return 3;
 	}
 
 	function get_data($user) 
