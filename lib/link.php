@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: link.php,v 1.11.2 2006/04/27 03:00:00 miko Exp $
+// $Id: link.php,v 1.11.3 2006/07/29 12:38:00 upk Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2003-2006 PukiWiki Developers Team
@@ -146,7 +146,7 @@ function links_init()
 		unlink($cache);
 
 	$ref   = array(); // 参照元
-	foreach ($get_existpages() as $page) {
+	foreach (get_existpages() as $page) {
 		if ($page == $whatsnew) continue;
 
 		$rel   = array(); // 参照先
