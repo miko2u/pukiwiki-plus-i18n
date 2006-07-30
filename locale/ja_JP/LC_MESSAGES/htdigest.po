@@ -5,9 +5,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: PukiWiki Plus! 1.4.5-u2-i18n\n"
+"Project-Id-Version: PukiWiki Plus! 1.4.7-i18n\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-07-24 00:33+0900\n"
+"POT-Creation-Date: 2006-07-30 21:02+0900\n"
 "PO-Revision-Date: 2006-07-23 05:00+0900\n"
 "Last-Translator: Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>\n"
 "Language-Team: Japanese <ja@li.org>\n"
@@ -15,41 +15,33 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../plugin/htdigest.inc.php:29
+#: ../../plugin/htdigest.inc.php:31
 msgid "realm"
 msgstr "realm"
 
-#: ../../plugin/htdigest.inc.php:30
+#: ../../plugin/htdigest.inc.php:32
 msgid "UserName"
 msgstr "ユーザ名"
 
-#: ../../plugin/htdigest.inc.php:31
+#: ../../plugin/htdigest.inc.php:33
 msgid "Passwd"
 msgstr "パスワード"
 
-#: ../../plugin/htdigest.inc.php:32
+#: ../../plugin/htdigest.inc.php:34
 msgid "Calculate"
 msgstr "Calculate"
 
-#: ../../plugin/htdigest.inc.php:33
+#: ../../plugin/htdigest.inc.php:35
 msgid "CALC"
 msgstr "計算"
 
-#: ../../plugin/htdigest.inc.php:34
+#: ../../plugin/htdigest.inc.php:36
 msgid "Update"
 msgstr "更新"
 
-#: ../../plugin/htdigest.inc.php:35
+#: ../../plugin/htdigest.inc.php:37
 msgid "Result"
 msgstr "結果"
-
-#: ../../plugin/htdigest.inc.php:36
-msgid "For Plus!"
-msgstr "Plus!用"
-
-#: ../../plugin/htdigest.inc.php:37
-msgid "For Apache"
-msgstr "Apache用"
 
 #: ../../plugin/htdigest.inc.php:39
 msgid "It doesn't correspond to IIS of Microsoft Corporation."

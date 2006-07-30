@@ -3,7 +3,7 @@
  * htdigest plugin.
  *
  * @copyright   Copyright &copy; 2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: htdigest.inc.php,v 0.5 2006/07/30 20:28:00 upk Exp $
+ * @version     $Id: htdigest.inc.php,v 0.6 2006/07/30 20:55:00 upk Exp $
  *
  * $A1 = md5($data['username'] . ':' . $realm . ':' . $auth_users[$data['username']]);
  */
@@ -117,13 +117,6 @@ function htdigest_is_iis()
 	return ($srv_soft == 'microsoft') ? TRUE : FALSE;
 }
 
-function htdigest_is_ie()
-{
-	global $log_ua;
-	$obj = new ua_browsers();
-	return ($obj->set_browsers_icon($log_ua) == 'msie') ? TRUE : FALSE;
-}
-
 function htdigest_menu($msg='&nbsp;')
 {
 	global $script, $realm, $head_tags, $_htdigest_msg;
@@ -133,7 +126,7 @@ function htdigest_menu($msg='&nbsp;')
 	$head_tags[] = ' <script type="text/javascript" src="'.SKIN_DIR.'crypt/sha1.js"></script>';
 
 	// 使用する場合は、変更させることもコピーさせることも不要なので、抑止する
-	$disabled = (HTDIGEST_USE_FUNC_WRITE) ? 'disabled="disabled"' : '';
+	$disabled = (USE_APACHE_WRITE_FUNC) ? 'disabled="disabled"' : '';
 
 	$func = 'save';
 
@@ -193,10 +186,6 @@ function set_hash()
  } else {
    objForm.hash_view.value = objForm.username.value+':'+objForm.realm.value+':'+objForm.hash.value;
  }
-
- /* Windows ClipBord Copy */
- /* window.clipboardData.setData('text', objForm.hash.value); */
-
 }
 
 

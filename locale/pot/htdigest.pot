@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-07-24 00:33+0900\n"
+"POT-Creation-Date: 2006-07-30 21:02+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,40 +16,32 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../plugin/htdigest.inc.php:29
+#: ../../plugin/htdigest.inc.php:31
 msgid "realm"
 msgstr ""
 
-#: ../../plugin/htdigest.inc.php:30
+#: ../../plugin/htdigest.inc.php:32
 msgid "UserName"
 msgstr ""
 
-#: ../../plugin/htdigest.inc.php:31
+#: ../../plugin/htdigest.inc.php:33
 msgid "Passwd"
 msgstr ""
 
-#: ../../plugin/htdigest.inc.php:32
+#: ../../plugin/htdigest.inc.php:34
 msgid "Calculate"
 msgstr ""
 
-#: ../../plugin/htdigest.inc.php:33
+#: ../../plugin/htdigest.inc.php:35
 msgid "CALC"
 msgstr ""
 
-#: ../../plugin/htdigest.inc.php:34
+#: ../../plugin/htdigest.inc.php:36
 msgid "Update"
 msgstr ""
 
-#: ../../plugin/htdigest.inc.php:35
-msgid "Result"
-msgstr ""
-
-#: ../../plugin/htdigest.inc.php:36
-msgid "For Plus!"
-msgstr ""
-
 #: ../../plugin/htdigest.inc.php:37
-msgid "For Apache"
+msgid "Result"
 msgstr ""
 
 #: ../../plugin/htdigest.inc.php:39
