@@ -3,17 +3,13 @@
  * htdigest plugin.
  *
  * @copyright   Copyright &copy; 2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: googlemap.inc.php,v 0.4 2006/07/24 22:52:00 upk Exp $
+ * @version     $Id: htdigest.inc.php,v 0.5 2006/07/30 20:28:00 upk Exp $
  *
  * $A1 = md5($data['username'] . ':' . $realm . ':' . $auth_users[$data['username']]);
  */
 
 if (!defined('USE_APACHE_WRITE_FUNC')) {
 	define('USE_APACHE_WRITE_FUNC', FALSE);
-}
-
-if (!defined('USE_PKWK_WRITE_FUNC')) {
-	define('USE_PKWK_WRITE_FUNC', FALSE);
 }
 
 if (!defined('HTDIGEST_FILE_PATH')) {
@@ -36,12 +32,9 @@ function plugin_htdigest_init()
 		'UserName'	=> _("UserName"),
 		'Passwd'	=> _("Passwd"),
 		'Calculate'	=> _("Calculate"),
-		'AuthType'	=> _("Auth Type"),
 		'CALC'		=> _("CALC"),
 		'Update'	=> _("Update"),
 		'Result'	=> _("Result"),
-		'Result_Plus'	=> _("For Plus!"),
-		'Result_Apache'	=> _("For Apache"),
 				// マイクロソフト社のIISには、対応しておりません。
 		'msg_iis'	=> _("It doesn't correspond to IIS of Microsoft Corporation."),
 				// 書き込み機能は、制限されています。
@@ -81,7 +74,7 @@ function plugin_htdigest_action()
 	}
 
 	// プラグインによる書き込み制限の場合
-	if (! USE_APACHE_WRITE_FUNC && ! USE_PKWK_WRITE_FUNC) {
+	if (! USE_APACHE_WRITE_FUNC) {
 		return array('msg'=>$msg,'body'=>htdigest_menu($_htdigest_msg['err_not_use']));
 	}
 
@@ -95,10 +88,6 @@ function plugin_htdigest_action()
 		if (USE_APACHE_WRITE_FUNC) {
 			$rc_msg = htdigest_save($vars['username'], $vars['realm'], $vars['hash']);
 		}
-		if (USE_PKWK_WRITE_FUNC) {
-			$rc_msg = htdigest_auth_file_save($vars['username'],$vars['authtype'],$vars['algorithm'],$vars['hash'],'');
-		}
-
 		return array('msg'=>$msg,'body'=>htdigest_menu($rc_msg));
 
 	case 'update':
@@ -111,9 +100,6 @@ function plugin_htdigest_action()
 		$user = auth::check_auth();
 		if (USE_APACHE_WRITE_FUNC) {
 			$rc_msg = htdigest_save($user, $realm, $vars['hash']);
-		}
-		if (USE_PKWK_WRITE_FUNC) {
-			$rc_msg = htdigest_auth_file_save($user,$vars['authtype'],$vars['algorithm'],$vars['hash'],'');
 		}
 		return array('msg'=>$msg,'body'=>htdigest_menu($rc_msg));
 
@@ -166,21 +152,18 @@ $x = <<<EOD
 
 function set_hash()
 {
- var a1,ctr,pref,authtype;
+ var a1,ctr,pref;
  var fn = function(){
    switch(objForm.algorithm.value) {
    case 'MD4':
      objForm.hash.value = hex_md4(a1);
-     pref = "{x-"+authtype+"-md4}";
      break;
    case 'SHA-1':
      objForm.hash.value = hex_sha1(a1);
-     pref = "{x-"+authtype+"-sha1}";
      break;
    default:
      objForm.submit.disabled = false;
      objForm.hash.value = hex_md5(a1);
-     pref = "{x-"+authtype+"-md5}";
    }
  };
 
@@ -200,36 +183,15 @@ function set_hash()
      }
    }
 
-   ctr = objForm.authtype.length;
-   for (i=0; i<ctr; i++) {
-     if (objForm.authtype[i].checked) {
-       objForm.authtype.value = objForm.authtype[i].value;
-       break;
-     }
-   }
-
-   if (objForm.authtype.value == "basic") {
-     authtype = "php";
-     a1 = objForm.passwd.value;
-   } else {
-     authtype = objForm.authtype.value;
-     a1 = objForm.username.value+':'+objForm.realm.value+':'+objForm.passwd.value;
-   }
-
+   a1 = objForm.username.value+':'+objForm.realm.value+':'+objForm.passwd.value;
    fn();
    objForm.passwd.value = "";
  }
 
  if (objForm.hash.value == "") {
-   objForm.plus_view.value = "";
-   objForm.apache_view.value = "";
+   objForm.hash_view.value = "";
  } else {
-   objForm.plus_view.value = pref+objForm.hash.value;
-   if (objForm.authtype.value == "basic") {
-     objForm.apache_view.value = "";
-   } else {
-     objForm.apache_view.value = objForm.username.value+':'+objForm.realm.value+':'+objForm.hash.value;
-   }
+   objForm.hash_view.value = objForm.username.value+':'+objForm.realm.value+':'+objForm.hash.value;
  }
 
  /* Windows ClipBord Copy */
@@ -251,13 +213,6 @@ function set_hash()
   <input type="hidden" name="algorithm" />
   <input type="hidden" name="hash" />
   <table class="indented">
-    <tr>
-      <th>{$_htdigest_msg['AuthType']}</th>
-      <td>
-        <input type="radio" name="authtype" value="digest" checked="checked" /> <label>Digest</label>
-        <input type="radio" name="authtype" value="basic" /> <label>Basic</label>
-      </td>
-    </tr>
     <tr>
       <th>{$_htdigest_msg['realm']}</th>
       <td><input type="text" name="realm" size="30" value="$realm" /></td>
@@ -281,12 +236,8 @@ function set_hash()
       </td>
     </tr>
     <tr>
-      <th>{$_htdigest_msg['Result_Plus']}</th>
-      <td><input type="text" name="plus_view" size="80" /></td>
-    </tr>
-    <tr>
-      <th>{$_htdigest_msg['Result_Apache']}</th>
-      <td><input type="text" name="apache_view" size="80" $disabled /></td>
+      <th>{$_htdigest_msg['Result']}</th>
+      <td><input type="text" name="hash_view" size="80" $disabled /></td>
     </tr>
     <tr>
       <td><input type="submit" name="submit" value="{$_htdigest_msg['Update']}" disabled="disabled" /></td>
@@ -348,39 +299,6 @@ function htdigest_save($username,$p_realm,$hash)
 	}
 	@flock($fp, LOCK_UN);
 	@fclose($fp);
-	return $_htdigest_msg['msg_update'];
-}
-
-function htdigest_auth_file_save($username,$authtype,$algorithm,$passwd,$role='')
-{
-	global $_htdigest_msg;
-
-	$obj = new auth_file(PKWK_AUTH_FILE);
-
-	$type = ($authtype == 'basic') ? 'php' : 'digest';
-
-	$scheme = '{x-'.$type;
-	switch ($algorithm) {
-	case 'SHA-1':
-		$scheme .= '-sha1}';
-		break;
-	case 'MD4':
-		$scheme .= '-md4}';
-		break;
-	case 'MD5':
-	default:
-		$scheme .= '-md5}';
-	}
-
-	// 0:変更なし, 1:追加, 2:変更あり
-	$rc = $obj->set_passwd($username,$scheme.$passwd,$role);
-	if ($rc == 0) return $_htdigest_msg['msg_not_update'];
-
-	$obj->write_auth_file();
-
-	if ($rc == 1) {
-		return $_htdigest_msg['msg_add'];
-	}
 	return $_htdigest_msg['msg_update'];
 }
 
