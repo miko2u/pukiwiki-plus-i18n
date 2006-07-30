@@ -3,7 +3,7 @@
  * passwd plugin.
  *
  * @copyright   Copyright &copy; 2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: passwd.inc.php,v 0.1 2006/07/29 05:12:00 upk Exp $
+ * @version     $Id: passwd.inc.php,v 0.2 2006/07/30 22:17:00 upk Exp $
  *
  * $A1 = md5($data['username'] . ':' . $realm . ':' . $auth_users[$data['username']]);
  */
@@ -29,8 +29,6 @@ function plugin_passwd_init()
 		'err_not_use'	=> _("The writing function is limited."),
 				// 更新するためには、サイト管理者以上の権限が必要です。
 		'err_role'	=> _("The authority more than Webmaster for World Wide Web Site is necessary to update it."),
-				// ログインした後に passwd を使用してください。
-		'err_not_login' => _("Please use passwd after it login."),
 				// パスワードが同一なため、更新しませんでした。
 		'msg_not_update'=> _("Because the password was the same, it did not update it."),
 				// 認証管理ファイルを更新しました。
@@ -60,11 +58,6 @@ function plugin_passwd_action()
 	$func = (empty($vars['func'])) ? '' : $vars['func'];
 
 	$user = auth::check_auth();
-
-	if (empty($user)) {
-		// 未認証者は利用できない。
-		return array('msg'=>$msg,'body'=>$_passwd_msg['err_not_login']);
-	}
 
 	// 初回起動時
 	if (empty($func)) {
@@ -146,24 +139,18 @@ function plugin_passwd_action()
 
 function passwd_menu($msg='&nbsp;')
 {
-	global $script, $head_tags, $_passwd_msg, $auth_type;
+	global $script, $head_tags, $_passwd_msg, $auth_type, $realm;
 
 	$head_tags[] = ' <script type="text/javascript" src="'.SKIN_DIR.'crypt/md5.js"></script>';
 	$head_tags[] = ' <script type="text/javascript" src="'.SKIN_DIR.'crypt/sha1.js"></script>';
 
-	$x = passwd_menu_js();
+	$func = 'save';
+	$role_level = auth::get_role_level();
 
-	// プラグインによる書き込み制限の場合
-	// 使用する場合は、変更させることもコピーさせることも不要なので、抑止する
-	// 更新ボタンすら表示しない
-	if (USE_PKWK_WRITE_FUNC) {
-		$disabled_result = 'disabled="disabled"';
-		$msg_submit = <<<EOD
-    <tr>
-      <td><input type="submit" name="submit" value="{$_passwd_msg['Update']}" disabled="disabled" /></td>
-    </tr>
-
-EOD;
+	// 役割に応じた設定
+	if ($role_level == 2) {
+		// 管理者
+		$disabled_user = $user = '';
 		$msg_role = <<<EOD
     <tr>
       <th>{$_passwd_msg['role']}</th>
@@ -178,22 +165,10 @@ EOD;
 
 EOD;
 	} else {
-		$disabled_result = '';
-		$msg_submit = '';
-		$msg_role = '';
-	}
-
-	$func = 'save';
-
-	// 役割
-	$role_level = auth::get_role_level();
-	if ($role_level == 2) {
-		// 管理者
-		$disabled_user = $user = '';
-	} else {
 		// 一般ユーザ
 		$disabled_user = 'disabled="disabled"';
-		$user = auth::check_auth();
+		// ゲスト時は、admin として一律生成できるようにしておく
+		$user = ($role_level == 0) ? 'admin' :  auth::check_auth();
 		$func = 'update';
 		$msg_role = <<<EOD
     <tr>
@@ -217,72 +192,18 @@ EOD;
 
 EOD;
 
-	// 認証方式により、アルゴリズム選択を制御する
-	switch ($auth_type) {
-	case 1:
-		// basic
-		$disabled_sha1 = '';
-		// 書き込み禁止ならユーザ名は不要
-		if (! USE_PKWK_WRITE_FUNC) {
-			$msg_username = '';
-		}
-		break;
-	case 2:
-	default:
-		// digest
-		$disabled_sha1 = 'disabled="disabled"';
-	}
-
-$x .= <<<EOD
-<h2>passwd</h2>
-
-<div>$msg</div>
-
-<form name="passwd" action="$script" method="post">
-  <input type="hidden" name="plugin" value="passwd" />
-  <input type="hidden" name="func" value="$func" />
-  <input type="hidden" name="algorithm" />
-  <input type="hidden" name="hash" />
-  <table class="indented">
-$msg_username
-    <tr>
-      <th>{$_passwd_msg['Passwd']}</th>
-      <td><input type="password" name="passwd" size="10" /></td>
-    </tr>
-$msg_role
-    <tr>
-      <th>{$_passwd_msg['Calculate']}</th>
-      <td>
-        <input type="radio" name="scheme" value="MD5" checked="checked" /> <label>MD5</label>
-        <input type="radio" name="scheme" value="SHA-1" $disabled_sha1 /> <label>SHA-1</label>
-        &nbsp;
-        <input type="button" onclick="set_hash()" value="{$_passwd_msg['CALC']}" />
-      </td>
-    </tr>
-    <tr>
-      <th>{$_passwd_msg['Result']}</th>
-      <td><input type="text" name="hash_view" size="80" $disabled_result /></td>
-    </tr>
-$msg_submit
-  </table>
-</form>
-
-EOD;
-
-	return $x;
-
-}
-
-function passwd_menu_js()
-{
-	global $auth_type, $realm;
-
 	switch ($auth_type) {
 	case 1:
 		// basic
 		$pref = 'php';
 		$submit_sha1 = "objForm.submit.disabled = false;\n";
 		$a1 = "a1 = objForm.passwd.value;\n";
+
+		$disabled_sha1 = '';
+		// 書き込み禁止 または ゲスト時は、ユーザ名不要
+		if (! USE_PKWK_WRITE_FUNC || $role_level == 0) {
+			$msg_username = '';
+		}
 		break;
 	case 2:
 	default:
@@ -290,14 +211,28 @@ function passwd_menu_js()
 		$pref = 'digest';
 		$submit_sha1 = '';
 		$a1 = 'a1 = objForm.username.value+\':' . $realm . ":'+objForm.passwd.value;\n";
+
+		$disabled_sha1 = 'disabled="disabled"';
 	}
 
-	if (USE_PKWK_WRITE_FUNC) {
+	// プラグインによる書き込み制限の場合
+	// 使用する場合は、変更させることもコピーさせることも不要なので、抑止する
+	// 更新ボタンすら表示しない
+	if (! USE_PKWK_WRITE_FUNC || $role_level == 0) {
+		$submit_sha1 = $submit_false = $submit_true = '';
+ 		$disabled_result = $msg_submit = $msg_role = '';
+	} else {
 		// $submit_sha1
 		$submit_false = "objForm.submit.disabled = false;\n";
 		$submit_true = "objForm.submit.disabled = true;\n";
-	} else {
-		$submit_sha1 = $submit_false = $submit_true = '';
+
+		$disabled_result = 'disabled="disabled"';
+		$msg_submit = <<<EOD
+    <tr>
+      <td><input type="submit" name="submit" value="{$_passwd_msg['Update']}" disabled="disabled" /></td>
+    </tr>
+
+EOD;
 	}
 
 $x = <<<EOD
@@ -353,9 +288,43 @@ function set_hash()
 //]]>-->
 </script>
 
+<h2>passwd</h2>
+
+<div>$msg</div>
+
+<form name="passwd" action="$script" method="post">
+  <input type="hidden" name="plugin" value="passwd" />
+  <input type="hidden" name="func" value="$func" />
+  <input type="hidden" name="algorithm" />
+  <input type="hidden" name="hash" />
+  <table class="indented">
+$msg_username
+    <tr>
+      <th>{$_passwd_msg['Passwd']}</th>
+      <td><input type="password" name="passwd" size="10" /></td>
+    </tr>
+$msg_role
+    <tr>
+      <th>{$_passwd_msg['Calculate']}</th>
+      <td>
+        <input type="radio" name="scheme" value="MD5" checked="checked" /> <label>MD5</label>
+        <input type="radio" name="scheme" value="SHA-1" $disabled_sha1 /> <label>SHA-1</label>
+        &nbsp;
+        <input type="button" onclick="set_hash()" value="{$_passwd_msg['CALC']}" />
+      </td>
+    </tr>
+    <tr>
+      <th>{$_passwd_msg['Result']}</th>
+      <td><input type="text" name="hash_view" size="80" $disabled_result /></td>
+    </tr>
+$msg_submit
+  </table>
+</form>
+
 EOD;
 
 	return $x;
+
 }
 
 function passwd_auth_file_save($username,$algorithm,$passwd,$role)
