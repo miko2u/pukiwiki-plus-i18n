@@ -1,5 +1,5 @@
 <?php
-// $Id: proxy.php,v 2.1.3 2006/06/06 14:03:29 miko Exp $
+// $Id: proxy.php,v 2.1.5 2006/07/31 14:03:29 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2003-2005 PukiWiki Developers Team
@@ -15,8 +15,8 @@ define('PKWK_HTTP_VERSION', '1.1');
 define('PKWK_HTTP_CLIENT', 'PukiWiki/1.4');
 
 /*
- *
-*/
+ * is_requestable
+ */
 function is_requestable($uri)
 {
 	global $script;
