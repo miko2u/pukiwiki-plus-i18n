@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: file.php,v 1.72.21 2006/06/23 14:42:09 miko Exp $
+// $Id: file.php,v 1.72.22 2006/07/31 10:53:00 upk Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2006 PukiWiki Developers Team
@@ -110,6 +110,8 @@ function page_write($page, $postdata, $notimestamp = FALSE)
 
 function get_link_list($diffdata)
 {
+	global $script;
+
 	$links = array();
 
 	list($plus, $minus) = get_diff_lines($diffdata);
