@@ -15,6 +15,29 @@ define('PKWK_HTTP_VERSION', '1.1');
 define('PKWK_HTTP_CLIENT', 'PukiWiki/1.4');
 
 /*
+ *
+*/
+function is_requestable($uri)
+{
+	global $script;
+
+	$arr1 = parse_url($script);
+	$arr2 = parse_url($url);
+	$arr1['port']  = isset($arr1['port'])  ? $arr1['port'] : 80;
+	$arr2['port']  = isset($arr2['port'])  ? $arr2['port'] : 80;
+	$arr1['path']  = isset($arr1['path'])  ? dirname($arr1['path'] . 'dummy') : '/';
+	$arr2['path']  = isset($arr2['path'])  ? dirname($arr2['path'] . 'dummy') : '/';
+
+	if ($arr1['scheme'] != $arr2['scheme'] ||
+		$arr1['host'] != $arr2['host'] ||
+		$arr1['port'] != $arr2['port'] ||
+		$arr1['path'] != $arr2['path'])
+		return FALSE;
+
+	return TRUE;
+}
+
+/*
  * http_request($url)
  *     Get / Send data via HTTP request
  * $url     : URI started with http:// (http://user:pass@host:port/path?query)

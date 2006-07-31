@@ -60,6 +60,9 @@ function plugin_showrss_convert()
 	if (! is_url($uri))
 		return '#showrss: Seems not URI: ' . htmlspecialchars($uri) . '<br />' . "\n";
 
+	if (! is_requestable($uri))
+		return '#showrss: Prohibit fetching RSS from my server<br />' . "\n";
+
 	list($rss, $time) = plugin_showrss_get_rss($uri, $cachehour);
 	if ($rss === FALSE) return '#showrss: Failed fetching RSS from the server<br />' . "\n";
 
