@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: mixirss.inc.php,v 1.14.4 2006/03/22 01:27:00 upk Exp $
+// $Id: mixirss.inc.php,v 1.14.5 2006/07/31 01:27:00 miko Exp $
 //
 // Publishing RSS feed of RecentChanges
 // Usage: mixirss.inc.php?ver=[0.91|1.0(default)|2.0]
@@ -55,7 +55,7 @@ function plugin_mixirss_action()
 	// Official Main routine ...
 	$page_title_utf8 = mb_convert_encoding($page_title, 'UTF-8', SOURCE_ENCODING);
 	$self  = get_script_uri();
-	$rss_description_utf8 = mb_convert_encoding( htmlspecialchars($rss_description),'UTF-8',SOURCE_ENCODING);
+	$rss_description_utf8 = mb_convert_encoding(htmlspecialchars($rss_description), 'UTF-8', SOURCE_ENCODING);
 
 	// Creating <item>
 	$items = $rdf_li = '';
@@ -200,9 +200,9 @@ EOD;
 		$html .= <<<EOD
 <rss version="$version">
  <channel>
-  <title>$page_title_utf8</title>
+  <title><![CDATA[$page_title_utf8]]></title>
   <link>$self?$r_whatsnew</link>
-  <description>$rss_description_utf8</description>
+  <description><![CDATA[$rss_description_utf8]]></description>
   <language>ja</language>
 
 $items
@@ -222,9 +222,9 @@ $xmlns_trackback
   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
   xml:lang="ja">
  <channel rdf:about="$self?$r_whatsnew">
-  <title>$page_title_utf8</title>
+  <title><![CDATA[$page_title_utf8]]></title>
   <link>$self?$r_whatsnew</link>
-  <description>$rss_description_utf8</description>
+  <description><![CDATA[$rss_description_utf8]]></description>
   <items>
    <rdf:Seq>
 $rdf_li

@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: rss.inc.php,v 1.18.1 2006/04/27 15:01:31 miko Exp $
+// $Id: rss.inc.php,v 1.18.2 2006/07/31 15:01:31 miko Exp $
 //
 // RSS plugin: Publishing RSS of RecentChanges
 //
@@ -32,7 +32,7 @@ function plugin_rss_action()
 	$lang = LANG;
 	$page_title_utf8 = mb_convert_encoding($page_title, 'UTF-8', SOURCE_ENCODING);
 	$self = get_script_uri();
-	$rss_description_utf8 = mb_convert_encoding( htmlspecialchars($rss_description),'UTF-8',SOURCE_ENCODING);
+	$rss_description_utf8 = mb_convert_encoding(htmlspecialchars($rss_description), 'UTF-8', SOURCE_ENCODING);
 
 	// Creating <item>
 	$items = $rdf_li = '';
@@ -100,9 +100,9 @@ EOD;
 		print <<<EOD
 <rss version="$version">
  <channel>
-  <title>$page_title_utf8</title>
+  <title><![CDATA[$page_title_utf8]]></title>
   <link>$self?$r_whatsnew</link>
-  <description>$rss_description_utf8</description>
+  <description><![CDATA[$rss_description_utf8]]></description>
   <language>$lang</language>
 
 $items
@@ -122,9 +122,9 @@ $xmlns_trackback
   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
   xml:lang="$lang">
  <channel rdf:about="$self?$r_whatsnew">
-  <title>$page_title_utf8</title>
+  <title><![CDATA[$page_title_utf8]]></title>
   <link>$self?$r_whatsnew</link>
-  <description>$rss_description_utf8</description>
+  <description><![CDATA[$rss_description_utf8]]></description>
   <items>
    <rdf:Seq>
 $rdf_li
