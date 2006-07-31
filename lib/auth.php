@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: auth.php,v 1.19.11 2006/02/07 20:22:00 upk Exp $
+// $Id: auth.php,v 1.19.12 2006/08/01 00:54:00 upk Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2003-2005 PukiWiki Developers Team
@@ -174,7 +174,7 @@ function read_auth($page, $auth_flag = TRUE, $exit_flag = TRUE)
 // Basic authentication
 function basic_auth($page, $auth_flag, $exit_flag, $auth_pages, $title_cannot)
 {
-	global $auth_users, $auth_method_type;
+	global $auth_users, $auth_method_type, $auth_type;
 	global $realm;
 
 	// Checked by:
@@ -191,6 +191,11 @@ function basic_auth($page, $auth_flag, $exit_flag, $auth_pages, $title_cannot)
 			$user_list = array_merge($user_list, explode(',', $val));
 
 	if (empty($user_list)) return TRUE; // No limit
+
+	// Digest
+	if ($auth_type == 2) {
+		return auth::auth_digest($realm,$auth_users);
+	}
 
 	$matches = array();
 	if (! isset($_SERVER['PHP_AUTH_USER']) &&
