@@ -3,7 +3,7 @@
  * PukiWiki Plus! 認証処理
  *
  * @author	Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth.cls.php,v 0.14 2006/01/31 01:12:00 upk Exp $
+ * @version     $Id: auth.cls.php,v 0.15 2006/07/31 00:22:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
@@ -38,6 +38,11 @@ class auth
 			}
 		}
 
+		// PHP Digest認証対応
+		if (($data = auth::http_digest_parse($_SERVER['PHP_AUTH_DIGEST']))) {
+			if (! empty($data['username'])) return $data['username'];
+		}
+
 		// NTLM対応
 		list($domain, $login, $host, $pass) = auth::ntlm_decode();
 		return $login;
@@ -49,7 +54,7 @@ class auth
 	 */
 	function get_role_level()
 	{
-		global $auth_users, $adminpass;
+		global $realm, $auth_type, $auth_users, $adminpass;
 
 		$login = auth::check_auth();
 		if (empty($login)) return 0; // 未認証者
@@ -69,8 +74,11 @@ class auth
 		case 2: // サイト管理者
 		case 3: // コンテンツ管理者
 			// パスワードまで一致していること
-			return (auth::auth_pw($auth_users)) ? $role : 4;
-			// return $role;
+			if ($auth_type == 2) {
+				return (auth::auth_digest($realm,$auth_users)) ? $role : 4;
+			} else {
+				return (auth::auth_pw($auth_users)) ? $role : 4;
+			}
 		case 4: // 認証者(pukiwiki)
 			return ($temp_admin) ? 3.1 : 4;
 		}
@@ -302,6 +310,91 @@ class auth
 		if (empty($auth_users[$user][0])) return 0;
 		if ( pkwk_hash_compute($pass, $auth_users[$user][0]) !== $auth_users[$user][0]) return 0;
 		return 1;
+	}
+
+	/**
+	 * Digest認証本体
+	 * @static
+	 */
+	function auth_digest($realm,$auth_users)
+	{
+		if (empty($_SERVER['PHP_AUTH_DIGEST'])) {
+			header('HTTP/1.1 401 Unauthorized');
+			header('WWW-Authenticate: Digest realm="'.$realm.
+				'", qop="auth", nonce="'.uniqid().'", opaque="'.md5($realm).'"');
+
+			// キャンセルボタンを押下
+			return FALSE;
+		}
+
+		// analyze the PHP_AUTH_DIGEST variable
+		if (!($data = auth::http_digest_parse($_SERVER['PHP_AUTH_DIGEST']))) return FALSE;
+
+		list($scheme, $salt, $role) = auth::get_data($data['username'], $auth_users);
+		if ($scheme != '{x-digest-md5}') return FALSE;
+
+		// $A1 = md5($data['username'] . ':' . $realm . ':' . $auth_users[$data['username']]);
+		$A1 = $salt;
+		$A2 = md5($_SERVER['REQUEST_METHOD'].':'.$data['uri']);
+		$valid_response = md5($A1.':'.$data['nonce'].':'.$data['nc'].':'.$data['cnonce'].':'.$data['qop'].':'.$A2);
+
+		if ($data['response'] != $valid_response) return FALSE;
+		return TRUE;
+	}
+
+	/**
+	 * PHP_AUTH_DIGEST 変数をパースする関数
+	 * function to parse the http auth header
+	 * @static
+	 */
+	function http_digest_parse($txt)
+	{
+		// protect against missing data
+		$needed_parts = array('nonce'=>1, 'nc'=>1, 'cnonce'=>1, 'qop'=>1, 'username'=>1, 'uri'=>1, 'response'=>1);
+		$data = array();
+
+		// url に含まれる文字列を含む必要がある
+		preg_match_all('@(\w+)=([\'"]?)([a-zA-Z0-9=./%\?\_-_+]+)\2@', $txt, $matches, PREG_SET_ORDER);
+
+		foreach ($matches as $m) {
+			$data[$m[1]] = $m[3];
+			unset($needed_parts[$m[1]]);
+		}
+
+		return $needed_parts ? FALSE : $data;
+	}
+
+	/**
+	 * データの分解
+	 * @static
+	 */
+	function get_data($user,$auth_users)
+	{
+		if (!isset($auth_users[$user])) {
+			// scheme, salt, role
+			return array('','','');
+		}
+
+		$role = (empty($auth_users[$user][1])) ? '' : $auth_users[$user][1];
+		$regs = array();
+		if (preg_match('/^(\{.+\})(.*)$/', $auth_users[$user][0], $regs)) {
+			return array($regs[1], $regs[2], $role);
+		}
+		return array('','','');
+	}
+
+	/**
+	 * ユーザ名の取得
+	 * @static
+	 */
+	function get_username_digest()
+	{
+		global $realm,$auth_users;
+
+		if (auth::auth_digest($realm,$auth_users)) {
+			return auth::get_username_digest();
+		}
+		return '';
 	}
 
 	/**

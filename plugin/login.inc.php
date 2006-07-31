@@ -3,7 +3,7 @@
  * PukiWiki Plus! ログインプラグイン
  *
  * @copyright	Copyright &copy; 2004-2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version	$Id: login.php,v 0.6 2006/02/16 01:31:00 upk Exp $
+ * @version	$Id: login.php,v 0.7 2006/07/31 00:45:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
@@ -66,15 +66,21 @@ EOD;
  */
 function plugin_login_action()
 {
-	global $script,$vars, $auth_users, $realm;
+	global $auth_type, $auth_users, $realm;
 
 	// NTLM, Negotiate 認証 (IIS 4.0/5.0)
 	$srv_soft = (defined('SERVER_SOFTWARE'))? SERVER_SOFTWARE : $_SERVER['SERVER_SOFTWARE'];
 	if (substr($srv_soft,0,9) == 'Microsoft') {
 		auth::auth_ntlm();
-		$retloc = (isset($vars['page'])) ? $script.'?'.rawurlencode($vars['page']) : $script;
-		header( 'Location: ' . $retloc );
-		die();
+		login_return_page();
+	}
+
+	if ($auth_type == 2) {
+		if (! auth::auth_digest($realm,$auth_users)) {
+			return;
+		} else {
+			login_return_page();
+		}
 	}
 
 	if (!auth::auth_pw($auth_users))
@@ -86,11 +92,16 @@ function plugin_login_action()
 		// FIXME
 		// 認証成功時は、もともとのページに戻れる
 		// 下に記述すると認証すら行えないなぁ
-		$retloc = (isset($vars['page'])) ? $script.'?'.rawurlencode($vars['page']) : $script;
-		header( 'Location: ' . $retloc );
-		die();
+		login_return_page();
 	}
+}
 
+function login_return_page()
+{
+	global $vars, $script;
+	$retloc = (isset($vars['page'])) ? $script.'?'.rawurlencode($vars['page']) : $script;
+	header( 'Location: ' . $retloc );
+	die();
 }
 
 ?>
