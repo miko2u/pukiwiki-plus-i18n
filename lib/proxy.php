@@ -22,7 +22,7 @@ function is_requestable($uri)
 	global $script;
 
 	$arr1 = parse_url($script);
-	$arr2 = parse_url($url);
+	$arr2 = parse_url($uri);
 	$arr1['port']  = isset($arr1['port'])  ? $arr1['port'] : 80;
 	$arr2['port']  = isset($arr2['port'])  ? $arr2['port'] : 80;
 	$arr1['path']  = isset($arr1['path'])  ? dirname($arr1['path'] . 'dummy') : '/';
