@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: file.php,v 1.72.22 2006/07/31 10:53:00 upk Exp $
+// $Id: file.php,v 1.72.23 2006/08/02 10:53:00 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2006 PukiWiki Developers Team
@@ -71,7 +71,7 @@ function page_write($page, $postdata, $notimestamp = FALSE)
 	$postdata = make_str_rules($postdata);
 
 	// Create and write diff
-	$oldpostdata = is_page($page) ? join('', get_source($page)) : '';
+	$oldpostdata = is_page($page) ? get_source($page, TRUE, TRUE) : '';
 	$diffdata    = do_diff($oldpostdata, $postdata);
 
 	$role_adm_contents = auth::check_role('role_adm_contents');

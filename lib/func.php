@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: func.php,v 1.73.8 2006/06/06 09:30:58 miko Exp $
+// $Id: func.php,v 1.73.9 2006/08/02 09:30:58 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2006 PukiWiki Developers Team
@@ -122,7 +122,7 @@ function auto_template($page)
 		$template_page = preg_replace($rule_pattrn, $template, $page);
 		if (! is_page($template_page)) continue;
 
-		$body = join('', get_source($template_page));
+		$body = get_source($template_page, TRUE, TRUE);
 
 		// Remove fixed-heading anchors
 		$body = preg_replace('/^(\*{1,3}.*)\[#[A-Za-z][\w-]+\](.*)$/m', '$1$2', $body);

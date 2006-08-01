@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: html.php,v 1.49.58.3 2006/07/19 23:56:00 miko Exp $
+// $Id: html.php,v 1.49.58.4 2006/08/01 23:56:00 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2006 PukiWiki Developers Team
@@ -204,7 +204,7 @@ function edit_form($page, $postdata, $digest = FALSE, $b_template = TRUE)
 	global $ajax;
 
 	// Newly generate $digest or not
-	if ($digest === FALSE) $digest = md5(join('', get_source($page)));
+	if ($digest === FALSE) $digest = md5(get_source($page, TRUE, TRUE));
 
 	$refer = $template = $addtag = $add_top = $add_ajax = '';
 

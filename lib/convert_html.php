@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: convert_html.php,v 1.18.15 2006/06/09 07:29:58 miko Exp $
+// $Id: convert_html.php,v 1.18.16 2006/08/02 07:29:58 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2006 PukiWiki Developers Team
@@ -16,7 +16,7 @@ function convert_html($lines)
 	static $contents_id = 0;
 
 	// Set digest
-	$digest = md5(join('', get_source($vars['page'])));
+	$digest = md5(get_source($vars['page'], TRUE, TRUE));
 
 	if (! is_array($lines)) $lines = explode("\n", $lines);
 
