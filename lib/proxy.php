@@ -1,5 +1,5 @@
 <?php
-// $Id: proxy.php,v 2.1.4 2006/07/31 14:03:29 miko Exp $
+// $Id: proxy.php,v 2.1.6 2006/08/01 14:03:29 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2003-2005 PukiWiki Developers Team
@@ -15,7 +15,7 @@ define('PKWK_HTTP_VERSION', '1.1');
 define('PKWK_HTTP_CLIENT', 'PukiWiki/1.4');
 
 /*
- * is_requestable
+ * is_requestable($uri)
  */
 function is_requestable($uri)
 {
@@ -157,6 +157,8 @@ function http_request($url, $method = 'GET', $headers = array(), $post = array()
 	fwrite($fp, $query);
 
 	// Get a Head
+	$head = '';
+	$status = array();
 	while(!feof($fp)) {
 		$line = rtrim(fgets($fp, 4096));
 		$status = socket_get_status($fp);
