@@ -1,7 +1,8 @@
 # Apache .htaccess for PukiWiki
 #
-# $Id: .htaccess,v 1.14 2005/04/29 11:51:31 henoheno Exp $
+# $Id: .htaccess,v 1.14.1 2006/08/01 21:43:00 upk Exp $
 # Copyright (C)
+#   2006      PukiWiki Plus! Developers Team
 #   2002-2005 PukiWiki Developers Team
 #   2001      Originally written by yu-ji
 # License: GPL v2 or (at your option) any later version
@@ -31,6 +32,12 @@
 #AuthUserFile  /path/to/.htpasswd
 #AuthGroupFile /dev/null
 #Require       valid-user
+
+#AuthType Digest
+#AuthName       "PukiWikiAuth"
+#AuthDigestFile /path/to/.htdigest
+#AuthGroupFile  /dev/null
+#Require        valid-user
 
 ## Using zlib.output_compression per directory (via .htaccess)
 ## needs 'AllowOverride Options' at httpd.conf
