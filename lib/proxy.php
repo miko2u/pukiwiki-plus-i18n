@@ -1,5 +1,5 @@
 <?php
-// $Id: proxy.php,v 2.1.7 2006/08/01 14:03:29 miko Exp $
+// $Id: proxy.php,v 2.1.9 2006/08/02 01:03:29 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2003-2005 PukiWiki Developers Team
@@ -32,9 +32,9 @@ function is_requestable($uri)
 		$arr1['host'] != $arr2['host'] ||
 		$arr1['port'] != $arr2['port'] ||
 		$arr1['path'] != $arr2['path'])
-		return FALSE;
+		return TRUE;
 
-	return TRUE;
+	return FALSE;
 }
 
 /*
