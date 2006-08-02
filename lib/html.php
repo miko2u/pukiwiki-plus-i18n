@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: html.php,v 1.49.58.4 2006/08/01 23:56:00 miko Exp $
+// $Id: html.php,v 1.49.58.5 2006/08/02 23:56:00 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2006 PukiWiki Developers Team
@@ -14,7 +14,7 @@ function catbody($title, $page, $body)
 {
 	global $script, $vars, $arg, $defaultpage, $whatsnew, $help_page, $hr;
 	global $attach_link, $related_link, $cantedit, $function_freeze;
-	global $search_word_color, $foot_explain, $note_hr, $head_tags, $foot_tags;;
+	global $search_word_color, $foot_explain, $note_hr, $head_tags, $foot_tags;
 	global $trackback, $trackback_javascript, $referer, $javascript;
 	global $nofollow;
 	global $_LANG, $_LINK, $_IMAGE;
@@ -332,6 +332,7 @@ function edit_form_assistant()
 	// XHTML 1.0 Transitional
 	if (! isset($pkwk_dtd) || $pkwk_dtd == PKWK_DTD_XHTML_1_1)
 		$pkwk_dtd = PKWK_DTD_XHTML_1_0_TRANSITIONAL;
+
 	if (!$assist_loaded) {
 		$assist_loaded++;
 		$map = <<<EOD
@@ -361,7 +362,10 @@ function edit_form_assistant()
 <area shape="rect" coords="56,8,64,16" title="White" alt="White" href="#" onclick="javascript:pukiwiki_tag('White'); return false;" />
 </map>
 EOD;
+	} else {
+		$map = '';
 	}
+
 	return $map . "\n" . '<script type="text/javascript" src="' . SKIN_DIR . 'assistant.js"></script>' . "\n";
 }
 
