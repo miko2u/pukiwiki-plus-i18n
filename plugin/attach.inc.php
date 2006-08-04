@@ -519,6 +519,8 @@ function attach_form($page, $listview = FALSE)
 {
 	global $script, $vars, $_attach_messages;
 
+	$refer = isset($vars['refer']) ? $vars['refer'] : '';
+
 	$r_page = rawurlencode($page);
 	$s_page = htmlspecialchars($page);
 	$navi = <<<EOD
@@ -987,6 +989,7 @@ class AttachFiles
 		$files = array_keys($this->files);
 		sort($files);
 
+		$cssstyle = '';
 		foreach ($files as $file) {
 			$_files = array();
 			foreach (array_keys($this->files[$file]) as $age) {
