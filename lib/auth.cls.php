@@ -3,7 +3,7 @@
  * PukiWiki Plus! 認証処理
  *
  * @author	Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth.cls.php,v 0.15 2006/07/31 00:22:00 upk Exp $
+ * @version     $Id: auth.cls.php,v 0.16 2006/08/07 00:18:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
@@ -354,7 +354,7 @@ class auth
 		$data = array();
 
 		// url に含まれる文字列を含む必要がある
-		preg_match_all('@(\w+)=([\'"]?)([a-zA-Z0-9=./%\?\_-_+]+)\2@', $txt, $matches, PREG_SET_ORDER);
+		preg_match_all('@(\w+)=([\'"]?)([a-zA-Z0-9=./%&\?\_-_+]+)\2@', $txt, $matches, PREG_SET_ORDER);
 
 		foreach ($matches as $m) {
 			$data[$m[1]] = $m[3];
