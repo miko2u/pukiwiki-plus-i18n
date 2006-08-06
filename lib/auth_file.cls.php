@@ -3,7 +3,7 @@
  * auth_file.cls.php
  *
  * @copyright   Copyright &copy; 2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth_file.cls.php,v 0.6 2006/08/06 20:51:00 upk Exp $
+ * @version     $Id: auth_file.cls.php,v 0.7 2006/08/06 21:42:00 upk Exp $
  *
  */
 
@@ -21,7 +21,7 @@ class auth_file
 		if (file_exists($this->file)) {
 			$this->exist = TRUE;
 			include($this->file);
-			$this->auth_users = $$this->f_name;
+			$this->auth_users = $$name;
 		} else {
 			$this->exist = FALSE;
 			$this->auth_users = array();
