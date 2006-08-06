@@ -3,19 +3,20 @@
  * auth_file.cls.php
  *
  * @copyright   Copyright &copy; 2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth_file.cls.php,v 0.4 2006/07/30 04:57:00 upk Exp $
+ * @version     $Id: auth_file.cls.php,v 0.5 2006/08/06 19:53:00 upk Exp $
  *
  */
 
 class auth_file
 {
 	var $auth_users, $file;
-	var $exist, $write;
+	var $exist, $write, $f_name;
 
 	function auth_file($file)
 	{
 		$this->file = $file;
 		$this->write = FALSE;
+		$this->f_name = 'auth_users';
 
 		if (file_exists($this->file)) {
 			$this->exist = TRUE;
@@ -27,6 +28,8 @@ class auth_file
 		}
 	}
 
+	function property_field_name($x) { $this->f_name = $x; }
+
 	function write_auth_file()
 	{
 		if (! $this->write) return;
@@ -34,7 +37,7 @@ class auth_file
 
 		$fp = fopen($this->file,'w');
 		@flock($fp, LOCK_EX);
-		fputs($fp, "<?php\n\$auth_users = array(\n");
+		fputs($fp, "<?php\n\$".$this->f_name." = array(\n");
 
 		foreach($this->auth_users as $user=>$val) {
 			fputs($fp, "\t'".$user.'\' => array(\''.$val[0].'\'');
