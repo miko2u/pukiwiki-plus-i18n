@@ -3,7 +3,7 @@
  * auth_file.cls.php
  *
  * @copyright   Copyright &copy; 2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth_file.cls.php,v 0.7 2006/08/06 21:42:00 upk Exp $
+ * @version     $Id: auth_file.cls.php,v 0.8 2006/08/07 00:44:00 upk Exp $
  *
  */
 
@@ -87,11 +87,8 @@ class auth_file
 			return array('','','');
 		}
 		$role = (empty($this->auth_users[$user][1])) ? '' : $this->auth_users[$user][1];
-		$regs = array();
-		if (preg_match('/^(\{.+\})(.*)$/', $this->auth_users[$user][0], $regs)) {
-			return array($regs[1], $regs[2], $role);
-		}
-		return array('','','');
+		list($scheme,$salt) = auth::passwd_parse($this->auth_users[$user][0]);
+		return array($scheme,$salt,$role);
 	}
 }
 

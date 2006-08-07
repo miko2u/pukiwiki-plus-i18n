@@ -3,7 +3,7 @@
  * PukiWiki Plus! 認証処理
  *
  * @author	Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth.cls.php,v 0.16 2006/08/07 00:18:00 upk Exp $
+ * @version     $Id: auth.cls.php,v 0.17 2006/08/08 00:19:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
@@ -376,11 +376,21 @@ class auth
 		}
 
 		$role = (empty($auth_users[$user][1])) ? '' : $auth_users[$user][1];
+		list($scheme,$salt) = auth::passwd_parse($auth_users[$user][0]);
+		return array($scheme,$salt,$role);
+	}
+
+	/**
+	 * PukiWiki Passwd の分解
+	 * @static
+	 */
+	function passwd_parse($passwd)
+	{
 		$regs = array();
-		if (preg_match('/^(\{.+\})(.*)$/', $auth_users[$user][0], $regs)) {
-			return array($regs[1], $regs[2], $role);
+		if (preg_match('/^(\{.+\})(.*)$/', $passwd, $regs)) {
+			return array($regs[1], $regs[2]);
 		}
-		return array('','','');
+		return array('',$passwd);
 	}
 
 	/**
