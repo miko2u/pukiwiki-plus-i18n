@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: tdiary.skin.php,v 1.30.1 2006/04/23 14:03:02 miko Exp $
+// $Id: tdiary.skin.php,v 1.32.1 2006/08/06 12:44:55 henoheno Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2006 PukiWiki Developers Team
@@ -54,7 +54,7 @@ if (! defined('TDIARY_THEME') || TDIARY_THEME == '') {
 	die('Theme is not specified. Set "TDIARY_THEME" correctly');
 } else {
 	$theme = rawurlencode(TDIARY_THEME); // Supress all nasty letters
-	$theme_css = SKIN_DIR . 'theme/' . $theme . '/' . $theme . '.css';
+	$theme_css = SKIN_URI . 'theme/' . $theme . '/' . $theme . '.css';
 	if (! file_exists($theme_css)) {
 		echo 'tDiary theme wrapper: ';
 		echo 'Theme not found: ' . htmlspecialchars($theme_css) . '<br />';
@@ -580,10 +580,10 @@ if (isset($pkwk_dtd)) {
  <title><?php echo $title ?> - <?php echo $page_title ?></title>
 
  <link rel="SHORTCUT ICON" href="<?php echo $image['favicon'] ?>" />
- <link rel="stylesheet" type="text/css" media="all" href="skin/theme/base.css" />
- <link rel="stylesheet" type="text/css" media="all" href="skin/theme/<?php echo $theme ?>/<?php echo $theme ?>.css" />
- <link rel="stylesheet" type="text/css" media="screen" href="skin/tdiary.css.php?charset=<?php echo $css_charset ?>&amp;color=<?php echo $css_theme ?>" charset="<?php echo $css_charset ?>" />
- <link rel="stylesheet" type="text/css" media="print"  href="skin/tdiary.css.php?charset=<?php echo $css_charset ?>&amp;color=<?php echo $css_theme ?>&amp;media=print" charset="<?php echo $css_charset ?>" />
+ <link rel="stylesheet" type="text/css" media="all" href="<?php echo SKIN_URI ?>theme/base.css" />
+ <link rel="stylesheet" type="text/css" media="all" href="<?php echo SKIN_URI ?>theme/<?php echo $theme ?>/<?php echo $theme ?>.css" />
+ <link rel="stylesheet" type="text/css" media="screen" href="<?php echo SKIN_URI ?>tdiary.css.php?charset=<?php echo $css_charset ?>&amp;color=<?php echo $css_theme ?>" charset="<?php echo $css_charset ?>" />
+ <link rel="stylesheet" type="text/css" media="print"  href="<?php echo SKIN_URI ?>tdiary.css.php?charset=<?php echo $css_charset ?>&amp;color=<?php echo $css_theme ?>&amp;media=print" charset="<?php echo $css_charset ?>" />
  <link rel="alternate" type="application/rss+xml" title="RSS" href="<?php echo $link['rss'] ?>" /><?php // RSS auto-discovery ?>
 
 <?php if (PKWK_ALLOW_JAVASCRIPT && $trackback_javascript) { ?> <script type="text/javascript" src="skin/trackback.js"></script><?php } ?>
