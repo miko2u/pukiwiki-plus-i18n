@@ -1,5 +1,5 @@
 <?php
-// $Id: proxy.php,v 2.1.9 2006/08/02 01:03:29 miko Exp $
+// $Id: proxy.php,v 2.1.10 2006/08/11 01:03:29 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2003-2005 PukiWiki Developers Team
@@ -228,7 +228,7 @@ function http_request($url, $method = 'GET', $headers = array(), $post = array()
 //		'data'   => $resp[1]  // Data
 		'header' => $head, // Header
 		'data'   => $body, // Data
-		'timeout' => $status['timeout'],
+		'timeout' => $status['timed_out'],
 	);
 }
 
