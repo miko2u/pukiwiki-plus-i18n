@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: func.php,v 1.74.15 2006/08/11 18:10:59 miko Exp $
+// $Id: func.php,v 1.74.16 2006/08/11 18:10:59 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2006 PukiWiki Developers Team
@@ -580,7 +580,7 @@ function drop_submit($str)
 		'<input$1type="hidden"', $str);
 }
 
-function get_glossary_pattern()
+function get_glossary_pattern(& $pages, $min_len = -1)
 {
 	global $WikiName, $autoglossary, $nowikiname;
 
