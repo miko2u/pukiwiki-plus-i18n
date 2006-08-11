@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: func.php,v 1.73.9 2006/08/02 09:30:58 miko Exp $
+// $Id: func.php,v 1.74.15 2006/08/11 18:10:59 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2006 PukiWiki Developers Team
@@ -582,62 +582,26 @@ function drop_submit($str)
 
 function get_glossary_pattern()
 {
-	global $WikiName, $autoglossary;
+	global $WikiName, $autoglossary, $nowikiname;
 
 	$config = &new Config('Glossary');
-	$config->read();
-	$ignorepages = $config->get('IgnoreList');
-	$forceignorepages = $config->get('ForceIgnoreList');
-	unset($config);
-	$auto_pages = array_merge($ignorepages, $forceignorepages);
-
-	// ここでキーワードを調べる
-	$source = get_source('Glossary');
-	foreach ( $source as $line ){
-		if ( preg_match('/^[:|]([^|]+)\|([^|]+)\|?$/', $line, $match)) {
-			$dt = trim($match[1]);
-			if (mb_strlen($dt) >= $autoglossary) {
-				$auto_pages[] = $dt;
-			}
-		}
-	}
-
-	if (count($auto_pages) == 0) {
-		return array('(?!)','PukiWiki','');
-	}
-
-	$auto_pages = array_unique($auto_pages);
-	sort($auto_pages, SORT_STRING);
-
-	$auto_pages_a = array_values(preg_grep('/^[A-Z]+$/i', $auto_pages));
-	$auto_pages   = array_values(array_diff($auto_pages, $auto_pages_a));
-
-	$result   = get_autolink_pattern_sub($auto_pages,   0, count($auto_pages),   0);
-	$result_a = get_autolink_pattern_sub($auto_pages_a, 0, count($auto_pages_a), 0);
-
-	return array($result, $result_a, $forceignorepages);
-}
-
-// AutoAliasのパターンを生成する
-function get_autoalias_pattern(& $pages)
-{
-	global $WikiName, $autoalias, $nowikiname;
-
-	$config = &new Config('AutoLink');
 	$config->read();
 	$ignorepages      = $config->get('IgnoreList');
 	$forceignorepages = $config->get('ForceIgnoreList');
 	unset($config);
 	$auto_pages = array_merge($ignorepages, $forceignorepages);
 
-	foreach ($pages as $page) {
-		if (preg_match("/^$WikiName$/", $page) ?
-		    $nowikiname : mb_strlen($page) >= $autoalias)
-			$auto_pages[] = $page;
+	if ($min_len == -1) {
+		$min_len = $autoglossary;   // set $autoglossary, when omitted.
 	}
 
+	foreach ($pages as $page)
+		if (preg_match('/^' . $WikiName . '$/', $page) ?
+		    $nowikiname : strlen($page) >= $min_len)
+			$auto_pages[] = $page;
+
 	if (empty($auto_pages)) {
-		$result = $result_a = $nowikiname ? '(?!)' : $WikiName;
+		return array('(?!)', 'PukiWiki', 'PukiWiki');
 	} else {
 		$auto_pages = array_unique($auto_pages);
 		sort($auto_pages, SORT_STRING);
@@ -648,12 +612,11 @@ function get_autoalias_pattern(& $pages)
 		$result   = get_autolink_pattern_sub($auto_pages,   0, count($auto_pages),   0);
 		$result_a = get_autolink_pattern_sub($auto_pages_a, 0, count($auto_pages_a), 0);
 	}
-
 	return array($result, $result_a, $forceignorepages);
 }
 
 // Generate AutoLink patterns (thx to hirofummy)
-function get_autolink_pattern(& $pages)
+function get_autolink_pattern(& $pages, $min_len = -1)
 {
 	global $WikiName, $autolink, $nowikiname;
 
@@ -664,9 +627,13 @@ function get_autolink_pattern(& $pages)
 	unset($config);
 	$auto_pages = array_merge($ignorepages, $forceignorepages);
 
+	if ($min_len == -1) {
+		$min_len = $autolink;   // set $autolink, when omitted.
+	}
+
 	foreach ($pages as $page)
 		if (preg_match('/^' . $WikiName . '$/', $page) ?
-		    $nowikiname : strlen($page) >= $autolink)
+		    $nowikiname : strlen($page) >= $min_len)
 			$auto_pages[] = $page;
 
 	if (empty($auto_pages)) {
@@ -711,6 +678,53 @@ function get_autolink_pattern_sub(& $pages, $start, $end, $pos)
 	if ($x)               $result .= '?';
 
 	return $result;
+}
+
+// Get pagelist for AutoAlias
+function get_autoaliases()
+{
+	global $aliaspage, $autoalias_max_words;
+
+	$pages = array();
+	$pattern = <<<EOD
+\[\[                # open bracket
+((?:(?!\]\]).)+)>   # (1) alias name
+((?:(?!\]\]).)+)    # (2) alias link
+\]\]                # close bracket
+EOD;
+
+	$source = get_source($aliaspage, TRUE, TRUE);
+	$matches = array();
+	if(preg_match_all("/$pattern/x", $source, $matches, PREG_SET_ORDER)) {
+		foreach($matches as $match) {
+			$pages[$match[1]] = trim($match[2]);
+		}
+	}
+	// fail safe
+	$pages = array_slice($pages, 0, $autoalias_max_words);
+
+	return $pages;
+}
+
+// Get wordlist of Glossary
+function get_autoglossaries()
+{
+	global $glossarypage, $autoglossary_max_words;
+	$words = array();
+
+	// Get "Glossary" keyword list
+	$source = get_source($glossarypage);
+	$matches = array();
+	foreach ($source as $line) {
+		if (preg_match('/^[:|]([^|]+)\|([^|]+)\|?$/', $line, $matches)) {
+			$word = trim($matches[1]);
+			$words[$word] = TRUE;
+		}
+	}
+	// fail safe
+	$words = array_slice($words, 0, $autoglossary_max_words);
+
+	return $words;
 }
 
 // Get absolute-URI of this script

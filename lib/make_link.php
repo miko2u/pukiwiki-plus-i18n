@@ -1,9 +1,9 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: make_link.php,v 1.30.11 2006/06/04 16:14:00 upk Exp $
+// $Id: make_link.php,v 1.31.13 2006/08/08 18:10:59 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
-//   2003-2005 PukiWiki Developers Team
+//   2003-2006 PukiWiki Developers Team
 //   2001-2002 Originally written by yu-ji
 // License: GPL v2 or (at your option) any later version
 //
@@ -61,14 +61,14 @@ class InlineConverter
 				'url_interwiki', // URLs (interwiki definition)
 				'mailto',        // mailto: URL schemes
 				'interwikiname', // InterWikiName
-				'glossary',	     // AutoGlossary(cjk,other)
+				'autoalias',     // AutoAlias(cjk,other)
 				'autolink',      // AutoLink(cjk,other)
 				'bracketname',   // BracketName
+				'glossary',	     // AutoGlossary(cjk,other)
 				'wikiname',      // WikiName
-				'glossary_a',	 // AutoGlossary(alphabet)
-				'autolink_a',    // AutoLink(alphabet)
-				'autoalias',     // AutoAlias(cjk,other)
 				'autoalias_a',   // AutoAlias(alphabet)
+				'autolink_a',    // AutoLink(alphabet)
+				'glossary_a',	 // AutoGlossary(alphabet)
 			);
 		}
 
@@ -730,15 +730,15 @@ class Link_autoalias extends Link
 	var $forceignorepages = array();
 	var $auto;
 	var $auto_a; // alphabet only
+	var $alias;
 
 	function Link_autoalias($start)
 	{
-		global $autolink;
-		global $autoalias;
+		global $autoalias, $aliaspage;
 
 		parent::Link($start);
 
-		if (!$autolink or !file_exists(CACHE_DIR.'autoalias.dat') or $this->page == 'AutoAliasName')
+		if (!$autoalias or !file_exists(CACHE_DIR.'autoalias.dat') or $this->page == $aliaspage)
 		{
 			return;
 		}
@@ -746,10 +746,11 @@ class Link_autoalias extends Link
 		$this->auto = $auto;
 		$this->auto_a = $auto_a;
 		$this->forceignorepages = explode("\t",trim($forceignorepages));
+		$this->alias = '';
 	}
 	function get_pattern()
 	{
-		return isset($this->auto) ? "({$this->auto})" : FALSE;
+		return isset($this->auto) ? '(' . $this->auto . ')' : FALSE;
 	}
 	function get_count()
 	{
@@ -760,36 +761,30 @@ class Link_autoalias extends Link
 		global $WikiName;
 
 		list($name) = $this->splice($arr);
-		// no set "Autoalias" - force ingore pagelist.
-		if (in_array($name,$this->forceignorepages))
-		{
+		// Ignore pages listed
+		if (in_array($name, $this->forceignorepages)) {
 			return FALSE;
 		}
 		return parent::setParam($page,$name,'','pagename',$name);
 	}
 	function toString()
 	{
-		global $autoalias;
-
-		// Get "AutoAliasName" lists
-		$linkpages = array();
-		$pattern = <<<EOD
-^-\s*               # list
-(
-\[\[                # open bracket
-((?:(?!\]\]).)+)>   # alias name
-((?:(?!\]\]).)+)    # alias link
-\]\]                # close bracket
-)
-EOD;
-		foreach (get_source('AutoAliasName') as $line) {
-			$match = array();
-			if(preg_match("/$pattern/x",$line,$match)) {
-				if($this->name==trim($match[2])) {
-					return make_link($match[1]);
-				}
-			}
+		$this->alias = $this->get_alias($this->name);
+		if ($this->alias != '') {
+			$link = '[[' . $this->name . '>' . $this->alias . ']]';
+			return make_link($link);
 		}
+		return '';
+	}
+
+	function get_alias($name)
+	{
+		static $aliases;
+
+		if (!isset($aliases)) {
+			$aliases = get_autoaliases();
+		}
+		return isset($aliases[$name]) ? $aliases[$this->name]:'';
 	}
 }
 class Link_autoalias_a extends Link_autoalias
@@ -800,7 +795,7 @@ class Link_autoalias_a extends Link_autoalias
 	}
 	function get_pattern()
 	{
-		return isset($this->auto_a) ? "({$this->auto_a})" : FALSE;
+		return isset($this->auto_a) ? '(' . $this->auto_a . ')' : FALSE;
 	}
 }
 
@@ -828,7 +823,7 @@ class Link_glossary extends Link
 	}
 	function get_pattern()
 	{
-		return isset($this->auto) ? "({$this->auto})" : FALSE;
+		return isset($this->auto) ? '(' . $this->auto . ')' : FALSE;
 	}
 	function get_count()
 	{
@@ -837,7 +832,7 @@ class Link_glossary extends Link
 	function set($arr,$page)
 	{
 		list($name) = $this->splice($arr);
-		// no set glossary - force ingore pagelist.
+		// Ignore words listed
 		if (in_array($name,$this->forceignorepages))
 		{
 			return FALSE;
@@ -848,9 +843,7 @@ class Link_glossary extends Link
 	{
 		global $autoglossary;
 		if (!$autoglossary) return $this->name;
-		return make_tooltips(
-			$this->name
-		);
+		return make_tooltips($this->name);
 	}
 }
 class Link_glossary_a extends Link_glossary
@@ -861,7 +854,7 @@ class Link_glossary_a extends Link_glossary
 	}
 	function get_pattern()
 	{
-		return isset($this->auto_a) ? "({$this->auto_a})" : FALSE;
+		return isset($this->auto_a) ? '(' . $this->auto_a . ')' : FALSE;
 	}
 }
 
