@@ -597,7 +597,7 @@ function get_glossary_pattern(& $pages, $min_len = -1)
 
 	foreach ($pages as $page)
 		if (preg_match('/^' . $WikiName . '$/', $page) ?
-		    $nowikiname : strlen($page) >= $min_len)
+		    $nowikiname : mb_strlen($page) >= $min_len)
 			$auto_pages[] = $page;
 
 	if (empty($auto_pages)) {
