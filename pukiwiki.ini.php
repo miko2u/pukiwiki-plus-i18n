@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: pukiwiki.ini.php,v 1.139.140 2006/06/11 14:35:39 miko Exp $
+// $Id: pukiwiki.ini.php,v 1.139.141.3 2006/08/11 18:10:59 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2006 PukiWiki Developers Team
@@ -136,6 +136,8 @@ $defaultpage  = 'FrontPage';     // Top / Default page
 $whatsnew     = 'RecentChanges'; // Modified page list
 $whatsdeleted = 'RecentDeleted'; // Removeed page list
 $interwiki    = 'InterWikiName'; // Set InterWiki definition here
+$aliaspage    = 'AutoAliasName'; // Set AutoAlias definition here
+$glossarypage = 'Glossary';		 // Set Glossary definition here
 $menubar      = 'MenuBar';       // Menu
 $sidebar      = 'SideBar';       // Side
 $headarea     = ':Header';
@@ -201,13 +203,25 @@ $nowikiname = 1;
 
 // AutoLink minimum length of page name
 // Pukiwiki Plus! Recommended "5"
-$autolink = 5;
+$autolink = 5; // Bytes, 0 = OFF (try 8)
+
+/////////////////////////////////////////////////
+// AutoAlias feature
 
 // AutoAlias minimum bytes (0 = Disable)
 $autoalias = 2;
 
+// Maximum number of words which AutoAlias replace
+$autoalias_max_words = 50;
+
+/////////////////////////////////////////////////
+// AutoGlossary feature
+
 // AutoGlossary minimum bytes (0 = Disable)
 $autoglossary = 2;
+
+// Maximum number of words which AutoGlossary replace
+$autoglossary_max_words = 50;
 
 /////////////////////////////////////////////////
 // Enable Freeze / Unfreeze feature

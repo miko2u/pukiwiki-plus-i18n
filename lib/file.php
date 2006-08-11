@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: file.php,v 1.72.7 2006/07/12 14:42:09 miko Exp $
+// $Id: file.php,v 1.73.11 2006/08/11 18:10:59 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2006 PukiWiki Developers Team
@@ -15,6 +15,8 @@ define('PKWK_MAXSHOW_CACHE', 'recent.dat');
 
 // AutoLink
 define('PKWK_AUTOLINK_REGEX_CACHE', 'autolink.dat');
+define('PKWK_AUTOALIAS_REGEX_CACHE', 'autoalias.dat');
+define('PKWK_GLOSSARY_REGEX_CACHE', 'glossary.dat');
 
 // Get source(wiki text) data of the page
 function get_source($page = NULL, $lock = TRUE, $join = FALSE)
@@ -64,6 +66,8 @@ function get_filename($page)
 function page_write($page, $postdata, $notimestamp = FALSE)
 {
 	global $trackback;
+	global $autoalias, $aliaspage;
+	global $autoglossary, $glossarypage;
 
 	if (PKWK_READONLY) return; // Do nothing
 
@@ -92,6 +96,28 @@ function page_write($page, $postdata, $notimestamp = FALSE)
 	}
 
 	links_update($page);
+
+	// for AutoAlias
+	if ($autoalias > 0 && $page == $aliaspage) {
+		// AutoAliasName is updated
+		$pages = array_keys(get_autoaliases());
+		if (!empty($pages)) {
+			autolink_pattern_write(CACHE_DIR . PKWK_AUTOALIAS_REGEX_CACHE, get_autolink_pattern($pages, $autoalias));
+		} else {
+			@unlink(CACHE_DIR . PKWK_AUTOALIAS_REGEX_CACHE);
+		}
+	}
+
+	// for AutoGlossary
+	if ($autoglossary > 0 && $page == $glossarypage) {
+		// AutoGlossaryName is updated
+		$words = array_keys(get_autoglossaries());
+		if (!empty($words)) {
+			autolink_pattern_write(CACHE_DIR . PKWK_GLOSSARY_REGEX_CACHE, get_glossary_pattern($words, $autoglossary));
+		} else {
+			@unlink(CACHE_DIR . PKWK_GLOSSARY_REGEX_CACHE);
+		}
+	}
 }
 
 // Modify original text with user-defined / system-defined rules
@@ -425,7 +451,6 @@ function lastmodified_add($update = '', $remove = '')
 function put_lastmodified()
 {
 	global $maxshow, $whatsnew, $autolink;
-	global $autoalias, $autoglossary;
 
 	if (PKWK_READONLY) return; // Do nothing
 
@@ -487,71 +512,26 @@ function put_lastmodified()
 
 	// For AutoLink
 	if ($autolink) {
-		list($pattern, $pattern_a, $forceignorelist) =
-			get_autolink_pattern($pages);
-
-		$file = CACHE_DIR . PKWK_AUTOLINK_REGEX_CACHE;
-		pkwk_touch_file($file);
-		$fp = fopen($file, 'r+') or
-			die_message('Cannot open ' . 'CACHE_DIR/' . PKWK_AUTOLINK_REGEX_CACHE);
-		set_file_buffer($fp, 0);
-		flock($fp, LOCK_EX);
-		ftruncate($fp, 0);
-		rewind($fp);
-		fputs($fp, $pattern   . "\n");
-		fputs($fp, $pattern_a . "\n");
-		fputs($fp, join("\t", $forceignorelist) . "\n");
-		flock($fp, LOCK_UN);
-		fclose($fp);
+		autolink_pattern_write(CACHE_DIR . PKWK_AUTOLINK_REGEX_CACHE,
+			get_autolink_pattern($pages, $autolink));
 	}
+}
 
-	// for AutoAlias
-	if ($autoalias) {
-		$linkpages = array();
-		$pattern = <<<EOD
-^-\s*               # list
-(
-\[\[                # open bracket
-((?:(?!\]\]).)+)>   # alias name
-((?:(?!\]\]).)+)    # alias link
-\]\]                # close bracket
-)
-EOD;
-		foreach (get_source('AutoAliasName') as $line) {
-			$match = array();
-			if (preg_match("/$pattern/x",$line,$match))
-				$linkpages[] = trim($match[2]);
-		}
-		list($pattern, $pattern_a, $forceignorelist) = get_autoalias_pattern($linkpages);
-		$fp = fopen(CACHE_DIR . 'autoalias.dat', 'w') or
-		die_message('Cannot write autoalias file ' . CACHE_DIR . '/autoalias.dat' . '<br />Maybe permission is not writable');
-		set_file_buffer($fp, 0);
-		flock($fp, LOCK_EX);
-		rewind($fp);
-		fputs($fp, $pattern   . "\n");
-		fputs($fp, $pattern_a . "\n");
-		fputs($fp, join("\t", $forceignorelist) . "\n");
-		flock($fp, LOCK_UN);
-		fclose($fp);
-	}
+// Update autolink data
+function autolink_pattern_write($filename, $autolink_pattern)
+{
+	list($pattern, $pattern_a, $forceignorelist) = $autolink_pattern;
 
-	// for Glossary
-	if ($autoglossary) {
-		list($pattern, $pattern_a, $forceignorelist) = get_glossary_pattern();
-
-		$fp = fopen(CACHE_DIR . 'glossary.dat', 'w') or
-			die_message('Cannot write glossary file ' .
-			CACHE_DIR . '/glossary.dat' .
-			'<br />Maybe permission is not writable');
-		set_file_buffer($fp, 0);
-		flock($fp, LOCK_EX);
-		rewind($fp);
-		fputs($fp, $pattern   . "\n");
-		fputs($fp, $pattern_a . "\n");
-		fputs($fp, join("\t", $forceignorelist) . "\n");
-		flock($fp, LOCK_UN);
-		fclose($fp);
-	}
+	$fp = fopen($filename, 'w') or
+			die_message('Cannot open ' . $filename . '<br />Maybe permission is not writable');
+	set_file_buffer($fp, 0);
+	flock($fp, LOCK_EX);
+	rewind($fp);
+	fputs($fp, $pattern   . "\n");
+	fputs($fp, $pattern_a . "\n");
+	fputs($fp, join("\t", $forceignorelist) . "\n");
+	flock($fp, LOCK_UN);
+	fclose($fp);
 }
 
 // Get elapsed date of the page
