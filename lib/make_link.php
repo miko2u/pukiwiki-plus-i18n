@@ -61,14 +61,14 @@ class InlineConverter
 				'url_interwiki', // URLs (interwiki definition)
 				'mailto',        // mailto: URL schemes
 				'interwikiname', // InterWikiName
-				'glossary',	     // AutoGlossary(cjk,other)
 				'autoalias',     // AutoAlias(cjk,other)
 				'autolink',      // AutoLink(cjk,other)
 				'bracketname',   // BracketName
+				'glossary',	     // AutoGlossary(cjk,other)
 				'wikiname',      // WikiName
-				'glossary_a',	 // AutoGlossary(alphabet)
 				'autoalias_a',   // AutoAlias(alphabet)
 				'autolink_a',    // AutoLink(alphabet)
+				'glossary_a',	 // AutoGlossary(alphabet)
 			);
 		}
 

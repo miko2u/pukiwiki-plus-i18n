@@ -110,7 +110,7 @@ function page_write($page, $postdata, $notimestamp = FALSE)
 
 	// for AutoGlossary
 	if ($autoglossary > 0 && $page == $glossarypage) {
-		// AutoGlossaryName is updated
+		// Glossary is updated
 		$words = array_keys(get_autoglossaries());
 		if (!empty($words)) {
 			autolink_pattern_write(CACHE_DIR . PKWK_GLOSSARY_REGEX_CACHE, get_glossary_pattern($words, $autoglossary));

@@ -546,12 +546,12 @@ function get_glossary_pattern(& $pages, $min_len = -1)
 	$auto_pages = array_merge($ignorepages, $forceignorepages);
 
 	if ($min_len == -1) {
-		$min_len = $autoglossary;   // set $autolink, when omitted.
+		$min_len = $autoglossary;   // set $autoglossary, when omitted.
 	}
 
 	foreach ($pages as $page)
 		if (preg_match('/^' . $WikiName . '$/', $page) ?
-		    $nowikiname : strlen($page) >= $min_len)
+		    $nowikiname : mb_strlen($page) >= $min_len)
 			$auto_pages[] = $page;
 
 	if (empty($auto_pages)) {
