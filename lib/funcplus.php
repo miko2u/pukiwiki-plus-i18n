@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: funcplus.php,v 0.1.11 2006/06/27 00:52:00 miko Exp $
+// $Id: funcplus.php,v 0.1.12 2006/08/14 01:02:00 upk Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 // License: GPL v2 or (at your option) any later version
@@ -108,6 +108,8 @@ function open_uri_in_new_window($anchor, $which)
 
 	// 外部形式のリンクをどうするか
 	$frame = '';
+	// 質問箱/115 対応
+	/*
 	if ($which == 'link_interwikiname') {
 		$frame = (is_inside_uri($anchor) ? $open_uri_in_new_window_opisi:$open_uri_in_new_window_oposi);
 		$symbol = (is_inside_uri($anchor) ? $_symbol_innanchor:$_symbol_extanchor);
@@ -121,13 +123,27 @@ function open_uri_in_new_window($anchor, $which)
 		$symbol = (is_inside_uri($anchor) ? $_symbol_innanchor:$_symbol_extanchor);
 		$aclass = (is_inside_uri($anchor) ? 'class="inn" ':'class="ext" ');
 	}
+	*/
+	switch (strtolower($which)) {
+	case 'link_interwikiname':
+	case 'link_url_interwiki':
+		$frame  = (is_inside_uri($anchor) ? $open_uri_in_new_window_opisi : $open_uri_in_new_window_oposi);
+		$symbol = (is_inside_uri($anchor) ? $_symbol_innanchor : $_symbol_extanchor);
+		$aclass = (is_inside_uri($anchor) ? 'class="inn" ' : 'class="ext" ');
+		break;
+	case 'link_url':
+		$frame  = (is_inside_uri($anchor) ? $open_uri_in_new_window_opis : $open_uri_in_new_window_opos);
+		$symbol = (is_inside_uri($anchor) ? $_symbol_innanchor : $_symbol_extanchor);
+		$aclass = (is_inside_uri($anchor) ? 'class="inn" ' : 'class="ext" ');
+	}
 
 	if ($frame == '')
 		return $anchor;
 
 	// 引数 $anchor は a タグの中にクラスはない
 	$aclasspos = mb_strpos($anchor, '<a ', mb_detect_encoding($anchor)) + 3; // 3 is strlen('<a ')
-	$insertpos = mb_strpos($anchor, '</a>', mb_detect_encoding($anchor));
+	// $insertpos = mb_strpos($anchor, '</a>', mb_detect_encoding($anchor));
+	$insertpos = mb_strpos($anchor, '</a>', $aclasspos, mb_detect_encoding($anchor));
 	preg_match('#href="([^"]+)"#', $anchor, $href);
 
 	return (mb_substr($anchor, 0, $aclasspos) . $aclass .
