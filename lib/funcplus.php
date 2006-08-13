@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: funcplus.php,v 0.1.12 2006/08/14 01:02:00 upk Exp $
+// $Id: funcplus.php,v 0.1.13 2006/08/14 01:10:00 upk Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 // License: GPL v2 or (at your option) any later version
@@ -141,7 +141,7 @@ function open_uri_in_new_window($anchor, $which)
 		return $anchor;
 
 	// 引数 $anchor は a タグの中にクラスはない
-	$aclasspos = mb_strpos($anchor, '<a ', mb_detect_encoding($anchor)) + 3; // 3 is strlen('<a ')
+	$aclasspos = mb_strpos($anchor, '<a ', 0, mb_detect_encoding($anchor)) + 3; // 3 is strlen('<a ')
 	// $insertpos = mb_strpos($anchor, '</a>', mb_detect_encoding($anchor));
 	$insertpos = mb_strpos($anchor, '</a>', $aclasspos, mb_detect_encoding($anchor));
 	preg_match('#href="([^"]+)"#', $anchor, $href);
