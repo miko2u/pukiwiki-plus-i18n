@@ -3,7 +3,7 @@
  * PukiWiki Plus! 認証処理
  *
  * @author	Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth.cls.php,v 0.18 2006/08/13 14:43:00 upk Exp $
+ * @version     $Id: auth.cls.php,v 0.19 2006/08/16 01:46:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
@@ -318,27 +318,51 @@ class auth
 	 */
 	function auth_digest($realm,$auth_users)
 	{
+		// FIXME: なんかかっこ悪いロジックだぁ
+
 		if (empty($_SERVER['PHP_AUTH_DIGEST'])) {
 			header('HTTP/1.1 401 Unauthorized');
 			header('WWW-Authenticate: Digest realm="'.$realm.
 				'", qop="auth", nonce="'.uniqid().'", opaque="'.md5($realm).'"');
-
 			// キャンセルボタンを押下
+			unset($_SERVER['PHP_AUTH_DIGEST']);
 			return FALSE;
 		}
 
 		// analyze the PHP_AUTH_DIGEST variable
-		if (!($data = auth::http_digest_parse($_SERVER['PHP_AUTH_DIGEST']))) return FALSE;
+		if (!($data = auth::http_digest_parse($_SERVER['PHP_AUTH_DIGEST']))) {
+			header('HTTP/1.1 401 Unauthorized');
+			header('WWW-Authenticate: Digest realm="'.$realm.
+				'", qop="auth", nonce="'.uniqid().'", opaque="'.md5($realm).'"');
+			// キャンセルボタンを押下
+			unset($_SERVER['PHP_AUTH_DIGEST']);
+			return FALSE;
+		}
 
 		list($scheme, $salt, $role) = auth::get_data($data['username'], $auth_users);
-		if ($scheme != '{x-digest-md5}') return FALSE;
+		if ($scheme != '{x-digest-md5}') {
+			header('HTTP/1.1 401 Unauthorized');
+			header('WWW-Authenticate: Digest realm="'.$realm.
+				'", qop="auth", nonce="'.uniqid().'", opaque="'.md5($realm).'"');
+                        // キャンセルボタンを押下
+			unset($_SERVER['PHP_AUTH_DIGEST']);
+			return FALSE;
+		}
 
 		// $A1 = md5($data['username'] . ':' . $realm . ':' . $auth_users[$data['username']]);
 		$A1 = $salt;
 		$A2 = md5($_SERVER['REQUEST_METHOD'].':'.$data['uri']);
 		$valid_response = md5($A1.':'.$data['nonce'].':'.$data['nc'].':'.$data['cnonce'].':'.$data['qop'].':'.$A2);
 
-		if ($data['response'] != $valid_response) return FALSE;
+		if ($data['response'] != $valid_response) {
+			header('HTTP/1.1 401 Unauthorized');
+			header('WWW-Authenticate: Digest realm="'.$realm.
+				'", qop="auth", nonce="'.uniqid().'", opaque="'.md5($realm).'"');
+                        // キャンセルボタンを押下
+			unset($_SERVER['PHP_AUTH_DIGEST']);
+			return FALSE;
+		}
+
 		return TRUE;
 	}
 
