@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: funcplus.php,v 0.1.13 2006/08/14 01:10:00 upk Exp $
+// $Id: funcplus.php,v 0.1.14 2006/08/15 01:10:00 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 // License: GPL v2 or (at your option) any later version
@@ -25,13 +25,16 @@ function mb_basename($str)
 }
 
 // SPAM check
-function is_spampost($array)
+function is_spampost($array, $count=0)
 {
 	global $vars;
 
+	if ($count <= 0) {
+		$count = intval(FUNC_SPAMCOUNT);
+	}
 	$matches = array();
 	foreach($array as $idx) {
-		if (preg_match_all(FUNC_SPAMREGEX, $vars[$idx], $matches) >= FUNC_SPAMCOUNT)
+		if (preg_match_all(FUNC_SPAMREGEX, $vars[$idx], $matches) >= $count)
 			return TRUE;
 	}
 	return FALSE;
