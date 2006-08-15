@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: plugin.php,v 1.15.9 2006/07/13 17:13:00 miko Exp $
+// $Id: plugin.php,v 1.15.11 2006/08/15 17:13:00 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
@@ -42,67 +42,87 @@ function get_plugin_option($args, &$params, $tolower=TRUE, $separator=':')
 	$params['_done'] = TRUE;
 	return TRUE;
 }
+// Check plugin limit
+function limit_plugin($name)
+{
+	global $vars;
+	static $count = array();
+
+	$name = strtolower($name);
+	if (!isset($count[$name])) {
+		$count[$name] = 1;
+	}
+	if (++$count[$name] > PKWK_PLUGIN_CALL_TIME_LIMIT) {
+		die('Alert: plugin "' . htmlspecialchars($name) .
+		'" was called over ' . PKWK_PLUGIN_CALL_TIME_LIMIT .
+		' times. SPAM or someting?<br />' . "\n" .
+		'<a href="' . get_script_uri() . '?cmd=edit&amp;page='.
+		rawurlencode($vars['page']) . '">Try to edit this page</a><br />' . "\n" .
+		'<a href="' . get_script_uri() . '">Return to frontpage</a>');
+	}
+	return TRUE;
+}
 
 // Check plugin '$name' is here
 function exist_plugin($name)
 {
-	global $vars, $exclude_plugin, $plugin_lang_path;
-	static $exist = array(), $count = array();
+	global $exclude_plugin, $plugin_lang_path;
+	static $exist = array();
 
 	$name = strtolower($name);
-	if(isset($exist[$name])) {
-		if (++$count[$name] > PKWK_PLUGIN_CALL_TIME_LIMIT)
-			die('Alert: plugin "' . htmlspecialchars($name) .
-			'" was called over ' . PKWK_PLUGIN_CALL_TIME_LIMIT .
-			' times. SPAM or someting?<br />' . "\n" .
-			'<a href="' . get_script_uri() . '?cmd=edit&amp;page='.
-			rawurlencode($vars['page']) . '">Try to edit this page</a><br />' . "\n" .
-			'<a href="' . get_script_uri() . '">Return to frontpage</a>');
-		return $exist[$name];
-	}
 
-//miko - Added exclude plugin spec.
+	// (plus!)added exclude plugin spec.
 	if (in_array($name, $exclude_plugin)) {
 		$exist[$name] = FALSE;
-		$count[$name] = 1;
 		return FALSE;
 	}
-//miko
 
 	if (preg_match('/^\w{1,64}$/', $name)) {
-		foreach(array(EXT_PLUGIN_DIR,PLUGIN_DIR) as $p_dir){
+		foreach(array(EXT_PLUGIN_DIR,PLUGIN_DIR) as $p_dir) {
 			if (file_exists($p_dir . $name . '.inc.php')) {
 				$plugin_lang_path[$name] = (PLUGIN_DIR == $p_dir) ? LANG_DIR : EXT_LANG_DIR;
 				$exist[$name] = TRUE;
-				$count[$name] = 1;
 				load_init_value($name);
 				require_once($p_dir . $name . '.inc.php');
 				return TRUE;
 			}
 		}
-	} else {
-	    	$exist[$name] = FALSE;
-	    	$count[$name] = 1;
-		return FALSE;
 	}
+	$exist[$name] = FALSE;
+	return FALSE;
 }
 
 // Check if plugin API 'action' exists
 function exist_plugin_action($name) {
-	return	function_exists('plugin_' . $name . '_action') ? TRUE : exist_plugin($name) ?
-		function_exists('plugin_' . $name . '_action') : FALSE;
+	if (function_exists('plugin_' . $name . '_action'))
+		return limit_plugin($name);
+	if (exist_plugin($name)) {
+		if (function_exists('plugin_' . $name . '_action'))
+			return limit_plugin($name);
+	}
+	return FALSE;
 }
 
 // Check if plugin API 'convert' exists
 function exist_plugin_convert($name) {
-	return	function_exists('plugin_' . $name . '_convert') ? TRUE : exist_plugin($name) ?
-		function_exists('plugin_' . $name . '_convert') : FALSE;
+	if (function_exists('plugin_' . $name . '_convert'))
+		return limit_plugin($name);
+	if (exist_plugin($name)) {
+		if (function_exists('plugin_' . $name . '_convert'))
+			return limit_plugin($name);
+	}
+	return FALSE;
 }
 
 // Check if plugin API 'inline' exists
 function exist_plugin_inline($name) {
-	return	function_exists('plugin_' . $name . '_inline') ? TRUE : exist_plugin($name) ?
-		function_exists('plugin_' . $name . '_inline') : FALSE;
+	if (function_exists('plugin_' . $name . '_inline'))
+		return limit_plugin($name);
+	if (exist_plugin($name)) {
+		if (function_exists('plugin_' . $name . '_inline'))
+			return limit_plugin($name);
+	}
+	return FALSE;
 }
 
 // Do init the plugin
@@ -125,8 +145,11 @@ function do_plugin_init($name)
 		textdomain($name);
 		$checked[$name] = call_user_func($func);
 		textdomain(DOMAIN);
+		if (!isset($checked[$name])) {
+			$checked[$name] = TRUE;
+		}
 	} else {
-		$checked[$name] = NULL; // Not exist
+		$checked[$name] = TRUE; // Not exist
 	}
 
 	return $checked[$name];

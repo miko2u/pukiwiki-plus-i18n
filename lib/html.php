@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: html.php,v 1.49.58.5 2006/08/02 23:56:00 miko Exp $
+// $Id: html.php,v 1.49.58.7 2006/08/15 23:56:00 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2006 PukiWiki Developers Team
@@ -129,11 +129,11 @@ function catbody($title, $page, $body)
 	// List of attached files to the page
 //	$attaches = ($attach_link && $is_read && exist_plugin_action('attach')) ?
 //		attach_filelist() : '';
+	$attaches = '';
 	if ($attach_link && $is_read && exist_plugin_action('attach')) {
-		do_plugin_init('attach');
-		$attaches = attach_filelist();
-	} else {
-		$attaches = '';
+		if (do_plugin_init('attach') !== FALSE) {
+			$attaches = attach_filelist();
+		}
 	}
 
 	// List of related pages

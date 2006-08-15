@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: make_link.php,v 1.31.13 2006/08/08 18:10:59 miko Exp $
+// $Id: make_link.php,v 1.31.15 2006/08/15 18:10:59 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2003-2006 PukiWiki Developers Team
@@ -866,7 +866,7 @@ function make_tooltips($term,$glossary_page='')
 
 	if (!exist_plugin('tooltip')) { return FALSE; }
 	if (!$tooltip_initialized) {
-		do_plugin_init('tooltip');
+		if (do_plugin_init('tooltip') === FALSE) { return FALSE; }
 		$tooltip_initialized = TRUE;
 	}
 
