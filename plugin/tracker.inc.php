@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: tracker.inc.php,v 1.34.4 2006/06/07 23:46:00 miko Exp $
+// $Id: tracker.inc.php,v 1.34.6 2006/08/15 23:46:00 miko Exp $
 //
 // Issue tracker plugin (See Also bugtrack plugin)
 
@@ -13,9 +13,12 @@ define('TRACKER_LIST_EXCLUDE_PATTERN','#^SubMenu$|/#');
 // 項目の取り出しに失敗したページを一覧に表示する
 define('TRACKER_LIST_SHOW_ERROR_PAGE',TRUE);
 
+// スパムキーワードの数
+defined('PLUGIN_TRACKER_REJECT_SPAMCOUNT') or define('PLUGIN_TRACKER_REJECT_SPAMCOUNT', 1);
+
 function plugin_tracker_convert()
 {
-	global $script,$vars;
+	global $script, $vars;
 
 	// if (PKWK_READONLY) return ''; // Show nothing
 	if (auth::check_role('readonly')) return ''; // Show nothing
@@ -93,7 +96,7 @@ function plugin_tracker_action()
 	} else {
 		if (PKWK_ENCODING_HINT != '') $spam = TRUE;
 	}
-	if (is_spampost(array('body'))) $spam = TRUE;
+	if (is_spampost(array('body'), PLUGIN_TRACKER_REJECT_SPAMCOUNT)) $spam = TRUE;
 	if ($spam) {
 		honeypot_write();
 		return array('msg'=>'cannot write', 'body'=>'<p>prohibits editing</p>');
