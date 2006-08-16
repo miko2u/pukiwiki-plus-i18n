@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: plugin.php,v 1.15.11 2006/08/15 17:13:00 miko Exp $
+// $Id: plugin.php,v 1.15.11 2006/08/16 13:13:00 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
@@ -92,37 +92,28 @@ function exist_plugin($name)
 	return FALSE;
 }
 
+// Check if plguin API exists
+function exist_plugin_function($name, $func)
+{
+	if (function_exists($func)) {
+		return limit_plugin($name);
+	} elseif (exist_plugin($name) && function_exists($func)) {
+		return limit_plugin($name);
+	}
+	return FALSE;
+}
+
 // Check if plugin API 'action' exists
 function exist_plugin_action($name) {
-	if (function_exists('plugin_' . $name . '_action'))
-		return limit_plugin($name);
-	if (exist_plugin($name)) {
-		if (function_exists('plugin_' . $name . '_action'))
-			return limit_plugin($name);
-	}
-	return FALSE;
+	return exist_plugin_function($name, 'plugin_' . $name . '_action');
 }
-
 // Check if plugin API 'convert' exists
 function exist_plugin_convert($name) {
-	if (function_exists('plugin_' . $name . '_convert'))
-		return limit_plugin($name);
-	if (exist_plugin($name)) {
-		if (function_exists('plugin_' . $name . '_convert'))
-			return limit_plugin($name);
-	}
-	return FALSE;
+	return exist_plugin_function($name, 'plugin_' . $name . '_convert');
 }
-
 // Check if plugin API 'inline' exists
 function exist_plugin_inline($name) {
-	if (function_exists('plugin_' . $name . '_inline'))
-		return limit_plugin($name);
-	if (exist_plugin($name)) {
-		if (function_exists('plugin_' . $name . '_inline'))
-			return limit_plugin($name);
-	}
-	return FALSE;
+	return exist_plugin_function($name, 'plugin_' . $name . '_inline');
 }
 
 // Do init the plugin
@@ -146,10 +137,10 @@ function do_plugin_init($name)
 		$checked[$name] = call_user_func($func);
 		textdomain(DOMAIN);
 		if (!isset($checked[$name])) {
-			$checked[$name] = TRUE;
+			$checked[$name] = TRUE; // checked.
 		}
 	} else {
-		$checked[$name] = TRUE; // Not exist
+		$checked[$name] = TRUE; // checked.
 	}
 
 	return $checked[$name];
