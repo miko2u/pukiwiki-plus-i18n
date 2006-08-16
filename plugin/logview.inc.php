@@ -3,7 +3,7 @@
  * PukiWiki Plus! ログ閲覧プラグイン
  *
  * @copyright	Copyright &copy; 2004-2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version	$Id: logview.php,v 0.7 2006/06/26 2:22:00 upk Exp $
+ * @version	$Id: logview.php,v 0.8 2006/08/16 21:21:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
@@ -77,11 +77,24 @@ function plugin_logview_action()
 	// 保存データの項目名を取得
 	$name = log::get_log_field($kind);
 	$view = log::get_view_field($kind); // 表示したい項目設定
-	$body = '';
 
+	$body = <<<EOD
+<table class="style_table" cellspacing="1" border="0">
+<thead>
+<tr>
+
+EOD;
 	// タイトルの処理
-	foreach ($view as $_view) { $body .= '|'.$_logview_msg[$_view]; }
-	$body .= "|h\n";
+	foreach ($view as $_view) { 
+		$body .= '<td class="style_td">'.$_logview_msg[$_view].'</td>'."\n";
+	}
+
+	$body .= <<<EOD
+</tr>
+</thead>
+<tbody>
+
+EOD;
 
 	// データを取得
 	$fld = logview_get_data(log::set_filename($kind,$page), $name);
@@ -107,60 +120,85 @@ function plugin_logview_action()
 	// データの編集
 	foreach($fld as $data) {
 		if (!VIEW_ROBOTS && $obj_ua->is_robots($data['ua'])) continue;	// ロボットは対象外
+
+		$body .= "<tr>\n";
+
 		foreach ($view as $field) {
-
-			$body .= '|';
-
 			switch ($field) {
 			case 'ts': // タイムスタンプ (UTIME)
-				$body .= get_date('Y-m-d H:i:s', $data['ts']);
-				$body .= ' '.get_passage($data['ts']);
+				$body .= ' <td class="style_td">' .
+					get_date('Y-m-d H:i:s', $data['ts']) .
+					' '.get_passage($data['ts']) . "</td>\n";
 				break;
 			case '@diff': // 差分内容
 				// FIXME: バックアップ/差分 なしの新規の場合
 				// バックアップデータの確定
+				$body .= ' <td class="style_td">';
 				$age = log::get_backup_age($page,$data['ts']);
 				switch($age) {
 				case -1: // データなし
-					$body .= '[[none>'.$page.']]';
+					$body .= '<a class="ext" href="'.$script.'?'.rawurlencode($page).
+						'" rel="nofollow">none</a>';
 					break;
 				case 0:  // diff
-					if (log::diff_exist($page)) $body .= '['.$script.'?cmd=diff&page='.rawurlencode($page).' now]';
+					if (log::diff_exist($page)) {
+						$body .= '<a class="ext" href="'.$script.'?cmd=diff&amp;page='.rawurlencode($page).
+							'" rel="nofollow">now</a>';
+					}
 					break;
 				default: // あり
-					$body .= '['.$script.'?cmd=backup&page='.rawurlencode($page).'&age='.$age.'&action=diff '.$age.']';
+					$body .= '<a class="ext" href="'.$script.'?cmd=backup&amp;page='.rawurlencode($page).'&amp;age='.$age.'&amp;action=diff"'.
+						' rel="nofollow">'.$age.'</a>';
 					break;
 				}
+				$body .= "</td>\n";
 				break;
 
 			case 'host': // ホスト名 (FQDN)
+				$body .= ' <td class="style_td">';
 				if ($data['ip'] != $data['host']) {
 					// 国名取得
 					list($flag_icon,$flag_name) = $obj_ua->get_icon_flag($data['host']);
-					if (!empty($flag_icon) && $flag_icon != 'jp') $body .= '&img3('.$path_flag.$flag_icon.'.png,'.$flag_name.');';
+					if (!empty($flag_icon) && $flag_icon != 'jp') {
+						$body .= '<img src="'.$path_flag.$flag_icon.'.png"'.
+							' alt="'.$flag_name.'" title="'.$flag_name.'" />';
+					}
 					// ドメイン取得
 					$domain = $obj_ua->get_icon_domain($data['host']);
-					if (!empty($domain)) $body .= '&img3('.$path_domain.$domain.'.png,'.$data['host'].');';
+					if (!empty($domain)) {
+						$body .= '<img src="'.$path_domain.$domain.'.png"'.
+                                                        ' alt="'.$data['host'].'" title="'.$data['host'].'" />';
+					}
 				}
-				$body .= $data['host'];
+				$body .= $data['host']."</td>\n";
 				break;
 
 			case '@guess': // 推測
-				$body .= htmlspecialchars(logview_guess_user($data, $guess), ENT_QUOTES);
+				$body .= ' <td class="style_td">'.htmlspecialchars(logview_guess_user($data, $guess), ENT_QUOTES)."</td>\n";
 				break;
 
 			case 'ua': // ブラウザ情報 (USER-AGENT)
+				$body .= ' <td class="style_td">';
 				$os = $obj_ua->get_icon_os($data['ua']);
-				if (!empty($os))      $body .= '&img3('.$path_os.$os.'.png){'.$os.'};';
+				if (!empty($os)) {
+					$body .= '<img src="'.$path_os.$os.'.png"'.
+						' alt="'.$os.'" title="'.$os.'" />';
+				}
 				$browser = $obj_ua->get_icon_broeswes($data['ua']);
-				if (!empty($browser))
-					$body .= '&img3('.$path_browser.$browser.'.png){'.htmlspecialchars($data['ua'], ENT_QUOTES).'};';
+				if (!empty($browser)) {
+					$body .= '<img src="'.$path_browser.$browser.'.png"'.
+						' alt="'.htmlspecialchars($data['ua'], ENT_QUOTES).
+						'" title="'.htmlspecialchars($data['ua'], ENT_QUOTES).
+						'" />';
+				}
+				$body .= "</td>\n";
 				break;
 			default:
-				$body .= htmlspecialchars($data[$field], ENT_QUOTES);
+				$body .= ' <td class="style_td">'.htmlspecialchars($data[$field], ENT_QUOTES)."</td>\n";
 			}
 		}
-		$body .= "|\n";
+
+		$body .= "</tr>\n";
 		$ctr++;
 	}
 
@@ -173,9 +211,15 @@ function plugin_logview_action()
 		);
 	}
 
+	$body .= <<<EOD
+</tbody>
+</table>
+
+EOD;
+
 	return array(
 		'msg'  => $title,
-		'body' => convert_html($body),
+		'body' => $body,
 	);
 }
 
