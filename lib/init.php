@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: init.php,v 1.44.46.19 2006/06/11 15:04:27 miko Exp $
+// $Id: init.php,v 1.44.46.20 2006/08/17 02:01:00 upk Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2006 PukiWiki Developers Team
@@ -61,6 +61,8 @@ if (isset($_REQUEST['plugin']) && $_REQUEST['plugin'] != '') {
 if ($use_session > 0) {
 	if (ini_get('session.auto_start') != 1) {
 		session_name('pukiwiki');
+		// http://www.php.net/manual/ja/function.session-cache-limiter.php?#11690
+		session_cache_limiter('public');
 		session_start();
 	}
 }
