@@ -3,7 +3,7 @@
  * PukiWiki Plus! ログリストプラグイン
  *
  * @copyright	Copyright &copy; 2004-2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version	$Id: loglist.php,v 0.4 2006/02/16 01:31:00 upk Exp $
+ * @version	$Id: loglist.php,v 0.5 2006/08/19 00:01:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
@@ -44,7 +44,7 @@ function plugin_loglist_convert()
 	}
 
 	$dir = log::get_filename($kind,'','');
-	$pages = get_existpages($dir);
+	$pages = auth::get_existpages($dir);
 
 	if (count($pages) == 0) return $_loglist_messages['msg_not_found'];
 

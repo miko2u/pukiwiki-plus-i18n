@@ -2,8 +2,8 @@
 /**
  * PukiWiki Plus! 更新ログ処理
  *
- * @copyright	Copyright &copy; 2004-2005, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version	$Id: log.php,v 0.6 2005/06/20 20:40:00 upk Exp $
+ * @copyright	Copyright &copy; 2004-2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * @version	$Id: log.php,v 0.7 2006/08/19 00:00:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
@@ -33,7 +33,10 @@ function log_count($kind,$page)
 	global $log;
 
 	if (! log_exist($kind,$page)) return 0;
+
+	$filename = log::set_filename($kind,$page);
         if (!($fd = fopen($filename,'r'))) return 0;
+
         $ctr = 0;
         while ($data = @fgets($fd, 4096)) {
 		$x = trim($data);

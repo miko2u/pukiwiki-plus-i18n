@@ -160,7 +160,7 @@ function edit_auth($page, $auth_flag = TRUE, $exit_flag = TRUE)
 	global $_title;
 
 	if (auth::check_role('readonly')) return FALSE;
-	return $edit_auth ? basic_auth($page, $auth_flag, $exit_flag, $edit_auth_pages, $_title['cannnotedit']) : TRUE;
+	return $edit_auth ? basic_auth($page, $auth_flag, $exit_flag, $edit_auth_pages, $_title['cannotedit']) : TRUE;
 }
 
 function read_auth($page, $auth_flag = TRUE, $exit_flag = TRUE)
@@ -168,7 +168,7 @@ function read_auth($page, $auth_flag = TRUE, $exit_flag = TRUE)
 	global $read_auth, $read_auth_pages;
 	global $_title;
 
-	return $read_auth ? basic_auth($page, $auth_flag, $exit_flag, $read_auth_pages, $_title['cannnotread']) : TRUE;
+	return $read_auth ? basic_auth($page, $auth_flag, $exit_flag, $read_auth_pages, $_title['cannotread']) : TRUE;
 }
 
 // Basic authentication
@@ -194,7 +194,19 @@ function basic_auth($page, $auth_flag, $exit_flag, $auth_pages, $title_cannot)
 
 	// Digest
 	if ($auth_type == 2) {
-		return auth::auth_digest($realm,$auth_users);
+		if (auth::auth_digest($realm,$auth_users)) return TRUE;
+		// Auth failed
+		if ($auth_flag || $exit_flag) {
+			pkwk_common_headers();
+		}
+		if ($exit_flag) {
+			$body = $title = str_replace('$1',
+				htmlspecialchars(strip_bracket($page)), $title_cannot);
+			$page = str_replace('$1', make_search($page), $title_cannot);
+			catbody($title, $page, $body);
+			exit;
+		}
+		return FALSE;
 	}
 
 	$matches = array();

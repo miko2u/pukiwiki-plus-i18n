@@ -3,7 +3,7 @@
  * PukiWiki Plus! 認証処理
  *
  * @author	Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth.cls.php,v 0.19 2006/08/16 01:46:00 upk Exp $
+ * @version     $Id: auth.cls.php,v 0.20 2006/08/18 22:32:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
@@ -461,6 +461,65 @@ class auth
 
 	function is_auth_digest() { return version_compare(phpversion(), '5.1', '>='); }
 
+	function is_page_readable($uname, $page, $auth_flag = TRUE)
+	{
+		global $read_auth, $read_auth_pages;
+		global $auth_method_type;
+
+		if (! $read_auth) return TRUE;
+
+		// Checked by:
+		$target_str = '';
+		if ($auth_method_type == 'pagename') {
+			$target_str = $page; // Page name
+		} else if ($auth_method_type == 'contents') {
+			$target_str = get_source($page, TRUE, TRUE); // Its contents
+		}
+
+		$user_list = array();
+		foreach($read_auth_pages as $key=>$val)
+			if (preg_match($key, $target_str))
+				$user_list = array_merge($user_list, explode(',', $val));
+
+		if (empty($user_list)) return TRUE; // No limit
+
+		// 未認証者
+		if (empty($uname)) return FALSE;
+
+		if (in_array($uname, $user_list)) return TRUE;
+		return FALSE;
+	}
+
+	function get_existpages($dir = DATA_DIR, $ext = '.txt')
+	{
+		static $pages;
+
+		$rc = array();
+
+		// ページ名の取得
+		if (!isset($pages)) $pages = get_existpages($dir, $ext);
+		// ユーザ名取得
+		$uname = auth::check_auth();
+		// コンテンツ管理者以上は、: のページも閲覧可能
+		$is_colon = auth::check_role('role_adm_contents');
+
+		// 役割の取得
+		// $now_role = auth::get_role_level();
+
+		foreach($pages as $file=>$page) {
+			if (! auth::is_page_readable($uname, $page, TRUE)) continue;
+			if (substr($page,0,1) != ':') {
+				$rc[$file] = $page;
+				continue;
+			}
+
+			// colon page
+			if ($is_colon) continue;
+			$rc[$file] = $page;
+		}
+
+		return $rc;
+	}
 }
 
 ?>
