@@ -3,7 +3,7 @@
  * PukiWiki Plus! 認証処理
  *
  * @author	Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth.cls.php,v 0.21 2006/08/19 17:57:00 upk Exp $
+ * @version     $Id: auth.cls.php,v 0.22 2006/08/19 18:04:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 
@@ -496,12 +496,10 @@ class auth
 
 	function get_existpages($dir = DATA_DIR, $ext = '.txt')
 	{
-		static $pages;
-
 		$rc = array();
 
 		// ページ名の取得
-		if (!isset($pages)) $pages = get_existpages($dir, $ext);
+		$pages = get_existpages($dir, $ext);
 		// ユーザ名取得
 		$uname = auth::check_auth();
 		// コンテンツ管理者以上は、: のページも閲覧可能
