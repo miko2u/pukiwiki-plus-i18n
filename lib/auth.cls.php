@@ -3,8 +3,8 @@
  * PukiWiki Plus! 認証処理
  *
  * @author	Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth.cls.php,v 0.20 2006/08/18 22:32:00 upk Exp $
- * @license	http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version     $Id: auth.cls.php,v 0.21 2006/08/19 17:57:00 upk Exp $
+ * @license	http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 
 /**
@@ -464,17 +464,21 @@ class auth
 	function is_page_readable($uname, $page, $auth_flag = TRUE)
 	{
 		global $read_auth, $read_auth_pages;
-		global $auth_method_type;
+		// global $auth_method_type;
 
 		if (! $read_auth) return TRUE;
 
-		// Checked by:
+		// ページ名の一覧を生成するがために、contents の場合は、
+		// ソースをフルスキャンするため、現実的ではないので、ロジックからは外す
+		/*
 		$target_str = '';
 		if ($auth_method_type == 'pagename') {
 			$target_str = $page; // Page name
 		} else if ($auth_method_type == 'contents') {
 			$target_str = get_source($page, TRUE, TRUE); // Its contents
 		}
+		*/
+		$target_str = $page;
 
 		$user_list = array();
 		foreach($read_auth_pages as $key=>$val)
