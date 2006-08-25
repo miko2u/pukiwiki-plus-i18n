@@ -85,7 +85,7 @@ function todo_generate_index($vars, $page, $mark)
 		sort($list);
 		// End Add
 		foreach ($list as $line) {
-			$html .= '- ' . $line . ' [[[' . $page . "]]]\n";
+			$html .= '- ' . $line . ' ([[' . $page . "]])\n";
 		}
 	}
 	return convert_html($html);
@@ -97,7 +97,7 @@ function todo_search($vars, $page, $mark)
 	if ($page == "''") $page = '';
 
 	// 検索対象を選択
-	foreach (get_existpages() as $file => $name) {
+	foreach (auth::get_existpages() as $file => $name) {
 		if (strncmp($name, $page, strlen($page)) == 0) {
 			$scan[$file] = $name;
 		}
