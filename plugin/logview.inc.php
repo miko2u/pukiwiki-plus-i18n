@@ -3,7 +3,7 @@
  * PukiWiki Plus! ログ閲覧プラグイン
  *
  * @copyright	Copyright &copy; 2004-2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version	$Id: logview.php,v 0.8 2006/08/16 21:21:00 upk Exp $
+ * @version	$Id: logview.php,v 0.9 2006/08/25 19:58:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
@@ -259,7 +259,7 @@ function logview_guess_user($data,$guess)
 {
 	// 確定的な情報
 	$user  = (isset($data['user'])) ? $data['user'] : '';
-	$ntml  = (isset($data['ntml'])) ? $data['ntml'] : '';
+	$ntlm  = (isset($data['ntlm'])) ? $data['ntlm'] : '';
 	$sig   = (isset($data['sig']))  ? $data['sig']  : '';
 	$now_user = log::guess_user($user,$ntlm,$sig);
 	if (!empty($now_user)) return $now_user;
