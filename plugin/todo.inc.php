@@ -21,7 +21,7 @@
  * @version 0.01
  *
  * MODIFICATION
- * 2006-08-21 Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * 2006-08-26 Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  */
 
 /***************************************************************************
@@ -81,9 +81,7 @@ function todo_generate_index($vars, $page, $mark)
 	$todo = todo_search($vars, trim($page), trim($mark));
 
 	foreach ($todo as $page => $list) {
-		// Start Add
-		sort($list);
-		// End Add
+		//sort($list);
 		foreach ($list as $line) {
 			$html .= '- ' . $line . ' ([[' . $page . "]])\n";
 		}
