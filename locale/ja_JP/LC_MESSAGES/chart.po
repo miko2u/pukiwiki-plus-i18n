@@ -1,0 +1,24 @@
+# PukiWiki Plus! - Yet Another WikiWikiWeb Clone
+# Copyright (C) 2006 PukiWiki Plus! Developer Team
+# License is GPL2
+# Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>, 2006.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PukiWiki Plus! 1.4.7-u2-i18n\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2006-08-27 23:55+0900\n"
+"PO-Revision-Date: 2006-08-27 23:56+0900\n"
+"Last-Translator: Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>\n"
+"Language-Team: Japanese <ja@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../plugin/chart.inc.php:45
+msgid "<p>parameter error</p>"
+msgstr "<p>パラメータ エラー</p>"
+
+#: ../../plugin/chart.inc.php:46
+msgid "<p>GD is not supported.</p>"
+msgstr "<p>GD がサポートされていません。</p>"
