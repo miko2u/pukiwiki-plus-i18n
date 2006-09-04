@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: auth.ini.php,v 0.0.1 2006/07/28 01:47:00 upk Exp $
+// $Id: auth.ini.php,v 0.0.2 2006/09/05 00:23:00 upk Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 // License: GPL v2 or (at your option) any later version
@@ -68,5 +68,9 @@ $edit_auth_pages = array(
 // 0: Disabled (Search read-prohibited page contents)
 // 1: Enabled  (Search only permitted pages for the user)
 $search_auth = 0;
+
+/////////////////////////////////////////////////
+// Check Role
+$check_role = 0;
 
 ?>
