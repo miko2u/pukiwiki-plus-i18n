@@ -1,13 +1,13 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: source.inc.php,v 1.14.3 2006/01/11 23:58:00 upk Exp $
+// $Id: source.inc.php,v 1.14.4 2006/09/05 02:01:00 upk Exp $
 //
 // Source plugin
 
 // Output source text of the page
 function plugin_source_action()
 {
-	global $vars; //, $_source_messages;
+	global $vars, $check_role; //, $_source_messages;
 
 	// if (PKWK_SAFE_MODE) die_message('PKWK_SAFE_MODE prohibits this');
 	if (auth::check_role('safemode')) die_message('PKWK_SAFE_MODE prohibits this');
@@ -21,9 +21,15 @@ function plugin_source_action()
 			'body' => _('cannot display the page source.')
 		);
 
+	$source = join('', get_source($page));
+
+	if ($check_role) {
+		convert_html($source);
+	}
+
 	return array(
 		'msg' => _('Source of  $1'),
-		'body' => '<pre id="source">' . htmlspecialchars(join('', get_source($page))) . '</pre>'
+		'body' => '<pre id="source">' . htmlspecialchars($source) . '</pre>'
 	);
 }
 ?>
