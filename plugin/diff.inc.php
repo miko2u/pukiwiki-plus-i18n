@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: diff.inc.php,v 1.18.4 2006/02/06 20:52:00 upk Exp $
+// $Id: diff.inc.php,v 1.18.5 2006/09/06 01:25:00 upk Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
@@ -63,9 +63,13 @@ function plugin_diff_view($page)
 			$menu[] = '<li><a href="' . $script . '?cmd=diff&amp;action=delete&amp;page=' .
 				$r_page . '">' . str_replace('$1', $s_page, $_title_diff_delete) . '</a></li>';
 		}
-		$msg = '<pre>' . diff_style_to_css(htmlspecialchars(join('', file($filename)))) . '</pre>' . "\n";
+		$source = join('', file($filename));
+		auth::is_role_page($source);
+		$msg = '<pre>' . diff_style_to_css(htmlspecialchars($source)) . '</pre>' . "\n";
 	} else if ($is_page) {
-		$diffdata = trim(htmlspecialchars(join('', get_source($page))));
+		$source = join('', get_source($page));
+		auth::is_role_page($source);
+		$diffdata = trim(htmlspecialchars($source));
 		$msg = '<pre><span class="diff_added">' . $diffdata . '</span></pre>' . "\n";
 	} else {
 		return array('msg'=>$_title_diff, 'body'=>$_msg_notfound);

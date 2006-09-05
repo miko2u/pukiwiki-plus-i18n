@@ -3,7 +3,7 @@
  * PukiWiki Plus! 認証処理
  *
  * @author	Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth.cls.php,v 0.22 2006/08/19 18:04:00 upk Exp $
+ * @version     $Id: auth.cls.php,v 0.23 2006/09/06 01:10:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 
@@ -522,6 +522,15 @@ class auth
 
 		return $rc;
 	}
-}
 
+	function is_role_page($lines)
+	{
+		global $check_role;
+		if (! $check_role) return FALSE;
+		$cmd = use_plugin('check_role',$lines);
+		if ($cmd === FLASE) return FALSE;
+		convert_html($cmd); // die();
+		return TRUE;
+	}
+}
 ?>

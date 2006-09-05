@@ -124,16 +124,22 @@ $_title_backuplist     = _('Backup list');
 		$title = & $_title_backupdiff;
 		$old = ($s_age > 1) ? join('', $backups[$s_age - 1]['data']) : '';
 		$cur = join('', $backups[$s_age]['data']);
+		auth::is_role_page($old);
+		auth::is_role_page($cur);
 		$body .= plugin_backup_diff(do_diff($old, $cur));
 	} else if ($s_action == 'nowdiff') {
 		if (auth::check_role('safemode')) die_message('PKWK_SAFE_MODE prohibits this');
 		$title = & $_title_backupnowdiff;
 		$old = join('', $backups[$s_age]['data']);
 		$cur = join('', get_source($page));
+		auth::is_role_page($old);
+                auth::is_role_page($cur);
 		$body .= plugin_backup_diff(do_diff($old, $cur));
 	} else if ($s_action == 'visualdiff') {
 		$old = join('', $backups[$s_age]['data']);
 		$cur = join('', get_source($page));
+		auth::is_role_page($old);
+                auth::is_role_page($cur);
 		$source = do_diff($old,$cur);
 		$source = plugin_backup_visualdiff($source);
 		$body .= "$hr\n" . drop_submit(convert_html($source));
@@ -147,6 +153,7 @@ $_title_backuplist     = _('Backup list');
 	} else if ($s_action == 'source') {
 		if (auth::check_role('safemode')) die_message('PKWK_SAFE_MODE prohibits this');
 		$title = & $_title_backupsource;
+		auth::is_role_page($backups[$s_age]['data']);
 		$body .= '<pre>' . htmlspecialchars(join('', $backups[$s_age]['data'])) .
 			'</pre>' . "\n";
 	} else {
@@ -154,6 +161,7 @@ $_title_backuplist     = _('Backup list');
 			die_message('This feature is prohibited');
 		} else {
 			$title = & $_title_backup;
+			auth::is_role_page($backups[$s_age]['data']);
 			$body .= $hr . "\n" .
 				drop_submit(convert_html($backups[$s_age]['data']));
 		}

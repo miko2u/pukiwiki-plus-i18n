@@ -1,5 +1,5 @@
 <?php
-// $Id: template.inc.php,v 1.21.3 2006/07/17 18:19:00 upk Exp $
+// $Id: template.inc.php,v 1.21.4 2006/09/06 01:36:00 upk Exp $
 //
 // Load template plugin
 
@@ -37,6 +37,7 @@ function plugin_template_action()
                 );
 
 	$lines = get_source($vars['refer']);
+	auth::is_role_page($lines);
 
 	// Remove '#freeze'
 	if (! empty($lines) && strtolower(rtrim($lines[0])) == '#freeze')

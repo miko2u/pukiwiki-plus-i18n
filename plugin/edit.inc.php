@@ -17,7 +17,7 @@ defined('PLUGIN_EDIT_PARTAREA') or define('PLUGIN_EDIT_PARTAREA', 'compat');
 function plugin_edit_action()
 {
 	// global $vars, $_title_edit, $load_template_func;
-	global $vars, $post, $load_template_func, $check_role;
+	global $vars, $post, $load_template_func;
 
 	// if (PKWK_READONLY) die_message( _('PKWK_READONLY prohibits editing') );
 	if (auth::check_role('readonly')) die_message( _('PKWK_READONLY prohibits editing') );
@@ -45,10 +45,7 @@ function plugin_edit_action()
 	}
 
 	$source = get_source($page);
-
-	if ($check_role) {
-		convert_html($source);
-	}
+	auth::is_role_page($source);
 
 	$postdata = $vars['original'] = join('', $source);
 	if (!empty($vars['id']))

@@ -7,7 +7,7 @@
 // Output source text of the page
 function plugin_source_action()
 {
-	global $vars, $check_role; //, $_source_messages;
+	global $vars; //, $_source_messages;
 
 	// if (PKWK_SAFE_MODE) die_message('PKWK_SAFE_MODE prohibits this');
 	if (auth::check_role('safemode')) die_message('PKWK_SAFE_MODE prohibits this');
@@ -22,10 +22,7 @@ function plugin_source_action()
 		);
 
 	$source = join('', get_source($page));
-
-	if ($check_role) {
-		convert_html($source);
-	}
+	auth::is_role_page($source);
 
 	return array(
 		'msg' => _('Source of  $1'),

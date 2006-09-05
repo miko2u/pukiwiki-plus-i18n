@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: plugin.php,v 1.15.11 2006/08/16 13:13:00 miko Exp $
+// $Id: plugin.php,v 1.15.12 2006/09/06 01:06:00 upk Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
@@ -241,5 +241,29 @@ function do_plugin_inline($name, $args, & $body)
 	} else {
 		return $retvar;
 	}
+}
+
+function use_plugin($plugin,$lines)
+{
+	if (! is_array($lines)) {
+		$lines = preg_replace(
+			array("[\\r\\n]","[\\r]"),
+			array("\n","\n"),
+			$lines
+		); // 行末の統一
+		$lines = explode("\n", $lines);
+	}
+
+	foreach($lines as $line) {
+		if (substr($line, 0, 2) == '//') continue;
+		// Diff data
+		if (substr($line, 0, 1) == '+' || substr($line, 0, 1) == '-') {
+			$line = substr($line, 1);
+		}
+		if (preg_match('/^[#|&]'.$plugin.'[^a-zA-Z]*$/', $line, $matches)) {
+			return $matches[0];
+		}
+	}
+	return FALSE;
 }
 ?>
