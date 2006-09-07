@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: attachref.inc.php,v 0.14.6 2003/10/08 04:10:29 miko Exp $
+// $Id: attachref.inc.php,v 0.14.7 2006/09/07 04:10:29 miko Exp $
 // Original is sha
 //
 // Attach & ref plugin: Combined attach-ref
@@ -88,8 +88,8 @@ function plugin_attachref_convert()
 	$dispattach = 1;
 
 	$args = $options;
-	if ( count($args) and $args[0] != '' ) {
-		require_once(PLUGIN_DIR."ref.inc.php");
+	if (isset($args[0]) && $args[0] != '') {
+		require_once(PLUGIN_DIR . 'ref.inc.php');
 		$params = plugin_ref_body(func_get_args());
 		if (isset($params['_error']) && $params['_error'] != '') {
 			$ret = $params['_error'];
@@ -187,9 +187,8 @@ function plugin_attachref_inline()
 //	}
 //	if ( $no_flag == 1 ) $btn_text .= "[$attachref_no]";
 	$args = $options;
-	if ( count($args) and $args[0]!='' )
-	{
-		require_once(PLUGIN_DIR."ref.inc.php");
+	if (isset($args[0]) && $args[0] != '') {
+		require_once(PLUGIN_DIR . 'ref.inc.php');
 	    $params = plugin_ref_body($args,$vars['page']);
 	    if ($params['_error'] != '') {
 		$ret = $params['_error'];
@@ -262,8 +261,8 @@ function plugin_attachref_action()
 		
 		$file['name'] = $attachname;
 		
-		require_once(PLUGIN_DIR."attach.inc.php");
-		if (!exist_plugin('attach') or !function_exists('attach_upload'))
+//miko	require_once(PLUGIN_DIR.'attach.inc.php');
+		if (!exist_plugin('attach') || !function_exists('attach_upload'))
 		{
 			return array('msg'=>'attach.inc.php not found or not correct version.');
 		}

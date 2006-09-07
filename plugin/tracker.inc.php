@@ -431,12 +431,10 @@ class Tracker_field_file extends Tracker_field_format
 	}
 	function format_value($str)
 	{
-		if (array_key_exists($this->name,$_FILES))
+		if (array_key_exists($this->name,$_FILES) && exist_plugin('attach') && function_exists('attach_upload'))
 		{
-			require_once(PLUGIN_DIR.'attach.inc.php');
 			$result = attach_upload($_FILES[$this->name],$this->page);
-			if ($result['result']) // アップロード成功
-			{
+			if ($result['result']) { // アップロード成功
 				return parent::format_value($this->page.'/'.$_FILES[$this->name]['name']);
 			}
 		}
