@@ -145,6 +145,7 @@ function plugin_comment_convert()
 	$nodate = in_array('nodate', $options) ? '1' : '0';
 	$above  = in_array('above',  $options) ? '1' :
 		(in_array('below', $options) ? '0' : PLUGIN_COMMENT_DIRECTION_DEFAULT);
+	$refpage = '';
 
 	$script = get_script_uri();
 	$s_page = htmlspecialchars($vars['page']);
