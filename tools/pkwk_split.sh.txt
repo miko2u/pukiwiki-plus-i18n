@@ -31,7 +31,7 @@ rm -R $WIKI_CONTENTS > /dev/null 2>&1
 mkdir $WIKI_CONTENTS
 #
 mv $WIKI_DATA/index.php          $WIKI_CONTENTS
-mv $WIKI_DATA/pukiwiki.php       $WIKI_CONTENTS
+# mv $WIKI_DATA/pukiwiki.php       $WIKI_CONTENTS
 mv $WIKI_DATA/image              $WIKI_CONTENTS
 mv $WIKI_DATA/skin               $WIKI_CONTENTS
 mv $WIKI_DATA/doc                $WIKI_CONTENTS
