@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: showrss.inc.php,v 1.21.4 2006/07/31 23:46:00 miko Exp $
+// $Id: showrss.inc.php,v 1.21.5 2006/09/10 17:19:00 upk Exp $
 //  Id:showrss.inc.php,v 1.40 2003/03/18 11:52:58 hiro Exp
 // Copyright (C):
 //     2002-2006 PukiWiki Developers Team
@@ -66,7 +66,6 @@ function plugin_showrss_convert()
 	list($rss, $time) = plugin_showrss_get_rss($uri, $cachehour);
 	if ($rss === FALSE) return '#showrss: Failed fetching RSS from the server<br />' . "\n";
 
-	$time = '';
 	if ($timestamp > 0) {
 		$time = '<p style="font-size:10px; font-weight:bold">Last-Modified:' .
 			get_date('Y/m/d H:i:s', $time) .  '</p>';
