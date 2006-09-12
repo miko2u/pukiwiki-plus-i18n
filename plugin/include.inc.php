@@ -52,7 +52,7 @@ define('PLUGIN_INCLUDE_USAGE', '#include(): Usage: (a-page-name-you-want-to-incl
 
 function plugin_include_convert()
 {
-	global $script, $vars, $get, $post, $menubar, $_msg_include_restrict;
+	global $script, $vars, $get, $post, $menubar, $sidebar, $_msg_include_restrict;
 	static $included = array();
 	static $count = 1;
 
