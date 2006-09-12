@@ -122,6 +122,10 @@ if ($plugin != '') {
 	}
 }
 
+// If text/html(or same), Enable session.
+pkwk_session_start();
+
+// Render
 $title = htmlspecialchars(strip_bracket($base));
 $page  = make_search($base);
 if (isset($retvars['msg']) && $retvars['msg'] != '') {

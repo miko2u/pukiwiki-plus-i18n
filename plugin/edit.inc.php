@@ -21,6 +21,7 @@ function plugin_edit_action()
 
 	// if (PKWK_READONLY) die_message( _('PKWK_READONLY prohibits editing') );
 	if (auth::check_role('readonly')) die_message( _('PKWK_READONLY prohibits editing') );
+	if (function_exists('pkwk_session_start')) pkwk_session_start();
 
 	if (isset($vars['realview'])) {
 		return plugin_edit_realview();
@@ -181,16 +182,20 @@ function plugin_edit_write()
 	$add    = isset($vars['add'])    ? $vars['add']    : '';
 	$digest = isset($vars['digest']) ? $vars['digest'] : '';
 	$partid = isset($vars['id'])     ? $vars['id']     : '';
-	$ticket = isset($vars['ticket']) ? $vars['ticket'] : '';
 	$notimestamp = isset($vars['notimestamp']) && $vars['notimestamp'] != '';
 
 	// Check Validate and Ticket
 	if ($notimestamp && !is_page($page)) {
 		return plugin_edit_honeypot();
 	}
-//	if (md5(get_ticket() . str_replace("\r", '', rtrim(htmlspecialchars($vars['original'])))) != $ticket) {
-//		return plugin_edit_honeypot();
-//	}
+
+	if (function_exists('pkwk_session_start')) {
+		$s_original  = htmlspecialchars($vars['original']);
+		$s_ticket    = md5(get_ticket() . str_replace("\r", '', rtrim($s_original)));
+		if ($_SESSION['ticket'] != $s_ticket) {
+			return plugin_edit_honeypot();
+		}
+	}
 
 	// Paragraph edit mode
 	if ($partid) {
