@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: edit.inc.php,v 1.40.28 2006/09/05 00:18:00 upk Exp $
+// $Id: edit.inc.php,v 1.40.29 2006/09/12 00:18:00 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2001-2006 PukiWiki Developers Team
@@ -17,7 +17,7 @@ defined('PLUGIN_EDIT_PARTAREA') or define('PLUGIN_EDIT_PARTAREA', 'compat');
 function plugin_edit_action()
 {
 	// global $vars, $_title_edit, $load_template_func;
-	global $vars, $post, $load_template_func;
+	global $vars, $load_template_func;
 
 	// if (PKWK_READONLY) die_message( _('PKWK_READONLY prohibits editing') );
 	if (auth::check_role('readonly')) die_message( _('PKWK_READONLY prohibits editing') );
@@ -33,14 +33,7 @@ function plugin_edit_action()
 	if (isset($vars['preview']) || ($load_template_func && isset($vars['template']))) {
 		return plugin_edit_preview();
 	} else if (isset($vars['write'])) {
-		// Petit SPAM Check (Client(Browser)-Server Ticket Check)
-		if (!isset($post['encode_hint']) && PKWK_ENCODING_HINT == '') {
-			return plugin_edit_write();
-		} elseif (isset($post['encode_hint']) && $post['encode_hint'] == PKWK_ENCODING_HINT) {
-			return plugin_edit_write();
-		} else {
-			return plugin_edit_honeypot();
-		}
+		return plugin_edit_write();
 	} else if (isset($vars['cancel'])) {
 		return plugin_edit_cancel();
 	}
@@ -171,7 +164,7 @@ function plugin_edit_inline()
 // Write, add, or insert new comment
 function plugin_edit_write()
 {
-	global $vars, $trackback;
+	global $post, $vars, $trackback;
 	global $notimeupdate, $do_update_diff_table;
 //	global $_title_collided, $_msg_collided_auto, $_msg_collided, $_title_deleted;
 //	global $_msg_invalidpass;
@@ -189,12 +182,17 @@ function plugin_edit_write()
 		return plugin_edit_honeypot();
 	}
 
+	// SPAM Check (Client(Browser)-Server Ticket Check)
 	if (function_exists('pkwk_session_start')) {
 		$s_original  = htmlspecialchars($vars['original']);
 		$s_ticket    = md5(get_ticket() . str_replace("\r", '', rtrim($s_original)));
-		if ($_SESSION['ticket'] != $s_ticket) {
+		if ($_SESSION['ticket'] != $s_ticket)
 			return plugin_edit_honeypot();
-		}
+	} else {
+		if (isset($post['encode_hint']) && $post['encode_hint'] != PKWK_ENCODING_HINT)
+			return plugin_edit_honeypot();
+		if (!isset($post['encode_hint']) && PKWK_ENCODING_HINT != '')
+			return plugin_edit_honeypot();
 	}
 
 	// Paragraph edit mode
