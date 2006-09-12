@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: funcplus.php,v 0.1.14 2006/09/12 01:10:00 miko Exp $
+// $Id: funcplus.php,v 0.1.17 2006/09/13 01:10:00 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 // License: GPL v2 or (at your option) any later version
@@ -15,24 +15,23 @@ defined('FUNC_SPAMCOUNT') or define('FUNC_SPAMCOUNT', 3);
 // Session start
 function pkwk_session_start()
 {
+	global $use_trans_sid_address;
 	static $use_session;
-	global $session;
 
 	if (!isset($use_session)) {
-		// for SESSION Variables
 		$use_session = intval(PLUS_ALLOW_SESSION);
 		if ($use_session > 0) {
-			if (FALSE) {
+			if (!is_array($use_trans_sid_address)) $use_trans_sid_address = array();
+			if (in_the_net($use_trans_sid_address, $_SERVER['REMOTE_ADDR'])) {
 				ini_set('session.use_cookies', 0);
 				ini_set('session.use_trans_sid', 1);
 			} else {
+				ini_set('session.use_trans_sid', 0);
 				ini_set('session.use_cookies', 1);
 				ini_set('session.use_only_cookies', 1);
 			}
-			if (ini_get('session.auto_start') != 1) {
-				session_name('pukiwiki');
-				session_start();
-			}
+			session_name('pukiwiki');
+			@session_start();
 		}
 	}
 	return $use_session;
