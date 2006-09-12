@@ -34,7 +34,6 @@ function pkwk_session_start()
 				session_start();
 			}
 		}
-		unset($use_session);
 	}
 	return $use_session;
 }
