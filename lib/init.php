@@ -305,7 +305,7 @@ if (! isset($vars['cmd']) && ! isset($vars['plugin'])) {
 
 	$get['cmd']  = $post['cmd']  = $vars['cmd']  = 'read';
 
-	$argx = explode($arg);
+	$argx = explode('&', $arg);
 	$arg = is_array($argx) ? $argx[0]:$argx;
 	if ($arg == '') $arg = $defaultpage;
 	$arg = rawurldecode($arg);
