@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: init.php,v 1.44.46.21 2006/09/12 15:04:27 miko Exp $
+// $Id: init.php,v 1.44.46.25 2006/09/13 15:04:27 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2006 PukiWiki Developers Team
@@ -167,7 +167,6 @@ unset($_REQUEST);	// Considered harmful
 $_GET    = input_filter($_GET);
 $_POST   = input_filter($_POST);
 $_COOKIE = input_filter($_COOKIE);
-$_SESSION = input_filter($_SESSION);
 
 // 文字コード変換 ($_POST)
 // <form> で送信された文字 (ブラウザがエンコードしたデータ) のコードを変換
@@ -246,7 +245,7 @@ $arg = $arg[0];
 $matches = array();
 foreach (explode('&', $arg) as $key_and_value) {
 	if (preg_match('/^([^=]+)=(.+)/', $key_and_value, $matches) &&
-	    mb_detect_encoding($matches[2]) != 'ASCII') {
+	    (mb_detect_encoding($matches[2]) != 'ASCII' || $matches[1] == 'pukiwiki')) {
 		$_GET[$matches[1]] = $matches[2];
 	}
 }
@@ -306,6 +305,8 @@ if (! isset($vars['cmd']) && ! isset($vars['plugin'])) {
 
 	$get['cmd']  = $post['cmd']  = $vars['cmd']  = 'read';
 
+	$argx = explode($arg);
+	$arg = is_array($argx) ? $argx[0]:$argx;
 	if ($arg == '') $arg = $defaultpage;
 	$arg = rawurldecode($arg);
 	$arg = strip_bracket($arg);
