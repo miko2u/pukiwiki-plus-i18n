@@ -92,6 +92,8 @@ function plugin_tracker_action()
 	// if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
 	if (auth::check_role('readonly')) die_message('PKWK_READONLY prohibits editing');
 
+	$config_name = (isset($post['_config']) && $post['_config'] != '') ? $post['_config'] : '';
+
 	// Petit SPAM Check (Client(Browser)-Server Ticket Check)
 	$spam = FALSE;
 	if (function_exists('pkwk_session_start') && pkwk_session_start() != 0) {
@@ -111,8 +113,6 @@ function plugin_tracker_action()
 		honeypot_write();
 		return array('msg'=>'cannot write', 'body'=>'<p>prohibits editing</p>');
 	}
-
-	$config_name = (isset($post['_config']) && $post['_config'] != '') ? $post['_config'] : '';
 
 	$config = new Config('plugin/tracker/'.$config_name);
 	if (!$config->read())
