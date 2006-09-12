@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: tracker.inc.php,v 1.34.6 2006/08/15 23:46:00 miko Exp $
+// $Id: tracker.inc.php,v 1.34.8 2006/09/13 23:46:00 miko Exp $
 //
 // Issue tracker plugin (See Also bugtrack plugin)
 
@@ -56,8 +56,7 @@ function plugin_tracker_convert()
 	$fields = plugin_tracker_get_fields($base,$refer,$config);
 
 	$form = $config->page.'/'.$form;
-	if (!is_page($form))
-	{
+	if (!is_page($form)){
 		return "<p>config file '".make_pagelink($form)."' not found.</p>";
 	}
 	$retval = convert_html(plugin_tracker_get_source($form));
@@ -73,6 +72,10 @@ function plugin_tracker_convert()
 		}
 		$retval = str_replace("[$name]",$replace,$retval);
 	}
+	if (function_exists('pkwk_session_start') && pkwk_session_start() != 0) {
+		$_SESSION['tracker'] = md5(get_ticket() . $config_name);
+	}
+
 	return <<<EOD
 <form enctype="multipart/form-data" action="$script" method="post">
 <div>
@@ -91,18 +94,25 @@ function plugin_tracker_action()
 
 	// Petit SPAM Check (Client(Browser)-Server Ticket Check)
 	$spam = FALSE;
-	if (isset($post['encode_hint']) && $post['encode_hint'] != '') {
-		if (PKWK_ENCODING_HINT != $post['encode_hint']) $spam = TRUE;
+	if (function_exists('pkwk_session_start') && pkwk_session_start() != 0) {
+		$s_tracker = md5(get_ticket() . $config_name);
+		if ($_SESSION['tracker'] != $s_tracker) {
+			$spam = TRUE;
+		}
 	} else {
-		if (PKWK_ENCODING_HINT != '') $spam = TRUE;
+		if (isset($post['encode_hint']) && $post['encode_hint'] != '') {
+			if (PKWK_ENCODING_HINT != $post['encode_hint']) $spam = TRUE;
+		} else {
+			if (PKWK_ENCODING_HINT != '') $spam = TRUE;
+		}
+		if (is_spampost(array('body'), PLUGIN_TRACKER_REJECT_SPAMCOUNT)) $spam = TRUE;
 	}
-	if (is_spampost(array('body'), PLUGIN_TRACKER_REJECT_SPAMCOUNT)) $spam = TRUE;
 	if ($spam) {
 		honeypot_write();
 		return array('msg'=>'cannot write', 'body'=>'<p>prohibits editing</p>');
 	}
 
-	$config_name = array_key_exists('_config',$post) ? $post['_config'] : '';
+	$config_name = (isset($post['_config']) && $post['_config'] != '') ? $post['_config'] : '';
 
 	$config = new Config('plugin/tracker/'.$config_name);
 	if (!$config->read())
