@@ -24,9 +24,10 @@ function pkwk_session_start()
 			if (!is_array($use_trans_sid_address)) $use_trans_sid_address = array();
 			if (in_the_net($use_trans_sid_address, $_SERVER['REMOTE_ADDR'])) {
 				ini_set('session.use_cookies', 0);
-				ini_set('session.use_trans_sid', 1);
+				if (ini_get('session.use_trans_sid') == 0) {
+					output_add_rewrite_var(session_name(), session_id());
+				}
 			} else {
-				ini_set('session.use_trans_sid', 0);
 				ini_set('session.use_cookies', 1);
 				ini_set('session.use_only_cookies', 1);
 			}
