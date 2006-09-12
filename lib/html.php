@@ -253,8 +253,9 @@ EOD;
 	$b_preview   = isset($vars['preview']); // TRUE when preview
 	$btn_preview = $b_preview ? $_button['repreview'] : $_button['preview'];
 
-	pkwk_session_start();
-	$_SESSION['ticket'] = $s_ticket;
+	if (function_exists('pkwk_session_start') && pkwk_session_start() != 0) {
+		$_SESSION['ticket'] = $s_ticket;
+	}
 
 	if ($ajax) {
 		$add_ajax = '<input type="button" name="add_ajax" value="' . $btn_preview . '" accesskey="p" onclick="pukiwiki_apx(this.form.page.value)" />';

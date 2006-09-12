@@ -21,14 +21,14 @@ function pkwk_session_start()
 	if (!isset($use_session)) {
 		// for SESSION Variables
 		$use_session = intval(PLUS_ALLOW_SESSION);
-		// application/* はセッションを張ってはいけない (IEProblem)
-//		if (isset($_REQUEST['plugin']) && $_REQUEST['plugin'] != '') {
-//			if ($_REQUEST['plugin'] == 'attach' && (isset($_REQUEST['openfile']) || $_REQUEST['pcmd'] == 'open'))
-//				$use_session = 0;
-//			if ($_REQUEST['plugin'] != 'ref' && isset($_REQUEST['page']) && isset($_REQUEST['src']))
-//				$use_session = 0;
-//		}
 		if ($use_session > 0) {
+			if (FALSE) {
+				ini_set('session.use_cookies', 0);
+				ini_set('session.use_trans_sid', 1);
+			} else {
+				ini_set('session.use_cookies', 1);
+				ini_set('session.use_only_cookies', 1);
+			}
 			if (ini_get('session.auto_start') != 1) {
 				session_name('pukiwiki');
 				session_start();
