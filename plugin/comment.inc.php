@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: comment.inc.php,v 1.36.8 2006/04/27 23:24:00 miko Exp $
+// $Id: comment.inc.php,v 1.36.12 2006/09/12 23:24:00 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
@@ -28,14 +28,24 @@ function plugin_comment_action()
 	if (auth::check_role('readonly')) die_message('PKWK_READONLY prohibits editing');
 
 	// Petit SPAM Check (Client(Browser)-Server Ticket Check)
-	if (!isset($post['encode_hint']) && PKWK_ENCODING_HINT == '') {
-		return plugin_comment_write();
-	} elseif (isset($post['encode_hint']) && $post['encode_hint'] == PKWK_ENCODING_HINT) {
-		return plugin_comment_write();
+	$spam = FALSE;
+	if (function_exists('pkwk_session_start') && pkwk_session_start() != 0) {
+		$s_comment = md5(get_ticket() . $post['ticket']);
+		$keyword = 'comment' . $post['comment_no'];
+		if ($_SESSION[$keyword] != $s_comment) {
+			$spam = TRUE;
+		}
+	} else {
+		if (isset($post['encode_hint']) && $post['encode_hint'] != '') {
+			if (PKWK_ENCODING_HINT != $post['encode_hint']) $spam = TRUE;
+		} else {
+			if (PKWK_ENCODING_HINT != '') $spam = TRUE;
+		}
 	}
 
 	// If SPAM, goto jail.
-	return plugin_comment_honeypot();
+	if ($spam) return plugin_comment_honeypot();
+	return plugin_comment_write();
 }
 
 function plugin_comment_write()
@@ -160,6 +170,13 @@ function plugin_comment_convert()
 
 	$script = get_script_uri();
 	$s_page = htmlspecialchars($vars['page']);
+
+	$ticket = md5(mt_rand());
+	if (function_exists('pkwk_session_start') && pkwk_session_start() != 0) {
+		$keyword = 'comment' . $comment_no;
+		$_SESSION[$keyword] = md5(get_ticket() . $ticket);
+	}
+
 	$string = <<<EOD
 <br />
 <form action="$script" method="post">
@@ -171,6 +188,7 @@ function plugin_comment_convert()
   <input type="hidden" name="nodate" value="$nodate" />
   <input type="hidden" name="above"  value="$above" />
   <input type="hidden" name="digest" value="$digest" />
+  <input type="hidden" name="ticket" value="$ticket" />
   $nametags
   <input type="text"   name="msg" id="_p_comment_comment_{$comment_no}" size="$comment_cols" />
   <input type="submit" name="comment" value="$_btn_comment" />
