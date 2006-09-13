@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: funcplus.php,v 0.1.17 2006/09/13 01:10:00 miko Exp $
+// $Id: funcplus.php,v 0.1.20 2006/09/13 11:10:00 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 // License: GPL v2 or (at your option) any later version
@@ -30,7 +30,7 @@ function pkwk_session_start()
 			}
 			session_name('pukiwiki');
 			@session_start();
-			if (ini_set('session.use_cookies') == 0 && ini_get('session.use_trans_sid') == 0) {
+			if (ini_get('session.use_cookies') == 0 && ini_get('session.use_trans_sid') == 0) {
 				output_add_rewrite_var(session_name(), session_id());
 			}
 		}
