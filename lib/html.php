@@ -248,13 +248,13 @@ EOD;
 	$s_digest    = htmlspecialchars($digest);
 	$s_postdata  = htmlspecialchars($refer . $postdata);
 	$s_original  = isset($vars['original']) ? htmlspecialchars($vars['original']) : $s_postdata;
-	$s_ticket    = md5(get_ticket() . str_replace("\r", '', rtrim($s_original)));
+	$s_ticket    = md5(mt_rand());
 	$s_id        = isset($vars['id']) ? htmlspecialchars($vars['id']) : '';
 	$b_preview   = isset($vars['preview']); // TRUE when preview
 	$btn_preview = $b_preview ? $_button['repreview'] : $_button['preview'];
 
 	if (function_exists('pkwk_session_start') && pkwk_session_start() != 0) {
-		$_SESSION['ticket'] = $s_ticket;
+		$_SESSION['ticket'] = md5(get_ticket() . $s_ticket);
 	}
 
 	if ($ajax) {
@@ -291,6 +291,7 @@ $template
   <input type="hidden" name="cmd"    value="edit" />
   <input type="hidden" name="page"   value="$s_page" />
   <input type="hidden" name="digest" value="$s_digest" />
+  <input type="hidden" name="ticket" value="$s_ticket" />
   <input type="hidden" name="id"     value="$s_id" />
   <textarea id="msg" name="msg" rows="$rows" cols="$cols" onselect="pukiwiki_apv(this.form.page.value,this)" onfocus="pukiwiki_apv(this.form.page.value,this)" onkeyup="pukiwiki_apv(this.form.page.value,this)" onmouseup="pukiwiki_apv(this.form.page.value,this)">$s_postdata</textarea>
   <br />
