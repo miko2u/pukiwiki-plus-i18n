@@ -1,5 +1,5 @@
 <?php
-// $Id: tb.inc.php,v 1.19.21 2006/04/27 01:59:00 miko Exp $
+// $Id: tb.inc.php,v 1.19.22 2006/09/17 02:59:00 upk Exp $
 /*
  * PukiWiki/TrackBack: TrackBack Ping receiver and viewer
  * (C) 2003,2005-2006 Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
@@ -64,7 +64,7 @@ function plugin_tb_action()
 		}
 
 		// Show List of pages that TrackBacks reached
-		$pages = get_existpages(TRACKBACK_DIR, '.txt');
+		$pages = auth::get_existpages(TRACKBACK_DIR, '.txt');
 		if (! empty($pages)) {
 			return array('msg'=>'Trackback list',
 				'body'=>page_list($pages, 'read', FALSE));
