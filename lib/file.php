@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: file.php,v 1.73.23 2006/08/11 18:10:59 miko Exp $
+// $Id: file.php,v 1.75.23 2006/09/17 09:52:21 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2006 PukiWiki Developers Team
@@ -65,9 +65,9 @@ function get_filename($page)
 // Put a data(wiki text) into a physical file(diff, backup, text)
 function page_write($page, $postdata, $notimestamp = FALSE)
 {
-	global $trackback, $use_spam_check;
-	global $autoalias, $aliaspage;
+	global $trackback, $autoalias, $aliaspage;
 	global $autoglossary, $glossarypage;
+	global $use_spam_check;
 
 	// if (PKWK_READONLY) return; // Do nothing
 	if (auth::check_role('readonly')) return; // Do nothing
@@ -110,25 +110,29 @@ function page_write($page, $postdata, $notimestamp = FALSE)
 	unset($oldpostdata,$diffdata,$links);
 	links_update($page);
 
-	// for AutoAlias
-	if ($autoalias > 0 && $page == $aliaspage) {
-		// AutoAliasName is updated
-		$pages = array_keys(get_autoaliases());
-		if (!empty($pages)) {
-			autolink_pattern_write(CACHE_DIR . PKWK_AUTOALIAS_REGEX_CACHE, get_autolink_pattern($pages, $autoalias));
-		} else {
+	// Update autoalias.dat (AutoAliasName)
+	if ($autoalias && $page == $aliaspage) {
+		$aliases = get_autoaliases();
+		if (empty($aliases)) {
+			// Remove
 			@unlink(CACHE_DIR . PKWK_AUTOALIAS_REGEX_CACHE);
+		} else {
+			// Create or Update
+			autolink_pattern_write(CACHE_DIR . PKWK_AUTOALIAS_REGEX_CACHE,
+				get_autolink_pattern(array_keys($aliases), $autoalias));
 		}
 	}
 
-	// for AutoGlossary
-	if ($autoglossary > 0 && $page == $glossarypage) {
-		// Glossary is updated
-		$words = array_keys(get_autoglossaries());
-		if (!empty($words)) {
-			autolink_pattern_write(CACHE_DIR . PKWK_GLOSSARY_REGEX_CACHE, get_glossary_pattern($words, $autoglossary));
-		} else {
+	// Update glossary.dat (AutoGlossary)
+	if ($autoglossary && $page == $glossarypage) {
+		$words = get_autoglossaries();
+		if (empty($words)) {
+			// Remove
 			@unlink(CACHE_DIR . PKWK_GLOSSARY_REGEX_CACHE);
+		} else {
+			// Create or Update
+			autolink_pattern_write(CACHE_DIR . PKWK_GLOSSARY_REGEX_CACHE,
+				get_glossary_pattern(array_keys($words), $autoglossary));
 		}
 	}
 

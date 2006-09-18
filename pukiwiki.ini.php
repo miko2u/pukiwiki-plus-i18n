@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: pukiwiki.ini.php,v 1.139.142.6 2006/08/11 18:10:59 miko Exp $
+// $Id: pukiwiki.ini.php,v 1.139.142.9 2006/09/17 03:30:36 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2006 PukiWiki Developers Team
@@ -250,28 +250,33 @@ $_symbol_noexists = '?';
 
 /////////////////////////////////////////////////
 // AutoLink feature
+// Automatic link to existing pages (especially helpful for non-wikiword pages, but heavy)
 
-// AutoLink minimum length of page name
+// Minimum length of page name
 // Pukiwiki Plus! Recommended "5"
 $autolink = 5; // Bytes, 0 = OFF (try 8)
 
 /////////////////////////////////////////////////
 // AutoAlias feature
+// Automatic link from specified word, to specifiled URI, page or InterWiki
 
-// AutoAlias minimum bytes (0 = Disable)
-$autoalias = 2;
+// Minimum length of alias "from" word
+// Pukiwiki Plus! Recommended "4"
+$autoalias = 4; // Bytes, 0 = OFF (try 8)
 
-// Maximum number of words which AutoAlias replace
-$autoalias_max_words = 50;
+// Limit loading valid alias pairs
+$autoalias_max_words = 50; // pairs
 
 /////////////////////////////////////////////////
 // AutoGlossary feature
+// Automatic tooltip from specified word
 
-// AutoGlossary minimum bytes (0 = Disable)
-$autoglossary = 2;
+// Minimum length of glossary "from" word
+// Pukiwiki Plus! Recommended "2"
+$autoglossary = 2; // NChars, 0 = OFF
 
-// Maximum number of words which AutoGlossary replace
-$autoglossary_max_words = 50;
+// Limit loading valid glossary pairs
+$autoglossary_max_words = 50; // pairs
 
 /////////////////////////////////////////////////
 // Enable Freeze / Unfreeze feature
