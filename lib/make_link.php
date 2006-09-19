@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: make_link.php,v 1.31.8 2006/08/08 18:10:59 miko Exp $
+// $Id: make_link.php,v 1.34.8 2006/09/18 05:12:45 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2003-2005 PukiWiki Developers Team
@@ -738,14 +738,14 @@ class Link_autoalias extends Link
 
 		parent::Link($start);
 
-		if (!$autoalias or !file_exists(CACHE_DIR.'autoalias.dat') or $this->page == $aliaspage)
+		if (! $autoalias || ! file_exists(CACHE_DIR . PKWK_AUTOALIAS_REGEX_CACHE) || $this->page == $aliaspage)
 		{
 			return;
 		}
-		@list($auto,$auto_a,$forceignorepages) = file(CACHE_DIR.'autoalias.dat');
+		@list($auto, $auto_a, $forceignorepages) = file(CACHE_DIR . PKWK_AUTOALIAS_REGEX_CACHE);
 		$this->auto = $auto;
 		$this->auto_a = $auto_a;
-		$this->forceignorepages = explode("\t",trim($forceignorepages));
+		$this->forceignorepages = explode("\t", trim($forceignorepages));
 		$this->alias = '';
 	}
 	function get_pattern()
@@ -769,22 +769,12 @@ class Link_autoalias extends Link
 	}
 	function toString()
 	{
-		$this->alias = $this->get_alias($this->name);
+		$this->alias = get_autoaliases($this->name);
 		if ($this->alias != '') {
 			$link = '[[' . $this->name . '>' . $this->alias . ']]';
 			return make_link($link);
 		}
 		return '';
-	}
-
-	function get_alias($name)
-	{
-		static $aliases;
-
-		if (!isset($aliases)) {
-			$aliases = get_autoaliases();
-		}
-		return isset($aliases[$name]) ? $aliases[$this->name]:'';
 	}
 }
 class Link_autoalias_a extends Link_autoalias

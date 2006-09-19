@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: func.php,v 1.74.11 2006/08/11 18:10:59 miko Exp $
+// $Id: func.php,v 1.76.11 2006/09/18 05:12:45 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2006 PukiWiki Developers Team
@@ -634,51 +634,75 @@ function get_autolink_pattern_sub(& $pages, $start, $end, $pos)
 	return $result;
 }
 
-// Get pagelist for AutoAlias
-function get_autoaliases()
+// Load/get setting pairs from AutoAliasName
+function get_autoaliases($word = '')
 {
 	global $aliaspage, $autoalias_max_words;
+	static $pairs;
 
-	$pages = array();
-	$pattern = <<<EOD
+	if (! isset($pairs)) {
+		$pairs = array();
+		$pattern = <<<EOD
 \[\[                # open bracket
 ((?:(?!\]\]).)+)>   # (1) alias name
 ((?:(?!\]\]).)+)    # (2) alias link
 \]\]                # close bracket
 EOD;
 
-	$source = get_source($aliaspage, TRUE, TRUE);
-	$matches = array();
-	if(preg_match_all("/$pattern/x", $source, $matches, PREG_SET_ORDER)) {
-		foreach($matches as $match) {
-			$pages[$match[1]] = trim($match[2]);
+		$postdata = get_source($aliaspage, TRUE, TRUE);
+		$matches = array();
+		$count = 0;
+		$max   = max($autoalias_max_words, 0);
+		if (preg_match_all('/' . $pattern . '/x', $postdata, $matches, PREG_SET_ORDER)) {
+			foreach($matches as $key => $value) {
+				if ($count == $max) break;
+				$name = trim($value[1]);
+				if (! isset($pairs[$name])) {
+					++$count;
+					$pairs[$name] = trim($value[2]);
+				}
+				unset($matches[$key]);
+			}
 		}
 	}
-	// fail safe
-	$pages = array_slice($pages, 0, $autoalias_max_words);
 
-	return $pages;
+	// An array: All pairs
+	if ($word === '') return $pairs;
+
+	// A string: Seek the pair
+	return isset($pairs[$word]) ? $pairs[$word]:'';
 }
 
-// Get wordlist of Glossary
-function get_autoglossaries()
+// Load/get setting pairs from Glossary
+function get_autoglossaries($word = '')
 {
 	global $glossarypage, $autoglossary_max_words;
-	$words = array();
+	static $pairs;
 
-	// Get "Glossary" keyword list
-	$source = get_source($glossarypage);
-	$matches = array();
-	foreach ($source as $line) {
-		if (preg_match('/^[:|]([^|]+)\|([^|]+)\|?$/', $line, $matches)) {
-			$word = trim($matches[1]);
-			$words[$word] = TRUE;
+	if (! isset($pairs)) {
+		$pairs = array();
+		$pattern = '/^[:|]([^|]+)\|([^|]+)\|?$/';
+		$postdata = get_source($glossarypage); // an array!
+		$matches = array();
+		$count = 0;
+		$max   = max($autoglossary_max_words, 0);
+		foreach ($postdata as $line) {
+			if ($count == $max) break;
+			if (preg_match($pattern, $line, $matches)) {
+				$word = trim($matches[1]);
+				if (!isset($pairs[$word])) {
+					++$count;
+					$pairs[$word] = TRUE;
+				}
+			}
 		}
 	}
-	// fail safe
-	$words = array_slice($words, 0, $autoglossary_max_words);
 
-	return $words;
+	// An array: All pairs
+	if ($word === '') return $pairs;
+
+	// A string: Seek the pair
+	return isset($pairs[$word]) ? $pairs[$word]:'';
 }
 
 // Get absolute-URI of this script
