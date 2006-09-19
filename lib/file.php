@@ -371,10 +371,9 @@ function add_recent($page, $recentpage, $subject = '', $limit = 0)
 function lastmodified_add($update = '', $remove = '')
 {
 	global $maxshow, $whatsnew, $autolink;
-	global $autoalias, $autoglossary;
 
 	// AutoLink implimentation needs everything, for now
-	if ($autolink || $autoalias || $autoglossary) {
+	if ($autolink) {
 		put_lastmodified(); // Try to (re)create ALL
 		return;
 	}
@@ -388,12 +387,6 @@ function lastmodified_add($update = '', $remove = '')
 		return;
 	}
 
-	pkwk_touch_file($file);
-	$fp = fopen($file, 'r+') or
-		die_message('Cannot open ' . 'CACHE_DIR/' . PKWK_MAXSHOW_CACHE);
-	set_file_buffer($fp, 0);
-	flock($fp, LOCK_EX);
-
 	// Read (keep the order of the lines)
 	$recent_pages = $matches = array();
 	foreach(file_head($file, $maxshow + PKWK_MAXSHOW_ALLOWANCE, FALSE) as $line)
@@ -405,48 +398,46 @@ function lastmodified_add($update = '', $remove = '')
 	if (isset($recent_pages[$remove])) unset($recent_pages[$remove]);
 
 	// Add to the top: like array_unshift()
-	if ($update != '')
+	if ($update != '') {
 		$recent_pages = array($update => get_filetime($update)) + $recent_pages;
-
-	// Check
-	$abort = count($recent_pages) < $maxshow;
-	if (! $abort) {
-		// Write
-		ftruncate($fp, 0);
-		rewind($fp);
-		foreach ($recent_pages as $_page=>$time)
-			fputs($fp, $time . "\t" . $_page . "\n");
 	}
 
-	flock($fp, LOCK_UN);
-	fclose($fp);
-
-	if ($abort) {
+	// Check
+	if (count($recent_pages) < $maxshow) {
 		put_lastmodified(); // Try to (re)create ALL
 		return;
 	}
 
-	// ----
-	// Update the page 'RecentChanges'
+	// Sort decending order of last-modification date(Pointed Question/119)
+	arsort($recent_pages, SORT_NUMERIC);
 
+	// Re-create PKWK_MAXSHOW_CACHE
+	pkwk_touch_file($file);
+	$fp = fopen($file, 'r+') or
+		die_message('Cannot open ' . 'CACHE_DIR/' . PKWK_MAXSHOW_CACHE);
+	set_file_buffer($fp, 0);
+	flock($fp, LOCK_EX);
+	ftruncate($fp, 0);
+	rewind($fp);
+	foreach ($recent_pages as $page=>$time)
+		fputs($fp, $time . "\t" . $page . "\n");
+	flock($fp, LOCK_UN);
+	fclose($fp);
+
+	// Update 'RecentChanges'
 	$recent_pages = array_splice($recent_pages, 0, $maxshow);
 	$file = get_filename($whatsnew);
-
-	// Open
 	pkwk_touch_file($file);
 	$fp = fopen($file, 'r+') or
 		die_message('Cannot open ' . htmlspecialchars($whatsnew));
 	set_file_buffer($fp, 0);
 	flock($fp, LOCK_EX);
-
-	// Recreate
 	ftruncate($fp, 0);
 	rewind($fp);
-	foreach ($recent_pages as $_page=>$time)
+	foreach ($recent_pages as $page=>$time)
 		fputs($fp, '-' . htmlspecialchars(format_date($time)) .
-			' - ' . '[[' . htmlspecialchars($_page) . ']]' . "\n");
+			' - ' . '[[' . htmlspecialchars($page) . ']]' . "\n");
 	fputs($fp, '#norelated' . "\n"); // :)
-
 	flock($fp, LOCK_UN);
 	fclose($fp);
 }
