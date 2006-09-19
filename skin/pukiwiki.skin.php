@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: pukiwiki.skin.php,v 1.48.2 2005/04/27 14:22:30 miko Exp $
+// $Id: pukiwiki.skin.php,v 1.49.2 2005/07/19 17:43:27 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
@@ -77,11 +77,11 @@ if (isset($pkwk_dtd)) {
  <title><?php echo $title ?> - <?php echo $page_title ?></title>
 
  <link rel="shortcut icon" href="<?php echo $image['favicon'] ?>" />
- <link rel="stylesheet" type="text/css" media="screen" href="skin/pukiwiki.css.php?charset=<?php echo $css_charset ?>" charset="<?php echo $css_charset ?>" />
- <link rel="stylesheet" type="text/css" media="print"  href="skin/pukiwiki.css.php?charset=<?php echo $css_charset ?>&amp;media=print" charset="<?php echo $css_charset ?>" />
+ <link rel="stylesheet" type="text/css" media="screen" href="<php echo SKIN_URI ?>pukiwiki.css.php?charset=<?php echo $css_charset ?>" charset="<?php echo $css_charset ?>" />
+ <link rel="stylesheet" type="text/css" media="print"  href="<php echo SKIN_URI ?>pukiwiki.css.php?charset=<?php echo $css_charset ?>&amp;media=print" charset="<?php echo $css_charset ?>" />
  <link rel="alternate" type="application/rss+xml" title="RSS" href="<?php echo $link['rss'] ?>" /><?php // RSS auto-discovery ?>
 
-<?php if (PKWK_ALLOW_JAVASCRIPT && $trackback_javascript) { ?> <script type="text/javascript" src="skin/trackback.js"></script><?php } ?>
+<?php if (PKWK_ALLOW_JAVASCRIPT && $trackback_javascript) { ?> <script type="text/javascript" src="<php echo SKIN_URI ?>trackback.js"></script><?php } ?>
 
 <?php echo $head_tag ?>
 </head>

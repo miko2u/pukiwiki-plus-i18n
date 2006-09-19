@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: make_link.php,v 1.33.15 2006/09/17 14:47:31 miko Exp $
+// $Id: make_link.php,v 1.34.15 2006/09/18 05:12:45 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2003-2006 PukiWiki Developers Team
@@ -745,7 +745,7 @@ class Link_autoalias extends Link
 		@list($auto, $auto_a, $forceignorepages) = file(CACHE_DIR . PKWK_AUTOALIAS_REGEX_CACHE);
 		$this->auto = $auto;
 		$this->auto_a = $auto_a;
-		$this->forceignorepages = explode("\t",trim($forceignorepages));
+		$this->forceignorepages = explode("\t", trim($forceignorepages));
 		$this->alias = '';
 	}
 	function get_pattern()
@@ -769,22 +769,12 @@ class Link_autoalias extends Link
 	}
 	function toString()
 	{
-		$this->alias = $this->get_alias($this->name);
+		$this->alias = get_autoaliases($this->name);
 		if ($this->alias != '') {
 			$link = '[[' . $this->name . '>' . $this->alias . ']]';
 			return make_link($link);
 		}
 		return '';
-	}
-
-	function get_alias($name)
-	{
-		$aliases = get_autoaliases();
-		$result = '';
-		if (isset($aliases[$name])) {
-			$result = $aliases[$name];
-		}
-		return $result;
 	}
 }
 class Link_autoalias_a extends Link_autoalias
@@ -812,14 +802,14 @@ class Link_glossary extends Link
 
 		parent::Link($start);
 
-		if (!$autoglossary or !file_exists(CACHE_DIR.'glossary.dat'))
+		if (! $autoglossary || ! file_exists(CACHE_DIR . PKWK_GLOSSARY_REGEX_CACHE))
 		{
 			return;
 		}
-		@list($auto,$auto_a,$forceignorepages) = file(CACHE_DIR.'glossary.dat');
+		@list($auto, $auto_a, $forceignorepages) = file(CACHE_DIR . PKWK_GLOSSARY_REGEX_CACHE);
 		$this->auto = $auto;
 		$this->auto_a = $auto_a;
-		$this->forceignorepages = explode("\t",trim($forceignorepages));
+		$this->forceignorepages = explode("\t", trim($forceignorepages));
 	}
 	function get_pattern()
 	{
