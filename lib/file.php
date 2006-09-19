@@ -366,9 +366,11 @@ function file_write($dir, $page, $str, $notimestamp = FALSE)
 		'Maybe permission is not writable or filename is too long');
 	set_file_buffer($fp, 0);
 	flock($fp, LOCK_EX);
+	$last = ignore_user_abort(1);
 	ftruncate($fp, 0);
 	rewind($fp);
 	fputs($fp, $str);
+	ignore_user_abort($last);
 	flock($fp, LOCK_UN);
 	fclose($fp);
 
@@ -501,10 +503,12 @@ function lastmodified_add($update = '', $remove = '')
 		die_message('Cannot open ' . 'CACHE_DIR/' . PKWK_MAXSHOW_CACHE);
 	set_file_buffer($fp, 0);
 	flock($fp, LOCK_EX);
+	$last = ignore_user_abort(1);
 	ftruncate($fp, 0);
 	rewind($fp);
 	foreach ($recent_pages as $page=>$time)
 		fputs($fp, $time . "\t" . $page . "\n");
+	ignore_user_abort($last);
 	flock($fp, LOCK_UN);
 	fclose($fp);
 
@@ -516,12 +520,14 @@ function lastmodified_add($update = '', $remove = '')
 		die_message('Cannot open ' . htmlspecialchars($whatsnew));
 	set_file_buffer($fp, 0);
 	flock($fp, LOCK_EX);
+	$last = ignore_user_abort(1);
 	ftruncate($fp, 0);
 	rewind($fp);
 	foreach ($recent_pages as $page=>$time)
 		fputs($fp, '-' . htmlspecialchars(format_date($time)) .
 			' - ' . '[[' . htmlspecialchars($page) . ']]' . "\n");
 	fputs($fp, '#norelated' . "\n"); // :)
+	ignore_user_abort($last);
 	flock($fp, LOCK_UN);
 	fclose($fp);
 }
@@ -564,10 +570,12 @@ function put_lastmodified()
 		die_message('Cannot open' . 'CACHE_DIR/' . PKWK_MAXSHOW_CACHE);
 	set_file_buffer($fp, 0);
 	flock($fp, LOCK_EX);
+	$last = ignore_user_abort(1);
 	ftruncate($fp, 0);
 	rewind($fp);
 	foreach ($recent_pages as $page=>$time)
 		fputs($fp, $time . "\t" . $page . "\n");
+	ignore_user_abort($last);
 	flock($fp, LOCK_UN);
 	fclose($fp);
 
@@ -578,6 +586,7 @@ function put_lastmodified()
 		die_message('Cannot open ' . htmlspecialchars($whatsnew));
 	set_file_buffer($fp, 0);
 	flock($fp, LOCK_EX);
+	$last = ignore_user_abort(1);
 	ftruncate($fp, 0);
 	rewind($fp);
 	foreach (array_keys($recent_pages) as $page) {
@@ -587,6 +596,7 @@ function put_lastmodified()
 		fputs($fp, '-' . $s_lastmod . ' - [[' . $s_page . ']]' . "\n");
 	}
 	fputs($fp, '#norelated' . "\n"); // :)
+	ignore_user_abort($last);
 	flock($fp, LOCK_UN);
 	fclose($fp);
 

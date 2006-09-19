@@ -22,9 +22,11 @@ function get_ticket($newticket = FALSE)
 		$fp = fopen($file, 'r+') or die_message('Cannot open ' . 'CACHE_DIR/' . 'ticket.dat');
 		set_file_buffer($fp, 0);
 		flock($fp, LOCK_EX);
+		$last = ignore_user_abort(1);
 		ftruncate($fp, 0);
 		rewind($fp);
 		fputs($fp, $ticket . "\n");
+		ignore_user_abort($last);
 		flock($fp, LOCK_UN);
 		fclose($fp);
 	}
