@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: file.php,v 1.75.23 2006/09/17 09:52:21 miko Exp $
+// $Id: file.php,v 1.75.25 2006/09/19 00:40:21 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2006 PukiWiki Developers Team
@@ -472,13 +472,6 @@ function lastmodified_add($update = '', $remove = '')
 		return;
 	}
 
-	// Open
-	pkwk_touch_file($file);
-	$fp = fopen($file, 'r+') or
-		die_message('Cannot open ' . 'CACHE_DIR/' . PKWK_MAXSHOW_CACHE);
-	set_file_buffer($fp, 0);
-	flock($fp, LOCK_EX);
-
 	// Read (keep the order of the lines)
 	$recent_pages = $matches = array();
 	foreach(file_head($file, $maxshow + PKWK_MAXSHOW_ALLOWANCE, FALSE) as $line)
@@ -494,45 +487,41 @@ function lastmodified_add($update = '', $remove = '')
 		$recent_pages = array($update => get_filetime($update)) + $recent_pages;
 
 	// Check
-	$abort = count($recent_pages) < $maxshow;
-
-	if (! $abort) {
-		// Write
-		ftruncate($fp, 0);
-		rewind($fp);
-		foreach ($recent_pages as $_page=>$time)
-			fputs($fp, $time . "\t" . $_page . "\n");
-	}
-
-	flock($fp, LOCK_UN);
-	fclose($fp);
-
-	if ($abort) {
+	if (count($recent_pages) < $maxshow) {
 		put_lastmodified(); // Try to (re)create ALL
 		return;
 	}
 
-	// ----
-	// Update the page 'RecentChanges'
+	// Sort decending order of last-modification date(Pointed Question/119)
+	arsort($recent_pages, SORT_NUMERIC);
 
+	// Re-create PKWK_MAXSHOW_CACHE
+	pkwk_touch_file($file);
+	$fp = fopen($file, 'r+') or
+		die_message('Cannot open ' . 'CACHE_DIR/' . PKWK_MAXSHOW_CACHE);
+	set_file_buffer($fp, 0);
+	flock($fp, LOCK_EX);
+	ftruncate($fp, 0);
+	rewind($fp);
+	foreach ($recent_pages as $page=>$time)
+		fputs($fp, $time . "\t" . $page . "\n");
+	flock($fp, LOCK_UN);
+	fclose($fp);
+
+	// Update 'RecentChanges'
 	$recent_pages = array_splice($recent_pages, 0, $maxshow);
 	$file = get_filename($whatsnew);
-
-	// Open
 	pkwk_touch_file($file);
 	$fp = fopen($file, 'r+') or
 		die_message('Cannot open ' . htmlspecialchars($whatsnew));
 	set_file_buffer($fp, 0);
 	flock($fp, LOCK_EX);
-
-	// Recreate
 	ftruncate($fp, 0);
 	rewind($fp);
-	foreach ($recent_pages as $_page=>$time)
+	foreach ($recent_pages as $page=>$time)
 		fputs($fp, '-' . htmlspecialchars(format_date($time)) .
-			' - ' . '[[' . htmlspecialchars($_page) . ']]' . "\n");
+			' - ' . '[[' . htmlspecialchars($page) . ']]' . "\n");
 	fputs($fp, '#norelated' . "\n"); // :)
-
 	flock($fp, LOCK_UN);
 	fclose($fp);
 }
