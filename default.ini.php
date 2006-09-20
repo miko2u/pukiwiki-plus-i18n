@@ -180,20 +180,20 @@ $facemark_rules = array(
 	'&amp;(star);'	=> ' <img alt="[$1]" src="' . IMAGE_URI . 'face/star.gif" />',
 
 	// Face marks, Japanese style
-	'(\(\^\^\))'	=> ' <img alt="$1" src="' . IMAGE_URI . 'face/smile.png" />',
-	'(\(\^-\^)'	=> ' <img alt="$1" src="' . IMAGE_URI . 'face/bigsmile.png" />',
-	'(\(\^Q\^)'	=> ' <img alt="$1" src="' . IMAGE_URI . 'face/huh.png" />',
-	'(\(\.\.;)'	=> ' <img alt="$1" src="' . IMAGE_URI . 'face/oh.png" />',
-	'(\(\^_-)'	=> ' <img alt="$1" src="' . IMAGE_URI . 'face/wink.png" />',
-	'(\(\^_-\))'	=> ' <img alt="$1" src="' . IMAGE_URI . 'face/wink.png" />',
-	'(\(--;)'	=> ' <img alt="$1" src="' . IMAGE_URI . 'face/sad.png" />',
-	'(\(\^\^;)'	=> ' <img alt="$1" src="' . IMAGE_URI . 'face/worried.png" />',
-	'(\(\^\^;\))'	=> ' <img alt="$1" src="' . IMAGE_URI . 'face/worried.png" />', // Plus! not patched BugTrack2/144
-	'(\(\T-T)'	=> ' <img alt="$1" src="' . IMAGE_URI . 'face/tear.png" />',
-	'(\(\T-T\))'	=> ' <img alt="$1" src="' . IMAGE_URI . 'face/tear.png" />',
-	'(\(\;_;)'	=> ' <img alt="$1" src="' . IMAGE_URI . 'face/tear.png" />',
-	'(\(\;_;\))'	=> ' <img alt="$1" src="' . IMAGE_URI . 'face/tear.png" />',
-	'(\(__;)'	=> ' <img alt="$1" src="' . IMAGE_URI . 'face/umm.png" />',
+	'\((\^\^\))'	=> ' <img alt="&#40;$1" src="' . IMAGE_URI . 'face/smile.png" />',
+	'\((\^-\^)'	=> ' <img alt="&#40;$1" src="' . IMAGE_URI . 'face/bigsmile.png" />',
+	'\((\^Q\^)'	=> ' <img alt="&#40;$1" src="' . IMAGE_URI . 'face/huh.png" />',
+	'\((\.\.;)'	=> ' <img alt="&#40;$1" src="' . IMAGE_URI . 'face/oh.png" />',
+	'\((\^_-)'	=> ' <img alt="&#40;$1" src="' . IMAGE_URI . 'face/wink.png" />',
+	'\((\^_-\))'	=> ' <img alt="&#40;$1" src="' . IMAGE_URI . 'face/wink.png" />',
+	'\((--;)'	=> ' <img alt="&#40;$1" src="' . IMAGE_URI . 'face/sad.png" />',
+	'\((\^\^;)'	=> ' <img alt="&#40;$1" src="' . IMAGE_URI . 'face/worried.png" />',
+	'\((\^\^;\))'	=> ' <img alt="&#40;$1" src="' . IMAGE_URI . 'face/worried.png" />', // Plus! not patched BugTrack2/144
+	'\((\T-T)'	=> ' <img alt="&#40;$1" src="' . IMAGE_URI . 'face/tear.png" />',
+	'\((\T-T\))'	=> ' <img alt="&#40;$1" src="' . IMAGE_URI . 'face/tear.png" />',
+	'\((\;_;)'	=> ' <img alt="&#40;$1" src="' . IMAGE_URI . 'face/tear.png" />',
+	'\((\;_;\))'	=> ' <img alt="&#40;$1" src="' . IMAGE_URI . 'face/tear.png" />',
+	'\((__;)'	=> ' <img alt="&#40;$1" src="' . IMAGE_URI . 'face/umm.png" />',
 
 	// Push buttons, 0-9 and sharp (Compatibility with cell phones)
 	'&amp;(pb1);'	=> '[1]',
