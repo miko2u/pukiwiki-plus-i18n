@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: html.php,v 1.49.58.7 2006/08/15 23:56:00 miko Exp $
+// $Id: html.php,v 1.49.58.9 2006/09/25 13:41:00 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2006 PukiWiki Developers Team
@@ -28,11 +28,11 @@ function catbody($title, $page, $body)
 	global $skin_file, $menubar, $sidebar;
 	global $_string;
 
-	if (!defined('SKIN_FILE') || ! file_exists(SKIN_FILE) || ! is_readable(SKIN_FILE)) {
+	if (! defined('SKIN_FILE') || ! file_exists(SKIN_FILE) || ! is_readable(SKIN_FILE)) {
 		if (! file_exists($skin_file) || ! is_readable($skin_file)) {
-			die_message(SKIN_FILE.'(skin file) is not found.');
+			die_message(SKIN_FILE . '(skin file) is not found.');
 		} else {
-			define('SKIN_FILE',$skin_file);
+			define('SKIN_FILE', $skin_file);
 		}
 	}
 
@@ -127,8 +127,6 @@ function catbody($title, $page, $body)
 		' ' . get_pg_passage($_page, FALSE) : '';
 
 	// List of attached files to the page
-//	$attaches = ($attach_link && $is_read && exist_plugin_action('attach')) ?
-//		attach_filelist() : '';
 	$attaches = '';
 	if ($attach_link && $is_read && exist_plugin_action('attach')) {
 		if (do_plugin_init('attach') !== FALSE) {
@@ -257,7 +255,7 @@ EOD;
 		$_SESSION['ticket'] = md5(get_ticket() . $s_ticket);
 	}
 
-	if ($ajax) {
+	if ($ajax && UA_PROFILE == 'default') {
 		$add_ajax = '<input type="button" name="add_ajax" value="' . $btn_preview . '" accesskey="p" onclick="pukiwiki_apx(this.form.page.value)" />';
 	} else {
 		$add_ajax = '<input type="submit" name="preview" value="' . $btn_preview . '" accesskey="p" />';
@@ -271,7 +269,7 @@ EOD;
   <input type="checkbox" name="notimestamp" id="_edit_form_notimestamp" value="true"$checked_time />
   <label for="_edit_form_notimestamp"><span class="small">{$_button['notchangetimestamp']}</span></label>
 EOD;
-		if ( $notimeupdate == 2 && auth::check_role('role_adm_contents')) {
+		if ($notimeupdate == 2 && auth::check_role('role_adm_contents')) {
 			// enable only administrator
 			$add_notimestamp .= <<<EOD
   <input type="password" name="pass" size="12" />
@@ -306,14 +304,6 @@ $template
  </div>
 </form>
 EOD;
-
-//	if (isset($vars['help'])) {
-//		$body .= $hr . catrule();
-//	} else {
-//		$body .= '<ul><li><a href="' .
-//			$script . '?cmd=edit&amp;help=true&amp;page=' . $r_page .
-//			'">' . $_string['help'] . '</a></li></ul>';
-//	}
 
 	if ($ajax) {
 		global $head_tags;
