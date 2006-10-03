@@ -245,14 +245,16 @@ EOD;
 	$s_page      = htmlspecialchars($page);
 	$s_digest    = htmlspecialchars($digest);
 	$s_postdata  = htmlspecialchars($refer . $postdata);
+	$s_ticket    = '';
 	$s_original  = isset($vars['original']) ? htmlspecialchars($vars['original']) : $s_postdata;
-	$s_ticket    = md5(mt_rand());
 	$s_id        = isset($vars['id']) ? htmlspecialchars($vars['id']) : '';
 	$b_preview   = isset($vars['preview']); // TRUE when preview
 	$btn_preview = $b_preview ? $_button['repreview'] : $_button['preview'];
 
 	if (function_exists('pkwk_session_start') && pkwk_session_start() != 0) {
-		$_SESSION['ticket'] = md5(get_ticket() . $s_ticket);
+		$ticket = md5(mt_rand());
+		$s_ticket = md5(get_ticket() . $ticket);
+		$_SESSION['ticket'] = $ticket;
 	}
 
 	if ($ajax && UA_PROFILE == 'default') {

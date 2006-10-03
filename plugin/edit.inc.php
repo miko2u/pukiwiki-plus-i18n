@@ -183,9 +183,8 @@ function plugin_edit_write()
 
 	// SPAM Check (Client(Browser)-Server Ticket Check)
 	if (function_exists('pkwk_session_start') && pkwk_session_start() != 0) {
-		$s_original  = htmlspecialchars($vars['original']);
-		$s_ticket    = md5(get_ticket() . $vars['ticket']);
-		if ($_SESSION['ticket'] != $s_ticket)
+		$s_ticket = md5(get_ticket() . $_SESSION['ticket']);
+		if ($vars['ticket'] != $s_ticket)
 			return plugin_edit_honeypot();
 	} else {
 		if (isset($post['encode_hint']) && $post['encode_hint'] != PKWK_ENCODING_HINT)
