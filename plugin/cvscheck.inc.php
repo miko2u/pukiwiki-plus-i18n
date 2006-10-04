@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: cvscheck.inc.php,v 0.18 2006/02/16 01:31:00 upk Exp $
+// $Id: cvscheck.inc.php,v 0.19 2006/10/04 01:31:00 miko Exp $
 /* 
 *プラグイン cvscheck
  cvsのversionと比較して異なるものを表示
@@ -33,10 +33,12 @@ function plugin_cvscheck_init()
 				 "PLUGIN_DIR"  =>'/plugin/',
 				 "LIB_DIR"     =>'/lib/',
 				 "SKIN_DIR"    =>'/skin/' ),
+				 "DOC_DIR"     =>'/doc/' ),
 		 'LDIRS' => array("DATA_HOME"  => DATA_HOME ,
 				  "PLUGIN_DIR" => PLUGIN_DIR, 
 				  "LIB_DIR"    => LIB_DIR,
 				  "SKIN_DIR"   => SKIN_DIR, ),
+				  "DOC_DIR"    => SITE_HOME . 'doc/', ),
 		 'title_name'  => _('file name'),
 		 'title_cvs'    => _('cvs versions'),
 		 'title_local'  => _('local versions'),
