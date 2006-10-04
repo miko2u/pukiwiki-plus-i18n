@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: pcomment.inc.php,v 1.43.7 2006/06/16 23:38:00 miko Exp $
+// $Id: pcomment.inc.php,v 1.44.7 2006/10/03 14:16:31 miko Exp $
 //
 // pcomment plugin - Show/Insert comments into specified (another) page
 //
@@ -92,8 +92,6 @@ function plugin_pcomment_convert()
 		'err_pagename'   => _('[[%s]] : not a valid page name.'),
 	);
 
-	$ret = '';
-
 	$params = array(
 		'noname'=>FALSE,
 		'nodate'=>FALSE,
@@ -103,16 +101,14 @@ function plugin_pcomment_convert()
 		'_args' =>array()
 	);
 
-	// BugTrack2/106: Only variables can be passed by reference from PHP 5.0.5
-	$args = func_get_args(); // with array_walk()
+	$args = func_get_args();
 	get_plugin_option($args, &$params);
 
 	$vars_page = isset($vars['page']) ? $vars['page'] : '';
 	$page  = (isset($params['_args'][0]) && $params['_args'][0] != '') ? $params['_args'][0] :
 		sprintf(PLUGIN_PCOMMENT_PAGE, strip_bracket($vars_page));
-	$count = (isset($params['_args'][1]) && $params['_args'][1] != '') ? $params['_args'][1] : 0;
-	if ($count == 0 && $count !== '0')
-		$count = PLUGIN_PCOMMENT_NUM_COMMENTS;
+	$count = (isset($params['_args'][1])) ? intval($params['_args'][1]) : 0;
+	if ($count == 0) $count = PLUGIN_PCOMMENT_NUM_COMMENTS;
 
 	$_page = get_fullname(strip_bracket($page), $vars_page);
 	if (!is_pagename($_page))
@@ -148,7 +144,6 @@ function plugin_pcomment_convert()
 		$s_page   = htmlspecialchars($page);
 		$s_refer  = htmlspecialchars($vars_page);
 		$s_nodate = htmlspecialchars($params['nodate']);
-		$s_count  = htmlspecialchars($count);
 		$helptags = edit_form_assistant();
 
 		$form_start = '<form action="' . get_script_uri() . '" method="post">' . "\n";
@@ -199,9 +194,8 @@ EOD;
 
 function plugin_pcomment_insert()
 {
-	global $script, $vars, $now;
-	global $_no_name;
-//	global $_title_updated, $_no_name, $_pcmt_messages;
+	global $vars, $now, $_no_name;
+//	global $vars, $now, $_title_updated, $_no_name, $_pcmt_messages;
 
 	$refer = isset($vars['refer']) ? $vars['refer'] : '';
 	$page  = isset($vars['page'])  ? $vars['page']  : '';

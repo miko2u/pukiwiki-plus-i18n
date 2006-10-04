@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: update_entities.inc.php,v 1.9.3 2006/02/06 20:02:00 upk Exp $
+// $Id: update_entities.inc.php,v 1.10.3 2006/09/30 02:35:35 miko Exp $
 //
 // Update entities plugin - Update XHTML entities from DTD
 // (for admin)
@@ -116,8 +116,8 @@ function plugin_update_entities_create($do = FALSE)
 
 	$pattern = "(?=[a-zA-Z0-9]\{$min,$max})" .
 		get_autolink_pattern_sub($entities, 0, count($entities), 0);
-	$fp = fopen(CACHE_DIR  .'entities.dat', 'w')
-		or die_message('cannot write file ' . CACHE_DIR . 'entities.dat<br />' . "\n" .
+	$fp = fopen(CACHE_DIR . PKWK_ENTITIES_REGEX_CACHE, 'w')
+		or die_message('cannot write file PKWK_ENTITIES_REGEX_CACHE<br />' . "\n" .
 			'maybe permission is not writable or filename is too long');
 	fwrite($fp, $pattern);
 	fclose($fp);
