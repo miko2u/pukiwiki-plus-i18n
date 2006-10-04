@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: plugin.php,v 1.15.12 2006/09/06 01:06:00 upk Exp $
+// $Id: plugin.php,v 1.15.14 2006/10/04 01:06:00 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
@@ -32,11 +32,12 @@ function get_plugin_option($args, &$params, $tolower=TRUE, $separator=':')
 		list($_key, $_val) = array_pad(split($separator, $val, 2), 2, TRUE);
 		if ($tolower === TRUE) $_key = strtolower($_key);
 		$_key = trim($_key);
-		$_val = trim($_val);
-		if (in_array($_key, $keys)) {
+		if (is_string($_val)) $_val = trim($_val);
+		if (in_array($_key, $keys) && $params['_done'] !== TRUE) {
 			$params[$_key] = $_val;    // Exist keys
 		} elseif ($val != '') {
 			$params['_args'][] = $val; // Not exist keys, in '_args'
+			$params['_done'] = TRUE;
 		}
 	}
 	$params['_done'] = TRUE;
@@ -243,24 +244,22 @@ function do_plugin_inline($name, $args, & $body)
 	}
 }
 
-function use_plugin($plugin,$lines)
+// Used Plugin?
+function use_plugin($plugin, $lines)
 {
-	if (! is_array($lines)) {
-		$lines = preg_replace(
-			array("[\\r\\n]","[\\r]"),
-			array("\n","\n"),
-			$lines
-		); // 行末の統一
+	if (!is_array($lines)) {
+		$delim = array("\r\n", "\r");
+		$lines = str_replace($delim, "\n", $lines);
 		$lines = explode("\n", $lines);
 	}
 
-	foreach($lines as $line) {
+	foreach ($lines as $line) {
 		if (substr($line, 0, 2) == '//') continue;
 		// Diff data
 		if (substr($line, 0, 1) == '+' || substr($line, 0, 1) == '-') {
 			$line = substr($line, 1);
 		}
-		if (preg_match('/^[#|&]'.$plugin.'[^a-zA-Z]*$/', $line, $matches)) {
+		if (preg_match('/^[#|&]' . $plugin . '[^a-zA-Z]*$/', $line, $matches)) {
 			return $matches[0];
 		}
 	}
