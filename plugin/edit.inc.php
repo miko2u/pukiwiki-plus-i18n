@@ -186,6 +186,9 @@ function plugin_edit_write()
 		$s_ticket = md5(get_ticket() . $_SESSION['ticket']);
 		if ($vars['ticket'] != $s_ticket)
 			return plugin_edit_honeypot();
+		$s_origin = md5(get_ticket() . str_replace("\r", '', htmlspecialchars($vars['original'])));
+		if (!isset($_SESSION['origin']) || $_SESSION['origin'] != $s_origin)
+			return plugin_edit_honeypot();
 	} else {
 		if (isset($post['encode_hint']) && $post['encode_hint'] != PKWK_ENCODING_HINT)
 			return plugin_edit_honeypot();
@@ -210,7 +213,7 @@ function plugin_edit_write()
 	$retvars = array();
 
 	// Collision Detection
-	$oldpagesrc = join('', get_source($page));
+	$oldpagesrc = get_source($page, TRUE, TRUE);
 	$oldpagemd5 = md5($oldpagesrc);
 
 	if ($digest != $oldpagemd5) {

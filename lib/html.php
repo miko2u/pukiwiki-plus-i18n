@@ -255,6 +255,7 @@ EOD;
 		$ticket = md5(mt_rand());
 		$s_ticket = md5(get_ticket() . $ticket);
 		$_SESSION['ticket'] = $ticket;
+		$_SESSION['origin'] = md5(get_ticket() . str_replace("\r", '', $s_original));
 	}
 
 	if ($ajax && UA_PROFILE == 'default') {
