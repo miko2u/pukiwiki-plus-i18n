@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: file.php,v 1.75.11 2006/09/17 09:52:21 miko Exp $
+// $Id: file.php,v 1.76.11 2006/09/30 02:35:35 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2006 PukiWiki Developers Team
@@ -12,6 +12,9 @@
 // RecentChanges
 define('PKWK_MAXSHOW_ALLOWANCE', 10);
 define('PKWK_MAXSHOW_CACHE', 'recent.dat');
+
+// XHTML entities
+define('PKWK_ENTITIES_REGEX_CACHE', 'entities.dat');
 
 // AutoLink
 define('PKWK_AUTOLINK_REGEX_CACHE', 'autolink.dat');

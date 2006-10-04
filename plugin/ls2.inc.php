@@ -1,7 +1,7 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: ls2.inc.php,v 1.24.1 2006/08/06 13:17:31 miko Exp $
+// $Id: ls2.inc.php,v 1.25.1 2006/10/03 13:33:36 miko Exp $
 //
 // List plugin 2
 
@@ -34,7 +34,8 @@ function plugin_ls2_action()
 	global $vars, $_ls2_msg_title;
 
 	$params = array();
-	foreach (array('title', 'include', 'reverse') as $key)
+	$keys   = array('title', 'include', 'reverse');
+	foreach ($keys as $key)
 		$params[$key] = isset($vars[$key]);
 
 	$prefix = isset($vars['prefix']) ? $vars['prefix'] : '';
@@ -66,8 +67,8 @@ function plugin_ls2_convert()
 	}
 	if ($prefix == '') $prefix = strip_bracket($vars['page']) . '/';
 
-	foreach ($args as $key => $arg)
-		plugin_ls2_check_arg($arg, $key, $params);
+	foreach ($args as $arg)
+		plugin_ls2_check_arg($arg, $params);
 
 	$title = (! empty($params['_args'])) ? join(',', $params['_args']) :   // Manual
 		str_replace('$1', htmlspecialchars($prefix), $_ls2_msg_title); // Auto
@@ -100,7 +101,7 @@ function plugin_ls2_show_lists($prefix, & $params)
 	natcasesort($pages);
 	if ($params['reverse']) $pages = array_reverse($pages);
 
-	foreach ($pages as $page) $params["page_$page"] = 0;
+	foreach ($pages as $page) $params['page_ ' . $page] = 0;
 
 	if (empty($pages)) {
 		return str_replace('$1', htmlspecialchars($prefix), $_ls2_err_nopages);
@@ -118,8 +119,8 @@ function plugin_ls2_get_headings($page, & $params, $level, $include = FALSE)
 	static $_ls2_anchor = 0;
 
 	// ページが未表示のとき
-	$is_done = (isset($params["page_$page"]) && $params["page_$page"] > 0);
-	if (! $is_done) $params["page_$page"] = ++$_ls2_anchor;
+	$is_done = (isset($params['page_ ' . $page]) && $params['page_ ' . $page] > 0);
+	if (! $is_done) $params['page_ ' . $page] = ++$_ls2_anchor;
 
 	$r_page = rawurlencode($page);
 	$s_page = htmlspecialchars($page);
@@ -131,12 +132,12 @@ function plugin_ls2_get_headings($page, & $params, $level, $include = FALSE)
 
 	if ($params['title'] && $is_done) {
 		$ret .= '<a href="' . $href . '" title="' . $title . '">' . $s_page . '</a> ';
-		$ret .= '<a href="#list_' . $params["page_$page"] . '"><sup>&uarr;</sup></a>';
+		$ret .= '<a href="#list_' . $params['page_ ' . $page] . '"><sup>&uarr;</sup></a>';
 		array_push($params['result'], $ret);
 		return;
 	}
 
-	$ret .= '<a id="list_' . $params["page_$page"] . '" href="' . $href .
+	$ret .= '<a id="list_' . $params['page_ ' . $page] . '" href="' . $href .
 		'" title="' . $title . '">' . $s_page . '</a>';
 	array_push($params['result'], $ret);
 
@@ -202,7 +203,7 @@ function plugin_ls2_list_push(& $params, $level)
 }
 
 // オプションを解析する
-function plugin_ls2_check_arg($value, $key, & $params)
+function plugin_ls2_check_arg($value, & $params)
 {
 	if ($value == '') {
 		$params['_done'] = TRUE;

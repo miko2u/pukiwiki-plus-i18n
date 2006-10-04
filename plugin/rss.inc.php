@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: rss.inc.php,v 1.18 2006/03/05 15:01:31 henoheno Exp $
+// $Id: rss.inc.php,v 1.20 2006/09/30 02:19:38 henoheno Exp $
 //
 // RSS plugin: Publishing RSS of RecentChanges
 //
@@ -26,8 +26,8 @@ function plugin_rss_action()
 	default: die('Invalid RSS version!!');
 	}
 
-	$recent = CACHE_DIR . 'recent.dat';
-	if (! file_exists($recent)) die('recent.dat is not found');
+	$recent = CACHE_DIR . PKWK_MAXSHOW_CACHE;
+	if (! file_exists($recent)) die('PKWK_MAXSHOW_CACHE is not found');
 
 	$lang = LANG;
 	$page_title_utf8 = mb_convert_encoding($page_title, 'UTF-8', SOURCE_ENCODING);

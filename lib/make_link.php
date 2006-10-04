@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: make_link.php,v 1.34.8 2006/09/18 05:12:45 miko Exp $
+// $Id: make_link.php,v 1.35.8 2006/09/30 02:10:50 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2003-2005 PukiWiki Developers Team
@@ -673,10 +673,10 @@ class Link_autolink extends Link
 
 		parent::Link($start);
 
-		if (! $autolink || ! file_exists(CACHE_DIR . 'autolink.dat'))
+		if (! $autolink || ! file_exists(CACHE_DIR . PKWK_AUTOLINK_REGEX_CACHE))
 			return;
 
-		@list($auto, $auto_a, $forceignorepages) = file(CACHE_DIR . 'autolink.dat');
+		@list($auto, $auto_a, $forceignorepages) = file(CACHE_DIR . PKWK_AUTOLINK_REGEX_CACHE);
 		$this->auto   = $auto;
 		$this->auto_a = $auto_a;
 		$this->forceignorepages = explode("\t", trim($forceignorepages));
