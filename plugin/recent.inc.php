@@ -1,5 +1,5 @@
 <?php
-// $Id: recent.inc.php,v 1.23.1 2006/03/05 14:59:29 miko Exp $
+// $Id: recent.inc.php,v 1.24.1 2006/09/30 02:18:23 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2006 PukiWiki Developers Team
@@ -21,7 +21,7 @@ define('PLUGIN_RECENT_EXEC_LIMIT', 3); // N times per one output
 define('PLUGIN_RECENT_USAGE', '#recent(number-to-show)');
 
 // Place of the cache of 'RecentChanges'
-define('PLUGIN_RECENT_CACHE', CACHE_DIR . 'recent.dat');
+define('PLUGIN_RECENT_CACHE', CACHE_DIR . PKWK_MAXSHOW_CACHE);
 
 function plugin_recent_convert()
 {
