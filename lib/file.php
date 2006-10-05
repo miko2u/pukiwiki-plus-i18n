@@ -97,6 +97,10 @@ function page_write($page, $postdata, $notimestamp = FALSE)
 		}
 	}
 
+	// Logging postdata
+	postdata_write();
+
+	// Create diff text
 	file_write(DIFF_DIR, $page, $diffdata);
 
 	// Create backup

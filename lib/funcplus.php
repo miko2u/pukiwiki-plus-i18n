@@ -1,14 +1,15 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: funcplus.php,v 0.1.20 2006/09/13 11:10:00 miko Exp $
+// $Id: funcplus.php,v 0.1.21 2006/09/13 11:10:00 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 // License: GPL v2 or (at your option) any later version
 //
 // Plus! extension function(s)
 
+defined('FUNC_POSTLOG')   or define('FUNC_POSTLOG', FALSE);
 defined('FUNC_SPAMLOG')   or define('FUNC_SPAMLOG', FALSE);
-defined('FUNC_BLACKLIST') or define('FUNC_BLACKLIST', FALSE);
+defined('FUNC_BLACKLIST') or define('FUNC_BLACKLIST', TRUE);
 defined('FUNC_SPAMREGEX') or define('FUNC_SPAMREGEX', '#(?:a\s+href=|\[/link\]|\[/url\])#i');
 defined('FUNC_SPAMCOUNT') or define('FUNC_SPAMCOUNT', 3);
 
@@ -65,16 +66,31 @@ function is_spampost($array, $count=0)
 	}
 	return FALSE;
 }
+// POST logging
+function postdata_write()
+{
+	global $get, $post, $vars, $cookie;
+
+	// Logging for POST Report
+	if (FUNC_POSTLOG === TRUE && version_compare(PHP_VERSION, '4.2.0', '>=')) {
+		error_log("\n\n----" . date('Y-m-d H:i:s', time()) . "\n", 3, CACHE_DIR . 'postdata.log');
+		error_log("[ADDR]" . $_SERVER['REMOTE_ADDR'] . "\t" . $_SERVER['HTTP_USER_AGENT'] . "\n", 3, CACHE_DIR . 'postdata.log');
+		error_log("[SESS]\n" . var_export($cookie, TRUE) . "\n", 3, CACHE_DIR . 'postdata.log');
+		error_log("[GET]\n"  . var_export($get,    TRUE) . "\n", 3, CACHE_DIR . 'postdata.log');
+		error_log("[POST]\n" . var_export($post,   TRUE) . "\n", 3, CACHE_DIR . 'postdata.log');
+		error_log("[VARS]\n" . var_export($vars,   TRUE) . "\n", 3, CACHE_DIR . 'postdata.log');
+	}
+}
 
 // SPAM logging
 function honeypot_write()
 {
-	global $get, $post, $vars;
+	global $get, $post, $vars, $cookie;
 
 	// Logging for SPAM Address
 	// NOTE: Not recommended use Rental Server
 	if ((FUNC_SPAMLOG === TRUE || FUNC_BLACKLIST === TRUE) && version_compare(PHP_VERSION, '4.2.0', '>=')) {
-		error_log($_SERVER['REMOTE_ADDR'] . "\t" . $_SERVER['HTTP_USER_AGENT'] . "\n", 3, CACHE_DIR . 'blacklist.log');
+		error_log($_SERVER['REMOTE_ADDR'] . "\t" . UTIME . "\t" . $_SERVER['HTTP_USER_AGENT'] . "\n", 3, CACHE_DIR . 'blacklist.log');
 	}
 
 	// Logging for SPAM Report
@@ -82,9 +98,10 @@ function honeypot_write()
 	if (FUNC_SPAMLOG === TRUE && version_compare(PHP_VERSION, '4.2.0', '>=')) {
 		error_log("----" . date('Y-m-d H:i:s', time()) . "\n", 3, CACHE_DIR . 'honeypot.log');
 		error_log("[ADDR]" . $_SERVER['REMOTE_ADDR'] . "\t" . $_SERVER['HTTP_USER_AGENT'] . "\n", 3, CACHE_DIR . 'honeypot.log');
-		error_log("[GET]\n"  . var_export($get,  TRUE) . "\n", 3, CACHE_DIR . 'honeypot.log');
-		error_log("[POST]\n" . var_export($post, TRUE) . "\n", 3, CACHE_DIR . 'honeypot.log');
-		error_log("[VARS]\n" . var_export($vars, TRUE) . "\n", 3, CACHE_DIR . 'honeypot.log');
+		error_log("[SESS]\n" . var_export($cookie, TRUE) . "\n", 3, CACHE_DIR . 'honeypot.log');
+		error_log("[GET]\n"  . var_export($get,    TRUE) . "\n", 3, CACHE_DIR . 'honeypot.log');
+		error_log("[POST]\n" . var_export($post,   TRUE) . "\n", 3, CACHE_DIR . 'honeypot.log');
+		error_log("[VARS]\n" . var_export($vars,   TRUE) . "\n", 3, CACHE_DIR . 'honeypot.log');
 	}
 }
 
