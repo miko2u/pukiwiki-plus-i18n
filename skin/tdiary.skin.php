@@ -600,12 +600,6 @@ if (isset($pkwk_dtd)) {
 <?php } ?>
  <script type="text/javascript" src="<?php echo SKIN_URI ?>greybox/AmiJS.js"></script>
  <script type="text/javascript" src="<?php echo SKIN_URI ?>greybox/greybox.js"></script>
-<?php
-  global $trackback, $referer;
-  if ($trackback) {
-?>
- <script type="text/javascript" src="<?php echo SKIN_URI ?>trackback.js"></script>
-<?php } ?>
 <?php echo $head_tag ?>
 </head>
 <body><!-- Theme:<?php echo htmlspecialchars($theme) . ' Sidebar:' . $sidebar ?> -->
@@ -671,11 +665,14 @@ function _navigator($key, $value = '', $javascript = ''){
    <?php _navigator('recent') ?>
    <?php _navigator('help')   ?>
 
-<?php if ($trackback) { ?> &nbsp;
-   <?php _navigator('trackback', $lang['trackback'] . '(' . tb_count($_page) . ')',
- 	($trackback_javascript == 1) ? 'onclick="OpenTrackback(this.href); return false"' : '') ?>
+<?php
+  global $trackback;
+  if ($trackback) { ?> &nbsp;
+   <?php _navigator('trackback', $lang['trackback'] . '(' . tb_count($_page) . ')','') ?>
 <?php } ?>
-<?php if ($referer)   { ?> &nbsp;
+<?php
+  global $referer;
+  if ($referer) { ?> &nbsp;
    <?php _navigator('refer') ?>
 <?php } ?>
 </div></div>

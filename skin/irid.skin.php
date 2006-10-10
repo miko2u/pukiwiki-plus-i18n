@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: irid.skin.php,v 1.1.8 2006/04/26 00:20:00 upk Exp $
+// $Id: irid.skin.php,v 1.1.9 2006/10/11 00:59:00 upk Exp $
 // Original is ari-
 //
 
@@ -73,12 +73,6 @@ if (isset($pkwk_dtd)) {
 <?php } ?>
  <script type="text/javascript" src="<?php echo SKIN_URI ?>greybox/AmiJS.js"></script>
  <script type="text/javascript" src="<?php echo SKIN_URI ?>greybox/greybox.js"></script>
-<?php
-  global $trackback, $referer;
-  if ($trackback) {
-?>
- <script type="text/javascript" src="<?php echo SKIN_URI ?>trackback.js"></script>
-<?php } ?>
 <?php echo $head_tag ?>
 </head>
 <body>
@@ -115,13 +109,15 @@ if (isset($pkwk_dtd)) {
 <?php } ?><!-- □END id:note -->
 <div id="trackback"><!-- ■BEGIN id:trackback -->
 <?php
+  global $trackback;
   if ($trackback) {
     $tb_id = tb_get_id($_page);
 ?>
-<a href="<?php echo "$script?plugin=tb&amp;__mode=view&amp;tb_id=$tb_id" ?>" onClick="OpenTrackback(this.href); return false">TrackBack(<?php echo tb_count($_page) ?>)</a> | 
+<a href="<?php echo "$script?plugin=tb&amp;__mode=view&amp;tb_id=$tb_id" ?>">TrackBack(<?php echo tb_count($_page) ?>)</a> | 
 <?php } ?>
 
 <?php
+  global $referer;
   if ($referer) {
 ?>
 <a href="<?php echo "$script?plugin=referer&amp;page=$r_page" ?>">外部リンク元</a>

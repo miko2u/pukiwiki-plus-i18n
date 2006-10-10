@@ -81,8 +81,6 @@ if (isset($pkwk_dtd)) {
  <link rel="stylesheet" type="text/css" media="print"  href="<php echo SKIN_URI ?>pukiwiki.css.php?charset=<?php echo $css_charset ?>&amp;media=print" charset="<?php echo $css_charset ?>" />
  <link rel="alternate" type="application/rss+xml" title="RSS" href="<?php echo $link['rss'] ?>" /><?php // RSS auto-discovery ?>
 
-<?php if (PKWK_ALLOW_JAVASCRIPT && $trackback_javascript) { ?> <script type="text/javascript" src="<php echo SKIN_URI ?>trackback.js"></script><?php } ?>
-
 <?php echo $head_tag ?>
 </head>
 <body>
@@ -155,11 +153,14 @@ function _navigator($key, $value = '', $javascript = ''){
  | <?php _navigator('help')   ?>
  ]
 
-<?php if ($trackback) { ?> &nbsp;
- [ <?php _navigator('trackback', $lang['trackback'] . '(' . tb_count($_page) . ')',
- 	($trackback_javascript == 1) ? 'onclick="OpenTrackback(this.href); return false"' : '') ?> ]
+<?php
+  global $trackback;
+  if ($trackback) { ?> &nbsp;
+ [ <?php _navigator('trackback', $lang['trackback'] . '(' . tb_count($_page) . ')','') ?> ]
 <?php } ?>
-<?php if ($referer)   { ?> &nbsp;
+<?php
+  global $referer;
+  if ($referer)   { ?> &nbsp;
  [ <?php _navigator('refer') ?> ]
 <?php } ?>
 <?php } // PKWK_SKIN_SHOW_NAVBAR ?>

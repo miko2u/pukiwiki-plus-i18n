@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: pukiwiki.ini.php,v 1.139.142.9 2006/09/17 03:30:36 miko Exp $
+// $Id: pukiwiki.ini.php,v 1.139.142.10 2006/10/11 00:50:00 upk Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2006 PukiWiki Developers Team
@@ -228,9 +228,6 @@ $use_spam_check = array(
 // 2: on
 //    Function in the past. Automatic ping transmission.
 $trackback = 2;
-
-// Show trackbacks with an another window (using JavaScript)
-$trackback_javascript = 0;
 
 /////////////////////////////////////////////////
 // Referer list feature

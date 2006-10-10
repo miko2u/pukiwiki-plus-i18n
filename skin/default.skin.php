@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: default.skin.php,v 1.34.30 2006/04/23 17:07:00 upk Exp $
+// $Id: default.skin.php,v 1.34.31 2006/10/11 00:59:00 upk Exp $
 //
 if (!defined('DATA_DIR')) { exit; }
 
@@ -64,12 +64,6 @@ if (isset($pkwk_dtd)) {
 <?php } ?>
  <script type="text/javascript" src="<?php echo SKIN_URI ?>greybox/AmiJS.js"></script>
  <script type="text/javascript" src="<?php echo SKIN_URI ?>greybox/greybox.js"></script>
-<?php
-  global $trackback, $referer;
-  if ($trackback) {
-?>
- <script type="text/javascript" src="<?php echo SKIN_URI ?>trackback.js"></script>
-<?php } ?>
 <?php echo $head_tag ?>
 </head>
 <body>

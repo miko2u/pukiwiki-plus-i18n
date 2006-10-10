@@ -1,9 +1,9 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: pukiwiki.ini.php,v 1.139.141 2006/06/24 23:08:00 upk Exp $
+// $Id: pukiwiki.ini.php,v 1.139.142.10 2006/10/11 00:50:00 upk Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
-//   2002-2005 PukiWiki Developers Team
+//   2002-2006 PukiWiki Developers Team
 //   2001-2002 Originally written by yu-ji
 // License: GPL v2 or (at your option) any later version
 //
@@ -170,6 +170,8 @@ $defaultpage  = 'FrontPage';     // Top / Default page
 $whatsnew     = 'RecentChanges'; // Modified page list
 $whatsdeleted = 'RecentDeleted'; // Removeed page list
 $interwiki    = 'InterWikiName'; // Set InterWiki definition here
+$aliaspage    = 'AutoAliasName'; // Set AutoAlias definition here
+$glossarypage = 'Glossary';		 // Set Glossary definition here
 $menubar      = 'MenuBar';       // Menu
 $sidebar      = 'SideBar';       // Side
 $headarea     = ':Header';
@@ -227,9 +229,6 @@ $use_spam_check = array(
 //    Function in the past. Automatic ping transmission.
 $trackback = 2;
 
-// Show trackbacks with an another window (using JavaScript)
-$trackback_javascript = 0;
-
 /////////////////////////////////////////////////
 // Referer list feature
 // 0: off
@@ -248,16 +247,33 @@ $_symbol_noexists = '?';
 
 /////////////////////////////////////////////////
 // AutoLink feature
+// Automatic link to existing pages (especially helpful for non-wikiword pages, but heavy)
 
-// AutoLink minimum length of page name
+// Minimum length of page name
 // Pukiwiki Plus! Recommended "5"
-$autolink = 5;
+$autolink = 5; // Bytes, 0 = OFF (try 8)
 
-// AutoAlias minimum bytes (0 = Disable)
-$autoalias = 2;
+/////////////////////////////////////////////////
+// AutoAlias feature
+// Automatic link from specified word, to specifiled URI, page or InterWiki
 
-// AutoGlossary minimum bytes (0 = Disable)
-$autoglossary = 2;
+// Minimum length of alias "from" word
+// Pukiwiki Plus! Recommended "4"
+$autoalias = 4; // Bytes, 0 = OFF (try 8)
+
+// Limit loading valid alias pairs
+$autoalias_max_words = 50; // pairs
+
+/////////////////////////////////////////////////
+// AutoGlossary feature
+// Automatic tooltip from specified word
+
+// Minimum length of glossary "from" word
+// Pukiwiki Plus! Recommended "2"
+$autoglossary = 2; // NChars, 0 = OFF
+
+// Limit loading valid glossary pairs
+$autoglossary_max_words = 50; // pairs
 
 /////////////////////////////////////////////////
 // Enable Freeze / Unfreeze feature
@@ -268,18 +284,8 @@ $function_freeze = 1;
 // (0:Disable, 1:For everyone,  2:Only for the administrator)
 $notimeupdate = 1;
 
-/////////////////////////////////////////////////
-// Authentication Parameter REALM
-$realm = 'PukiWikiAuth';
-
-/////////////////////////////////////////////////
-// Admin password for this Wikisite
-
-// CHANGE THIS
-$adminpass = '{x-php-md5}1a1dc91c907325c69271ddf0c944bc72'; // md5('pass')
-//$adminpass = '{CRYPT}$1$AR.Gk94x$uCe8fUUGMfxAPH83psCZG/'; // CRYPT 'pass'
-//$adminpass = '{MD5}Gh3JHJBzJcaScd3wyUS8cg==';             // MD5   'pass'
-//$adminpass = '{SMD5}o7lTdtHFJDqxFOVX09C8QnlmYmZnd2Qx';    // SMD5  'pass'
+// Authentication
+require_once('auth.ini.php');
 
 /////////////////////////////////////////////////
 // Page-reading feature settings
@@ -310,55 +316,6 @@ $pagereading_config_page = ':config/PageReading';
 
 // Page name of default pronouncing dictionary, used when converter = 'none'
 $pagereading_config_dict = ':config/PageReading/dict';
-
-/////////////////////////////////////////////////
-// User definition
-// 役割(ROLE)
-// 2 - サイト管理者
-// 3 - コンテンツ管理者
-// 4 - 認証者(未設定時のデフォルト)
-$auth_users = array(
-	// Username => password
-	'foo'	=> array('foo_passwd'), // Cleartext
-	'bar'	=> array('{x-php-md5}f53ae779077e987718cc285b14dfbe86'), // md5('bar_passwd')
-	'hoge'	=> array('{SMD5}OzJo/boHwM4q5R+g7LCOx2xGMkFKRVEx'), // SMD5 'hoge_passwd'
-	// 'hoge' => array('{SMD5}OzJo/boHwM4q5R+g7LCOx2xGMkFKRVEx',3), // SMD5 'hoge_passwd', コンテンツ管理者
-	// 'hoge' => array('{SMD5}OzJo/boHwM4q5R+g7LCOx2xGMkFKRVEx',2), // SMD5 'hoge_passwd', サイト管理者
-);
-
-/////////////////////////////////////////////////
-// Authentication method
-
-$auth_method_type = 'pagename'; // By Page name
-//$auth_method_type = 'contents'; // By Page contents
-
-/////////////////////////////////////////////////
-// Read auth (0:Disable, 1:Enable)
-$read_auth = 0;
-
-$read_auth_pages = array(
-	// Regex                   Username
-	'/:log/'		=> 'hoge',
-	'#ひきこもるほげ#'	=> 'hoge',
-	'#(ネタバレ|ねたばれ)#'	=> 'foo,bar,hoge',
-);
-
-/////////////////////////////////////////////////
-// Edit auth (0:Disable, 1:Enable)
-$edit_auth = 0;
-
-$edit_auth_pages = array(
-	// Regex                   Username
-	'#Barの公開日記#'	=> 'bar',
-	'#ひきこもるほげ#'	=> 'hoge',
-	'#(ネタバレ|ねたばれ)#'	=> 'foo,bar,hoge',
-);
-
-/////////////////////////////////////////////////
-// Search auth
-// 0: Disabled (Search read-prohibited page contents)
-// 1: Enabled  (Search only permitted pages for the user)
-$search_auth = 0;
 
 /////////////////////////////////////////////////
 // Exclude plugin for this site-policy.
