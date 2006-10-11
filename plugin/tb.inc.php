@@ -1,5 +1,5 @@
 <?php
-// $Id: tb.inc.php,v 1.19.23 2006/10/11 19:48:00 upk Exp $
+// $Id: tb.inc.php,v 1.19.24 2006/10/12 00:06:00 upk Exp $
 /*
  * PukiWiki/TrackBack: TrackBack Ping receiver and viewer
  * (C) 2003,2005-2006 Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
@@ -252,7 +252,7 @@ function plugin_tb_mode_view_set($page)
 
 	$tb_id = tb_get_id($page);
 
-	$body = '<div><fieldset><legend>'._('TrackBack URL').'<legend>'.
+	$body = '<div><fieldset><legend>'._('TrackBack URL').'</legend>'.
 		'<p>'.$script . '?tb_id=' . $tb_id.'</p>'.
 		'</fieldset></div>'."\n";
 
