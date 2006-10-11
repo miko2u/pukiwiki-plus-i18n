@@ -1,5 +1,5 @@
 <?php
-// $Id: tb.inc.php,v 1.19.22 2006/09/17 02:59:00 upk Exp $
+// $Id: tb.inc.php,v 1.19.23 2006/10/11 19:48:00 upk Exp $
 /*
  * PukiWiki/TrackBack: TrackBack Ping receiver and viewer
  * (C) 2003,2005-2006 Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
@@ -237,7 +237,11 @@ function plugin_tb_mode_view($tb_id)
 
 	$vars['page'] = $page; // topicpath
 	$retval = array();
-	$retval['msg'] = sprintf( _('TrackBack: Discussion on TrackBack in %s'), $page);
+// TrackBack list to aaaaa
+// aaaa への TrackBack 一覧
+
+	// $retval['msg'] = sprintf( _('TrackBack list to %s'), $page);
+	$retval['msg'] = $page;
 	$retval['body'] = plugin_tb_mode_view_set($page);
 	return $retval;
 }
@@ -248,13 +252,12 @@ function plugin_tb_mode_view_set($page)
 
 	$tb_id = tb_get_id($page);
 
-	$body  = '<h3>' . _('TrackBack URL for this entry:') . "</h3>\n";
-	$body .= '<p>' . $script . '?tb_id=' . $tb_id . "</p>\n";
-	$body .= '<h3>' . _('Continuing the discussion...') . "</h3>\n";
-	
-	$_tb_header_Excerpt = _('Summary:');
-	$_tb_header_Weblog  = _('Weblog:');
-	$_tb_header_Tracked = _('Tracked:');
+	$body = '<div><fieldset><legend>'._('TrackBack URL').'<legend>'.
+		'<p>'.$script . '?tb_id=' . $tb_id.'</p>'.
+		'</fieldset></div>'."\n";
+
+	$_tb_header_Weblog  = _('Blog:');
+	$_tb_header_Tracked = _('Date:');
 	$_tb_date   = _('F j, Y, g:i A');
 
 	$data = tb_get(tb_get_filename($page));
@@ -270,16 +273,19 @@ function plugin_tb_mode_view_set($page)
 
 		$time = get_date($_tb_date, $time);
 
-		$body .= '<h4><a class="ext" href="' . $url . '" rel="nofollow">' . $title . 
+		$body .= '<div><fieldset>'.
+			 '<legend><a class="ext" href="' . $url . '" rel="nofollow">' . $title . 
 			 '<img src="'.IMAGE_URI.'plus/ext.png" alt="" title="" class="ext" onclick="return open_uri(\'' .
-			 $url . '\', \'_blank\');" /></a></h4>' . "\n";
+			 $url . '\', \'_blank\');" /></a></legend>' . "\n".
 
-		$body .= '<p>' . $excerpt . "</p>\n";
+			 '<p>' . $excerpt . "</p>\n".
 
-		$body .= '<div style="text-align:right">' .
-			 $_tb_header_Tracked . $time . ' ' .
-			 $_tb_header_Weblog . $blog_name . "</div>\n";
+			 '<div style="text-align:right">' .
+			 '<strong>'.$_tb_header_Tracked.'</strong>'.$time.'&nbsp;&nbsp;'.
+			 '<strong>'.$_tb_header_Weblog.'</strong>'.$blog_name.
+			 '</div>'."\n".
 
+			 '</fieldset></div>'."\n";
 	}
 
 	$body .= '<div style="text-align:right">' .

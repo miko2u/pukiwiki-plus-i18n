@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-20 15:20+0900\n"
+"POT-Creation-Date: 2006-10-11 22:59+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,35 +16,22 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../plugin/tb.inc.php:198
-#, php-format
-msgid "TrackBack: Discussion on TrackBack in %s"
+#: ../../plugin/tb.inc.php:255
+msgid "TrackBack URL"
 msgstr ""
 
-#: ../../plugin/tb.inc.php:209
-msgid "TrackBack URL for this entry:"
+#: ../../plugin/tb.inc.php:259
+msgid "Blog:"
 msgstr ""
 
-#: ../../plugin/tb.inc.php:211
-msgid "Continuing the discussion..."
+#: ../../plugin/tb.inc.php:260
+msgid "Date:"
 msgstr ""
 
-#: ../../plugin/tb.inc.php:213
-msgid "Summary:"
-msgstr ""
-
-#: ../../plugin/tb.inc.php:214
-msgid "Weblog:"
-msgstr ""
-
-#: ../../plugin/tb.inc.php:215
-msgid "Tracked:"
-msgstr ""
-
-#: ../../plugin/tb.inc.php:216
+#: ../../plugin/tb.inc.php:261
 msgid "F j, Y, g:i A"
 msgstr ""
 
-#: ../../plugin/tb.inc.php:264
+#: ../../plugin/tb.inc.php:314
 msgid "RECENT TRACKBACK"
 msgstr ""
