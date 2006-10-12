@@ -592,8 +592,7 @@ if (isset($pkwk_dtd)) {
 <?php if (exist_plugin_convert('js_init')) echo do_plugin_convert('js_init'); ?>
  // -->
  </script>
-<?php global $language,$use_local_time; ?>
- <script type="text/javascript" src="<?php echo SKIN_URI.'lang/'.$language ?>.js"></script>
+ <script type="text/javascript" src="<?php echo SKIN_URI . 'lang/' . $language ?>.js"></script>
  <script type="text/javascript" src="<?php echo SKIN_URI ?>default.js"></script>
  <script type="text/javascript" src="<?php echo SKIN_URI ?>kanzaki.js"></script>
  <script type="text/javascript" src="<?php echo SKIN_URI ?>ajax/textloader.js"></script>
