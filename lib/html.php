@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: html.php,v 1.49.58.10 2006/10/11 01:26:00 upk Exp $
+// $Id: html.php,v 1.49.58.11 2006/10/12 01:26:00 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2006 PukiWiki Developers Team
@@ -16,6 +16,7 @@ function catbody($title, $page, $body)
 	global $attach_link, $related_link, $cantedit, $function_freeze;
 	global $search_word_color, $foot_explain, $note_hr, $head_tags, $foot_tags;
 	global $trackback, $referer, $javascript;
+	global $newtitle, $newbase, $language, $use_local_time; // Plus! skin extension
 	global $nofollow;
 	global $_LANG, $_LINK, $_IMAGE;
 
