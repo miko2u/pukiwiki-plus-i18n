@@ -27,7 +27,7 @@ switch(UI_LANG){
 
 // Output HTTP headers
 pkwk_common_headers();
-header('Cache-control: no-cache');
+header('Cache-Control: no-cache');
 header('Pragma: no-cache');
 header('Content-Type: text/html; charset=' . CONTENT_CHARSET);
 header('ETag: ' . md5(MUTIME));
@@ -46,7 +46,6 @@ if (isset($pkwk_dtd)) {
  <meta http-equiv="content-style-type" content="text/css" />
  <meta http-equiv="content-script-type" content="text/javascript" />
 <?php if ($nofollow || ! $is_read)  { ?> <meta name="robots" content="NOINDEX,NOFOLLOW" /><?php } ?>
-<?php global $newtitle, $newbase; ?>
 <?php if ($title == $defaultpage) { ?>
  <title><?php echo "$page_title" ?></title>
 <?php } elseif ($newtitle != '' && $is_read) { ?>
@@ -62,8 +61,7 @@ if (isset($pkwk_dtd)) {
 <?php if (exist_plugin_convert('js_init')) echo do_plugin_convert('js_init'); ?>
  // -->
  </script>
-<?php global $language,$use_local_time; ?>
- <script type="text/javascript" src="<?php echo SKIN_URI.'lang/'.$language ?>.js"></script>
+ <script type="text/javascript" src="<?php echo SKIN_URI . 'lang/' . $language ?>.js"></script>
  <script type="text/javascript" src="<?php echo SKIN_URI ?>default.js"></script>
  <script type="text/javascript" src="<?php echo SKIN_URI ?>kanzaki.js"></script>
  <script type="text/javascript" src="<?php echo SKIN_URI ?>ajax/textloader.js"></script>
@@ -108,18 +106,13 @@ if (isset($pkwk_dtd)) {
 </div>
 <?php } ?><!-- □END id:note -->
 <div id="trackback"><!-- ■BEGIN id:trackback -->
-<?php
-  global $trackback;
-  if ($trackback) {
+<?php if ($trackback) {
     $tb_id = tb_get_id($_page);
 ?>
 <a href="<?php echo "$script?plugin=tb&amp;__mode=view&amp;tb_id=$tb_id" ?>">TrackBack(<?php echo tb_count($_page) ?>)</a> | 
 <?php } ?>
 
-<?php
-  global $referer;
-  if ($referer) {
-?>
+<?php if ($referer) { ?>
 <a href="<?php echo "$script?plugin=referer&amp;page=$r_page" ?>">外部リンク元</a>
 <?php } ?>
 </div><!-- □ END id:trackback -->

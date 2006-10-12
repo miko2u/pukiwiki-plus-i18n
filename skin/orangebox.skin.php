@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
 //
-// $Id: orangebox.skin.php,v 1.18.9 2006/04/30 04:46:00 upk Exp $
+// $Id: orangebox.skin.php,v 1.18.10 2006/10/12 04:46:00 miko Exp $
 // Original is ari-
 
 // Prohibit direct access
@@ -64,7 +64,6 @@ if (isset($pkwk_dtd)) {
  <meta http-equiv="content-style-type" content="text/css" />
  <meta http-equiv="content-script-type" content="text/javascript" />
 <?php if ($nofollow || ! $is_read)  { ?> <meta name="robots" content="NOINDEX,NOFOLLOW" /><?php } ?>
-<?php global $newtitle, $newbase; ?>
 <?php if ($title == $defaultpage) { ?>
  <title><?php echo "$page_title" ?></title>
 <?php } elseif ($newtitle != '' && $is_read) { ?>
@@ -80,7 +79,6 @@ if (isset($pkwk_dtd)) {
 <?php if (exist_plugin_convert('js_init')) echo do_plugin_convert('js_init'); ?>
  // -->
  </script>
-<?php global $language,$use_local_time; ?>
  <script type="text/javascript" src="<?php echo SKIN_URI.'lang/'.$language ?>.js"></script>
  <script type="text/javascript" src="<?php echo SKIN_URI ?>default.js"></script>
  <script type="text/javascript" src="<?php echo SKIN_URI ?>kanzaki.js"></script>
@@ -120,17 +118,12 @@ if (isset($pkwk_dtd)) {
 <div id="note"><?php echo $notes ?></div>
 <?php } ?>
 <div id="trackback">
-<?php
-  global $trackback;
-  if ($trackback) {
+<?php if ($trackback) {
     $tb_id = tb_get_id($_page);
 ?>
 <a href="<?php echo "$script?plugin=tb&amp;__mode=view&amp;tb_id=$tb_id" ?>">TrackBack(<?php echo tb_count($_page) ?>)</a> | 
 <?php } ?>
-<?php
-  global $referer;
-  if ($referer) {
-?>
+<?php if ($referer) { ?>
 <a href="<?php echo "$script?plugin=referer&amp;page=$r_page" ?>">外部リンク元</a>
 <?php } ?>
 </div>
