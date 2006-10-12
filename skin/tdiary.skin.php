@@ -1,9 +1,9 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: tdiary.skin.php,v 1.30.3 2006/04/30 02:27:00 upk Exp $
+// $Id: tdiary.skin.php,v 1.33.3 2006/10/08 11:24:30 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
-//   2002-2005 PukiWiki Developers Team
+//   2002-2006 PukiWiki Developers Team
 //   2001-2002 Originally written by yu-ji
 // License: GPL v2 or (at your option) any later version
 //
@@ -575,15 +575,18 @@ if (isset($pkwk_dtd)) {
  <?php echo $meta_content_type ?>
  <meta http-equiv="content-style-type" content="text/css" />
 <?php if ($nofollow || ! $is_read)  { ?> <meta name="robots" content="NOINDEX,NOFOLLOW" /><?php } ?>
+<?php if (PKWK_ALLOW_JAVASCRIPT && isset($javascript)) { ?> <meta http-equiv="Content-Script-Type" content="text/javascript" /><?php } ?>
+
  <title><?php echo $title ?> - <?php echo $page_title ?></title>
- <link rel="shortcut icon" href="<?php echo $image['favicon'] ?>" />
+
+ <link rel="SHORTCUT ICON" href="<?php echo $image['favicon'] ?>" />
  <link rel="stylesheet" type="text/css" media="all" href="<?php echo SKIN_URI ?>theme/base.css" />
  <link rel="stylesheet" type="text/css" media="all" href="<?php echo SKIN_URI ?>theme/<?php echo $theme ?>/<?php echo $theme ?>.css" />
  <link rel="stylesheet" type="text/css" media="screen" href="<?php echo SKIN_URI ?>tdiary.css.php?charset=<?php echo $css_charset ?>&amp;color=<?php echo $css_theme ?>" charset="<?php echo $css_charset ?>" />
  <link rel="stylesheet" type="text/css" media="print"  href="<?php echo SKIN_URI ?>tdiary.css.php?charset=<?php echo $css_charset ?>&amp;color=<?php echo $css_theme ?>&amp;media=print" charset="<?php echo $css_charset ?>" />
  <link rel="stylesheet" href="<?php echo SKIN_URI ?>greybox/greybox.css" type="text/css" media="all" charset="<?php echo $css_charset ?>" />
  <link rel="alternate" href="<?php echo $_LINK['mixirss'] ?>" type="application/rss+xml" title="RSS" />
- <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+
  <script type="text/javascript">
  <!--
 <?php if (exist_plugin_convert('js_init')) echo do_plugin_convert('js_init'); ?>
@@ -665,14 +668,10 @@ function _navigator($key, $value = '', $javascript = ''){
    <?php _navigator('recent') ?>
    <?php _navigator('help')   ?>
 
-<?php
-  global $trackback;
-  if ($trackback) { ?> &nbsp;
-   <?php _navigator('trackback', $lang['trackback'] . '(' . tb_count($_page) . ')','') ?>
+<?php if ($trackback) { ?> &nbsp;
+   <?php _navigator('trackback', $lang['trackback'] . '(' . tb_count($_page) . ')') ?>
 <?php } ?>
-<?php
-  global $referer;
-  if ($referer) { ?> &nbsp;
+<?php if ($referer)   { ?> &nbsp;
    <?php _navigator('refer') ?>
 <?php } ?>
 </div></div>
@@ -925,7 +924,7 @@ function _toolbar($key, $x = 20, $y = 20){
 <?php } // PKWK_SKIN_SHOW_TOOLBAR ?>
 
 <!-- Copyright etc -->
- Webmaster: <a href="<?php echo $modifierlink ?>"><?php echo $modifier ?></a><p />
+ Site admin: <a href="<?php echo $modifierlink ?>"><?php echo $modifier ?></a><p />
  <?php echo S_COPYRIGHT ?>.
  Powered by PHP <?php echo PHP_VERSION ?><br />
  HTML convert time: <?php echo $taketime ?> sec.
