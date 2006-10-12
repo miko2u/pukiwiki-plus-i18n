@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: html.php,v 1.49.58.11 2006/10/12 01:26:00 miko Exp $
+// $Id: html.php,v 1.49.58.12 2006/10/12 13:26:00 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2006 PukiWiki Developers Team
@@ -320,7 +320,7 @@ EOD;
 function edit_form_assistant()
 {
 	global $pkwk_dtd;
-	static $assist_loaded = 0;	// for non-reentry
+	static $assist_loaded = FALSE;	// for non-reentry
 
 	// if Mobile-Phone, do not use.
 	if (defined('UA_PROFILE') && UA_PROFILE != 'default')
@@ -330,8 +330,8 @@ function edit_form_assistant()
 	if (! isset($pkwk_dtd) || $pkwk_dtd == PKWK_DTD_XHTML_1_1)
 		$pkwk_dtd = PKWK_DTD_XHTML_1_0_TRANSITIONAL;
 
-	if (!$assist_loaded) {
-		$assist_loaded++;
+	if ($assist_loaded === FALSE) {
+		$assist_loaded = TRUE;
 		$map = <<<EOD
 <map id="map_button" name="map_button">
 <area shape="rect" coords="0,0,22,16" title="URL" alt="URL" href="#" onclick="javascript:pukiwiki_linkPrompt('url'); return false;" />
