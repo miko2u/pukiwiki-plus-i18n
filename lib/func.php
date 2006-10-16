@@ -718,10 +718,10 @@ function get_autoglossaries($word = '')
 		foreach ($postdata as $line) {
 			if ($count == $max) break;
 			if (preg_match($pattern, $line, $matches)) {
-				$word = trim($matches[1]);
-				if (!isset($pairs[$word])) {
+				$name = trim($matches[1]);
+				if (!isset($pairs[$name])) {
 					++$count;
-					$pairs[$word] = TRUE;
+					$pairs[$name] = TRUE;
 				}
 			}
 		}
