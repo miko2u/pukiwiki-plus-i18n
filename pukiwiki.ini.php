@@ -174,9 +174,6 @@ define('PLUS_ALLOW_SESSION', 1);
 // Enable Trackback
 $trackback = 1;
 
-// Show trackbacks with an another window (using JavaScript)
-$trackback_javascript = 0;
-
 /////////////////////////////////////////////////
 // Convert cache feature
 

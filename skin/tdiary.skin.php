@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: tdiary.skin.php,v 1.32.1 2006/08/06 12:44:55 henoheno Exp $
+// $Id: tdiary.skin.php,v 1.33.1 2006/10/08 11:24:30 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2006 PukiWiki Developers Team
@@ -586,8 +586,6 @@ if (isset($pkwk_dtd)) {
  <link rel="stylesheet" type="text/css" media="print"  href="<?php echo SKIN_URI ?>tdiary.css.php?charset=<?php echo $css_charset ?>&amp;color=<?php echo $css_theme ?>&amp;media=print" charset="<?php echo $css_charset ?>" />
  <link rel="alternate" type="application/rss+xml" title="RSS" href="<?php echo $link['rss'] ?>" /><?php // RSS auto-discovery ?>
 
-<?php if (PKWK_ALLOW_JAVASCRIPT && $trackback_javascript) { ?> <script type="text/javascript" src="skin/trackback.js"></script><?php } ?>
-
 <?php echo $head_tag ?>
 </head>
 <body><!-- Theme:<?php echo htmlspecialchars($theme) . ' Sidebar:' . $sidebar ?> -->
@@ -654,8 +652,7 @@ function _navigator($key, $value = '', $javascript = ''){
    <?php _navigator('help')   ?>
 
 <?php if ($trackback) { ?> &nbsp;
-   <?php _navigator('trackback', $lang['trackback'] . '(' . tb_count($_page) . ')',
- 	($trackback_javascript == 1) ? 'onclick="OpenTrackback(this.href); return false"' : '') ?>
+   <?php _navigator('trackback', $lang['trackback'] . '(' . tb_count($_page) . ')') ?>
 <?php } ?>
 <?php if ($referer)   { ?> &nbsp;
    <?php _navigator('refer') ?>
