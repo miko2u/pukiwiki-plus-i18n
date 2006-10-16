@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: func.php,v 1.76.11 2006/09/18 05:12:45 miko Exp $
+// $Id: func.php,v 1.81.11 2006/10/09 22:09:04 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2006 PukiWiki Developers Team
@@ -563,8 +563,8 @@ function get_glossary_pattern(& $pages, $min_len = -1)
 		$auto_pages_a = array_values(preg_grep('/^[A-Z]+$/i', $auto_pages));
 		$auto_pages   = array_values(array_diff($auto_pages,  $auto_pages_a));
 
-		$result   = get_autolink_pattern_sub($auto_pages,   0, count($auto_pages),   0);
-		$result_a = get_autolink_pattern_sub($auto_pages_a, 0, count($auto_pages_a), 0);
+		$result   = get_matcher_regex($auto_pages);
+		$result_a = get_matcher_regex($auto_pages_a);
 	}
 	return array($result, $result_a, $forceignorepages);
 }
@@ -599,39 +599,68 @@ function get_autolink_pattern(& $pages, $min_len = -1)
 		$auto_pages_a = array_values(preg_grep('/^[A-Z]+$/i', $auto_pages));
 		$auto_pages   = array_values(array_diff($auto_pages,  $auto_pages_a));
 
-		$result   = get_autolink_pattern_sub($auto_pages,   0, count($auto_pages),   0);
-		$result_a = get_autolink_pattern_sub($auto_pages_a, 0, count($auto_pages_a), 0);
+		$result   = get_matcher_regex($auto_pages);
+		$result_a = get_matcher_regex($auto_pages_a);
 	}
 	return array($result, $result_a, $forceignorepages);
 }
 
+// Generate a regex, that just matches with all $array values
+// NOTE: All array_keys($array) must be continuous integers, like 0 ... N
+//       Also, all $array values must be strings.
+// $offset = (int) $array[$offset] is the first value to check
+// $sentry = (int) $array[$sentry - 1] is the last value to check  
+// $pos    = (int) Position of letter to start checking. (0 = the first letter)
+function get_matcher_regex(& $array, $offset = 0, $sentry = NULL, $pos = 0)
+{
+	if (empty($array)) return '(?!)'; // Zero
+	if ($sentry === NULL) $sentry = count($array);
+
+	// Too short. Skip this
+	$skip = ($pos >= mb_strlen($array[$offset]));
+	if ($skip) ++$offset;
+
+	// Generate regex for each value
+	$regex = '';
+	$index = $offset;
+	$multi = FALSE;
+	while ($index < $sentry) {
+		if ($index != $offset) {
+			$multi = TRUE;
+			$regex .= '|'; // OR
+		}
+
+		// Get one character from left side of the value
+		$char = mb_substr($array[$index], $pos, 1);
+
+		// How many continuous keys have the same letter
+		// at the same position?
+		for ($i = $index; $i < $sentry; $i++)
+			if (mb_substr($array[$i], $pos, 1) != $char) break;
+
+		if ($index < ($i - 1)) {
+			// Some more keys found
+			// Recurse
+			$regex .= str_replace(' ', '\\ ', preg_quote($char, '/')) .
+				get_matcher_regex($array, $index, $i, $pos + 1);
+		} else {
+			// Not found
+			$regex .= str_replace(' ', '\\ ',
+				preg_quote(mb_substr($array[$index], $pos), '/'));
+		}
+		$index = $i;
+	}
+
+	if ($skip || $multi) $regex = '(?:' . $regex . ')';
+	if ($skip) $regex .= '?'; // Match for $pages[$offset - 1]
+
+	return $regex;
+}
+
+// Compat
 function get_autolink_pattern_sub(& $pages, $start, $end, $pos)
 {
-	if ($end == 0) return '(?!)';
-
-	$result = '';
-	$count = $i = $j = 0;
-	$x = (mb_strlen($pages[$start]) <= $pos);
-	if ($x) ++$start;
-
-	for ($i = $start; $i < $end; $i = $j) {
-		$char = mb_substr($pages[$i], $pos, 1);
-		for ($j = $i; $j < $end; $j++)
-			if (mb_substr($pages[$j], $pos, 1) != $char) break;
-
-		if ($i != $start) $result .= '|';
-		if ($i >= ($j - 1)) {
-			$result .= str_replace(' ', '\\ ', preg_quote(mb_substr($pages[$i], $pos), '/'));
-		} else {
-			$result .= str_replace(' ', '\\ ', preg_quote($char, '/')) .
-				get_autolink_pattern_sub($pages, $i, $j, $pos + 1);
-		}
-		++$count;
-	}
-	if ($x || $count > 1) $result = '(?:' . $result . ')';
-	if ($x)               $result .= '?';
-
-	return $result;
+	return get_matcher_regex(& $pages, $start, $end, $pos);
 }
 
 // Load/get setting pairs from AutoAliasName
