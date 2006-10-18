@@ -191,8 +191,10 @@ function pukiwiki_linkPrompt(v) {
 	if(cbText && cbText.match(regex))
 		default_url = cbText;
 	var my_link = prompt('URL: ', default_url);
-	if (my_link != null)
+	if (my_link != null) {
+		pukiwiki_elem.focus();
 		document.selection.createRange().text = '[[' + str + '>' + my_link + ']]';
+	}
 	pukiwiki_elem.focus();
 	//if (pukiwiki_elem != null) pukiwiki_elem = null;
 }
