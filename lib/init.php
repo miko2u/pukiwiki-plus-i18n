@@ -11,7 +11,7 @@
 
 // PukiWiki version / Copyright / License
 
-define('S_VERSION', '1.4.7plus-u1-i18n');
+define('S_VERSION', '1.4.7plus-u2-i18n');
 define('S_COPYRIGHT',
 	'<strong>PukiWiki Plus! ' . S_VERSION . '</strong>' .
 	' Copyright &copy; 2001-2006' .
