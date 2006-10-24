@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: edit.inc.php,v 1.40.29 2006/09/12 00:18:00 miko Exp $
+// $Id: edit.inc.php,v 1.40.30 2006/10/24 13:03:00 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2001-2006 PukiWiki Developers Team
@@ -187,8 +187,8 @@ function plugin_edit_write()
 		if ($vars['ticket'] != $s_ticket)
 			return plugin_edit_honeypot();
 		$s_origin = md5(get_ticket() . str_replace("\r", '', htmlspecialchars($vars['original'])));
-		if (!isset($_SESSION['origin']) || $_SESSION['origin'] != $s_origin)
-			return plugin_edit_honeypot();
+//		if (!isset($_SESSION['origin']) || $_SESSION['origin'] != $s_origin)
+//			return plugin_edit_honeypot();
 	} else {
 		if (isset($post['encode_hint']) && $post['encode_hint'] != PKWK_ENCODING_HINT)
 			return plugin_edit_honeypot();
