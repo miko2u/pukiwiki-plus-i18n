@@ -1,5 +1,5 @@
 <?php
-// $Id: bugtrack.inc.php,v 1.26 2006/01/11 23:20:00 upk Exp $
+// $Id: bugtrack.inc.php,v 1.26.1 2006/10/24 15:00:02 miko Exp $
 //
 // PukiWiki BugTrack plugin
 //
@@ -101,9 +101,10 @@ function plugin_bugtrack_print_form($base, $category)
 		$encoded_category .= '</select>';
 	}
 
-	$ticket = md5(mt_rand());
+	$ticket = md5(MUTIME);
 	if (function_exists('pkwk_session_start') && pkwk_session_start() != 0) {
-		$_SESSION['bugtrack'] = md5(get_ticket() . $ticket);
+		$keyword = 'B_' . $ticket;
+		$_SESSION[$keyword] = md5(get_ticket() . $ticket);
 	}
 
 	$script     = get_script_uri();
@@ -186,7 +187,8 @@ function plugin_bugtrack_action()
 	$spam = FALSE;
 	if (function_exists('pkwk_session_start') && pkwk_session_start() != 0) {
 		$s_bugtrack = md5(get_ticket() . $post['ticket']);
-		if ($_SESSION['bugtrack'] != $s_bugtrack) {
+		$keyword = 'B_' . $post['ticket'];
+		if ($_SESSION[$keyword] != $s_bugtrack) {
 			$spam = TRUE;
 		}
 	} else {
