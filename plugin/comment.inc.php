@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: comment.inc.php,v 1.36.12 2006/09/12 23:24:00 miko Exp $
+// $Id: comment.inc.php,v 1.36.13 2006/10/24 14:24:00 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
@@ -30,8 +30,8 @@ function plugin_comment_action()
 	// Petit SPAM Check (Client(Browser)-Server Ticket Check)
 	$spam = FALSE;
 	if (function_exists('pkwk_session_start') && pkwk_session_start() != 0) {
-		$s_comment = md5(get_ticket() . $post['ticket']);
-		$keyword = 'comment' . $post['comment_no'];
+		$s_comment = md5(get_ticket() . $post['digest']);
+		$keyword = $post['ticket'];
 		if ($_SESSION[$keyword] != $s_comment) {
 			$spam = TRUE;
 		}
@@ -171,10 +171,10 @@ function plugin_comment_convert()
 	$script = get_script_uri();
 	$s_page = htmlspecialchars($vars['page']);
 
-	$ticket = md5(mt_rand());
+	$ticket = md5(MUTIME);
 	if (function_exists('pkwk_session_start') && pkwk_session_start() != 0) {
-		$keyword = 'comment' . $comment_no;
-		$_SESSION[$keyword] = md5(get_ticket() . $ticket);
+		$keyword = $ticket;
+		$_SESSION[$keyword] = md5(get_ticket() . $digest);
 	}
 
 	$string = <<<EOD
