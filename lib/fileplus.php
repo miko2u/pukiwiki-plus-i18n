@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: fileplus.php,v 1.2 2006/05/15 05:21:00 miko Exp $
+// $Id: fileplus.php,v 1.2.1 2006/10/24 22:18:00 upk Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 // License: GPL v2 or (at your option) any later version
@@ -21,13 +21,13 @@ function get_ticket($newticket = FALSE)
 		pkwk_touch_file($file);
 		$fp = fopen($file, 'r+') or die_message('Cannot open ' . 'CACHE_DIR/' . 'ticket.dat');
 		set_file_buffer($fp, 0);
-		flock($fp, LOCK_EX);
+		@flock($fp, LOCK_EX);
 		$last = ignore_user_abort(1);
 		ftruncate($fp, 0);
 		rewind($fp);
 		fputs($fp, $ticket . "\n");
 		ignore_user_abort($last);
-		flock($fp, LOCK_UN);
+		@flock($fp, LOCK_UN);
 		fclose($fp);
 	}
 	return $ticket;

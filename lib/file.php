@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: file.php,v 1.76.25 2006/09/30 02:35:35 miko Exp $
+// $Id: file.php,v 1.76.26 2006/10/24 22:18:00 upk Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2006 PukiWiki Developers Team
@@ -32,7 +32,7 @@ function get_source($page = NULL, $lock = TRUE, $join = FALSE)
 		if ($lock) {
 			$fp = @fopen($path, 'r');
 			if ($fp == FALSE) return $result;
-			flock($fp, LOCK_SH);
+			@flock($fp, LOCK_SH);
 		}
 
 		if ($join) {
@@ -45,7 +45,7 @@ function get_source($page = NULL, $lock = TRUE, $join = FALSE)
 		}
 
 		if ($lock) {
-			flock($fp, LOCK_UN);
+			@flock($fp, LOCK_UN);
 			@fclose($fp);
 		}
 	}
@@ -302,7 +302,7 @@ function file_head($file, $count = 1, $lock = TRUE, $buffer = 8192)
 	$fp = @fopen($file, 'r');
 	if ($fp === FALSE) return FALSE;
 	set_file_buffer($fp, 0);
-	if ($lock) flock($fp, LOCK_SH);
+	if ($lock) @flock($fp, LOCK_SH);
 	rewind($fp);
 	$index = 0;
 	while (! feof($fp)) {
@@ -310,7 +310,7 @@ function file_head($file, $count = 1, $lock = TRUE, $buffer = 8192)
 		if ($line != FALSE) $array[] = $line;
 		if (++$index >= $count) break;
 	}
-	if ($lock) flock($fp, LOCK_UN);
+	if ($lock) @flock($fp, LOCK_UN);
 	if (! fclose($fp)) return FALSE;
 
 	return $array;
@@ -372,13 +372,13 @@ function file_write($dir, $page, $str, $notimestamp = FALSE)
 		'<br />' . "\n" .
 		'Maybe permission is not writable or filename is too long');
 	set_file_buffer($fp, 0);
-	flock($fp, LOCK_EX);
+	@flock($fp, LOCK_EX);
 	$last = ignore_user_abort(1);
 	ftruncate($fp, 0);
 	rewind($fp);
 	fputs($fp, $str);
 	ignore_user_abort($last);
-	flock($fp, LOCK_UN);
+	@flock($fp, LOCK_UN);
 	fclose($fp);
 
 	if ($timestamp) pkwk_touch_file($file, $timestamp);
@@ -451,13 +451,13 @@ function add_recent($page, $recentpage, $subject = '', $limit = 0)
 		htmlspecialchars($recentpage) .
 		'<br />Maybe permission is not writable or filename is too long');
 	set_file_buffer($fp, 0);
-	flock($fp, LOCK_EX);
+	@flock($fp, LOCK_EX);
 	rewind($fp);
 	fputs($fp, '#freeze'    . "\n");
 	fputs($fp, '#norelated' . "\n"); // :)
 	fputs($fp, join('', $lines));
-	flock($fp, LOCK_UN);
-	fclose($fp);
+	@flock($fp, LOCK_UN);
+	@fclose($fp);
 }
 
 // Update PKWK_MAXSHOW_CACHE itself (Add or renew about the $page) (Light)
@@ -509,15 +509,15 @@ function lastmodified_add($update = '', $remove = '')
 	$fp = fopen($file, 'r+') or
 		die_message('Cannot open ' . 'CACHE_DIR/' . PKWK_MAXSHOW_CACHE);
 	set_file_buffer($fp, 0);
-	flock($fp, LOCK_EX);
+	@flock($fp, LOCK_EX);
 	$last = ignore_user_abort(1);
 	ftruncate($fp, 0);
 	rewind($fp);
 	foreach ($recent_pages as $page=>$time)
 		fputs($fp, $time . "\t" . $page . "\n");
 	ignore_user_abort($last);
-	flock($fp, LOCK_UN);
-	fclose($fp);
+	@flock($fp, LOCK_UN);
+	@fclose($fp);
 
 	// Update 'RecentChanges'
 	$recent_pages = array_splice($recent_pages, 0, $maxshow);
@@ -526,7 +526,7 @@ function lastmodified_add($update = '', $remove = '')
 	$fp = fopen($file, 'r+') or
 		die_message('Cannot open ' . htmlspecialchars($whatsnew));
 	set_file_buffer($fp, 0);
-	flock($fp, LOCK_EX);
+	@flock($fp, LOCK_EX);
 	$last = ignore_user_abort(1);
 	ftruncate($fp, 0);
 	rewind($fp);
@@ -535,8 +535,8 @@ function lastmodified_add($update = '', $remove = '')
 			' - ' . '[[' . htmlspecialchars($page) . ']]' . "\n");
 	fputs($fp, '#norelated' . "\n"); // :)
 	ignore_user_abort($last);
-	flock($fp, LOCK_UN);
-	fclose($fp);
+	@flock($fp, LOCK_UN);
+	@fclose($fp);
 }
 
 // Update RecentChanges
@@ -576,15 +576,15 @@ function put_lastmodified()
 	$fp = fopen($file, 'r+') or
 		die_message('Cannot open' . 'CACHE_DIR/' . PKWK_MAXSHOW_CACHE);
 	set_file_buffer($fp, 0);
-	flock($fp, LOCK_EX);
+	@flock($fp, LOCK_EX);
 	$last = ignore_user_abort(1);
 	ftruncate($fp, 0);
 	rewind($fp);
 	foreach ($recent_pages as $page=>$time)
 		fputs($fp, $time . "\t" . $page . "\n");
 	ignore_user_abort($last);
-	flock($fp, LOCK_UN);
-	fclose($fp);
+	@flock($fp, LOCK_UN);
+	@fclose($fp);
 
 	// Create RecentChanges
 	$file = get_filename($whatsnew);
@@ -592,7 +592,7 @@ function put_lastmodified()
 	$fp = fopen($file, 'r+') or
 		die_message('Cannot open ' . htmlspecialchars($whatsnew));
 	set_file_buffer($fp, 0);
-	flock($fp, LOCK_EX);
+	@flock($fp, LOCK_EX);
 	$last = ignore_user_abort(1);
 	ftruncate($fp, 0);
 	rewind($fp);
@@ -604,8 +604,8 @@ function put_lastmodified()
 	}
 	fputs($fp, '#norelated' . "\n"); // :)
 	ignore_user_abort($last);
-	flock($fp, LOCK_UN);
-	fclose($fp);
+	@flock($fp, LOCK_UN);
+	@fclose($fp);
 
 	// For AutoLink
 	if ($autolink) {
@@ -622,13 +622,13 @@ function autolink_pattern_write($filename, $autolink_pattern)
 	$fp = fopen($filename, 'w') or
 			die_message('Cannot open ' . $filename . '<br />Maybe permission is not writable');
 	set_file_buffer($fp, 0);
-	flock($fp, LOCK_EX);
+	@flock($fp, LOCK_EX);
 	rewind($fp);
 	fputs($fp, $pattern   . "\n");
 	fputs($fp, $pattern_a . "\n");
 	fputs($fp, join("\t", $forceignorelist) . "\n");
-	flock($fp, LOCK_UN);
-	fclose($fp);
+	@flock($fp, LOCK_UN);
+	@fclose($fp);
 }
 
 // Get elapsed date of the page
@@ -885,7 +885,8 @@ function pkwk_chown($filename, $preserve_time = TRUE)
 	$flock = fopen($lockfile, 'a') or
 		die('pkwk_chown(): fopen() failed for: CACHEDIR/' .
 			basename(htmlspecialchars($lockfile)));
-	flock($flock, LOCK_EX) or die('pkwk_chown(): flock() failed for lock');
+	// flock($flock, LOCK_EX) or die('pkwk_chown(): flock() failed for lock');
+	@flock($flock, LOCK_EX);
 
 	// Check owner
 	$stat = stat($filename) or
@@ -907,11 +908,13 @@ function pkwk_chown($filename, $preserve_time = TRUE)
 		//   * touch() before copy() is for 'rw-r--r--' instead of 'rwxr-xr-x' (with umask 022).
 		//   * (PHP 4 < PHP 4.2.0) touch() with the third argument is not implemented and retuns NULL and Warn.
 		//   * @unlink() before rename() is for Windows but here's for Unix only
-		flock($ffile, LOCK_EX) or die('pkwk_chown(): flock() failed');
+		// flock($ffile, LOCK_EX) or die('pkwk_chown(): flock() failed');
+		@flock($ffile, LOCK_EX);
 		$result = touch($tmp) && copy($filename, $tmp) &&
 			($preserve_time ? (touch($tmp, $stat[9], $stat[8]) || touch($tmp, $stat[9])) : TRUE) &&
 			rename($tmp, $filename);
-		flock($ffile, LOCK_UN) or die('pkwk_chown(): flock() failed');
+		// flock($ffile, LOCK_UN) or die('pkwk_chown(): flock() failed');
+		@flock($ffile, LOCK_UN);
 
 		fclose($ffile) or die('pkwk_chown(): fclose() failed');
 
@@ -919,7 +922,8 @@ function pkwk_chown($filename, $preserve_time = TRUE)
 	}
 
 	// Unlock for pkwk_chown()
-	flock($flock, LOCK_UN) or die('pkwk_chown(): flock() failed for lock');
+	// flock($flock, LOCK_UN) or die('pkwk_chown(): flock() failed for lock');
+	@flock($flock, LOCK_UN);
 	fclose($flock) or die('pkwk_chown(): fclose() failed for lock');
 
 	return $result;

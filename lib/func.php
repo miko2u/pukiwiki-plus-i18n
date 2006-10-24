@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: func.php,v 1.81.16 2006/10/09 22:09:04 miko Exp $
+// $Id: func.php,v 1.81.17 2006/10/24 22:16:00 upk Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2006 PukiWiki Developers Team
@@ -82,10 +82,12 @@ function is_freeze($page, $clearcache = FALSE)
 	} else {
 		$fp = fopen(get_filename($page), 'rb') or
 			die('is_freeze(): fopen() failed: ' . htmlspecialchars($page));
-		flock($fp, LOCK_SH) or die('is_freeze(): flock() failed');
+		// flock($fp, LOCK_SH) or die('is_freeze(): flock() failed');
+		@flock($fp, LOCK_SH);
 		rewind($fp);
 		$buffer = fgets($fp, 9);
-		flock($fp, LOCK_UN) or die('is_freeze(): flock() failed');
+		// flock($fp, LOCK_UN) or die('is_freeze(): flock() failed');
+		@flock($fp, LOCK_UN);
 		fclose($fp) or die('is_freeze(): fclose() failed: ' . htmlspecialchars($page));
 
 		$is_freeze[$page] = ($buffer != FALSE && rtrim($buffer, "\r\n") == '#freeze');
