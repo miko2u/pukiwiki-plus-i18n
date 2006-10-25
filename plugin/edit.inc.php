@@ -185,8 +185,8 @@ function plugin_edit_write()
 	// SPAM Check (Client(Browser)-Server Ticket Check)
 	if (function_exists('pkwk_session_start') && pkwk_session_start() != 0) {
 		// BugTrack/95 fix Problem: browser RSS request with session
-		$s_digest = $post['digest'];
-		$s_ticket = md5(get_ticket() . $_SESSION['ticket']);
+		$s_ticket = $post['ticket'];
+		$s_digest = md5(get_ticket() . $_SESSION[$s_ticket]);
 		if ($vars[$s_digest] != $s_ticket)
 			return plugin_edit_honeypot();
 		// BugTrack/96 in mobile-phone is converted illegual mojicode
