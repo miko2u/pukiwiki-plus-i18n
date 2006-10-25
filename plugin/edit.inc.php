@@ -165,6 +165,7 @@ function plugin_edit_write()
 {
 	global $post, $vars, $trackback;
 	global $notimeupdate, $do_update_diff_table;
+	global $use_trans_sid_address;
 //	global $_title_collided, $_msg_collided_auto, $_msg_collided, $_title_deleted;
 //	global $_msg_invalidpass;
 	$_title_deleted = _(' $1 was deleted');
