@@ -43,6 +43,22 @@ function get_plugin_option($args, &$params, $tolower=TRUE, $separator=':')
 	$params['_done'] = TRUE;
 	return TRUE;
 }
+
+// Check arguments for plugins
+function check_plugin_option($val, &$params, $tolower=TRUE)
+{
+	if ($val != '') {
+		if ($tolower === TRUE) $_val = strtolower($val);
+		foreach (array_keys($params) as $key) {
+			if (strpos($key, $_val) === 0) {
+				$params[$key] = TRUE;
+				return;
+			}
+		}
+	}
+	$params['_args'][] = $val;
+}
+
 // Check plugin limit
 function limit_plugin($name)
 {

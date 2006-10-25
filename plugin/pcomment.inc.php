@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: pcomment.inc.php,v 1.44.7 2006/10/03 14:16:31 miko Exp $
+// $Id: pcomment.inc.php,v 1.44.11 2006/10/25 23:38:00 miko Exp $
 //
 // pcomment plugin - Show/Insert comments into specified (another) page
 //
@@ -101,8 +101,8 @@ function plugin_pcomment_convert()
 		'_args' =>array()
 	);
 
-	$args = func_get_args();
-	get_plugin_option($args, &$params);
+	foreach(func_get_args() as $arg)
+		check_plugin_option($arg, &$params);
 
 	$vars_page = isset($vars['page']) ? $vars['page'] : '';
 	$page  = (isset($params['_args'][0]) && $params['_args'][0] != '') ? $params['_args'][0] :
