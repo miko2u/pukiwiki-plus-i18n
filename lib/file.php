@@ -820,11 +820,13 @@ function pkwk_chown($filename, $preserve_time = TRUE)
 		//   * touch() before copy() is for 'rw-r--r--' instead of 'rwxr-xr-x' (with umask 022).
 		//   * (PHP 4 < PHP 4.2.0) touch() with the third argument is not implemented and retuns NULL and Warn.
 		//   * @unlink() before rename() is for Windows but here's for Unix only
-		flock($ffile, LOCK_EX) or die('pkwk_chown(): flock() failed');
+//		flock($ffile, LOCK_EX) or die('pkwk_chown(): flock() failed');
+		@flock($ffile, LOCK_EX);
 		$result = touch($tmp) && copy($filename, $tmp) &&
 			($preserve_time ? (touch($tmp, $stat[9], $stat[8]) || touch($tmp, $stat[9])) : TRUE) &&
 			rename($tmp, $filename);
-		flock($ffile, LOCK_UN) or die('pkwk_chown(): flock() failed');
+		@flock($ffile, LOCK_UN);
+//		flock($ffile, LOCK_UN) or die('pkwk_chown(): flock() failed');
 
 		fclose($ffile) or die('pkwk_chown(): fclose() failed');
 
