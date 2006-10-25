@@ -250,11 +250,10 @@ EOD;
 	$b_preview   = isset($vars['preview']); // TRUE when preview
 	$btn_preview = $b_preview ? $_button['repreview'] : $_button['preview'];
 
-	$keyword = md5(MUTIME);
-	$s_ticket = md5(get_ticket() . $keyword);
+	$s_ticket = md5(MUTIME);
 	if (function_exists('pkwk_session_start') && pkwk_session_start() != 0) {
 		// BugTrack/95 fix Problem: browser RSS request with session
-		$_SESSION[$s_ticket] = $keyword;
+		$_SESSION[$s_ticket] = md5(get_ticket() . $digest);
 		$_SESSION['origin'] = md5(get_ticket() . str_replace("\r", '', $s_original));
 	}
 
