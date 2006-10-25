@@ -187,7 +187,7 @@ function plugin_edit_write()
 		// BugTrack/95 fix Problem: browser RSS request with session
 		$s_ticket = $post['ticket'];
 		$s_digest = md5(get_ticket() . $post['digest']);
-		if ($vars[$s_ticket] != $s_digest)
+		if ($_SESSION[$s_ticket] != $s_digest)
 			return plugin_edit_honeypot();
 		// BugTrack/96 in mobile-phone is converted illegual mojicode
 		if (!in_the_net($use_trans_sid_address, $_SERVER['REMOTE_ADDR'])) {
