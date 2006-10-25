@@ -252,9 +252,10 @@ EOD;
 	$btn_preview = $b_preview ? $_button['repreview'] : $_button['preview'];
 
 	if (function_exists('pkwk_session_start') && pkwk_session_start() != 0) {
-		$ticket = md5(mt_rand());
+		// BugTrack/95 fix Problem: browser RSS request with session
+		$ticket = md5(MUTIME);
 		$s_ticket = md5(get_ticket() . $ticket);
-		$_SESSION['ticket'] = $ticket;
+		$_SESSION[$digest] = $ticket;
 		$_SESSION['origin'] = md5(get_ticket() . str_replace("\r", '', $s_original));
 	}
 
