@@ -254,7 +254,7 @@ EOD;
 	if (function_exists('pkwk_session_start') && pkwk_session_start() != 0) {
 		// BugTrack/95 fix Problem: browser RSS request with session
 		$_SESSION[$s_ticket] = md5(get_ticket() . $digest);
-		$_SESSION['origin'] = md5(get_ticket() . str_replace("\r", '', $s_original));
+		$_SESSION['origin' . $s_ticket] = md5(get_ticket() . str_replace("\r", '', $s_original));
 	}
 
 	if ($ajax && UA_PROFILE == 'default') {

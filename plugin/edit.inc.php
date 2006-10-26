@@ -192,7 +192,7 @@ function plugin_edit_write()
 		// BugTrack/96 in mobile-phone is converted illegual mojicode
 		if (!in_the_net($use_trans_sid_address, $_SERVER['REMOTE_ADDR'])) {
 			$s_origin = md5(get_ticket() . str_replace("\r", '', htmlspecialchars($vars['original'])));
-			if (!isset($_SESSION['origin']) || $_SESSION['origin'] != $s_origin)
+			if (!isset($_SESSION['origin' . $s_ticket]) || $_SESSION['origin' . $s_ticket] != $s_origin)
 				return plugin_edit_honeypot();
 		}
 	} else {
