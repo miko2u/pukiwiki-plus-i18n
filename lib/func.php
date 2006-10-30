@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: func.php,v 1.81.11 2006/10/09 22:09:04 miko Exp $
+// $Id: func.php,v 1.83.11 2006/10/28 14:35:42 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2006 PukiWiki Developers Team
@@ -212,7 +212,7 @@ function do_search($word, $type = 'AND', $non_format = FALSE, $base = '')
 {
 	global $script, $whatsnew, $non_list, $search_non_list;
 	global $_msg_andresult, $_msg_orresult, $_msg_notfoundresult;
-	global $search_auth, $show_passage;
+	global $search_auth, $show_passage, $search_word_color;
 
 	$retval = array();
 
@@ -275,9 +275,12 @@ function do_search($word, $type = 'AND', $non_format = FALSE, $base = '')
 		$r_page  = rawurlencode($page);
 		$s_page  = htmlspecialchars($page);
 		$passage = $show_passage ? ' ' . get_passage(get_filetime($page)) : '';
-		$retval .= ' <li><a href="' . $script . '?cmd=read&amp;page=' .
-			$r_page . '&amp;word=' . $r_word . '">' . $s_page .
-			'</a>' . $passage . '</li>' . "\n";
+		if ($search_word_color) {
+			$uri =  $script . '?' . 'cmd=read&amp;page=' . $r_page . '&amp;word=' . $r_word;
+		} else {
+			$uri =  $script . '?' . $r_page;
+		}
+		$retval .= ' <li><a href="' . $uri . '">' . $s_page . '</a>' . $passage . '</li>' . "\n";
 	}
 	$retval .= '</ul>' . "\n";
 
