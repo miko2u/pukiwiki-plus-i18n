@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: func.php,v 1.83.17 2006/10/28 14:35:42 miko Exp $
+// $Id: func.php,v 1.83.18 2006/11/02 14:35:42 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2006 PukiWiki Developers Team
@@ -213,7 +213,7 @@ function get_search_words($words, $do_escape = FALSE)
 function do_search($word, $type = 'AND', $non_format = FALSE, $base = '')
 {
 	global $script, $whatsnew, $non_list, $search_non_list;
- 	global $search_auth, $show_passage, $search_word_color;
+ 	global $search_auth, $show_passage, $search_word_color, $ajax;
 //	global $_msg_andresult, $_msg_orresult, $_msg_notfoundresult;
 	global $_string;
 
@@ -292,14 +292,18 @@ function do_search($word, $type = 'AND', $non_format = FALSE, $base = '')
 		$s_page  = htmlspecialchars($page);
 		$passage = $show_passage ? ' ' . get_passage(get_filetime($page)) : '';
 		if ($search_word_color) {
-			$uri =  $script . '?' . 'cmd=read&amp;page=' . $r_page . '&amp;word=' . $r_word;
-			$pre =  $script . '?' . 'cmd=preview&amp;page=' . $r_page . '&amp;word=' . $r_word;
-			$retval .= ' <li><a href="' . $uri . '" onmouseover="showGlossaryPopup(' . "'" . $pre . "'" .
-				',event,0.2);" onmouseout="hideGlossaryPopup();">' . $s_page . '</a>' . $passage . '</li>' . "\n";
+			$uri = $script . '?' . 'cmd=read&amp;page=' . $r_page . '&amp;word=' . $r_word;
+			if ($ajax && UA_PROFILE == 'default') {
+				$pre = $script . '?' . 'cmd=preview&amp;page=' . $r_page . '&amp;word=' . $r_word;
+				$pre = ' onmouseover="showGlossaryPopup(' . "'" . $pre . "'" . ',event,0.2);" onmouseout="hideGlossaryPopup();"';
+			} else {
+				$pre = '';
+			}
 		} else {
-			$uri =  $script . '?' . $r_page;
-			$retval .= ' <li><a href="' . $uri . '">' . $s_page . '</a>' . $passage . '</li>' . "\n";
+			$uri = $script . '?' . $r_page;
+			$pre = '';
 		}
+		$retval .= ' <li><a href="' . $uri . '"' . $pre . '>' . $s_page . '</a>' . $passage . '</li>' . "\n";
 	}
 	$retval .= '</ul>' . "\n";
 
