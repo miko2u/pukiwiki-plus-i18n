@@ -3,7 +3,7 @@
  * PukiWiki Plus! 認証処理
  *
  * @author	Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth.cls.php,v 0.23 2006/09/06 01:10:00 upk Exp $
+ * @version     $Id: auth.cls.php,v 0.24 2006/11/04 00:45:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 
@@ -461,15 +461,16 @@ class auth
 
 	function is_auth_digest() { return version_compare(phpversion(), '5.1', '>='); }
 
-	function is_page_readable($uname, $page, $auth_flag = TRUE)
+	function is_page_readable($uname, $page)
 	{
 		global $read_auth, $read_auth_pages;
 		// global $auth_method_type;
 
 		if (! $read_auth) return TRUE;
 
-		// ページ名の一覧を生成するがために、contents の場合は、
-		// ソースをフルスキャンするため、現実的ではないので、ロジックからは外す
+		// FIXME:
+		// ページ名一覧を生成する際に、contents の場合は、
+		// 全ページのソースをフルスキャンするため、現実的ではないためロジックからは外す
 		/*
 		$target_str = '';
 		if ($auth_method_type == 'pagename') {
@@ -509,7 +510,7 @@ class auth
 		// $now_role = auth::get_role_level();
 
 		foreach($pages as $file=>$page) {
-			if (! auth::is_page_readable($uname, $page, TRUE)) continue;
+			if (! auth::is_page_readable($uname, $page)) continue;
 			if (substr($page,0,1) != ':') {
 				$rc[$file] = $page;
 				continue;
