@@ -1,7 +1,7 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: ls2.inc.php,v 1.25.4 2006/10/03 13:33:36 miko Exp $
+// $Id: ls2.inc.php,v 1.25.5 2006/11/04 03:02:00 upk Exp $
 //
 // List plugin 2
 
@@ -91,11 +91,11 @@ function plugin_ls2_show_lists($prefix, & $params)
 
 	$pages = array();
 	if ($prefix != '') {
-		foreach (get_existpages() as $_page)
+		foreach (auth::get_existpages() as $_page)
 			if (strpos($_page, $prefix) === 0)
 				$pages[] = $_page;
 	} else {
-		$pages = get_existpages();
+		$pages = auth::get_existpages();
 	}
 
 	natcasesort($pages);
