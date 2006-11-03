@@ -3,8 +3,8 @@
  * PukiWiki Plus! ログ閲覧プラグイン
  *
  * @copyright	Copyright &copy; 2004-2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version	$Id: logview.php,v 0.9 2006/08/25 19:58:00 upk Exp $
- * @license	http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version	$Id: logview.php,v 0.10 2006/11/03 23:16:00 upk Exp $
+ * @license	http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 
 if (!defined('MAX_LINE')) {
@@ -51,7 +51,8 @@ function plugin_logview_init()
 function plugin_logview_action()
 {
 	global $script, $vars, $_logview_msg;
-	global $log;
+	global $log, $sortable_tracker;
+	static $count = 0;
 
 	$kind = (isset($vars['kind'])) ? $vars['kind'] : 'update';
 	$title = sprintf($_logview_msg['msg_title'],$kind); // タイトルを設定
@@ -78,15 +79,23 @@ function plugin_logview_action()
 	$name = log::get_log_field($kind);
 	$view = log::get_view_field($kind); // 表示したい項目設定
 
+	if ($sortable_tracker && $count == 0) {
+		global $head_tags;
+		$head_tags[] = ' <script type="text/javascript" charset="utf-8" src="' . SKIN_URI . 'sortabletable.js"></script>';
+	}
+
+	$count++;
 	$body = <<<EOD
-<table class="style_table" cellspacing="1" border="0">
+<table id="logview$count" class="style_table" cellspacing="1" border="0">
 <thead>
 <tr>
 
 EOD;
+	$cols = 0;
 	// タイトルの処理
 	foreach ($view as $_view) { 
 		$body .= '<td class="style_td">'.$_logview_msg[$_view].'</td>'."\n";
+		$cols++;
 	}
 
 	$body .= <<<EOD
@@ -216,6 +225,17 @@ EOD;
 </table>
 
 EOD;
+
+	if ($sortable_tracker) {
+		$logviewso = join(',', array_fill(0, $cols, '"String"'));
+		$body .= <<<EOD
+<script type="text/javascript">
+<!-- <![CDATA[
+var st = new SortableTable(document.getElementById('logview{$count}'),[{$logviewso}]);
+//]]>-->
+</script>
+EOD;
+	}
 
 	return array(
 		'msg'  => $title,
