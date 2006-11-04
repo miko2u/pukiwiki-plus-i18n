@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: popular.inc.php,v 1.16.5 2006/11/04 18:29:00 upk Exp $
+// $Id: popular.inc.php,v 1.16.6 2006/11/04 19:56:00 upk Exp $
 //
 // Popular pages plugin: Show an access ranking of this wiki
 // -- like recent plugin, using counter plugin's count --
@@ -52,7 +52,8 @@ function plugin_popular_convert()
 	}
 
 	$today = gmdate('Y/m/d', $localtime);
-	$yesterday = gmdate('Y/m/d', strtotime('yesterday', $localtime));
+	// $yesterday = gmdate('Y/m/d', strtotime('yesterday', $localtime));
+        $yesterday = gmdate('Y/m/d',gmmktime(0,0,0, gmdate('m',$localtime), gmdate('d',$localtime)-1, gmdate('Y',$localtime)));
 
 	$array = func_get_args();
 	switch (func_num_args()) {
