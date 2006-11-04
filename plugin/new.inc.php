@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: new.inc.php,v 1.9.2 2006/01/22 23:31:00 upk Exp $
+// $Id: new.inc.php,v 1.9.3 2006/11/04 18:35:00 upk Exp $
 //
 // New! plugin
 //
@@ -54,7 +54,7 @@ function plugin_new_inline()
 			// Check multiple pages started with "$page"
 			$timestamp = 0;
 			$regex = '/^' . preg_quote($page, '/') . '/';
-			foreach (preg_grep($regex, get_existpages()) as $page) {
+			foreach (preg_grep($regex, auth::get_existpages()) as $page) {
 				// Get the latest pagename and its timestamp
 				$_timestamp = get_filetime($page);
 				if ($timestamp < $_timestamp) {

@@ -3,7 +3,7 @@
  * PukiWiki Plus! XBEL Plugin
  *
  * @copyright   Copyright &copy; 2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: xbel.inc.php,v 0.1 2006/08/14 01:36:00 upk Exp $
+ * @version     $Id: xbel.inc.php,v 0.2 2006/11/04 18:20:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  *
  */
@@ -232,7 +232,7 @@ EOD;
 	function get_data_prefix($pref)
 	{
 		static $pages;
-		if (!isset($pages)) $pages = get_existpages();
+		if (!isset($pages)) $pages = auth::get_existpages();
 
 		$rc = array();
 

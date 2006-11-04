@@ -2,7 +2,7 @@
 //////////////////////////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: replace.inc.php,v 1.1.6 2006/02/06 22:35:00 upk Exp $
+// $Id: replace.inc.php,v 1.1.7 2006/11/04 18:42:00 upk Exp $
 //
 // ファイル名一覧の表示
 // cmd=replace
@@ -63,7 +63,7 @@ function replace_do($search,$replace,$notimestamp)
 	global $_replace_msg;
 
 	// パスワードが合ってたらいよいよ置換
-	$pages = get_existpages();
+	$pages = auth::get_existpages();
 	$replaced_pages = array();
 	foreach ($pages as $page)
 	{

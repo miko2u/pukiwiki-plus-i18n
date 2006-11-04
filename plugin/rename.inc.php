@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: rename.inc.php,v 1.27.4 2006/03/18 18:22:00 upk Exp $
+// $Id: rename.inc.php,v 1.27.5 2006/11/04 18:40:00 upk Exp $
 //
 // Rename plugin: Rename page-name and related data
 //
@@ -54,7 +54,7 @@ function plugin_rename_action()
 		if ($src == '') return plugin_rename_phase1();
 
 		$src_pattern = '/' . preg_quote($src, '/') . '/';
-		$arr0 = preg_grep($src_pattern, get_existpages());
+		$arr0 = preg_grep($src_pattern, auth::get_existpages());
 		if (! is_array($arr0) || empty($arr0))
 			return plugin_rename_phase1('nomatch');
 
@@ -440,7 +440,7 @@ function plugin_rename_proceed($pages, $files, $exists)
 function plugin_rename_getrelated($page)
 {
 	$related = array();
-	$pages = get_existpages();
+	$pages = auth::get_existpages();
 	$pattern = '/(?:^|\/)' . preg_quote(strip_bracket($page), '/') . '(?:\/|$)/';
 	foreach ($pages as $name) {
 		if ($name == $page) continue;
@@ -454,7 +454,7 @@ function plugin_rename_getselecttag($page)
 	global $whatsnew;
 
 	$pages = array();
-	foreach (get_existpages() as $_page) {
+	foreach (auth::get_existpages() as $_page) {
 		if ($_page == $whatsnew) continue;
 
 		$selected = ($_page == $page) ? ' selected' : '';

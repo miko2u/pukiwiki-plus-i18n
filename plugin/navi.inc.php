@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: navi.inc.php,v 1.22.3 2005/06/05 06:33:39 miko Exp $
+// $Id: navi.inc.php,v 1.22.4 2006/11/04 18:35:00 upk Exp $
 //
 // Navi plugin: Show DocBook-like navigation bar and contents
 
@@ -91,7 +91,7 @@ function plugin_navi_convert()
 		);
 
 		$pages = preg_grep('/^' . preg_quote($home, '/') .
-			'($|\/)/', get_existpages());
+			'($|\/)/', auth::get_existpages());
 		if (PLUGIN_NAVI_EXCLUSIVE_REGEX != '') {
 			// If old PHP could use preg_grep(,,PREG_GREP_INVERT)...
 			$pages = array_diff($pages,

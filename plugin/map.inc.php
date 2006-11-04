@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: map.inc.php,v 1.14 2005/01/10 09:17:11 henoheno Exp $
+// $Id: map.inc.php,v 1.14.1 2006/11/04 18:24:00 upk Exp $
 //
 // Site map plugin
 
@@ -30,7 +30,7 @@ function plugin_map_action()
 	$retval['body'] = '';
 
 	// Get pages
-	$pages = array_values(array_diff(get_existpages(), array($whatsnew)));
+	$pages = array_values(array_diff(auth::get_existpages(), array($whatsnew)));
 	if (! PLUGIN_MAP_SHOW_HIDDEN)
 		$pages = array_diff($pages, preg_grep('/' . $non_list . '/', $pages));
 	if (empty($pages)) {

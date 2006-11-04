@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: random.inc.php,v 1.8 2004/09/10 14:18:34 henoheno Exp $
+// $Id: random.inc.php,v 1.8.1 2006/11/04 18:17:00 upk Exp $
 //
 
 /*
@@ -39,7 +39,7 @@ function plugin_random_action()
 
 	$pattern = strip_bracket($vars['refer']) . '/';
 	$pages = array();
-	foreach (get_existpages() as $_page) {
+	foreach (auth::get_existpages() as $_page) {
 		if (strpos($_page, $pattern) === 0)
 			$pages[$_page] = strip_bracket($_page);
 	}

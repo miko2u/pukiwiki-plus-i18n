@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: deleted.inc.php,v 1.6.1 2005/03/09 04:22:01 miko Exp $
+// $Id: deleted.inc.php,v 1.6.2 2006/11/04 18:37:00 upk Exp $
 //
 // Show deleted (= Exists in BACKUP_DIR or DIFF_DIR but not in DATA_DIR)
 // page list to clean them up
@@ -30,8 +30,8 @@ function plugin_deleted_action()
 		return array('msg'=>'Deleted plugin', 'body'=>'No such setting: Choose backup or diff');
 
 	$deleted_pages  = array_diff(
-		get_existpages($_DIR[$dir]['dir'], $_DIR[$dir]['ext']),
-		get_existpages());
+		auth::get_existpages($_DIR[$dir]['dir'], $_DIR[$dir]['ext']),
+		auth::get_existpages());
 
 	if ($withfilename) {
 		$retval['msg'] = $_deleted_plugin_title_withfilename;

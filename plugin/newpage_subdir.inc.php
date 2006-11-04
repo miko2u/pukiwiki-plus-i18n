@@ -1,5 +1,5 @@
 <?php
-// $Id: newpage_subdir.inc.php,v 1.2 2003/05/14 15:26:43 rokudo Exp $
+// $Id: newpage_subdir.inc.php,v 1.2.1 2006/11/04 18:19:00 upk Exp $
 // @based_on newpage.inc.php
 // @based_on ls2.inc.php
 // @thanks to panda (auther of newpage.inc.php/ls2.inc.php)
@@ -9,7 +9,7 @@ function build_directory_list($roots, $option) {
 
 	global $WikiName,$BracketName,$script;
 	
-	$existingPages = get_existpages();
+	$existingPages = auth::get_existpages();
 	foreach($roots as $root) {
 		$matched = FALSE;
 		foreach($existingPages as $page) {

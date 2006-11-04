@@ -1,5 +1,5 @@
 <?php
-// $Id: bugtrack.inc.php,v 1.26.1 2006/10/24 15:00:02 miko Exp $
+// $Id: bugtrack.inc.php,v 1.26.2 2006/11/04 18:26:00 upk Exp $
 //
 // PukiWiki BugTrack plugin
 //
@@ -303,7 +303,7 @@ function plugin_bugtrack_list_convert()
 	$data = array();
 	$pattern = $page . '/';
 	$pattern_len = strlen($pattern);
-	foreach (get_existpages() as $page)
+	foreach (auth::get_existpages() as $page)
 		if (strpos($page, $pattern) === 0 && is_numeric(substr($page, $pattern_len)))
 			array_push($data, plugin_bugtrack_list_pageinfo($page));
 

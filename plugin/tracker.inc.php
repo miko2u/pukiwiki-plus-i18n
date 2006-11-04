@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: tracker.inc.php,v 1.34.8 2006/09/13 23:46:00 miko Exp $
+// $Id: tracker.inc.php,v 1.34.9 2006/11/04 18:13:00 upk Exp $
 //
 // Issue tracker plugin (See Also bugtrack plugin)
 
@@ -735,7 +735,7 @@ class Tracker_list
 		$this->rows = array();
 		$pattern = "$page/";
 		$pattern_len = strlen($pattern);
-		foreach (get_existpages() as $_page)
+		foreach (auth::get_existpages() as $_page)
 		{
 			if (strpos($_page,$pattern) === 0)
 			{

@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: yetlist.inc.php,v 1.28.2 2006/05/07 03:55:26 miko Exp $
+// $Id: yetlist.inc.php,v 1.28.3 2006/11/04 18:32:00 upk Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2001-2006 PukiWiki Developers Team
@@ -19,7 +19,7 @@ function plugin_yetlist_action()
 	);
 
 	// Diff
-	$pages = array_diff(get_existpages(CACHE_DIR, '.ref'), get_existpages());
+	$pages = array_diff(auth::get_existpages(CACHE_DIR, '.ref'), auth::get_existpages());
 	if (empty($pages)) {
 		$retval['body'] = _('All pages have been created.');
 		return $retval;

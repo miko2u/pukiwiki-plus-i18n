@@ -5,7 +5,9 @@
  * CopyRight 2002 Y.MASUI GPL2
  * http://masui.net/pukiwiki/ masui@masui.net
  *
- * $Id: ls.inc.php,v 1.9 2004/07/31 03:09:20 henoheno Exp $
+ * 2005-2006 PukiWiki Plus! Team
+ *
+ * $Id: ls.inc.php,v 1.9.1 2006/11/04 18:06:00 upk Exp $
  */
 
 function plugin_ls_convert()
@@ -23,7 +25,7 @@ function plugin_ls_convert()
 	$prefix = $vars['page'].'/';
 
 	$pages = array();
-	foreach (get_existpages() as $page)
+	foreach (auth::get_existpages() as $page)
 	{
 		if (strpos($page,$prefix) === 0)
 		{
