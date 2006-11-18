@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: attach.inc.php,v 1.82.7 2006/06/21 23:51:12 miko Exp $
+// $Id: attach.inc.php,v 1.82.8 2006/11/19 00:33:00 upk Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2003-2005 PukiWiki Developers Team
@@ -548,6 +548,7 @@ EOD;
 		$html .= '<h3>' . str_replace('$1', $s_page, $_attach_messages['msg_upload']) . '</h3>';
 		$navi = <<<EOD
   <span class="small">
+   [<a href="$script?plugin=attach&amp;pcmd=list&amp;refer=$r_page">{$_attach_messages['msg_list']}</a>]
    [<a href="$script?plugin=attach&amp;pcmd=list">{$_attach_messages['msg_listall']}</a>]
   </span><br />
 EOD;
