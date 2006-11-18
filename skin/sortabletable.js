@@ -146,7 +146,8 @@ SortableTable.prototype.initHeader = function (oSortTypes) {
 		if (this.sortTypes[i] != null && this.sortTypes[i] != "None") {
 			if (c.firstChild.nodeName == 'A') { c.firstChild.href='javascript:void(0)'; }
 			img = doc.createElement("IMG");
-			img.src = "image/blank.png";
+			// img.src = "image/blank.png";
+			img.src = IMAGE_DIR+"blank.png";
 			c.appendChild(img);
 			if (this.sortTypes[i] != null)
 				c._sortType = this.sortTypes[i];
