@@ -4,7 +4,7 @@
  *
  * @copyright   Copyright &copy; 2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: typekey.cls.php,v 0.2 2006/11/19 15:53:00 upk Exp $
+ * @version     $Id: typekey.cls.php,v 0.3 2006/11/19 16:33:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 
@@ -149,7 +149,7 @@ class typekey
 
 	function typekey_profile_url($name)
 	{
-		return TYPEKEY_PROFILE_URL.urlencode($name).'/';
+		return TYPEKEY_PROFILE_URL.rawurlencode($name).'/';
 	}
 
 	function session_get($session_name)

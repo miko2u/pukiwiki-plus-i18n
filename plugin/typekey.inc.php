@@ -4,7 +4,7 @@
  *
  * @copyright   Copyright &copy; 2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: typekey.inc.php,v 0.1 2006/11/19 01:16:00 upk Exp $
+ * @version     $Id: typekey.inc.php,v 0.2 2006/11/19 16:32:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'typekey.cls.php');
@@ -37,14 +37,14 @@ function plugin_typekey_convert()
 	if ($typekey['use'] != 1) return '<p>'.$_typekey_msg['msg_invalid'].'</p>';
 	if (empty($typekey['site_token'])) return '<p>'.$_typekey_msg['msg_error'].'</p>';
 
-	$page  = $script.urlencode('?plugin=typekey');
+	$page  = $script.rawurlencode('?plugin=typekey');
 	if (! empty($vars['page'])) {
-		$page .= urlencode('&page='.$vars['page']);
+		$page .= rawurlencode('&page='.$vars['page']);
 	}
 
 	$user = typekey::get_profile_link();
 	if (! empty($user)) {
-		$logout_url = typekey::typekey_logout_url($page).urlencode('&logout');
+		$logout_url = typekey::typekey_logout_url($page).rawurlencode('&logout');
 		return <<<EOD
 <div>
 	<label>TypeKey</label>:
@@ -79,16 +79,16 @@ function plugin_typekey_inline()
 	if ($typekey['use'] != 1) return $_typekey_msg['msg_invalid'];
 	if (empty($typekey['site_token'])) return $_typekey_msg['msg_error'];
 
-	$page  = $script.urlencode('?plugin=typekey');
+	$page  = $script.rawurlencode('?plugin=typekey');
 	if (! empty($vars['page'])) {
-		$page .= urlencode('&page='.$vars['page']);
+		$page .= rawurlencode('&page='.$vars['page']);
 	}
 
 	$link = typekey::get_profile_link();
 	if (! empty($link)) {
 		// 既に認証済
 		return sprintf($_typekey_msg['msg_logined'],$link) .
-			'(<a href="'.typekey::typekey_logout_url($page).urlencode('&logout').'">' .
+			'(<a href="'.typekey::typekey_logout_url($page).rawurlencode('&logout').'">' .
 			$_typekey_msg['msg_logout'].'</a>)';
 	}
 
@@ -111,7 +111,7 @@ function plugin_typekey_action()
 	$obj_typekey->set_need_email($typekey['need_email']);
 	$obj_typekey->set_sigKey($vars);
 
-	$r_page = (empty($vars['page'])) ? '' : urlencode($vars['page']);
+	$r_page = (empty($vars['page'])) ? '' : rawurlencode($vars['page']);
 
 	if (! $obj_typekey->auth()) {
 		if (isset($vars['logout'])) {
