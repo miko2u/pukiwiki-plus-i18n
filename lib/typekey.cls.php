@@ -4,7 +4,7 @@
  *
  * @copyright   Copyright &copy; 2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: typekey.cls.php,v 0.1 2006/11/19 01:13:00 upk Exp $
+ * @version     $Id: typekey.cls.php,v 0.2 2006/11/19 15:53:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 
@@ -125,11 +125,11 @@ class typekey
 			global $script;
 			$return = $script;
 		}
-		$rc = TYPEKEY_LOGIN_URL.'?t='.$this->siteToken.'&v='.$this->version;
+		$rc = TYPEKEY_LOGIN_URL.'?t='.$this->siteToken.'&amp;v='.$this->version;
 		if ($this->need_email != 0) {
-			$rc .= '&need_email=1';
+			$rc .= '&amp;need_email=1';
 		}
-		return $rc.'&_return='.$return;
+		return $rc.'&amp;_return='.$return;
 	}
 
 	function typekey_logout_url($return='')
