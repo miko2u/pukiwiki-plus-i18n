@@ -4,17 +4,17 @@
  *
  * @copyright   Copyright &copy; 2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: typekey.cls.php,v 0.3 2006/11/19 16:33:00 upk Exp $
+ * @version     $Id: typekey.cls.php,v 0.4 2006/11/20 00:19:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 
-defined('TYPEKEY_LOGIN_URL')	or define('TYPEKEY_LOGIN_URL',	'https://www.typekey.com/t/typekey/login');
-defined('TYPEKEY_LOGOUT_URL')	or define('TYPEKEY_LOGOUT_URL',	'https://www.typekey.com/t/typekey/logout');
-defined('TYPEKEY_VERSION')	or define('TYPEKEY_VERSION',	'1.1');
-defined('TYPEKEY_REGKEYS')	or define('TYPEKEY_REGKEYS', 	'http://www.typekey.com/extras/regkeys.txt');
-defined('TYPEKEY_CACHE_TIME')	or define('TYPEKEY_CACHE_TIME', 60*60*24*2); // 2 day
-defined('TYPEKEY_PROFILE_URL')	or define('TYPEKEY_PROFILE_URL','http://profile.typekey.com/');
-defined('TYPEKEY_SESSION_MESSAGE') or define('TYPEKEY_SESSION_MESSAGE','typekey_message');
+defined('TYPEKEY_URL_LOGIN')	or define('TYPEKEY_URL_LOGIN',	 'https://www.typekey.com/t/typekey/login');
+defined('TYPEKEY_URL_LOGOUT')	or define('TYPEKEY_URL_LOGOUT',	 'https://www.typekey.com/t/typekey/logout');
+defined('TYPEKEY_URL_PROFILE')	or define('TYPEKEY_URL_PROFILE', 'http://profile.typekey.com/');
+defined('TYPEKEY_REGKEYS')	or define('TYPEKEY_REGKEYS',	 'http://www.typekey.com/extras/regkeys.txt');
+defined('TYPEKEY_VERSION')	or define('TYPEKEY_VERSION',	 '1.1');
+defined('TYPEKEY_CACHE_TIME')	or define('TYPEKEY_CACHE_TIME',	 60*60*24*2); // 2 day
+defined('TYPEKEY_SESSION_NAME')	or define('TYPEKEY_SESSION_NAME','typekey_message');
 
 class typekey
 {
@@ -125,7 +125,7 @@ class typekey
 			global $script;
 			$return = $script;
 		}
-		$rc = TYPEKEY_LOGIN_URL.'?t='.$this->siteToken.'&amp;v='.$this->version;
+		$rc = TYPEKEY_URL_LOGIN.'?t='.$this->siteToken.'&amp;v='.$this->version;
 		if ($this->need_email != 0) {
 			$rc .= '&amp;need_email=1';
 		}
@@ -138,7 +138,7 @@ class typekey
 			global $script;
 			$return = $script;
 		}
-		return TYPEKEY_LOGOUT_URL.'?_return='.$return;
+		return TYPEKEY_URL_LOGOUT.'?_return='.$return;
         }
 
 	function typekey_login($return)
@@ -149,37 +149,12 @@ class typekey
 
 	function typekey_profile_url($name)
 	{
-		return TYPEKEY_PROFILE_URL.rawurlencode($name).'/';
-	}
-
-	function session_get($session_name)
-	{
-		global $adminpass;
-
-		// adminpass の処理
-		list($scheme, $salt) = auth::passwd_parse($adminpass);
-
-		// des化された内容を平文に戻す
-		if (isset($_SESSION[$session_name])) {
-			require_once(LIB_DIR . 'des.php');
-			return des($salt, base64_decode($_SESSION[$session_name]), 0, 0, null);
-		}
-                return '';
-        }
-
-	function session_put($session_name,$val)
-	{
-		global $adminpass;
-
-		// adminpass の処理
-		list($scheme, $salt) = auth::passwd_parse($adminpass);
-		require_once(LIB_DIR . 'des.php');
-		$_SESSION[$session_name] = base64_encode( des($salt, $val, 1, 0, null) );
+		return TYPEKEY_URL_PROFILE.rawurlencode($name).'/';
 	}
 
 	function typekey_session_get()
 	{
-		$val = typekey::session_get(TYPEKEY_SESSION_MESSAGE);
+		$val = auth::des_session_get(TYPEKEY_SESSION_NAME);
 		if (empty($val)) {
 			return array();
 		}
@@ -189,12 +164,12 @@ class typekey
 	function typekey_session_put()
 	{
 		$message = $this->gen_message();
-		typekey::session_put(TYPEKEY_SESSION_MESSAGE,$message);
+		auth::des_session_put(TYPEKEY_SESSION_NAME,$message);
 	}
 
 	function typekey_session_unset()
 	{
-		return session_unregister(TYPEKEY_SESSION_MESSAGE);
+		return session_unregister(TYPEKEY_SESSION_NAME);
 	}
 
 	function auth()

@@ -3,9 +3,18 @@
  * PukiWiki Plus! 認証処理
  *
  * @author	Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth.cls.php,v 0.24 2006/11/04 00:45:00 upk Exp $
+ * @version     $Id: auth.cls.php,v 0.25 2006/11/19 23:34:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
+
+defined('ROLE_GUEST')             or define('ROLE_GUEST', 0);
+defined('ROLE_FORCE')             or define('ROLE_FORCE', 1);
+defined('ROLE_ADM')               or define('ROLE_ADM', 2);
+defined('ROLE_ADM_CONTENTS')      or define('ROLE_ADM_CONTENTS', 3);
+defined('ROLE_ADM_CONTENTS_TEMP') or define('ROLE_ADM_CONTENTS_TEMP', 3.1);
+defined('ROLE_AUTH')              or define('ROLE_AUTH', 4);
+defined('ROLE_AUTH_TEMP')         or define('ROLE_AUTH_TEMP', 4.1);
+defined('ROLE_AUTH_TYPEKEY')      or define('ROLE_AUTH_TYPEKEY', 4.2);
 
 /**
  * 認証クラス
@@ -45,7 +54,14 @@ class auth
 
 		// NTLM対応
 		list($domain, $login, $host, $pass) = auth::ntlm_decode();
-		return $login;
+		if (! empty($login)) return $login;
+
+		// TypeKey 対応
+		global $typekey;
+		if (! $typekey['use']) return '';
+		require_once(LIB_DIR . 'typekey.cls.php');
+		$login = typekey::get_profile('nick');
+		return (empty($login)) ? '' : $login;
 	}
 
 	/**
@@ -57,7 +73,7 @@ class auth
 		global $realm, $auth_type, $auth_users, $adminpass;
 
 		$login = auth::check_auth();
-		if (empty($login)) return 0; // 未認証者
+		if (empty($login)) return ROLE_GUEST; // 未認証者
 
 		// 管理者パスワードなのかどうか？
 		$temp_admin = ( pkwk_hash_compute($_SERVER['PHP_AUTH_PW'], $adminpass) !== $adminpass) ? FALSE : TRUE;
@@ -65,24 +81,32 @@ class auth
 		if (! isset($auth_users[$login])) {
 			// 未登録者の場合
 			// 管理者パスワードと偶然一致した場合でも見做し認証者(4.1)
-			return ($login == 'admin' && $temp_admin) ? 3.1 : 4.1;
+			//return ($login == 'admin' && $temp_admin) ? 3.1 : 4.1;
+			if ($login == 'admin' && $temp_admin) return ROLE_ADM_CONTENTS_TEMP;
+
+			// TypeKey 対応
+			global $typekey;
+			if (! $typekey['use']) return ROLE_AUTH_TEMP;
+			require_once(LIB_DIR . 'typekey.cls.php');
+			$login = typekey::get_profile('nick');
+			return (empty($login)) ? ROLE_AUTH_TEMP : ROLE_AUTH_TYPEKEY;
 		}
 
 		// 設定されている役割を取得
-		$role = (empty($auth_users[$login][1])) ? 4 : $auth_users[$login][1];
+		$role = (empty($auth_users[$login][1])) ? ROLE_AUTH : $auth_users[$login][1];
 		switch ($role) {
-		case 2: // サイト管理者
-		case 3: // コンテンツ管理者
+		case ROLE_ADM: // サイト管理者
+		case ROLE_ADM_CONTENTS: // コンテンツ管理者
 			// パスワードまで一致していること
 			if ($auth_type == 2) {
-				return (auth::auth_digest($realm,$auth_users)) ? $role : 4;
+				return (auth::auth_digest($realm,$auth_users)) ? $role : ROLE_AUTH;
 			} else {
-				return (auth::auth_pw($auth_users)) ? $role : 4;
+				return (auth::auth_pw($auth_users)) ? $role : ROLE_AUTH;
 			}
-		case 4: // 認証者(pukiwiki)
-			return ($temp_admin) ? 3.1 : 4;
+		case ROLE_AUTH: // 認証者(pukiwiki)
+			return ($temp_admin) ? ROLE_ADM_CONTENTS_TEMP : ROLE_AUTH;
 		}
-		return 4;
+		return ROLE_AUTH;
 	}
 
 	/*
@@ -95,13 +119,13 @@ class auth
 		$rc = array();
 		foreach($auth_users as $user=>$val)
 		{
-			$def_role = (empty($val[1])) ? 4 : $val[1];
+			$def_role = (empty($val[1])) ? ROLE_AUTH : $val[1];
 			if ($def_role > $role) continue;
 			$rc[] = $user;
 		}
 
 		$now_role = auth::get_role_level();
-		if (($now_role == 4.1 && $role == 4) || ($now_role == 3.1 && $role == 3))
+		if (($now_role == ROLE_AUTH_TEMP && $role == ROLE_AUTH) || ($now_role == ROLE_ADM_CONTENTS_TEMP && $role == ROLE_ADM_CONTENTS))
 		{
 			$rc[] = auth::check_auth();
 		}
@@ -120,24 +144,24 @@ class auth
 
 		switch($func) {
 		case 'readonly':
-			$chk_role = (defined('PKWK_READONLY')) ? PKWK_READONLY : 0;
+			$chk_role = (defined('PKWK_READONLY')) ? PKWK_READONLY : ROLE_GUEST;
 			break;
 		case 'safemode':
-			$chk_role = (defined('PKWK_SAFE_MODE')) ? PKWK_SAFE_MODE : 0;
+			$chk_role = (defined('PKWK_SAFE_MODE')) ? PKWK_SAFE_MODE : ROLE_GUEST;
 			break;
 		case 'su':
 			$now_role = auth::get_role_level();
-			if ($now_role == 2 || (int)$now_role == 3) return FALSE; // 既に権限有
-			$chk_role = 3;
+			if ($now_role == 2 || (int)$now_role == ROLE_ADM_CONTENTS) return FALSE; // 既に権限有
+			$chk_role = ROLE_ADM_CONTENTS;
 			switch ($now_role) {
-			case 4.1:
+			case ROLE_AUTH_TEMP:
 				// FIXME:
 				return TRUE;
-			case 0:
+			case ROLE_GUEST:
 				// 未認証者は、単に管理者パスワードを要求
 				$user = 'admin';
 				break;
-			case 4:
+			case ROLE_AUTH:
 				// 認証済ユーザは、ユーザ名を維持しつつ管理者パスワードを要求
 				$user = auth::check_auth();
 				break;
@@ -157,24 +181,24 @@ class auth
 			}
 			break;
 		case 'role_adm':
-			$chk_role = 2;
+			$chk_role = ROLE_ADM;
 			break;
 		case 'role_adm_contents':
-			$chk_role = 3;
+			$chk_role = ROLE_ADM_CONTENTS;
 			break;
 		case 'role_auth':
-			$chk_role = 4;
+			$chk_role = ROLE_AUTH;
 			break;
 		default:
-			$chk_role = 0;
+			$chk_role = ROLE_GUEST;
 		}
 
-		if ($chk_role == 0) return FALSE;	// 機能無効
-		if ($chk_role == 1) return TRUE;	// 強制
+		if ($chk_role == ROLE_GUEST) return FALSE;	// 機能無効
+		if ($chk_role == ROLE_FORCE) return TRUE;	// 強制
 
 		// 役割に応じた挙動の設定
 		$now_role = (int)auth::get_role_level();
-		if ($now_role == 0) return TRUE;
+		if ($now_role == ROLE_GUEST) return TRUE;
 		return ($now_role <= $chk_role) ? FALSE : TRUE;
 	}
 
@@ -532,6 +556,31 @@ class auth
 		if ($cmd === FLASE) return FALSE;
 		convert_html($cmd); // die();
 		return TRUE;
+	}
+
+	function des_session_get($session_name)
+	{
+		global $adminpass;
+
+		// adminpass の処理
+		list($scheme, $salt) = auth::passwd_parse($adminpass);
+
+		// des化された内容を平文に戻す
+		if (isset($_SESSION[$session_name])) {
+			require_once(LIB_DIR . 'des.php');
+			return des($salt, base64_decode($_SESSION[$session_name]), 0, 0, null);
+		}
+		return '';
+	}
+
+	function des_session_put($session_name,$val)
+	{
+		global $adminpass;
+
+		// adminpass の処理
+		list($scheme, $salt) = auth::passwd_parse($adminpass);
+		require_once(LIB_DIR . 'des.php');
+		$_SESSION[$session_name] = base64_encode( des($salt, $val, 1, 0, null) );
 	}
 }
 ?>
