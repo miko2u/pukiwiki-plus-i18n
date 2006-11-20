@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: pukiwiki.php,v 1.11.5 2006/03/21 02:00:00 upk Exp $
+// $Id: pukiwiki.php,v 1.11.6 2006/11/20 21:00:00 upk Exp $
 //
 // PukiWiki 1.4.*
 //  Copyright (C) 2002-2005 by PukiWiki Developers Team
@@ -100,6 +100,10 @@ if (isset($vars['cmd'])) {
 } else {
 	$plugin = '';
 }
+
+// If text/html(or same), Enable session.
+pkwk_session_start();
+
 if ($plugin != '') {
 	if (exist_plugin_action($plugin)) {
 		// Found and exec
@@ -121,9 +125,6 @@ if ($plugin != '') {
 		$base    = & $defaultpage;
 	}
 }
-
-// If text/html(or same), Enable session.
-pkwk_session_start();
 
 // Render
 $title = htmlspecialchars(strip_bracket($base));
