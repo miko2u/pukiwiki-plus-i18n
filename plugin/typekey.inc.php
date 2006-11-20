@@ -4,7 +4,7 @@
  *
  * @copyright   Copyright &copy; 2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: typekey.inc.php,v 0.3 2006/11/20 21:27:00 upk Exp $
+ * @version     $Id: typekey.inc.php,v 0.4 2006/11/20 21:38:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'typekey.cls.php');
@@ -54,8 +54,8 @@ function plugin_typekey_convert()
 EOD;
 	}
 
-        $obj_typekey = new typekey($typekey['site_token']);
-        $obj_typekey->set_need_email($typekey['need_email']);
+        $obj_typekey = new typekey($auth_api['typekey']['site_token']);
+        $obj_typekey->set_need_email($auth_api['typekey']['need_email']);
 
 	$login_url = $obj_typekey->typekey_login_url($page);
 	// ボタンを表示するだけ
@@ -92,8 +92,8 @@ function plugin_typekey_inline()
 			$_typekey_msg['msg_logout'].'</a>)';
 	}
 
-	$obj_typekey = new typekey($typekey['site_token']);
-	$obj_typekey->set_need_email($typekey['need_email']);
+	$obj_typekey = new typekey($auth_api['typekey']['site_token']);
+	$obj_typekey->set_need_email($auth_api['typekey']['need_email']);
 	return '<a href="'.$obj_typekey->typekey_login_url($page).'">'.$_typekey_msg['msg_login'].'</a>';
 }
 
