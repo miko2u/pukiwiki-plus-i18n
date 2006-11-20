@@ -3,7 +3,7 @@
  * PukiWiki Plus! 認証処理
  *
  * @author	Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth.cls.php,v 0.25 2006/11/19 23:34:00 upk Exp $
+ * @version     $Id: auth.cls.php,v 0.26 2006/11/20 21:10:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 
@@ -58,10 +58,13 @@ class auth
 
 		// TypeKey 対応
 		global $typekey;
-		if (! $typekey['use']) return '';
-		require_once(LIB_DIR . 'typekey.cls.php');
-		$login = typekey::get_profile('nick');
-		return (empty($login)) ? '' : $login;
+		if ($typekey['use']) {
+			require_once(LIB_DIR . 'typekey.cls.php');
+			$login = typekey::get_profile('nick');
+			if (! empty($login)) return $login;
+		}
+
+		return '';
 	}
 
 	/**
@@ -86,10 +89,13 @@ class auth
 
 			// TypeKey 対応
 			global $typekey;
-			if (! $typekey['use']) return ROLE_AUTH_TEMP;
-			require_once(LIB_DIR . 'typekey.cls.php');
-			$login = typekey::get_profile('nick');
-			return (empty($login)) ? ROLE_AUTH_TEMP : ROLE_AUTH_TYPEKEY;
+			if ($typekey['use']) {
+				require_once(LIB_DIR . 'typekey.cls.php');
+				$login = typekey::get_profile('nick');
+				return (empty($login)) ? ROLE_AUTH_TEMP : ROLE_AUTH_TYPEKEY;
+			}
+
+			return ROLE_AUTH_TEMP;
 		}
 
 		// 設定されている役割を取得
