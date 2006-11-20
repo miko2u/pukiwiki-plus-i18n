@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: auth.ini.php,v 0.0.3 2006/11/19 03:39:00 upk Exp $
+// $Id: auth.ini.php,v 0.0.4 2006/11/20 21:22:00 upk Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 // License: GPL v2 or (at your option) any later version
@@ -74,11 +74,14 @@ $search_auth = 0;
 $check_role = 0;
 
 /////////////////////////////////////////////////
-// TypeKey
-$typekey = array(
-	'use'           => 0,
-	'site_token'    => '',
-	'need_email'    => 0,
+// Auth API
+$auth_api = array(
+	// TypeKey
+	'typekey'		=> array(
+		'use'		=> 0,
+		'site_token'	=> '',
+		'need_email'	=> 0,
+	),
 );
 
 ?>

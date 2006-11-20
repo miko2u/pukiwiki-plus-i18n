@@ -4,7 +4,7 @@
  *
  * @copyright   Copyright &copy; 2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: typekey.inc.php,v 0.2 2006/11/19 16:32:00 upk Exp $
+ * @version     $Id: typekey.inc.php,v 0.3 2006/11/20 21:27:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'typekey.cls.php');
@@ -29,13 +29,13 @@ function plugin_typekey_init()
 
 function plugin_typekey_convert()
 {
-	global $script,$vars,$_typekey_msg,$typekey;
+	global $script,$vars,$_typekey_msg,$auth_api;
 
 	if (! function_exists('pkwk_session_start')) return '<p>'.$_typekey_msg['msg_not_found'].'</p>';
 	if (pkwk_session_start() == 0) return '<p>'.$_typekey_msg['msg_not_start'].'</p>';
 
-	if ($typekey['use'] != 1) return '<p>'.$_typekey_msg['msg_invalid'].'</p>';
-	if (empty($typekey['site_token'])) return '<p>'.$_typekey_msg['msg_error'].'</p>';
+	if ($auth_api['typekey']['use'] != 1) return '<p>'.$_typekey_msg['msg_invalid'].'</p>';
+	if (empty($auth_api['typekey']['site_token'])) return '<p>'.$_typekey_msg['msg_error'].'</p>';
 
 	$page  = $script.rawurlencode('?plugin=typekey');
 	if (! empty($vars['page'])) {
@@ -71,13 +71,13 @@ EOD;
 
 function plugin_typekey_inline()
 {
-	global $script,$vars,$_typekey_msg,$typekey;
+	global $script,$vars,$_typekey_msg,$auth_api;
 
 	if (! function_exists('pkwk_session_start')) return $_typekey_msg['msg_not_found'];
 	if (pkwk_session_start() == 0) return $_typekey_msg['msg_not_start'];
 
-	if ($typekey['use'] != 1) return $_typekey_msg['msg_invalid'];
-	if (empty($typekey['site_token'])) return $_typekey_msg['msg_error'];
+	if ($auth_api['typekey']['use'] != 1) return $_typekey_msg['msg_invalid'];
+	if (empty($auth_api['typekey']['site_token'])) return $_typekey_msg['msg_error'];
 
 	$page  = $script.rawurlencode('?plugin=typekey');
 	if (! empty($vars['page'])) {
@@ -99,16 +99,16 @@ function plugin_typekey_inline()
 
 function plugin_typekey_action()
 {
-	global $script,$vars,$typekey;
+	global $script,$vars,$auth_api;
 
 	if (! function_exists('pkwk_session_start')) return '';
 	if (pkwk_session_start() == 0) return '';
 
-	if (empty($typekey['site_token'])) return '';
+	if (empty($auth_api['typekey']['site_token'])) return '';
 
-	$obj_typekey = new typekey($typekey['site_token']);
+	$obj_typekey = new typekey($auth_api['typekey']['site_token']);
 	$obj_typekey->set_regkeys();
-	$obj_typekey->set_need_email($typekey['need_email']);
+	$obj_typekey->set_need_email($auth_api['typekey']['need_email']);
 	$obj_typekey->set_sigKey($vars);
 
 	$r_page = (empty($vars['page'])) ? '' : rawurlencode($vars['page']);

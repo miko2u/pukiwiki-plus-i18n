@@ -3,7 +3,7 @@
  * PukiWiki Plus! 認証処理
  *
  * @author	Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth.cls.php,v 0.26 2006/11/20 21:10:00 upk Exp $
+ * @version     $Id: auth.cls.php,v 0.27 2006/11/20 21:25:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 
@@ -57,8 +57,8 @@ class auth
 		if (! empty($login)) return $login;
 
 		// TypeKey 対応
-		global $typekey;
-		if ($typekey['use']) {
+		global $auth_api;
+		if ($auth_api['typekey']['use']) {
 			require_once(LIB_DIR . 'typekey.cls.php');
 			$login = typekey::get_profile('nick');
 			if (! empty($login)) return $login;
@@ -88,8 +88,8 @@ class auth
 			if ($login == 'admin' && $temp_admin) return ROLE_ADM_CONTENTS_TEMP;
 
 			// TypeKey 対応
-			global $typekey;
-			if ($typekey['use']) {
+			global $auth_api;
+			if ($auth_api['typekey']['use']) {
 				require_once(LIB_DIR . 'typekey.cls.php');
 				$login = typekey::get_profile('nick');
 				return (empty($login)) ? ROLE_AUTH_TEMP : ROLE_AUTH_TYPEKEY;
