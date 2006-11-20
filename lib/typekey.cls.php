@@ -4,7 +4,7 @@
  *
  * @copyright   Copyright &copy; 2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: typekey.cls.php,v 0.4 2006/11/20 00:19:00 upk Exp $
+ * @version     $Id: typekey.cls.php,v 0.5 2006/11/20 23:36:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 
@@ -14,7 +14,7 @@ defined('TYPEKEY_URL_PROFILE')	or define('TYPEKEY_URL_PROFILE', 'http://profile.
 defined('TYPEKEY_REGKEYS')	or define('TYPEKEY_REGKEYS',	 'http://www.typekey.com/extras/regkeys.txt');
 defined('TYPEKEY_VERSION')	or define('TYPEKEY_VERSION',	 '1.1');
 defined('TYPEKEY_CACHE_TIME')	or define('TYPEKEY_CACHE_TIME',	 60*60*24*2); // 2 day
-defined('TYPEKEY_SESSION_NAME')	or define('TYPEKEY_SESSION_NAME','typekey_message');
+defined('TYPEKEY_SESSION_NAME')	or define('TYPEKEY_SESSION_NAME',md5('typekey_message'));
 
 class typekey
 {
