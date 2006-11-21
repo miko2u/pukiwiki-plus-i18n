@@ -23,7 +23,7 @@ define('S_COPYRIGHT',
 /////////////////////////////////////////////////
 // Init server variables
 
-// Comapat and suppress notices
+// Compat and suppress notices
 if (!isset($HTTP_SERVER_VARS)) $HTTP_SERVER_VARS = array();
 
 foreach (array('SCRIPT_NAME', 'SERVER_ADMIN', 'SERVER_NAME',
