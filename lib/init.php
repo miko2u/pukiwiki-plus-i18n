@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: init.php,v 1.50.18 2006/11/19 05:41:45 miko Exp $
+// $Id: init.php,v 1.50.19 2006/11/19 05:41:45 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2006 PukiWiki Developers Team
@@ -328,6 +328,11 @@ $get    = & $_GET;
 $post   = & $_POST;
 $cookie = & $_COOKIE;
 $session = & $_SESSION;
+
+// If POST, include spam filter.
+if (! empty($post)) {
+	require(LIB_DIR . 'spam.php');
+}
 
 // GET + POST = $vars
 if (empty($_POST)) {
