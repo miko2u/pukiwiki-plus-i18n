@@ -4,7 +4,7 @@
  *
  * @copyright   Copyright &copy; 2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: typekey.cls.php,v 0.5 2006/11/20 23:36:00 upk Exp $
+ * @version     $Id: auth_typekey.cls.php,v 0.6 2006/11/21 01:38:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 
@@ -16,11 +16,11 @@ defined('TYPEKEY_VERSION')	or define('TYPEKEY_VERSION',	 '1.1');
 defined('TYPEKEY_CACHE_TIME')	or define('TYPEKEY_CACHE_TIME',	 60*60*24*2); // 2 day
 defined('TYPEKEY_SESSION_NAME')	or define('TYPEKEY_SESSION_NAME',md5('typekey_message'));
 
-class typekey
+class auth_typekey
 {
 	var $siteToken, $need_email, $regkeys, $sigKey, $version;
 
-	function typekey($siteToken)
+	function auth_typekey($siteToken)
 	{
 		$this->siteToken = trim($siteToken);
 		$this->need_email = 0;
@@ -83,18 +83,18 @@ class typekey
 
 	function get_profile($field='nick')
 	{
-		$message = typekey::typekey_session_get();
+		$message = auth_typekey::typekey_session_get();
 		return (empty($message[$field])) ? '' : $message[$field];
 	}
 
 	function get_profile_link()
 	{
-		$message = typekey::typekey_session_get();
+		$message = auth_typekey::typekey_session_get();
 		if (empty($message['nick'])) return '';
-		return '<a class="ext" href="'.typekey::typekey_profile_url($message['name']).'" rel="nofollow">'.
+		return '<a class="ext" href="'.auth_typekey::typekey_profile_url($message['name']).'" rel="nofollow">'.
 			$message['nick'].
 			'<img src="'.IMAGE_DIR.'plus/ext.png" alt="" title="" class="ext" onclick="return open_uri(\''.
-			typekey::typekey_profile_url($message['name']).'\',\'_blank\');" /></a>';
+			auth_typekey::typekey_profile_url($message['name']).'\',\'_blank\');" /></a>';
 	}
 
 	function gen_message()
@@ -158,7 +158,7 @@ class typekey
 		if (empty($val)) {
 			return array();
 		}
-		return typekey::parse_message($val);
+		return auth_typekey::parse_message($val);
 	}
 
 	function typekey_session_put()

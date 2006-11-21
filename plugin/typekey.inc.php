@@ -4,10 +4,10 @@
  *
  * @copyright   Copyright &copy; 2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: typekey.inc.php,v 0.4 2006/11/20 21:38:00 upk Exp $
+ * @version     $Id: typekey.inc.php,v 0.5 2006/11/21 01:42:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
-require_once(LIB_DIR . 'typekey.cls.php');
+require_once(LIB_DIR . 'auth_typekey.cls.php');
 
 function plugin_typekey_init()
 {
@@ -42,9 +42,9 @@ function plugin_typekey_convert()
 		$page .= rawurlencode('&page='.$vars['page']);
 	}
 
-	$user = typekey::get_profile_link();
+	$user = auth_typekey::get_profile_link();
 	if (! empty($user)) {
-		$logout_url = typekey::typekey_logout_url($page).rawurlencode('&logout');
+		$logout_url = auth_typekey::typekey_logout_url($page).rawurlencode('&logout');
 		return <<<EOD
 <div>
 	<label>TypeKey</label>:
@@ -54,7 +54,7 @@ function plugin_typekey_convert()
 EOD;
 	}
 
-        $obj_typekey = new typekey($auth_api['typekey']['site_token']);
+        $obj_typekey = new auth_typekey($auth_api['typekey']['site_token']);
         $obj_typekey->set_need_email($auth_api['typekey']['need_email']);
 
 	$login_url = $obj_typekey->typekey_login_url($page);
@@ -84,15 +84,15 @@ function plugin_typekey_inline()
 		$page .= rawurlencode('&page='.$vars['page']);
 	}
 
-	$link = typekey::get_profile_link();
+	$link = auth_typekey::get_profile_link();
 	if (! empty($link)) {
 		// 既に認証済
 		return sprintf($_typekey_msg['msg_logined'],$link) .
-			'(<a href="'.typekey::typekey_logout_url($page).rawurlencode('&logout').'">' .
+			'(<a href="'.auth_typekey::typekey_logout_url($page).rawurlencode('&logout').'">' .
 			$_typekey_msg['msg_logout'].'</a>)';
 	}
 
-	$obj_typekey = new typekey($auth_api['typekey']['site_token']);
+	$obj_typekey = new auth_typekey($auth_api['typekey']['site_token']);
 	$obj_typekey->set_need_email($auth_api['typekey']['need_email']);
 	return '<a href="'.$obj_typekey->typekey_login_url($page).'">'.$_typekey_msg['msg_login'].'</a>';
 }
@@ -106,7 +106,7 @@ function plugin_typekey_action()
 
 	if (empty($auth_api['typekey']['site_token'])) return '';
 
-	$obj_typekey = new typekey($auth_api['typekey']['site_token']);
+	$obj_typekey = new auth_typekey($auth_api['typekey']['site_token']);
 	$obj_typekey->set_regkeys();
 	$obj_typekey->set_need_email($auth_api['typekey']['need_email']);
 	$obj_typekey->set_sigKey($vars);
@@ -115,7 +115,7 @@ function plugin_typekey_action()
 
 	if (! $obj_typekey->auth()) {
 		if (isset($vars['logout'])) {
-			typekey::typekey_session_unset();
+			auth_typekey::typekey_session_unset();
 		}
 		header('Location: '.$script.'?'.$r_page);
 		die();
