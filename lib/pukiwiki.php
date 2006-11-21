@@ -101,9 +101,6 @@ if (isset($vars['cmd'])) {
 	$plugin = '';
 }
 
-// If text/html(or same), Enable session.
-pkwk_session_start();
-
 if ($plugin != '') {
 	if (exist_plugin_action($plugin)) {
 		// Found and exec
@@ -126,6 +123,11 @@ if ($plugin != '') {
 	}
 }
 
+// If text/html(or same), Enable session.
+// NOTE: if action plugin(command) use session, call pkwk_session_start()
+//       in plugin action-API function.
+pkwk_session_start();
+
 // Render
 $title = htmlspecialchars(strip_bracket($base));
 $page  = make_search($base);
@@ -146,13 +148,11 @@ if (isset($retvars['body']) && $retvars['body'] != '') {
 	$vars['cmd']  = 'read';
 	$vars['page'] = & $base;
 
-//	$body  = convert_html(get_source($base));
-//miko
 	global $fixed_heading_edited;
 	$source = get_source($base);
-	// 見出し編集を動的に行うための処理
-	// convert_html は再入禁止のため擬似プラグインとする
-	// (従来と違い、本文ソースしか見ない)
+
+	// Virtual action plugin(partedit).
+	// NOTE: Check wiki source only.(*NOT* call convert_html() function)
 	$lines = $source;
 	while (! empty($lines)) {
 		$line = array_shift($lines);
@@ -168,7 +168,6 @@ if (isset($retvars['body']) && $retvars['body'] != '') {
 	}
 
 	$body = convert_html($source);
-//miko
 
 	if ($trackback) $body .= tb_get_rdf($base); // Add TrackBack-Ping URI
 	if ($referer) ref_save($base);
