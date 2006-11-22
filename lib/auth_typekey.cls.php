@@ -4,7 +4,7 @@
  *
  * @copyright   Copyright &copy; 2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth_typekey.cls.php,v 0.7 2006/11/22 23:37:00 upk Exp $
+ * @version     $Id: auth_typekey.cls.php,v 0.8 2006/11/23 00:15:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 
@@ -14,8 +14,6 @@ defined('TYPEKEY_URL_PROFILE')	or define('TYPEKEY_URL_PROFILE', 'http://profile.
 defined('TYPEKEY_REGKEYS')	or define('TYPEKEY_REGKEYS',	 'http://www.typekey.com/extras/regkeys.txt');
 defined('TYPEKEY_VERSION')	or define('TYPEKEY_VERSION',	 '1.1');
 defined('TYPEKEY_CACHE_TIME')	or define('TYPEKEY_CACHE_TIME',	 60*60*24*2); // 2 day
-global $script;
-defined('TYPEKEY_SESSION_NAME')	or define('TYPEKEY_SESSION_NAME',md5('typekey_message_'.$script));
 
 class auth_typekey
 {
@@ -155,7 +153,7 @@ class auth_typekey
 
 	function typekey_session_get()
 	{
-		$val = auth::des_session_get(TYPEKEY_SESSION_NAME);
+		$val = auth::des_session_get(md5('typekey_message_'.session_id()));
 		if (empty($val)) {
 			return array();
 		}
@@ -165,12 +163,12 @@ class auth_typekey
 	function typekey_session_put()
 	{
 		$message = $this->gen_message();
-		auth::des_session_put(TYPEKEY_SESSION_NAME,$message);
+		auth::des_session_put(md5('typekey_message_'.session_id()),$message);
 	}
 
 	function typekey_session_unset()
 	{
-		return session_unregister(TYPEKEY_SESSION_NAME);
+		return session_unregister(md5('typekey_message_'.session_id()));
 	}
 
 	function auth()

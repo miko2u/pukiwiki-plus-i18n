@@ -4,14 +4,12 @@
  *
  * @copyright   Copyright &copy; 2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth_hatena.cls.php,v 0.3 2006/11/22 23:28:00 upk Exp $
+ * @version     $Id: auth_hatena.cls.php,v 0.4 2006/11/23 00:14:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 defined('HATENA_URL_AUTH')	or define('HATENA_URL_AUTH','http://auth.hatena.ne.jp/auth');
 defined('HATENA_URL_XML')	or define('HATENA_URL_XML', 'http://auth.hatena.ne.jp/api/auth.xml');
 defined('HATENA_URL_PROFILE')	or define('HATENA_URL_PROFILE','http://www.hatena.ne.jp/user?userid=');
-global $script;
-defined('HATENA_SESSION_NAME')	or define('HATENA_SESSION_NAME',md5('hatena_message_'.$script));
 
 class auth_hatena
 {
@@ -58,7 +56,7 @@ class auth_hatena
 
 	function hatena_session_get()
 	{
-		$val = auth::des_session_get(HATENA_SESSION_NAME);
+		$val = auth::des_session_get(md5('hatena_message_'.session_id()));
 		if (empty($val)) {
 			return array();
 		}
@@ -71,12 +69,12 @@ class auth_hatena
 			encode(UTIME).'::'.
 			encode($this->response['image_url']).'::'.
 			encode($this->response['thumbnail_url']);
-		auth::des_session_put(HATENA_SESSION_NAME,$message);
+		auth::des_session_put(md5('hatena_message_'.session_id()),$message);
 	}
 
 	function hatena_session_unset()
 	{
-		return session_unregister(HATENA_SESSION_NAME);
+		return session_unregister(md5('hatena_message_'.session_id()));
 	}
 
 	function parse_message($message)
