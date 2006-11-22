@@ -4,13 +4,14 @@
  *
  * @copyright   Copyright &copy; 2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth_hatena.cls.php,v 0.2 2006/11/22 23:01:00 upk Exp $
+ * @version     $Id: auth_hatena.cls.php,v 0.3 2006/11/22 23:28:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 defined('HATENA_URL_AUTH')	or define('HATENA_URL_AUTH','http://auth.hatena.ne.jp/auth');
 defined('HATENA_URL_XML')	or define('HATENA_URL_XML', 'http://auth.hatena.ne.jp/api/auth.xml');
 defined('HATENA_URL_PROFILE')	or define('HATENA_URL_PROFILE','http://www.hatena.ne.jp/user?userid=');
-defined('HATENA_SESSION_NAME')	or define('HATENA_SESSION_NAME',md5('hatena_message'));
+global $script;
+defined('HATENA_SESSION_NAME')	or define('HATENA_SESSION_NAME',md5('hatena_message_'.$script));
 
 class auth_hatena
 {

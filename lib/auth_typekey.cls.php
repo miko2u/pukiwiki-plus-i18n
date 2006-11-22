@@ -4,7 +4,7 @@
  *
  * @copyright   Copyright &copy; 2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth_typekey.cls.php,v 0.6 2006/11/21 01:38:00 upk Exp $
+ * @version     $Id: auth_typekey.cls.php,v 0.7 2006/11/22 23:37:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 
@@ -14,7 +14,8 @@ defined('TYPEKEY_URL_PROFILE')	or define('TYPEKEY_URL_PROFILE', 'http://profile.
 defined('TYPEKEY_REGKEYS')	or define('TYPEKEY_REGKEYS',	 'http://www.typekey.com/extras/regkeys.txt');
 defined('TYPEKEY_VERSION')	or define('TYPEKEY_VERSION',	 '1.1');
 defined('TYPEKEY_CACHE_TIME')	or define('TYPEKEY_CACHE_TIME',	 60*60*24*2); // 2 day
-defined('TYPEKEY_SESSION_NAME')	or define('TYPEKEY_SESSION_NAME',md5('typekey_message'));
+global $script;
+defined('TYPEKEY_SESSION_NAME')	or define('TYPEKEY_SESSION_NAME',md5('typekey_message_'.$script));
 
 class auth_typekey
 {
