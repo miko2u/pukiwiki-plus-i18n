@@ -3,7 +3,7 @@
  * PukiWiki Plus! ログインプラグイン
  *
  * @copyright	Copyright &copy; 2004-2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version	$Id: login.php,v 0.8 2006/11/22 21:46:00 upk Exp $
+ * @version	$Id: login.php,v 0.9 2006/11/22 22:14:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
@@ -121,11 +121,6 @@ function plugin_login_action()
 function login_return_page()
 {
 	global $vars, $script;
-
-	if (! empty($_SERVER['HTTP_REFERER'])) {
-		header( 'Location: ' . $_SERVER['HTTP_REFERER']);
-		die();
-	}
 
 	$retloc = (isset($vars['page'])) ? $script.'?'.rawurlencode($vars['page']) : $script;
 	header( 'Location: ' . $retloc );
