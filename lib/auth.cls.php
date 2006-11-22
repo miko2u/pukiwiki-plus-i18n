@@ -3,7 +3,7 @@
  * PukiWiki Plus! 認証処理
  *
  * @author	Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth.cls.php,v 0.28 2006/11/21 02:02:00 upk Exp $
+ * @version     $Id: auth.cls.php,v 0.30 2006/11/22 21:52:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 
@@ -15,6 +15,13 @@ defined('ROLE_ADM_CONTENTS_TEMP') or define('ROLE_ADM_CONTENTS_TEMP', 3.1);
 defined('ROLE_AUTH')              or define('ROLE_AUTH', 4);
 defined('ROLE_AUTH_TEMP')         or define('ROLE_AUTH_TEMP', 4.1);
 defined('ROLE_AUTH_TYPEKEY')      or define('ROLE_AUTH_TYPEKEY', 4.2);
+defined('ROLE_AUTH_HATENA')       or define('ROLE_AUTH_HATENA', 4.3);
+
+$login_api = array(
+	// role level => login plugin name
+	strval(ROLE_AUTH_TYPEKEY)	=> 'typekey',
+	strval(ROLE_AUTH_HATENA)	=> 'hatena',
+);
 
 /**
  * 認証クラス
@@ -64,6 +71,12 @@ class auth
 			if (! empty($login)) return $login;
 		}
 
+		if ($auth_api['hatena']['use']) {
+			require_once(LIB_DIR . 'auth_hatena.cls.php');
+			$login = auth_hatena::hatena_session_get();
+			if (! empty($login['name'])) return $login['name'];
+		}
+
 		return '';
 	}
 
@@ -92,7 +105,13 @@ class auth
 			if ($auth_api['typekey']['use']) {
 				require_once(LIB_DIR . 'auth_typekey.cls.php');
 				$login = auth_typekey::get_profile('nick');
-				return (empty($login)) ? ROLE_AUTH_TEMP : ROLE_AUTH_TYPEKEY;
+				if (! empty($login)) return ROLE_AUTH_TYPEKEY;
+			}
+
+			if ($auth_api['hatena']['use']) {
+				require_once(LIB_DIR . 'auth_hatena.cls.php');
+				$login = auth_hatena::hatena_session_get();
+				if (! empty($login['name'])) return ROLE_AUTH_HATENA;
 			}
 
 			return ROLE_AUTH_TEMP;
