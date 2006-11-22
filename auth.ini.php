@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: auth.ini.php,v 0.0.5 2006/11/22 21:56:00 upk Exp $
+// $Id: auth.ini.php,v 0.0.6 2006/11/22 22:38:00 upk Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 // License: GPL v2 or (at your option) any later version
@@ -85,8 +85,8 @@ $auth_api = array(
 	// Hatena
 	'hatena'		=> array(
 		'use'           => 0,
-		'sec_key'       => '',
 		'api_key'       => '',
+		'sec_key'       => '',
 	),
 );
 
