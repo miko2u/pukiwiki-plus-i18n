@@ -4,7 +4,7 @@
  *
  * @copyright   Copyright &copy; 2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth_typekey.cls.php,v 0.8 2006/11/23 00:15:00 upk Exp $
+ * @version     $Id: auth_typekey.cls.php,v 0.9 2006/11/23 00:20:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 
@@ -153,7 +153,8 @@ class auth_typekey
 
 	function typekey_session_get()
 	{
-		$val = auth::des_session_get(md5('typekey_message_'.session_id()));
+		global $script;
+		$val = auth::des_session_get(md5('typekey_message_'.$script.session_id()));
 		if (empty($val)) {
 			return array();
 		}
@@ -162,13 +163,15 @@ class auth_typekey
 
 	function typekey_session_put()
 	{
+		global $script;
 		$message = $this->gen_message();
-		auth::des_session_put(md5('typekey_message_'.session_id()),$message);
+		auth::des_session_put(md5('typekey_message_'.$script.session_id()),$message);
 	}
 
 	function typekey_session_unset()
 	{
-		return session_unregister(md5('typekey_message_'.session_id()));
+		global $script;
+		return session_unregister(md5('typekey_message_'.$script.session_id()));
 	}
 
 	function auth()
