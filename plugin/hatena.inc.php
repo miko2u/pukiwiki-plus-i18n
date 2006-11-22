@@ -4,7 +4,7 @@
  *
  * @copyright   Copyright &copy; 2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: hatena.inc.php,v 0.2 2006/11/22 22:25:00 upk Exp $
+ * @version     $Id: hatena.inc.php,v 0.3 2006/11/22 23:19:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'auth_hatena.cls.php');
@@ -56,8 +56,14 @@ EOD;
 	}
 
 	// ボタンを表示するだけ
+	$login_url = $script.'?plugin=hatena';
+	if (! empty($vars['page'])) {
+		$login_url .= '&amp;page='.rawurlencode($vars['page']);
+	}
+	$login_url .= '&amp;login';
+
 	return <<<EOD
-<form action="{$script}?plugin=hatena&amp;login" method="post">
+<form action="$login_url" method="post">
 	<div>
 		<input type="submit" value="{$_hatena_msg['btn_login']}" />
 	</div>
