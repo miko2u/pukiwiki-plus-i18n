@@ -4,7 +4,7 @@
  *
  * @copyright   Copyright &copy; 2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth_hatena.cls.php,v 0.1 2006/11/22 21:57:00 upk Exp $
+ * @version     $Id: auth_hatena.cls.php,v 0.2 2006/11/22 23:01:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 defined('HATENA_URL_AUTH')	or define('HATENA_URL_AUTH','http://auth.hatena.ne.jp/auth');
@@ -27,7 +27,7 @@ class auth_hatena
 	{
 		$x1 = $x2 = '';
 		foreach($return as $key=>$val) {
-			$r_val = rawurlencode($val);
+			$r_val = ($key == 'page') ? encode($val) : rawurlencode($val);
 			$x1 .= $key.$r_val;
 			$x2 .= '&amp;'.$key.'='.$r_val;
 		}

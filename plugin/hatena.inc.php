@@ -4,7 +4,7 @@
  *
  * @copyright   Copyright &copy; 2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: hatena.inc.php,v 0.1 2006/11/22 21:59:00 upk Exp $
+ * @version     $Id: hatena.inc.php,v 0.2 2006/11/22 22:25:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'auth_hatena.cls.php');
@@ -39,12 +39,17 @@ function plugin_hatena_convert()
 	$name = auth_hatena::hatena_session_get();
 	if (isset($name['name'])) {
 		// $name = array('name','ts','image_url','thumbnail_url');
+		$logout_url = $script.'?plugin=hatena';
+		if (! empty($vars['page'])) {
+			$logout_url .= '&amp;page='.rawurlencode($vars['page']).'&amp;logout';
+		}
+
 		return <<<EOD
 <div>
 	<label>Hatena</label>:
 	{$name['name']}
 	<img src="{$name['thumbnail_url']}" alt="id:{$name['name']}" />
-	(<a href="{$script}?plugin=hatena&amp;logout">{$_hatena_msg['msg_out']}</a>)
+	(<a href="$logout_url">{$_hatena_msg['msg_out']}</a>)
 </div>
 
 EOD;
@@ -75,9 +80,12 @@ function plugin_hatena_inline()
 	if (isset($name['name'])) {
 		// $name = array('name','ts','image_url','thumbnail_url');
 		$link = $name['name'].'<img src="'.$name['thumbnail_url'].'" alt="id:'.$name['name'].'" />';
-		// 既に認証済
+		$logout_url = $script.'?plugin=hatena';
+		if (! empty($vars['page'])) {
+			$logout_url .= '&amp;page='.rawurlencode($vars['page']).'&amp;logout';
+		}
 		return sprintf($_hatena_msg['msg_logined'],$link) .
-			'(<a href="'.$script.'?plugin=hatena&amp;logout">'.$_hatena_msg['msg_out'].'</a>)';
+			'(<a href="'.$logout_url.'">'.$_hatena_msg['msg_out'].'</a>)';
 	}
 
 	$login_url = plugin_hatena_jump_url(1);
@@ -92,12 +100,10 @@ function plugin_hatena_action()
 	if (! function_exists('pkwk_session_start')) return '';
 	if (pkwk_session_start() == 0) return '';
 
-	$r_page = (empty($vars['page'])) ? '' : rawurlencode($vars['page']);
+	$r_page = (empty($vars['page'])) ? '' : rawurlencode( decode($vars['page']) );
 
 	// LOGIN
 	if (isset($vars['login'])) {
-		// $login_url = str_replace('&amp;','&',plugin_hatena_jump_url());
-		// header('Location: '. $login_url);
 		header('Location: '. plugin_hatena_jump_url());
 		die();
         }
