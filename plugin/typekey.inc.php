@@ -4,7 +4,7 @@
  *
  * @copyright   Copyright &copy; 2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: typekey.inc.php,v 0.6 2006/11/22 21:47:00 upk Exp $
+ * @version     $Id: typekey.inc.php,v 0.7 2006/11/23 00:40:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'auth_typekey.cls.php');
@@ -13,9 +13,8 @@ function plugin_typekey_init()
 {
 	$msg = array(
 	  '_typekey_msg' => array(
-		'msg_login'		=> _("TypeKey Login"),
-		'msg_logout'		=> _("TypeKey Logout"),
-		'msg_out'		=> _("logout"),
+		'msg_typekey'		=> _("TypeKey"),
+		'msg_logout'		=> _("logout"),
 		'msg_logined'		=> _("%s has been approved by TypeKey."),	// %s さんは、TypeKey によって、承認されています。
 		'msg_error'		=> _("site_token must be set."),
 		'msg_invalid'		=> _("The function of TypeKey is invalid."),	// TypeKey の機能は、無効です。
@@ -47,7 +46,7 @@ function plugin_typekey_convert()
 		return <<<EOD
 <div>
 	<label>TypeKey</label>:
-	$user(<a href="$logout_url">{$_typekey_msg['msg_out']}</a>)
+	$user(<a href="$logout_url">{$_typekey_msg['msg_logout']}</a>)
 </div>
 
 EOD;
@@ -87,7 +86,7 @@ function plugin_typekey_inline()
 			$_typekey_msg['msg_logout'].'</a>)';
 	}
 
-	return '<a href="'.plugin_typekey_jump_url().'">'.$_typekey_msg['msg_login'].'</a>';
+	return '<a href="'.plugin_typekey_jump_url().'">'.$_typekey_msg['msg_typekey'].'</a>';
 }
 
 function plugin_typekey_action()

@@ -4,7 +4,7 @@
  *
  * @copyright   Copyright &copy; 2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: hatena.inc.php,v 0.3 2006/11/22 23:19:00 upk Exp $
+ * @version     $Id: hatena.inc.php,v 0.4 2006/11/23 00:36:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'auth_hatena.cls.php');
@@ -13,14 +13,12 @@ function plugin_hatena_init()
 {
 	$msg = array(
 	  '_hatena_msg' => array(
-		'msg_login'		=> _("Hatena Login"),
-		'msg_logout'		=> _("Hatena Logout"),
-		'msg_out'		=> _("logout"),
+		'msg_logout'		=> _("logout"),
 		'msg_logined'		=> _("%s has been approved by Hatena."),	// %s さんは、Hatena によって、承認されています。
-		'msg_error'		=> _("site_token must be set."),
 		'msg_invalid'		=> _("The function of Hatena is invalid."),	// Hatena の機能は、無効です。
 		'msg_not_found'		=> _("pkwk_session_start() doesn't exist."),	// pkwk_session_start() が見つかりません。
 		'msg_not_start'		=> _("The session is not start."),		// セッションが開始されていません。
+		'msg_hatena'		=> _("Hatena"),
 		'btn_login'		=> _("LOGIN(Hatena)"),
           )
         );
@@ -49,7 +47,7 @@ function plugin_hatena_convert()
 	<label>Hatena</label>:
 	{$name['name']}
 	<img src="{$name['thumbnail_url']}" alt="id:{$name['name']}" />
-	(<a href="$logout_url">{$_hatena_msg['msg_out']}</a>)
+	(<a href="$logout_url">{$_hatena_msg['msg_logout']}</a>)
 </div>
 
 EOD;
@@ -91,11 +89,11 @@ function plugin_hatena_inline()
 			$logout_url .= '&amp;page='.rawurlencode($vars['page']).'&amp;logout';
 		}
 		return sprintf($_hatena_msg['msg_logined'],$link) .
-			'(<a href="'.$logout_url.'">'.$_hatena_msg['msg_out'].'</a>)';
+			'(<a href="'.$logout_url.'">'.$_hatena_msg['msg_logout'].'</a>)';
 	}
 
 	$login_url = plugin_hatena_jump_url(1);
-	return '<a href="'.$login_url.'">'.$_hatena_msg['msg_login'].'</a>';
+	return '<a href="'.$login_url.'">'.$_hatena_msg['msg_hatena'].'</a>';
 }
 
 function plugin_hatena_action()
