@@ -3,7 +3,7 @@
  * PukiWiki Plus! 認証処理
  *
  * @author	Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth.cls.php,v 0.33 2006/11/23 15:20:00 upk Exp $
+ * @version     $Id: auth.cls.php,v 0.34 2006/11/23 23:17:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 
@@ -16,11 +16,13 @@ defined('ROLE_AUTH')              or define('ROLE_AUTH', 4);
 defined('ROLE_AUTH_TEMP')         or define('ROLE_AUTH_TEMP', 4.1);
 defined('ROLE_AUTH_TYPEKEY')      or define('ROLE_AUTH_TYPEKEY', 4.2);
 defined('ROLE_AUTH_HATENA')       or define('ROLE_AUTH_HATENA', 4.3);
+defined('ROLE_AUTH_JUGEMKEY')     or define('ROLE_AUTH_JUGEMKEY', 4.4);
 
 $login_api = array(
 	// role level => login plugin name
 	strval(ROLE_AUTH_TYPEKEY)	=> 'typekey',
 	strval(ROLE_AUTH_HATENA)	=> 'hatena',
+	strval(ROLE_AUTH_JUGEMKEY)	=> 'jugemkey',
 );
 
 /**
@@ -77,6 +79,12 @@ class auth
 			if (! empty($login['name'])) return $login['name'];
 		}
 
+		if ($auth_api['jugemkey']['use']) {
+			require_once(LIB_DIR . 'auth_jugemkey.cls.php');
+			$login = auth_jugemkey::jugemkey_session_get();
+			if (! empty($login['title'])) return $login['title'];
+		}
+
 		return '';
 	}
 
@@ -112,6 +120,12 @@ class auth
 				require_once(LIB_DIR . 'auth_hatena.cls.php');
 				$login = auth_hatena::hatena_session_get();
 				if (! empty($login['name'])) return ROLE_AUTH_HATENA;
+			}
+
+			if ($auth_api['jugemkey']['use']) {
+				require_once(LIB_DIR . 'auth_jugemkey.cls.php');
+				$login = auth_jugemkey::jugemkey_session_get();
+				if (! empty($login['title'])) return ROLE_AUTH_JUGEMKEY;
 			}
 
 			return ROLE_AUTH_TEMP;
