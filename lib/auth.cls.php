@@ -3,7 +3,7 @@
  * PukiWiki Plus! 認証処理
  *
  * @author	Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth.cls.php,v 0.30 2006/11/22 21:52:00 upk Exp $
+ * @version     $Id: auth.cls.php,v 0.31 2006/11/23 15:04:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 
@@ -378,7 +378,6 @@ class auth
 			return FALSE;
 		}
 
-		// analyze the PHP_AUTH_DIGEST variable
 		if (!($data = auth::http_digest_parse($_SERVER['PHP_AUTH_DIGEST']))) {
 			header('HTTP/1.1 401 Unauthorized');
 			header('WWW-Authenticate: Digest realm="'.$realm.
@@ -606,6 +605,43 @@ class auth
 		list($scheme, $salt) = auth::passwd_parse($adminpass);
 		require_once(LIB_DIR . 'des.php');
 		$_SESSION[$session_name] = base64_encode( des($salt, $val, 1, 0, null) );
+	}
+
+	function get_nick()
+	{
+		$role = auth::get_role_level();
+
+		switch($role) {
+		case ROLE_AUTH_TYPEKEY:
+			require_once(LIB_DIR . 'auth_typekey.cls.php');
+			$message = auth_typekey::typekey_session_get();
+			if (! empty($message['nick']) && ! empty($message['name'])) {
+				return array($role,$message['name'],$message['nick']);
+			}
+			break;
+		case ROLE_AUTH_HATENA:
+			require_once(LIB_DIR . 'auth_hatena.cls.php');
+			$login = auth_hatena::hatena_session_get();
+			if (! empty($login['name'])) {
+				return array($role,$message['name'],$message['name']);
+			}
+			break;
+		}
+		return array($role,'','');
+	}
+
+	function get_nick_link()
+	{
+		list($role,$name,$nick) = auth::get_nick();
+		if (empty($nick)) return array('','');
+
+		switch($role) {
+		case ROLE_AUTH_TYPEKEY:
+			return array($nick,TYPEKEY_URL_PROFILE.$name);
+		case ROLE_AUTH_HATENA:
+			return array($name,HATENA_URL_PROFILE.$name);
+		}
+		return array('','');
 	}
 }
 ?>
