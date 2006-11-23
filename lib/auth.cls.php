@@ -3,7 +3,7 @@
  * PukiWiki Plus! 認証処理
  *
  * @author	Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth.cls.php,v 0.31 2006/11/23 15:04:00 upk Exp $
+ * @version     $Id: auth.cls.php,v 0.32 2006/11/23 15:12:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 
@@ -613,14 +613,14 @@ class auth
 
 		switch($role) {
 		case ROLE_AUTH_TYPEKEY:
-			require_once(LIB_DIR . 'auth_typekey.cls.php');
+			// require_once(LIB_DIR . 'auth_typekey.cls.php');
 			$message = auth_typekey::typekey_session_get();
 			if (! empty($message['nick']) && ! empty($message['name'])) {
 				return array($role,$message['name'],$message['nick']);
 			}
 			break;
 		case ROLE_AUTH_HATENA:
-			require_once(LIB_DIR . 'auth_hatena.cls.php');
+			// require_once(LIB_DIR . 'auth_hatena.cls.php');
 			$login = auth_hatena::hatena_session_get();
 			if (! empty($login['name'])) {
 				return array($role,$message['name'],$message['name']);
