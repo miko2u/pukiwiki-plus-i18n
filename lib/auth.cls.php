@@ -3,7 +3,7 @@
  * PukiWiki Plus! 認証処理
  *
  * @author	Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth.cls.php,v 0.34 2006/11/23 23:17:00 upk Exp $
+ * @version     $Id: auth.cls.php,v 0.35 2006/11/24 23:32:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 
@@ -65,27 +65,9 @@ class auth
 		list($domain, $login, $host, $pass) = auth::ntlm_decode();
 		if (! empty($login)) return $login;
 
-		// TypeKey 対応
-		global $auth_api;
-		if ($auth_api['typekey']['use']) {
-			require_once(LIB_DIR . 'auth_typekey.cls.php');
-			$login = auth_typekey::get_profile('nick');
-			if (! empty($login)) return $login;
-		}
-
-		if ($auth_api['hatena']['use']) {
-			require_once(LIB_DIR . 'auth_hatena.cls.php');
-			$login = auth_hatena::hatena_session_get();
-			if (! empty($login['name'])) return $login['name'];
-		}
-
-		if ($auth_api['jugemkey']['use']) {
-			require_once(LIB_DIR . 'auth_jugemkey.cls.php');
-			$login = auth_jugemkey::jugemkey_session_get();
-			if (! empty($login['title'])) return $login['title'];
-		}
-
-		return '';
+		// 外部認証API
+		list($role,$name,$login) = auth::get_user_name();
+		return $login;
 	}
 
 	/**
@@ -107,28 +89,9 @@ class auth
 			// 管理者パスワードと偶然一致した場合でも見做し認証者(4.1)
 			//return ($login == 'admin' && $temp_admin) ? 3.1 : 4.1;
 			if ($login == 'admin' && $temp_admin) return ROLE_ADM_CONTENTS_TEMP;
-
-			// TypeKey 対応
-			global $auth_api;
-			if ($auth_api['typekey']['use']) {
-				require_once(LIB_DIR . 'auth_typekey.cls.php');
-				$login = auth_typekey::get_profile('nick');
-				if (! empty($login)) return ROLE_AUTH_TYPEKEY;
-			}
-
-			if ($auth_api['hatena']['use']) {
-				require_once(LIB_DIR . 'auth_hatena.cls.php');
-				$login = auth_hatena::hatena_session_get();
-				if (! empty($login['name'])) return ROLE_AUTH_HATENA;
-			}
-
-			if ($auth_api['jugemkey']['use']) {
-				require_once(LIB_DIR . 'auth_jugemkey.cls.php');
-				$login = auth_jugemkey::jugemkey_session_get();
-				if (! empty($login['title'])) return ROLE_AUTH_JUGEMKEY;
-			}
-
-			return ROLE_AUTH_TEMP;
+			// 外部認証API
+			list($role,$name,$nick) = auth::get_user_name();
+			return (empty($name)) ? ROLE_AUTH_TEMP : $role;
 		}
 
 		// 設定されている役割を取得
@@ -146,6 +109,35 @@ class auth
 			return ($temp_admin) ? ROLE_ADM_CONTENTS_TEMP : ROLE_AUTH;
 		}
 		return ROLE_AUTH;
+	}
+
+	function get_user_name()
+	{
+		global $auth_api;
+
+		foreach($auth_api as $api=>$val) {
+			if (! $val['use']) continue;
+			if (! exist_plugin($api)) continue;
+			$call_func = 'plugin_'.$api.'_get_user_name';
+			list($role,$name,$nick) = $call_func();
+			if (! empty($name)) return array($role,$name,$nick);
+		}
+		return array(ROLE_GUEST,'','');
+	}
+
+	function get_nick_link()
+	{
+		// 外部認証API
+		list($role,$name,$nick) = auth::get_user_name();
+		if (empty($nick)) return array('','');
+
+		switch($role) {
+		case ROLE_AUTH_TYPEKEY:
+			return array($nick,TYPEKEY_URL_PROFILE.$name);
+		case ROLE_AUTH_HATENA:
+			return array($name,HATENA_URL_PROFILE.$name);
+		}
+		return array($nick,'');
 	}
 
 	/*
@@ -619,43 +611,6 @@ class auth
 		list($scheme, $salt) = auth::passwd_parse($adminpass);
 		require_once(LIB_DIR . 'des.php');
 		$_SESSION[$session_name] = base64_encode( des($salt, $val, 1, 0, null) );
-	}
-
-	function get_nick()
-	{
-		$role = auth::get_role_level();
-
-		switch($role) {
-		case ROLE_AUTH_TYPEKEY:
-			// require_once(LIB_DIR . 'auth_typekey.cls.php');
-			$message = auth_typekey::typekey_session_get();
-			if (! empty($message['nick']) && ! empty($message['name'])) {
-				return array($role,$message['name'],$message['nick']);
-			}
-			break;
-		case ROLE_AUTH_HATENA:
-			// require_once(LIB_DIR . 'auth_hatena.cls.php');
-			$message = auth_hatena::hatena_session_get();
-			if (! empty($message['name'])) {
-				return array($role,$message['name'],$message['name']);
-			}
-			break;
-		}
-		return array($role,'','');
-	}
-
-	function get_nick_link()
-	{
-		list($role,$name,$nick) = auth::get_nick();
-		if (empty($nick)) return array('','');
-
-		switch($role) {
-		case ROLE_AUTH_TYPEKEY:
-			return array($nick,TYPEKEY_URL_PROFILE.$name);
-		case ROLE_AUTH_HATENA:
-			return array($name,HATENA_URL_PROFILE.$name);
-		}
-		return array('','');
 	}
 }
 ?>
