@@ -4,7 +4,7 @@
  *
  * @copyright   Copyright &copy; 2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: jugemkey.inc.php,v 0.3 2006/11/23 23:49:00 upk Exp $
+ * @version     $Id: jugemkey.inc.php,v 0.4 2006/11/23 23:52:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'auth_jugemkey.cls.php');
@@ -20,6 +20,8 @@ function plugin_jugemkey_init()
 		'msg_not_start'         => _("The session is not start."),              // セッションが開始されていません。
 		'msg_jugemkey'		=> _("JugemKey"),
 		'btn_login'		=> _("LOGIN(JugemKey)"),
+		'msg_userinfo'		=> _("JugemKey user information"),
+		'msg_user_name'		=> _("User Name"),
 	  )
 	);
         set_plugin_messages($msg);
@@ -116,6 +118,19 @@ function plugin_jugemkey_action()
 		die();
 	}
 
+	// Get token info
+	if (isset($vars['userinfo'])) {
+		$obj_token =new auth_jugemkey($auth_api['jugemkey']['sec_key'],$auth_api['jugemkey']['api_key']);
+		$rc = $obj_token->get_userinfo($vars['token']);
+		if ($rc['rc'] != 200) {
+			die_message('JugemKey: RC='.$rc['rc']);
+		}
+
+		$body = '<h3>'.$_jugemkey_msg['msg_userinfo'].'</h3>'.
+			'<strong>'.$_jugemkey_msg['msg_user_name'].': '.$rc['title'].'</strong>';
+		return array('msg'=>'JugemKey', 'body'=>$body);
+	}
+
 	// AUTH
 	$obj = new auth_jugemkey($auth_api['jugemkey']['sec_key'],$auth_api['jugemkey']['api_key']);
 	$rc = $obj->auth($vars['frob']);
@@ -142,10 +157,11 @@ function plugin_jugemkey_jump_url($inline=0)
 
 function plugin_jugemkey_get_user_name()
 {
-	global $auth_api;
+	global $script,$auth_api;
         if (! $auth_api['jugemkey']['use']) return array(ROLE_GUEST,'','','');
 	$login = auth_jugemkey::jugemkey_session_get();
-	if (! empty($login['title'])) return array(ROLE_AUTH_JUGEMKEY,$login['title'],$login['title'],'');
+	$info = (empty($login['token'])) ? '' : $script.'?plugin=jugemkey&token='.$login['token'].'&userinfo';
+	if (! empty($login['title'])) return array(ROLE_AUTH_JUGEMKEY,$login['title'],$login['title'],$info);
 	return array(ROLE_GUEST,'','','');
 }
 

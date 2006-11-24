@@ -4,11 +4,12 @@
  *
  * @copyright   Copyright &copy; 2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth_jugemkey.cls.php,v 0.1 2006/11/23 22:58:00 upk Exp $
+ * @version     $Id: auth_jugemkey.cls.php,v 0.2 2006/11/23 23:47:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
-defined('JUGEMKEY_URL_AUTH')     or define('JUGEMKEY_URL_AUTH','https://secure.jugemkey.jp/?mode=auth_issue_frob');
-defined('JUGEMKEY_URL_TOKEN')    or define('JUGEMKEY_URL_TOKEN','http://api.jugemkey.jp/api/auth/token');
+defined('JUGEMKEY_URL_AUTH')  or define('JUGEMKEY_URL_AUTH', 'https://secure.jugemkey.jp/?mode=auth_issue_frob');
+defined('JUGEMKEY_URL_TOKEN') or define('JUGEMKEY_URL_TOKEN','http://api.jugemkey.jp/api/auth/token');
+defined('JUGEMKEY_URL_USER')  or define('JUGEMKEY_URL_USER', 'http://api.jugemkey.jp/api/auth/user');
 
 class auth_jugemkey
 {
@@ -81,12 +82,8 @@ class auth_jugemkey
 
 	function auth($frob)
 	{
-		// 2006-05-20T01:09:39Z
 		$created = substr_replace(get_date('Y-m-d\TH:i:sO', UTIME), ':', -2, 0);
-
-		// X-JUGEMKEY-API-SIG
 		$api_sig = auth_jugemkey::hmac_sha1($this->sec_key,$this->api_key.$created.$frob);
-
 		$headers = array(
 			'X-JUGEMKEY-API-CREATED'=> $created,
 			'X-JUGEMKEY-API-KEY'	=> $this->api_key,
@@ -112,6 +109,33 @@ class auth_jugemkey
 		return $this->response;
 	}
 
+	function get_userinfo($token)
+	{
+		$created = substr_replace(get_date('Y-m-d\TH:i:sO', UTIME), ':', -2, 0);
+		$api_sig = auth_jugemkey::hmac_sha1($this->sec_key,$this->api_key.$created.$token);
+		$headers = array(
+			'X-JUGEMKEY-API-CREATED'=> $created,
+			'X-JUGEMKEY-API-KEY'    => $this->api_key,
+			'X-JUGEMKEY-API-TOKEN'  => $token,
+			'X-JUGEMKEY-API-SIG'    => $api_sig,
+		);
+
+		$data = http_request(JUGEMKEY_URL_USER, 'GET', $headers);
+
+		$rc = array();
+		$rc['rc'] = $data['rc'];
+		if ($data['rc'] != 200) return $rc;
+
+		$xml_parser = xml_parser_create();
+		xml_parse_into_struct($xml_parser, $data['data'], $val, $index);
+		xml_parser_free($xml_parser);
+
+		foreach($val as $x) {
+			if ($x['type'] != 'complete') continue;
+			$rc[strtolower($x['tag'])] = $x['value'];
+		}
+		return $rc;
+	}
 }
 
 ?>
