@@ -4,7 +4,7 @@
  *
  * @copyright   Copyright &copy; 2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: hatena.inc.php,v 0.6 2006/11/23 01:47:00 upk Exp $
+ * @version     $Id: hatena.inc.php,v 0.7 2006/11/25 02:27:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'auth_hatena.cls.php');
@@ -14,10 +14,10 @@ function plugin_hatena_init()
 	$msg = array(
 	  '_hatena_msg' => array(
 		'msg_logout'		=> _("logout"),
-		'msg_logined'		=> _("%s has been approved by Hatena."),	// %s さんは、Hatena によって、承認されています。
-		'msg_invalid'		=> _("The function of Hatena is invalid."),	// Hatena の機能は、無効です。
-		'msg_not_found'		=> _("pkwk_session_start() doesn't exist."),	// pkwk_session_start() が見つかりません。
-		'msg_not_start'		=> _("The session is not start."),		// セッションが開始されていません。
+		'msg_logined'		=> _("%s has been approved by Hatena."),
+		'msg_invalid'		=> _("The function of Hatena is invalid."),
+		'msg_not_found'		=> _("pkwk_session_start() doesn't exist."),
+		'msg_not_start'		=> _("The session is not start."),
 		'msg_hatena'		=> _("Hatena"),
 		'btn_login'		=> _("LOGIN(Hatena)"),
           )

@@ -4,7 +4,7 @@
  *
  * @copyright   Copyright &copy; 2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: jugemkey.inc.php,v 0.4 2006/11/23 23:52:00 upk Exp $
+ * @version     $Id: jugemkey.inc.php,v 0.5 2006/11/25 01:56:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'auth_jugemkey.cls.php');
@@ -14,10 +14,10 @@ function plugin_jugemkey_init()
 	$msg = array(
 	  '_jugemkey_msg' => array(
 		'msg_logout'		=> _("logout"),
-		'msg_logined'		=> _("%s has been approved by JugemKey."),      // %s さんは、Jugemkey によって、承認されています。
-		'msg_invalid'		=> _("The function of Hatena is invalid."),     // Jugemkey の機能は、無効です。
-		'msg_not_found'		=> _("pkwk_session_start() doesn't exist."),    // pkwk_session_start() が見つかりません。
-		'msg_not_start'         => _("The session is not start."),              // セッションが開始されていません。
+		'msg_logined'		=> _("%s has been approved by JugemKey."),
+		'msg_invalid'		=> _("The function of Hatena is invalid."),
+		'msg_not_found'		=> _("pkwk_session_start() doesn't exist."),
+		'msg_not_start'         => _("The session is not start."),
 		'msg_jugemkey'		=> _("JugemKey"),
 		'btn_login'		=> _("LOGIN(JugemKey)"),
 		'msg_userinfo'		=> _("JugemKey user information"),
@@ -123,7 +123,8 @@ function plugin_jugemkey_action()
 		$obj_token =new auth_jugemkey($auth_api['jugemkey']['sec_key'],$auth_api['jugemkey']['api_key']);
 		$rc = $obj_token->get_userinfo($vars['token']);
 		if ($rc['rc'] != 200) {
-			die_message('JugemKey: RC='.$rc['rc']);
+			$msg = (empty($rc['error'])) ? '' : ' ('.$rc['error'].')';
+			die_message('JugemKey: RC='.$rc['rc'].$msg);
 		}
 
 		$body = '<h3>'.$_jugemkey_msg['msg_userinfo'].'</h3>'.
@@ -134,10 +135,9 @@ function plugin_jugemkey_action()
 	// AUTH
 	$obj = new auth_jugemkey($auth_api['jugemkey']['sec_key'],$auth_api['jugemkey']['api_key']);
 	$rc = $obj->auth($vars['frob']);
-
 	if ($rc['rc'] != 200) {
-		// ERROR
-		die_message('JugemKey: '.$rc['rc']);
+		$msg = (empty($rc['error'])) ? '' : ' ('.$rc['error'].')';
+		die_message('JugemKey: '.$rc['rc'].$msg);
 	}
 
 	$obj->jugemkey_session_put();
@@ -160,7 +160,11 @@ function plugin_jugemkey_get_user_name()
 	global $script,$auth_api;
         if (! $auth_api['jugemkey']['use']) return array(ROLE_GUEST,'','','');
 	$login = auth_jugemkey::jugemkey_session_get();
-	$info = (empty($login['token'])) ? '' : $script.'?plugin=jugemkey&token='.$login['token'].'&userinfo';
+	// FIXME
+	// Because user information can be acquired by token only at online, it doesn't mount. 
+	// $info = (empty($login['token'])) ? '' : $script.'?plugin=jugemkey&token='.$login['token'].'&userinfo';
+	// Only, it leaves it only as a location of attestation by JugemKey.
+	$info = 'http://jugemkey.jp/';
 	if (! empty($login['title'])) return array(ROLE_AUTH_JUGEMKEY,$login['title'],$login['title'],$info);
 	return array(ROLE_GUEST,'','','');
 }

@@ -1,0 +1,49 @@
+# PukiWiki Plus! - Yet Another WikiWikiWeb Clone
+# Copyright (C) 2006 PukiWiki Plus! Developer Team
+# License is GPL2
+# Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>, 2006.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PukiWiki Plus! 1.4.7-u2-i18n\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2006-11-25 02:09+0900\n"
+"PO-Revision-Date: 2006-11-25 02:14+0900\n"
+"Last-Translator: Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>\n"
+"Language-Team: Japanese <ja@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../plugin/typekey.inc.php:16
+msgid "TypeKey"
+msgstr "TypeKey"
+
+#: ../../plugin/typekey.inc.php:17
+msgid "logout"
+msgstr "logout"
+
+#: ../../plugin/typekey.inc.php:18
+#, php-format
+msgid "%s has been approved by TypeKey."
+msgstr "%s さんは、TypeKey により認証されています。"
+
+#: ../../plugin/typekey.inc.php:19
+msgid "site_token must be set."
+msgstr "site_token を設定しなくてはいけません。"
+
+#: ../../plugin/typekey.inc.php:20
+msgid "The function of TypeKey is invalid."
+msgstr "TypeKey の機能は無効です。"
+
+#: ../../plugin/typekey.inc.php:21
+msgid "pkwk_session_start() doesn't exist."
+msgstr "pkwk_session_start() が見つかりません。"
+
+#: ../../plugin/typekey.inc.php:22
+msgid "The session is not start."
+msgstr "セッションが開始されていません。"
+
+#: ../../plugin/typekey.inc.php:23
+msgid "LOGIN(TypeKey)"
+msgstr "ログイン(TypeKey)"

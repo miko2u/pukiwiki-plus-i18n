@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: pcomment.inc.php,v 1.44.11 2006/10/25 23:38:00 miko Exp $
+// $Id: pcomment.inc.php,v 1.44.12 2006/11/25 02:07:00 upk Exp $
 //
 // pcomment plugin - Show/Insert comments into specified (another) page
 //
@@ -42,6 +42,10 @@ define('PLUGIN_PCOMMENT_FORMAT_STRING',
 function plugin_pcomment_action()
 {
 	global $post, $vars;
+
+	if (function_exists('pkwk_session_start')) {
+		pkwk_session_start();
+	}
 
 	// if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
 	if (auth::check_role('readonly')) die_message('PKWK_READONLY prohibits editing');
@@ -134,7 +138,10 @@ function plugin_pcomment_convert()
 			$name = '';
 		} else {
 			$title = $_pcmt_messages['btn_name'];
-			$name = '<input type="text" name="name" size="' . PLUGIN_PCOMMENT_SIZE_NAME . '" />';
+			// $name = '<input type="text" name="name" size="' . PLUGIN_PCOMMENT_SIZE_NAME . '" />';
+			list($nick,$link) = plugin_pcomment_get_nick();
+			$disabled = (empty($nick)) ? '' : "disabled=\"disabled\"";
+			$name = '<input type="text" name="name" value="'.$nick.'" '.$disabled.' size="' . PLUGIN_PCOMMENT_SIZE_NAME . '" />';
 		}
 
 		$radio   = $params['reply'] ?
@@ -214,6 +221,10 @@ function plugin_pcomment_insert()
 
 	$msg = str_replace('$msg', rtrim($vars['msg']), PLUGIN_PCOMMENT_FORMAT_MSG);
 	$name = (! isset($vars['name']) || $vars['name'] == '') ? $_no_name : $vars['name'];
+
+	list($nick,$link) = plugin_pcomment_get_nick();
+	if (! empty($link)) $name = $link;
+
 	$name = ($name == '') ? '' : str_replace('$name', $name, PLUGIN_PCOMMENT_FORMAT_NAME);
 	$date = (! isset($vars['nodate']) || $vars['nodate'] != '1') ?
 		str_replace('$now', $now, PLUGIN_PCOMMENT_FORMAT_NOW) : '';
@@ -381,5 +392,18 @@ function plugin_pcomment_get_comments($page, $count, $dir, $reply)
 			$comments);
 
 	return array($comments, $digest);
+}
+
+function plugin_pcomment_get_nick()
+{
+	global $vars;
+
+	$name = (empty($vars['name'])) ? '' : $vars['name'];
+	if (PKWK_READONLY != ROLE_AUTH) return array($name,$name);
+
+	list($role,$name,$nick,$url) = auth::get_user_name();
+	if (empty($nick)) return array($name,$name);
+	$link = (empty($url)) ? $nick : $nick.'>'.$url;
+	return array($nick, $link);
 }
 ?>

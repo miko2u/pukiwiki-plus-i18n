@@ -4,7 +4,7 @@
  *
  * @copyright   Copyright &copy; 2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth_jugemkey.cls.php,v 0.2 2006/11/23 23:47:00 upk Exp $
+ * @version     $Id: auth_jugemkey.cls.php,v 0.3 2006/11/25 01:48:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 defined('JUGEMKEY_URL_AUTH')  or define('JUGEMKEY_URL_AUTH', 'https://secure.jugemkey.jp/?mode=auth_issue_frob');
@@ -124,7 +124,7 @@ class auth_jugemkey
 
 		$rc = array();
 		$rc['rc'] = $data['rc'];
-		if ($data['rc'] != 200) return $rc;
+		if ($data['rc'] != 200 && ($data['rc'] != 401)) return $rc;
 
 		$xml_parser = xml_parser_create();
 		xml_parse_into_struct($xml_parser, $data['data'], $val, $index);

@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: comment.inc.php,v 1.36.13 2006/10/24 14:24:00 miko Exp $
+// $Id: comment.inc.php,v 1.36.14 2006/11/25 02:07:00 upk Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
@@ -24,9 +24,6 @@ function plugin_comment_action()
 {
 	global $vars, $post;
 
-	// if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
-	if (auth::check_role('readonly')) die_message('PKWK_READONLY prohibits editing');
-
 	// Petit SPAM Check (Client(Browser)-Server Ticket Check)
 	$spam = FALSE;
 	if (function_exists('pkwk_session_start') && pkwk_session_start() != 0) {
@@ -42,6 +39,9 @@ function plugin_comment_action()
 			if (PKWK_ENCODING_HINT != '') $spam = TRUE;
 		}
 	}
+
+	// if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
+	if (auth::check_role('readonly')) die_message('PKWK_READONLY prohibits editing');
 
 	// If SPAM, goto jail.
 	if ($spam) return plugin_comment_honeypot();
@@ -74,6 +74,9 @@ function plugin_comment_write()
 	if ($vars['msg'] == '') return array('msg'=>'', 'body'=>''); // Do nothing
 
 	$comment  = str_replace('$msg', $vars['msg'], PLUGIN_COMMENT_FORMAT_MSG);
+
+	list($nick, $vars['name']) = plugin_comment_get_nick();
+
 	if(isset($vars['name']) || ($vars['nodate'] != '1')) {
 		$_name = (! isset($vars['name']) || $vars['name'] == '') ? $_no_name : $vars['name'];
 		$_name = ($_name == '') ? '' : str_replace('$name', $_name, PLUGIN_COMMENT_FORMAT_NAME);
@@ -125,6 +128,19 @@ function plugin_comment_write()
 	return $retvars;
 }
 
+function plugin_comment_get_nick()
+{
+	global $vars;
+
+	$name = (empty($vars['name'])) ? '' : $vars['name'];
+	if (PKWK_READONLY != ROLE_AUTH) return array($name,$name);
+
+	list($role,$name,$nick,$url) = auth::get_user_name();
+	if (empty($nick)) return array($name,$name);
+	$link = (empty($url)) ? $nick : $nick.'>'.$url;
+	return array($nick, $link);
+}
+
 // Cancel (Back to the page / Escape edit page)
 function plugin_comment_honeypot()
 {
@@ -151,6 +167,10 @@ function plugin_comment_convert()
 	$comment_no = $numbers[$vars['page']]++;
 
 	$options = func_num_args() ? func_get_args() : array();
+
+	list($user, $link) = plugin_comment_get_nick();
+	$disabled = (empty($user)) ? '' : "disabled=\"disabled\"";
+
 	if (in_array('noname', $options)) {
 		$nametags = '<label for="_p_comment_comment_' . $comment_no . '">' .
 			$_msg_comment . '</label>';
@@ -159,7 +179,7 @@ function plugin_comment_convert()
 			$_btn_name . '</label>' .
 			'<input type="text" name="name" id="_p_comment_name_' .
 			$comment_no .  '" size="' . PLUGIN_COMMENT_SIZE_NAME .
-			'" />' . "\n";
+			'" value="'.$user.'"'.$disabled.' />' . "\n";
 	}
 
 	$helptags = edit_form_assistant();

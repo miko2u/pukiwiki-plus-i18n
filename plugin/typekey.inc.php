@@ -4,7 +4,7 @@
  *
  * @copyright   Copyright &copy; 2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: typekey.inc.php,v 0.9 2006/11/23 01:42:00 upk Exp $
+ * @version     $Id: typekey.inc.php,v 0.10 2006/11/25 02:27:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'auth_typekey.cls.php');
@@ -15,11 +15,11 @@ function plugin_typekey_init()
 	  '_typekey_msg' => array(
 		'msg_typekey'		=> _("TypeKey"),
 		'msg_logout'		=> _("logout"),
-		'msg_logined'		=> _("%s has been approved by TypeKey."),	// %s さんは、TypeKey によって、承認されています。
+		'msg_logined'		=> _("%s has been approved by TypeKey."),
 		'msg_error'		=> _("site_token must be set."),
-		'msg_invalid'		=> _("The function of TypeKey is invalid."),	// TypeKey の機能は、無効です。
-		'msg_not_found'		=> _("pkwk_session_start() doesn't exist."),	// pkwk_session_start() が見つかりません。
-		'msg_not_start'		=> _("The session is not start."),		// セッションが開始されていません。
+		'msg_invalid'		=> _("The function of TypeKey is invalid."),
+		'msg_not_found'		=> _("pkwk_session_start() doesn't exist."),
+		'msg_not_start'		=> _("The session is not start."),
 		'btn_login'		=> _("LOGIN(TypeKey)"),
 	  )
 	);
