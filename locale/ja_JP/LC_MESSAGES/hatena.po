@@ -22,7 +22,7 @@ msgstr "logout"
 #: ../../plugin/hatena.inc.php:17
 #, php-format
 msgid "%s has been approved by Hatena."
-msgstr ""
+msgstr "%s さんは、Hatena  により認証されています。"
 
 #: ../../plugin/hatena.inc.php:18
 msgid "The function of Hatena is invalid."
@@ -38,7 +38,7 @@ msgstr "セッションが開始されていません。"
 
 #: ../../plugin/hatena.inc.php:21
 msgid "Hatena"
-msgstr "はてな"
+msgstr "Hatena"
 
 #: ../../plugin/hatena.inc.php:22
 msgid "LOGIN(Hatena)"
