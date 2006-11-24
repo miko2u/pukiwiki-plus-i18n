@@ -4,7 +4,7 @@
  *
  * @copyright   Copyright &copy; 2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: jugemkey.inc.php,v 0.2 2006/11/23 23:27:00 upk Exp $
+ * @version     $Id: jugemkey.inc.php,v 0.3 2006/11/23 23:49:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'auth_jugemkey.cls.php');
@@ -143,10 +143,10 @@ function plugin_jugemkey_jump_url($inline=0)
 function plugin_jugemkey_get_user_name()
 {
 	global $auth_api;
-        if (! $auth_api['jugemkey']['use']) return array(ROLE_GUEST,'','');
+        if (! $auth_api['jugemkey']['use']) return array(ROLE_GUEST,'','','');
 	$login = auth_jugemkey::jugemkey_session_get();
-	if (! empty($login['title'])) return array(ROLE_AUTH_JUGEMKEY,$login['title'],$login['title']);
-	return array(ROLE_GUEST,'','');
+	if (! empty($login['title'])) return array(ROLE_AUTH_JUGEMKEY,$login['title'],$login['title'],'');
+	return array(ROLE_GUEST,'','','');
 }
 
 ?>

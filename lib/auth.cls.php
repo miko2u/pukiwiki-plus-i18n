@@ -3,7 +3,7 @@
  * PukiWiki Plus! 認証処理
  *
  * @author	Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth.cls.php,v 0.35 2006/11/24 23:32:00 upk Exp $
+ * @version     $Id: auth.cls.php,v 0.36 2006/11/23 23:50:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 
@@ -66,7 +66,7 @@ class auth
 		if (! empty($login)) return $login;
 
 		// 外部認証API
-		list($role,$name,$login) = auth::get_user_name();
+		list($role,$name,$login,$profile) = auth::get_user_name();
 		return $login;
 	}
 
@@ -90,7 +90,7 @@ class auth
 			//return ($login == 'admin' && $temp_admin) ? 3.1 : 4.1;
 			if ($login == 'admin' && $temp_admin) return ROLE_ADM_CONTENTS_TEMP;
 			// 外部認証API
-			list($role,$name,$nick) = auth::get_user_name();
+			list($role,$name,$nick,$profile) = auth::get_user_name();
 			return (empty($name)) ? ROLE_AUTH_TEMP : $role;
 		}
 
@@ -119,25 +119,10 @@ class auth
 			if (! $val['use']) continue;
 			if (! exist_plugin($api)) continue;
 			$call_func = 'plugin_'.$api.'_get_user_name';
-			list($role,$name,$nick) = $call_func();
-			if (! empty($name)) return array($role,$name,$nick);
+			list($role,$name,$nick,$profile) = $call_func();
+			if (! empty($name)) return array($role,$name,$nick,$profile);
 		}
-		return array(ROLE_GUEST,'','');
-	}
-
-	function get_nick_link()
-	{
-		// 外部認証API
-		list($role,$name,$nick) = auth::get_user_name();
-		if (empty($nick)) return array('','');
-
-		switch($role) {
-		case ROLE_AUTH_TYPEKEY:
-			return array($nick,TYPEKEY_URL_PROFILE.$name);
-		case ROLE_AUTH_HATENA:
-			return array($name,HATENA_URL_PROFILE.$name);
-		}
-		return array($nick,'');
+		return array(ROLE_GUEST,'','','');
 	}
 
 	/*

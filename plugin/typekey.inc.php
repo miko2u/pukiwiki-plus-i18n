@@ -4,7 +4,7 @@
  *
  * @copyright   Copyright &copy; 2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: typekey.inc.php,v 0.8 2006/11/23 01:23:00 upk Exp $
+ * @version     $Id: typekey.inc.php,v 0.9 2006/11/23 01:42:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'auth_typekey.cls.php');
@@ -136,12 +136,13 @@ function plugin_typekey_jump_url()
 function plugin_typekey_get_user_name()
 {
 	global $auth_api;
-	if (! $auth_api['typekey']['use']) return array(ROLE_GUEST,'','');
-	$message = auth_typekey::typekey_session_get();
-	if (! empty($message['nick']) && ! empty($message['name'])) {
-		return array(ROLE_AUTH_TYPEKEY,$message['name'],$message['nick']);
+	// role,name,nick,profile
+	if (! $auth_api['typekey']['use']) return array(ROLE_GUEST,'','','');
+	$msg = auth_typekey::typekey_session_get();
+	if (! empty($msg['nick']) && ! empty($msg['name'])) {
+		return array(ROLE_AUTH_TYPEKEY,$msg['name'],$msg['nick'],TYPEKEY_URL_PROFILE.$msg['name']);
 	}
-	return array(ROLE_GUEST,'','');
+	return array(ROLE_GUEST,'','','');
 }
 
 ?>

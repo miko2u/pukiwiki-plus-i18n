@@ -4,7 +4,7 @@
  *
  * @copyright   Copyright &copy; 2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: hatena.inc.php,v 0.5 2006/11/23 01:23:00 upk Exp $
+ * @version     $Id: hatena.inc.php,v 0.6 2006/11/23 01:47:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'auth_hatena.cls.php');
@@ -144,10 +144,11 @@ function plugin_hatena_jump_url($inline=0)
 function plugin_hatena_get_user_name()
 {
 	global $auth_api;
-	if (! $auth_api['hatena']['use']) return array(ROLE_GUEST,'','');
-	$login = auth_hatena::hatena_session_get();
-	if (! empty($login['name'])) return array(ROLE_AUTH_HATENA,$login['name'],$login['name']);
-	return array(ROLE_GUEST,'','');
+	// role,name,nick,profile
+	if (! $auth_api['hatena']['use']) return array(ROLE_GUEST,'','','');
+	$msg = auth_hatena::hatena_session_get();
+	if (! empty($msg['name'])) return array(ROLE_AUTH_HATENA,$msg['name'],$msg['name'],HATENA_URL_PROFILE.$msg['name']);
+	return array(ROLE_GUEST,'','','');
 }
 
 ?>
