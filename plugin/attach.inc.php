@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: attach.inc.php,v 1.82.8 2006/11/19 00:33:00 upk Exp $
+// $Id: attach.inc.php,v 1.82.9 2006/11/26 22:49:00 upk Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2003-2005 PukiWiki Developers Team
@@ -468,6 +468,7 @@ function attach_showform()
 	global $vars, $_attach_messages;
 
 	$page = isset($vars['page']) ? $vars['page'] : '';
+	check_editable($page, true, true);
 	$vars['refer'] = $page;
 	$body = attach_form($page, TRUE);
 
