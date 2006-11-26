@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: attach.inc.php,v 1.82.9 2006/11/26 22:49:00 upk Exp $
+// $Id: attach.inc.php,v 1.82.10 2006/11/26 23:00:00 upk Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2003-2005 PukiWiki Developers Team
@@ -367,6 +367,8 @@ function attach_info($err = '')
 
 	foreach (array('refer', 'file', 'age') as $var)
 		${$var} = isset($vars[$var]) ? $vars[$var] : '';
+
+	check_editable($refer, true, true);
 
 	$obj = & new AttachFile($refer, $file, $age);
 	return $obj->getstatus() ?
