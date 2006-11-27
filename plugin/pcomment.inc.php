@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: pcomment.inc.php,v 1.44.12 2006/11/25 02:07:00 upk Exp $
+// $Id: pcomment.inc.php,v 1.44.13 2006/11/27 22:12:00 upk Exp $
 //
 // pcomment plugin - Show/Insert comments into specified (another) page
 //
@@ -127,6 +127,12 @@ function plugin_pcomment_convert()
 
 	list($comments, $digest) = plugin_pcomment_get_comments($_page, $count, $dir, $params['reply']);
 
+	$auth_guide = '';
+	if (PKWK_READONLY == ROLE_AUTH) {
+		exist_plugin('login');
+		$auth_guide = do_plugin_inline('login');
+	}
+
 	// if (PKWK_READONLY) {
 	if (auth::check_role('readonly')) {
 		$form_start = $form = $form_end = '';
@@ -182,6 +188,7 @@ EOD;
 
 	if ($dir) {
 		return '<div>' .
+			$auth_guide .
 			'<p>' . $recent . ' ' . $link . '</p>' . "\n" .
 			$form_start .
 				$comments . "\n" .
@@ -195,6 +202,7 @@ EOD;
 				$comments. "\n" .
 			$form_end .
 			'<p>' . $recent . ' ' . $link . '</p>' . "\n" .
+			$auth_guide .
 			'</div>' . "\n";
 	}
 }

@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: comment.inc.php,v 1.36.14 2006/11/25 02:07:00 upk Exp $
+// $Id: comment.inc.php,v 1.36.15 2006/11/27 22:39:00 upk Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
@@ -161,8 +161,14 @@ function plugin_comment_convert()
 	$_btn_comment = _("Post Comment");
 	$_msg_comment = _("Comment: ");
 
+	$auth_guide = '';
+	if (PKWK_READONLY == ROLE_AUTH) {
+		exist_plugin('login');
+		$auth_guide = do_plugin_inline('login');
+	}
+
 	// if (PKWK_READONLY) return ''; // Show nothing
-	if (auth::check_role('readonly')) return ''; // Show nothing
+	if (auth::check_role('readonly')) return $auth_guide;
 	if (! isset($numbers[$vars['page']])) $numbers[$vars['page']] = 0;
 	$comment_no = $numbers[$vars['page']]++;
 
@@ -199,6 +205,7 @@ function plugin_comment_convert()
 
 	$string = <<<EOD
 <br />
+$auth_guide
 <form action="$script" method="post">
  <div class="commentform" onmouseup="pukiwiki_pos()" onkeyup="pukiwiki_pos()">
   <input type="hidden" name="refpage" value="$refpage" />
