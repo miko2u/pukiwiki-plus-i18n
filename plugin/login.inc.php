@@ -3,7 +3,7 @@
  * PukiWiki Plus! ログインプラグイン
  *
  * @copyright	Copyright &copy; 2004-2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version	$Id: login.php,v 0.10 2006/11/27 21:09:00 upk Exp $
+ * @version	$Id: login.php,v 0.11 2006/11/27 22:04:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
@@ -80,6 +80,8 @@ function plugin_login_inline()
 {
 	global $script, $_login_msg, $login_api;
 
+	if (PKWK_READONLY != ROLE_AUTH) return '';
+
 	$user = auth::check_auth();
 
 	// Offline
@@ -99,8 +101,6 @@ function plugin_login_inline()
 function plugin_login_auth_guide()
 {
 	global $auth_api,$_login_msg;
-
-	if (PKWK_READONLY != ROLE_AUTH) return '';
 
 	$inline = '';
 	$sw = true;
