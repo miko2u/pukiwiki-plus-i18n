@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-07 00:20+0900\n"
+"POT-Creation-Date: 2006-11-27 21:48+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,5 +21,10 @@ msgid "UserName"
 msgstr ""
 
 #: ../../plugin/login.inc.php:20
+#, php-format
+msgid "Please attest it with %s to write the comment."
+msgstr ""
+
+#: ../../plugin/login.inc.php:21
 msgid "Login"
 msgstr ""

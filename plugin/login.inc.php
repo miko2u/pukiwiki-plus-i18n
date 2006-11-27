@@ -3,7 +3,7 @@
  * PukiWiki Plus! ログインプラグイン
  *
  * @copyright	Copyright &copy; 2004-2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version	$Id: login.php,v 0.9 2006/11/22 22:14:00 upk Exp $
+ * @version	$Id: login.php,v 0.10 2006/11/27 21:09:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
@@ -17,6 +17,7 @@ function plugin_login_init()
 	$messages = array(
 	'_login_msg' => array(
 		'msg_username'		=> _('UserName'),
+		'msg_auth_guide'	=> _('Please attest it with %s to write the comment.'),
 		'btn_login'		=> _('Login'),
 		)
 	);
@@ -73,6 +74,46 @@ $select
 EOD;
 
 	return $rc;
+}
+
+function plugin_login_inline()
+{
+	global $script, $_login_msg, $login_api;
+
+	$user = auth::check_auth();
+
+	// Offline
+	if (empty($user)) {
+		return plugin_login_auth_guide();
+	}
+
+	// Online
+	$role = strval(auth::get_role_level());
+	if (isset($login_api[$role])) {
+		exist_plugin($login_api[$role]);
+		return do_plugin_inline($login_api[$role]);
+	}
+	return '';
+}
+
+function plugin_login_auth_guide()
+{
+	global $auth_api,$_login_msg;
+
+	if (PKWK_READONLY != ROLE_AUTH) return '';
+
+	$inline = '';
+	$sw = true;
+	foreach($auth_api as $api=>$val) {
+		if ($val['use']) {
+			$inline .= ($sw) ? '' : ',';
+			$sw = false;
+			$inline .= '&'.$api.'();';
+		}
+	}
+
+	if ($sw) return '';
+	return convert_html(sprintf($_login_msg['msg_auth_guide'],$inline));
 }
 
 /*
