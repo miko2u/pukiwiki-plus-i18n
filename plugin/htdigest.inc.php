@@ -3,7 +3,7 @@
  * htdigest plugin.
  *
  * @copyright   Copyright &copy; 2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: htdigest.inc.php,v 0.7 2006/11/28 23:54:00 upk Exp $
+ * @version     $Id: htdigest.inc.php,v 0.8 2006/11/29 02:12:00 upk Exp $
  *
  * $A1 = md5($data['username'] . ':' . $realm . ':' . $auth_users[$data['username']]);
  */
@@ -36,14 +36,14 @@ function plugin_htdigest_init()
 		'CALC'		=> _("CALC"),
 		'Update'	=> _("Update"),
 		'Result'	=> _("Result"),
-		'Secret'	=> _("Secret Key"),
+		'Crypt'		=> _("Encryption key"),
 		'msg_pass_admin' => _("Please input Administrator password."),
 		'msg_pass_old'   => _("Please input the password being used now."),
 		'msg_pass_new'   => _("Please input a new password."),
 		'msg_iis'	=> _("It doesn't correspond to IIS of Microsoft Corporation."),
 		'err_not_use'	=> _("The writing function is limited."),
 		'err_role'	=> _("The authority more than Webmaster for World Wide Web Site is necessary to update it."),
-		'err_key'	=> _("The secret key is not corresponding."),
+		'err_key'	=> _("The encryption key is not corresponding."),
 		'err_md5'	=> _("In this version, the Administrator password is supported only with {x-php-md5}."),
 		'msg_realm'	=> _("Realm is not corresponding."),
 		'msg_1st'	=> _("It newly made .htdigest."),
@@ -236,7 +236,7 @@ $x .= <<<EOD
     </tr>
 
     <tr>
-     <th>{$_htdigest_msg['Secret']}</th>
+     <th>{$_htdigest_msg['Crypt']}</th>
      <td><input type="password" name="key" size="10" />&nbsp;{$msg_pass}</td>
     </tr>
 

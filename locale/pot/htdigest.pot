@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-11-29 00:18+0900\n"
+"POT-Creation-Date: 2006-11-29 02:15+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -45,7 +45,7 @@ msgid "Result"
 msgstr ""
 
 #: ../../plugin/htdigest.inc.php:39
-msgid "Secret Key"
+msgid "Encryption key"
 msgstr ""
 
 #: ../../plugin/htdigest.inc.php:40
@@ -75,7 +75,7 @@ msgid ""
 msgstr ""
 
 #: ../../plugin/htdigest.inc.php:46
-msgid "The secret key is not corresponding."
+msgid "The encryption key is not corresponding."
 msgstr ""
 
 #: ../../plugin/htdigest.inc.php:47

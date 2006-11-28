@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PukiWiki Plus! 1.4.7-i18n\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-11-29 00:18+0900\n"
+"POT-Creation-Date: 2006-11-29 02:15+0900\n"
 "PO-Revision-Date: 2006-07-23 05:00+0900\n"
 "Last-Translator: Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>\n"
 "Language-Team: Japanese <ja@li.org>\n"
@@ -44,8 +44,8 @@ msgid "Result"
 msgstr "結果"
 
 #: ../../plugin/htdigest.inc.php:39
-msgid "Secret Key"
-msgstr "秘密鍵"
+msgid "Encryption key"
+msgstr "暗号鍵"
 
 #: ../../plugin/htdigest.inc.php:40
 msgid "Please input Administrator password."
@@ -74,8 +74,8 @@ msgid ""
 msgstr "更新するためには、サイト管理者以上の権限が必要です。"
 
 #: ../../plugin/htdigest.inc.php:46
-msgid "The secret key is not corresponding."
-msgstr "秘密鍵が一致しません。"
+msgid "The encryption key is not corresponding."
+msgstr "暗号鍵が一致しません。"
 
 #: ../../plugin/htdigest.inc.php:47
 msgid ""
