@@ -3,7 +3,7 @@
  * htdigest plugin.
  *
  * @copyright   Copyright &copy; 2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: htdigest.inc.php,v 0.6 2006/07/30 20:55:00 upk Exp $
+ * @version     $Id: htdigest.inc.php,v 0.7 2006/11/28 23:54:00 upk Exp $
  *
  * $A1 = md5($data['username'] . ':' . $realm . ':' . $auth_users[$data['username']]);
  */
@@ -23,6 +23,7 @@ if (!defined('HTDIGEST_FILE')) {
 }
 
 require(LIB_DIR . 'auth_file.cls.php');
+require(LIB_DIR . 'des.php');
 
 function plugin_htdigest_init()
 {
@@ -35,20 +36,19 @@ function plugin_htdigest_init()
 		'CALC'		=> _("CALC"),
 		'Update'	=> _("Update"),
 		'Result'	=> _("Result"),
-				// マイクロソフト社のIISには、対応しておりません。
+		'Secret'	=> _("Secret Key"),
+		'msg_pass_admin' => _("Please input Administrator password."),
+		'msg_pass_old'   => _("Please input the password being used now."),
+		'msg_pass_new'   => _("Please input a new password."),
 		'msg_iis'	=> _("It doesn't correspond to IIS of Microsoft Corporation."),
-				// 書き込み機能は、制限されています。
 		'err_not_use'	=> _("The writing function is limited."),
-				// 更新するためには、サイト管理者以上の権限が必要です。
 		'err_role'	=> _("The authority more than Webmaster for World Wide Web Site is necessary to update it."),
+		'err_key'	=> _("The secret key is not corresponding."),
+		'err_md5'	=> _("In this version, the Administrator password is supported only with {x-php-md5}."),
 		'msg_realm'	=> _("Realm is not corresponding."),
-				// .htdigest を新規作成しました。
 		'msg_1st'	=> _("It newly made .htdigest."),
-				// パスワードが同一なため、更新しませんでした。
 		'msg_not_update'=> _("Because the password was the same, it did not update it."),
-				// .htdigest を更新しました。
 		'msg_update'	=> _("It updated .htdigest."),
-				// １件追加しました。
 		'msg_add'	=> _("One was added."),
 		'msg_err'	=> _("ERROR."),
 	  )
@@ -84,9 +84,9 @@ function plugin_htdigest_action()
 		if (auth::check_role('role_adm')) {
 			return array('msg'=>$msg,'body'=>htdigest_menu($_htdigest_msg['err_role']));
 		}
-
+		// ADM
 		if (USE_APACHE_WRITE_FUNC) {
-			$rc_msg = htdigest_save($vars['username'], $vars['realm'], $vars['hash']);
+			$rc_msg = htdigest_save($vars['username'], $vars['realm'], $vars['hash'], 2);
 		}
 		return array('msg'=>$msg,'body'=>htdigest_menu($rc_msg));
 
@@ -94,12 +94,14 @@ function plugin_htdigest_action()
 		// サイト管理者未満は、自分のパスワードのみ更新ができる
 		$role_level = auth::get_role_level();
 		if ($role_level < 2) {
+			// Guest
 			return array('msg'=>$msg,'body'=>htdigest_menu($_htdigest_msg['err_role']));
 		}
+		// Auth User
 		global $realm;
 		$user = auth::check_auth();
 		if (USE_APACHE_WRITE_FUNC) {
-			$rc_msg = htdigest_save($user, $realm, $vars['hash']);
+			$rc_msg = htdigest_save($user, $realm, $vars['hash'], $role_level);
 		}
 		return array('msg'=>$msg,'body'=>htdigest_menu($rc_msg));
 
@@ -124,6 +126,8 @@ function htdigest_menu($msg='&nbsp;')
 	$head_tags[] = ' <script type="text/javascript" src="'.SKIN_DIR.'crypt/md4.js"></script>';
 	$head_tags[] = ' <script type="text/javascript" src="'.SKIN_DIR.'crypt/md5.js"></script>';
 	$head_tags[] = ' <script type="text/javascript" src="'.SKIN_DIR.'crypt/sha1.js"></script>';
+	$head_tags[] = ' <script type="text/javascript" src="'.SKIN_DIR.'crypt/des.js"></script>';
+	$head_tags[] = ' <script type="text/javascript" src="'.SKIN_DIR.'crypt/base64.js"></script>';
 
 	// 使用する場合は、変更させることもコピーさせることも不要なので、抑止する
 	$disabled = (USE_APACHE_WRITE_FUNC) ? 'disabled="disabled"' : '';
@@ -135,8 +139,10 @@ function htdigest_menu($msg='&nbsp;')
 		$user_disabled = 'disabled="disabled"';
 		$user = auth::check_auth();
 		$func = 'update';
+		$msg_pass = $_htdigest_msg['msg_pass_old'];
 	} else {
 		$user_disabled = $user = '';
+		$msg_pass = ($role_level == 2) ? $_htdigest_msg['msg_pass_admin'] : '';
 	}
 
 $x = <<<EOD
@@ -145,25 +151,25 @@ $x = <<<EOD
 
 function set_hash()
 {
- var a1,ctr,pref;
+ var a1,ctr,pref,hash,des_key;
  var fn = function(){
    switch(objForm.algorithm.value) {
    case 'MD4':
-     objForm.hash.value = hex_md4(a1);
+     hash = hex_md4(a1);
      break;
    case 'SHA-1':
-     objForm.hash.value = hex_sha1(a1);
+     hash = hex_sha1(a1);
      break;
    default:
      objForm.submit.disabled = false;
-     objForm.hash.value = hex_md5(a1);
+     hash = hex_md5(a1);
    }
  };
 
  var objForm = eval("document.htdigest");
  objForm.submit.disabled = true;
 
- if (objForm.passwd.value == "") {
+ if (objForm.passwd.value == "" || objForm.key.value == "") {
    objForm.hash.value = "";
    objForm.algorithm.value = "";
  } else {
@@ -175,19 +181,33 @@ function set_hash()
        break;
      }
    }
+EOD;
+
+	if ($role_level > 2) {
+		// a1
+		$x .= "a1 = objForm.username.value+':'+objForm.realm.value+':'+objForm.key.value;\n";
+	} else {
+		// adminpass
+		$x .= "a1 = objForm.key.value;\n";
+	}
+
+$x .= <<<EOD
+   fn();
+   des_key = hash;
 
    a1 = objForm.username.value+':'+objForm.realm.value+':'+objForm.passwd.value;
    fn();
+
+   objForm.hash.value = base64encode( des(des_key, hash, 1, 0) );
    objForm.passwd.value = "";
  }
 
  if (objForm.hash.value == "") {
    objForm.hash_view.value = "";
  } else {
-   objForm.hash_view.value = objForm.username.value+':'+objForm.realm.value+':'+objForm.hash.value;
+   objForm.hash_view.value = objForm.username.value+':'+objForm.realm.value+':'+hash;
  }
 }
-
 
 //]]>-->
 </script>
@@ -212,8 +232,14 @@ function set_hash()
     </tr>
     <tr>
       <th>{$_htdigest_msg['Passwd']}</th>
-      <td><input type="password" name="passwd" size="10" /></td>
+      <td><input type="password" name="passwd" size="10" />&nbsp;{$_htdigest_msg['msg_pass_new']}</td>
     </tr>
+
+    <tr>
+     <th>{$_htdigest_msg['Secret']}</th>
+     <td><input type="password" name="key" size="10" />&nbsp;{$msg_pass}</td>
+    </tr>
+
     <tr>
       <th>{$_htdigest_msg['Calculate']}</th>
       <td>
@@ -240,13 +266,51 @@ EOD;
 
 }
 
-function htdigest_save($username,$p_realm,$hash)
+function htdigest_get_hash($username,$p_realm='')
+{
+	global $realm;
+
+	if (! file_exists(HTDIGEST_FILE)) return '';
+	if (empty($p_realm)) $p_realm = $realm;
+
+	if (!($fd = fopen(HTDIGEST_FILE,'r'))) return '';
+
+	while ($data = @fgets($fd, 4096)) {
+		$field = split(':', trim($data));
+		if ($field[0] == $username && $field[1] == $p_realm) {
+			fclose($fd);
+			return $field[2];
+		}
+	}
+	fclose($fd);
+	return '';
+}
+
+function htdigest_save($username,$p_realm,$hash,$role)
 {
 	global $realm, $_htdigest_msg;
 
 	if ($realm != $p_realm)
 		return $_htdigest_msg['msg_realm'];
 
+	// DES
+	if ($role > 2) {
+		$key = htdigest_get_hash($username,$p_realm);
+	} else {
+		// adminpass
+		global $adminpass;
+		list($scheme, $key) = auth::passwd_parse($adminpass);
+		// FIXME: MD5 ONLY
+		if ($scheme != '{x-php-md5}') {
+			return $_htdigest_msg['err_md5'];
+		}
+	}
+	$hash = des($key, base64_decode($hash), 0, 0, null);
+	if (! preg_match('/^[a-z0-9]+$/iD', $hash)) {
+		return $_htdigest_msg['err_key'];
+	}
+
+	// SAVE
 	if (file_exists(HTDIGEST_FILE)) {
 		$lines = file(HTDIGEST_FILE);
 	} else {
