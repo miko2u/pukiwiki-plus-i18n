@@ -3,7 +3,7 @@
  * passwd plugin.
  *
  * @copyright   Copyright &copy; 2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: passwd.inc.php,v 0.2 2006/07/30 22:17:00 upk Exp $
+ * @version     $Id: passwd.inc.php,v 0.3 2006/12/04 00:56:00 upk Exp $
  *
  * $A1 = md5($data['username'] . ':' . $realm . ':' . $auth_users[$data['username']]);
  */
@@ -13,6 +13,7 @@ if (!defined('USE_PKWK_WRITE_FUNC')) {
 }
 
 require(LIB_DIR . 'auth_file.cls.php');
+require(LIB_DIR . 'des.php');
 
 function plugin_passwd_init()
 {
@@ -25,17 +26,17 @@ function plugin_passwd_init()
 		'CALC'		=> _("CALC"),
 		'Update'	=> _("Update"),
 		'Result'	=> _("Result"),
-				// 書き込み機能は、制限されています。
+		'Crypt'		=> _("Encryption key"),
+		'msg_pass_admin' => _("Please input Administrator password."),
+		'msg_pass_old'   => _("Please input the password being used now."),
+		'msg_pass_new'   => _("Please input a new password."),
+		'msg_pass_none'  => _("Please input a suitable character string."),
 		'err_not_use'	=> _("The writing function is limited."),
-				// 更新するためには、サイト管理者以上の権限が必要です。
 		'err_role'	=> _("The authority more than Webmaster for World Wide Web Site is necessary to update it."),
-				// パスワードが同一なため、更新しませんでした。
+		'err_key'	=> _("The encryption key is not corresponding."),
 		'msg_not_update'=> _("Because the password was the same, it did not update it."),
-				// 認証管理ファイルを更新しました。
 		'msg_update'	=> _("The Authentication management file was updated."),
-				// ログインしなおさなければなりません。さもないと、役割が初期化されてしまいます。
 		'msg_relogin'	=> _("<b>You must be login again.</b> Otherwise, the role is initialized."),
-				// １件追加しました。
 		'msg_add'	=> _("One was added."),
 		'msg_err'	=> _("ERROR."),
 		// role.inc.php
@@ -76,8 +77,12 @@ function plugin_passwd_action()
 			return array('msg'=>$msg,'body'=>passwd_menu($_passwd_msg['err_role']));
 		}
 
+		$hash = passwd_undes(2,$vars['username'],$vars['hash']);
+		if ($hash === false) {
+			return array('msg'=>$msg,'body'=>passwd_menu($_passwd_msg['err_key']));
+		}
 		// 0:変更なし, 1:追加, 2:変更あり
-		$rc_save = passwd_auth_file_save($vars['username'],$vars['algorithm'],$vars['hash'],$vars['role']);
+		$rc_save = passwd_auth_file_save($vars['username'],$vars['algorithm'],$hash,$vars['role']);
 		switch ($rc_save) {
 		case 1:
 			$msg_save = $_passwd_msg['msg_add'];
@@ -113,8 +118,13 @@ function plugin_passwd_action()
 			$role_level = '';
 		}
 
+		$hash = passwd_undes(4,$user,$vars['hash']);
+		if ($hash === false) {
+			return array('msg'=>$msg,'body'=>passwd_menu($_passwd_msg['err_key']));
+		}
+
 		// 0:変更なし, 1:追加, 2:パスワードの変更あり 3:変更あり
-		$rc_save = passwd_auth_file_save($user,$vars['algorithm'],$vars['hash'],$role_level);
+		$rc_save = passwd_auth_file_save($user,$vars['algorithm'],$hash,$role_level);
 
 		switch ($rc_save) {
 		case 1:
@@ -143,14 +153,22 @@ function passwd_menu($msg='&nbsp;')
 
 	$head_tags[] = ' <script type="text/javascript" src="'.SKIN_DIR.'crypt/md5.js"></script>';
 	$head_tags[] = ' <script type="text/javascript" src="'.SKIN_DIR.'crypt/sha1.js"></script>';
+	$head_tags[] = ' <script type="text/javascript" src="'.SKIN_DIR.'crypt/des.js"></script>';
+	$head_tags[] = ' <script type="text/javascript" src="'.SKIN_DIR.'crypt/base64.js"></script>';
 
 	$func = 'save';
 	$role_level = auth::get_role_level();
+	$old_algorithm = '';
+
+	$checked_md5 = 'checked="checked"';
+	$checked_sha1 = '';
 
 	// 役割に応じた設定
 	if ($role_level == 2) {
 		// 管理者
 		$disabled_user = $user = '';
+		$msg_pass = $_passwd_msg['msg_pass_admin'];
+		$a1_des = "a1 = objForm.key.value;\n";
 		$msg_role = <<<EOD
     <tr>
       <th>{$_passwd_msg['role']}</th>
@@ -168,7 +186,30 @@ EOD;
 		// 一般ユーザ
 		$disabled_user = 'disabled="disabled"';
 		// ゲスト時は、admin として一律生成できるようにしておく
-		$user = ($role_level == 0) ? 'admin' :  auth::check_auth();
+		// $user = ($role_level == 0) ? 'admin' :  auth::check_auth();
+		if ($role_level == 0) {
+			$user = 'admin';
+			$msg_pass = $_passwd_msg['msg_pass_none'];
+			$a1_des = "a1 = objForm.key.value;\n";
+		} else {
+			$user = auth::check_auth();
+			$msg_pass = $_passwd_msg['msg_pass_old'];
+			$old_algorithm = passwd_get_scheme($user);
+
+			switch ($old_algorithm) {
+			case 'md5':
+				$checked_md5 = 'checked="checked"';
+				$checked_sha1 = '';
+				break;
+			case 'sha1':
+				$checked_md5 = '';
+				$checked_sha1 = 'checked="checked"';
+				break;
+			}
+
+			$a1_des = 'a1 = objForm.username.value+\':' . $realm . ":'+objForm.key.value;\n";
+		}
+
 		$func = 'update';
 		$msg_role = <<<EOD
     <tr>
@@ -198,7 +239,8 @@ EOD;
 		$pref = 'php';
 		$submit_sha1 = "objForm.submit.disabled = false;\n";
 		$a1 = "a1 = objForm.passwd.value;\n";
-
+		// basic の場合は上書きする
+		$a1_des = "a1 = objForm.key.value;\n";
 		$disabled_sha1 = '';
 		// 書き込み禁止 または ゲスト時は、ユーザ名不要
 		if (! USE_PKWK_WRITE_FUNC || $role_level == 0) {
@@ -211,7 +253,8 @@ EOD;
 		$pref = 'digest';
 		$submit_sha1 = '';
 		$a1 = 'a1 = objForm.username.value+\':' . $realm . ":'+objForm.passwd.value;\n";
-
+		$checked_md5 = 'checked="checked"';
+		$checked_sha1 = '';
 		$disabled_sha1 = 'disabled="disabled"';
 	}
 
@@ -241,17 +284,17 @@ $x = <<<EOD
 
 function set_hash()
 {
- var a1,ctr,pref;
+ var a1,ctr,pref,hash,des_key,hash_view,algorithm;
  var fn = function(){
-   switch(objForm.algorithm.value) {
-   case 'SHA-1':
+   switch(algorithm) {
+   case 'sha1':
      $submit_sha1
-     objForm.hash.value = hex_sha1(a1);
+     hash = hex_sha1(a1);
      pref = "{x-$pref-sha1}";
      break;
    default:
      $submit_false
-     objForm.hash.value = hex_md5(a1);
+     hash = hex_md5(a1);
      pref = "{x-$pref-md5}";
    }
  };
@@ -272,15 +315,28 @@ function set_hash()
      }
    }
 
+   if (objForm.old_algorithm.value == "") {
+     algorithm = objForm.algorithm.value;
+   } else {
+     algorithm = objForm.old_algorithm.value;
+   }
+   $a1_des
+   fn();
+   des_key = hash;
+
+   algorithm = objForm.algorithm.value;
    $a1
    fn();
+   hash_view = hash;
+
+   objForm.hash.value = base64encode( des(des_key, hash, 1, 0) );
    objForm.passwd.value = "";
  }
 
  if (objForm.hash.value == "") {
    objForm.hash_view.value = "";
  } else {
-   objForm.hash_view.value = pref+objForm.hash.value;
+   objForm.hash_view.value = pref+hash_view;
  }
 
 }
@@ -296,19 +352,24 @@ function set_hash()
   <input type="hidden" name="plugin" value="passwd" />
   <input type="hidden" name="func" value="$func" />
   <input type="hidden" name="algorithm" />
+  <input type="hidden" name="old_algorithm" value="$old_algorithm"/>
   <input type="hidden" name="hash" />
   <table class="indented">
 $msg_username
     <tr>
       <th>{$_passwd_msg['Passwd']}</th>
-      <td><input type="password" name="passwd" size="10" /></td>
+      <td><input type="password" name="passwd" size="10" />&nbsp;{$_passwd_msg['msg_pass_new']}</td>
+    </tr>
+    <tr>
+     <th>{$_passwd_msg['Crypt']}</th>
+     <td><input type="password" name="key" size="10" />&nbsp;{$msg_pass}</td>
     </tr>
 $msg_role
     <tr>
       <th>{$_passwd_msg['Calculate']}</th>
       <td>
-        <input type="radio" name="scheme" value="MD5" checked="checked" /> <label>MD5</label>
-        <input type="radio" name="scheme" value="SHA-1" $disabled_sha1 /> <label>SHA-1</label>
+        <input type="radio" name="scheme" value="md5" $checked_md5 /> <label>MD5</label>
+        <input type="radio" name="scheme" value="sha1" $checked_sha1 $disabled_sha1 /> <label>SHA-1</label>
         &nbsp;
         <input type="button" onclick="set_hash()" value="{$_passwd_msg['CALC']}" />
       </td>
@@ -325,6 +386,34 @@ EOD;
 
 	return $x;
 
+}
+
+// MD5 など既に設定しているものを変更すると、復号できないため
+// どうにかしないといけない
+function passwd_undes($role,$user,$hash)
+{
+	if ($role == 2) {
+		// adminpass
+		global $adminpass;
+		list($scheme, $key) = auth::passwd_parse($adminpass);
+	} else {
+		$obj = new auth_file(PKWK_AUTH_FILE);
+		list($o_scheme,$key,$o_role) = $obj->get_data($user);
+	}
+
+	$hash = des($key, base64_decode($hash), 0, 0, null);
+	if (! preg_match('/^[a-z0-9]+$/iD', $hash)) {
+		return false;
+	}
+	return $hash;
+}
+
+function passwd_get_scheme($user)
+{
+	$obj = new auth_file(PKWK_AUTH_FILE);
+	list($scheme,$key,$role) = $obj->get_data($user);
+	$x = explode('-',substr($scheme,1,-1));
+	return $x[count($x)-1];
 }
 
 function passwd_auth_file_save($username,$algorithm,$passwd,$role)
@@ -346,10 +435,10 @@ function passwd_auth_file_save($username,$algorithm,$passwd,$role)
 
 	$scheme = '{x-'.$type;
 	switch ($algorithm) {
-	case 'SHA-1':
+	case 'sha1':
 		$scheme .= '-sha1}';
 		break;
-	case 'MD5':
+	case 'md5':
 	default:
 		$scheme .= '-md5}';
 	}
