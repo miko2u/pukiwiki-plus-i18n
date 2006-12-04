@@ -1,23 +1,19 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: topicpath.inc.php,v 1.6.2 2006/01/11 23:45:00 upk Exp $
+// $Id: topicpath.inc.php,v 1.6.3 2006/12/05 02:21:00 upk Exp $
 //
 // 'topicpath' plugin for PukiWiki, available under GPL
 
 // Show a link to $defaultpage or not
-define('PLUGIN_TOPICPATH_TOP_DISPLAY', 1);
-
+defined('PLUGIN_TOPICPATH_TOP_DISPLAY') or define('PLUGIN_TOPICPATH_TOP_DISPLAY', 1);
 // Label for $defaultpage
-define('PLUGIN_TOPICPATH_TOP_LABEL', 'Top');
-
+defined('PLUGIN_TOPICPATH_TOP_LABEL') or define('PLUGIN_TOPICPATH_TOP_LABEL', 'Top');
 // Separetor / of / topic / path
-define('PLUGIN_TOPICPATH_TOP_SEPARATOR', ' &gt; ');
-
+defined('PLUGIN_TOPICPATH_TOP_SEPARATOR') or define('PLUGIN_TOPICPATH_TOP_SEPARATOR', ' &gt; ');
 // Show the page itself or not
-define('PLUGIN_TOPICPATH_THIS_PAGE_DISPLAY', 1);
-
+defined('PLUGIN_TOPICPATH_THIS_PAGE_DISPLAY') or define('PLUGIN_TOPICPATH_THIS_PAGE_DISPLAY', 1);
 // If PLUGIN_TOPICPATH_THIS_PAGE_DISPLAY, add a link to itself
-define('PLUGIN_TOPICPATH_THIS_PAGE_LINK', 0);
+defined('PLUGIN_TOPICPATH_THIS_PAGE_LINK') or define('PLUGIN_TOPICPATH_THIS_PAGE_LINK', 0);
 
 function plugin_topicpath_convert()
 {
