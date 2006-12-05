@@ -3,7 +3,7 @@
  * PukiWiki Plus! 認証処理
  *
  * @author	Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth.cls.php,v 0.36 2006/11/23 23:50:00 upk Exp $
+ * @version     $Id: auth.cls.php,v 0.37 2006/12/06 02:13:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 
@@ -114,6 +114,13 @@ class auth
 	function get_user_name()
 	{
 		global $auth_api;
+
+		foreach($auth_api as $api=>$val) {
+			// どうしても必要な場合のみ開始
+			if (! $val['use']) continue;
+			if (function_exists('pkwk_session_start')) pkwk_session_start();
+			break;
+		}
 
 		foreach($auth_api as $api=>$val) {
 			if (! $val['use']) continue;

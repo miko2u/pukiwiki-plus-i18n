@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: comment.inc.php,v 1.36.15 2006/11/27 22:39:00 upk Exp $
+// $Id: comment.inc.php,v 1.36.16 2006/12/06 02:10:00 upk Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
@@ -137,6 +137,7 @@ function plugin_comment_get_nick()
 
 	list($role,$name,$nick,$url) = auth::get_user_name();
 	if (empty($nick)) return array($name,$name);
+	if ($role < ROLE_AUTH) return array($name,$name);
 	$link = (empty($url)) ? $nick : $nick.'>'.$url;
 	return array($nick, $link);
 }

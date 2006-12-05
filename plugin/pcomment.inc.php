@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: pcomment.inc.php,v 1.44.13 2006/11/27 22:12:00 upk Exp $
+// $Id: pcomment.inc.php,v 1.44.14 2006/12/06 02:10:00 upk Exp $
 //
 // pcomment plugin - Show/Insert comments into specified (another) page
 //
@@ -42,10 +42,6 @@ define('PLUGIN_PCOMMENT_FORMAT_STRING',
 function plugin_pcomment_action()
 {
 	global $post, $vars;
-
-	if (function_exists('pkwk_session_start')) {
-		pkwk_session_start();
-	}
 
 	// if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
 	if (auth::check_role('readonly')) die_message('PKWK_READONLY prohibits editing');
@@ -411,6 +407,7 @@ function plugin_pcomment_get_nick()
 
 	list($role,$name,$nick,$url) = auth::get_user_name();
 	if (empty($nick)) return array($name,$name);
+	if ($role < ROLE_AUTH) return array($name,$name);
 	$link = (empty($url)) ? $nick : $nick.'>'.$url;
 	return array($nick, $link);
 }
