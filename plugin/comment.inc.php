@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: comment.inc.php,v 1.36.16 2006/12/06 02:10:00 upk Exp $
+// $Id: comment.inc.php,v 1.36.17 2006/12/06 03:00:00 upk Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
@@ -75,7 +75,7 @@ function plugin_comment_write()
 
 	$comment  = str_replace('$msg', $vars['msg'], PLUGIN_COMMENT_FORMAT_MSG);
 
-	list($nick, $vars['name']) = plugin_comment_get_nick();
+	list($nick, $vars['name'], $disabled) = plugin_comment_get_nick();
 
 	if(isset($vars['name']) || ($vars['nodate'] != '1')) {
 		$_name = (! isset($vars['name']) || $vars['name'] == '') ? $_no_name : $vars['name'];
@@ -133,13 +133,13 @@ function plugin_comment_get_nick()
 	global $vars;
 
 	$name = (empty($vars['name'])) ? '' : $vars['name'];
-	if (PKWK_READONLY != ROLE_AUTH) return array($name,$name);
+	if (PKWK_READONLY != ROLE_AUTH) return array($name,$name,'');
 
 	list($role,$name,$nick,$url) = auth::get_user_name();
-	if (empty($nick)) return array($name,$name);
-	if ($role < ROLE_AUTH) return array($name,$name);
+	if (empty($nick)) return array($name,$name,'');
+	if (auth::get_role_level() < ROLE_AUTH) return array($name,$name,'');
 	$link = (empty($url)) ? $nick : $nick.'>'.$url;
-	return array($nick, $link);
+	return array($nick, $link, "disabled=\"disabled\"");
 }
 
 // Cancel (Back to the page / Escape edit page)
@@ -175,8 +175,7 @@ function plugin_comment_convert()
 
 	$options = func_num_args() ? func_get_args() : array();
 
-	list($user, $link) = plugin_comment_get_nick();
-	$disabled = (empty($user)) ? '' : "disabled=\"disabled\"";
+	list($user, $link, $disabled) = plugin_comment_get_nick();
 
 	if (in_array('noname', $options)) {
 		$nametags = '<label for="_p_comment_comment_' . $comment_no . '">' .

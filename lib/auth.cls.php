@@ -3,7 +3,7 @@
  * PukiWiki Plus! 認証処理
  *
  * @author	Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth.cls.php,v 0.37 2006/12/06 02:13:00 upk Exp $
+ * @version     $Id: auth.cls.php,v 0.38 2006/12/06 03:01:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 
@@ -91,7 +91,11 @@ class auth
 			if ($login == 'admin' && $temp_admin) return ROLE_ADM_CONTENTS_TEMP;
 			// 外部認証API
 			list($role,$name,$nick,$profile) = auth::get_user_name();
-			return (empty($name)) ? ROLE_AUTH_TEMP : $role;
+			// return (empty($name)) ? ROLE_AUTH_TEMP : $role;
+			if (empty($name)) return ROLE_AUTH_TEMP;
+
+			$wkgrp = auth::get_role_wkgrp($role,$name);
+			return ($wkgrp == 0) ? $role : $wkgrp;
 		}
 
 		// 設定されている役割を取得
@@ -109,6 +113,19 @@ class auth
 			return ($temp_admin) ? ROLE_ADM_CONTENTS_TEMP : ROLE_AUTH;
 		}
 		return ROLE_AUTH;
+	}
+
+	function get_role_wkgrp($role,$user)
+	{
+		global $auth_wkgrp_user, $login_api;
+
+		$str_role = strval($role);
+
+		if (empty($login_api[$str_role])) return 0;
+		$api_name = $login_api[$str_role];
+
+		if (empty($auth_wkgrp_user[$api_name][$user])) return 0;
+		return $auth_wkgrp_user[$api_name][$user];
 	}
 
 	function get_user_name()

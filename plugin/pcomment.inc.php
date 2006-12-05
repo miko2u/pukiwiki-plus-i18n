@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: pcomment.inc.php,v 1.44.14 2006/12/06 02:10:00 upk Exp $
+// $Id: pcomment.inc.php,v 1.44.15 2006/12/06 02:42:00 upk Exp $
 //
 // pcomment plugin - Show/Insert comments into specified (another) page
 //
@@ -141,8 +141,7 @@ function plugin_pcomment_convert()
 		} else {
 			$title = $_pcmt_messages['btn_name'];
 			// $name = '<input type="text" name="name" size="' . PLUGIN_PCOMMENT_SIZE_NAME . '" />';
-			list($nick,$link) = plugin_pcomment_get_nick();
-			$disabled = (empty($nick)) ? '' : "disabled=\"disabled\"";
+			list($nick,$link,$disabled) = plugin_pcomment_get_nick();
 			$name = '<input type="text" name="name" value="'.$nick.'" '.$disabled.' size="' . PLUGIN_PCOMMENT_SIZE_NAME . '" />';
 		}
 
@@ -398,17 +397,18 @@ function plugin_pcomment_get_comments($page, $count, $dir, $reply)
 	return array($comments, $digest);
 }
 
+// @return nick,link,disabled
 function plugin_pcomment_get_nick()
 {
 	global $vars;
 
 	$name = (empty($vars['name'])) ? '' : $vars['name'];
-	if (PKWK_READONLY != ROLE_AUTH) return array($name,$name);
+	if (PKWK_READONLY != ROLE_AUTH) return array($name,$name,'');
 
 	list($role,$name,$nick,$url) = auth::get_user_name();
-	if (empty($nick)) return array($name,$name);
-	if ($role < ROLE_AUTH) return array($name,$name);
+	if (empty($nick)) return array($name,$name,'');
+	if (auth::get_role_level() < ROLE_AUTH) return array($name,$name,'');
 	$link = (empty($url)) ? $nick : $nick.'>'.$url;
-	return array($nick, $link);
+	return array($nick, $link, "disabled=\"disabled\"");
 }
 ?>
