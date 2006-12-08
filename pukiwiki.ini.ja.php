@@ -175,6 +175,10 @@ define('PKWK_ALLOW_JAVASCRIPT', 1);
 // PLUS_ALLOW_SESSION - Sessionの利用を許可/禁止する
 define('PLUS_ALLOW_SESSION', 1);
 
+/////////////////////////////////////////////////
+// URIスパムフィルタの適用
+
+$spam = 1; // 1:適用する
 
 /////////////////////////////////////////////////
 // TrackBack 機能
@@ -595,6 +599,11 @@ $agents = array(
 	// Sample: "J-PHONE/2.0/J-T03"	// 2.0は"ブラウザの"バージョン
 	// Sample: "J-PHONE/4.0/J-SH51/SNxxxx SH/0001a Profile/MIDP-1.0 Configuration/CLDC-1.0 Ext-Profile/JSCL-1.1.0"
 	array('pattern'=>'#^(J-PHONE)/([0-9\.]+)#',	'profile'=>'keitai'),
+
+	// Vodafone/SoftBank 3G's embedded browser
+	// Sample: "Vodafone/1.0/V904SH/SHJ001/SNxxxx Browser/VF-NetFront/3.3 Profile/MIDP-2.0 Configuration/CLDC-1.1"
+	// Sample: "SoftBank/1.0/910T/TJ001/SNxxxxxx Browser/NetFront/3.3 Profile/MIDP-2.0 Configuration/CLDC-1.1"
+//	array('pattern'=>'#^(Vodafone|SoftBank)/([0-9\.]+)#',	'profile'=>'keitai'),
 
 	// Openwave(R) Mobile Browser (EZweb, WAP phone, etc)
 	// Sample: "OPWV-SDK/62K UP.Browser/6.2.0.5.136 (GUI) MMP/2.0"

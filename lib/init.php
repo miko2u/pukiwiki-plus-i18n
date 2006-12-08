@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: init.php,v 1.50.19 2006/11/19 05:41:45 miko Exp $
+// $Id: init.php,v 1.51.19 2006/12/07 14:46:49 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2006 PukiWiki Developers Team
@@ -336,10 +336,13 @@ if (! empty($post)) {
 
 // GET + POST = $vars
 if (empty($_POST)) {
+	$method = 'GET';
 	$vars = & $_GET;  // Major pattern: Read-only access via GET
 } else if (empty($_GET)) {
+	$method = 'POST';
 	$vars = & $_POST; // Minor pattern: Write access via POST etc.
 } else {
+	$method = 'GET and POST';
 	$vars = array_merge($_GET, $_POST); // Considered reliable than $_REQUEST
 }
 
