@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: default.skin.php,v 1.34.32 2006/10/12 00:59:00 miko Exp $
+// $Id: default.skin.php,v 1.34.33 2006/12/17 23:37:00 upk Exp $
 //
 if (!defined('DATA_DIR')) { exit; }
 
@@ -73,7 +73,7 @@ if (isset($pkwk_dtd)) {
 </div>
 <?php } else { ?>
 <div id="header">
- <a href="<?php echo $modifierlink ?>"><img id="logo" src="<?php echo IMAGE_URI; ?>pukiwiki.png" width="80" height="80" alt="[PukiWiki]" title="[PukiWiki]" /></a>
+ <a href="<?php echo $modifierlink ?>"><img id="logo" src="<?php echo IMAGE_URI; ?>pukiwiki.plus_logo.png" width="80" height="80" alt="[PukiWiki Plus!]" title="[PukiWiki Plus!]" /></a>
  <h1 class="title"><?php echo(($newtitle!='' && $is_read)?$newtitle:$page) ?></h1>
 
 <?php if ($is_page) { ?>
