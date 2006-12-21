@@ -2,7 +2,7 @@
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
 // $Id: pukiwiki.php,v 1.15.7 2006/12/19 14:33:38 miko Exp $
 //
-// PukiWiki 1.4.* Plus!
+// PukiWiki Plus! 1.4.*
 //  Copyright (C) 2002-2006 by PukiWiki Plus! Team
 //  http://pukiwiki.cafelounge.net/plus/
 //
@@ -16,7 +16,7 @@
 //
 // PukiWiki 1.3 (Base)
 //  Copyright (C) 2001-2002 by yu-ji <sng@factage.com>
-//  http://factage.com/sng/pukiwiki/
+//  http://pukiwiki.sourceforge.jp/
 //
 // Special thanks
 //  YukiWiki by Hiroshi Yuki <hyuki@hyuki.com>
