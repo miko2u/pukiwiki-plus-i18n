@@ -53,7 +53,7 @@ require(LIB_DIR . 'proxy.php');
 require(LIB_DIR . 'lang.php');
 require(LIB_DIR . 'timezone.php');
 require(LIB_DIR . 'log.php');
-require(LIB_DIR . 'spam.php');
+require(LIB_DIR . 'spamplus.php');
 require(LIB_DIR . 'proxy.cls.php');
 require(LIB_DIR . 'auth.cls.php');
 require(LIB_DIR . 'netbios.cls.php');
