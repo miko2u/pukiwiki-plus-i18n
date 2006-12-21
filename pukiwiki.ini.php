@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: pukiwiki.ini.php,v 1.139.144.3 2006/12/07 14:47:15 miko Exp $
+// $Id: pukiwiki.ini.php,v 1.146.3 2006/12/19 14:34:54 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2006 PukiWiki Developers Team
@@ -8,6 +8,7 @@
 // License: GPL v2 or (at your option) any later version
 //
 // PukiWiki main setting file
+// Plus!note:(policy)not merge official cvs(1.139->1.140)
 
 /////////////////////////////////////////////////
 // Functionality settings
@@ -172,6 +173,41 @@ define('PLUS_ALLOW_SESSION', 1);
 // Spam URI insertion filtering
 
 $spam = 1; // 1 = On
+
+if ($spam) {
+	$spam = array();
+
+	// Threshold and rules for insertion (default)
+	$spam['method']['_default'] = array(
+		'_comment'    => '_default',
+		'quantity'    => 8,
+		'non_uniq'    => 3,
+		'area_anchor' => 0,
+		'area_bbcode' => 0,
+		'uniqhost'    => TRUE,
+		'badhost'     => TRUE,
+		'asap'        => TRUE, // Stop as soon as possible (quick)
+	);
+
+	// For editing
+	// NOTE:
+	// Any thresholds may LOCK your contents by
+	// "posting one URL" many times.
+	// Any rules will lock contents that have NG things already.
+	$spam['method']['edit'] = array(
+		// Supposed_by_you(n) * Edit_form_spec(2) * Margin(1.5)
+		'_comment'    => 'edit',
+		//'quantity'    => 60 * 3,
+		//'non_uniq'    =>  5 * 3,
+		//'area_anchor' => 30 * 3,
+		//'area_bbcode' => 15 * 3,
+		'uniqhost'    => TRUE,
+		'badhost'     => TRUE,
+		'asap'        => TRUE,
+	);
+
+	//$spam['exitmode'] = 'dump'; // Dump progress
+}
 
 /////////////////////////////////////////////////
 // TrackBack feature

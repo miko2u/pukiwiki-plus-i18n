@@ -1,9 +1,9 @@
 <?php
-// PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: pukiwiki.php,v 1.12.7 2006/12/07 14:46:49 miko Exp $
+// PukiWiki Plus! - Yet another WikiWikiWeb clone.
+// $Id: pukiwiki.php,v 1.15.7 2006/12/19 14:33:38 miko Exp $
 //
 // PukiWiki 1.4.* Plus!
-//  Copyright (C) 2002-2006 by PukiWiki Plus Team
+//  Copyright (C) 2002-2006 by PukiWiki Plus! Team
 //  http://pukiwiki.cafelounge.net/plus/
 //
 // PukiWiki 1.4.*
@@ -80,75 +80,64 @@ if ($trackback || $referer) {
 // Main
 
 $retvars = array();
-$is_cmd = FALSE;
+$page  = isset($vars['page'])  ? $vars['page']  : '';
+$refer = isset($vars['refer']) ? $vars['refer'] : '';
+
 if (isset($vars['cmd'])) {
-	$is_cmd  = TRUE;
+	$base   = $page;
 	$plugin = & $vars['cmd'];
 } else if (isset($vars['plugin'])) {
+	$base   =  $refer;
 	$plugin = & $vars['plugin'];
 } else {
+	$base   =  $refer;
 	$plugin = '';
 }
 
+// Spam filtering
+if ($spam && $method != 'GET') {
+	// Adjustment
+	$_spam   = ! empty($spam);
+	$_plugin = strtolower($plugin);
+	switch ($_plugin) {
+		case 'search': $_spam = FALSE; break;
+		case 'edit':
+			$_page = & $page;
+			if (isset($vars['add']) && $vars['add']) {
+				$_plugin = 'add';
+			}
+			break;
+		case 'bugtrack': $_page = & $post['base'];  break;
+		case 'tracker':  $_page = & $post['_base']; break;
+		default: $_page = & $refer; break;
+	}
+	if ($_spam) {
+		require(LIB_DIR . 'spam.php');
+		if (isset($spam['method'][$_plugin])) {
+			$_method = & $spam['method'][$_plugin];
+		} else if (isset($spam['method']['_default'])) {
+			$_method = & $spam['method']['_default'];
+		} else {
+			$_method = array();
+		}
+		$exitmode = isset($spam['exitmode']) ? $spam['exitmode'] : '';
+		pkwk_spamfilter($method . ' to #' . $_plugin, $_page, $vars, $_method, $exitmode);
+	}
+}
+
+// Plugin execution
 if ($plugin != '') {
 	if (! exist_plugin_action($plugin)) {
 		$msg = 'plugin=' . htmlspecialchars($plugin) . ' is not implemented.';
 		$retvars = array('msg'=>$msg,'body'=>$msg);
 		$base    = & $defaultpage;
 	} else {
-		$page  = isset($vars['page'])  ? $vars['page']  : '';
-		$refer = isset($vars['refer']) ? $vars['refer'] : '';
-
-		if ($spam /* && $method != 'GET' */) {
-			// Adjustment
-			$_spam   = $spam;
-			$_plugin = strtolower($plugin);
-			switch ($_plugin) {
-				//case 'read':
-				//	$_page = & $page;
-				//	$_spam = FALSE;
-				//	break;
-
-				case 'search':
-					$_page = ''; // TODO: track which page or ...
-					$_spam = FALSE;
-				   break;
-
-				case 'edit':
-					$_page = & $page;
-					// Adjustment
-					if (isset($vars['add']) && $vars['add']) {
-						$_spam   = TRUE;
-						$_plugin = 'add';
-					} else {
-						// TODO: Add some metrics to plus (quantitiy, non_uniq, badhost etc)
-						$_spam = FALSE;
-					}
-					break;
-
-				case 'bugtrack': $_page = & $post['base'];  break;
-				case 'tracker':  $_page = & $post['_base']; break;
-
-				//case 'article':  /*FALLTHROUGH*/
-				//case 'comment':  /*FALLTHROUGH*/
-				//case 'insert':   /*FALLTHROUGH*/
-				//case 'lookup':   /*FALLTHROUGH*/
-				//case 'pcomment': /*FALLTHROUGH*/
-				default:         $_page = & $refer; break;
-			}
-			if ($_spam) {
-				require(LIB_DIR . 'spam.php');
-				pkwk_spamfilter($method . ' to #' . $_plugin, $_page, $vars);
-			}
-		}
-
 		$retvars = do_plugin_action($plugin);
 		if ($retvars === FALSE) exit; // Done
-
-		$base = $is_cmd ? $page : $refer;
 	}
 }
 
+// Page output
 $title = htmlspecialchars(strip_bracket($base));
 $page  = make_search($base);
 if (isset($retvars['msg']) && $retvars['msg'] != '') {
