@@ -1,9 +1,13 @@
 <?php
-// PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: pukiwiki.php,v 1.11.6 2006/11/20 21:00:00 upk Exp $
+// PukiWiki Plus! - Yet another WikiWikiWeb clone.
+// $Id: pukiwiki.php,v 1.15.7 2006/11/20 21:00:00 miko Exp $
+//
+// PukiWiki Plus! 1.4.*
+//  Copyright (C) 2002-2006 by PukiWiki Plus! Team
+//  http://pukiwiki.cafelounge.net/plus/
 //
 // PukiWiki 1.4.*
-//  Copyright (C) 2002-2005 by PukiWiki Developers Team
+//  Copyright (C) 2002-2006 by PukiWiki Developers Team
 //  http://pukiwiki.sourceforge.jp/
 //
 // PukiWiki 1.3.*
@@ -91,7 +95,9 @@ if ($trackback || $referer) {
 // Main
 
 $retvars = array();
-$is_cmd = FALSE;
+$page  = isset($vars['page'])  ? $vars['page']  : '';
+$refer = isset($vars['refer']) ? $vars['refer'] : '';
+
 if (isset($vars['cmd'])) {
 	$is_cmd  = TRUE;
 	$plugin = & $vars['cmd'];
@@ -101,34 +107,55 @@ if (isset($vars['cmd'])) {
 	$plugin = '';
 }
 
-if ($plugin != '') {
-	if (exist_plugin_action($plugin)) {
-		// Found and exec
-		$retvars = do_plugin_action($plugin);
-		if ($retvars === FALSE) exit; // Done
-
-		if ($is_cmd) {
-			$base = isset($vars['page'])  ? $vars['page']  : '';
+// Spam filtering
+if ($spam && $method != 'GET') {
+	// Adjustment
+	$_spam   = ! empty($spam);
+	$_plugin = strtolower($plugin);
+	switch ($_plugin) {
+		case 'search': $_spam = FALSE; break;
+		case 'edit':
+			$_page = & $page;
+			if (isset($vars['add']) && $vars['add']) {
+				$_plugin = 'add';
+			}
+			break;
+		case 'bugtrack': $_page = & $post['base'];  break;
+		case 'tracker':  $_page = & $post['_base']; break;
+		default: $_page = & $refer; break;
+	}
+	if ($_spam) {
+		require(LIB_DIR . 'spam.php');
+		if (isset($spam['method'][$_plugin])) {
+			$_method = & $spam['method'][$_plugin];
+		} else if (isset($spam['method']['_default'])) {
+			$_method = & $spam['method']['_default'];
 		} else {
-			$base = isset($vars['refer']) ? $vars['refer'] : '';
+			$_method = array();
 		}
-		// Recover of notes(miko)
-		$foot_explain = array();
-	} else {
-		// Not found
-		$msg = 'plugin=' . htmlspecialchars($plugin) .
-			' is not implemented.';
-		$retvars = array('msg'=>$msg,'body'=>$msg);
-		$base    = & $defaultpage;
+		$exitmode = isset($spam['exitmode']) ? $spam['exitmode'] : '';
+		pkwk_spamfilter($method . ' to #' . $_plugin, $_page, $vars, $_method, $exitmode);
 	}
 }
 
-// If text/html(or same), Enable session.
+// Plugin execution
+if ($plugin != '') {
+	if (! exist_plugin_action($plugin)) {
+		$msg = 'plugin=' . htmlspecialchars($plugin) . ' is not implemented.';
+		$retvars = array('msg'=>$msg,'body'=>$msg);
+		$base    = & $defaultpage;
+	} else {
+		$retvars = do_plugin_action($plugin);
+		if ($retvars === FALSE) exit; // Done
+	}
+}
+
+// If page output, enable session.
 // NOTE: if action plugin(command) use session, call pkwk_session_start()
 //       in plugin action-API function.
 pkwk_session_start();
 
-// Render
+// Page output
 $title = htmlspecialchars(strip_bracket($base));
 $page  = make_search($base);
 if (isset($retvars['msg']) && $retvars['msg'] != '') {
