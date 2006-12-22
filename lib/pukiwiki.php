@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: pukiwiki.php,v 1.15.7 2006/11/20 21:00:00 miko Exp $
+// $Id: pukiwiki.php,v 1.15.8 2006/12/19 14:33:38 miko Exp $
 //
 // PukiWiki Plus! 1.4.*
 //  Copyright (C) 2002-2006 by PukiWiki Plus! Team
@@ -99,11 +99,13 @@ $page  = isset($vars['page'])  ? $vars['page']  : '';
 $refer = isset($vars['refer']) ? $vars['refer'] : '';
 
 if (isset($vars['cmd'])) {
-	$is_cmd  = TRUE;
+	$base   = $page;
 	$plugin = & $vars['cmd'];
 } else if (isset($vars['plugin'])) {
+	$base   =  $refer;
 	$plugin = & $vars['plugin'];
 } else {
+	$base   =  $refer;
 	$plugin = '';
 }
 
