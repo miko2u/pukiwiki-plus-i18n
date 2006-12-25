@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: file.php,v 1.76.11 2006/09/30 02:35:35 miko Exp $
+// $Id: file.php,v 1.77.11 2006/12/23 04:41:54 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2006 PukiWiki Developers Team
@@ -318,13 +318,13 @@ function file_write($dir, $page, $str, $notimestamp = FALSE)
 		}
 		if ($notify_exec !== FALSE) {
 			if ($notify_diff_only) $str = preg_replace('/^[^-+].*\n/m', '', $str);
-			$footer['ACTION'] = 'Page update';
-			$footer['PAGE']   = & $page;
-			$footer['URI']    = get_script_uri() . '?' . rawurlencode($page);
-			$footer['USER_AGENT']  = TRUE;
-			$footer['REMOTE_ADDR'] = TRUE;
-			pkwk_mail_notify($notify_subject, $str, $footer);
-//			pkwk_mail_notify($notify_subject, $str, $footer) or
+			$summary['ACTION'] = 'Page update';
+			$summary['PAGE']   = & $page;
+			$summary['URI']    = get_script_uri() . '?' . rawurlencode($page);
+			$summary['USER_AGENT']  = TRUE;
+			$summary['REMOTE_ADDR'] = TRUE;
+			pkwk_mail_notify($notify_subject, $str, $summary);
+//			pkwk_mail_notify($notify_subject, $str, $summary) or
 //				die('pkwk_mail_notify(): Failed');
 		}
 	}
