@@ -973,7 +973,7 @@ function pkwk_spamnotify($action, $page, $target = array('title' => ''), $progre
 {
 	global $notify, $notify_subject;
 
-	if (! $notify) return;
+	if (!($notify && 2)) return;
 
 	$asap = isset($method['asap']);
 

@@ -450,7 +450,7 @@ $no_proxy = array(
 // Mail related settings
 
 // Send mail per update of pages
-$notify = 0;
+$notify = 0; // 1:notify update of pages, 2:notify post spam and update of pages
 
 // Send diff only
 $notify_diff_only = 1;
