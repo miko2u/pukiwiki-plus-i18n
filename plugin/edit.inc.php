@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: edit.inc.php,v 1.40.21 2006/04/25 14:59:24 miko Exp $
+// $Id: edit.inc.php,v 1.40.22 2006/12/25 14:59:24 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2001-2006 PukiWiki Developers Team
@@ -134,9 +134,10 @@ function plugin_edit_write()
 	$partid = isset($vars['id'])     ? $vars['id']     : '';
 	$notimestamp = isset($vars['notimestamp']) && $vars['notimestamp'] != '';
 
-	// Check Validate and Ticket
+	// Check Validate
 	if ($notimestamp && !is_page($page)) {
-		return plugin_edit_honeypot();
+		honeypot_write();
+		return plugin_edit_cancel();
 	}
 
 	// Paragraph edit mode
@@ -228,16 +229,6 @@ function plugin_edit_cancel()
 	pkwk_headers_sent();
 	header('Location: ' . get_script_uri() . '?' . rawurlencode($vars['page']));
 	exit;
-}
-
-// Cancel (Back to the page / Escape edit page)
-function plugin_edit_honeypot()
-{
-	// SPAM Logging
-	honeypot_write();
-
-	// Same as "Cancel" action
-	return plugin_edit_cancel();
 }
 
 // Replace/Pickup a part of source

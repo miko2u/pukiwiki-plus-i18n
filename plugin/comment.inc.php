@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: comment.inc.php,v 1.36.4 2006/04/23 04:44:20 miko Exp $
+// $Id: comment.inc.php,v 1.36.5 2006/12/25 04:44:20 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2002-2006 PukiWiki Developers Team
@@ -24,15 +24,6 @@ function plugin_comment_action()
 	if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
 
 	return plugin_comment_write();
-
-	// Petit SPAM Check (Client(Browser)-Server Ticket Check)
-//	if (!isset($post['encode_hint']) && PKWK_ENCODING_HINT == '') {
-//		return plugin_comment_write();
-//	} elseif (isset($post['encode_hint']) && $post['encode_hint'] == PKWK_ENCODING_HINT) {
-//		return plugin_comment_write();
-//	}
-	// If SPAM, goto jail.
-//	return plugin_comment_honeypot();
 }
 
 function plugin_comment_write()
@@ -41,11 +32,6 @@ function plugin_comment_write()
 	global $_msg_comment_collided, $_title_comment_collided;
 
 	if (! isset($vars['msg'])) return array('msg'=>'', 'body'=>''); // Do nothing
-
-	// Validate
-	if (is_spampost(array('msg'))) {
-		return plugin_comment_honeypot();
-	}
 
 	$vars['msg'] = str_replace("\n", '', $vars['msg']); // Cut LFs
 	$head = '';
@@ -106,16 +92,6 @@ function plugin_comment_write()
 	$vars['page'] = $vars['refer'];
 
 	return $retvars;
-}
-
-// Cancel (Back to the page / Escape edit page)
-function plugin_comment_honeypot()
-{
-	// Logging for SPAM Report
-	honeypot_write();
-
-	// Same as "Cancel" action
-	return array('msg'=>'', 'body'=>''); // Do nothing
 }
 
 function plugin_comment_convert()
