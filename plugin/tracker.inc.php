@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: tracker.inc.php,v 1.34.1 2006/06/11 17:48:30 miko Exp $
+// $Id: tracker.inc.php,v 1.34.2 2006/12/25 17:48:30 miko Exp $
 //
 // Issue tracker plugin (See Also bugtrack plugin)
 
@@ -83,19 +83,6 @@ function plugin_tracker_action()
 	global $post, $vars, $now;
 
 	if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
-
-	// Petit SPAM Check (Client(Browser)-Server Ticket Check)
-//	if (!isset($post['encode_hint']) && PKWK_ENCODING_HINT == '') {
-//		honeypot_write();
-//		return array('msg'=>'cannot write', 'body'=>'<p>prohibits editing</p>');
-//	} elseif (isset($post['encode_hint']) && $post['encode_hint'] != PKWK_ENCODING_HINT) {
-//		honeypot_write();
-//		return array('msg'=>'cannot write', 'body'=>'<p>prohibits editing</p>');
-//	}
-	if (is_spampost(array('body'))) {
-		honeypot_write();
-		return array('msg'=>'cannot write', 'body'=>'<p>prohibits editing</p>');
-	}
 
 	$config_name = array_key_exists('_config',$post) ? $post['_config'] : '';
 

@@ -1,5 +1,5 @@
 <?php
-// $Id: bugtrack.inc.php,v 1.25.1 2005/06/11 03:33:47 miko Exp $
+// $Id: bugtrack.inc.php,v 1.25.2 2005/12/25 03:33:47 miko Exp $
 //
 // PukiWiki BugTrack plugin
 //
@@ -172,19 +172,6 @@ function plugin_bugtrack_action()
 
 	if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
 	if ($post['mode'] != 'submit') return FALSE;
-
-	// Petit SPAM Check (Client(Browser)-Server Ticket Check) by miko
-//	if (!isset($post['encode_hint']) && PKWK_ENCODING_HINT == '') {
-//		honeypot_write();
-//		return array('msg'=>'cannot write', 'body'=>'<p>prohibits editing</p>');
-//	} elseif (isset($post['encode_hint']) && $post['encode_hint'] != PKWK_ENCODING_HINT) {
-//		honeypot_write();
-//		return array('msg'=>'cannot write', 'body'=>'<p>prohibits editing</p>');
-//	}
-	if (is_spampost(array('body'))) {
-		honeypot_write();
-		return array('msg'=>'cannot write', 'body'=>'<p>prohibits editing</p>');
-	}
 
 	$page = plugin_bugtrack_write($post['base'], $post['pagename'], $post['summary'],
 		$post['name'], $post['priority'], $post['state'], $post['category'],
