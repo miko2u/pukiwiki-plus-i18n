@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: keitai.ini.php,v 1.25.2 2005/12/10 07:57:30 miko Exp $
+// $Id: keitai.ini.php,v 1.25.3 2005/12/25 07:57:30 miko Exp $
 // Copyright (C)
 //   2005      PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
@@ -407,11 +407,12 @@ switch ($ua_name) {
 // クッキーを使用できないアドレス
 // (通常は、携帯電話のアドレス)
 $use_trans_sid_address = array(
-	//DoCoMo http://www.nttdocomo.co.jp/service/imode/make/content/ip/about/index.html
+	//DoCoMo 2006/10/23 http://www.nttdocomo.co.jp/service/imode/make/content/ip/about/index.html
 	'210.153.84.0/24',
 	'210.153.86.0/24',
+//	'210.153.87.0/24',  // full browser
 	'210.136.161.0/24',
-	//auKDDI http://www.au.kddi.com/ezfactory/tec/spec/ezsava_ip.html
+	//auKDDI 2006/12/01 http://www.au.kddi.com/ezfactory/tec/spec/ezsava_ip.html
 	'210.169.40.0,24',
 	'210.196.3.192/26',
 	'210.196.5.192/26',
@@ -436,7 +437,8 @@ $use_trans_sid_address = array(
 	'222.5.62.128/25',
 	'222.7.57.0/24',
 	'59.135.38.128/25',
-	// Vodafone http://developers.vodafone.jp/dp/tech_svc/web/ip.php
+	'219.108.157.0/25',
+	// Vodafone 2006/06/02 http://developers.softbankmobile.co.jp/dp/tech_svc/web/ip.php
 	'202.179.204.0/24',
 	'210.146.7.192/26',
 	'210.146.60.192/26',
@@ -445,13 +447,19 @@ $use_trans_sid_address = array(
 	'210.175.1.128/25',
 	'210.228.189.0/24',
 	'211.8.159.128/25',
-	// Willcom http://www.willcom-inc.com/ja/service/contents_service/club_air_edge/for_phone/ip/
+	// Willcom 2006/11/20 http://www.willcom-inc.com/ja/service/contents_service/club_air_edge/for_phone/ip/
 	'61.198.129.0/24',
-	'61.198.130.0/24',
+//	'61.198.130.0/24', //del 06/11/20
 	'61.198.140.0/24',
 	'61.198.141.0/24',
 	'61.198.142.0/24',
 	'61.198.161.0/24',
+	'61.198.165.0/24', //add 06/11/13
+	'61.198.166.0/24', //add 06/11/13
+	'61.198.168.0/24', //add 06/11/13
+	'61.198.169.0/24', //add 06/11/13
+	'61.198.170.0/24', //add 06/11/13
+	'61.198.248.0/24', //add 06/11/13
 	'61.198.249.0/24',
 	'61.198.250.0/24',
 	'61.198.253.0/24',
@@ -467,19 +475,27 @@ $use_trans_sid_address = array(
 	'125.28.0.0/21',
 	'125.28.8.0/24',
 	'125.28.11.0/24',
-	'125.28.12.0/22',
+	'125.28.12.0/24',
+	'125.28.13.0/24',
+	'125.28.14.0/24',
+	'125.28.16.0/24',  //add 06/11/13
+	'125.28.17.0/24',  //add 06/11/13
 	'210.168.246.0/24',
 	'210.168.247.0/24',
 	'211.18.232.0/24',
 	'211.18.233.0/24',
+	'211.18.234.0/24', //add 06/11/13
 	'211.18.235.0/24',
 	'211.18.236.0/24',
 	'211.18.237.0/24',
 	'211.18.238.0/24',
 	'211.18.239.0/24',
 	'219.108.0.0/21',
+	'219.108.8.0/24',  //add 06/11/13
+	'219.108.9.0/24',  //add 06/11/13
+	'219.108.10.0/24', //add 06/11/13
 	'219.108.14.0/24',
-	'219.108.15.0/24',
+//	'219.108.15.0/24', //del 06/11/20
 	'221.119.0.0/21',
 	'221.119.8.0/24',
 	'221.119.9.0/24',
