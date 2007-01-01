@@ -3,7 +3,7 @@
  * Non Print Plugin
  *
  * @copyright   Copyright &copy; 2007, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: free.inc.php,v 0.1 2007/01/02 00:00:09 upk Exp $
+ * @version     $Id: nonprint.inc.php,v 0.2 2007/01/02 01:04:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 function plugin_nonprint_convert()
