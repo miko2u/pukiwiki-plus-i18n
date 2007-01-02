@@ -3,7 +3,7 @@
  * Non Print Plugin
  *
  * @copyright   Copyright &copy; 2007, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: nonprint.inc.php,v 0.4 2007/01/03 01:03:00 upk Exp $
+ * @version     $Id: nonprint.inc.php,v 0.5 2007/01/03 01:23:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 function plugin_nonprint_convert()
@@ -16,6 +16,8 @@ function plugin_nonprint_convert()
 		'span'			=> 'span.small',
 		'hr'			=> 'hr.full_hr',
 		'topicpath'		=> 'div#topicpath',
+		'comment'		=> 'div.commentform',
+		'article'		=> 'div.articleform',
 		'calstick_calendar'	=> 'table.calstick_calendar',
 		'sbm'			=> '.sbm',
 	);
