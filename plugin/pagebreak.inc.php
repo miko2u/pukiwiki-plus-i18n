@@ -8,7 +8,23 @@
  */
 function plugin_pagebreak_convert()
 {
+	global $head_tags;
+	static $sw;
+
 	// page-break-before, page-break-after, page-break-inside
-	return '<div style="page-break-before: always;">&nbsp;</div>'."\n";
+	// return '<div style="page-break-before: always;">&nbsp;</div>'."\n";
+	if (! isset($sw)) {
+		$sw = true;
+		$head_tags[] = <<<EOD
+ <style type="text/css">
+ <!--
+ div.pagebreak { page-break-before:always; }
+ -->
+ </style>
+
+EOD;
+	}
+
+	return '<div class="pagebreak">&nbsp;</div>'."\n";
 }
 ?>
