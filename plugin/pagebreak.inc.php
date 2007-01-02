@@ -3,7 +3,7 @@
  * PageBreak Plugin
  *
  * @copyright   Copyright &copy; 2007, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: pagebreak.inc.php,v 0.3 2007/01/02 01:16:00 upk Exp $
+ * @version     $Id: pagebreak.inc.php,v 0.4 2007/01/02 01:38:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 function plugin_pagebreak_convert()
@@ -21,7 +21,6 @@ function plugin_pagebreak_convert()
  div.pagebreak { page-break-before:always; }
  -->
  </style>
-
 EOD;
 	}
 
