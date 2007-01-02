@@ -3,15 +3,13 @@
  * Non Print Plugin
  *
  * @copyright   Copyright &copy; 2007, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: nonprint.inc.php,v 0.2 2007/01/02 01:04:00 upk Exp $
+ * @version     $Id: nonprint.inc.php,v 0.3 2007/01/03 00:08:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 function plugin_nonprint_convert()
 {
-	$argv = func_get_args();
-	$argc = func_num_args();
-
-	$key = array(
+	global $head_tags;
+	static $key = array(
 		'title'			=> 'h1.title',
 		'topicpath'		=> 'div#topicpath',
 		'calstick_calendar'	=> 'table.calstick_calendar',
@@ -19,14 +17,17 @@ function plugin_nonprint_convert()
 
 	);
 
-	$rc = '<style type="text/css" media="print">'."\n";
+	$argv = func_get_args();
+	$argc = func_num_args();
+
+	$rc = ' <style type="text/css" media="print">'."\n <!--\n";
 	for($i=0; $i<$argc; $i++) {
 		if (! empty($key[$argv[$i]])) {
 			$rc .= $key[$argv[$i]].'{ display:none; }'."\n";
 		}
 	}
-	$rc .= '</style>'."\n";
-	return $rc;
+	$rc .= ' -->'."\n".' </style>'."\n";
+	$head_tags[] = $rc;
 }
 
 ?>
