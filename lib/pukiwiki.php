@@ -1,13 +1,13 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: pukiwiki.php,v 1.15.8 2006/12/19 14:33:38 miko Exp $
+// $Id: pukiwiki.php,v 1.16.8 2007/01/02 06:49:45 miko Exp $
 //
 // PukiWiki Plus! 1.4.*
-//  Copyright (C) 2002-2006 by PukiWiki Plus! Team
+//  Copyright (C) 2002-2007 by PukiWiki Plus! Team
 //  http://pukiwiki.cafelounge.net/plus/
 //
 // PukiWiki 1.4.*
-//  Copyright (C) 2002-2006 by PukiWiki Developers Team
+//  Copyright (C) 2002-2007 by PukiWiki Developers Team
 //  http://pukiwiki.sourceforge.jp/
 //
 // PukiWiki 1.3.*
@@ -122,8 +122,9 @@ if ($spam && $method != 'GET') {
 				$_plugin = 'add';
 			}
 			break;
-		case 'bugtrack': $_page = & $post['base'];  break;
-		case 'tracker':  $_page = & $post['_base']; break;
+		case 'bugtrack': $_page = & $vars['base'];  break;
+		case 'tracker':  $_page = & $vars['_base']; break;
+		case 'read':     $_page = & $page;  break;
 		default: $_page = & $refer; break;
 	}
 	if ($_spam) {

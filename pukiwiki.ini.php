@@ -1,9 +1,9 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: pukiwiki.ini.php,v 1.146.12 2006/12/19 14:34:54 miko Exp $
+// $Id: pukiwiki.ini.php,v 1.147.12 2007/01/02 07:09:21 miko Exp $
 // Copyright (C)
-//   2005-2006 PukiWiki Plus! Team
-//   2002-2006 PukiWiki Developers Team
+//   2005-2007 PukiWiki Plus! Team
+//   2002-2007 PukiWiki Developers Team
 //   2001-2002 Originally written by yu-ji
 // License: GPL v2 or (at your option) any later version
 //
@@ -230,12 +230,13 @@ if ($spam) {
 	$spam['method']['_default'] = array(
 		'_comment'    => '_default',
 		'quantity'    => 8,
-		'non_uniq'    => 3,
+		//'non_uniquri'  =>  3,
+		'non_uniqhost' =>  3,
 		'area_anchor' => 0,
 		'area_bbcode' => 0,
 		'uniqhost'    => TRUE,
 		'badhost'     => TRUE,
-		'asap'        => TRUE, // Stop as soon as possible (quick)
+		'asap'         => TRUE, // Stop as soon as possible (quick but less-info)
 	);
 
 	// For editing
@@ -247,7 +248,8 @@ if ($spam) {
 		// Supposed_by_you(n) * Edit_form_spec(2) * Margin(1.5)
 		'_comment'    => 'edit',
 		//'quantity'    => 60 * 3,
-		//'non_uniq'    =>  5 * 3,
+		//'non_uniquri'  =>  5 * 3,
+		//'non_uniqhost' => 50 * 3,
 		//'area_anchor' => 30 * 3,
 		//'area_bbcode' => 15 * 3,
 		'uniqhost'    => TRUE,

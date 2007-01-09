@@ -1,14 +1,40 @@
 <?php
-// $Id: spam.php,v 1.11.1 2006/12/23 04:36:40 miko Exp $
-// Copyright (C) 2006 PukiWiki Plus! Team
-// Copyright (C) 2006 PukiWiki Developers Team
+// $Id: spam.php,v 1.15.1 2007/01/06 03:12:34 miko Exp $
+// Copyright (C) 2006-2007 PukiWiki Plus! Team
+// Copyright (C) 2006-2007 PukiWiki Developers Team
 // License: GPL v2 or (at your option) any later version
-
 // Functions for Concept-work of spam-uri metrics
 // (PHP 4 >= 4.3.0): preg_match_all(PREG_OFFSET_CAPTURE): $method['uri_XXX'] related feature
-// (PHP 4 >= 4.2.0): var_export(): mail-reporting and dump related
 
 defined('SPAM_INI_FILE')||define('SPAM_INI_FILE', 'spam.ini.php');
+
+// ---------------------
+// Compat etc
+
+// (PHP 4 >= 4.2.0): var_export(): mail-reporting and dump related
+if (! function_exists('var_export')) {
+	function var_export() {
+		return 'var_export() is not found' . "\n";
+	}
+}
+
+// (PHP 4 >= 4.2.0): preg_grep() enables invert option
+function preg_grep_invert($pattern = '//', $input = array())
+{
+	static $invert;
+	if (! isset($invert)) $invert = defined('PREG_GREP_INVERT');
+
+	if ($invert) {
+		return preg_grep($pattern, $input, PREG_GREP_INVERT);
+	} else {
+		$result = preg_grep($pattern, $input);
+		if ($result) {
+			return array_diff($input, preg_grep($pattern, $input));
+		} else {
+			return $input;
+		}
+	}
+}
 
 // ---------------------
 // URI pickup
@@ -34,7 +60,7 @@ function uri_pickup($string = '', $normalize = TRUE,
 			// 3: Host
 			'\[[0-9a-f:.]+\]' . '|' .				// IPv6([colon-hex and dot]): RFC2732
 			'(?:[0-9]{1-3}\.){3}[0-9]{1-3}' . '|' .	// IPv4(dot-decimal): 001.22.3.44
-			'[^\s<>"\'\[\]:/\#?]+' . 				// FQDN: foo.example.org
+			'[a-z0-9.-]+' . 						// hostname(FQDN) : foo.example.org
 		')' .
 		'(?::([0-9]*))?' .					// 4: Port
 		'((?:/+[^\s<>"\'\[\]/\#]+)*/+)?' .	// 5: Directory path or path-info
@@ -324,7 +350,7 @@ function spam_uri_pickup_preprocess($string = '')
 			// Something Google: http://www.google.com/supported_domains
 			'#(http)://([a-z0-9.]+\.google\.[a-z]{2,3}(?:\.[a-z]{2})?)/' .
 			'([a-z0-9?=&.%_+-]+)' .		// ?query=foo+
-			'\bsite:([a-z0-9.%_-]+)' .	// site:nasty.example.com
+			'\bsite:([a-z0-9.%_-]+\.[a-z0-9.%_-]+)' .	// site:nasty.example.com
 			//'()' .	// Preserve or remove?
 			'#i',
 		),
@@ -628,32 +654,23 @@ function generate_glob_regex($string = '', $divider = '/')
 	}
 }
 
-// TODO: Ignore list
-// TODO: preg_grep() ?
-// TODO: Multi list
-function is_badhost($hosts = '', $asap = TRUE)
+function get_blocklist($list = '')
 {
 	static $regex;
 
 	if (! isset($regex)) {
 		$regex = array();
-		$regex['badhost'] = array();
 
 		// Sample
-		if (TRUE) {
+		if (FALSE) {
 			$blocklist['badhost'] = array(
 				//'*',			// Deny all uri
 				//'10.20.*.*',	// 10.20.example.com also matches
 				//'*.blogspot.com',	// Blog services subdomains
 				//array('blogspot.com', '*.blogspot.com')
-
-				// Viral/Buzz marketers' site, trying to make people
-				// as commercial Wiki spammers
-				// http://pukiwiki.sourceforge.jp/image/2006-12-16_wikiviral_pressblog.gif
-				array('pressblog.jp', '*.pressblog.jp'),
 			);
 			foreach ($blocklist['badhost'] as $part) {
-				$_part = is_array($part) ? implode(', ', $part) : $part;
+				$_part = is_array($part) ? implode('/', $part) : $part;
 				$regex['badhost'][$_part] = '/^' . generate_glob_regex($part) . '$/i';
 			}
 		}
@@ -662,36 +679,56 @@ function is_badhost($hosts = '', $asap = TRUE)
 		if (file_exists(SPAM_INI_FILE)) {
 			$blocklist = array();
 			require(SPAM_INI_FILE);
-			foreach ($blocklist['badhost'] as $part) {
-				$_part = is_array($part) ? implode(', ', $part) : $part;
-				$regex['badhost'][$_part] = '/^' . generate_glob_regex($part) . '$/i';
-			}
-		}
-	}
-	//var_dump($regex);
-
-	$result = array();
-	if (! is_array($hosts)) $hosts = array($hosts);
-
-	foreach($hosts as $host) {
-		if (! is_string($host)) $host = '';
-		foreach ($regex['badhost'] as $part => $_regex) {
-			if (preg_match($_regex, $host)) {
-				if (! isset($result[$part]))  $result[$part] = array();
-				$result[$part][] = $host;
-				if ($asap) {
-					return $result;
-				} else {
-					break;
+			foreach(array('goodhost', 'badhost') as $key) {
+				if (! isset($blocklist[$key])) continue;
+				foreach ($blocklist[$key] as $part) {
+					$_part = is_array($part) ? implode('/', $part) : $part;
+					$regex[$key][$_part] = '/^' . generate_glob_regex($part) . '$/i';
 				}
 			}
 		}
 	}
 
+	if ($list == '') {
+		return $regex;
+	} else if (isset($regex[$list])) {
+		return $regex[$list];
+	} else {	
+		return array();
+	}
+}
+
+function is_badhost($hosts = array(), $asap = TRUE, & $remains)
+{
+	$result = array();
+	if (! is_array($hosts)) $hosts = array($hosts);
+	foreach(array_keys($hosts) as $key) {
+		if (! is_string($hosts[$key])) unset($hosts[$key]);
+	}
+	if (empty($hosts)) return $result;
+
+	foreach (get_blocklist('goodhost') as $_regex) {
+		$hosts = preg_grep_invert($_regex, $hosts);
+	}
+	if (empty($hosts)) return $result;
+
+	$tmp = array();
+	foreach (get_blocklist('badhost') as $part => $_regex) {
+		$result[$part] = preg_grep($_regex, $hosts);
+		if (empty($result[$part])) {
+			unset($result[$part]);
+		} else {
+			$hosts = array_diff($hosts, $result[$part]);
+			if ($asap) break;
+		}
+	}
+
+	$remains = $hosts;
+
 	return $result;
 }
 
-// Default (enabled) methods and thresholds
+// Default (enabled) methods and thresholds (for content insertion)
 function check_uri_spam_method($times = 1, $t_area = 0, $rule = TRUE)
 {
 	$times  = intval($times);
@@ -699,21 +736,22 @@ function check_uri_spam_method($times = 1, $t_area = 0, $rule = TRUE)
 
 	$positive = array(
 		// Thresholds
-		'quantity'    => 8 * $times,	// Allow N URIs
-		'non_uniq'    => 3 * $times,	// Allow N duped (and normalized) URIs
+		'quantity'     =>  8 * $times,	// Allow N URIs
+		'non_uniqhost' =>  3 * $times,	// Allow N duped (and normalized) Hosts
+		//'non_uniquri'=>  3 * $times,	// Allow N duped (and normalized) URIs
 
 		// Areas
-		'area_anchor' => $t_area,	// Using <a href> HTML tag
-		'area_bbcode' => $t_area,	// Using [url] or [link] BBCode
-		//'uri_anchor'  => $t_area,	// URI inside <a href> HTML tag
-		//'uri_bbcode'  => $t_area,	// URI inside [url] or [link] BBCode
+		'area_anchor'  => $t_area,	// Using <a href> HTML tag
+		'area_bbcode'  => $t_area,	// Using [url] or [link] BBCode
+		//'uri_anchor' => $t_area,	// URI inside <a href> HTML tag
+		//'uri_bbcode' => $t_area,	// URI inside [url] or [link] BBCode
 	);
 	if ($rule) {
 		$bool = array(
 			// Rules
-			//'asap'      => TRUE,	// Quit or return As Soon As Possible
-			'uniqhost'    => TRUE,	// Show uniq host (at block notification mail)
-			'badhost'     => TRUE,	// Check badhost
+			//'asap'   => TRUE,	// Quit or return As Soon As Possible
+			'uniqhost' => TRUE,	// Show uniq host (at block notification mail)
+			'badhost'  => TRUE,	// Check badhost
 		);
 	} else {
 		$bool = array();
@@ -737,7 +775,8 @@ function check_uri_spam($target = '', $method = array())
 		'sum' => array(
 			'quantity'    => 0,
 			'uniqhost'    => 0,
-			'non_uniq'    => 0,
+			'non_uniqhost'=> 0,
+			'non_uniquri' => 0,
 			'badhost'     => 0,
 			'area_anchor' => 0,
 			'area_bbcode' => 0,
@@ -746,9 +785,11 @@ function check_uri_spam($target = '', $method = array())
 		),
 		'is_spam' => array(),
 		'method'  => & $method,
+		'remains' => array(),
 	);
 	$sum     = & $progress['sum'];
 	$is_spam = & $progress['is_spam'];
+	$remains = & $progress['remains'];
 	$asap    = isset($method['asap']);
 
 	// Return if ...
@@ -756,11 +797,30 @@ function check_uri_spam($target = '', $method = array())
 		foreach($target as $str) {
 			// Recurse
 			$_progress = check_uri_spam($str, $method);
-			foreach (array_keys($_progress['sum']) as $key) {
-				$sum[$key] += $_progress['sum'][$key];
+			$_sum      = & $_progress['sum'];
+			$_is_spam  = & $_progress['is_spam'];
+			$_remains  = & $_progress['remains'];
+			foreach (array_keys($_sum) as $key) {
+				$sum[$key] += $_sum[$key];
 			}
-			foreach(array_keys($_progress['is_spam']) as $key) {
-				$is_spam[$key] = TRUE;
+			foreach (array_keys($_is_spam) as $key) {
+				if (is_array($_is_spam[$key])) {
+					// Marge keys (badhost)
+					foreach(array_keys($_is_spam[$key]) as $_key) {
+						if (! isset($is_spam[$key][$_key])) {
+							$is_spam[$key][$_key] =  $_is_spam[$key][$_key];
+						} else {
+							$is_spam[$key][$_key] += $_is_spam[$key][$_key];
+						}
+					}
+				} else {
+					$is_spam[$key] = TRUE;
+				}
+			}
+			foreach ($_remains as $key=>$value) {
+				foreach ($value as $_key=>$_value) {
+					$remains[$key][$_key] = $_value;
+				}
 			}
 			if ($asap && $is_spam) break;
 		}
@@ -844,7 +904,7 @@ function check_uri_spam($target = '', $method = array())
 	}
 
 	// URI: Uniqueness (and removing non-uniques)
-	if ((! $asap || ! $is_spam) && isset($method['non_uniq'])) {
+	if ((! $asap || ! $is_spam) && isset($method['non_uniquri'])) {
 
 		// Destructive normalize of URIs
 		uri_array_normalize($pickups);
@@ -855,9 +915,9 @@ function check_uri_spam($target = '', $method = array())
 		}
 		$count = count($uris);
 		$uris  = array_unique($uris);
-		$sum['non_uniq'] += $count - count($uris);
-		if ($sum['non_uniq'] > $method['non_uniq']) {
-			$is_spam['non_uniq'] = TRUE;
+		$sum['non_uniquri'] += $count - count($uris);
+		if ($sum['non_uniquri'] > $method['non_uniquri']) {
+			$is_spam['non_uniquri'] = TRUE;
 		}
 		if (! $asap || ! $is_spam) {
 			foreach (array_diff(array_keys($pickups),
@@ -873,17 +933,46 @@ function check_uri_spam($target = '', $method = array())
 		return $progress;
 	}
 
-	// URI: Unique host
+	// Host: Uniqueness (uniq / non-uniq)
 	$hosts = array();
 	foreach ($pickups as $pickup) $hosts[] = & $pickup['host'];
 	$hosts = array_unique($hosts);
 	$sum['uniqhost'] += count($hosts);
+	if ((! $asap || ! $is_spam) && isset($method['non_uniqhost'])) {
+		$sum['non_uniqhost'] = $sum['quantity'] - $sum['uniqhost'];
+		if ($sum['non_uniqhost'] > $method['non_uniqhost']) {
+			$is_spam['non_uniqhost'] = TRUE;
+		}
+	}
+
+	// Return if ...
+	if ($asap && $is_spam) {
+		return $progress;
+	}
 
 	// URI: Bad host
 	if ((! $asap || ! $is_spam) && isset($method['badhost'])) {
-		$count = array_count_leaves(is_badhost($hosts, $asap));
-		$sum['badhost'] += $count;
-		if ($count != 0) $is_spam['badhost'] = TRUE;
+		$__remains = array();
+		if ($asap) {
+			$badhost = is_badhost($hosts, $asap, $__remains);
+		} else {
+			$badhost = is_badhost($hosts, $asap, $__remains);
+			if ($__remains) {
+				$progress['remains']['badhost'] = array();
+				foreach ($__remains as $value) {
+					$progress['remains']['badhost'][$value] = TRUE;
+				}
+			}
+		}
+		unset($__remains);
+		if (! empty($badhost)) {
+			$sum['badhost'] += array_count_leaves($badhost);
+			foreach(array_keys($badhost) as $keys) {
+				$is_spam['badhost'][$keys] =
+					array_count_leaves($badhost[$keys]);
+			}
+			unset($badhost);
+		}
 	}
 
 	return $progress;
@@ -974,13 +1063,30 @@ function pkwk_spamnotify($action, $page, $target = array('title' => ''), $progre
 {
 	global $notify, $notify_subject;
 
-	if (!($notify && 2)) return;
+	if (! $notify) return;
 
 	$asap = isset($method['asap']);
 
 	$summary['ACTION']  = 'Blocked by: ' . summarize_spam_progress($progress, TRUE);
 	if (! $asap) {
 		$summary['METRICS'] = summarize_spam_progress($progress);
+	}
+	if (isset($progress['is_spam']['badhost'])) {
+		$badhost = array();
+		foreach($progress['is_spam']['badhost'] as $glob=>$number) {
+			$badhost[] = $glob . '(' . $number . ')';
+		}
+		$summary['DETAIL_BADHOST'] = implode(', ', $badhost);
+	}
+	if (! $asap && $progress['remains']['badhost']) {
+		$count = count($progress['remains']['badhost']);
+		$summary['DETAIL_NEUTRAL_HOST'] = $count .
+			' (' .
+				preg_replace(
+					'/[^, a-z0-9.-]/i', '',
+					implode(', ', array_keys($progress['remains']['badhost']))
+				) .
+			')';
 	}
 	$summary['COMMENT'] = $action;
 	$summary['PAGE']    = '[blocked] ' . (is_pagename($page) ? $page : '');
