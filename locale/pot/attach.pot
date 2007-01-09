@@ -1,0 +1,200 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2006-04-13 00:51+0900\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../plugin/attach.inc.php:55
+msgid "Uploaded the file to $1"
+msgstr ""
+
+#: ../../plugin/attach.inc.php:56
+msgid "Deleted the file in $1"
+msgstr ""
+
+#: ../../plugin/attach.inc.php:57
+msgid "The file has been frozen."
+msgstr ""
+
+#: ../../plugin/attach.inc.php:58
+msgid "The file has been unfrozen"
+msgstr ""
+
+#: ../../plugin/attach.inc.php:59
+msgid "Upload to $1"
+msgstr ""
+
+#: ../../plugin/attach.inc.php:60
+msgid "File information"
+msgstr ""
+
+#: ../../plugin/attach.inc.php:61
+#, php-format
+msgid "<p>Delete %s.</p>"
+msgstr ""
+
+#: ../../plugin/attach.inc.php:62
+msgid "List of attached file(s)"
+msgstr ""
+
+#: ../../plugin/attach.inc.php:63
+msgid "List of attached file(s) in $1"
+msgstr ""
+
+#: ../../plugin/attach.inc.php:64
+msgid "Attached file list of all pages"
+msgstr ""
+
+#: ../../plugin/attach.inc.php:65
+msgid "Attach file"
+msgstr ""
+
+#: ../../plugin/attach.inc.php:66
+#, php-format
+msgid "Maximum file size is %s."
+msgstr ""
+
+#: ../../plugin/attach.inc.php:67
+#, php-format
+msgid " <span class=\"small\">%s download</span>"
+msgstr ""
+
+#: ../../plugin/attach.inc.php:68
+msgid "password"
+msgstr ""
+
+#: ../../plugin/attach.inc.php:69
+msgid "Administrator password"
+msgstr ""
+
+#: ../../plugin/attach.inc.php:70
+msgid "Delete file."
+msgstr ""
+
+#: ../../plugin/attach.inc.php:71
+msgid "Freeze file."
+msgstr ""
+
+#: ../../plugin/attach.inc.php:72
+msgid "Unfreeze file."
+msgstr ""
+
+#: ../../plugin/attach.inc.php:73
+msgid "The file has been renamed"
+msgstr ""
+
+#: ../../plugin/attach.inc.php:74
+msgid "File is frozen."
+msgstr ""
+
+#: ../../plugin/attach.inc.php:75
+msgid "Rename"
+msgstr ""
+
+#: ../../plugin/attach.inc.php:76
+msgid "New file name"
+msgstr ""
+
+#: ../../plugin/attach.inc.php:77
+msgid "(require administrator password)"
+msgstr ""
+
+#: ../../plugin/attach.inc.php:78
+msgid "size"
+msgstr ""
+
+#: ../../plugin/attach.inc.php:79
+msgid "type"
+msgstr ""
+
+#: ../../plugin/attach.inc.php:80
+msgid "date"
+msgstr ""
+
+#: ../../plugin/attach.inc.php:81
+msgid "access count"
+msgstr ""
+
+#: ../../plugin/attach.inc.php:82
+msgid "MD5 hash"
+msgstr ""
+
+#: ../../plugin/attach.inc.php:83
+msgid "Page"
+msgstr ""
+
+#: ../../plugin/attach.inc.php:84
+msgid "Stored filename"
+msgstr ""
+
+#: ../../plugin/attach.inc.php:85
+msgid "Cannot upload/delete file in $1"
+msgstr ""
+
+#: ../../plugin/attach.inc.php:86
+msgid "File size too large to $1"
+msgstr ""
+
+#: ../../plugin/attach.inc.php:87
+msgid "File already exists in $1"
+msgstr ""
+
+#: ../../plugin/attach.inc.php:88
+msgid "Could not find the file in $1"
+msgstr ""
+
+#: ../../plugin/attach.inc.php:89
+msgid "File does not exist."
+msgstr ""
+
+#: ../../plugin/attach.inc.php:90
+msgid "Cannot delete file in  $1"
+msgstr ""
+
+#: ../../plugin/attach.inc.php:91
+msgid "Cannot rename this file"
+msgstr ""
+
+#: ../../plugin/attach.inc.php:92
+msgid "Wrong password."
+msgstr ""
+
+#: ../../plugin/attach.inc.php:93
+msgid "Wrong administrator password"
+msgstr ""
+
+#: ../../plugin/attach.inc.php:94
+msgid "Upload"
+msgstr ""
+
+#: ../../plugin/attach.inc.php:95
+msgid "Information"
+msgstr ""
+
+#: ../../plugin/attach.inc.php:96
+msgid "Submit"
+msgstr ""
+
+#: ../../plugin/attach.inc.php:223
+msgid "Query string (page name and/or file name) too long"
+msgstr ""
+
+#: ../../plugin/attach.inc.php:226
+msgid "No such page"
+msgstr ""
+
+#: ../../plugin/attach.inc.php:272
+msgid "It failed in the generation of a temporary file."
+msgstr ""

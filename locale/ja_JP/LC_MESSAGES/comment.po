@@ -1,0 +1,50 @@
+# PukiWiki Plus! - Yet Another WikiWikiWeb Clone
+# Copyright (C) 2005 PukiWiki Plus! Developer Team
+# License is GPL2
+# Author: Miko.Hoshina(E.Satoh) <miko@cafeterrace.com>, 2005.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PukiWiki Plus! 1.4.5-u2\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2005-04-16 18:10+0900\n"
+"PO-Revision-Date: 2005-03-10 10:15+0900\n"
+"Last-Translator: Miko.Hoshina(E.Satoh) <miko@cafeterrace.com>\n"
+"Language-Team: Japanese \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8-bit\n"
+
+#: ../../plugin/comment.inc.php:21
+msgid "$1 was updated"
+msgstr "$1 を更新しました"
+
+#: ../../plugin/comment.inc.php:22
+msgid "On updating  $1, a collision has occurred."
+msgstr "$1 で【更新の衝突】が起きました"
+
+#: ../../plugin/comment.inc.php:23
+msgid ""
+"It seems that someone has already updated the page you were editing.<br />"
+msgstr ""
+"あなたがこのページを編集している間に、他の人が同じページを更新してしまったよ"
+"うです。<br />"
+
+#: ../../plugin/comment.inc.php:24
+msgid ""
+"The comment was added, alhough it may be inserted in the wrong position.<br /"
+">"
+msgstr ""
+"コメントを追加しましたが、違う位置に挿入されているかもしれません。<br />"
+
+#: ../../plugin/comment.inc.php:98
+msgid "Name: "
+msgstr "お名前: "
+
+#: ../../plugin/comment.inc.php:99
+msgid "Post Comment"
+msgstr "コメントの挿入"
+
+#: ../../plugin/comment.inc.php:100
+msgid "Comment: "
+msgstr "コメント: "

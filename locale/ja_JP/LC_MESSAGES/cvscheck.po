@@ -1,0 +1,64 @@
+# PukiWiki Plus! - Yet Another WikiWikiWeb Clone
+# Copyright (C) 2005 PukiWiki Plus! Developer Team
+# License is GPL2
+# Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>, 2005.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PukiWiki Plus! 1.4.5-u2\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2005-04-02 18:49+0900\n"
+"PO-Revision-Date: 2005-04-02 18:50+0900\n"
+"Last-Translator: Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>\n"
+"Language-Team: Japanese <ja@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../plugin/cvscheck.inc.php:40
+msgid "file name"
+msgstr "file name"
+
+#: ../../plugin/cvscheck.inc.php:41
+msgid "cvs versions"
+msgstr "cvs versions"
+
+#: ../../plugin/cvscheck.inc.php:42
+msgid "local versions"
+msgstr "local versions"
+
+#: ../../plugin/cvscheck.inc.php:43
+msgid "not found"
+msgstr "not found"
+
+#: ../../plugin/cvscheck.inc.php:44
+msgid "diff in cvscheck"
+msgstr "diff in cvscheck"
+
+#: ../../plugin/cvscheck.inc.php:45
+msgid "Difference of file version of this site and CVS"
+msgstr "本サイトとCVSとのファイルバージョンの差分"
+
+#: ../../plugin/cvscheck.inc.php:46
+msgid "Version of file where only this site exists"
+msgstr "本サイトのみ存在するファイルのバージョン"
+
+#: ../../plugin/cvscheck.inc.php:47
+msgid "It is not necessary to update it."
+msgstr "全てのファイルが更新済みでした。"
+
+#: ../../plugin/cvscheck.inc.php:48
+msgid "File Load Error"
+msgstr "File Load Error"
+
+#: ../../plugin/cvscheck.inc.php:49
+msgid "The file was not able to be read."
+msgstr "ファイルが読み込みできませんでした。"
+
+#: ../../plugin/cvscheck.inc.php:50
+msgid "Access Error"
+msgstr "Access Error"
+
+#: ../../plugin/cvscheck.inc.php:51
+msgid "It was not able to access the CVS site."
+msgstr "CVSサイトにアクセスできませんでした。"

@@ -1,0 +1,74 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2006-01-17 02:16+0900\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../plugin/links.inc.php:12
+msgid "Cash update"
+msgstr ""
+
+#: ../../plugin/links.inc.php:13
+msgid "Administrator password"
+msgstr ""
+
+#: ../../plugin/links.inc.php:14
+msgid "Exec"
+msgstr ""
+
+#: ../../plugin/links.inc.php:15
+msgid "The update of cash was completed."
+msgstr ""
+
+#: ../../plugin/links.inc.php:17
+msgid "* Content of processing\n"
+msgstr ""
+
+#: ../../plugin/links.inc.php:18
+msgid ":Cash update|\n"
+msgstr ""
+
+#: ../../plugin/links.inc.php:19
+msgid ""
+"All pages are scanned, whether on which page certain pages have been linked "
+"is investigated, and it records in the cache.\n"
+"\n"
+msgstr ""
+
+#: ../../plugin/links.inc.php:20
+msgid "* CAUTION\n"
+msgstr ""
+
+#: ../../plugin/links.inc.php:21
+msgid "It is likely to drive it for a few minutes in execution."
+msgstr ""
+
+#: ../../plugin/links.inc.php:22
+msgid ""
+"Please wait for a while after pushing the execution button.\n"
+"\n"
+msgstr ""
+
+#: ../../plugin/links.inc.php:24
+msgid "* EXEC\n"
+msgstr ""
+
+#: ../../plugin/links.inc.php:25
+msgid "Please input the Administrator password, and click the [Exec] button.\n"
+msgstr ""
+
+#: ../../plugin/links.inc.php:37
+msgid "PKWK_READONLY prohibits this"
+msgstr ""

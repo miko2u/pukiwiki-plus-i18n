@@ -1,0 +1,199 @@
+# PukiWiki Plus! - Yet Another WikiWikiWeb Clone
+# Copyright (C) 2005 PukiWiki Plus! Developer Team
+# License is GPL2
+# Author: Miko.Hoshina(E.Satoh) <miko@cafeterrace.com>, 2005.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PukiWiki Plus! 1.4.5-u2\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2006-04-13 00:51+0900\n"
+"PO-Revision-Date: 2005-03-10 10:15+0900\n"
+"Last-Translator: Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>\n"
+"Language-Team: Japanese \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8-bit\n"
+
+#: ../../plugin/attach.inc.php:55
+msgid "Uploaded the file to $1"
+msgstr "$1 にアップロードしました"
+
+#: ../../plugin/attach.inc.php:56
+msgid "Deleted the file in $1"
+msgstr "$1 からファイルを削除しました"
+
+#: ../../plugin/attach.inc.php:57
+msgid "The file has been frozen."
+msgstr "添付ファイルを凍結しました。"
+
+#: ../../plugin/attach.inc.php:58
+msgid "The file has been unfrozen"
+msgstr "添付ファイルを凍結解除しました。"
+
+#: ../../plugin/attach.inc.php:59
+msgid "Upload to $1"
+msgstr "$1 への添付"
+
+#: ../../plugin/attach.inc.php:60
+msgid "File information"
+msgstr "添付ファイルの情報"
+
+#: ../../plugin/attach.inc.php:61
+#, php-format
+msgid "<p>Delete %s.</p>"
+msgstr "<p>%s を削除します。</p>"
+
+#: ../../plugin/attach.inc.php:62
+msgid "List of attached file(s)"
+msgstr "添付ファイル一覧"
+
+#: ../../plugin/attach.inc.php:63
+msgid "List of attached file(s) in $1"
+msgstr "$1 の添付ファイル一覧"
+
+#: ../../plugin/attach.inc.php:64
+msgid "Attached file list of all pages"
+msgstr "全ページの添付ファイル一覧"
+
+#: ../../plugin/attach.inc.php:65
+msgid "Attach file"
+msgstr "添付ファイル"
+
+#: ../../plugin/attach.inc.php:66
+#, php-format
+msgid "Maximum file size is %s."
+msgstr "アップロード可能最大ファイルサイズは %s です。"
+
+#: ../../plugin/attach.inc.php:67
+#, php-format
+msgid " <span class=\"small\">%s download</span>"
+msgstr " <span class=\"small\">%s件</span>"
+
+#: ../../plugin/attach.inc.php:68
+msgid "password"
+msgstr "パスワード"
+
+#: ../../plugin/attach.inc.php:69
+msgid "Administrator password"
+msgstr "管理者パスワード"
+
+#: ../../plugin/attach.inc.php:70
+msgid "Delete file."
+msgstr "このファイルを削除します。"
+
+#: ../../plugin/attach.inc.php:71
+msgid "Freeze file."
+msgstr "このファイルを凍結します。"
+
+#: ../../plugin/attach.inc.php:72
+msgid "Unfreeze file."
+msgstr "このファイルを凍結解除します。"
+
+#: ../../plugin/attach.inc.php:73
+msgid "The file has been renamed"
+msgstr "添付ファイルの名前を変更しました"
+
+#: ../../plugin/attach.inc.php:74
+msgid "File is frozen."
+msgstr "このファイルは凍結されています。"
+
+#: ../../plugin/attach.inc.php:75
+msgid "Rename"
+msgstr "この添付ファイル名の変更"
+
+#: ../../plugin/attach.inc.php:76
+msgid "New file name"
+msgstr "新ファイル名"
+
+#: ../../plugin/attach.inc.php:77
+msgid "(require administrator password)"
+msgstr "(管理者パスワードが必要です)"
+
+#: ../../plugin/attach.inc.php:78
+msgid "size"
+msgstr "サイズ"
+
+#: ../../plugin/attach.inc.php:79
+msgid "type"
+msgstr "タイプ"
+
+#: ../../plugin/attach.inc.php:80
+msgid "date"
+msgstr "登録日時"
+
+#: ../../plugin/attach.inc.php:81
+msgid "access count"
+msgstr "アクセス数"
+
+#: ../../plugin/attach.inc.php:82
+msgid "MD5 hash"
+msgstr "MD5ハッシュ値"
+
+#: ../../plugin/attach.inc.php:83
+msgid "Page"
+msgstr "ページ"
+
+#: ../../plugin/attach.inc.php:84
+msgid "Stored filename"
+msgstr "格納ファイル名"
+
+#: ../../plugin/attach.inc.php:85
+msgid "Cannot upload/delete file in $1"
+msgstr "$1 へはアップロード・削除はできません"
+
+#: ../../plugin/attach.inc.php:86
+msgid "File size too large to $1"
+msgstr "$1 へのファイルサイズが大きすぎます"
+
+#: ../../plugin/attach.inc.php:87
+msgid "File already exists in $1"
+msgstr "$1 に同じファイル名が存在します"
+
+#: ../../plugin/attach.inc.php:88
+msgid "Could not find the file in $1"
+msgstr "$1 にそのファイルは見つかりません"
+
+#: ../../plugin/attach.inc.php:89
+msgid "File does not exist."
+msgstr "添付ファイルがありません。"
+
+#: ../../plugin/attach.inc.php:90
+msgid "Cannot delete file in  $1"
+msgstr "$1 からファイルを削除できませんでした"
+
+#: ../../plugin/attach.inc.php:91
+msgid "Cannot rename this file"
+msgstr "$1 からファイルの名前を変更をできませんでした"
+
+#: ../../plugin/attach.inc.php:92
+msgid "Wrong password."
+msgstr "パスワードが一致しません。"
+
+#: ../../plugin/attach.inc.php:93
+msgid "Wrong administrator password"
+msgstr "管理者パスワードが一致しません。"
+
+#: ../../plugin/attach.inc.php:94
+msgid "Upload"
+msgstr "アップロード"
+
+#: ../../plugin/attach.inc.php:95
+msgid "Information"
+msgstr "詳細"
+
+#: ../../plugin/attach.inc.php:96
+msgid "Submit"
+msgstr "実行"
+
+#: ../../plugin/attach.inc.php:223
+msgid "Query string (page name and/or file name) too long"
+msgstr ""
+
+#: ../../plugin/attach.inc.php:226
+msgid "No such page"
+msgstr "ページが見つかりません"
+
+#: ../../plugin/attach.inc.php:272
+msgid "It failed in the generation of a temporary file."
+msgstr ""

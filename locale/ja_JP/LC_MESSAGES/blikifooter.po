@@ -1,0 +1,37 @@
+# PukiWiki Plus! - Yet Another WikiWikiWeb Clone
+# Copyright (C) 2006 PukiWiki Plus! Developer Team
+# License is GPL2
+# Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>, 2006.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PukiWiki Plus! 1.4.6-u1-i18n\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2006-02-17 00:49+0900\n"
+"PO-Revision-Date: 2006-02-17 00:52+0900\n"
+"Last-Translator: Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>\n"
+"Language-Team: Japanese <ja@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../plugin/blikifooter.inc.php:41
+msgid "Author"
+msgstr "投稿者"
+
+#: ../../plugin/blikifooter.inc.php:42
+msgid "Permalink"
+msgstr "パーマリンク"
+
+#: ../../plugin/blikifooter.inc.php:43
+msgid "Trackback"
+msgstr "TrackBack"
+
+#: ../../plugin/blikifooter.inc.php:44
+#, php-format
+msgid "Comments(%s)"
+msgstr "コメント(%s)"
+
+#: ../../plugin/blikifooter.inc.php:45
+msgid " | "
+msgstr " | "

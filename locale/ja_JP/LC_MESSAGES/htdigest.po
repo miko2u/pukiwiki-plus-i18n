@@ -1,0 +1,109 @@
+# PukiWiki Plus! - Yet Another WikiWikiWeb Clone
+# Copyright (C) 2006 PukiWiki Plus! Developer Team
+# License is GPL2
+# Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>, 2006.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PukiWiki Plus! 1.4.7-i18n\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2006-11-29 02:15+0900\n"
+"PO-Revision-Date: 2006-07-23 05:00+0900\n"
+"Last-Translator: Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>\n"
+"Language-Team: Japanese <ja@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../plugin/htdigest.inc.php:32
+msgid "realm"
+msgstr "realm"
+
+#: ../../plugin/htdigest.inc.php:33
+msgid "UserName"
+msgstr "ユーザ名"
+
+#: ../../plugin/htdigest.inc.php:34
+msgid "Passwd"
+msgstr "パスワード"
+
+#: ../../plugin/htdigest.inc.php:35
+msgid "Calculate"
+msgstr "Calculate"
+
+#: ../../plugin/htdigest.inc.php:36
+msgid "CALC"
+msgstr "計算"
+
+#: ../../plugin/htdigest.inc.php:37
+msgid "Update"
+msgstr "更新"
+
+#: ../../plugin/htdigest.inc.php:38
+msgid "Result"
+msgstr "結果"
+
+#: ../../plugin/htdigest.inc.php:39
+msgid "Encryption key"
+msgstr "暗号鍵"
+
+#: ../../plugin/htdigest.inc.php:40
+msgid "Please input Administrator password."
+msgstr "管理者パスワードを入力して下さい。"
+
+#: ../../plugin/htdigest.inc.php:41
+msgid "Please input the password being used now."
+msgstr "現在使用中のパスワードを入力して下さい。"
+
+#: ../../plugin/htdigest.inc.php:42
+msgid "Please input a new password."
+msgstr "新しいパスワードを入力して下さい。"
+
+#: ../../plugin/htdigest.inc.php:43
+msgid "It doesn't correspond to IIS of Microsoft Corporation."
+msgstr "マイクロソフト社のIISには、対応しておりません。"
+
+#: ../../plugin/htdigest.inc.php:44
+msgid "The writing function is limited."
+msgstr "書き込み機能は、制限されています。"
+
+#: ../../plugin/htdigest.inc.php:45
+msgid ""
+"The authority more than Webmaster for World Wide Web Site is necessary to "
+"update it."
+msgstr "更新するためには、サイト管理者以上の権限が必要です。"
+
+#: ../../plugin/htdigest.inc.php:46
+msgid "The encryption key is not corresponding."
+msgstr "暗号鍵が一致しません。"
+
+#: ../../plugin/htdigest.inc.php:47
+msgid ""
+"In this version, the Administrator password is supported only with {x-php-"
+"md5}."
+msgstr ""
+"このバージョンでは、管理者パスワードが {x-php-md5} のみサポートされます。"
+
+#: ../../plugin/htdigest.inc.php:48
+msgid "Realm is not corresponding."
+msgstr "Realm と一致しません。"
+
+#: ../../plugin/htdigest.inc.php:49
+msgid "It newly made .htdigest."
+msgstr ".htdigest を新規作成しました。"
+
+#: ../../plugin/htdigest.inc.php:50
+msgid "Because the password was the same, it did not update it."
+msgstr "パスワードが同一なため、更新されませんでした。"
+
+#: ../../plugin/htdigest.inc.php:51
+msgid "It updated .htdigest."
+msgstr ".htdigest を更新しました。"
+
+#: ../../plugin/htdigest.inc.php:52
+msgid "One was added."
+msgstr "１件追加しました。"
+
+#: ../../plugin/htdigest.inc.php:53
+msgid "ERROR."
+msgstr "エラー。"

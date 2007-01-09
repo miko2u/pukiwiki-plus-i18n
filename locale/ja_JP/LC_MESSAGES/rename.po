@@ -1,0 +1,117 @@
+# PukiWiki Plus! - Yet Another WikiWikiWeb Clone
+# Copyright (C) 2005 PukiWiki Plus! Developer Team
+# License is GPL2
+# Author: Miko.Hoshina(E.Satoh) <miko@cafeterrace.com>, 2005.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PukiWiki Plus! 1.4.5-u2\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2005-03-10 10:15+0900\n"
+"PO-Revision-Date: 2005-03-10 10:15+0900\n"
+"Last-Translator: Miko.Hoshina(E.Satoh) <miko@cafeterrace.com>\n"
+"Language-Team: Japanese \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8-bit\n"
+
+#: ../plugin/rename.inc.php:15
+#, php-format
+msgid "<p>error:%s</p>"
+msgstr "<p>エラー:%s</p>"
+
+#: ../plugin/rename.inc.php:16
+msgid "no matching page(s)"
+msgstr "マッチするページがありません。"
+
+#: ../plugin/rename.inc.php:17
+msgid "the new name is invalid."
+msgstr "リネーム後のページ名が正しくありません。"
+
+#: ../plugin/rename.inc.php:18
+msgid "Incorrect administrator password."
+msgstr "管理者パスワードが正しくありません。"
+
+#: ../plugin/rename.inc.php:19
+#, php-format
+msgid "%s is not a valid pagename."
+msgstr "%sはページ名ではありません。"
+
+#: ../plugin/rename.inc.php:20
+#, php-format
+msgid "cannot rename %s."
+msgstr "%sをリネームすることはできません。"
+
+#: ../plugin/rename.inc.php:21
+#, php-format
+msgid "already exists :%s."
+msgstr "ページがすでに存在します。:%s"
+
+#: ../plugin/rename.inc.php:22
+msgid "The following files already exist."
+msgstr "以下のファイルがすでに存在します。"
+
+#: ../plugin/rename.inc.php:23
+msgid "Rename page"
+msgstr "ページ名の変更"
+
+#: ../plugin/rename.inc.php:24
+msgid "specify source page name"
+msgstr "変更元ページを指定"
+
+#: ../plugin/rename.inc.php:25
+msgid "rename with regular expressions."
+msgstr "正規表現で置換"
+
+#: ../plugin/rename.inc.php:26
+msgid "related pages"
+msgstr "関連ページ"
+
+#: ../plugin/rename.inc.php:27
+msgid "A related page is also renamed."
+msgstr "関連ページもリネームする"
+
+#: ../plugin/rename.inc.php:28
+#, php-format
+msgid "rename %s"
+msgstr "%sの名前を変更します。"
+
+#: ../plugin/rename.inc.php:29
+msgid "current page name"
+msgstr "現在の名前"
+
+#: ../plugin/rename.inc.php:30
+msgid "new page name"
+msgstr "新しい名前"
+
+#: ../plugin/rename.inc.php:31
+msgid "Administrator password"
+msgstr "管理者パスワード"
+
+#: ../plugin/rename.inc.php:32
+msgid "->"
+msgstr "→"
+
+#: ../plugin/rename.inc.php:33
+msgid "page is not processed when it already exists."
+msgstr "そのページを処理しない"
+
+#: ../plugin/rename.inc.php:34
+msgid "page is overwritten when it already exists."
+msgstr "そのファイルを上書きする"
+
+#: ../plugin/rename.inc.php:35
+msgid "The following files will be renamed."
+msgstr "以下のファイルをリネームします。"
+
+#: ../plugin/rename.inc.php:36
+msgid "The following files have been overwritten."
+msgstr "以下のファイルを上書きしました。"
+
+#: ../plugin/rename.inc.php:37
+msgid "Submit"
+msgstr "実行"
+
+#: ../plugin/rename.inc.php:38
+msgid "Next"
+msgstr "次へ"

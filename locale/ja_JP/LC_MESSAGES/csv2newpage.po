@@ -1,0 +1,45 @@
+# PukiWiki Plus! - Yet Another WikiWikiWeb Clone
+# Copyright (C) 2006 PukiWiki Plus! Developer Team
+# License is GPL2
+# Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>, 2006.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PukiWiki Plus! 1.4.6-u1-i18n\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2006-02-18 02:53+0900\n"
+"PO-Revision-Date: 2006-02-18 02:56+0900\n"
+"Last-Translator: Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>\n"
+"Language-Team: Japanese <ja@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../plugin/csv2newpage.inc.php:33
+msgid "Exec"
+msgstr "実行"
+
+#: ../../plugin/csv2newpage.inc.php:34
+msgid "New page generation:"
+msgstr "新規ページ生成:"
+
+#: ../../plugin/csv2newpage.inc.php:35
+msgid "Attache & Exec"
+msgstr "添付＆実行"
+
+#: ../../plugin/csv2newpage.inc.php:36
+msgid "CSV File:"
+msgstr "CSVファイル:"
+
+#: ../../plugin/csv2newpage.inc.php:38
+#, php-format
+msgid "Maximum file size is %s."
+msgstr "アップロード可能最大ファイルサイズは %s です。"
+
+#: ../../plugin/csv2newpage.inc.php:39
+msgid "password"
+msgstr "パスワード"
+
+#: ../../plugin/csv2newpage.inc.php:40
+msgid "Administrator password"
+msgstr "管理者パスワード"

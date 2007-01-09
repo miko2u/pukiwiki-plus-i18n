@@ -1,0 +1,36 @@
+# PukiWiki Plus! - Yet Another WikiWikiWeb Clone
+# Copyright (C) 2006 PukiWiki Plus! Developer Team
+# License is GPL2
+# Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>, 2006.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PukiWiki Plus! 1.4.7-u2-i18n\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2006-08-25 00:26+0900\n"
+"PO-Revision-Date: 2006-08-25 00:27+0900\n"
+"Last-Translator: Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>\n"
+"Language-Team: Japanese <ja@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../plugin/brokenlink.inc.php:15
+msgid "Broken Link List"
+msgstr "リンク切れ一覧"
+
+#: ../../plugin/brokenlink.inc.php:16
+msgid "All links are effective."
+msgstr "全てのリンクは有効です。"
+
+#: ../../plugin/brokenlink.inc.php:17
+msgid "<p>The parameter is illegal.</p>"
+msgstr "<p>パラメータが不正です。</p>"
+
+#: ../../plugin/brokenlink.inc.php:18
+msgid "<p>Not authorized to access.</p>"
+msgstr "<p>認証者のみアクセスできます。</p>"
+
+#: ../../plugin/brokenlink.inc.php:19
+msgid "<p>The xbel plugin is not found.</p>"
+msgstr "<p>xbel プラグインが見つかりません。</p>"

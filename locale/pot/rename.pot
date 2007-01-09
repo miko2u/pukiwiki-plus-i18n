@@ -1,0 +1,118 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2005-03-10 16:39+0900\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../plugin/rename.inc.php:15
+#, php-format
+msgid "<p>error:%s</p>"
+msgstr ""
+
+#: ../plugin/rename.inc.php:16
+msgid "no matching page(s)"
+msgstr ""
+
+#: ../plugin/rename.inc.php:17
+msgid "the new name is invalid."
+msgstr ""
+
+#: ../plugin/rename.inc.php:18
+msgid "Incorrect administrator password."
+msgstr ""
+
+#: ../plugin/rename.inc.php:19
+#, php-format
+msgid "%s is not a valid pagename."
+msgstr ""
+
+#: ../plugin/rename.inc.php:20
+#, php-format
+msgid "cannot rename %s."
+msgstr ""
+
+#: ../plugin/rename.inc.php:21
+#, php-format
+msgid "already exists :%s."
+msgstr ""
+
+#: ../plugin/rename.inc.php:22
+msgid "The following files already exist."
+msgstr ""
+
+#: ../plugin/rename.inc.php:23
+msgid "Rename page"
+msgstr ""
+
+#: ../plugin/rename.inc.php:24
+msgid "specify source page name"
+msgstr ""
+
+#: ../plugin/rename.inc.php:25
+msgid "rename with regular expressions."
+msgstr ""
+
+#: ../plugin/rename.inc.php:26
+msgid "related pages"
+msgstr ""
+
+#: ../plugin/rename.inc.php:27
+msgid "A related page is also renamed."
+msgstr ""
+
+#: ../plugin/rename.inc.php:28
+#, php-format
+msgid "rename %s"
+msgstr ""
+
+#: ../plugin/rename.inc.php:29
+msgid "current page name"
+msgstr ""
+
+#: ../plugin/rename.inc.php:30
+msgid "new page name"
+msgstr ""
+
+#: ../plugin/rename.inc.php:31
+msgid "Administrator password"
+msgstr ""
+
+#: ../plugin/rename.inc.php:32
+msgid "->"
+msgstr ""
+
+#: ../plugin/rename.inc.php:33
+msgid "page is not processed when it already exists."
+msgstr ""
+
+#: ../plugin/rename.inc.php:34
+msgid "page is overwritten when it already exists."
+msgstr ""
+
+#: ../plugin/rename.inc.php:35
+msgid "The following files will be renamed."
+msgstr ""
+
+#: ../plugin/rename.inc.php:36
+msgid "The following files have been overwritten."
+msgstr ""
+
+#: ../plugin/rename.inc.php:37
+msgid "Submit"
+msgstr ""
+
+#: ../plugin/rename.inc.php:38
+msgid "Next"
+msgstr ""

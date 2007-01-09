@@ -1,0 +1,62 @@
+# PukiWiki Plus! - Yet Another WikiWikiWeb Clone
+# Copyright (C) 2005 PukiWiki Plus! Developer Team
+# License is GPL2
+# Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>, 2005.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PukiWiki Plus! 1.4.5-u2\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2005-04-28 15:22+0900\n"
+"PO-Revision-Date: 2005-03-23 00:44+0900\n"
+"Last-Translator: Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>\n"
+"Language-Team: Japanese <ja@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../plugin/attachref.inc.php:27
+msgid "Upload to $1"
+msgstr "$1 への添付"
+
+#: ../../plugin/attachref.inc.php:28
+#, php-format
+msgid "Maximum file size is %s."
+msgstr "アップロード可能最大ファイルサイズは %s です。"
+
+#: ../../plugin/attachref.inc.php:29
+msgid "Administrator password"
+msgstr "管理者パスワード"
+
+#: ../../plugin/attachref.inc.php:30
+msgid "password"
+msgstr "パスワード"
+
+#: ../../plugin/attachref.inc.php:31
+msgid "Attach file"
+msgstr "添付ファイル"
+
+#: ../../plugin/attachref.inc.php:32
+msgid "Upload"
+msgstr "アップロード"
+
+#: ../../plugin/attachref.inc.php:34
+msgid "[Upload]"
+msgstr "[添付]"
+
+#: ../../plugin/attachref.inc.php:35
+msgid "Attach and Ref to $1"
+msgstr "$1 にアップロードしました"
+
+#: ../../plugin/attachref.inc.php:36
+msgid "On updating $1, a collision has occurred."
+msgstr "$1 で【更新の衝突】が起きました。"
+
+#: ../../plugin/attachref.inc.php:37
+msgid ""
+"It seems that someone has already updated the page you were editing.<br /"
+">The attach file was added, alhough it may be inserted in the wrong position."
+"<br />"
+msgstr ""
+"あなたがファイルを添付している間に、他の人が同じページを更新してしまったよう"
+"です。<br />ファイルが違う位置に挿入されているかもしれません。<br />"

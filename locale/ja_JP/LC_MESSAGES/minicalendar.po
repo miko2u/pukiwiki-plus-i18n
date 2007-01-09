@@ -1,0 +1,30 @@
+# PukiWiki Plus! - Yet Another WikiWikiWeb Clone
+# Copyright (C) 2005 PukiWiki Plus! Developer Team
+# License is GPL2
+# Author: Miko.Hoshina(E.Satoh) <miko@cafeterrace.com>, 2005.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PukiWiki Plus! 1.4.5-u2\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2005-03-21 23:55+0900\n"
+"PO-Revision-Date: 2005-03-10 10:15+0900\n"
+"Last-Translator: Miko.Hoshina(E.Satoh) <miko@cafeterrace.com>\n"
+"Language-Team: Japanese \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8-bit\n"
+
+#: ../../plugin/minicalendar.inc.php:12
+msgid "[edit]"
+msgstr "[この日記を編集]"
+
+#: ../../plugin/minicalendar.inc.php:13
+#, php-format
+msgid "%s is empty."
+msgstr "%sは空です。"
+
+#: ../../plugin/minicalendar.inc.php:93
+#, php-format
+msgid "%04d/%02d %s"
+msgstr "%04d年 %02d月 の %s"

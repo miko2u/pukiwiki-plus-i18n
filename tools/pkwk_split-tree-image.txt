@@ -1,0 +1,23 @@
+.
+|-- html
+|   `-- contents
+|       |-- doc
+|       |-- image
+|       `-- skin
+|
+|-- wiki-common
+|   |-- lib
+|   |-- locale
+|   `-- plugin
+|
+`-- wiki-data
+    `-- contents
+        |-- attach
+        |-- backup
+        |-- cache
+        |-- counter
+        |-- diff
+        |-- log
+        |-- trackback
+        `-- wiki
+

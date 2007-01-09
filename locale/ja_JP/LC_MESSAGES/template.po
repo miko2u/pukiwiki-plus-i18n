@@ -1,0 +1,56 @@
+# PukiWiki Plus! - Yet Another WikiWikiWeb Clone
+# Copyright (C) 2005 PukiWiki Plus! Developer Team
+# License is GPL2
+# Author: Miko.Hoshina(E.Satoh) <miko@cafeterrace.com>, 2005.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PukiWiki Plus! 1.4.5-u2\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2005-03-10 10:15+0900\n"
+"PO-Revision-Date: 2005-03-10 10:15+0900\n"
+"Last-Translator: Miko.Hoshina(E.Satoh) <miko@cafeterrace.com>\n"
+"Language-Team: Japanese \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8-bit\n"
+
+#: ../plugin/template.inc.php:16
+msgid "Edit of  $1"
+msgstr "$1 の編集"
+
+#: ../plugin/template.inc.php:17
+msgid "Start:<br />"
+msgstr "開始行:<br />"
+
+#: ../plugin/template.inc.php:18
+msgid "End:<br />"
+msgstr "終了行:<br />"
+
+#: ../plugin/template.inc.php:19
+msgid "$1/copy"
+msgstr "$1/複製"
+
+#: ../plugin/template.inc.php:20
+msgid "Page:"
+msgstr "ページ名:"
+
+#: ../plugin/template.inc.php:21
+msgid "Edit with a page name which already exists"
+msgstr "既存のページ名で編集する"
+
+#: ../plugin/template.inc.php:22
+msgid " $1 already exists."
+msgstr "$1 はすでに存在します。"
+
+#: ../plugin/template.inc.php:23
+msgid " $1 is not a valid page name."
+msgstr "$1 は有効なページ名ではありません。"
+
+#: ../plugin/template.inc.php:24
+msgid "Create"
+msgstr "作成"
+
+#: ../plugin/template.inc.php:25
+msgid "create a new page, using  $1 as a template."
+msgstr "$1 をテンプレートにして作成"

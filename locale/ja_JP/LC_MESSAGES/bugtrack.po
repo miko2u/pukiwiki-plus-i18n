@@ -1,0 +1,116 @@
+# PukiWiki Plus! - Yet Another WikiWikiWeb Clone
+# Copyright (C) 2005 PukiWiki Plus! Developer Team
+# License is GPL2
+# Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>, 2005.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PukiWiki Plus! 1.4.5-u2\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2005-04-28 18:47+0900\n"
+"PO-Revision-Date: 2005-04-01 01:35+0900\n"
+"Last-Translator: Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>\n"
+"Language-Team: Japanese <ja@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../plugin/bugtrack.inc.php:24
+msgid "Emergency"
+msgstr "緊急"
+
+#: ../../plugin/bugtrack.inc.php:24
+msgid "Importance"
+msgstr "重要"
+
+#: ../../plugin/bugtrack.inc.php:24
+msgid "Normal"
+msgstr "普通"
+
+#: ../../plugin/bugtrack.inc.php:24
+msgid "Low"
+msgstr "低"
+
+#: ../../plugin/bugtrack.inc.php:25 ../../plugin/bugtrack.inc.php:26
+msgid "Proposal"
+msgstr "提案"
+
+#: ../../plugin/bugtrack.inc.php:25 ../../plugin/bugtrack.inc.php:26
+msgid "Start"
+msgstr "着手"
+
+#: ../../plugin/bugtrack.inc.php:25 ../../plugin/bugtrack.inc.php:26
+msgid "CVS Waiting"
+msgstr "CVS待ち"
+
+#: ../../plugin/bugtrack.inc.php:25 ../../plugin/bugtrack.inc.php:26
+msgid "Completion"
+msgstr "完了"
+
+#: ../../plugin/bugtrack.inc.php:25 ../../plugin/bugtrack.inc.php:26
+msgid "Reservation"
+msgstr "保留"
+
+#: ../../plugin/bugtrack.inc.php:25 ../../plugin/bugtrack.inc.php:26
+msgid "Rejection"
+msgstr "却下"
+
+#: ../../plugin/bugtrack.inc.php:29
+msgid "Page"
+msgstr "ページ"
+
+#: ../../plugin/bugtrack.inc.php:30
+msgid "Summary"
+msgstr "サマリ"
+
+#: ../../plugin/bugtrack.inc.php:31
+msgid "Fill in the summary here. "
+msgstr ""
+
+#: ../../plugin/bugtrack.inc.php:32
+msgid "Priority"
+msgstr "優先順位"
+
+#: ../../plugin/bugtrack.inc.php:33
+msgid "State"
+msgstr "状態"
+
+#: ../../plugin/bugtrack.inc.php:34
+msgid "Name"
+msgstr "投稿者"
+
+#: ../../plugin/bugtrack.inc.php:35
+msgid "Anonymous"
+msgstr ""
+
+#: ../../plugin/bugtrack.inc.php:36
+msgid "Date"
+msgstr "投稿日"
+
+#: ../../plugin/bugtrack.inc.php:37
+msgid "Message"
+msgstr "メッセージ"
+
+#: ../../plugin/bugtrack.inc.php:38
+msgid "Category"
+msgstr "カテゴリ"
+
+#: ../../plugin/bugtrack.inc.php:39
+msgid "Page Name"
+msgstr "ページ名"
+
+#: ../../plugin/bugtrack.inc.php:40
+msgid "Page name is automatically given for an empty column."
+msgstr "空欄のままだと自動的にページ名が振られます。"
+
+#: ../../plugin/bugtrack.inc.php:41
+msgid "It is acceptable also in an empty column."
+msgstr "空欄でも構いません"
+
+#: ../../plugin/bugtrack.inc.php:42
+msgid "Version"
+msgstr "バージョン"
+
+#: ../../plugin/bugtrack.inc.php:43
+msgid "Submit"
+msgstr "追加"

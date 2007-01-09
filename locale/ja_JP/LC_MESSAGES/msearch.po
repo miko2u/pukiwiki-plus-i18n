@@ -1,0 +1,72 @@
+# PukiWiki Plus! - Yet Another WikiWikiWeb Clone
+# Copyright (C) 2005 PukiWiki Plus! Developer Team
+# License is GPL2
+# Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>, 2005.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PukiWiki Plus! 1.4.5-u2\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2005-03-23 01:55+0900\n"
+"PO-Revision-Date: 2005-03-23 01:51+0900\n"
+"Last-Translator: Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>\n"
+"Language-Team: Japanese <ja@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../plugin/msearch.inc.php:24
+msgid "It was not able to access any site. "
+msgstr "どのサイトにもアクセスできませんでした"
+
+#: ../../plugin/msearch.inc.php:27
+msgid "Elapsed Time Order"
+msgstr "経過時間順"
+
+#: ../../plugin/msearch.inc.php:28
+msgid "Elapsed Time Reverse Order"
+msgstr "経過時間逆順"
+
+#: ../../plugin/msearch.inc.php:29
+msgid "Site Order"
+msgstr "サイト順"
+
+#: ../../plugin/msearch.inc.php:30
+msgid "Site Reverse Order"
+msgstr "サイト逆順"
+
+#: ../../plugin/msearch.inc.php:31
+msgid "Page Name Order"
+msgstr "ページ名順"
+
+#: ../../plugin/msearch.inc.php:32
+msgid "Page Name Reverse Order"
+msgstr "ページ名逆順"
+
+#: ../../plugin/msearch.inc.php:78
+msgid "Search"
+msgstr "検索"
+
+#: ../../plugin/msearch.inc.php:79
+msgid "AND"
+msgstr "AND"
+
+#: ../../plugin/msearch.inc.php:80
+msgid "OR"
+msgstr "OR"
+
+#: ../../plugin/msearch.inc.php:81
+msgid ""
+"In the page <strong> $2</strong>, <strong> $3</strong> pages that contain "
+"all the terms $1 were found."
+msgstr ""
+"$1 のすべてを含むページは <strong>$3</strong> ページ中、 "
+"<strong>$2</strong> ページ見つかりました。"
+
+#: ../../plugin/msearch.inc.php:82
+msgid ""
+"In the page <strong> $2</strong>, <strong> $3</strong> pages that contain at "
+"least one of the terms $1 were found."
+msgstr ""
+"$1 のいずれかを含むページは <strong>$3</strong> ページ中、"
+"<strong>$2</strong> ページ見つかりました。"

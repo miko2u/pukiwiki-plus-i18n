@@ -1,0 +1,39 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2005-03-10 18:35+0900\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../plugin/memo.inc.php:15
+msgid "On updating $1, a collision has occurred."
+msgstr ""
+
+#: ../../plugin/memo.inc.php:16
+msgid "$1 was updated"
+msgstr ""
+
+#: ../../plugin/memo.inc.php:17
+msgid ""
+"It seems that someone has already updated this page while you were editing "
+"it.<br />\n"
+" + is placed at the beginning of a line that was newly added.<br />\n"
+" ! is placed at the beginning of a line that has possibly been updated.<br /"
+">\n"
+" Edit those lines, and submit again."
+msgstr ""
+
+#: ../../plugin/memo.inc.php:96
+msgid "update"
+msgstr ""

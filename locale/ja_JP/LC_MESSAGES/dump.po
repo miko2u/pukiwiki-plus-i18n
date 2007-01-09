@@ -1,0 +1,132 @@
+# PukiWiki Plus! - Yet Another WikiWikiWeb Clone
+# Copyright (C) 2005 PukiWiki Plus! Developer Team
+# License is GPL2
+# Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>, 2005.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PukiWiki Plus! 1.4.5-u2\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2006-01-16 00:55+0900\n"
+"PO-Revision-Date: 2005-04-02 21:48+0900\n"
+"Last-Translator: Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>\n"
+"Language-Team: Japanese <ja@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../plugin/dump.inc.php:48
+msgid "PKWK_READONLY prohibits this"
+msgstr "読み込み専用: この操作は禁止されています"
+
+#: ../../plugin/dump.inc.php:50
+msgid "dump & restore"
+msgstr "ダンプ ＆ 復元"
+
+#: ../../plugin/dump.inc.php:50
+msgid "dump"
+msgstr "ダンプ"
+
+#: ../../plugin/dump.inc.php:60
+msgid "The password is different."
+msgstr "パスワードが違います。"
+
+#: ../../plugin/dump.inc.php:81
+msgid "Up-loading was completed."
+msgstr "アップロードが完了しました"
+
+#: ../../plugin/dump.inc.php:81
+msgid "It failed in up-loading."
+msgstr "アップロードに失敗しました"
+
+#: ../../plugin/dump.inc.php:86
+msgid "It is an invalid instruction."
+msgstr "無効な命令です。"
+
+#: ../../plugin/dump.inc.php:113
+msgid "It failed in the generation of a temporary file."
+msgstr "テンポラリファイルの生成に失敗しました。"
+
+#: ../../plugin/dump.inc.php:123 ../../plugin/dump.inc.php:164
+msgid "The file was not found."
+msgstr "ファイルがみつかりませんでした。"
+
+#: ../../plugin/dump.inc.php:139
+msgid "Restoring function is not allowed"
+msgstr "復元機能は許可されていません"
+
+#: ../../plugin/dump.inc.php:152
+msgid "Invalid file suffix: "
+msgstr "無効なファイル接尾辞: "
+
+#: ../../plugin/dump.inc.php:156
+msgid "Max file size exceeded: "
+msgstr "実行可能な最大ファイルサイズ: "
+
+#: ../../plugin/dump.inc.php:173
+msgid "There was no file that was able to be expanded."
+msgstr "展開できるファイルがありませんでした。"
+
+#: ../../plugin/dump.inc.php:176
+msgid "Progressing file list"
+msgstr "展開したファイル一覧"
+
+#: ../../plugin/dump.inc.php:219
+msgid "Download of data"
+msgstr "データのダウンロード"
+
+#: ../../plugin/dump.inc.php:220
+msgid "Form of archive"
+msgstr "アーカイブの形式"
+
+#: ../../plugin/dump.inc.php:221
+msgid "form"
+msgstr "形式"
+
+#: ../../plugin/dump.inc.php:222
+msgid "Backup directory"
+msgstr "バックアップディレクトリ"
+
+#: ../../plugin/dump.inc.php:223
+msgid "Options"
+msgstr "オプション"
+
+#: ../../plugin/dump.inc.php:224
+msgid ""
+"Virtual of page name encode is converted into the file name with the "
+"directory."
+msgstr ""
+" エンコードされているページ名をディレクトリ階層つきのファイルにデコード"
+
+#: ../../plugin/dump.inc.php:225
+msgid "(The restoration that uses this data cannot be done."
+msgstr " (※リストアに使うことはできなくなります。"
+
+#: ../../plugin/dump.inc.php:226
+msgid "Moreover, a part of character is substituted for '_'.)"
+msgstr "また、一部の文字は '_' に置換されます。)"
+
+#: ../../plugin/dump.inc.php:228
+msgid " Restoration of data"
+msgstr " データのリストア"
+
+#: ../../plugin/dump.inc.php:229
+msgid "[IMPORTANCE]"
+msgstr "[重要]"
+
+#: ../../plugin/dump.inc.php:230
+msgid ""
+"Attention: Please note that the data file of the same name is overwrited."
+msgstr " 同じ名前のデータファイルは上書きされますので、十分ご注意ください。"
+
+#: ../../plugin/dump.inc.php:232
+msgid "File"
+msgstr "ファイル"
+
+#: ../../plugin/dump.inc.php:233
+msgid "Download execution"
+msgstr "ダウンロード実行"
+
+#: ../../plugin/dump.inc.php:234
+msgid "Upload execution"
+msgstr "アップロード実行"

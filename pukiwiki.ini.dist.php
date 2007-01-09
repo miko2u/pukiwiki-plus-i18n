@@ -1,10 +1,10 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: pukiwiki.ini.php,v 1.121.13 2005/04/29 11:26:28 miko Exp $
+// $Id: pukiwiki.ini.php,v 1.139.142.10 2006/10/11 00:50:00 upk Exp $
 // Copyright (C)
-//   2005      Customized/Patched by Miko.Hoshina
-//   2002-2005 PukiWiki Developers Team
-//   2001      Originally written by yu-ji
+//   2005-2006 PukiWiki Plus! Team
+//   2002-2006 PukiWiki Developers Team
+//   2001-2002 Originally written by yu-ji
 // License: GPL v2 or (at your option) any later version
 //
 // PukiWiki main setting file
@@ -20,15 +20,31 @@ if (! defined('PKWK_OPTIMISE'))
 
 /////////////////////////////////////////////////
 // Security settings
+// 0 - æ©Ÿèƒ½ç„¡åŠ¹
+// 1 - å¼·åˆ¶ãƒ¢ãƒ¼ãƒ‰
+// 2 - ã‚µã‚¤ãƒˆç®¡ç†è€…ä»¥ä¸Šã¯é™¤ã
+// 3 - ã‚³ãƒ³ãƒ†ãƒ³ãƒ„ç®¡ç†è€…ä»¥ä¸Šã¯é™¤ã
+// 4 - èªè¨¼è€…(æœªè¨­å®šæ™‚ã®ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆ)ä»¥ä¸Šã¯é™¤ã
 
 // PKWK_READONLY - Prohibits editing and maintain via WWW
 //   NOTE: Counter-related functions will work now (counter, attach count, etc)
 if (! defined('PKWK_READONLY'))
-	define('PKWK_READONLY', 0); // 0 or 1
+	define('PKWK_READONLY', 0); // 0,1,2,3,4
 
 // PKWK_SAFE_MODE - Prohibits some unsafe(but compatible) functions 
 if (! defined('PKWK_SAFE_MODE'))
-	define('PKWK_SAFE_MODE', 0);
+	define('PKWK_SAFE_MODE', 0); // 0,1,2,3,4
+
+// PKWK_USE_REDIRECT - When linking outside, Referer is removed.
+if (! defined('PKWK_USE_REDIRECT'))
+        define('PKWK_USE_REDIRECT', 0);
+
+// PKWK_DISABLE_INLINE_IMAGE_FROM_URI - Disallow using inline-image-tag for URIs
+//   Inline-image-tag for URIs may allow leakage of Wiki readers' information
+//   (in short, 'Web bug') or external malicious CGI (looks like an image's URL)
+//   attack to Wiki readers, but easy way to show images.
+if (! defined('PKWK_DISABLE_INLINE_IMAGE_FROM_URI'))
+	define('PKWK_DISABLE_INLINE_IMAGE_FROM_URI', 0);
 
 // PKWK_QUERY_STRING_MAX
 //   Max length of GET method, prohibits some worm attack ASAP
@@ -36,13 +52,57 @@ if (! defined('PKWK_SAFE_MODE'))
 define('PKWK_QUERY_STRING_MAX', 640); // Bytes, 0 = OFF
 
 /////////////////////////////////////////////////
+// Experimental features
+
+// Multiline plugin hack (See BugTrack2/84)
+// EXAMPLE(with a known BUG):
+//   #plugin(args1,args2,...,argsN){{
+//   argsN+1
+//   argsN+1
+//   #memo(foo)
+//   argsN+1
+//   }}
+//   #memo(This makes '#memo(foo)' to this)
+define('PKWKEXP_DISABLE_MULTILINE_PLUGIN_HACK', 0); // 1 = Disabled
+
+/////////////////////////////////////////////////
 // Language / Encoding settings
+// <language>_<territory> = <ISO 639>_<ISO 3166>
+// ja_JP, ko_KR, en_US, zh_TW ...
+if (! defined('DEFAULT_LANG'))
+	define('DEFAULT_LANG', 'ja_JP');
 
-// LANG - Internal content encoding ('en', 'ja', or ...)
-define('LANG', 'ja');
+// It conforms at the time of server installation location (DEFAULT_LANG).
+// (1: Conforming, 0: Language dependence)
+// ã‚µãƒ¼ãƒè¨­ç½®å ´æ‰€(DEFAULT_LANG)ã®æ™‚åˆ»ã«æº–æ‹ ã™ã‚‹ã€‚(1:æº–æ‹ , 0:è¨€èªä¾å­˜)
+$use_local_time = 0;
 
-// UI_LANG - Content encoding for buttons, menus,  etc
-define('UI_LANG', LANG); // 'en' for Internationalized wikisite
+// Effective making function switch (2 Then, it becomes a judgment of 1 and 2.)
+// 0) Invalidity
+// 1) Judgment with COOKIE['lang']
+// 2) Judgment with HTTP_ACCEPT_LANGUAGE
+// 3) Considering judgment to HTTP_USER_AGENT
+// 4) Considering judgment to HTTP_ACCEPT_CHARSET
+// 5) Considering judgment to REMOTE_ADDR
+// æ©Ÿèƒ½æœ‰åŠ¹åŒ–ã‚¹ã‚¤ãƒƒãƒ (2 ãªã‚‰ã€1ã¨2ã®åˆ¤å®šã¨ãªã‚‹)
+// 0) ç„¡åŠ¹
+// 1) COOKIE['lang'] ã§ã®åˆ¤å®š
+// 2) HTTP_ACCEPT_LANGUAGE ã§ã®åˆ¤å®š
+// 3) HTTP_USER_AGENT ã¾ã§ã®è¦‹åšã—åˆ¤å®š
+// 4) HTTP_ACCEPT_CHARSET ã¾ã§ã®è¦‹åšã—åˆ¤å®š
+// 5) REMOTE_ADDR ã¾ã§ã®è¦‹åšã—åˆ¤å®š
+$language_considering_setting_level = 2;
+
+// Please define it when two or more TimeZone such as en_US exists.
+// Please refer to lib/timezone.php for the defined character string.
+// en_US ãªã©ã€è¤‡æ•°ã®ã‚¿ã‚¤ãƒ ã‚¾ãƒ¼ãƒ³ãŒå­˜åœ¨ã™ã‚‹å ´åˆã«å®šç¾©ã—ã¦ä¸‹ã•ã„ã€‚
+// å®šç¾©ã™ã‚‹æ–‡å­—åˆ—ã¯ã€lib/timezone.php ã‚’å‚ç…§ã—ã¦ä¸‹ã•ã„ã€‚
+//if (! defined('DEFAULT_TZ_NAME'))
+//	define('DEFAULT_TZ_NAME', 'Asia/Tokyo');
+
+// The view on public holiday applies to installation features.
+// ç¥æ—¥ã®è¡¨ç¤ºã¯ã€è¨­ç½®å ´æ‰€ã«æº–ãšã‚‹ (0:è¨­ç½®è€…è¦–ç‚¹, 1:é–²è¦§è€…è¦–ç‚¹)
+$public_holiday_guest_view = 0;
 
 /////////////////////////////////////////////////
 // Directory settings I (ended with '/', permission '777')
@@ -57,7 +117,16 @@ define('CACHE_DIR',     DATA_HOME . 'cache/'    ); // Some sort of caches
 define('UPLOAD_DIR',    DATA_HOME . 'attach/'   ); // Attached files and logs
 define('COUNTER_DIR',   DATA_HOME . 'counter/'  ); // Counter plugin's counts
 define('TRACKBACK_DIR', DATA_HOME . 'trackback/'); // TrackBack logs
-define('PLUGIN_DIR',    DATA_HOME . 'plugin/'   ); // Plugin directory
+define('LOG_DIR',       DATA_HOME . 'log/'      ); // Logging file
+define('INIT_DIR',      DATA_HOME . 'init/'     ); // Initial value (Contents)
+
+define('PLUGIN_DIR',    SITE_HOME . 'plugin/'   ); // Plugin directory
+define('LANG_DIR',      SITE_HOME . 'locale/'   ); // Language file
+define('SITE_INIT_DIR', SITE_HOME . 'init/'     ); // Initial value (Site)
+
+define('EXTEND_DIR',    SITE_HOME . 'extend/'   ); // Extend directory
+define('EXT_PLUGIN_DIR',EXTEND_DIR. 'plugin/'   ); // Extend Plugin directory
+define('EXT_LANG_DIR',  EXTEND_DIR. 'locale/'   ); // Extend Language file
 
 /////////////////////////////////////////////////
 // Directory settings II (ended with '/')
@@ -78,20 +147,6 @@ define('IMAGE_DIR', 'image/');
 define('ROOT_URI', '');
 define('SKIN_URI', ROOT_URI . SKIN_DIR);
 define('IMAGE_URI', ROOT_URI . IMAGE_DIR);
-
-/////////////////////////////////////////////////
-// Local time setting
-
-switch (LANG) { // or specifiy one
-case 'ja':
-	define('ZONE', 'JST');
-	define('ZONETIME', 9 * 3600); // JST = GMT + 9
-	break;
-default  :
-	define('ZONE', 'GMT');
-	define('ZONETIME', 0);
-	break;
-}
 
 /////////////////////////////////////////////////
 // Title of your Wikisite (Name this)
@@ -115,6 +170,8 @@ $defaultpage  = 'FrontPage';     // Top / Default page
 $whatsnew     = 'RecentChanges'; // Modified page list
 $whatsdeleted = 'RecentDeleted'; // Removeed page list
 $interwiki    = 'InterWikiName'; // Set InterWiki definition here
+$aliaspage    = 'AutoAliasName'; // Set AutoAlias definition here
+$glossarypage = 'Glossary';		 // Set Glossary definition here
 $menubar      = 'MenuBar';       // Menu
 $sidebar      = 'SideBar';       // Side
 $headarea     = ':Header';
@@ -133,21 +190,51 @@ $footarea     = ':Footer';
 //$pkwk_dtd = PKWK_DTD_HTML_4_01_TRANSITIONAL;
 
 /////////////////////////////////////////////////
+// Always output "nofollow,noindex" attribute
+
+$nofollow = 0; // 1 = Try hiding from search engines
+
+/////////////////////////////////////////////////
+
+// PLUS_ALLOW_SESSION - Allow / Prohibit using Session
+define('PLUS_ALLOW_SESSION', 1);
 
 // PKWK_ALLOW_JAVASCRIPT - Allow / Prohibit using JavaScript
 define('PKWK_ALLOW_JAVASCRIPT', 1);
+
+// Javascript Async Library Extenstion
+$ajax = 1;
+
+// LOG
+require_once('config-log.ini.php');
+
+/////////////////////////////////////////////////
+// Blocking SPAM
+$use_spam_check = array(
+	'page_remote_addr'	=> 0,
+	'page_contents'		=> 0,
+	'trackback'		=> 0,
+	'referer'		=> 0,
+);
 
 /////////////////////////////////////////////////
 // TrackBack feature
 
 // Enable Trackback
-$trackback = 1;
-
-// Show trackbacks with an another window (using JavaScript)
-$trackback_javascript = 0;
+// 0: off
+// 1: on
+//    Only the reception of ping.
+//    Ping is not transmitted by the automatic operation.
+// 2: on
+//    Function in the past. Automatic ping transmission.
+$trackback = 2;
 
 /////////////////////////////////////////////////
 // Referer list feature
+// 0: off
+// 1: on
+// 2: on
+//    IGNORE is not having a look displayed.
 $referer = 1;
 
 /////////////////////////////////////////////////
@@ -155,32 +242,50 @@ $referer = 1;
 $nowikiname = 1;
 
 /////////////////////////////////////////////////
+// Symbol of not exists WikiName/BracketName
+$_symbol_noexists = '?';
+
+/////////////////////////////////////////////////
 // AutoLink feature
+// Automatic link to existing pages (especially helpful for non-wikiword pages, but heavy)
 
-// AutoLink minimum length of page name
+// Minimum length of page name
 // Pukiwiki Plus! Recommended "5"
-$autolink = 5;
+$autolink = 5; // Bytes, 0 = OFF (try 8)
 
-// AutoAlias minimum bytes (0 = Disable)
-$autoalias = 2;
+/////////////////////////////////////////////////
+// AutoAlias feature
+// Automatic link from specified word, to specifiled URI, page or InterWiki
 
-// AutoGlossary minimum bytes (0 = Disable)
-$autoglossary = 2;
+// Minimum length of alias "from" word
+// Pukiwiki Plus! Recommended "4"
+$autoalias = 4; // Bytes, 0 = OFF (try 8)
+
+// Limit loading valid alias pairs
+$autoalias_max_words = 50; // pairs
+
+/////////////////////////////////////////////////
+// AutoGlossary feature
+// Automatic tooltip from specified word
+
+// Minimum length of glossary "from" word
+// Pukiwiki Plus! Recommended "2"
+$autoglossary = 2; // NChars, 0 = OFF
+
+// Limit loading valid glossary pairs
+$autoglossary_max_words = 50; // pairs
 
 /////////////////////////////////////////////////
 // Enable Freeze / Unfreeze feature
 $function_freeze = 1;
 
 /////////////////////////////////////////////////
-// Enable 'Do not change timestamp' at edit
-// (1:Enable, 2:Enable only administrator, 0:Disable)
+// Allow to use 'Do not change timestamp' checkbox
+// (0:Disable, 1:For everyone,  2:Only for the administrator)
 $notimeupdate = 1;
 
-/////////////////////////////////////////////////
-// Admin password for this Wikisite
-
-// CHANGE THIS
-$adminpass = '{x-php-md5}1a1dc91c907325c69271ddf0c944bc72'; // md5('pass')
+// Authentication
+require_once('auth.ini.php');
 
 /////////////////////////////////////////////////
 // Page-reading feature settings
@@ -213,45 +318,36 @@ $pagereading_config_page = ':config/PageReading';
 $pagereading_config_dict = ':config/PageReading/dict';
 
 /////////////////////////////////////////////////
-// User definition
-$auth_users = array(
-	'foo'	=> 'foo_passwd', // Cleartext
-	'bar'	=> '{x-php-md5}f53ae779077e987718cc285b14dfbe86', // md5('bar_passwd')
-	'hoge'	=> '{SMD5}OzJo/boHwM4q5R+g7LCOx2xGMkFKRVEx', // SMD5 'hoge_passwd'
+// Exclude plugin for this site-policy.
+$exclude_plugin = array(
+	'server',
+	'version',
+	'versionlist',
 );
 
 /////////////////////////////////////////////////
-// Authentication method
-
-$auth_method_type = 'contents';	// By Page contents
-//$auth_method_type = 'pagename';	// By Page name
-
-/////////////////////////////////////////////////
-// Read auth (0:Disable, 1:Enable)
-$read_auth = 0;
-
-// Read auth regex
-$read_auth_pages = array(
-	'#¤Ò¤­¤³¤â¤ë¤Û¤²#'	=> 'hoge',
-	'#(¥Í¥¿¥Ğ¥ì|¤Í¤¿¤Ğ¤ì)#'	=> 'foo,bar,hoge',
+// Exclude Link plugin.
+//
+// When TrackBack Ping and SPAM Check are processed,
+// it is substituted for null plugin.
+//
+// TrackBack Ping ãŠã‚ˆã³ SPAMãƒã‚§ãƒƒã‚¯ã®å‡¦ç†ã®éš›ã«ã€
+// null ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã«ç½®æ›ã•ã‚Œã¾ã™ã€‚
+$exclude_link_plugin = array(
+	'showrss',
+	'rssreader',
 );
 
 /////////////////////////////////////////////////
-// Edit auth (0:Disable, 1:Enable)
-$edit_auth = 0;
-
-// Edit auth regex
-$edit_auth_pages = array(
-	'#Bar¤Î¸ø³«Æüµ­#'	=> 'bar',
-	'#¤Ò¤­¤³¤â¤ë¤Û¤²#'	=> 'hoge',
-	'#(¥Í¥¿¥Ğ¥ì|¤Í¤¿¤Ğ¤ì)#'	=> 'foo,bar,hoge',
-);
+// Fuzzy Search (for Japanese EUC-JP Version Only)
+// 0: Disabled
+// 1: Enabled
+$search_fuzzy = 0;
 
 /////////////////////////////////////////////////
-// Search auth
-// 0: Disabled (Search read-prohibited page contents)
-// 1: Enabled  (Search only permitted pages for the user)
-$search_auth = 0;
+// Fast Tracker(Sortable Tracker)
+//
+$sortable_tracker = 1;
 
 /////////////////////////////////////////////////
 // $whatsnew: Max number of RecentChanges
@@ -279,6 +375,8 @@ $time_format = 'H:i:s';
 /////////////////////////////////////////////////
 // Max number of RSS feed
 $rss_max = 15;
+// Description
+$rss_description = 'PukiWiki RecentChanges';
 
 /////////////////////////////////////////////////
 // Backup related settings
@@ -301,8 +399,17 @@ define('PKWK_SPLITTER', '>>>>>>>>>>');
 
 /////////////////////////////////////////////////
 // Command executed per update
-$update_exec = '';
-//$update_exec = '/usr/bin/mknmz --media-type=text/pukiwiki -O /var/lib/namazu/index/ -L ja -c -K /var/www/wiki/';
+
+define('PKWK_UPDATE_EXEC', '');
+$update_exec = PKWK_UPDATE_EXEC;
+
+// Sample: Namazu (Search engine)
+//$target     = '/var/www/wiki/';
+//$mknmz      = '/usr/bin/mknmz';
+//$output_dir = '/var/lib/namazu/index/';
+//define('PKWK_UPDATE_EXEC',
+//	$mknmz . ' --media-type=text/pukiwiki' .
+//	' -O ' . $output_dir . ' -L ja -c -K ' . $target);
 
 /////////////////////////////////////////////////
 // HTTP proxy setting (for TrackBack etc)
@@ -348,8 +455,8 @@ $notify_from = 'from@example.com';	// From:
 $notify_subject = '[PukiWiki] $page';
 
 // Mail header
-$notify_header = "From: $notify_from\r\n" .
-	'X-Mailer: PukiWiki/' .  S_VERSION . ' PHP/' . phpversion();
+// NOTE: Multiple items must be divided by "\r\n", not "\n".
+$notify_header = '';
 
 // No Mail for Remote Host.
 $notify_exclude = array(
@@ -407,37 +514,37 @@ $line_break = 0;
 $usedatetime = 1;
 
 /////////////////////////////////////////////////
-// ¸«½Ğ¤·¤´¤È¤ÎÊÔ½¸¤ò²ÄÇ½¤Ë¤¹¤ë 
+// è¦‹å‡ºã—ã”ã¨ã®ç·¨é›†ã‚’å¯èƒ½ã«ã™ã‚‹ 
 //
-// ¸«½Ğ¤·¹Ô¤Î¸ÇÍ­¤Î¥¢¥ó¥«¼«Æ°ÁŞÆş¤µ¤ì¤Æ¤¤¤ë¤È¤­
-// ¤Î¤ßÍ­¸ú¤Ç¤¹
+// è¦‹å‡ºã—è¡Œã®å›ºæœ‰ã®ã‚¢ãƒ³ã‚«è‡ªå‹•æŒ¿å…¥ã•ã‚Œã¦ã„ã‚‹ã¨ã
+// ã®ã¿æœ‰åŠ¹ã§ã™
 $fixed_heading_edited = 0;
 
 /////////////////////////////////////////////////
-// ¥Ú¡¼¥¸¤òÇ¤°Õ¤Î¥Õ¥ì¡¼¥à¤Ë³«¤¯»ş¤Ë»È¤¦ÀßÄê
+// ãƒšãƒ¼ã‚¸ã‚’ä»»æ„ã®ãƒ•ãƒ¬ãƒ¼ãƒ ã«é–‹ãæ™‚ã«ä½¿ã†è¨­å®š
 $use_open_uri_in_new_window  = 1;
 
-// Æ±°ì¥µ¡¼¥Ğ¡¼¤È¤·¤Æ¤ß¤Ê¤¹¥Û¥¹¥È¤ÎURI
+// åŒä¸€ã‚µãƒ¼ãƒãƒ¼ã¨ã—ã¦ã¿ãªã™ãƒ›ã‚¹ãƒˆã®URI
 $open_uri_in_new_window_servername = array(
-      "http://localhost/",
-      "http://localhost.localdomain/",
+      'http://localhost/',
+      'http://localhost.localdomain/',
 );
-// URI¤Î¼ïÎà¤Ë¤è¤Ã¤Æ³«¤¯Æ°ºî¤òÀßÄê¡£
-// "_blank"¤ÇÊÌÁë¤ØÉ½¼¨¡¢false¤ò»ØÄê¤¹¤ë¤ÈÌµ¸ú
-$open_uri_in_new_window_opis  = "_blank";     // pukiwiki¤Î³°¤ÇÆ±°ì¥µ¡¼¥Ğ¡¼Æâ
-$open_uri_in_new_window_opisi = false;        // pukiwiki¤Î³°¤ÇÆ±°ì¥µ¡¼¥Ğ¡¼Æâ(InterWikiLink)
-$open_uri_in_new_window_opos  = "_blank";     // pukiwiki¤Î³°¤Ç³°Éô¥µ¡¼¥Ğ¡¼
-$open_uri_in_new_window_oposi = "_blank";     // pukiwiki¤Î³°¤Ç³°Éô¥µ¡¼¥Ğ¡¼(InterWikiLink)
-// (Ãí°Õ¡§¤¢¤¨¤Æ³ÈÄ¥¤·¤ä¤¹¤¤¤è¤¦¤Ë¤·¤Æ¤¤¤Ş¤¹¤¬¡¢"_blank"°Ê³°¤Ï»ØÄê¤·¤Ê¤¤¤Ç¤¯¤À¤µ¤¤)
+// URIã®ç¨®é¡ã«ã‚ˆã£ã¦é–‹ãå‹•ä½œã‚’è¨­å®šã€‚
+// "_blank"ã§åˆ¥çª“ã¸è¡¨ç¤ºã€falseã‚’æŒ‡å®šã™ã‚‹ã¨ç„¡åŠ¹
+$open_uri_in_new_window_opis  = '_blank';     // pukiwikiã®å¤–ã§åŒä¸€ã‚µãƒ¼ãƒãƒ¼å†…
+$open_uri_in_new_window_opisi = false;        // pukiwikiã®å¤–ã§åŒä¸€ã‚µãƒ¼ãƒãƒ¼å†…(InterWikiLink)
+$open_uri_in_new_window_opos  = '_blank';     // pukiwikiã®å¤–ã§å¤–éƒ¨ã‚µãƒ¼ãƒãƒ¼
+$open_uri_in_new_window_oposi = '_blank';     // pukiwikiã®å¤–ã§å¤–éƒ¨ã‚µãƒ¼ãƒãƒ¼(InterWikiLink)
+// (æ³¨æ„ï¼šã‚ãˆã¦æ‹¡å¼µã—ã‚„ã™ã„ã‚ˆã†ã«ã—ã¦ã„ã¾ã™ãŒã€'_blank'ä»¥å¤–ã¯æŒ‡å®šã—ãªã„ã§ãã ã•ã„)
 
 /////////////////////////////////////////////////
 // User-Agent settings
 //
 // If you want to ignore embedded browsers for rich-content-wikisite,
-// remove (or comment-out) all 'keitai' settings.
+// remove (or comment-out) all 'mobile' settings.
 //
 // If you want to to ignore desktop-PC browsers for simple wikisite,
-// copy keitai.ini.php to default.ini.php and customize it.
+// copy mobile.ini.php to default.ini.php and customize it.
 
 $agents = array(
 // pattern: A regular-expression that matches device(browser)'s name and version
@@ -459,57 +566,57 @@ $agents = array(
 
 	// Windows CE (the others)
 	// Sample: "Mozilla/2.0 (compatible; MSIE 3.02; Windows CE; 240x320 )" (GFORT, NTT DoCoMo)
-	array('pattern'=>'#\b(Windows CE)\b#', 'profile'=>'keitai'),
+	array('pattern'=>'#\b(Windows CE)\b#', 'profile'=>'mobile'),
 
 	// ACCESS "NetFront" / "Compact NetFront" and thier OEM
 	// Sample: "Mozilla/3.0 (AveFront/2.6)" ("SUNTAC OnlineStation", USB-Modem for PlayStation 2)
 	// Sample: "Mozilla/3.0(DDIPOCKET;JRC/AH-J3001V,AH-J3002V/1.0/0100/c50)CNF/2.0" (DDI Pocket: AirH" Phone by JRC)
-	array('pattern'=>'#\b(NetFront)/([0-9\.]+)#',	'profile'=>'keitai'),
-	array('pattern'=>'#\b(CNF)/([0-9\.]+)#',	'profile'=>'keitai'),
-	array('pattern'=>'#\b(AveFront)/([0-9\.]+)#',	'profile'=>'keitai'),
-	array('pattern'=>'#\b(AVE-Front)/([0-9\.]+)#',	'profile'=>'keitai'), // The same?
+	array('pattern'=>'#\b(NetFront)/([0-9\.]+)#',	'profile'=>'mobile'),
+	array('pattern'=>'#\b(CNF)/([0-9\.]+)#',	'profile'=>'mobile'),
+	array('pattern'=>'#\b(AveFront)/([0-9\.]+)#',	'profile'=>'mobile'),
+	array('pattern'=>'#\b(AVE-Front)/([0-9\.]+)#',	'profile'=>'mobile'), // The same?
 
 	// NTT-DoCoMo, i-mode (embeded Compact NetFront) and FOMA (embedded NetFront) phones
-	// Sample: "DoCoMo/1.0/F501i", "DoCoMo/1.0/N504i/c10/TB/serXXXX" // c°Ê¹ß¤Ï²ÄÊÑ
-	// Sample: "DoCoMo/2.0 MST_v_SH2101V(c100;TB;W22H12;serXXXX;iccxxxx)" // ()¤ÎÃæ¤Ï²ÄÊÑ
-	array('pattern'=>'#^(DoCoMo)/([0-9\.]+)#',	'profile'=>'keitai'),
+	// Sample: "DoCoMo/1.0/F501i", "DoCoMo/1.0/N504i/c10/TB/serXXXX" // cä»¥é™ã¯å¯å¤‰
+	// Sample: "DoCoMo/2.0 MST_v_SH2101V(c100;TB;W22H12;serXXXX;iccxxxx)" // ()ã®ä¸­ã¯å¯å¤‰
+	array('pattern'=>'#^(DoCoMo)/([0-9\.]+)#',	'profile'=>'mobile'),
 
 	// Vodafone's embedded browser
-	// Sample: "J-PHONE/2.0/J-T03"	// 2.0¤Ï"¥Ö¥é¥¦¥¶¤Î"¥Ğ¡¼¥¸¥ç¥ó
+	// Sample: "J-PHONE/2.0/J-T03"	// 2.0ã¯"ãƒ–ãƒ©ã‚¦ã‚¶ã®"ãƒãƒ¼ã‚¸ãƒ§ãƒ³
 	// Sample: "J-PHONE/4.0/J-SH51/SNxxxx SH/0001a Profile/MIDP-1.0 Configuration/CLDC-1.0 Ext-Profile/JSCL-1.1.0"
-	array('pattern'=>'#^(J-PHONE)/([0-9\.]+)#',	'profile'=>'keitai'),
+	array('pattern'=>'#^(J-PHONE)/([0-9\.]+)#',	'profile'=>'mobile'),
 
 	// Openwave(R) Mobile Browser (EZweb, WAP phone, etc)
 	// Sample: "OPWV-SDK/62K UP.Browser/6.2.0.5.136 (GUI) MMP/2.0"
-	array('pattern'=>'#\b(UP\.Browser)/([0-9\.]+)#',	'profile'=>'keitai'),
+	array('pattern'=>'#\b(UP\.Browser)/([0-9\.]+)#',	'profile'=>'mobile'),
 
 	// Opera, dressing up as other embedded browsers
-	// Sample: "Mozilla/3.0(DDIPOCKET;KYOCERA/AH-K3001V/1.4.1.67.000000/0.1/C100) Opera 7.0" (Like CNF at 'keitai'-mode)
-	array('pattern'=>'#\bDDIPOCKET\b.+\b(Opera) ([0-9\.]+)\b#',	'profile'=>'keitai'),
+	// Sample: "Mozilla/3.0(DDIPOCKET;KYOCERA/AH-K3001V/1.4.1.67.000000/0.1/C100) Opera 7.0" (Like CNF at 'mobile'-mode)
+	array('pattern'=>'#\b(?:DDIPOCKET|WILLCOM)\b.+\b(Opera) ([0-9\.]+)\b#', 'profile'=>'keitai'),
 
 	// Planetweb http://www.planetweb.com/
 	// Sample: "Mozilla/3.0 (Planetweb/v1.07 Build 141; SPS JP)" ("EGBROWSER", Web browser for PlayStation 2)
-	array('pattern'=>'#\b(Planetweb)/v([0-9\.]+)#', 'profile'=>'keitai'),
+	array('pattern'=>'#\b(Planetweb)/v([0-9\.]+)#', 'profile'=>'mobile'),
 
 	// DreamPassport, Web browser for SEGA DreamCast
 	// Sample: "Mozilla/3.0 (DreamPassport/3.0)"
-	array('pattern'=>'#\b(DreamPassport)/([0-9\.]+)#',	'profile'=>'keitai'),
+	array('pattern'=>'#\b(DreamPassport)/([0-9\.]+)#',	'profile'=>'mobile'),
 
 	// Palm "Web Pro" http://www.palmone.com/us/support/accessories/webpro/
 	// Sample: "Mozilla/4.76 [en] (PalmOS; U; WebPro)"
-	array('pattern'=>'#\b(WebPro)\b#',	'profile'=>'keitai'),
+	array('pattern'=>'#\b(WebPro)\b#',	'profile'=>'mobile'),
 
 	// ilinx "Palmscape" / "Xiino" http://www.ilinx.co.jp/
 	// Sample: "Xiino/2.1SJ [ja] (v. 4.1; 153x130; c16/d)"
-	array('pattern'=>'#^(Palmscape)/([0-9\.]+)#',	'profile'=>'keitai'),
-	array('pattern'=>'#^(Xiino)/([0-9\.]+)#',	'profile'=>'keitai'),
+	array('pattern'=>'#^(Palmscape)/([0-9\.]+)#',	'profile'=>'mobile'),
+	array('pattern'=>'#^(Xiino)/([0-9\.]+)#',	'profile'=>'mobile'),
 
 	// SHARP PDA Browser (SHARP Zaurus)
 	// Sample: "sharp pda browser/6.1[ja](MI-E1/1.0) "
-	array('pattern'=>'#^(sharp [a-z]+ browser)/([0-9\.]+)#',	'profile'=>'keitai'),
+	array('pattern'=>'#^(sharp [a-z]+ browser)/([0-9\.]+)#',	'profile'=>'mobile'),
 
 	// WebTV
-	array('pattern'=>'#^(WebTV)/([0-9\.]+)#',	'profile'=>'keitai'),
+	array('pattern'=>'#^(WebTV)/([0-9\.]+)#',	'profile'=>'mobile'),
 
     // Desktop-PC browsers
 
@@ -528,7 +635,7 @@ $agents = array(
 	// Sample: "Mozilla/5.0 (Windows; U; Windows NT 5.0; ja-JP; rv:1.7) Gecko/20040803 Firefox/0.9.3"
 	array('pattern'=>'#\b(Firefox)/([0-9\.]+)\b#',	'profile'=>'default'),
 
-    	// Loose default: Including something Mozilla
+	// Loose default: Including something Mozilla
 	array('pattern'=>'#^([a-zA-z0-9 ]+)/([0-9\.]+)\b#',	'profile'=>'default'),
 
 	array('pattern'=>'#^#',	'profile'=>'default'),	// Sentinel

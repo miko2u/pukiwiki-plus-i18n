@@ -1,0 +1,61 @@
+#!/bin/sh
+
+# PukiWiki Plus! アーカイブのディレクトリ名を指定
+# ** 変更が必要 **
+ARC_DIR=1.4.5-u1-utf8
+
+# Apache の稼動設定
+WEB_OWNER=apache
+WEB_GROUP=apache
+
+# 共通利用分
+WIKI_COMMON=wiki-common
+# Sample PukiWiki Plus! Directory
+# 公開するファイル
+WIKI_CONTENTS=contents
+# wiki-data の下に contents($WIKI_CONTENTS) が作成される上位ディレクトリ
+WIKI_DATA_DIR=wiki-data
+
+# #####################
+# #     変更不要      #
+# #####################
+WIKI_DATA=$WIKI_DATA_DIR/$WIKI_CONTENTS
+# wiki-data (残りの全てのファイルは、ここに)
+rm -R $WIKI_DATA_DIR > /dev/null 2>&1
+mkdir -p $WIKI_DATA
+cp -a $ARC_DIR/*                 $WIKI_DATA
+chown -R $WEB_OWNER.$WEB_GROUP   $WIKI_DATA_DIR
+
+# contents
+rm -R $WIKI_CONTENTS > /dev/null 2>&1
+mkdir $WIKI_CONTENTS
+#
+mv $WIKI_DATA/index.php          $WIKI_CONTENTS
+# mv $WIKI_DATA/pukiwiki.php       $WIKI_CONTENTS
+mv $WIKI_DATA/image              $WIKI_CONTENTS
+mv $WIKI_DATA/skin               $WIKI_CONTENTS
+mv $WIKI_DATA/doc                $WIKI_CONTENTS
+mv $WIKI_DATA/COPYING.txt        $WIKI_CONTENTS
+mv $WIKI_DATA/README.txt         $WIKI_CONTENTS
+chown -R $WEB_OWNER.$WEB_GROUP   $WIKI_CONTENTS
+
+# wiki-common
+rm -R $WIKI_COMMON > /dev/null 2>&1
+mkdir -p $WIKI_COMMON/init
+#
+#mv $WIKI_DATA/init/default.ini.* $WIKI_COMMON/init
+#mv $WIKI_DATA/init/mobile.ini.*  $WIKI_COMMON/init
+#mv $WIKI_DATA/init/keitai.ini.*  $WIKI_COMMON/init
+#mv $WIKI_DATA/init/rules.ini.*   $WIKI_COMMON/init
+mv $WIKI_DATA/default.ini.*      $WIKI_COMMON
+mv $WIKI_DATA/mobile.ini.*       $WIKI_COMMON
+mv $WIKI_DATA/keitai.ini.*       $WIKI_COMMON
+mv $WIKI_DATA/rules.ini.*        $WIKI_COMMON
+#
+mv $WIKI_DATA/lib                $WIKI_COMMON
+mv $WIKI_DATA/locale             $WIKI_COMMON
+mv $WIKI_DATA/plugin             $WIKI_COMMON
+mv $WIKI_DATA/tools              $WIKI_COMMON
+chown -R $WEB_OWNER.$WEB_GROUP   $WIKI_COMMON
+
+# End of Script

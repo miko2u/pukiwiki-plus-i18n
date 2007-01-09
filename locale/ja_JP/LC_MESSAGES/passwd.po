@@ -1,0 +1,120 @@
+# PukiWiki Plus! - Yet Another WikiWikiWeb Clone
+# Copyright (C) 2006 PukiWiki Plus! Developer Team
+# License is GPL2
+# Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>, 2006.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PukiWiki Plus! 1.4.7-u2-i18n\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2006-12-05 01:39+0900\n"
+"PO-Revision-Date: 2006-07-30 16:13+0900\n"
+"Last-Translator: Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>\n"
+"Language-Team: Japanese <ja@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../plugin/passwd.inc.php:22
+msgid "UserName"
+msgstr "ユーザ名"
+
+#: ../../plugin/passwd.inc.php:23
+msgid "Passwd"
+msgstr "パスワード"
+
+#: ../../plugin/passwd.inc.php:24
+msgid "Calculate"
+msgstr "Calculate"
+
+#: ../../plugin/passwd.inc.php:25
+msgid "Auth Type"
+msgstr "認証タイプ"
+
+#: ../../plugin/passwd.inc.php:26
+msgid "CALC"
+msgstr "CALC"
+
+#: ../../plugin/passwd.inc.php:27
+msgid "Update"
+msgstr "更新"
+
+#: ../../plugin/passwd.inc.php:28
+msgid "Result"
+msgstr "結果"
+
+#: ../../plugin/passwd.inc.php:29
+msgid "Encryption key"
+msgstr "暗号鍵"
+
+#: ../../plugin/passwd.inc.php:30
+msgid "Please input Administrator password."
+msgstr "管理者パスワードを入力して下さい。"
+
+#: ../../plugin/passwd.inc.php:31
+msgid "Please input the password being used now."
+msgstr "現在使用中のパスワードを入力して下さい。"
+
+#: ../../plugin/passwd.inc.php:32
+msgid "Please input a new password."
+msgstr "新しいパスワードを入力して下さい。"
+
+#: ../../plugin/passwd.inc.php:33
+msgid "Please input a suitable character string."
+msgstr "何か適当な文字列を入力して下さい。"
+
+#: ../../plugin/passwd.inc.php:34
+msgid "The writing function is limited."
+msgstr "書き込み機能は、制限されています。"
+
+#: ../../plugin/passwd.inc.php:35
+msgid ""
+"The authority more than Webmaster for World Wide Web Site is necessary to "
+"update it."
+msgstr "更新するためには、サイト管理者以上の権限が必要です。"
+
+#: ../../plugin/passwd.inc.php:36
+msgid "The encryption key is not corresponding."
+msgstr "暗号鍵が一致しません。"
+
+#: ../../plugin/passwd.inc.php:37
+msgid "Because the password was the same, it did not update it."
+msgstr "パスワードが同一なため、更新しませんでした。"
+
+#: ../../plugin/passwd.inc.php:38
+msgid "The Authentication management file was updated."
+msgstr "認証管理ファイルを更新しました。"
+
+#: ../../plugin/passwd.inc.php:39
+msgid "<b>You must be login again.</b> Otherwise, the role is initialized."
+msgstr ""
+"<b>ログインしなおさなければなりません。</b>さもないと、役割が初期化されてしま"
+"います。"
+
+#: ../../plugin/passwd.inc.php:40
+msgid "One was added."
+msgstr "１件追加しました。"
+
+#: ../../plugin/passwd.inc.php:41
+msgid "ERROR."
+msgstr "エラー。"
+
+#: ../../plugin/passwd.inc.php:43
+msgid "Role"
+msgstr "役割"
+
+#: ../../plugin/passwd.inc.php:44
+msgid "Guest"
+msgstr "ゲスト"
+
+#: ../../plugin/passwd.inc.php:45
+msgid "Webmaster"
+msgstr "サイト管理者"
+
+#: ../../plugin/passwd.inc.php:46
+msgid "Contents manager"
+msgstr "コンテンツ管理者"
+
+#: ../../plugin/passwd.inc.php:47
+msgid "Authorized"
+msgstr "認証者"

@@ -1,0 +1,78 @@
+# PukiWiki Plus! - Yet Another WikiWikiWeb Clone
+# Copyright (C) 2005 PukiWiki Plus! Developer Team
+# License is GPL2
+# Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>, 2005.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PukiWiki Plus! 1.4.5-u2\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2006-01-17 02:16+0900\n"
+"PO-Revision-Date: 2005-04-02 14:56+0900\n"
+"Last-Translator: Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>\n"
+"Language-Team: Japanese <ja@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../plugin/links.inc.php:12
+msgid "Cash update"
+msgstr "キャッシュ更新"
+
+#: ../../plugin/links.inc.php:13
+msgid "Administrator password"
+msgstr "管理者パスワード"
+
+#: ../../plugin/links.inc.php:14
+msgid "Exec"
+msgstr "実行"
+
+#: ../../plugin/links.inc.php:15
+msgid "The update of cash was completed."
+msgstr "キャッシュの更新が完了しました。"
+
+#: ../../plugin/links.inc.php:17
+msgid "* Content of processing\n"
+msgstr "* 処理内容\n"
+
+#: ../../plugin/links.inc.php:18
+msgid ":Cash update|\n"
+msgstr ":キャッシュを更新|\n"
+
+#: ../../plugin/links.inc.php:19
+msgid ""
+"All pages are scanned, whether on which page certain pages have been linked "
+"is investigated, and it records in the cache.\n"
+"\n"
+msgstr ""
+"全てのページをスキャンし、あるページがどのページからリンクされているかを調査"
+"して、キャッシュに記録します。\n"
+"\n"
+
+#: ../../plugin/links.inc.php:20
+msgid "* CAUTION\n"
+msgstr "* 注意\n"
+
+#: ../../plugin/links.inc.php:21
+msgid "It is likely to drive it for a few minutes in execution."
+msgstr "実行には数分かかる場合もあります。"
+
+#: ../../plugin/links.inc.php:22
+msgid ""
+"Please wait for a while after pushing the execution button.\n"
+"\n"
+msgstr ""
+"実行ボタンを押したあと、しばらくお待ちください。\n"
+"\n"
+
+#: ../../plugin/links.inc.php:24
+msgid "* EXEC\n"
+msgstr "* 実行\n"
+
+#: ../../plugin/links.inc.php:25
+msgid "Please input the Administrator password, and click the [Exec] button.\n"
+msgstr "管理者パスワードを入力して、[実行]ボタンをクリックしてください。\n"
+
+#: ../../plugin/links.inc.php:37
+msgid "PKWK_READONLY prohibits this"
+msgstr "読み込み専用: この操作は禁止されています"

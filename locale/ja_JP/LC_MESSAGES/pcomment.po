@@ -1,0 +1,74 @@
+# PukiWiki Plus! - Yet Another WikiWikiWeb Clone
+# Copyright (C) 2005 PukiWiki Plus! Developer Team
+# License is GPL2
+# Author: Miko.Hoshina(E.Satoh) <miko@cafeterrace.com>, 2005.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PukiWiki Plus! 1.4.5-u2\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2005-03-10 10:15+0900\n"
+"PO-Revision-Date: 2005-03-10 10:15+0900\n"
+"Last-Translator: Miko.Hoshina(E.Satoh) <miko@cafeterrace.com>\n"
+"Language-Team: Japanese \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8-bit\n"
+
+#: ../plugin/pcomment.inc.php:82
+msgid "Name: "
+msgstr "お名前: "
+
+#: ../plugin/pcomment.inc.php:83
+msgid "Post Comment"
+msgstr "コメントの挿入"
+
+#: ../plugin/pcomment.inc.php:84
+msgid "Comment: "
+msgstr "コメント: "
+
+#: ../plugin/pcomment.inc.php:85
+#, php-format
+msgid "Show recent %d comments."
+msgstr "最新の%d件を表示しています。"
+
+#: ../plugin/pcomment.inc.php:86
+msgid "Go to the comment page."
+msgstr "コメントページを参照"
+
+#: ../plugin/pcomment.inc.php:87
+msgid "No comment."
+msgstr "コメントはありません。"
+
+#: ../plugin/pcomment.inc.php:88
+#, php-format
+msgid "[[%s]] : not a valid page name."
+msgstr "ページ名 [[%s]] は使用できません。 正しいページ名を指定してください。"
+
+#: ../plugin/pcomment.inc.php:206
+msgid "invalid page name."
+msgstr "ページ名が不正です。"
+
+#: ../plugin/pcomment.inc.php:206
+msgid "cannot add comment."
+msgstr "コメントを追加できません。"
+
+#: ../plugin/pcomment.inc.php:210
+msgid " $1 was updated"
+msgstr "$1 を更新しました"
+
+#: ../plugin/pcomment.inc.php:240
+msgid "On updating  $1, there was a collision."
+msgstr "$1 で【更新の衝突】が起きました"
+
+#: ../plugin/pcomment.inc.php:241
+msgid "It seems that someone has already updated this page while you were editing it.<br />"
+msgstr "あなたがこのページを編集している間に、他の人が同じページを更新してしまったようです。<br />"
+
+#: ../plugin/pcomment.inc.php:242
+msgid "The comment was added to the page, but there may be a problem.<br />"
+msgstr "コメントを追加しましたが、違う位置に挿入されているかもしれません。<br />"
+
+#: ../plugin/pcomment.inc.php:355
+msgid "Due to the blocking, no comments could be read from  $1 at all."
+msgstr "閲覧制限がかかっているため、$1からはコメントを読みこむことができません。"

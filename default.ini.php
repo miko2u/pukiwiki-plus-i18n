@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: default.ini.php,v 1.25.5 2006/06/27 14:04:40 miko Exp $
+// $Id: default.ini.php,v 1.25.10 2006/06/22 19:13:00 miko Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2003-2005 PukiWiki Developers Team
@@ -13,114 +13,128 @@
 // Skin file
 if (defined('TDIARY_THEME')) { 
 //	define('SKIN_FILE', DATA_HOME . SKIN_DIR . 'tdiary.skin.php');
-	define('SKIN_FILE_DEFAULT', DATA_HOME . SKIN_DIR . 'tdiary.skin.php'); 
+	define('SKIN_FILE_DEFAULT', SKIN_DIR . 'tdiary.skin.php'); 
 } else {
-//	define('SKIN_FILE', DATA_HOME . SKIN_DIR . 'pukiwiki.skin.php');
-	define('SKIN_FILE_DEFAULT', DATA_HOME . SKIN_DIR . 'default.skin.php');
+	// define('SKIN_FILE', DATA_HOME . SKIN_DIR . 'pukiwiki.skin.php');
+	define('SKIN_FILE_DEFAULT', SKIN_DIR . 'default.skin.php');
+	// define('SKIN_FILE_DEFAULT', SKIN_DIR . 'bluebox.skin.php');
+	// define('SKIN_FILE_DEFAULT', SKIN_DIR . 'cloudwalk.skin.php');
+	// define('SKIN_FILE_DEFAULT', SKIN_DIR . 'irid.skin.php');
+	// define('SKIN_FILE_DEFAULT', SKIN_DIR . 'iridorange.skin.php');
+	// define('SKIN_FILE_DEFAULT', SKIN_DIR . 'orangebox.skin.php');
 }
 $skin_file = SKIN_FILE_DEFAULT;
 
 /////////////////////////////////////////////////
-// �����Ȥ���ڡ������ɤ߹��ߤ��ǽ�ˤ���(1:���� 0:���ʤ�)
+// メニューバー/サイドバーを常に表示する(1:する 0:しない)
+$always_menu_displayed = 0;
+
+/////////////////////////////////////////////////
+// 雛形とするページの読み込みを可能にする(1:する 0:しない)
 $load_template_func = 0;
 
 /////////////////////////////////////////////////
-// ���ڡ����Υ�󥯤�ưŪ����Ƭ�ˤĤ���(1:�Ĥ��� 0:�Ĥ��ʤ�)
+// 元ページのリンクを自動的に先頭につける(1:つける 0:つけない)
 $load_refer_related = 0;
 
 /////////////////////////////////////////////////
-// ����ʸ�����ʬ������(1:���� 0:���ʤ�)
+// 検索文字列を色分けする(1:する 0:しない)
 $search_word_color = 1;
 
 /////////////////////////////////////////////////
-// �����ڡ�����Ƭʸ������ǥå�����Ĥ���(1:�Ĥ��� 0:�Ĥ��ʤ�)
+// 一覧ページに頭文字インデックスをつける(1:つける 0:つけない)
 $list_index = 1;
 
 /////////////////////////////////////////////////
-// �ü쥷��ܥ�
-$_symbol_paraedit = '<img src="./image/plus/paraedit.png" width="9" height="9" alt="Edit" title="Edit" />';
-$_symbol_extanchor = '<img src="./image/plus/ext.png" alt="" title="" class="ext" onclick="return open_uri(\'$1\', \'$2\');" />';
-$_symbol_innanchor = '<img src="./image/plus/inn.png" alt="" title="" class="inn" onclick="return open_uri(\'$1\', \'$2\');" />';
+// 特殊シンボル
+$_symbol_paraedit = '<img src="'. IMAGE_URI.'plus/paraedit.png" width="9" height="9" alt="Edit" title="Edit" />';
+$_symbol_extanchor = '<img src="'.IMAGE_URI.'plus/ext.png" alt="" title="" class="ext" onclick="return open_uri(\'$1\', \'$2\');" />';
+$_symbol_innanchor = '<img src="'.IMAGE_URI.'plus/inn.png" alt="" title="" class="inn" onclick="return open_uri(\'$1\', \'$2\');" />';
 
 /////////////////////////////////////////////////
-// �ꥹ�ȹ�¤�κ��ޡ�����
-$_ul_left_margin = 0;   // �ꥹ�ȤȲ��̺�ü�Ȥδֳ�(px)
-$_ul_margin = 16;       // �ꥹ�Ȥγ��ش֤δֳ�(px)
-$_ol_left_margin = 0;   // �ꥹ�ȤȲ��̺�ü�Ȥδֳ�(px)
-$_ol_margin = 16;       // �ꥹ�Ȥγ��ش֤δֳ�(px)
-$_dl_left_margin = 0;   // �ꥹ�ȤȲ��̺�ü�Ȥδֳ�(px)
-$_dl_margin = 16;        // �ꥹ�Ȥγ��ش֤δֳ�(px)
+// 先頭・最後へジャンプ
+$_msg_content_back_to_top = '';
+//$_msg_content_back_to_top = '<div class="jumpmenu"><a href="#header">▲</a>&nbsp;<a href="#footer">▼</a></div>';
+
+/////////////////////////////////////////////////
+// リスト構造の左マージン
+$_ul_left_margin = 0;   // リストと画面左端との間隔(px)
+$_ul_margin = 16;       // リストの階層間の間隔(px)
+$_ol_left_margin = 0;   // リストと画面左端との間隔(px)
+$_ol_margin = 16;       // リストの階層間の間隔(px)
+$_dl_left_margin = 0;   // リストと画面左端との間隔(px)
+$_dl_margin = 16;        // リストの階層間の間隔(px)
 $_list_pad_str = ' class="list%d" style="padding-left:%dpx;margin-left:%dpx"';
 
 /////////////////////////////////////////////////
-// �ƥ����ȥ��ꥢ�Υ�����
+// テキストエリアのカラム数
 $cols = 80;
 
 /////////////////////////////////////////////////
-// �ƥ����ȥ��ꥢ�ιԿ�
+// テキストエリアの行数
 $rows = 20;
 
 /////////////////////////////////////////////////
-// �硦�����Ф������ܼ�������󥯤�ʸ��
+// 大・小見出しから目次へ戻るリンクの文字
 $top = $_msg_content_back_to_top;
 
 /////////////////////////////////////////////////
-// ź�եե�����ΰ�������ɽ������ (��ô��������ޤ�)
+// 添付ファイルの一覧を常に表示する (負担がかかります)
 $attach_link = 1;
 
 /////////////////////////////////////////////////
-// ��Ϣ����ڡ����Υ�󥯰�������ɽ������(��ô��������ޤ�)
+// 関連するページのリンク一覧を常に表示する(負担がかかります)
 $related_link = 1;
 
-// ��󥯰����ζ��ڤ�ʸ��
+// リンク一覧の区切り文字
 $related_str = "\n ";
 
-// (#related�ץ饰����ɽ������) ��󥯰����ζ��ڤ�ʸ��
+// (#relatedプラグインが表示する) リンク一覧の区切り文字
 $rule_related_str = "</li>\n<li>";
 
 /////////////////////////////////////////////////
-// ��ʿ���Υ���
+// 水平線のタグ
 $hr = '<hr class="full_hr" />';
 
 /////////////////////////////////////////////////
-// ������ǽ��Ϣ
+// 脚注機能関連
 
-// �����Υ��󥫡�����������ʸ�κ���Ĺ
+// 脚注のアンカーに埋め込む本文の最大長
 define('PKWK_FOOTNOTE_TITLE_MAX', 16); // Characters
 
-// �����Υ��󥫡������Хѥ���ɽ������ (0 = ���Хѥ�)
-//  * ���Хѥ��ξ�硢�����ΥС�������Opera������ˤʤ뤳�Ȥ�����ޤ�
-//  * ���Хѥ��ξ�硢calendar_viewer�ʤɤ�����ˤʤ뤳�Ȥ�����ޤ�
-// (�ܤ�����: BugTrack/698)
+// 脚注のアンカーを相対パスで表示する (0 = 絶対パス)
+//  * 相対パスの場合、以前のバージョンのOperaで問題になることがあります
+//  * 絶対パスの場合、calendar_viewerなどで問題になることがあります
+// (詳しくは: BugTrack/698)
 define('PKWK_ALLOW_RELATIVE_FOOTNOTE_ANCHOR', 1);
 
-// ʸ���ε�����ľ����ɽ�����륿��
+// 文末の脚注の直前に表示するタグ
 $note_hr = '<hr class="note_hr" />';
 
 /////////////////////////////////////////////////
-// WikiName,BracketName�˷в���֤��ղä���
+// WikiName,BracketNameに経過時間を付加する
 $show_passage = 1;
 
 /////////////////////////////////////////////////
-// ���ɽ���򥳥�ѥ��Ȥˤ���
-// * �ڡ������Ф���ϥ��ѡ���󥯤��饿���ȥ�򳰤�
-// * Dangling link��CSS�򳰤�
+// リンク表示をコンパクトにする
+// * ページに対するハイパーリンクからタイトルを外す
+// * Dangling linkのCSSを外す
 $link_compact = 0;
 
 /////////////////////////////////////////////////
-// �ե������ޡ�������Ѥ���
+// フェイスマークを使用する
 $usefacemark = 1;
 
 /////////////////////////////////////////////////
-// �桼������롼��
+// ユーザ定義ルール
 //
-//  ����ɽ���ǵ��Ҥ��Ƥ���������?(){}-*./+\$^|�ʤ�
-//  �� \? �Τ褦�˥������Ȥ��Ƥ���������
-//  �����ɬ�� / ��ޤ�Ƥ�����������Ƭ����� ^ ��Ƭ�ˡ�
-//  ��������� $ �����ˡ�
+//  正規表現で記述してください。?(){}-*./+\$^|など
+//  は \? のようにクォートしてください。
+//  前後に必ず / を含めてください。行頭指定は ^ を頭に。
+//  行末指定は $ を後ろに。
 //
 /////////////////////////////////////////////////
-// �桼������롼��(����С��Ȼ����ִ�)
+// ユーザ定義ルール(コンバート時に置換)
 $line_rules = array(
 	'COLOR\(([^\(\)]*)\){([^}]*)}'	=> '<span style="color:$1">$2</span>',
 	'SIZE\(([^\(\)]*)\){([^}]*)}'	=> '<span style="font-size:$1px">$2</span>',
@@ -135,11 +149,11 @@ $line_rules = array(
 );
 
 /////////////////////////////////////////////////
-// �ե������ޡ�������롼��(����С��Ȼ����ִ�)
+// フェイスマーク定義ルール(コンバート時に置換)
 
-// $usefacemark = 1�ʤ�ե������ޡ������ִ�����ޤ�
-// ʸ�����XD�ʤɤ����ä�����facemark���ִ�����Ƥ��ޤ��Τ�
-// ɬ�פΤʤ����� $usefacemark��0�ˤ��Ƥ���������
+// $usefacemark = 1ならフェイスマークが置換されます
+// 文章内にXDなどが入った場合にfacemarkに置換されてしまうので
+// 必要のない方は $usefacemarkを0にしてください。
 
 $facemark_rules = array(
 	// Face marks
@@ -166,20 +180,20 @@ $facemark_rules = array(
 	'&amp;(star);'	=> ' <img alt="[$1]" src="' . IMAGE_URI . 'face/star.gif" />',
 
 	// Face marks, Japanese style
-	'(\(\^\^\))'	=> ' <img alt="$1" src="' . IMAGE_URI . 'face/smile.png" />',
-	'(\(\^-\^)'	=> ' <img alt="$1" src="' . IMAGE_URI . 'face/bigsmile.png" />',
-	'(\(\^Q\^)'	=> ' <img alt="$1" src="' . IMAGE_URI . 'face/huh.png" />',
-	'(\(\.\.;)'	=> ' <img alt="$1" src="' . IMAGE_URI . 'face/oh.png" />',
-	'(\(\^_-)'	=> ' <img alt="$1" src="' . IMAGE_URI . 'face/wink.png" />',
-	'(\(\^_-\))'	=> ' <img alt="$1" src="' . IMAGE_URI . 'face/wink.png" />',
-	'(\(--;)'	=> ' <img alt="$1" src="' . IMAGE_URI . 'face/sad.png" />',
-	'(\(\^\^;\))'	=> ' <img alt="$1" src="' . IMAGE_URI . 'face/worried.png" />',
-	'(\(\^\^;)'	=> ' <img alt="$1" src="' . IMAGE_URI . 'face/worried.png" />',
-	'(\(\T-T)'	=> ' <img alt="$1" src="' . IMAGE_URI . 'face/tear.png" />',
-	'(\(\T-T\))'	=> ' <img alt="$1" src="' . IMAGE_URI . 'face/tear.png" />',
-	'(\(\;_;)'	=> ' <img alt="$1" src="' . IMAGE_URI . 'face/tear.png" />',
-	'(\(\;_;\))'	=> ' <img alt="$1" src="' . IMAGE_URI . 'face/tear.png" />',
-	'(\(__;)'	=> ' <img alt="$1" src="' . IMAGE_URI . 'face/umm.png" />',
+	'\((\^\^\))'	=> ' <img alt="&#40;$1" src="' . IMAGE_URI . 'face/smile.png" />',
+	'\((\^-\^)'	=> ' <img alt="&#40;$1" src="' . IMAGE_URI . 'face/bigsmile.png" />',
+	'\((\^Q\^)'	=> ' <img alt="&#40;$1" src="' . IMAGE_URI . 'face/huh.png" />',
+	'\((\.\.;)'	=> ' <img alt="&#40;$1" src="' . IMAGE_URI . 'face/oh.png" />',
+	'\((\^_-)'	=> ' <img alt="&#40;$1" src="' . IMAGE_URI . 'face/wink.png" />',
+	'\((\^_-\))'	=> ' <img alt="&#40;$1" src="' . IMAGE_URI . 'face/wink.png" />',
+	'\((--;)'	=> ' <img alt="&#40;$1" src="' . IMAGE_URI . 'face/sad.png" />',
+	'\((\^\^;)'	=> ' <img alt="&#40;$1" src="' . IMAGE_URI . 'face/worried.png" />',
+	'\((\^\^;\))'	=> ' <img alt="&#40;$1" src="' . IMAGE_URI . 'face/worried.png" />', // Plus! not patched BugTrack2/144
+	'\((\T-T)'	=> ' <img alt="&#40;$1" src="' . IMAGE_URI . 'face/tear.png" />',
+	'\((\T-T\))'	=> ' <img alt="&#40;$1" src="' . IMAGE_URI . 'face/tear.png" />',
+	'\((\;_;)'	=> ' <img alt="&#40;$1" src="' . IMAGE_URI . 'face/tear.png" />',
+	'\((\;_;\))'	=> ' <img alt="&#40;$1" src="' . IMAGE_URI . 'face/tear.png" />',
+	'\((__;)'	=> ' <img alt="&#40;$1" src="' . IMAGE_URI . 'face/umm.png" />',
 
 	// Push buttons, 0-9 and sharp (Compatibility with cell phones)
 	'&amp;(pb1);'	=> '[1]',
@@ -205,4 +219,9 @@ $facemark_rules = array(
 	'&amp;(faxto);'	=> '[faxto]',
 );
 
+/////////////////////////////////////////////////
+// クッキーを使用できないアドレス
+// (通常、デスクトップでは存在しない)
+$use_trans_sid_address = array(
+);
 ?>

@@ -1,0 +1,81 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2006-01-23 02:04+0900\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../plugin/replace.inc.php:19
+msgid ""
+"Please input the retrieval character string, the substitution character "
+"string, and the password for the Administrator."
+msgstr ""
+
+#: ../../plugin/replace.inc.php:20
+msgid ""
+"Please input the retrieval character string, the substitution character "
+"string."
+msgstr ""
+
+#: ../../plugin/replace.inc.php:21
+msgid "Retrieval character string:"
+msgstr ""
+
+#: ../../plugin/replace.inc.php:22
+msgid "Substitution character string:"
+msgstr ""
+
+#: ../../plugin/replace.inc.php:23
+msgid "Exec"
+msgstr ""
+
+#: ../../plugin/replace.inc.php:24
+msgid "SECURITY ERROR:"
+msgstr ""
+
+#: ../../plugin/replace.inc.php:25
+msgid "It remains as the Administrator password distributes it."
+msgstr ""
+
+#: ../../plugin/replace.inc.php:26
+msgid "Please change the password."
+msgstr ""
+
+#: ../../plugin/replace.inc.php:27
+msgid "The password is wrong."
+msgstr ""
+
+#: ../../plugin/replace.inc.php:28
+msgid "The retrieval character string to substitute it is empty."
+msgstr ""
+
+#: ../../plugin/replace.inc.php:29
+msgid "All page character string substitution"
+msgstr ""
+
+#: ../../plugin/replace.inc.php:30
+msgid "There is no substituted character string."
+msgstr ""
+
+#: ../../plugin/replace.inc.php:31
+msgid "The following pages were substituted."
+msgstr ""
+
+#: ../../plugin/replace.inc.php:32
+msgid "Replaced."
+msgstr ""
+
+#: ../../plugin/replace.inc.php:33
+msgid "No search data."
+msgstr ""

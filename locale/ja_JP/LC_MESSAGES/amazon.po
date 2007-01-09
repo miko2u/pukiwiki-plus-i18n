@@ -1,0 +1,122 @@
+# PukiWiki Plus! - Yet Another WikiWikiWeb Clone
+# Copyright (C) 2005 PukiWiki Plus! Developer Team
+# License is GPL2
+# Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>, 2005.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PukiWiki Plus! 1.4.5-u2\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2005-04-02 23:30+0900\n"
+"PO-Revision-Date: 2005-04-02 23:23+0900\n"
+"Last-Translator: Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>\n"
+"Language-Team: Japanese <ja@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../plugin/amazon.inc.php:47
+msgid "Author"
+msgstr "作者"
+
+#: ../../plugin/amazon.inc.php:47 ../../plugin/amazon.inc.php:51
+#: ../../plugin/amazon.inc.php:55
+msgid "THIS EDIT"
+msgstr "ここ編集のこと"
+
+#: ../../plugin/amazon.inc.php:48
+msgid "Critic"
+msgstr "評者"
+
+#: ../../plugin/amazon.inc.php:48
+msgid "MY_NAME"
+msgstr "お名前"
+
+#: ../../plugin/amazon.inc.php:49
+msgid "Date"
+msgstr "日付"
+
+#: ../../plugin/amazon.inc.php:50
+msgid "RECOMMENDATION"
+msgstr "お薦め対象"
+
+#: ../../plugin/amazon.inc.php:54
+msgid "Impression"
+msgstr "感想"
+
+#: ../../plugin/amazon.inc.php:57
+msgid ""
+"// First of all, please delete the full text when you stop this review, and "
+"push the [update] button on the page.\n"
+msgstr ""
+"// まず、このレビューを止める場合、全文を削除し、ページの[更新ボタン]を押して"
+"ください！\n"
+
+#: ../../plugin/amazon.inc.php:58
+msgid "// (It has already been registered in PukiWiki.)\n"
+msgstr "// (PukiWiki にはもう登録されています)\n"
+
+#: ../../plugin/amazon.inc.php:59
+msgid ""
+"// Please delete the [[THIS EDIT]] part on including parentheses, and "
+"rewrite it if you continue.\n"
+msgstr ""
+"// 続けるなら、上の、[[ここ編集のこと]]部分を括弧を含めて削除し、書き直してく"
+"ださい。\n"
+
+#: ../../plugin/amazon.inc.php:60
+msgid "// Please change the MY_NAME part to my name.\n"
+msgstr ""
+"// お名前、部分はご自分の名前に変更してください。私だと、閑舎、です。\n"
+
+#: ../../plugin/amazon.inc.php:61
+msgid ""
+"// **RECOMMENDATION Above, please do not add a new line. Because it uses it "
+"for the contents making.\n"
+msgstr ""
+"// **お薦め対象、より上は、新しい行を追加しないでください。目次作成に使用する"
+"ので。\n"
+
+#: ../../plugin/amazon.inc.php:62
+msgid "// Please cut all the comment lines that start in // finally.\n"
+msgstr "// //で始まるコメント行は、最終的に全部カットしてください。\n"
+
+#: ../../plugin/amazon.inc.php:63
+msgid "// There is a possibility that contents cannot be normally made.\n"
+msgstr "// 目次が正常に作成できない可能性があります。\n"
+
+#: ../../plugin/amazon.inc.php:69
+msgid "Review edit"
+msgstr "レビュー編集"
+
+#: ../../plugin/amazon.inc.php:70
+msgid "(ISBN(10) or ASIN(12))"
+msgstr "(ISBN 10 桁 or ASIN 12 桁)"
+
+#: ../../plugin/amazon.inc.php:71
+msgid "To the shopping basket"
+msgstr "買物かごへ"
+
+#: ../../plugin/amazon.inc.php:72
+msgid "Price"
+msgstr "価格"
+
+#: ../../plugin/amazon.inc.php:73
+msgid "Fixed price"
+msgstr "定価"
+
+#: ../../plugin/amazon.inc.php:74
+msgid "(Including tax)"
+msgstr "(税込)"
+
+#: ../../plugin/amazon.inc.php:75
+msgid "Book review edit"
+msgstr "ブックレビュー編集"
+
+#: ../../plugin/amazon.inc.php:76
+msgid "Amazon.co.jp associate"
+msgstr "Amazon.co.jp アソシエイト"
+
+#: ../../plugin/amazon.inc.php:77
+msgid "Relation"
+msgstr "関連"

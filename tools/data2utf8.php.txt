@@ -1,0 +1,430 @@
+<?php
+/**
+ * PukiWiki Plus! UTF-8 移行支援スクリプト
+ *
+ * @copyright   Copyright &copy; 2005, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * @version     $Id: data2utf8.php,v 0.2 2005/06/08 23:46:00 upk Exp $
+ * @license     http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @link        http://jo1upk.blogdns.net/saito/
+ *
+ * == 使用方法 ==
+ * 1. バックアップをとる
+ * 2. PukiWiki Plus! I18N のファイルを展開する
+ * 3. 2.で展開したところに、現在、稼動していた(EUC-JPの)データを上書きする
+ * 4. 通常 PukiWiki を設定しているように DATA_HOME の定義
+ * 5. data2utf8.php.TXT を必要ならば data2utf8.php にリネームする
+ * 6. 実行
+ *    php -f data2utf8.php
+ *
+ * == ブラウザから実行する場合 ==
+ * 権限上の問題があるので、 * .htaccess などの定義を適宜変更する必要がある。
+ * 恐らく plugin ディレクトリなどでエラーが出るはず。
+ * 変換処理時のみ、.htaccess を消すなりして実行する。
+ *
+ * == タイムアウトの場合 ==
+ * stage1 までの場合は、何度でも再実行できるようにしています。
+ * 以下の ini_set() の値を変更して反映される環境の場合は、適当に大きな値に
+ * 変更して実行する方法もあります。
+ *
+ * == 最後に ==
+ * 失敗しても、責任は取りかねますので、ご注意下さい。
+ *
+ */
+
+ini_set("max_execution_time", "360");	// デフォルトは、30秒。とりあえず 6分に設定。
+ini_set("memory_limit", "32M");		// デフォルトは、8M。
+
+/* **************************************************************************
+ * *               稼動条件の定義(各自必ず変更して利用下さい)               *
+ * ************************************************************************** */
+define('DATA_HOME', '');
+
+// pukiwiki.ini.php で定義している内容と異なる場合には、各自変更して下さい。
+define('DATA_DIR',      DATA_HOME . 'wiki/'     ); // Latest wiki texts
+define('DIFF_DIR',      DATA_HOME . 'diff/'     ); // Latest diffs
+define('BACKUP_DIR',    DATA_HOME . 'backup/'   ); // Backups
+define('CACHE_DIR',     DATA_HOME . 'cache/'    ); // Some sort of caches
+define('UPLOAD_DIR',    DATA_HOME . 'attach/'   ); // Attached files and logs
+define('COUNTER_DIR',   DATA_HOME . 'counter/'  ); // Counter plugin's counts
+define('TRACKBACK_DIR', DATA_HOME . 'trackback/'); // TrackBack logs
+
+/* **************************************************************************
+ * *                           変換処理の定義                               *
+ * ************************************************************************** */
+
+$do_true  = 1; // 変換処理実行
+$do_false = 0; // 変換処理迂回
+
+// PukiWiki Plus! I18N などを利用する場合には、0 にします。
+$do_opt   = 0; // オプション
+
+// pukiwiki.ini.php と同じ設定でＯＫです。
+$do_backup = 1; // バックアップを実施している場合は 1 です。
+$trackback = 1; // TrackBack で蓄積したファイルを変換するなら1 です。
+$referer   = 1; // Referer で蓄積したファイルを変換するなら1 です。
+
+if (extension_loaded('zlib')) {
+	define('BACKUP_EXT', '.gz');
+} else {
+	define('BACKUP_EXT', '.txt');
+}
+
+// JCODE を利用する場合にのみ定義を有効にして下さい。
+// ちなみに、ちゃんとしたテストはしていません。
+// define('JCODE_DIR', '');
+// define('JCODE_DIR', '/mnt/home/katsumi/pw/Plus!/jcode_1.35a/');
+
+if (!defined('LOG_DIR')) { define('LOG_DIR', DATA_HOME . 'log/'); }
+
+// 存在していないディレクトリ(ロギングなど)を有効にしても、エラーを出さず終了
+// します。あまり気にしないで結構です。
+
+// 各種ディレクトリの定義リスト
+$config_dir = array(
+	// 0:key 1:処理判定 2:ディレクトリ 3:拡張子
+	// 4:ファイル名変更   - 0:しない 1:する
+	// 5:ファイル内容変更 - 0:しない 1:する
+	array('diff',		$do_true,	DIFF_DIR,			'.txt',		1,1),
+	array('wiki',		$do_true,	DATA_DIR,			'.txt',		1,1),
+	array('counter',	$do_true,	COUNTER_DIR,			'.count',	1,1),
+	array('attach',		$do_true,	UPLOAD_DIR,			'.log',		1,1),
+	array('attach',		$do_true,	UPLOAD_DIR,			'',		1,0),
+	array('attach',		$do_opt,	UPLOAD_DIR . 'thumbnail/',	'',		1,0), // img2
+	array('cache',		$do_true,	CACHE_DIR,			'.ref',		1,1),
+	array('cache',		$do_true,	CACHE_DIR,			'.rel',		1,1),
+	array('cache',		$do_true,	CACHE_DIR,			'.tmp',		1,1),
+	array('cache',		$do_true,	CACHE_DIR,			'.dat',		0,1),
+	array('cache',		$do_true,	CACHE_DIR,			'.lite',	0,1), // amazon
+	array('cache',		$do_true,	CACHE_DIR,			'.tit',		0,1), // amazon
+	array('cache',		$do_true,	CACHE_DIR,			'.heavy',	0,1), // amazon
+	// 現在の稼動状況に依存
+	array('backup',		$do_backup,	BACKUP_DIR,			BACKUP_EXT,	1,1),
+	array('trackback',	$trackback,	TRACKBACK_DIR,			'.txt',		1,1),
+	array('referer',	$referer,	TRACKBACK_DIR,			'.ref',		1,0),
+
+	// とりあえず、実行しない
+	// array('cache',	$do_opt,	CACHE_DIR . 'html/',		'.htm',		1,1), // showhtml
+	// array('cache',	$do_opt,	CACHE_DIR . 'html/',		'.lst',		1,1), // showhtml
+	// array('cache',	$do_opt,	CACHE_DIR . 'html/',		'',		1,0), // showhtml
+	// array('log',		$do_opt,	LOG_DIR . 'browse/',		'.txt',		1,1), // logging
+	// array('log',		$do_opt,	LOG_DIR . 'download/',		'.txt',		1,1), // do
+	// array('log',		$do_opt,	LOG_DIR . 'update/',		'.txt',		1,1), // do
+);
+
+/* **************************************************************************
+ * *                           実行の本体                                   *
+ * ************************************************************************** */
+
+/**
+ * 文字コード変換処理
+ * PHPの素を利用するか、JCODEを利用するかを決定する。
+ */
+if (defined('JCODE_DIR')) {
+	require(JCODE_DIR . 'jcode.php');
+	function _euc2utf8($str)  { return JcodeConvert($str, 1, 4); }
+} else {
+	function _euc2utf8($x)  { return mb_convert_encoding($x,'utf-8','EUC-JP'); }
+}
+$sub_dir = 'utf8_file/';
+
+
+echo "<pre>\n";
+if (! stage_0() ) return;
+if (! stage_1() ) return;
+if (! stage_2() ) return;
+echo "</pre>\n";
+
+/* **************************************************************************
+ * *                           処理関数の定義                               *
+ * ************************************************************************** */
+
+/**
+ * 環境設定準備
+ * 所定の各ディレクトリに、処理用サブディレクトリを作成する
+ */
+function stage_0()
+{
+	global $config_dir, $sub_dir;
+	$sw = 0;
+	echo "stage 0: start\n";
+
+	foreach($config_dir as $func) {
+		if (!$func[1]) continue;
+		if (! file_exists($func[2])) continue; // 存在していない場合
+
+		$dir = $func[2] . $sub_dir;
+		if (file_exists($dir)) continue;
+		if (mkdir($dir,0777)) {
+			$sw = 1;
+			echo "stage 0: makedir " . $dir . "\n";
+		} else {
+			echo "stage 0: " . $func[0] . " - Permission denied.\n";
+			return 0;
+		}
+	}
+
+	echo $sw ? "stage 0: complete\n" : "stage 0: Bypass\n";
+	return 1;
+}
+
+
+/**
+ * ファイル名変更
+ * EUC-JP で生成されたファイルを UTF-8 に変換する。
+ * 拡張子が .php に関しては、ファイル名の変更を迂回する。
+ */
+function stage_1()
+{
+	global $config_dir, $sub_dir;
+	$sw = 0;
+
+	echo "stage 1: start\n";
+
+	foreach($config_dir as $func) {
+		// 1:処理判定
+		if (!$func[1]) continue;
+		if (! file_exists($func[2])) continue; // 存在していない場合
+
+		echo "stage 1: " . $func[0] . "(" . $func[3] . ") start\n";
+
+		// 4:ファイル名変更   - 0:しない 1:する
+		if ($func[4]) {
+			$func_name1 = 'get_existpages';
+			$func_name2 = 'pw_mv';
+		} else {
+			$func_name1 = 'get_existfile';
+			$func_name2 = 'mv';
+		}
+
+		// 2:ディレクトリ 3:拡張子
+		$files = $func_name1($func[2], $func[3]);
+
+		foreach($files as $file => $name) {
+			// 5:ファイル内容変更 - 0:しない 1:する
+			if (! $func_name2($func[0], $func[5], $func[2], $func[2] . $sub_dir, $file)) return 0;
+			$sw = 1;
+		}
+	}
+
+	echo $sw ? "stage 1: complete\n" : "stage 1: Bypass\n";
+	return 1;
+}
+
+/**
+ * 終止処理
+ * 元あった場所に戻す
+ */
+function stage_2()
+{
+	global $config_dir, $sub_dir;
+	$sw = 0;
+
+	echo "stage 2: start\n";
+
+	foreach($config_dir as $func) {
+		// 1:処理判定
+		if (!$func[1]) continue;
+		if (! file_exists($func[2])) continue; // 存在していない場合
+
+		echo "stage 2: " . $func[0] . "(" . $func[3] . ") move start\n";
+
+		// 4:ファイル名変更   - 0:しない 1:する
+		$func_name1 = ($func[4]) ? 'get_existpages' : 'get_existfile';
+		// 2:ディレクトリ 3:拡張子
+		$files = $func_name1($func[2].$sub_dir, $func[3]); // ファイルの取得
+
+		foreach($files as $file => $name) {
+			// 5:ファイル内容変更 - 0:しない 1:する
+			//    mv($key, $conv, $olddir, $newdir, $filename)
+			if (! mv($func[0], 0, $func[2].$sub_dir, $func[2], $file)) return 0;
+			$sw = 1;
+		}
+	}
+
+	foreach($config_dir as $func) {
+		// 1:処理判定
+		if (!$func[1]) continue;
+		if (! file_exists($func[2])) continue; // 存在していない場合
+
+		echo "stage 2: " . $func[0] . "(" . $func[3] . ") rmdir start\n";
+		@rmdir($func[2].$sub_dir); // 作業ディレクトリを消す
+	}
+
+	echo $sw ? "stage 2: complete\n" : "stage 2: Bypass\n";
+	return 1;
+}
+
+
+/**
+ * ファイル名取得(単純ファイル名)
+ */
+function get_existfile($dir = DATA_HOME, $ext = '.php')
+{
+	$aryret = array();
+
+	$pattern = '[\d\w\.]+';
+	if ($ext != '') $ext = preg_quote($ext, '/');
+	$pattern = '/^' . $pattern . $ext . '$/';
+
+	$dp = @opendir($dir) or
+		die($dir . ' is not found or not readable.');
+	$matches = array();
+	while ($file = readdir($dp)){
+		if (preg_match($pattern, $file, $matches)){
+			$aryret[$file] = "";
+		}
+	}
+	closedir($dp);
+
+	return $aryret;
+}
+
+/**
+ * encode()されている文字を変換してファイルを移動する
+ */
+function pw_mv($key, $conv, $olddir, $newdir, $filename)
+{
+	@list($file1, $ext)  = explode('.', $filename);
+	$ext = (empty($ext)) ? "" : "." . $ext;
+	$oldname = $olddir . $filename;
+
+	if ($key == 'attach') {
+		@list($page, $file2) = explode('_', $file1);
+		$utf8_page = _euc2utf8( decode($page) );
+		$utf8_file = _euc2utf8( decode($file2) );
+		$enc_name = encode($utf8_page) . "_" . encode($utf8_file) . $ext;
+		$newname = $newdir . $enc_name;
+	} else {
+		$utf8_file = _euc2utf8( decode($file1) );
+		$enc_name = encode($utf8_file) . $ext;
+		$newname = $newdir . $enc_name;
+	}
+
+	return _mv($key, $conv, $oldname, $newname);
+}
+
+/**
+ * ファイルの単純移動
+ */
+function mv($key, $conv, $olddir, $newdir, $filename)
+{
+	$oldname = $olddir . $filename;
+	$newname = $newdir . $filename;
+
+	return _mv($key, $conv, $oldname, $newname);
+}
+
+/*
+ * ファイルの単純移動
+ */
+function _mv($key, $conv, $oldname, $newname)
+{
+	// 5:ファイル内容変更 - 0:しない 1:する
+	if (!$conv) {
+		$rc = rename($oldname, $newname);
+		if (!$rc) echo "_mv: RENAME ERROR! ". $oldname . "\n";
+		return $rc;
+	}
+
+	$rc = utf8_write($key, $oldname, $newname);
+	if ($rc) {
+		$rc = unlink($oldname);
+		if (!$rc) echo "_mv: UNLINK ERROR! ". $oldname . "\n"; // 処理は続行
+		return 1;
+	} else {
+		if (!$rc) echo "_mv: CONVERT ERROR! ". $oldname . "\n";
+		return $rc;
+	}
+}
+
+function utf8_write($key, $oldname, $newname)
+{
+	@list($file1, $ext)  = explode('.', $oldname);
+	$oldname_time = @filemtime($oldname); // 最終更新日時の取得
+
+	if ($key == 'backup' && $ext == 'gz') {
+		$sw_gz   = 1;
+		$f_open  = 'gzopen';
+		$f_close = 'gzclose';
+		$f_file  = 'gzfile';
+		$f_write = 'gzwrite';
+	} else {
+		$sw_gz   = 0;
+		$f_open  = 'fopen';
+		$f_close = 'fclose';
+		$f_file  = 'file';
+		$f_write = 'fwrite';
+	}
+	// showhtml用
+	$sw_lst = ($key == 'cache' && $ext == 'lst') ? 1 : 0;
+
+	$data = $f_file($oldname);
+
+	if (!($fp = $f_open($newname,'w'))) {
+		echo "utf8_write: OPEN ERROR! ". $newname . "\n";
+		return 0; // ERROR
+	}
+
+	if (!$sw_gz) @flock($fp, LOCK_EX);
+
+	foreach($data as $x) {
+		if ($sw_lst) {
+			@list($sh_file, $sh_time)  = explode(' ', $x);
+			@list($sh_body, $sh_ext)  = explode('.', $sh_file);
+			$wk = encode( _euc2utf8( decode($sh_body) ) ) . "." . $sh_ext . " " . $sh_time;
+		} else {
+			$wk = _euc2utf8($x);
+		}
+		$f_write($fp, $wk);
+	}
+
+	if (!$sw_gz) @flock($fp, LOCK_UN);
+	@$f_close($fp);
+	@touch($newname, $oldname_time); // 最終更新日時に戻す
+	return 1;
+}
+
+/* **************************************************************************
+ *                              本体関数                                    *
+ * ************************************************************************** */
+
+// 全ページ名を配列に
+function get_existpages($dir = DATA_DIR, $ext = '.txt')
+{
+	$aryret = array();
+
+	$pattern = '^((?:[0-9A-F]{2})+)';
+	if ($ext != '')
+		$pattern .= preg_quote($ext, '/') . '$';
+
+	$dp = @opendir($dir) or
+		die($dir . ' is not found or not readable.');
+	$matches = array();
+	while ($file = readdir($dp)) {
+		if (preg_match("/$pattern/", $file, $matches))
+			$aryret[$file] = decode($matches[1]);
+	}
+	closedir($dp);
+
+	return $aryret;
+}
+
+// ページ名のエンコード
+function encode($key)
+{
+	return ($key == '') ? '' : strtoupper(bin2hex($key));
+	// Equal to strtoupper(join('', unpack('H*0', $key)));
+	// But PHP 4.3.10 says 'Warning: unpack(): Type H: outside of string in ...'
+}
+
+// ページ名のデコード
+function decode($key)
+{
+	return ($key == '') ? '' : substr(pack('H*', '20202020' . $key), 4);
+}
+
+/* **************************************************************************
+ * *                              定義終了                                  *
+ * ************************************************************************** */
+
+?>

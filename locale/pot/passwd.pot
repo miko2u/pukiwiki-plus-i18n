@@ -1,0 +1,119 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2006-12-05 01:39+0900\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../plugin/passwd.inc.php:22
+msgid "UserName"
+msgstr ""
+
+#: ../../plugin/passwd.inc.php:23
+msgid "Passwd"
+msgstr ""
+
+#: ../../plugin/passwd.inc.php:24
+msgid "Calculate"
+msgstr ""
+
+#: ../../plugin/passwd.inc.php:25
+msgid "Auth Type"
+msgstr ""
+
+#: ../../plugin/passwd.inc.php:26
+msgid "CALC"
+msgstr ""
+
+#: ../../plugin/passwd.inc.php:27
+msgid "Update"
+msgstr ""
+
+#: ../../plugin/passwd.inc.php:28
+msgid "Result"
+msgstr ""
+
+#: ../../plugin/passwd.inc.php:29
+msgid "Encryption key"
+msgstr ""
+
+#: ../../plugin/passwd.inc.php:30
+msgid "Please input Administrator password."
+msgstr ""
+
+#: ../../plugin/passwd.inc.php:31
+msgid "Please input the password being used now."
+msgstr ""
+
+#: ../../plugin/passwd.inc.php:32
+msgid "Please input a new password."
+msgstr ""
+
+#: ../../plugin/passwd.inc.php:33
+msgid "Please input a suitable character string."
+msgstr ""
+
+#: ../../plugin/passwd.inc.php:34
+msgid "The writing function is limited."
+msgstr ""
+
+#: ../../plugin/passwd.inc.php:35
+msgid ""
+"The authority more than Webmaster for World Wide Web Site is necessary to "
+"update it."
+msgstr ""
+
+#: ../../plugin/passwd.inc.php:36
+msgid "The encryption key is not corresponding."
+msgstr ""
+
+#: ../../plugin/passwd.inc.php:37
+msgid "Because the password was the same, it did not update it."
+msgstr ""
+
+#: ../../plugin/passwd.inc.php:38
+msgid "The Authentication management file was updated."
+msgstr ""
+
+#: ../../plugin/passwd.inc.php:39
+msgid "<b>You must be login again.</b> Otherwise, the role is initialized."
+msgstr ""
+
+#: ../../plugin/passwd.inc.php:40
+msgid "One was added."
+msgstr ""
+
+#: ../../plugin/passwd.inc.php:41
+msgid "ERROR."
+msgstr ""
+
+#: ../../plugin/passwd.inc.php:43
+msgid "Role"
+msgstr ""
+
+#: ../../plugin/passwd.inc.php:44
+msgid "Guest"
+msgstr ""
+
+#: ../../plugin/passwd.inc.php:45
+msgid "Webmaster"
+msgstr ""
+
+#: ../../plugin/passwd.inc.php:46
+msgid "Contents manager"
+msgstr ""
+
+#: ../../plugin/passwd.inc.php:47
+msgid "Authorized"
+msgstr ""

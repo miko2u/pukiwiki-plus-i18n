@@ -1,0 +1,70 @@
+# PukiWiki Plus! - Yet Another WikiWikiWeb Clone
+# Copyright (C) 2005 PukiWiki Plus! Developer Team
+# License is GPL2
+# Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>, 2005.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PukiWiki Plus! 1.4.5-u2\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2005-05-22 01:02+0900\n"
+"PO-Revision-Date: 2005-05-22 00:58+0900\n"
+"Last-Translator: Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>\n"
+"Language-Team: Japanese <ja@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../plugin/update_entities.inc.php:16
+msgid "Cache update"
+msgstr "キャッシュ更新"
+
+#: ../../plugin/update_entities.inc.php:17
+msgid "Administrator password"
+msgstr "管理者パスワード"
+
+#: ../../plugin/update_entities.inc.php:18
+msgid "Exec"
+msgstr "実行"
+
+#: ../../plugin/update_entities.inc.php:19
+msgid "The update of cache was completed."
+msgstr "キャッシュの更新が完了しました。"
+
+#: ../../plugin/update_entities.inc.php:21
+msgid ""
+"* Content of processing\n"
+"\n"
+msgstr ""
+"* 処理内容\n"
+"\n"
+
+#: ../../plugin/update_entities.inc.php:22
+msgid ""
+":The cache of the regular expression pattern that matches to the Character "
+"entity references is updated.|\n"
+msgstr ":文字実体参照にマッチする正規表現パターンのキャッシュを更新|\n"
+
+#: ../../plugin/update_entities.inc.php:23
+msgid ""
+"The table of PHP and DTD of W3C are scanned, and it records in the cache.\n"
+"\n"
+msgstr ""
+"PHPの持つテーブルおよびW3CのDTDをスキャンして、キャッシュに記録します。\n"
+"\n"
+
+#: ../../plugin/update_entities.inc.php:24
+msgid "* Processing object\n"
+msgstr "* 処理対象\n"
+
+#: ../../plugin/update_entities.inc.php:25
+msgid "The file displayed as `COLOR(red){not found.}` is not processed.\n"
+msgstr "「COLOR(red){not found.}」と表示されたファイルは処理されません。\n"
+
+#: ../../plugin/update_entities.inc.php:27
+msgid "* Execution\n"
+msgstr "* 実行\n"
+
+#: ../../plugin/update_entities.inc.php:28
+msgid "Please input the Administrator password, and click the [Exec] button.\n"
+msgstr "管理者パスワードを入力して、[実行]ボタンをクリックしてください。\n"

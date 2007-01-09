@@ -1,0 +1,33 @@
+# PukiWiki Plus! - Yet Another WikiWikiWeb Clone
+# Copyright (C) 2005 PukiWiki Plus! Developer Team
+# License is GPL2
+# Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>, 2005.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PukiWiki Plus! 1.4.5-u2-i18n\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2005-06-12 04:12+0900\n"
+"PO-Revision-Date: 2005-06-12 00:47+0900\n"
+"Last-Translator: Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>\n"
+"Language-Team: Japanese <ja@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../plugin/linklist.inc.php:17
+msgid "Auto Mutual link"
+msgstr "自動相互リンク"
+
+#: ../../plugin/linklist.inc.php:18
+#, php-format
+msgid "Auto Mutual link of %s"
+msgstr "%s の自動相互リンク"
+
+#: ../../plugin/linklist.inc.php:19
+msgid "The function of Referer is not effective."
+msgstr "Referer の機能が有効ではありません。"
+
+#: ../../plugin/linklist.inc.php:20
+msgid "no data."
+msgstr "データはありません。"

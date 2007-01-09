@@ -1,0 +1,37 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2006-10-11 22:59+0900\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../plugin/tb.inc.php:255
+msgid "TrackBack URL"
+msgstr ""
+
+#: ../../plugin/tb.inc.php:259
+msgid "Blog:"
+msgstr ""
+
+#: ../../plugin/tb.inc.php:260
+msgid "Date:"
+msgstr ""
+
+#: ../../plugin/tb.inc.php:261
+msgid "F j, Y, g:i A"
+msgstr ""
+
+#: ../../plugin/tb.inc.php:314
+msgid "RECENT TRACKBACK"
+msgstr ""

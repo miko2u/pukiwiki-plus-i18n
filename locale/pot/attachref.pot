@@ -1,0 +1,61 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2005-04-28 15:22+0900\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../plugin/attachref.inc.php:27
+msgid "Upload to $1"
+msgstr ""
+
+#: ../../plugin/attachref.inc.php:28
+#, php-format
+msgid "Maximum file size is %s."
+msgstr ""
+
+#: ../../plugin/attachref.inc.php:29
+msgid "Administrator password"
+msgstr ""
+
+#: ../../plugin/attachref.inc.php:30
+msgid "password"
+msgstr ""
+
+#: ../../plugin/attachref.inc.php:31
+msgid "Attach file"
+msgstr ""
+
+#: ../../plugin/attachref.inc.php:32
+msgid "Upload"
+msgstr ""
+
+#: ../../plugin/attachref.inc.php:34
+msgid "[Upload]"
+msgstr ""
+
+#: ../../plugin/attachref.inc.php:35
+msgid "Attach and Ref to $1"
+msgstr ""
+
+#: ../../plugin/attachref.inc.php:36
+msgid "On updating $1, a collision has occurred."
+msgstr ""
+
+#: ../../plugin/attachref.inc.php:37
+msgid ""
+"It seems that someone has already updated the page you were editing.<br /"
+">The attach file was added, alhough it may be inserted in the wrong position."
+"<br />"
+msgstr ""

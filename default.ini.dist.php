@@ -1,8 +1,8 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: default.ini.php,v 1.21.3 2005/05/16 11:35:43 miko Exp $
+// $Id: default.ini.php,v 1.24.6 2006/04/25 19:13:00 upk Exp $
 // Copyright (C)
-//   2005      Customized/Patched by Miko.Hoshina
+//   2005-2006 PukiWiki Plus! Team
 //   2003-2005 PukiWiki Developers Team
 //   2001-2002 Originally written by yu-ji
 // License: GPL v2 or (at your option) any later version
@@ -13,103 +13,119 @@
 // Skin file
 if (defined('TDIARY_THEME')) { 
 //	define('SKIN_FILE', DATA_HOME . SKIN_DIR . 'tdiary.skin.php');
-	define('SKIN_FILE_DEFAULT', DATA_HOME . SKIN_DIR . 'tdiary.skin.php'); 
+	define('SKIN_FILE_DEFAULT', SKIN_DIR . 'tdiary.skin.php'); 
 } else {
-//	define('SKIN_FILE', DATA_HOME . SKIN_DIR . 'pukiwiki.skin.php');
-	define('SKIN_FILE_DEFAULT', DATA_HOME . SKIN_DIR . 'default.skin.php');
+	// define('SKIN_FILE', DATA_HOME . SKIN_DIR . 'pukiwiki.skin.php');
+	define('SKIN_FILE_DEFAULT', SKIN_DIR . 'default.skin.php');
+	// define('SKIN_FILE_DEFAULT', SKIN_DIR . 'bluebox.skin.php');
+	// define('SKIN_FILE_DEFAULT', SKIN_DIR . 'cloudwalk.skin.php');
+	// define('SKIN_FILE_DEFAULT', SKIN_DIR . 'irid.skin.php');
+	// define('SKIN_FILE_DEFAULT', SKIN_DIR . 'iridorange.skin.php');
+	// define('SKIN_FILE_DEFAULT', SKIN_DIR . 'orangebox.skin.php');
 }
 $skin_file = SKIN_FILE_DEFAULT;
 
 /////////////////////////////////////////////////
-// �����Ȥ���ڡ������ɤ߹��ߤ��ǽ�ˤ���
+// メニューバー/サイドバーを常に表示する
+$always_menu_displayed = 0;
+
+/////////////////////////////////////////////////
+// 雛形とするページの読み込みを可能にする
 $load_template_func = 0;
 
 /////////////////////////////////////////////////
-// ����ʸ�����ʬ������
+// 検索文字列を色分けする
 $search_word_color = 1;
 
 /////////////////////////////////////////////////
-// �����ڡ�����Ƭʸ������ǥå�����Ĥ���
+// 一覧ページに頭文字インデックスをつける
 $list_index = 1;
 
 /////////////////////////////////////////////////
-// �ü쥷��ܥ�
-$_symbol_paraedit = '<img src="./image/plus/paraedit.png" width="9" height="9" alt="Edit" title="Edit" />';
-$_symbol_extanchor = '<img src="./image/plus/ext.png" alt="" title="" class="ext" onclick="return open_uri(\'$1\', \'$2\');" />';
-$_symbol_innanchor = '<img src="./image/plus/inn.png" alt="" title="" class="inn" onclick="return open_uri(\'$1\', \'$2\');" />';
+// 特殊シンボル
+$_symbol_paraedit = '<img src="'. IMAGE_URI.'plus/paraedit.png" width="9" height="9" alt="Edit" title="Edit" />';
+$_symbol_extanchor = '<img src="'.IMAGE_URI.'plus/ext.png" alt="" title="" class="ext" onclick="return open_uri(\'$1\', \'$2\');" />';
+$_symbol_innanchor = '<img src="'.IMAGE_URI.'plus/inn.png" alt="" title="" class="inn" onclick="return open_uri(\'$1\', \'$2\');" />';
 
 /////////////////////////////////////////////////
-// �ꥹ�ȹ�¤�κ��ޡ�����
-$_ul_left_margin = 0;   // �ꥹ�ȤȲ��̺�ü�Ȥδֳ�(px)
-$_ul_margin = 16;       // �ꥹ�Ȥγ��ش֤δֳ�(px)
-$_ol_left_margin = 0;   // �ꥹ�ȤȲ��̺�ü�Ȥδֳ�(px)
-$_ol_margin = 16;       // �ꥹ�Ȥγ��ش֤δֳ�(px)
-$_dl_left_margin = 0;   // �ꥹ�ȤȲ��̺�ü�Ȥδֳ�(px)
-$_dl_margin = 16;        // �ꥹ�Ȥγ��ش֤δֳ�(px)
+// リスト構造の左マージン
+$_ul_left_margin = 0;   // リストと画面左端との間隔(px)
+$_ul_margin = 16;       // リストの階層間の間隔(px)
+$_ol_left_margin = 0;   // リストと画面左端との間隔(px)
+$_ol_margin = 16;       // リストの階層間の間隔(px)
+$_dl_left_margin = 0;   // リストと画面左端との間隔(px)
+$_dl_margin = 16;        // リストの階層間の間隔(px)
 $_list_pad_str = ' class="list%d" style="padding-left:%dpx;margin-left:%dpx"';
 
 /////////////////////////////////////////////////
-// �ƥ����ȥ��ꥢ�Υ�����
+// テキストエリアのカラム数
 $cols = 80;
 
 /////////////////////////////////////////////////
-// �ƥ����ȥ��ꥢ�ιԿ�
+// テキストエリアの行数
 $rows = 20;
 
 /////////////////////////////////////////////////
-// �硦�����Ф������ܼ�������󥯤�ʸ��
+// 大・小見出しから目次へ戻るリンクの文字
 $top = $_msg_content_back_to_top;
 
 /////////////////////////////////////////////////
-// ��Ϣ�ڡ���ɽ���Υڡ���̾�ζ��ڤ�ʸ��
-$related_str = "\n ";
+// 添付ファイルの一覧を常に表示する (負担がかかります)
+$attach_link = 1;
 
 /////////////////////////////////////////////////
-// �����롼��Ǥδ�Ϣ�ڡ���ɽ���Υڡ���̾�ζ��ڤ�ʸ��
+// 関連するページのリンク一覧を常に表示する(負担がかかります)
+$related_link = 1;
+
+// リンク一覧の区切り文字
+$related_str = "\n ";
+
+// (#relatedプラグインが表示する) リンク一覧の区切り文字
 $rule_related_str = "</li>\n<li>";
 
 /////////////////////////////////////////////////
-// ��ʿ���Υ���
+// 水平線のタグ
 $hr = '<hr class="full_hr" />';
 
 /////////////////////////////////////////////////
-// ������ǽ��Ϣ
+// 脚注機能関連
 
-// �����Υ��󥫡������Хѥ���ɽ������ (0 = ���Хѥ�)
-//  * ���Хѥ��ξ�硢�����ΥС�������Opera������ˤʤ뤳�Ȥ�����ޤ�
-//  * ���Хѥ��ξ�硢calendar_viewer�ʤɤ�����ˤʤ뤳�Ȥ�����ޤ�
-// (�ܤ�����: BugTrack/698)
+// 脚注のアンカーに埋め込む本文の最大長
+define('PKWK_FOOTNOTE_TITLE_MAX', 16); // Characters
+
+// 脚注のアンカーを相対パスで表示する (0 = 絶対パス)
+//  * 相対パスの場合、以前のバージョンのOperaで問題になることがあります
+//  * 絶対パスの場合、calendar_viewerなどで問題になることがあります
+// (詳しくは: BugTrack/698)
 define('PKWK_ALLOW_RELATIVE_FOOTNOTE_ANCHOR', 1);
 
-// ʸ���ε�����ľ����ɽ�����륿��
+// 文末の脚注の直前に表示するタグ
 $note_hr = '<hr class="note_hr" />';
 
 /////////////////////////////////////////////////
-// ��Ϣ�����󥯤���ɽ������(��ô��������ޤ�)
-$related_link = 1;
-
-/////////////////////////////////////////////////
-// WikiName,BracketName�˷в���֤��ղä���
+// WikiName,BracketNameに経過時間を付加する
 $show_passage = 1;
 
 /////////////////////////////////////////////////
-// ���ɽ���򥳥�ѥ��Ȥˤ���
+// リンク表示をコンパクトにする
+// * ページに対するハイパーリンクからタイトルを外す
+// * Dangling linkのCSSを外す
 $link_compact = 0;
 
 /////////////////////////////////////////////////
-// �ե������ޡ�������Ѥ���
+// フェイスマークを使用する
 $usefacemark = 1;
 
 /////////////////////////////////////////////////
-// �桼������롼��
+// ユーザ定義ルール
 //
-//  ����ɽ���ǵ��Ҥ��Ƥ���������?(){}-*./+\$^|�ʤ�
-//  �� \? �Τ褦�˥������Ȥ��Ƥ���������
-//  �����ɬ�� / ��ޤ�Ƥ�����������Ƭ����� ^ ��Ƭ�ˡ�
-//  ��������� $ �����ˡ�
+//  正規表現で記述してください。?(){}-*./+\$^|など
+//  は \? のようにクォートしてください。
+//  前後に必ず / を含めてください。行頭指定は ^ を頭に。
+//  行末指定は $ を後ろに。
 //
 /////////////////////////////////////////////////
-// �桼������롼��(����С��Ȼ����ִ�)
+// ユーザ定義ルール(コンバート時に置換)
 $line_rules = array(
 	'COLOR\(([^\(\)]*)\){([^}]*)}'	=> '<span style="color:$1">$2</span>',
 	'SIZE\(([^\(\)]*)\){([^}]*)}'	=> '<span style="font-size:$1px">$2</span>',
@@ -124,11 +140,11 @@ $line_rules = array(
 );
 
 /////////////////////////////////////////////////
-// �ե������ޡ�������롼��(����С��Ȼ����ִ�)
+// フェイスマーク定義ルール(コンバート時に置換)
 
-// $usefacemark = 1�ʤ�ե������ޡ������ִ�����ޤ�
-// ʸ�����XD�ʤɤ����ä�����facemark���ִ�����Ƥ��ޤ��Τ�
-// ɬ�פΤʤ����� $usefacemark��0�ˤ��Ƥ���������
+// $usefacemark = 1ならフェイスマークが置換されます
+// 文章内にXDなどが入った場合にfacemarkに置換されてしまうので
+// 必要のない方は $usefacemarkを0にしてください。
 
 $facemark_rules = array(
 	// Face marks

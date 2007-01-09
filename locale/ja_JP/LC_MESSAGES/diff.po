@@ -1,0 +1,60 @@
+# PukiWiki Plus! - Yet Another WikiWikiWeb Clone
+# Copyright (C) 2005 PukiWiki Plus! Developer Team
+# License is GPL2
+# Author: Miko.Hoshina(E.Satoh) <miko@cafeterrace.com>, 2005.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PukiWiki Plus! 1.4.5-u2\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2005-04-10 16:26+0900\n"
+"PO-Revision-Date: 2005-03-10 10:15+0900\n"
+"Last-Translator: Miko.Hoshina(E.Satoh) <miko@cafeterrace.com>\n"
+"Language-Team: Japanese \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8-bit\n"
+
+#: ../../plugin/diff.inc.php:31
+msgid "The page was not found."
+msgstr "指定されたページは見つかりませんでした。"
+
+#: ../../plugin/diff.inc.php:32
+msgid "The added line is <span class=\"diff_added\">THIS COLOR</span>."
+msgstr "追加された行は<span class=\"diff_added\">この色</span>です。"
+
+#: ../../plugin/diff.inc.php:33
+msgid "The deleted line is <span class=\"diff_removed\">THIS COLOR</span>."
+msgstr "削除された行は<span class=\"diff_removed\">この色</span>です。"
+
+#: ../../plugin/diff.inc.php:34
+msgid "Go to $1."
+msgstr "$1 へ行く。"
+
+#: ../../plugin/diff.inc.php:35
+msgid " $1 has been deleted."
+msgstr "$1 の差分を削除しました。"
+
+#: ../../plugin/diff.inc.php:36
+msgid "Diff of $1"
+msgstr "$1 の変更点"
+
+#: ../../plugin/diff.inc.php:37 ../../plugin/diff.inc.php:89
+msgid "Deleting diff of $1"
+msgstr "$1 の差分を削除"
+
+#: ../../plugin/diff.inc.php:90
+msgid "Diff of  $1 has been deleted."
+msgstr "$1 の差分を削除しました。"
+
+#: ../../plugin/diff.inc.php:91
+msgid "Please input the password for deleting."
+msgstr "削除を行うためのパスワードを入力して下さい。"
+
+#: ../../plugin/diff.inc.php:92
+msgid "Delete"
+msgstr "削除"
+
+#: ../../plugin/diff.inc.php:93
+msgid "Invalid password."
+msgstr ""

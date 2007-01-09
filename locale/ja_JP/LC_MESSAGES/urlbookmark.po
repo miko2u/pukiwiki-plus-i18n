@@ -1,0 +1,49 @@
+# PukiWiki Plus! - Yet Another WikiWikiWeb Clone
+# Copyright (C) 2005 PukiWiki Plus! Developer Team
+# License is GPL2
+# Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>, 2005.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PukiWiki Plus! 1.4.5-u2\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2005-04-07 23:27+0900\n"
+"PO-Revision-Date: 2005-04-08 17:32+0900\n"
+"Last-Translator: Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>\n"
+"Language-Team: Japanese <ja@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../plugin/urlbookmark.inc.php:121
+msgid " $1 was updated"
+msgstr "$1 を更新しました"
+
+#: ../../plugin/urlbookmark.inc.php:125
+msgid "On updating  $1, a collision has occurred."
+msgstr "$1 で【更新の衝突】が起きました"
+
+#: ../../plugin/urlbookmark.inc.php:126
+msgid "It seems that someone has already updated this page while you were editing it.<br />"
+msgstr "あなたがこのページを編集している間に、他の人が同じページを更新してしまったようです。<br />"
+
+#: ../../plugin/urlbookmark.inc.php:127
+msgid "It is likely to be inserted in a different position though it bookmarked.<br />"
+msgstr "ブックマークを追加しましたが、違う位置に挿入されているかもしれません。<br />"
+
+#: ../../plugin/urlbookmark.inc.php:158
+msgid "Title: "
+msgstr "タイトル: "
+
+#: ../../plugin/urlbookmark.inc.php:168
+msgid "Comment: "
+msgstr "コメント: "
+
+#: ../../plugin/urlbookmark.inc.php:169
+msgid "Add URL"
+msgstr "URLの追加"
+
+#: ../../plugin/urlbookmark.inc.php:170
+msgid "URL: "
+msgstr "URL: "
+

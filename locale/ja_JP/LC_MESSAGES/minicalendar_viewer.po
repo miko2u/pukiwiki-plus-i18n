@@ -1,0 +1,38 @@
+# PukiWiki Plus! - Yet Another WikiWikiWeb Clone
+# Copyright (C) 2005 PukiWiki Plus! Developer Team
+# License is GPL2
+# Author: Miko.Hoshina(E.Satoh) <miko@cafeterrace.com>, 2005.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PukiWiki Plus! 1.4.5-u2\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2005-03-10 10:15+0900\n"
+"PO-Revision-Date: 2005-03-10 10:15+0900\n"
+"Last-Translator: Miko.Hoshina(E.Satoh) <miko@cafeterrace.com>\n"
+"Language-Team: Japanese \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8-bit\n"
+
+#: ../plugin/minicalendar_viewer.inc.php:54
+msgid "Wrong parameter."
+msgstr "引数が不正です。"
+
+#: ../plugin/minicalendar_viewer.inc.php:55
+msgid "Wrong second parameter."
+msgstr "第2引数が不正です。"
+
+#: ../plugin/minicalendar_viewer.inc.php:56
+#, php-format
+msgid "Next %d&gt;&gt;"
+msgstr "次の%d件&gt;&gt;"
+
+#: ../plugin/minicalendar_viewer.inc.php:57
+#, php-format
+msgid "&lt;&lt; Prev %d"
+msgstr "&lt;&lt;前の%d件"
+
+#: ../plugin/minicalendar_viewer.inc.php:58
+msgid "Due to the blocking, the minicalendar_viewer cannot refer to $1."
+msgstr "$1 は閲覧制限がかかっているためminicalendar_viewerによる参照はできません"

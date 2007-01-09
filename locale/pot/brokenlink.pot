@@ -1,0 +1,37 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2006-08-25 00:26+0900\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../plugin/brokenlink.inc.php:15
+msgid "Broken Link List"
+msgstr ""
+
+#: ../../plugin/brokenlink.inc.php:16
+msgid "All links are effective."
+msgstr ""
+
+#: ../../plugin/brokenlink.inc.php:17
+msgid "<p>The parameter is illegal.</p>"
+msgstr ""
+
+#: ../../plugin/brokenlink.inc.php:18
+msgid "<p>Not authorized to access.</p>"
+msgstr ""
+
+#: ../../plugin/brokenlink.inc.php:19
+msgid "<p>The xbel plugin is not found.</p>"
+msgstr ""
