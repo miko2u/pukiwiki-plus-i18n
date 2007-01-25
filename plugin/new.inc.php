@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: new.inc.php,v 1.9.3 2006/11/04 18:35:00 upk Exp $
+// $Id: new.inc.php,v 1.9.4 2007/01/26 03:58:00 upk Exp $
 //
 // New! plugin
 //
@@ -37,7 +37,9 @@ function plugin_new_inline()
 		// dev:BugTrack2/120
 		//$timestamp = strtotime($date);
 		//if ($timestamp === -1) return '&new([nodate]){date}: Invalid date string;';
-		$timestamp = strtotime(preg_replace('/\([^\x00-\x7F]+\)/','',$date));
+		//$timestamp = strtotime(preg_replace('/\([^\x00-\x7F]+\)/','',$date));
+		// plus:BugTrack/102
+		$timestamp = strtotime(preg_replace('/\(.*?\)/','',$date));
 		if ($timestamp === -1 || $timestamp === FALSE) return '&new([nodate]){date}: Invalid date string;';
 		// $timestamp -= ZONETIME;
 
