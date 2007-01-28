@@ -1,8 +1,8 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: init.php,v 1.51.26 2006/12/07 14:46:49 miko Exp $
+// $Id: init.php,v 1.51.27 2007/01/28 19:54:00 upk Exp $
 // Copyright (C)
-//   2005-2006 PukiWiki Plus! Team
+//   2005-2007 PukiWiki Plus! Team
 //   2002-2006 PukiWiki Developers Team
 //   2001-2002 Originally written by yu-ji
 // License: GPL v2 or (at your option) any later version
@@ -15,7 +15,7 @@
 define('S_VERSION', '1.4.7plus-u2-i18n');
 define('S_COPYRIGHT',
 	'<strong>PukiWiki Plus! ' . S_VERSION . '</strong>' .
-	' Copyright &copy; 2001-2006' .
+	' Copyright &copy; 2001-2007' .
 	' <a href="http://pukiwiki.cafelounge.net/plus/">PukiWiki Plus! Team</a>.' .
 	' License is <a href="http://www.gnu.org/licenses/gpl.html">GPL</a>.<br />' .
 	' Based on <a href="http://pukiwiki.sourceforge.jp/">"PukiWiki"</a>'
@@ -44,7 +44,7 @@ $foot_tags    = array();
 /////////////////////////////////////////////////
 // Require INI_FILE
 
-define('INI_FILE',  DATA_HOME . 'pukiwiki.ini.php');
+define('INI_FILE',  set_homedir('pukiwiki.ini.php') . 'pukiwiki.ini.php');
 $die = '';
 if (! file_exists(INI_FILE) || ! is_readable(INI_FILE)) {
 	$die .= 'File is not found. (INI_FILE)' . "\n";
@@ -105,7 +105,7 @@ unset($agents, $matches);
 // Profile-related init and setting
 define('UA_PROFILE', isset($user_agent['profile']) ? $user_agent['profile'] : '');
 
-define('UA_INI_FILE', SITE_HOME . UA_PROFILE . '.ini.php');
+define('UA_INI_FILE', set_homedir(UA_PROFILE . '.ini.php') . UA_PROFILE . '.ini.php');
 if (! file_exists(UA_INI_FILE) || ! is_readable(UA_INI_FILE)) {
 	die_message('UA_INI_FILE for "' . UA_PROFILE . '" not found.');
 } else {
@@ -339,7 +339,7 @@ $NotePattern = '/\(\(((?:(?>(?:(?!\(\()(?!\)\)(?:[^\)]|$)).)+)|(?R))*)\)\)/ex';
 
 /////////////////////////////////////////////////
 // 初期設定(ユーザ定義ルール読み込み)
-require(SITE_HOME . 'rules.ini.php');
+require(set_homedir('rules.ini.php') . 'rules.ini.php');
 
 /////////////////////////////////////////////////
 // 初期設定(その他のグローバル変数)
