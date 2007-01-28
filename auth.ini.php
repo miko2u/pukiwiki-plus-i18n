@@ -1,8 +1,8 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: auth.ini.php,v 0.0.8 2006/12/06 03:14:00 upk Exp $
+// $Id: auth.ini.php,v 0.0.9 2007/01/28 19:34:00 upk Exp $
 // Copyright (C)
-//   2005-2006 PukiWiki Plus! Team
+//   2005-2007 PukiWiki Plus! Team
 // License: GPL v2 or (at your option) any later version
 //
 
@@ -32,10 +32,10 @@ $adminpass = '{x-php-md5}1a1dc91c907325c69271ddf0c944bc72'; // md5('pass')
 // 4 - 認証者(未設定時のデフォルト)
 //
 // プラグインによりデータを管理
-define('PKWK_AUTH_FILE', DATA_HOME . 'auth_users.ini.php');
+define('PKWK_AUTH_FILE', set_homedir('auth_users.ini.php') . 'auth_users.ini.php');
 require_once(PKWK_AUTH_FILE);
 
-define('PKWK_AUTH_WKGRP_FILE', DATA_HOME . 'auth_wkgrp.ini.php');
+define('PKWK_AUTH_WKGRP_FILE', set_homedir('auth_wkgrp.ini.php') . 'auth_wkgrp.ini.php');
 require_once(PKWK_AUTH_WKGRP_FILE);
 
 /////////////////////////////////////////////////
