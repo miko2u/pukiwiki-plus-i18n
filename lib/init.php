@@ -44,7 +44,7 @@ $foot_tags    = array();
 /////////////////////////////////////////////////
 // Require INI_FILE
 
-define('INI_FILE',  set_homedir('pukiwiki.ini.php') . 'pukiwiki.ini.php');
+define('INI_FILE',  add_homedir('pukiwiki.ini.php'));
 $die = '';
 if (! file_exists(INI_FILE) || ! is_readable(INI_FILE)) {
 	$die .= 'File is not found. (INI_FILE)' . "\n";
@@ -105,7 +105,7 @@ unset($agents, $matches);
 // Profile-related init and setting
 define('UA_PROFILE', isset($user_agent['profile']) ? $user_agent['profile'] : '');
 
-define('UA_INI_FILE', set_homedir(UA_PROFILE . '.ini.php') . UA_PROFILE . '.ini.php');
+define('UA_INI_FILE', add_homedir(UA_PROFILE . '.ini.php'));
 if (! file_exists(UA_INI_FILE) || ! is_readable(UA_INI_FILE)) {
 	die_message('UA_INI_FILE for "' . UA_PROFILE . '" not found.');
 } else {
@@ -339,7 +339,7 @@ $NotePattern = '/\(\(((?:(?>(?:(?!\(\()(?!\)\)(?:[^\)]|$)).)+)|(?R))*)\)\)/ex';
 
 /////////////////////////////////////////////////
 // 初期設定(ユーザ定義ルール読み込み)
-require(set_homedir('rules.ini.php') . 'rules.ini.php');
+require(add_homedir('rules.ini.php'));
 
 /////////////////////////////////////////////////
 // 初期設定(その他のグローバル変数)
