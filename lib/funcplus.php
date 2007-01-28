@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: funcplus.php,v 0.1.22 2007/01/28 18:53:00 upk Exp $
+// $Id: funcplus.php,v 0.1.23 2007/01/28 20:02:00 upk Exp $
 // Copyright (C)
 //   2005-2007 PukiWiki Plus! Team
 // License: GPL v2 or (at your option) any later version
@@ -231,12 +231,12 @@ function load_init_value($name,$must=0)
 	return FALSE;
 }
 
-function set_homedir($file)
+function add_homedir($file)
 {
 	foreach(array(DATA_HOME,SITE_HOME) as $dir) {
-		if (file_exists($dir.$file) && is_readable($dir.$file)) return $dir;
+		if (file_exists($dir.$file) && is_readable($dir.$file)) return $dir.$file;
 	}
-	return '';
+	return $file;
 }
 
 function is_ignore_page($page)
