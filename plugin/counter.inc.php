@@ -1,10 +1,11 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: counter.inc.php,v 1.18.7 2006/05/27 13:31:11 miko Exp $
-//
-// (C) 2002-2006 PukiWiki Plus! Team
-// (C) 2002-2005 PukiWiki Developers Team
-// (C) 2002 Y.MASUI GPL2 http://masui.net/pukiwiki/ masui@masui.net
+// $Id: counter.inc.php,v 1.19.7 2007/02/04 11:14:44 miko Exp $
+// Copyright (C)
+//   2004-2007 PukiWiki Plus! Team
+//   2002-2005, 2007 PukiWiki Developers Team
+//   2002 Y.MASUI GPL2 http://masui.net/pukiwiki/ masui@masui.net
+// License: GPL2
 //
 // Counter plugin
 
@@ -78,20 +79,24 @@ function plugin_counter_get_count($page)
 	$counters[$page] = $default;
 	$modify = FALSE;
 
+	// Open
 	$file = COUNTER_DIR . encode($page) . PLUGIN_COUNTER_SUFFIX;
-	$fp = fopen($file, file_exists($file) ? 'r+' : 'w+')
+	pkwk_touch_file($file);
+	$fp = fopen($file, 'r+')
 		or die('counter.inc.php: Cannot open COUTER_DIR/' . basename($file));
 	set_file_buffer($fp, 0);
 	@flock($fp, LOCK_EX);
 	rewind($fp);
+
+	// Read
 	foreach ($default as $key=>$val) {
 		// Update
 		$counters[$page][$key] = rtrim(fgets($fp, 256));
 		if (feof($fp)) break;
 	}
 
+	// Anothoer day?
 	if ($counters[$page]['date'] != $default['date']) {
-		// New day
 		$modify = TRUE;
 		$yesterday = gmmktime(0,0,0, gmdate('m',$localtime), gmdate('d',$localtime)-1, gmdate('Y',$localtime));
 		$is_yesterday = ($counters[$page]['date'] == gmdate('Y/m/d', $yesterday));
@@ -100,7 +105,6 @@ function plugin_counter_get_count($page)
 		$counters[$page]['yesterday'] = $is_yesterday ? $counters[$page]['today'] : 0;
 		$counters[$page]['today']     = 1;
 		$counters[$page]['total']++;
-
 	} else if ($counters[$page]['ip'] != $_SERVER['REMOTE_ADDR']) {
 		// Not the same host
 		$modify = TRUE;
@@ -116,6 +120,8 @@ function plugin_counter_get_count($page)
 		foreach (array_keys($default) as $key)
 			fputs($fp, $counters[$page][$key] . "\n");
 	}
+
+	// Close
 	@flock($fp, LOCK_UN);
 	fclose($fp);
 
