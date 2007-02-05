@@ -3,7 +3,7 @@
  * PukiWiki Plus! 認証処理
  *
  * @author	Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth.cls.php,v 0.38 2006/12/06 03:01:00 upk Exp $
+ * @version     $Id: auth.cls.php,v 0.39 2007/02/05 18:58:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 
@@ -17,6 +17,7 @@ defined('ROLE_AUTH_TEMP')         or define('ROLE_AUTH_TEMP', 4.1);
 defined('ROLE_AUTH_TYPEKEY')      or define('ROLE_AUTH_TYPEKEY', 4.2);
 defined('ROLE_AUTH_HATENA')       or define('ROLE_AUTH_HATENA', 4.3);
 defined('ROLE_AUTH_JUGEMKEY')     or define('ROLE_AUTH_JUGEMKEY', 4.4);
+defined('UNAME_ADM_CONTENTS_TEMP') or define('UNAME_ADM_CONTENTS_TEMP', 'admin');
 
 $login_api = array(
 	// role level => login plugin name
@@ -67,6 +68,11 @@ class auth
 
 		// 外部認証API
 		list($role,$name,$login,$profile) = auth::get_user_name();
+
+		// 暫定管理者(su)
+		global $vars;
+		if (! isset($vars['pass'])) return $login;
+		if (pkwk_login($vars['pass'])) return UNAME_ADM_CONTENTS_TEMP;
 		return $login;
 	}
 
@@ -83,12 +89,16 @@ class auth
 
 		// 管理者パスワードなのかどうか？
 		$temp_admin = ( pkwk_hash_compute($_SERVER['PHP_AUTH_PW'], $adminpass) !== $adminpass) ? FALSE : TRUE;
+		if (! $temp_admin && $login == UNAME_ADM_CONTENTS_TEMP) {
+			global $vars;
+			if (isset($vars['pass']) && pkwk_login($vars['pass'])) $temp_admin = TRUE;
+		}
 
 		if (! isset($auth_users[$login])) {
 			// 未登録者の場合
 			// 管理者パスワードと偶然一致した場合でも見做し認証者(4.1)
 			//return ($login == 'admin' && $temp_admin) ? 3.1 : 4.1;
-			if ($login == 'admin' && $temp_admin) return ROLE_ADM_CONTENTS_TEMP;
+			if ($login == UNAME_ADM_CONTENTS_TEMP && $temp_admin) return ROLE_ADM_CONTENTS_TEMP;
 			// 外部認証API
 			list($role,$name,$nick,$profile) = auth::get_user_name();
 			// return (empty($name)) ? ROLE_AUTH_TEMP : $role;
@@ -199,7 +209,7 @@ class auth
 				return TRUE;
 			case ROLE_GUEST:
 				// 未認証者は、単に管理者パスワードを要求
-				$user = 'admin';
+				$user = UNAME_ADM_CONTENTS_TEMP;
 				break;
 			case ROLE_AUTH:
 				// 認証済ユーザは、ユーザ名を維持しつつ管理者パスワードを要求
