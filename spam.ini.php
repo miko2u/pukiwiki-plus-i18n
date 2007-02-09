@@ -1,5 +1,5 @@
 <?php
-// $Id: spam.ini.php,v 1.18 2007/02/04 10:43:28 henoheno Exp $
+// $Id: spam.ini.php,v 1.20 2007/02/07 14:19:59 henoheno Exp $
 // Spam-related setting
 
 $blocklist['goodhost'] = array(
@@ -70,6 +70,7 @@ $blocklist['badhost'] = array(
 	'*.4x2.net',		// by active.ws
 	'*.4t.com',			// by freeservers.com
 	'5jp.net',
+	'6url.com',
 	'*.6url.com',
 	'*.6x.to',
 	'74678439.com',		// by shortify.com
@@ -142,6 +143,7 @@ $blocklist['badhost'] = array(
 	'*.f2b.be',			// by f2b.be
 	'*.faithweb.com',	// by freeservers.com
 	'*.fancyurl.com',
+	'url.fibiger.org',
 	'ffwd.to',
 	'*.filetap.com',	// by shorturl.com
 	'flingk.com',
@@ -164,8 +166,11 @@ $blocklist['badhost'] = array(
 	'*.galeon.com',		// by hispavista.com
 	'gentleurl.net',
 	'*.getto.net',		// by vdirect.com
+	'glinki.com',
 	'goonlink.com',
 	'*.got.to',			// by webalias.com
+	'gourl.org',
+	'*.gourl.org',
 	'*.gq.nu',			// by freeservers.com
 	'*.gr.st',			// by ulimit.com
 	'greatitem.com',
@@ -298,6 +303,7 @@ $blocklist['badhost'] = array(
 	'*.shorturl.com',
 	'shorturl-accessanalyzer.com',
 	'shortify.com',
+	'shrinkalink.com',
 	'shrinkthatlink.com',
 	'shrinkurl.us',
 	'shrt.org',
@@ -341,6 +347,7 @@ $blocklist['badhost'] = array(
 	'tinyurl.com',
 	'tinyurl.name',		// by comteche.com
 	'tinyurl.us',		// by comteche.com
+	'tnij.org',
 	'*.toolbot.com',
 	'*.tophonors.com',	// by webalias.com
 	'*.torontonian.com',
@@ -363,6 +370,8 @@ $blocklist['badhost'] = array(
 	'urlcut.com',
 	'urlcutter.com',
 	'urlic.com',
+	'urlin.it',
+	'urlser.com',
 	'urlsnip.com',
 	'urlzip.de',
 	'urlx.org',
@@ -443,6 +452,7 @@ $blocklist['badhost'] = array(
 	'*.asphost4free.com',
 	'*.beeplog.com',
 	'*.blog.hr',
+	'blogas.lt',
 	'*.bloggingmylife.com',
 	'bloggers.nl',
 	'*.blogharbor.com',
@@ -451,7 +461,7 @@ $blocklist['badhost'] = array(
 	'*.bravenet.com',
 	'blogyaz.com',
 	'*.by.ru',
-	'*.kokoom.com',
+	'*.createmybb.com',
 	'dakrats.net',
 	'*.diaryland.com',
 	'*.dox.hu',
@@ -527,6 +537,7 @@ $blocklist['badhost'] = array(
 	'*.iquebec.com',		// by ieurop.net
 	'*.isuisse.com',		// by ieurop.net
 	'*.journalscape.com',
+	'*.kokoom.com',
 	'*.land.ru',			// pochta.ru related
 	'limmon.net',
 	'ltss.luton.ac.uk',
@@ -536,6 +547,7 @@ $blocklist['badhost'] = array(
 	'myblog.es',			// by 20six weblog services
 	'myblog.is',
 	'*.myblogvoice.com',
+	'*.myforum.ro',
 	'*.netfast.org',
 	'neweconomics.info',
 	'*.nm.ru',
@@ -546,6 +558,7 @@ $blocklist['badhost'] = array(
 	'*.pochta.ru',
 	'*.sayt.ws',
 	'*.sbn.bz',				// by rin.ru
+	'*.siamforum.com',
 	'*.spazioforum.it',
 	'*.squarespace.com',
 	'stickypond.com',
@@ -556,13 +569,16 @@ $blocklist['badhost'] = array(
 	'thestudentunderground.org',
 	'think.ubc.ca',
 	'*.welover.org',
+	'*.web-space.ws',		// by your-websites.com
 	'weblogmaniacs.com',
 	'*.wikidot.com',
 	'*.wmjblogs.ru',
 	'*.wol.bz',				 // by sbn.bz (rin.ru)
 	'xeboards.com',
+	'xhostar.com',
 	'blogs.ya.com',
 	'yourfreebb.de',
+	'*.your-websites.net',	// by your-websites.com
 
 	// B-2: Jacked contents, something implanted
 	// (e.g. some sort of blog comments, BBSes, forums, wikis)
@@ -587,7 +603,11 @@ $blocklist['badhost'] = array(
 	'*.inventforum.com',
 	'funnyclipcentral.com',
 	'huskerink.com',
+	'hyba.info',
+	'*.hyba.info',
 	'internetincomeclub.com',
+	'jloo.org',
+	'*.jloo.org',
 	'kevindmurray.com',
 	'macfaq.net',
 	'me4x4.com',
@@ -614,6 +634,8 @@ $blocklist['badhost'] = array(
 	'urgentclick.com',
 	'wolvas.org.uk',
 	'wvup.edu',
+	'youthpeer.org',
+	'*.zenburger.com',
 
 
 	// C: Sample setting of:
@@ -801,9 +823,14 @@ $blocklist['badhost'] = array(
 	'wifes1.info',		// by Andrey (vdf at lovespb.com), redirect to activefreehost.com
 	'*.wifes1.info',
 	//
-	'*.bequeous.info',	// by David C. Lack (David.C.Lack at dodgeit.com), redirect to activefreehost.com
-	'*.superfreedownload.info',	// by Varsylenko Vladimir (vvm_kz at rambler.ru), redirect to activefreehost.com
-	'*.yerap.info',		// by Kuzma V Safonov (admin at irtes.ru), redirect to activefreehost.com
+	'allsexonline.info',	// by Varsylenko Vladimir (vvm_kz at rambler.ru), redirect to activefreehost.com
+	'*.allsexonline.info',
+	'bequeous.info',	// by David C. Lack (David.C.Lack at dodgeit.com), redirect to activefreehost.com
+	'*.bequeous.info',
+	'superfreedownload.info',	// by Varsylenko Vladimir (vvm_kz at rambler.ru), redirect to activefreehost.com
+	'*.superfreedownload.info',
+	'yerap.info',		// by Kuzma V Safonov (admin at irtes.ru), redirect to activefreehost.com
+	'*.yerap.info',
 	//
 	'*.flywebs.com',	// by Andrey Zhurikov (zhu1313 at mail.ru)
 	'*.hostrim.com',	// by Andrey Zhurikov (zhu1313 at mail.ru)
@@ -904,6 +931,8 @@ $blocklist['badhost'] = array(
 	'*.bingogoldenpalace.info',
 	'ccarisoprodol.info',		// by Lebedev Sergey (serega555serega555 at yandex.ru)
 	'*.ccarisoprodol.info',
+	'ezxcv.info',				// by Lebedev Sergey (serega555serega555 at yandex.ru)
+	'*.ezxcv.info',
 	'isuperdrug.com',			// by Lebedev Sergey (serega555serega555 at yandex.ru)
 	'*.isuperdrug.com',
 	'pharmacif.info',			// by Lebedev Sergey (serega555serega555 at yandex.ru)
@@ -925,6 +954,33 @@ $blocklist['badhost'] = array(
 	'*.xer-vam.org',
 	'vvsa.org', // by Eva Sabina Lopez Castell (aliacsandr85 at yahoo.com)
 	'*.vvsa.org',
+	//
+	'axeboxew.info',	// by Billing Name:Gray (gray at trafic.name)
+	'*.axeboxew.info',
+	'boluzuhy.info',	// by Billing Name:Gray (gray at trafic.name)
+	'*.boluzuhy.info',
+	'ekafoloz.info',	// by Billing Name:Gray (gray at trafic.name)
+	'*.ekafoloz.info',
+	'exidiqe.info',		// by Billing Name:Gray (gray at trafic.name)
+	'*.exidiqe.info',
+	'gubiwu.info',		// by Billing Name:Gray (gray at trafic.name)
+	'*.gubiwu.info',
+	'jiuuz.info',		// by Billing Name:Gray (gray at trafic.name)
+	'*.jiuuz.info',
+	'olasep.info',		// by Billing Name:Gray (gray at trafic.name)
+	'*.olasep.info',
+	'oueuidop.info',	// by Billing Name:Gray (gray at trafic.name)
+	'*.oueuidop.info',
+	'oviravy.info',		// by Billing Name:Gray (gray at trafic.name)
+	'*.oviravy.info',
+	'ragibe.info',		// by Billing Name:Gray (gray at trafic.name)
+	'*.ragibe.info',
+	'udaxu.info',		// by Billing Name:Gray (gray at trafic.name)
+	'*.udaxu.info',
+	'vubiheq.info',		// by Billing Name:Gray (gray at trafic.name)
+	'*.vubiheq.info',
+	'yvaxat.info',		// by Billing Name:Gray (gray at trafic.name)
+	'*.yvaxat.info',
 
 	// C-2: Lonely domains (buddies not found yet)
 	'0nline-porno.info',	// by Timyr (timyr at narod.ru)
@@ -933,6 +989,9 @@ $blocklist['badhost'] = array(
 	'*.advancediet.com',// by Shonta Mojica (hostadmin at advancediet.com)
 	'*.areaseo.com',	// by Antony Carpito (xcentr at lycos.com)
 	'bestdiscountpharmacy.biz',	// by John  Brown (john780321 at yahoo.com), 2007-01-27, 61.144.122.45
+	'bloggerblast.com',	// by B. Kadrie (domains at starwhitehosting.com)
+	'carmodelrank.com',	// by Brianna Dunlord (briasmi at yahoo.com)
+	'covertarena.co.uk',// by Wayne Huxtable
 	'd999.info',		// by Peter Vayner (peter.vayner at inbox.ru)
 	'*.d999.info',
 	'*.dlekei.info',	// by Maxima Bucaro (webmaster at tts2f.info)
@@ -966,7 +1025,11 @@ $blocklist['badhost'] = array(
 	'qoclick.net',		// by DMITRIY SOLDATENKO
 	'relurl.com',		// tiny-like. by Grzes Tlalka (grzes1111 at interia.pl)
 	'*.roin.info',		// by Evgenius (roinse at yandex.ru)
+	'*.seek-www.com',	// by Adam Smit (pingpong at mail.md)
 	'sirlook.com',
+	'tabsdrugstore.info',	// by Jonn Gardens (admin at SearchHealtAdvCorpGb.com -- no such domain)
+	'*.tabsdrugstore.info',
+	'*.thetinyurl.com',	// by Beth J. Carter (Beth.J.Carter at thetinyurl.com)
 	'unctad.net',		// by gfdogfd at lovespb.com
 	'*.webnow.biz',		// by Hsien I Fan (admin at servcomputing.com)
 	'wellcams.biz',		// by Sergey Sergiyenko (studioboss at gmail.com)
@@ -977,9 +1040,10 @@ $blocklist['badhost'] = array(
 	// C-3: Not classifiable (information wanted)
 	//
 	// Something incoming to pukiwiki related sites
+	'planetnana.co.il',	// nana.co.il related
 	'mylexus.info',		// by Homer Simpson (simhomer12300 at mail.com), Redirect to Google
+	'*.nana.co.il',
 	'up2.co.il',		// inetwork.co.il related
-
 
 	// D: Sample setting of
 	// "third party in good faith"s

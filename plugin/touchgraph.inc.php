@@ -1,6 +1,10 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: touchgraph.inc.php,v 1.10.1 2006/11/04 18:41:00 upk Exp $
+// $Id: touchgraph.inc.php,v 1.11.1 2007/01/21 14:32:39 miko Exp $
+// Copyright (C)
+//   2005-2007 PukiWiki Plus! Team
+//   2003-2005 PukiWiki Developers Team
+// License: GPL v2 or (at your option) any later version
 //
 // Output an index for 'TouchGraph WikiBrowser'
 // http://www.touchgraph.com/
