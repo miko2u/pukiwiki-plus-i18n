@@ -1,6 +1,10 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: unfreeze.inc.php,v 1.10.4 2006/01/15 23:29:00 upk Exp $
+// $Id: unfreeze.inc.php,v 1.11.4 2007/01/21 14:27:08 miko Exp $
+// Copyright (C)
+//	 2004-2007 PukiWiki Plus! Team
+//   2003-2004 PukiWiki Developers Team
+// License: GPL v2 or (at your option) any later version
 //
 // Unfreeze(Unlock) plugin
 

@@ -1,11 +1,13 @@
 <?php
-// $Id: versionlist.inc.php,v 1.15.3 2006/01/12 00:00:00 upk Exp $
-/*
- * PukiWiki versionlist plugin
- *
- * CopyRight 2002 S.YOSHIMURA GPL2
- * http://masui.net/pukiwiki/ yosimura@excellence.ac.jp
- */
+// PukiWiki - Yet another WikiWikiWeb clone
+// $Id: versionlist.inc.php,v 1.16.4 2007/01/21 14:18:52 miko Exp $
+// Copyright (C)
+//	 2005-2007 PukiWiki Plus! Team
+//	 2002-2006 PukiWiki Developers Team
+//	 2002      S.YOSHIMURA GPL2 yosimura@excellence.ac.jp
+// License: GPL v2
+//
+// Listing cvs revisions of files
 
 function plugin_versionlist_action()
 {
@@ -23,7 +25,7 @@ function plugin_versionlist_convert()
 	// if (PKWK_SAFE_MODE) return ''; // Show nothi
 	if (auth::check_role('safemode')) return ''; // Show nothi
 
-	/* 探索ディレクトリ設定 */
+	/* Set search directory */
 	$SCRIPT_DIR = array('./');
 	if (LIB_DIR   != './') array_push($SCRIPT_DIR, LIB_DIR);
 	if (DATA_HOME != './' && DATA_HOME != LIB_DIR) array_push($SCRIPT_DIR, DATA_HOME);
