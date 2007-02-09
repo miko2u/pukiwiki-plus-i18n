@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: topicpath.inc.php,v 1.6.3 2006/12/05 02:21:00 upk Exp $
+// $Id: topicpath.inc.php,v 1.7.3 2007/01/21 14:32:39 miko Exp $
 // Copyright (C)
 //   2004-2007 PukiWiki Plus! Team
 //   2004-2005 PukiWiki Developers Team

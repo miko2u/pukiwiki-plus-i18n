@@ -1,6 +1,9 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: tracker.inc.php,v 1.34.9 2006/11/04 18:13:00 upk Exp $
+// $Id: tracker.inc.php,v 1.35.9 2007/01/21 14:29:12 miko Exp $
+// Copyright (C)
+//	 2004-2007 PukiWiki Plus! Team
+//   2003-2005 PukiWiki Developers Team
 //
 // Issue tracker plugin (See Also bugtrack plugin)
 

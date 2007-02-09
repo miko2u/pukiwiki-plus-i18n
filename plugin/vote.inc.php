@@ -1,6 +1,10 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: vote.inc.php,v 1.23.5 2006/01/11 23:48:00 upk Exp $
+// $Id: vote.inc.php,v 1.24.5 2007/01/21 14:15:30 miko Exp $
+// Copyright (C)
+//	 2004-2007 PukiWiki Plus! Team
+//   2002-2005 PukiWiki Developers Team
+// License: GPL v2 or (at your option) any later version
 //
 // Vote box plugin
 
@@ -28,7 +32,7 @@ $_msg_collided = _('It seems that someone has already updated this page while yo
 	$title = $body = $postdata = $postdata_input = $vote_str = '';
 	$matches = array();
 
-//added by miko
+	// added by miko
 	$votedkey = 'vote_'.$vars['refer'].'_'.$vars['vote_no'];
 	if (isset($_COOKIE[$votedkey])) {
 		return array(
@@ -39,7 +43,7 @@ $_msg_collided = _('It seems that someone has already updated this page while yo
 	$_COOKIE[$votedkey] = 1;
 	preg_match('!(.*/)!', $_SERVER['REQUEST_URI'], $matches);
 	setcookie($votedkey, 1, time()+PLUGIN_VOTE_COOKIE_EXPIRED, $matches[0]);
-//added by miko
+	// added by miko
 
 	foreach($postdata_old as $line) {
 
