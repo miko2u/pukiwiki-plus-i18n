@@ -1,14 +1,16 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: update_entities.inc.php,v 1.10.3 2006/09/30 02:35:35 miko Exp $
+// $Id: update_entities.inc.php,v 1.13.3 2007/01/21 14:14:05 miko Exp $
+// Copyright (C)
+//   2005-2007 PukiWiki Plus! Team
+//   2003-2007 PukiWiki Developers Team
+// License: GPL v2 or (at your option) any later version
 //
 // Update entities plugin - Update XHTML entities from DTD
 // (for admin)
 
-// DTDの場所
 define('W3C_XHTML_DTD_LOCATION', 'http://www.w3.org/TR/xhtml1/DTD/');
 
-// メッセージ設定
 function plugin_update_entities_init()
 {
 	$messages = array(
@@ -89,6 +91,7 @@ function plugin_update_entities_create($do = FALSE)
 	$items   = array('php:html_translation_table');
 	$matches = array();
 	foreach ($files as $file) {
+		// FIXME: 'allow_url_fopen = Off' will stop this
 		$source = file(W3C_XHTML_DTD_LOCATION . $file);
 //			or die_message('cannot receive ' . W3C_XHTML_DTD_LOCATION . $file . '.');
 		if (! is_array($source)) {
@@ -114,8 +117,7 @@ function plugin_update_entities_create($do = FALSE)
 		$min = min($min, $len);
 	}
 
-	$pattern = "(?=[a-zA-Z0-9]\{$min,$max})" .
-		get_autolink_pattern_sub($entities, 0, count($entities), 0);
+	$pattern = "(?=[a-zA-Z0-9]\{$min,$max})" . generate_matcher_regex($entities);
 	$fp = fopen(CACHE_DIR . PKWK_ENTITIES_REGEX_CACHE, 'w')
 		or die_message('cannot write file PKWK_ENTITIES_REGEX_CACHE<br />' . "\n" .
 			'maybe permission is not writable or filename is too long');
