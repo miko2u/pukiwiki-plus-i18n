@@ -187,24 +187,10 @@ function plugin_edit_write()
 	}
 
 	// SPAM Check (Client(Browser)-Server Ticket Check)
-	if (function_exists('pkwk_session_start') && pkwk_session_start() != 0) {
-		// BugTrack/95 fix Problem: browser RSS request with session
-		$s_ticket = $post['ticket'];
-		$s_digest = md5(get_ticket() . $post['digest']);
-		if ($_SESSION[$s_ticket] != $s_digest)
-			return plugin_edit_honeypot();
-		// BugTrack/96 in mobile-phone is converted illegual mojicode
-		if (!in_the_net($use_trans_sid_address, $_SERVER['REMOTE_ADDR'])) {
-			$s_origin = md5(get_ticket() . str_replace("\r", '', htmlspecialchars($vars['original'])));
-			if (!isset($_SESSION['origin' . $s_ticket]) || $_SESSION['origin' . $s_ticket] != $s_origin)
-				return plugin_edit_honeypot();
-		}
-	} else {
-		if (isset($post['encode_hint']) && $post['encode_hint'] != PKWK_ENCODING_HINT)
-			return plugin_edit_honeypot();
-		if (!isset($post['encode_hint']) && PKWK_ENCODING_HINT != '')
-			return plugin_edit_honeypot();
-	}
+	if (isset($post['encode_hint']) && $post['encode_hint'] != PKWK_ENCODING_HINT)
+		return plugin_edit_honeypot();
+	if (!isset($post['encode_hint']) && PKWK_ENCODING_HINT != '')
+		return plugin_edit_honeypot();
 
 	// Paragraph edit mode
 	if ($partid) {

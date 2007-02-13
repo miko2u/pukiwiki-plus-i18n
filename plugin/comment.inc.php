@@ -26,18 +26,10 @@ function plugin_comment_action()
 
 	// Petit SPAM Check (Client(Browser)-Server Ticket Check)
 	$spam = FALSE;
-	if (function_exists('pkwk_session_start') && pkwk_session_start() != 0) {
-		$s_comment = md5(get_ticket() . $post['digest']);
-		$keyword = $post['ticket'];
-		if ($_SESSION[$keyword] != $s_comment) {
-			$spam = TRUE;
-		}
+	if (isset($post['encode_hint']) && $post['encode_hint'] != '') {
+		if (PKWK_ENCODING_HINT != $post['encode_hint']) $spam = TRUE;
 	} else {
-		if (isset($post['encode_hint']) && $post['encode_hint'] != '') {
-			if (PKWK_ENCODING_HINT != $post['encode_hint']) $spam = TRUE;
-		} else {
-			if (PKWK_ENCODING_HINT != '') $spam = TRUE;
-		}
+		if (PKWK_ENCODING_HINT != '') $spam = TRUE;
 	}
 
 	// if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');

@@ -185,20 +185,10 @@ function plugin_bugtrack_action()
 
 	// Petit SPAM Check (Client(Browser)-Server Ticket Check)
 	$spam = FALSE;
-	if (function_exists('pkwk_session_start') && pkwk_session_start() != 0) {
-		$s_bugtrack = md5(get_ticket() . $post['ticket']);
-		$keyword = 'B_' . $post['ticket'];
-		if ($_SESSION[$keyword] != $s_bugtrack) {
-			$spam = TRUE;
-		}
+	if (isset($post['encode_hint']) && $post['encode_hint'] != '') {
+		if (PKWK_ENCODING_HINT != $post['encode_hint']) $spam = TRUE;
 	} else {
-		if (isset($post['encode_hint']) && $post['encode_hint'] != '') {
-			if (PKWK_ENCODING_HINT != $post['encode_hint']) $spam = TRUE;
-		} else {
-			if (PKWK_ENCODING_HINT != '') $spam = TRUE;
-		}
-		if (is_spampost(array('body'))) $spam = TRUE;
-
+		if (PKWK_ENCODING_HINT != '') $spam = TRUE;
 	}
 
 	// Vaildation foreign values(by miko)
