@@ -148,6 +148,7 @@ function plugin_comment_convert()
 {
 	global $vars, $digest;	//, $_btn_comment, $_btn_name, $_msg_comment;
 	static $numbers = array();
+	static $all_numbers = 0;
 	static $comment_cols = PLUGIN_COMMENT_SIZE_MSG;
 
 	$_btn_name    = _("Name: ");
@@ -164,19 +165,20 @@ function plugin_comment_convert()
 	if (auth::check_role('readonly')) return $auth_guide;
 	if (! isset($numbers[$vars['page']])) $numbers[$vars['page']] = 0;
 	$comment_no = $numbers[$vars['page']]++;
+	$comment_all_no = $all_numbers++;
 
 	$options = func_num_args() ? func_get_args() : array();
 
 	list($user, $link, $disabled) = plugin_comment_get_nick();
 
 	if (in_array('noname', $options)) {
-		$nametags = '<label for="_p_comment_comment_' . $comment_no . '">' .
+		$nametags = '<label for="_p_comment_comment_' . $comment_all_no . '">' .
 			$_msg_comment . '</label>';
 	} else {
-		$nametags = '<label for="_p_comment_name_' . $comment_no . '">' .
+		$nametags = '<label for="_p_comment_name_' . $comment_all_no . '">' .
 			$_btn_name . '</label>' .
 			'<input type="text" name="name" id="_p_comment_name_' .
-			$comment_no .  '" size="' . PLUGIN_COMMENT_SIZE_NAME .
+			$comment_all_no .  '" size="' . PLUGIN_COMMENT_SIZE_NAME .
 			'" value="'.$user.'"'.$disabled.' />' . "\n";
 	}
 
@@ -209,7 +211,7 @@ $auth_guide
   <input type="hidden" name="digest" value="$digest" />
   <input type="hidden" name="ticket" value="$ticket" />
   $nametags
-  <input type="text"   name="msg" id="_p_comment_comment_{$comment_no}" size="$comment_cols" />
+  <input type="text"   name="msg" id="_p_comment_comment_{$comment_all_no}" size="$comment_cols" />
   <input type="submit" name="comment" value="$_btn_comment" />
   $helptags
  </div>
