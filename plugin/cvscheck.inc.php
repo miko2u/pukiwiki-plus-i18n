@@ -232,9 +232,9 @@ function plugin_cvscheck_diff($alocal,$acvs)
 			$lver = ( $lver == '' ) ? $_cvscheck_messages['title_not_found'] : $lver;
 			$s = preg_replace('/^\//','',$sites[$site]) . $file;
 			if (version_compare($lver,$cver) >= 0) {
-				$outs[] = "|[[$s&nbsp;:$url/$s]]|COLOR(green)\{$lver}|[[$cver:$curl/$s?rev=$cver]]|\n";
+				$outs[] = "|[[$s&nbsp;:$url/$s]]|COLOR(green)" . '{' . $lver . '}' . "|[[$cver:$curl/$s?rev=$cver]]|\n";
 			} else {
-				$outs[] = "|[[$s&nbsp;:$url/$s]]|COLOR(red)\{$lver}|[[$cver:$curl/$s?rev=$cver]]|\n";
+				$outs[] = "|[[$s&nbsp;:$url/$s]]|COLOR(red)" . '{' . $lver . '}' . "|[[$cver:$curl/$s?rev=$cver]]|\n";
 			}
 		}
 	}
