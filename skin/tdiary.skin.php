@@ -1,9 +1,9 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: tdiary.skin.php,v 1.33.3 2006/10/08 11:24:30 miko Exp $
+// $Id: tdiary.skin.php,v 1.34.3 2007/02/11 05:53:31 miko Exp $
 // Copyright (C)
-//   2005-2006 PukiWiki Plus! Team
-//   2002-2006 PukiWiki Developers Team
+//   2005-2007 PukiWiki Plus! Team
+//   2002-2007 PukiWiki Developers Team
 //   2001-2002 Originally written by yu-ji
 // License: GPL v2 or (at your option) any later version
 //
@@ -666,13 +666,6 @@ function _navigator($key, $value = '', $javascript = ''){
    <?php _navigator('search') ?>
    <?php _navigator('recent') ?>
    <?php _navigator('help')   ?>
-
-<?php if ($trackback) { ?> &nbsp;
-   <?php _navigator('trackback', $lang['trackback'] . '(' . tb_count($_page) . ')') ?>
-<?php } ?>
-<?php if ($referer)   { ?> &nbsp;
-   <?php _navigator('refer') ?>
-<?php } ?>
 </div></div>
 <?php } else { ?>
 <div id="navigator"></div>
