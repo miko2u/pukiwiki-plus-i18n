@@ -1,10 +1,12 @@
 <?php
-// $Id: referer.inc.php,v 1.10.5 2006/11/04 18:08:00 upk Exp $
-/*
- * PukiWiki Referer プラグイン(リンク元表示プラグイン)
- * (C) 2003,2005-2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * License: GPL
-*/
+// PukiWiki - Yet another WikiWikiWeb clone
+// $Id: referer.inc.php,v 1.10.7 2007/02/19 18:08:00 miko Exp $
+// Copyright (C)
+//   2007           PukiWiki Plus! Team
+//   2003,2005-2006 Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+// License: GPL
+//
+// Referer Plugin(Show Related-Link Plugin)
 
 define('CONFIG_REFERER', 'plugin/referer/config');
 define('REFERE_TITLE_LENGTH',70);
@@ -40,7 +42,7 @@ function plugin_referer_action()
 			'msg'  => $_referer_msg['msg_H0_Refer'],
 			'body' => plugin_referer_body($vars['page'], $sort));
 	}
-	$pages = auth::get_existpages(TRACKBACK_DIR, '.ref');
+	$pages = auth::get_existpages(REFERER_DIR, '.ref');
 
 	if (empty($pages)) {
 		return array('msg'=>'', 'body'=>'');
@@ -57,7 +59,7 @@ function plugin_referer_body($page, $sort)
 	global $script, $_referer_msg;
 	global $referer;
 
-	$data = tb_get(tb_get_filename($page, '.ref'));
+	$data = ref_get_data(REFERER_DIR . encode($page) . '.ref');
 	if (empty($data)) return '<p>no data.</p>';
 
 	$bg = plugin_referer_set_color();

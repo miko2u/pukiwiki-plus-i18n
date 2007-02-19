@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: funcplus.php,v 0.1.23 2007/01/28 20:02:00 upk Exp $
+// $Id: funcplus.php,v 0.1.27 2007/01/28 20:02:00 upk Exp $
 // Copyright (C)
 //   2005-2007 PukiWiki Plus! Team
 // License: GPL v2 or (at your option) any later version
@@ -319,6 +319,15 @@ function path_check($url1,$url2)
 		return FALSE;
 	}
 	return TRUE;
+}
+
+// Check CGI/CLI(true) or MOD_PHP(false)
+function is_sapi_clicgi()
+{
+	$sapiname = php_sapi_name();
+	if ($sapiname == 'cgi' || $sapiname == 'cli')
+		return TRUE;
+	return FALSE;
 }
 
 // get "GD" extension version

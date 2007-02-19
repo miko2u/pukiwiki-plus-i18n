@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: pukiwiki.ini.php,v 1.147.12 2007/01/02 07:09:21 miko Exp $
+// $Id: pukiwiki.ini.php,v 1.147.14 2007/02/19 07:09:21 miko Exp $
 // Copyright (C)
 //   2005-2007 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
@@ -118,6 +118,7 @@ define('CACHE_DIR',     DATA_HOME . 'cache/'    ); // Some sort of caches
 define('UPLOAD_DIR',    DATA_HOME . 'attach/'   ); // Attached files and logs
 define('COUNTER_DIR',   DATA_HOME . 'counter/'  ); // Counter plugin's counts
 define('TRACKBACK_DIR', DATA_HOME . 'trackback/'); // TrackBack logs
+define('REFERER_DIR',   DATA_HOME . 'trackback/'); // Referer logs
 define('LOG_DIR',       DATA_HOME . 'log/'      ); // Logging file
 define('INIT_DIR',      DATA_HOME . 'init/'     ); // Initial value (Contents)
 

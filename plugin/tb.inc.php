@@ -1,7 +1,8 @@
 <?php
-// $Id: tb.inc.php,v 1.19.24 2006/10/12 00:06:00 upk Exp $
+// $Id: tb.inc.php,v 1.19.27 2007/02/19 00:06:00 miko Exp $
 /*
  * PukiWiki/TrackBack: TrackBack Ping receiver and viewer
+ * (C) 2007      PukiWiki Plus! Team
  * (C) 2003,2005-2006 Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * (C) 2003-2005 PukiWiki Developers Team
  * License: GPL
@@ -15,6 +16,9 @@
  * plugin_tb_mode_view($tb_id)  ?__mode=view
  * plugin_tb_recent($line)
  */
+
+// If trackback error, 'HTTP/1.0 400 Bad Request'
+defined('PLUGIN_TB_HTTP_ERROR')||define('PLUGIN_TB_HTTP_ERROR', FALSE);
 
 define('PLUGIN_TB_OK',      0); 
 define('PLUGIN_TB_ERROR',   1); 
@@ -120,19 +124,37 @@ function plugin_tb_save($url, $tb_id)
 	$filename = tb_get_filename($page);
 	$data     = tb_get($filename);
 
+	$matches = array();
 	$items = array(UTIME);
 	foreach ($fields as $key) {
 		$value = isset($vars[$key]) ? $vars[$key] : '';
-		if (preg_match('/[,"' . "\n\r" . ']/', $value))
+		if (preg_match('/[,"' . "\n\r" . ']/', $value)) {
 			$value = '"' . str_replace('"', '""', $value) . '"';
+		}
 		$items[$key] = $value;
+
+		// minimum checking from SPAM
+		if (preg_match_all('/a\s+href=/i', $items[$key], $matches) >= 1) {
+			honeypot_write();
+			if (PLUGIN_TB_HTTP_ERROR === TRUE && is_sapi_clicgi() === FALSE) {
+				header('HTTP/1.0 400 Bad Request');
+				exit;
+			}
+			plugin_tb_return(PLUGIN_TB_ERROR, 'Writing is prohibited.');
+		}
 	}
 
-	// minimum checking from SPAM
-	$matches = array();
-	if (preg_match_all('/a\s+href=/i', $items['excerpt'], $matches) >= 1) {
-		honeypot_write();
-		plugin_tb_return(PLUGIN_TB_ERROR, 'Writing is prohibited.');
+	// minimum checking from SPAM #2
+	foreach(array('title', 'excerpt', 'blog_name') as $key) {
+		if (preg_match_all('#http\://#i', $items[$key], $matches) >= 1) {
+			honeypot_write();
+			$sapi = php_sapi_name();
+			if (PLUGIN_TB_HTTP_ERROR === TRUE && is_sapi_clicgi() === FALSE) {
+				header('HTTP/1.0 400 Bad Request');
+				exit;
+			}
+			plugin_tb_return(PLUGIN_TB_ERROR, 'Writing is prohibited.');
+		}
 	}
 
 	// Blocking SPAM

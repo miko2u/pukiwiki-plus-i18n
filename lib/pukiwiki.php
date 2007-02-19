@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: pukiwiki.php,v 1.16.8 2007/01/02 06:49:45 miko Exp $
+// $Id: pukiwiki.php,v 1.16.12 2007/02/19 06:49:45 miko Exp $
 //
 // PukiWiki Plus! 1.4.*
 //  Copyright (C) 2002-2007 by PukiWiki Plus! Team
@@ -85,10 +85,11 @@ require(LIB_DIR . 'init.php');
 if ($notify) {
 	require(LIB_DIR . 'mail.php'); // Mail notification
 }
-if ($trackback || $referer) {
-	// Referer functionality uses trackback functions
-	// without functional reason now
+if ($trackback) {
 	require(LIB_DIR . 'trackback.php'); // TrackBack
+}
+if ($referer) {
+	require(LIB_DIR . 'referer.php');
 }
 
 /////////////////////////////////////////////////

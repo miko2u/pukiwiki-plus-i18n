@@ -1,7 +1,7 @@
 <?php
-// $Id: trackback.php,v 1.21.8 2006/05/28 16:46:00 upk Exp $
+// $Id: trackback.php,v 1.21.10 2007/02/19 16:46:00 miko Exp $
 // Copyright (C)
-//   2005-2006 PukiWiki Plus! Team
+//   2005-2007 PukiWiki Plus! Team
 //   2003-2005 PukiWiki Developers Team
 //   2003      Originally written by Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
 // License: GPL v2 or (at your option) any later version
@@ -25,9 +25,6 @@
  *                         // lib/pukiwiki.php
  * tb_get_url($url)        HTTP-GET from $uri, and reveal the TrackBack Ping URL
  * class TrackBack_XML     Parse and reveal the TrackBack Ping URL from RDF data
- *
- * == Referer related ==
- * ref_save($page)         Save or update referer data // lib/pukiwiki.php
  */
 
 define('PLUGIN_TRACKBACK_VERSION', 'PukiWiki/TrackBack 0.4');
@@ -254,59 +251,5 @@ class TrackBack_XML
 	}
 
 	function end_element($parser, $name) {}
-}
-
-// Save or update referer data
-function ref_save($page)
-{
-	global $referer, $use_spam_check;
-
-	// if (PKWK_READONLY || ! $referer || empty($_SERVER['HTTP_REFERER'])) return TRUE;
-	if (auth::check_role('readonly') || ! $referer || empty($_SERVER['HTTP_REFERER'])) return TRUE;
-
-	$url = $_SERVER['HTTP_REFERER'];
-
-	// Validate URI (Ignore own)
-	$parse_url = parse_url($url);
-	if (empty($parse_url['host']) || $parse_url['host'] == $_SERVER['HTTP_HOST'])
-		return TRUE;
-
-	// Blocking SPAM
-	if ($use_spam_check['referer'] && SpamCheck($parse_url['host']))
-		return TRUE;
-
-	if (! is_dir(TRACKBACK_DIR))      die('No such directory: TRACKBACK_DIR');
-	if (! is_writable(TRACKBACK_DIR)) die('Permission denied to write: TRACKBACK_DIR');
-
-	// Update referer data
-	if (ereg("[,\"\n\r]", $url))
-		$url = '"' . str_replace('"', '""', $url) . '"';
-
-	$filename = tb_get_filename($page, '.ref');
-	$data     = tb_get($filename, 3);
-	$d_url    = rawurldecode($url);
-	if (! isset($data[$d_url])) {
-		$data[$d_url] = array(
-			'',    // [0]: Last update date
-			UTIME, // [1]: Creation date
-			0,     // [2]: Reference counter
-			$url,  // [3]: Referer header
-			1      // [4]: Enable / Disable flag (1 = enable)
-		);
-	}
-	$data[$d_url][0] = UTIME;
-	$data[$d_url][2]++;
-
-	$fp = fopen($filename, 'w');
-	if ($fp === FALSE) return FALSE;
-	set_file_buffer($fp, 0);
-	@flock($fp, LOCK_EX);
-	rewind($fp);
-	foreach ($data as $line)
-		fwrite($fp, join(',', $line) . "\n");
-	@flock($fp, LOCK_UN);
-	fclose($fp);
-
-	return TRUE;
 }
 ?>
