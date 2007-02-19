@@ -1,8 +1,8 @@
 <?php
-/////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
-//
-// $Id: toolbar.php,v 0.1.2 2005/12/06 00:21:00 upk Exp $
+// $Id: toolbar.php,v 0.2.4 2007/02/19 08:21:00 miko Exp $
+// Copyright (C) 2005,2007 PukiWiki Plus! Team
+// License: GPL v2
 //
 
 function plugin_toolbar_convert()
@@ -69,7 +69,7 @@ function plugin_toolbar_convert()
 		case 'rss':
 		case 'mixirss':
 			if ($body != '') { $body .= "\n"; }
-			$body .= _toolbar($name, 36, 14);
+			$body .= _toolbar($name);
 			break;
 		case '|':
 			$body .= "\n&nbsp;\n";
@@ -114,9 +114,9 @@ $_IMAGE['skin']['recent']   = 'recentchanges.png';
 $_IMAGE['skin']['backup']   = 'backup.png';
 $_IMAGE['skin']['refer']    = 'plus/referer.png';
 $_IMAGE['skin']['help']     = 'help.png';
-$_IMAGE['skin']['rss']      = 'rss.png';
-$_IMAGE['skin']['rssplus']  = 'rss.png';
-$_IMAGE['skin']['mixirss']  = 'rss.png';
+$_IMAGE['skin']['rss']      = 'feed.png';
+$_IMAGE['skin']['rssplus']  = 'feed.png';
+$_IMAGE['skin']['mixirss']  = 'feed.png';
 $_IMAGE['skin']['skeylist'] = 'plus/skeylist.png';
 $_IMAGE['skin']['linklist'] = 'plus/linklist.png';
 $_IMAGE['skin']['log']      = 'log.png';
@@ -129,7 +129,7 @@ $_IMAGE['skin']['log']      = 'log.png';
 	if (!isset($link[$key])) { return '<!--LINK NOT FOUND-->'; }
 	if (!isset($image[$key])) { return  '<!--IMAGE NOT FOUND-->'; }
 
-	return '<a href="' . $link[$key] . '">' .
+	return '<a href="' . $link[$key] . '" rel="nofollow">' .
 	       '<img src="' . IMAGE_DIR . $image[$key] . '" width="' . $x . '" height="' . $y . '" ' .
 	                'alt="' . $lang[$key] . '" title="' . $lang[$key] . '" />' .
 	       '</a>';
