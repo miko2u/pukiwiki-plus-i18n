@@ -1,5 +1,5 @@
 <?php
-// $Id: tb.inc.php,v 1.19.29 2007/02/19 00:06:00 miko Exp $
+// $Id: tb.inc.php,v 1.19.30 2007/02/19 07:06:00 miko Exp $
 /*
  * PukiWiki/TrackBack: TrackBack Ping receiver and viewer
  * (C) 2007      PukiWiki Plus! Team
@@ -126,7 +126,7 @@ function plugin_tb_save($url, $tb_id)
 		$result = http_request($url);
 		if ($result['rc'] !== 200) plugin_tb_return(PLUGIN_TB_ERROR, 'URL is fictitious.');
 		$urlbase = get_script_uri();
-		$matches = array()
+		$matches = array();
 		if (preg_match_all('#' . preg_quote($urlbase, '#') . '#i', $result['data'], $matches) == 0) {
 			honeypot_write();
 			if (PLUGIN_TB_HTTP_ERROR === TRUE && is_sapi_clicgi() === FALSE) {
