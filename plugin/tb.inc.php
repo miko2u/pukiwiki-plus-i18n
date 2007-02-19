@@ -1,5 +1,5 @@
 <?php
-// $Id: tb.inc.php,v 1.19.27 2007/02/19 00:06:00 miko Exp $
+// $Id: tb.inc.php,v 1.19.29 2007/02/19 00:06:00 miko Exp $
 /*
  * PukiWiki/TrackBack: TrackBack Ping receiver and viewer
  * (C) 2007      PukiWiki Plus! Team
@@ -16,6 +16,9 @@
  * plugin_tb_mode_view($tb_id)  ?__mode=view
  * plugin_tb_recent($line)
  */
+
+// Trackback site check.(Is foreign site linked my site?)
+defined('PLUGIN_TB_SITE_CHECK')||define('PLUGIN_TB_SITE_CHECK', TRUE);
 
 // If trackback error, 'HTTP/1.0 400 Bad Request'
 defined('PLUGIN_TB_HTTP_ERROR')||define('PLUGIN_TB_HTTP_ERROR', FALSE);
@@ -117,8 +120,25 @@ function plugin_tb_save($url, $tb_id)
 	if ($page === FALSE) plugin_tb_return(PLUGIN_TB_ERROR, 'TrackBack ID is invalid.');
 
 	// URL validation (maybe worse of processing time limit)
-	$result = http_request($url, 'HEAD');
-	if ($result['rc'] !== 200) plugin_tb_return(PLUGIN_TB_ERROR, 'URL is fictitious.');
+	if (!is_url($url)) plugin_tb_return(PLUGIN_TB_ERROR, 'URL is fictitious.');
+
+	if (PLUGIN_TB_SITE_CHECK === TRUE) {
+		$result = http_request($url);
+		if ($result['rc'] !== 200) plugin_tb_return(PLUGIN_TB_ERROR, 'URL is fictitious.');
+		$urlbase = get_script_uri();
+		$matches = array()
+		if (preg_match_all('#' . preg_quote($urlbase, '#') . '#i', $result['data'], $matches) == 0) {
+			honeypot_write();
+			if (PLUGIN_TB_HTTP_ERROR === TRUE && is_sapi_clicgi() === FALSE) {
+				header('HTTP/1.0 403 Forbidden');
+				exit;
+			}
+			plugin_tb_return(PLUGIN_TB_ERROR, 'Writing is prohibited.');
+		}
+	} else {
+		$result = http_request($url, 'HEAD');
+		if ($result['rc'] !== 200) plugin_tb_return(PLUGIN_TB_ERROR, 'URL is fictitious.');
+	}
 
 	// Update TrackBack Ping data
 	$filename = tb_get_filename($page);
@@ -148,7 +168,6 @@ function plugin_tb_save($url, $tb_id)
 	foreach(array('title', 'excerpt', 'blog_name') as $key) {
 		if (preg_match_all('#http\://#i', $items[$key], $matches) >= 1) {
 			honeypot_write();
-			$sapi = php_sapi_name();
 			if (PLUGIN_TB_HTTP_ERROR === TRUE && is_sapi_clicgi() === FALSE) {
 				header('HTTP/1.0 400 Bad Request');
 				exit;
