@@ -1,16 +1,16 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: mail.php,v 1.8.1 2006/12/23 04:37:52 miko Exp $
+// $Id: mail.php,v 1.10.1 2007/02/19 15:38:56 miko Exp $
 // Copyright (C)
-//   2006      PukiWiki Plus! Team
-//   2003-2006 PukiWiki Developers Team
+//   2006-2007 PukiWiki Plus! Team
+//   2003-2007 PukiWiki Developers Team
 //   2003      Originally written by upk
 // License: GPL v2 or (at your option) any later version
 //
 // E-mail related functions
 
 // Send a mail to the administrator
-function pkwk_mail_notify($subject, $message, $summary = array())
+function pkwk_mail_notify($subject, $message, $summary = array(), $summary_position = FALSE)
 {
 	global $smtp_server, $smtp_auth, $notify_to, $notify_from, $notify_header;
 	static $_to, $_headers, $_after_pop;
@@ -55,16 +55,24 @@ function pkwk_mail_notify($subject, $message, $summary = array())
 	// Subject:
 	if (isset($summary['PAGE'])) $subject = str_replace('$page', $summary['PAGE'], $subject);
 
-	// Footer
+	// Summary
 	if (isset($summary['REMOTE_ADDR'])) $summary['REMOTE_ADDR'] = & $_SERVER['REMOTE_ADDR'];
 	if (isset($summary['USER_AGENT']))
 		$summary['USER_AGENT']  = '(' . UA_PROFILE . ') ' . UA_NAME . '/' . UA_VERS;
+
 	if (! empty($summary)) {
-		$_summary = '';
-		if ($message != '') $_summary = "\n" . str_repeat('-', 30) . "\n";
-		foreach($summary as $key => $value)
-			$_summary .= $key . ': ' . $value . "\n";
-		$message .= $_summary;
+		$_separator = ($message != '') ? "\n" . str_repeat('-', 30) . "\n" : '';
+		foreach($summary as $key => $value) {
+			$summary[$key] = $key . ': ' . $value;
+		}
+		if ($summary_position) {
+			// Top
+			$message =implode("\n", $summary) . $_separator . $message;
+		} else {
+			// Bottom
+			$message = $message  . $_separator . implode("\n", $summary);
+		}
+		unset($summary);
 	}
 
 	// Wait POP/APOP auth completion
