@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: attach.inc.php,v 1.82.25 2007/02/17 04:13:25 miko Exp $
+// $Id: attach.inc.php,v 1.82.26 2007/02/28 02:18:00 upk Exp $
 // Copyright (C)
 //   2005-2006 PukiWiki Plus! Team
 //   2003-2005 PukiWiki Developers Team
@@ -299,17 +299,23 @@ function attach_doupload(&$file, $page, $pass=NULL, $temp='', $copyright=FALSE, 
 		} else if (preg_match('/^(image\/)/i', $type)) {
 			// file type is image, check image.
 			$size = @getimagesize($file['tmp_name']);
-			if (!is_array($size) || $size[2] < 0 || $size[2] > 4) {
+			if (!is_array($size) || !preg_match('/^(image\/)/i', $size['mime'])) {
 				$must_compress = 1;
 			}
 		} else {
+			// FIXME: BugTrack/104
 			// other is user settings.
-			$must_compress = PLUGIN_ATTACH_UNKNOWN_COMPRESS;
+			$size = @getimagesize($file['tmp_name']);
+			if (is_array($size) && preg_match('/^(image\/)/i', $size['mime'])) {
+				$must_compress = 0;
+			} else {
+				$must_compress = PLUGIN_ATTACH_UNKNOWN_COMPRESS;
+			}
 		}
 	} else {
 		// file type is image, check image.
 		$size = @getimagesize($file['tmp_name']);
-		if (!is_array($size) || $size[2] < 0 || $size[2] > 4) {
+		if (!is_array($size) || !preg_match('/^(image\/)/i', $size['mime'])) {
 			$must_compress = 1;
 		}
 	}
