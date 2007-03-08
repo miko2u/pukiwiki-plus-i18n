@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: pukiwiki.ini.php,v 1.147.14 2007/02/19 07:09:21 miko Exp $
+// $Id: pukiwiki.ini.php,v 1.148.14 2007/02/19 07:09:21 miko Exp $
 // Copyright (C)
 //   2005-2007 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
@@ -8,7 +8,8 @@
 // License: GPL v2 or (at your option) any later version
 //
 // PukiWiki main setting file
-// Plus!note:(policy)not merge official cvs(1.139->1.140)
+// Plus!NOTE:(policy)not merge official cvs(1.139->1.140)
+// Plus!NOTE:(policy)not merge official cvs(1.147->1.148) See Question/181
 
 /////////////////////////////////////////////////
 // Functionality settings

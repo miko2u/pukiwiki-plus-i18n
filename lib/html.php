@@ -8,6 +8,8 @@
 // License: GPL v2 or (at your option) any later version
 //
 // HTML-publishing related functions
+// Plus!NOTE:(policy)not merge official cvs(1.49->1.54)
+// Plus!NOTE:(policy)not merge official cvs(1.58->1.59) See Question/181
 
 // Show page-content
 function catbody($title, $page, $body)

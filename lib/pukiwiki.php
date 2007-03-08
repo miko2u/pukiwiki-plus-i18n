@@ -31,6 +31,8 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
+//
+// Plus!NOTE:(policy)not merge official cvs(1.16->1.17) See Question/181
 
 if (! defined('DATA_HOME')) define('DATA_HOME', '');
 

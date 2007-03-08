@@ -1,13 +1,14 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: file.php,v 1.77.26 2006/12/23 04:41:54 miko Exp $
+// $Id: file.php,v 1.78.26 2006/12/23 04:41:54 miko Exp $
 // Copyright (C)
-//   2005-2006 PukiWiki Plus! Team
-//   2002-2006 PukiWiki Developers Team
+//   2005-2007 PukiWiki Plus! Team
+//   2002-2007 PukiWiki Developers Team
 //   2001-2002 Originally written by yu-ji
 // License: GPL v2 or (at your option) any later version
 //
 // File related functions
+// Plus!NOTE:(policy)not merge official cvs(1.77->1.78) See Question/181
 
 // RecentChanges
 define('PKWK_MAXSHOW_ALLOWANCE', 10);

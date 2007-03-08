@@ -1,12 +1,13 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: edit.inc.php,v 1.40.32 2006/12/22 02:35:00 miko Exp $
+// $Id: edit.inc.php,v 1.41.32 2006/12/22 02:35:00 miko Exp $
 // Copyright (C)
-//   2005-2006 PukiWiki Plus! Team
-//   2001-2006 PukiWiki Developers Team
+//   2005-2007 PukiWiki Plus! Team
+//   2001-2007 PukiWiki Developers Team
 // License: GPL v2 or (at your option) any later version
 //
 // Edit plugin (cmd=edit)
+// Plus!NOTE:(policy)not merge official cvs(1.40->1.41) See Question/181
 
 // Remove #freeze written by hand
 define('PLUGIN_EDIT_FREEZE_REGEX', '/^(?:#freeze(?!\w)\s*)+/im');

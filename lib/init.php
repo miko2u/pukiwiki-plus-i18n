@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: init.php,v 1.51.27 2007/01/28 19:54:00 upk Exp $
+// $Id: init.php,v 1.52.27 2007/01/28 19:54:00 upk Exp $
 // Copyright (C)
 //   2005-2007 PukiWiki Plus! Team
 //   2002-2006 PukiWiki Developers Team
@@ -8,7 +8,8 @@
 // License: GPL v2 or (at your option) any later version
 //
 // Init PukiWiki here
-// Plus!note(policy):I18N not merged official 1.44->1.45
+// Plus!I18N:(policy)not merge official cvs(1.44->1.45)
+// Plus!NOTE:(policy)not merge official cvs(1.51->1.52) See Question/181
 
 // PukiWiki version / Copyright / License
 

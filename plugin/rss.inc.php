@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: rss.inc.php,v 1.20.2 2006/09/30 02:19:38 miko Exp $
+// $Id: rss.inc.php,v 1.21.2 2006/09/30 02:19:38 miko Exp $
 //
 // RSS plugin: Publishing RSS of RecentChanges
 //
@@ -10,6 +10,8 @@
 //   RSS 0.9,  1.0  : RSS means 'RDF Site Summary'
 //   RSS 0.91, 0.92 : RSS means 'Rich Site Summary'
 //   RSS 2.0        : RSS means 'Really Simple Syndication' (born from RSS 0.92)
+//
+// Plus!NOTE:(policy)not merge official cvs(1.20->1.21) See BugTrack2/62
 
 function plugin_rss_action()
 {
