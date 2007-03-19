@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: update_entities.inc.php,v 1.13.3 2007/01/21 14:14:05 miko Exp $
+// $Id: update_entities.inc.php,v 1.14.3 2007/02/28 16:12:10 miko Exp $
 // Copyright (C)
 //   2005-2007 PukiWiki Plus! Team
 //   2003-2007 PukiWiki Developers Team
@@ -117,7 +117,7 @@ function plugin_update_entities_create($do = FALSE)
 		$min = min($min, $len);
 	}
 
-	$pattern = "(?=[a-zA-Z0-9]\{$min,$max})" . generate_matcher_regex($entities);
+	$pattern = "(?=[a-zA-Z0-9]\{$min,$max})" . generate_trie_regex($entities);
 	$fp = fopen(CACHE_DIR . PKWK_ENTITIES_REGEX_CACHE, 'w')
 		or die_message('cannot write file PKWK_ENTITIES_REGEX_CACHE<br />' . "\n" .
 			'maybe permission is not writable or filename is too long');
