@@ -2,9 +2,9 @@
 /**
  * PukiWiki Plus! ログインプラグイン
  *
- * @copyright	Copyright &copy; 2004-2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version	$Id: login.php,v 0.12 2006/12/06 03:10:00 upk Exp $
- * @license	http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @copyright	Copyright &copy; 2004-2007, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * @version	$Id: login.php,v 0.13 2007/03/29 00:17:00 upk Exp $
+ * @license	http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 
 require_once(LIB_DIR . 'auth.cls.php');
@@ -56,7 +56,7 @@ function plugin_login_convert()
 	}
 
 	if (! empty($select)) {
-		$select = '<select name="api"><option value="plus" selected>Normal</option>'.$select.'</select>';
+		$select = '<select name="api"><option value="plus" selected="selected">Normal</option>'.$select.'</select>';
 	} else {
 		$select = '<input type="hidden" name="api" value="plus" />';
 	}
