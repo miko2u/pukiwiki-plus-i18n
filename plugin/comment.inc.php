@@ -1,8 +1,8 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: comment.inc.php,v 1.36.17 2006/12/06 03:00:00 upk Exp $
+// $Id: comment.inc.php,v 1.36.18 2007/04/09 01:03:00 upk Exp $
 // Copyright (C)
-//   2005-2006 PukiWiki Plus! Team
+//   2005-2007 PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
 //   2001-2002 Originally written by yu-ji
 // License: GPL v2 or (at your option) any later version
@@ -34,6 +34,10 @@ function plugin_comment_action()
 
 	// if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
 	if (auth::check_role('readonly')) die_message('PKWK_READONLY prohibits editing');
+
+	if (!is_page($vars['refer']) && auth::is_check_role(PKWK_CREATE_PAGE)) {
+		die_message( _('PKWK_CREATE_PAGE prohibits editing') );
+	}
 
 	// If SPAM, goto jail.
 	if ($spam) return plugin_comment_honeypot();

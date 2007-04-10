@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: pcomment.inc.php,v 1.44.15 2006/12/06 02:42:00 upk Exp $
+// $Id: pcomment.inc.php,v 1.44.16 2007/04/09 01:04:00 upk Exp $
 //
 // pcomment plugin - Show/Insert comments into specified (another) page
 //
@@ -67,6 +67,11 @@ function plugin_pcomment_action()
 	}
 
 	$refer = isset($vars['refer']) ? $vars['refer'] : '';
+
+	if (!is_page($refer) && auth::is_check_role(PKWK_CREATE_PAGE)) {
+		die_message( _('PKWK_CREATE_PAGE prohibits editing') );
+	}
+
 	$retval = plugin_pcomment_insert();
 	if ($retval['collided']) {
 		$vars['page'] = $refer;

@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: pukiwiki.ini.php,v 1.148.14 2007/02/19 07:09:21 miko Exp $
+// $Id: pukiwiki.ini.php,v 1.148.15 2007/04/09 01:34:00 upk Exp $
 // Copyright (C)
 //   2005-2007 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
@@ -36,6 +36,10 @@ if (! defined('PKWK_READONLY'))
 // PKWK_SAFE_MODE - Prohibits some unsafe(but compatible) functions 
 if (! defined('PKWK_SAFE_MODE'))
 	define('PKWK_SAFE_MODE', 0); // 0,1,2,3,4
+
+// PKWK_CREATE_PAGE - New page making is prohibited.
+if (! defined('PKWK_CREATE_PAGE'))
+	define('PKWK_CREATE_PAGE', 0); // 0,1,2,3,4
 
 // PKWK_USE_REDIRECT - When linking outside, Referer is removed.
 if (! defined('PKWK_USE_REDIRECT'))

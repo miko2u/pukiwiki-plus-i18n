@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: edit.inc.php,v 1.41.32 2006/12/22 02:35:00 miko Exp $
+// $Id: edit.inc.php,v 1.41.33 2007/04/09 01:12:00 upk Exp $
 // Copyright (C)
 //   2005-2007 PukiWiki Plus! Team
 //   2001-2007 PukiWiki Developers Team
@@ -24,7 +24,7 @@ function plugin_edit_action()
 	if (auth::check_role('readonly')) die_message( _('PKWK_READONLY prohibits editing') );
 
 	if (PKWK_READONLY == ROLE_AUTH && auth::get_role_level() > ROLE_AUTH) {
-			die_message( _('PKWK_READONLY prohibits editing') );
+		die_message( _('PKWK_READONLY prohibits editing') );
 	}
 
 	if (isset($vars['realview'])) {
@@ -33,6 +33,10 @@ function plugin_edit_action()
 
 	$page = isset($vars['page']) ? $vars['page'] : '';
 	check_editable($page, true, true);
+
+	if (!is_page($page) && auth::is_check_role(PKWK_CREATE_PAGE)) {
+		die_message( _('PKWK_CREATE_PAGE prohibits editing') );
+	}
 
 	if (isset($vars['preview']) || ($load_template_func && isset($vars['template']))) {
 		return plugin_edit_preview();
