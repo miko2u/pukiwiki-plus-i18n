@@ -2,8 +2,8 @@
 /**
  * passwd plugin.
  *
- * @copyright   Copyright &copy; 2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: passwd.inc.php,v 0.3 2006/12/04 00:56:00 upk Exp $
+ * @copyright   Copyright &copy; 2006-2007, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * @version     $Id: passwd.inc.php,v 0.4 2007/04/10 01:16:00 upk Exp $
  *
  * $A1 = md5($data['username'] . ':' . $realm . ':' . $auth_users[$data['username']]);
  */
@@ -149,7 +149,7 @@ function plugin_passwd_action()
 
 function passwd_menu($msg='&nbsp;')
 {
-	global $script, $head_tags, $_passwd_msg, $auth_type, $realm;
+	global $script, $head_tags, $_passwd_msg, $auth_type, $realm, $vars;
 
 	$head_tags[] = ' <script type="text/javascript" src="'.SKIN_DIR.'crypt/md5.js"></script>';
 	$head_tags[] = ' <script type="text/javascript" src="'.SKIN_DIR.'crypt/sha1.js"></script>';
@@ -162,6 +162,15 @@ function passwd_menu($msg='&nbsp;')
 
 	$checked_md5 = 'checked="checked"';
 	$checked_sha1 = '';
+
+	// adminpass を求める処理の場合か？
+	$is_adminpass = isset($vars['adminpass']);
+	if ($is_adminpass) {
+		$use_pkwk_write_func = false;
+		$auth_type = 1;
+	} else {
+		$use_pkwk_write_func = USE_PKWK_WRITE_FUNC;
+	}
 
 	// 役割に応じた設定
 	if ($role_level == 2) {
@@ -243,7 +252,7 @@ EOD;
 		$a1_des = "a1 = objForm.key.value;\n";
 		$disabled_sha1 = '';
 		// 書き込み禁止 または ゲスト時は、ユーザ名不要
-		if (! USE_PKWK_WRITE_FUNC || $role_level == 0) {
+		if (! $use_pkwk_write_func || $role_level == 0) {
 			$msg_username = '';
 		}
 		break;
@@ -261,7 +270,7 @@ EOD;
 	// プラグインによる書き込み制限の場合
 	// 使用する場合は、変更させることもコピーさせることも不要なので、抑止する
 	// 更新ボタンすら表示しない
-	if (! USE_PKWK_WRITE_FUNC || $role_level == 0) {
+	if (! $use_pkwk_write_func || $role_level == 0) {
 		$submit_sha1 = $submit_false = $submit_true = '';
  		$disabled_result = $msg_submit = $msg_role = '';
 	} else {
