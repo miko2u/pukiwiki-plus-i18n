@@ -3,11 +3,13 @@
  * PukiWiki Plus! ログインプラグイン
  *
  * @copyright	Copyright &copy; 2004-2007, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version	$Id: login.php,v 0.13 2007/03/29 00:17:00 upk Exp $
+ * @version	$Id: login.php,v 0.14 2007/04/12 00:23:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 
 require_once(LIB_DIR . 'auth.cls.php');
+
+defined('LOGIN_USE_AUTH_DEFAULT') or define('LOGIN_USE_AUTH_DEFAULT', 1);
 
 /*
  * 初期処理
@@ -49,15 +51,24 @@ function plugin_login_convert()
 	}
 
 	$select = '';
+	if (LOGIN_USE_AUTH_DEFAULT) {
+		$select .= '<option value="plus" selected="selected">Normal</option>';
+	}
+	$sw_ext_auth = false;
 	foreach($auth_api as $api=>$val) {
 		if ($val['use']) {
+			$sw_ext_auth = true;
 			$select .= '<option value="'.$api.'">'.$api.'</option>';
 		}
 	}
 
-	if (! empty($select)) {
-		$select = '<select name="api"><option value="plus" selected="selected">Normal</option>'.$select.'</select>';
+	if (empty($select)) return ''; // 認証機能が使えない
+
+	if ($sw_ext_auth) {
+		// 外部認証がある
+		$select = '<select name="api">'.$select.'</select>';
 	} else {
+		// 通常認証のみなのでボタン
 		$select = '<input type="hidden" name="api" value="plus" />';
 	}
 
