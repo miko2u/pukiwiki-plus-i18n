@@ -1,8 +1,8 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: auth.php,v 1.19.13 2006/08/02 02:22:00 miko Exp $
+// $Id: auth.php,v 1.19.14 2007/04/13 01:26:00 upk Exp $
 // Copyright (C)
-//   2005-2006 PukiWiki Plus! Team
+//   2005-2007 PukiWiki Plus! Team
 //   2003-2005 PukiWiki Developers Team
 // License: GPL v2 or (at your option) any later version
 //
@@ -191,6 +191,8 @@ function basic_auth($page, $auth_flag, $exit_flag, $auth_pages, $title_cannot)
 			$user_list = array_merge($user_list, explode(',', $val));
 
 	if (empty($user_list)) return TRUE; // No limit
+
+	if (! auth::check_role('role_adm_contents')) return TRUE; // 既にコンテンツ管理者
 
 	// Digest
 	if ($auth_type == 2) {
