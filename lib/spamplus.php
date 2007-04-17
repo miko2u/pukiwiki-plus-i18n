@@ -2,28 +2,21 @@
 /**
  * PukiWiki Plus! Blocking SPAM
  *
- * @copyright   Copyright &copy; 2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: log.php,v 0.4 2006/03/23 22:09:00 upk Exp $
+ * @copyright   Copyright &copy; 2006-2007, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * @version     $Id: spamplus.php,v 0.4 2007/04/17 00:39:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License
  *
  * Plus! - lib/file.php, lib/func.php, lib/config.php
  *
  */
 
-if (!defined('CONFIG_SPAM_BL')) {
-	define('CONFIG_SPAM_BL', 'spam/BlockList');
-}
-if (!defined('CONFIG_SPAM_WL_PRIVATE_NET')) {
-	define('CONFIG_SPAM_WL_PRIVATE_NET', 'spam/WhiteList/praivate_network');
-}
-if (!defined('CONFIG_SPAM_WL_SKIP_DOMAIN')) {
-	define('CONFIG_SPAM_WL_SKIP_DOMAIN', 'spam/WhiteList/skip_domain');
-}
+defined('CONFIG_SPAM_BLOCKLIST')      or define('CONFIG_SPAM_BLOCKLIST',      'spam/BlockList');
+defined('CONFIG_SPAM_BL')             or define('CONFIG_SPAM_BL',             'spam/BlackList');
+defined('CONFIG_SPAM_WL_PRIVATE_NET') or define('CONFIG_SPAM_WL_PRIVATE_NET', 'spam/WhiteList/praivate_network');
+defined('CONFIG_SPAM_WL_SKIP_DOMAIN') or define('CONFIG_SPAM_WL_SKIP_DOMAIN', 'spam/WhiteList/skip_domain');
 
 // Zero is Unlimited
-if (!defined('SPAM_MAX_COUNTER')) {
-	define('SPAM_MAX_COUNTER', 2);
-}
+defined('SPAM_MAX_COUNTER')           or define('SPAM_MAX_COUNTER', 2); 
 
 function SpamCheck($link,$mode='dns')
 {
@@ -36,7 +29,7 @@ function SpamCheckDNSBL($bl,$link)
 	$obj->setWhiteList( $obj->getConfig(CONFIG_SPAM_WL_SKIP_DOMAIN) );
 
 	if (empty($bl) || ! is_array($bl)) {
-		$obj->setBlockList( $obj->getConfig(CONFIG_SPAM_BL, 'HOST') );
+		$obj->setBlockList( $obj->getConfig(CONFIG_SPAM_BLOCKLIST, 'HOST') );
 	} else {
 		$obj->setBlockList( $bl );
 	}
@@ -60,12 +53,17 @@ function SpamCheckDNSBL($bl,$link)
 
 function SpamCheckIPBL($bl,$ip)
 {
-	global $log_common;
+	global $log_common, $log_ua;
+
+	$obj_bl = new SPAMBL();
+	if ($obj_bl->BlackCheck($ip,$log_ua)) return TRUE;
 
 	$obj = new IPBL();
 
+	$obj->setBlackList( $obj->getConfig(CONFIG_SPAM_BL, 'IP,HOST,UA') );
+
 	if (empty($bl) || ! is_array($bl)) {
-		$obj->setBlockList( $obj->getConfig(CONFIG_SPAM_BL, 'IP') );
+		$obj->setBlockList( $obj->getConfig(CONFIG_SPAM_BLOCKLIST, 'IP') );
 	} else {
 		$obj->setBlockList( $bl );
 	}
@@ -101,9 +99,66 @@ function SpamCheckIPBL($bl,$ip)
 	return FALSE;
 }
 
-class DNSBL
+class SPAMCHECK
 {
-	var $BlockList, $WhiteList, $MyNetList;
+	var $BlockList, $BlackList, $WhiteList, $MyNetList;
+
+	function setBlockList($x) { $this->BlockList = $x[0]; }
+	function setBlackList($x) { $this->BlackList = $x; }
+	function setWhiteList($x) { $this->WhiteList = $x[0]; }
+	function setMyNetList($x) { $this->MyNetList = $x[0]; }
+
+	function getConfig($name,$target='LIST')
+	{
+		$config = new Config($name);
+		$config->read();
+
+		$targets = explode(',', $target);
+		$data = array();
+		foreach($targets as $x) {
+			$data[] = $config->get($x);
+		}
+		unset($config);
+		return $data;
+	}
+}
+
+class SPAMBL extends SPAMCHECK
+{
+	function BlackCheck($ip,$ua)
+	{
+		$this->setBlackList( $this->getConfig(CONFIG_SPAM_BL, 'IP,HOST,UA') );
+
+		if (! empty($ip)) {
+			$ips = (is_ipaddr($ip)) ? array($ip) : gethostbynamel($ip);
+			foreach($ips as $i) {
+				// IP
+				foreach($this->BlackList[0] as $x) {
+					if ($i == $x) return TRUE;
+				}
+				// HOST
+				foreach($this->BlackList[1] as $x) {
+					$x_ips = gethostbynamel($x);
+					foreach($x_ips as $x_ip) {
+						if ($i == $x_ip) return TRUE;
+					}
+				}
+			}
+		}
+
+		if (! empty($ua)) {
+			// UA
+			foreach($this->BlackList[2] as $x) {
+				if ($ua == $x) return TRUE;
+			}
+		}
+
+		return FALSE;
+	}
+}
+
+class DNSBL extends SPAMCHECK
+{
 	var $debug = FALSE, $debug_result = array();
 	var $host, $reverse;
 	var $TLD = array(
@@ -123,18 +178,6 @@ class DNSBL
 	{
 		$this->host = strtolower($host);
 		$this->reverse = array_reverse(explode('.', $this->host ));
-	}
-	function setBlockList($x) { $this->BlockList = $x; }
-	function setWhiteList($x) { $this->WhiteList = $x; }
-	function setMyNetList($x) { $this->MyNetList = $x; }
-
-	function getConfig($name,$target='LIST')
-	{
-		$config = new Config($name);
-		$config->read();
-		$data = $config->get($target);
-		unset($config);
-		return $data;
 	}
 
 	function getDomain()
