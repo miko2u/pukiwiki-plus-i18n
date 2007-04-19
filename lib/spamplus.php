@@ -3,7 +3,7 @@
  * PukiWiki Plus! Blocking SPAM
  *
  * @copyright   Copyright &copy; 2006-2007, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: spamplus.php,v 0.4 2007/04/17 00:39:00 upk Exp $
+ * @version     $Id: spamplus.php,v 0.5 2007/04/18 01:08:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License
  *
  * Plus! - lib/file.php, lib/func.php, lib/config.php
@@ -125,29 +125,33 @@ class SPAMCHECK
 
 class SPAMBL extends SPAMCHECK
 {
-	function BlackCheck($ip,$ua)
+	function BlackCheck($target,$ua)
 	{
 		$this->setBlackList( $this->getConfig(CONFIG_SPAM_BL, 'IP,HOST,UA') );
 
-		if (! empty($ip)) {
-			$ips = (is_ipaddr($ip)) ? array($ip) : gethostbynamel($ip);
-			foreach($ips as $i) {
-				// IP
-				foreach($this->BlackList[0] as $x) {
-					if ($i == $x) return TRUE;
+		if (! empty($target)) {
+			// IP
+			if (! empty($this->BlackList[0])) {
+				$ips = (is_ipaddr($target)) ? array($target) : gethostbynamel($target);
+				foreach($ips as $ip) {
+					if (ip_scope_check($ip,$this->BlackList[0])) return TRUE;
 				}
-				// HOST
+			}
+			// HOST
+			if (! empty($this->BlackList[1])) {
+				$host = gethostbyaddr($target);
+				$len_host = strlen($host);
 				foreach($this->BlackList[1] as $x) {
-					$x_ips = gethostbynamel($x);
-					foreach($x_ips as $x_ip) {
-						if ($i == $x_ip) return TRUE;
-					}
+					// 後方一致のために、長さを確認
+					if (strlen($x) > $len_host) continue;
+					// 部分一致(後方一致)
+					if(stristr($host, $x) !== FALSE) return TRUE;
 				}
 			}
 		}
 
+		// UA
 		if (! empty($ua)) {
-			// UA
 			foreach($this->BlackList[2] as $x) {
 				if ($ua == $x) return TRUE;
 			}

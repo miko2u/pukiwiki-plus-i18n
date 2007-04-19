@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: funcplus.php,v 0.1.27 2007/01/28 20:02:00 upk Exp $
+// $Id: funcplus.php,v 0.1.28 2007/04/18 01:07:00 upk Exp $
 // Copyright (C)
 //   2005-2007 PukiWiki Plus! Team
 // License: GPL v2 or (at your option) any later version
@@ -270,7 +270,7 @@ function ip_scope_check($ip,$networks)
 		$range = explode('/', $network);
 		// $l_network = ip2long( ip2arrangement($range[0]) );
 		$l_network = ip2long( $range[0] );
-		if (empty($range[1])) $range[1] = 0;
+		if (empty($range[1])) $range[1] = 32;
 		$subnetmask = pow(2,32) - pow(2,32 - $range[1]);
 		if (($l_ip & $subnetmask) == $l_network) return TRUE;
 	}

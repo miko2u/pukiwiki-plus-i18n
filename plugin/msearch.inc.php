@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: msearch.inc.php,v 0.3.1 2005/03/10 05:00:10 miko Exp $
+// $Id: msearch.inc.php,v 0.3.2 2007/04/18 21:01:00 upk Exp $
 // Original is sha
 /* 
 *プラグイン msearch
@@ -291,7 +291,9 @@ function plugin_msearch_parse_html($ary,$ct,$site,$html,$type)
 
 		foreach ( $matches[0] as $line ) {
 //			$ary['debug'] .= "/$line<br />\n";
-			if ( preg_match('/<li\s*[^>]*>\s*<a\s+href=\"[^?]+(\?[^\"]+)\"[^>]*>(.+(?=<\/a>))<\/a>\((\d+)([mhdw])\)(.*(?=<\/li>))<\/li>/', $line, $mat) ) {
+			// For org:QA3/437
+			// if ( preg_match('/<li\s*[^>]*>\s*<a\s+href=\"[^?]+(\?[^\"]+)\"[^>]*>(.+(?=<\/a>))<\/a>\((\d+)([mhdw])\)(.*(?=<\/li>))<\/li>/', $line, $mat) ) {
+			if ( preg_match('/<li\s*[^>]*>\s*<a\s+href=\"[^?]+(\?[^\"]+)\"[^>]*>(.+(?=<\/a>))<\/a>\s*\((\d+)([mhdw])\)(.*(?=<\/li>))<\/li>/', $line, $mat) ) {
 				$mat['opt']  = $mat[1];
 				$mat['name'] = $mat[2];
 				$mat['past'] = $mat[3] . $mat[4];
