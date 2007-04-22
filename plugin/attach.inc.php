@@ -1,8 +1,8 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: attach.inc.php,v 1.82.26 2007/02/28 02:18:00 upk Exp $
+// $Id: attach.inc.php,v 1.82.27 2007/04/22 21:40:00 upk Exp $
 // Copyright (C)
-//   2005-2006 PukiWiki Plus! Team
+//   2005-2007 PukiWiki Plus! Team
 //   2003-2005 PukiWiki Developers Team
 //   2002-2003 PANDA <panda@arino.jp> http://home.arino.jp/
 //   2002      Y.MASUI <masui@hisec.co.jp> http://masui.net/pukiwiki/
@@ -288,7 +288,7 @@ function attach_gettext($path, $lock=FALSE)
 function attach_doupload(&$file, $page, $pass=NULL, $temp='', $copyright=FALSE, $notouch=FALSE)
 {
 	global $_attach_messages;
-	global $notify, $notify_subject, $notify_exclude;
+	global $notify, $notify_subject, $notify_exclude, $spam;
 
 	$must_compress = 0;
 	if (function_exists('mime_content_type')) {
@@ -326,16 +326,18 @@ function attach_doupload(&$file, $page, $pass=NULL, $temp='', $copyright=FALSE, 
 		$vars['uploadtext'] = attach_gettext($file['tmp_name']);
 		if ($vars['uploadtext'] === '' || $vars['uploadtext'] === FALSE) return FALSE;
 
-		global $spam;
-		if (isset($spam['method']['attach'])) {
-			$_method = & $spam['method']['attach'];
-		} else if (isset($spam['method']['_default'])) {
-			$_method = & $spam['method']['_default'];
-		} else {
-			$_method = array();
+		//global $spam;
+		if ($spam !== 0) {
+			if (isset($spam['method']['attach'])) {
+				$_method = & $spam['method']['attach'];
+			} else if (isset($spam['method']['_default'])) {
+				$_method = & $spam['method']['_default'];
+			} else {
+				$_method = array();
+			}
+			$exitmode = isset($spam['exitmode']) ? $spam['exitmode'] : '';
+			pkwk_spamfilter('File Attach', $page, $vars, $_method, $exitmode);
 		}
-		$exitmode = isset($spam['exitmode']) ? $spam['exitmode'] : '';
-		pkwk_spamfilter('File Attach', $page, $vars, $_method, $exitmode);
 	}
 
 	if ($must_compress && exist_plugin('dump')) {

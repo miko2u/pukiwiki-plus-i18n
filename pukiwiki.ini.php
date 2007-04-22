@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: pukiwiki.ini.php,v 1.148.15 2007/04/09 01:34:00 upk Exp $
+// $Id: pukiwiki.ini.php,v 1.148.16 2007/04/22 21:43:00 upk Exp $
 // Copyright (C)
 //   2005-2007 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
@@ -227,7 +227,7 @@ $use_spam_check = array(
 /////////////////////////////////////////////////
 // Spam URI insertion filtering
 
-$spam = 1;	// 1 = On
+$spam = 0;	// 1 = On
 
 if ($spam) {
 	$spam = array();
