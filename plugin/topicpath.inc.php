@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: topicpath.inc.php,v 1.7.4 2007/04/22 17:54:00 upk Exp $
+// $Id: topicpath.inc.php,v 1.7.5 2007/04/22 18:09:00 upk Exp $
 // Copyright (C)
 //   2004-2007 PukiWiki Plus! Team
 //   2004-2005 PukiWiki Developers Team
@@ -21,16 +21,16 @@ defined('PLUGIN_TOPICPATH_THIS_PAGE_LINK') or define('PLUGIN_TOPICPATH_THIS_PAGE
 
 function plugin_topicpath_convert()
 {
-	global $topicpath_display;
-	if (isset($topicpath_display) && $topicpath_display == false) return '';
+	global $topicpath;
+	if (isset($topicpath) && $topicpath == false) return '';
 	return '<div id ="topicpath">' . plugin_topicpath_inline() . '</div>';
 }
 
 function plugin_topicpath_inline()
 {
-	global $script, $vars, $defaultpage, $topicpath_display;
+	global $script, $vars, $defaultpage, $topicpath;
 
-	if (isset($topicpath_display) && $topicpath_display == false) return '';
+	if (isset($topicpath) && $topicpath == false) return '';
 
 	$page = isset($vars['page']) ? $vars['page'] : '';
 	if ($page == '' || $page == $defaultpage) return '';
