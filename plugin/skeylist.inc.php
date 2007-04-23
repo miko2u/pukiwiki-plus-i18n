@@ -1,8 +1,8 @@
 <?php
-// $Id: skeylist.inc.php,v 0.8 2005/05/20 01:01:00 upk Exp $
+// $Id: skeylist.inc.php,v 0.9 2007/04/23 00:05:00 upk Exp $
 /*
  * PukiWiki 人気検索キープラグイン
- * (C) 2004, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * (C) 2004-2007, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * License: GPL
 */
 
@@ -39,7 +39,8 @@ function plugin_skeylist_action()
 	}
 
 	$max  = (empty($vars['max']))  ? -1 : htmlspecialchars($vars['max'], ENT_QUOTES);
-	$data = tb_get(tb_get_filename($page,'.ref'));
+	// $data = tb_get(tb_get_filename($page,'.ref'));
+	$data = ref_get_data(REFERER_DIR . encode($page) . '.ref');
 
 	//  データ無し
 	if (count($data) == 0)
@@ -71,7 +72,8 @@ function plugin_skeylist_convert()
 	if (empty($page)) $page = htmlspecialchars($vars['page'], ENT_QUOTES);
 	$max = (empty($max)) ? 10 : htmlspecialchars($max, ENT_QUOTES);
 
-	$data = tb_get(tb_get_filename($page,'.ref'));
+	// $data = tb_get(tb_get_filename($page,'.ref'));
+	$data = ref_get_data(REFERER_DIR . encode($page) . '.ref');
 	if (count($data) == 0) return ''; //  データ無し
 	$data = skeylist_analysis($data);
 	// 0:検索キー 1:参照カウンタ
