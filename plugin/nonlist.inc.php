@@ -1,7 +1,31 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: nonlist.inc.php,v 0.0.1 2007/04/23 02:21:00 upk Exp $
+// $Id: nonlist.inc.php,v 0.0.2 2007/04/23 22:11:00 upk Exp $
 //
+
+function plugin_nonlist_convert()
+{
+	if (auth::check_role('role_adm_contents')) return '';
+
+	if (func_num_args() == 1) {
+		list($cmd) = func_get_args();
+		switch($cmd) {
+		case 'env':
+			$cmd = 2;
+			break;
+		case 'col':
+			$cmd = 1;
+			break;
+		default:
+			$cmd = 0;
+		}
+	} else {
+		$cmd = 0;
+	}
+
+	return plugin_nonlist_getlist($cmd);
+}
+
 function plugin_nonlist_action()
 {
 	global $vars;
@@ -34,14 +58,12 @@ function plugin_nonlist_getlist($cmd=0)
 	}
 
 	$pages = array_diff(auth::get_existpages(),array($whatsnew));
-	$tmp = array();
-	foreach($pages as $file=>$page) {
-		if (substr($page,0,1) !== ':') continue;
-		if ($cmd == 2 && substr($page,0,8) !== ':config/') continue;
-		$tmp[$file] = $page;
+	// : のみ抜粋
+	$pages = preg_grep('/^\:/S', $pages);
+	if ($cmd == 2) {
+		$pages = preg_grep('/^\:config\//S', $pages);
 	}
-
-	if (empty($tmp)) return '';
-	return page_list($tmp,'read',false);
+	if (empty($pages)) return '';
+	return page_list($pages,'read',false);
 }
 ?>
