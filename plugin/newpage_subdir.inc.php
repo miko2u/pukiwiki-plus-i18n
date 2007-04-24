@@ -16,32 +16,30 @@ function build_directory_list($roots, $option) {
 			$page = strip_bracket($page);
 //			if (preg_match("/^$root.*$/", $page)){
 			if (strpos($page,$root) === 0){
-				if($option['directory only'] && strrpos($page, "/") >= strlen($root) ) {
-					$page = substr($page,0, strrpos($page, "/"));
-					$list["directory"][] = $page;
-				} else {
-					$list["directory"][] = $page;
+				if($option['directory only'] && strrpos($page, '/') >= strlen($root) ) {
+					$page = substr($page,0, strrpos($page, '/'));
 				}
-				while( strrpos($page, "/") >= strlen($root) ) {
-					$page = substr($page,0, strrpos($page, "/"));
-					$list["directory"][] = $page;
+				$list['directory'][] = $page;
+				while( strrpos($page, '/') >= strlen($root) ) {
+					$page = substr($page,0, strrpos($page, '/'));
+					$list['directory'][] = $page;
 				}
 				$matched = TRUE;
 			}
 		}
 		if(!$matched) {
-			$list["directory"][] = $root;
+			$list['directory'][] = $root;
 
 			$warnings[] = 
 				"<font color=\"red\">" . sprintf( _("#%s doesn't have the corresponding page. "),$root) . "</font>" .
-				"(<a href=\"$script?" . rawurlencode($root) . "\">" . _("making") . "</a>)<br>\n";
+				"(<a href=\"$script?" . rawurlencode($root) . "\">" . _("making") . "</a>)<br />\n";
 		}
 	}
-	$list["directory"] = array_unique($list["directory"]);
-	natcasesort($list["directory"]);
+	$list['directory'] = array_unique($list['directory']);
+	natcasesort($list['directory']);
 
-	if(!$option["quiet"]) {
-		$list["warning"] = $warnings;
+	if(!$option['quiet']) {
+		$list['warning'] = $warnings;
 	}
 	return $list;
 }
@@ -49,28 +47,28 @@ function build_directory_list($roots, $option) {
 function print_form_string( $list ) {
 	global $script,$vars;
 	
-	$form_string = "<form action=\"$script\" method=\"post\">\n";
-	$form_string.= "<div>\n";
-	$form_string.= _('New page') . ": ";
+	$form_string  = "<form action=\"$script\" method=\"post\">\n";
+	$form_string .= "<div>\n";
+	$form_string .= _('New page') . ": ";
 
-	if($list["directory"]) {
-		$form_string.= "<select name=\"directory\">\n";
+	if($list['directory']) {
+		$form_string .= "<select name=\"directory\">\n";
 		foreach( $list["directory"] as $dir ) {
-			$form_string.= "<option>$dir/</option>\n";
+			$form_string .= "<option>$dir/</option>\n";
 		}
-		$form_string.= "</select>\n";
+		$form_string .= "</select>\n";
 	}
 	
-	$form_string.= "<input type=\"hidden\" name=\"plugin\" value=\"newpage_subdir\" />\n";
-	$form_string.= "<input type=\"hidden\" name=\"refer\" value=\"$vars[page]\" />\n";
-	$form_string.= "<input type=\"text\" name=\"page\" size=\"30\" value=\"\" />\n";
-	$form_string.= "<input type=\"submit\" value=\"" . _('Edit') . "\" />\n";
-	$form_string.= "</div>\n";
-	$form_string.= "</form>\n";
+	$form_string .= "<input type=\"hidden\" name=\"plugin\" value=\"newpage_subdir\" />\n";
+	$form_string .= "<input type=\"hidden\" name=\"refer\" value=\"$vars[page]\" />\n";
+	$form_string .= "<input type=\"text\" name=\"page\" size=\"30\" value=\"\" />\n";
+	$form_string .= "<input type=\"submit\" value=\"" . _('Edit') . "\" />\n";
+	$form_string .= "</div>\n";
+	$form_string .= "</form>\n";
 
-	if($list["warning"]) {
-		foreach( $list["warning"] as $warning ) {
-			$form_string.= $warning;
+	if($list['warning']) {
+		foreach( $list['warning'] as $warning ) {
+			$form_string .= $warning;
 		}
 	}
 
@@ -103,7 +101,9 @@ function print_help_message() {
 function plugin_newpage_subdir_convert()
 {
 	global $vars;
-	$available_option="rdhq";
+	$available_option = 'rdhq';
+
+	if (auth::check_role('readonly')) return '';
 
 	// parsing all parameters
 	foreach(func_get_args() as $arg) {
@@ -138,7 +138,7 @@ function plugin_newpage_subdir_convert()
 		return print_help_message();
 	}
 	if(!$roots) {
-		$roots[] = strip_bracket($vars["page"]);
+		$roots[] = strip_bracket($vars['page']);
 	}
 
 	return print_form_string(build_directory_list($roots, $option));
@@ -148,19 +148,19 @@ function plugin_newpage_subdir_action()
 {
 	global $script, $vars;
 
-	if(!$vars["page"]) {
-		if($vars["directory"]) {
-			$directory = strip_bracket($vars["directory"]);
+	if(!$vars['page']) {
+		if($vars['directory']) {
+			$directory = strip_bracket($vars['directory']);
 			$roots[] =  substr($directory, 0, strlen($directory)-1);
 			// $msg_prefix = $directory."..に";
 			$msg_prefix = _("To $directory.");
 		}
-		$action_messages["msg"] = $msg_prefix . _('New page');
-		$action_messages["body"] = print_form_string(build_directory_list($roots));
+		$action_messages['msg'] = $msg_prefix . _('New page');
+		$action_messages['body'] = print_form_string(build_directory_list($roots));
 		return $action_messages;
 	}
 	
-	header("Location: $script?".rawurlencode($vars['directory'].$vars["page"]));
+	header('Location: '.$script.'?'.rawurlencode($vars['directory'].$vars['page']));
 	die();
 }
 ?>
