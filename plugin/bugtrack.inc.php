@@ -52,6 +52,7 @@ function plugin_bugtrack_convert()
 
 	// if (PKWK_READONLY) return ''; // Show nothing
 	if (auth::check_role('readonly')) return ''; // Show nothing
+	if (auth::is_check_role(PKWK_CREATE_PAGE)) return '';
 
 	$base = $vars['page'];
 	$category = array();
@@ -181,6 +182,7 @@ function plugin_bugtrack_action()
 
 	// if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
 	if (auth::check_role('readonly')) die_message('PKWK_READONLY prohibits editing');
+	if (auth::is_check_role(PKWK_CREATE_PAGE)) die_message(_('PKWK_CREATE_PAGE prohibits editing'));
 	if ($post['mode'] != 'submit') return FALSE;
 
 	// Petit SPAM Check (Client(Browser)-Server Ticket Check)
