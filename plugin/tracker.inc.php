@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: tracker.inc.php,v 1.35.9 2007/01/21 14:29:12 miko Exp $
+// $Id: tracker.inc.php,v 1.35.10 2007/04/27 01:34:00 upk Exp $
 // Copyright (C)
 //	 2004-2007 PukiWiki Plus! Team
 //   2003-2005 PukiWiki Developers Team
@@ -25,6 +25,7 @@ function plugin_tracker_convert()
 
 	// if (PKWK_READONLY) return ''; // Show nothing
 	if (auth::check_role('readonly')) return ''; // Show nothing
+	if (auth::is_check_role(PKWK_CREATE_PAGE)) return '';
 
 	$base = $refer = $vars['page'];
 
@@ -93,7 +94,8 @@ function plugin_tracker_action()
 	global $post, $vars, $now;
 
 	// if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
-	if (auth::check_role('readonly')) die_message('PKWK_READONLY prohibits editing');
+	if (auth::check_role('readonly')) die_message(_('PKWK_READONLY prohibits editing'));
+	if (auth::is_check_role(PKWK_CREATE_PAGE)) die_message(_('PKWK_CREATE_PAGE prohibits editing'));
 
 	$config_name = (isset($post['_config']) && $post['_config'] != '') ? $post['_config'] : '';
 

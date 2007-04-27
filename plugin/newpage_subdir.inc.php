@@ -1,5 +1,5 @@
 <?php
-// $Id: newpage_subdir.inc.php,v 1.2.1 2006/11/04 18:19:00 upk Exp $
+// $Id: newpage_subdir.inc.php,v 1.2.2 2007/04/27 01:26:00 upk Exp $
 // @based_on newpage.inc.php
 // @based_on ls2.inc.php
 // @thanks to panda (auther of newpage.inc.php/ls2.inc.php)
@@ -104,6 +104,7 @@ function plugin_newpage_subdir_convert()
 	$available_option = 'rdhq';
 
 	if (auth::check_role('readonly')) return '';
+	if (auth::is_check_role(PKWK_CREATE_PAGE)) return '';
 
 	// parsing all parameters
 	foreach(func_get_args() as $arg) {
@@ -147,6 +148,9 @@ function plugin_newpage_subdir_convert()
 function plugin_newpage_subdir_action()
 {
 	global $script, $vars;
+
+        if (auth::check_role('readonly')) return '';
+        if (auth::is_check_role(PKWK_CREATE_PAGE)) return '';
 
 	if(!$vars['page']) {
 		if($vars['directory']) {

@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: file.php,v 1.78.26 2006/12/23 04:41:54 miko Exp $
+// $Id: file.php,v 1.78.27 2007/04/27 01:02:12 upk Exp $
 // Copyright (C)
 //   2005-2007 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
@@ -76,10 +76,21 @@ function page_write($page, $postdata, $notimestamp = FALSE)
 	// if (PKWK_READONLY) return; // Do nothing
 	if (auth::check_role('readonly')) return; // Do nothing
 
+	if (is_page($page)) {
+		$oldpostdata = get_source($page, TRUE, TRUE);
+echo '<pre>';
+echo 'page='.$page."\n";
+var_dump(is_page($page));
+print_r($oldpostdata);
+die('------ DIE');
+	} else {
+		if (auth::is_check_role(PKWK_CREATE_PAGE)) die('DDDD');
+		$oldpostdata = '';
+	}
+
 	$postdata = make_str_rules($postdata);
 
 	// Create and write diff
-	$oldpostdata = is_page($page) ? get_source($page, TRUE, TRUE) : '';
 	$diffdata    = do_diff($oldpostdata, $postdata);
 
 	$role_adm_contents = auth::check_role('role_adm_contents');
