@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: file.php,v 1.78.27 2007/04/27 01:02:12 upk Exp $
+// $Id: file.php,v 1.78.28 2007/04/27 01:02:20 upk Exp $
 // Copyright (C)
 //   2005-2007 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
@@ -78,11 +78,6 @@ function page_write($page, $postdata, $notimestamp = FALSE)
 
 	if (is_page($page)) {
 		$oldpostdata = get_source($page, TRUE, TRUE);
-echo '<pre>';
-echo 'page='.$page."\n";
-var_dump(is_page($page));
-print_r($oldpostdata);
-die('------ DIE');
 	} else {
 		if (auth::is_check_role(PKWK_CREATE_PAGE)) die('DDDD');
 		$oldpostdata = '';
