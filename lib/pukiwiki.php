@@ -109,6 +109,9 @@ if (isset($vars['cmd'])) {
 	$plugin = '';
 }
 
+// SPAM
+if (SpamCheckBAN($_SERVER['REMOTE_ADDR'])) die();
+
 // Spam filtering
 if ($spam && $method != 'GET') {
 	// Adjustment

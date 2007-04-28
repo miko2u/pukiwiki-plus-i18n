@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: pukiwiki.ini.php,v 1.148.16 2007/04/22 21:43:00 upk Exp $
+// $Id: pukiwiki.ini.php,v 1.148.17 2007/04/28 23:20:00 upk Exp $
 // Copyright (C)
 //   2005-2007 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
@@ -178,7 +178,7 @@ $whatsnew     = 'RecentChanges'; // Modified page list
 $whatsdeleted = 'RecentDeleted'; // Removeed page list
 $interwiki    = 'InterWikiName'; // Set InterWiki definition here
 $aliaspage    = 'AutoAliasName'; // Set AutoAlias definition here
-$glossarypage = 'Glossary';		 // Set Glossary definition here
+$glossarypage = 'Glossary';	 // Set Glossary definition here
 $menubar      = 'MenuBar';       // Menu
 $sidebar      = 'SideBar';       // Side
 $headarea     = ':Header';
@@ -218,6 +218,7 @@ require_once('config-log.ini.php');
 /////////////////////////////////////////////////
 // Blocking SPAM
 $use_spam_check = array(
+	'page_view'		=> 0,
 	'page_remote_addr'	=> 0,
 	'page_contents'		=> 0,
 	'trackback'		=> 0,
@@ -227,7 +228,7 @@ $use_spam_check = array(
 /////////////////////////////////////////////////
 // Spam URI insertion filtering
 
-$spam = 0;	// 1 = On
+$spam = 1;	// 1 = On
 
 if ($spam) {
 	$spam = array();

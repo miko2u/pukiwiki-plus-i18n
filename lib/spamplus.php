@@ -3,13 +3,14 @@
  * PukiWiki Plus! Blocking SPAM
  *
  * @copyright   Copyright &copy; 2006-2007, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: spamplus.php,v 0.6 2007/04/28 20:22:00 upk Exp $
+ * @version     $Id: spamplus.php,v 0.7 2007/04/28 23:26:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License
  *
  * Plus! - lib/file.php, lib/func.php, lib/config.php
  *
  */
 
+defined('CONFIG_SPAM_BANLIST')        or define('CONFIG_SPAM_BANLIST',        'spam/BANList');
 defined('CONFIG_SPAM_BLOCKLIST')      or define('CONFIG_SPAM_BLOCKLIST',      'spam/BlockList');
 defined('CONFIG_SPAM_BL')             or define('CONFIG_SPAM_BL',             'spam/BlackList');
 defined('CONFIG_SPAM_WL_PRIVATE_NET') or define('CONFIG_SPAM_WL_PRIVATE_NET', 'spam/WhiteList/praivate_network');
@@ -21,6 +22,15 @@ defined('SPAM_MAX_COUNTER')           or define('SPAM_MAX_COUNTER', 2);
 function SpamCheck($link,$mode='dns')
 {
 	return ($mode == 'ip') ? SpamCheckIPBL('',$link) : SpamCheckDNSBL('',$link);
+}
+
+function SpamCheckBAN($ip)
+{
+	global $log_ua, $use_spam_check;
+	if (! $use_spam_check['page_view']) return FALSE;
+	$obj = new SPAMBAN();
+	if ($obj->BlackCheck($ip,$log_ua)) return TRUE;
+	return FALSE;
 }
 
 function SpamCheckDNSBL($bl,$link)
@@ -125,21 +135,30 @@ class SPAMCHECK
 
 class SPAMBL extends SPAMCHECK
 {
+	var $target,$ua;
+
 	function BlackCheck($target,$ua)
 	{
-		$this->setBlackList( $this->getConfig(CONFIG_SPAM_BL, 'IP,HOST,UA') );
+		$this->target = $target;
+		$this->ua = $ua;
 
-		if (! empty($target)) {
+		$this->setBlackList( $this->getConfig(CONFIG_SPAM_BL, 'IP,HOST,UA') );
+		return $this->Check();
+	}
+
+	function Check()
+	{
+		if (! empty($this->target)) {
 			// IP
 			if (! empty($this->BlackList[0])) {
-				$ips = (is_ipaddr($target)) ? array($target) : gethostbynamel($target);
+				$ips = (is_ipaddr($this->target)) ? array($this->target) : gethostbynamel($this->target);
 				foreach($ips as $ip) {
 					if ($this->RangeCheck($ip)) return TRUE;
 				}
 			}
 			// HOST
 			if (! empty($this->BlackList[1])) {
-				$host = gethostbyaddr($target);
+				$host = gethostbyaddr($this->target);
 				$len_host = strlen($host);
 				foreach($this->BlackList[1] as $x) {
 					// 後方一致のために、長さを確認
@@ -151,9 +170,9 @@ class SPAMBL extends SPAMCHECK
 		}
 
 		// UA
-		if (! empty($ua)) {
+		if (! empty($this->ua)) {
 			foreach($this->BlackList[2] as $x) {
-				if ($ua == $x) return TRUE;
+				if ($this->ua == $x) return TRUE;
 			}
 		}
 
@@ -174,6 +193,18 @@ class SPAMBL extends SPAMCHECK
 			if (ip_range_check($ip,$from,$to)) return TRUE;
 		}
 		return FALSE;
+	}
+}
+
+class SPAMBAN extends SPAMBL
+{
+	function BlackCheck($target,$ua)
+	{
+                $this->target = $target;
+                $this->ua = $ua;
+
+		$this->setBlackList( $this->getConfig(CONFIG_SPAM_BANLIST, 'IP,HOST,UA') );
+                return $this->Check();
 	}
 }
 
