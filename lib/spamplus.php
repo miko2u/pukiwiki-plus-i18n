@@ -3,7 +3,7 @@
  * PukiWiki Plus! Blocking SPAM
  *
  * @copyright   Copyright &copy; 2006-2007, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: spamplus.php,v 0.5 2007/04/18 01:08:00 upk Exp $
+ * @version     $Id: spamplus.php,v 0.6 2007/04/28 20:22:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License
  *
  * Plus! - lib/file.php, lib/func.php, lib/config.php
@@ -60,7 +60,7 @@ function SpamCheckIPBL($bl,$ip)
 
 	$obj = new IPBL();
 
-	$obj->setBlackList( $obj->getConfig(CONFIG_SPAM_BL, 'IP,HOST,UA') );
+	// $obj->setBlackList( $obj->getConfig(CONFIG_SPAM_BL, 'IP,HOST,UA') );
 
 	if (empty($bl) || ! is_array($bl)) {
 		$obj->setBlockList( $obj->getConfig(CONFIG_SPAM_BLOCKLIST, 'IP') );
@@ -134,7 +134,7 @@ class SPAMBL extends SPAMCHECK
 			if (! empty($this->BlackList[0])) {
 				$ips = (is_ipaddr($target)) ? array($target) : gethostbynamel($target);
 				foreach($ips as $ip) {
-					if (ip_scope_check($ip,$this->BlackList[0])) return TRUE;
+					if ($this->RangeCheck($ip)) return TRUE;
 				}
 			}
 			// HOST
@@ -157,6 +157,22 @@ class SPAMBL extends SPAMCHECK
 			}
 		}
 
+		return FALSE;
+	}
+
+	function RangeCheck($ip)
+	{
+		foreach($this->BlackList[0] as $x) {
+			if (is_array($x)) {
+				$from = (empty($x[0])) ? '' : $x[0];
+				$to   = (empty($x[1])) ? '' : $x[1];
+			} else {
+				$from = $x;
+				$to = '';
+			}
+
+			if (ip_range_check($ip,$from,$to)) return TRUE;
+		}
 		return FALSE;
 	}
 }
