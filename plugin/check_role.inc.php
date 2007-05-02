@@ -2,8 +2,8 @@
 /**
  * check_role plugin
  *
- * @copyright   Copyright &copy; 2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: check_role.inc.php,v 0.2 2006/09/06 01:53:00 upk Exp $
+ * @copyright   Copyright &copy; 2006-2007, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * @version     $Id: check_role.inc.php,v 0.3 2007/05/02 03:51:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  *
  */
@@ -34,7 +34,10 @@ function plugin_check_role_convert()
 
 function check_role_die($msg)
 {
-	global $script;
+	global $script, $defaultpage, $vars;
+
+	if (! empty($vars['page']) && $defaultpage == $vars['page']) die($msg);
+
 	header('Location: ' . $script );
 	// 飛ばないときしかメッセージは表示されない
 	die($msg);
