@@ -3,7 +3,7 @@
  * PukiWiki Plus! PRINT Plugin
  *
  * @copyright   Copyright &copy; 2007, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: xbel.inc.php,v 0.2 2007/05/03 21:51:00 upk Exp $
+ * @version     $Id: xbel.inc.php,v 0.3 2007/05/03 22:08:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  *
  */
@@ -149,7 +149,7 @@ EOD;
 		$PRINT_HEAD_BORDER = PRINT_HEAD_BORDER;
 		echo <<<EOD
 <div style="background-color: $PRINT_HEAD_BGCOLOR;border: 1px $PRINT_HEAD_BORDER solid;padding: 6px 8px;margin: 6px 1%;">
-	<h1>$h1</h1>
+	<h1 class="title">$h1</h1>
 	<p style="font-size:10px;text-align:right;">Last-Modified: $lastmodified</p>
 </div>
 
