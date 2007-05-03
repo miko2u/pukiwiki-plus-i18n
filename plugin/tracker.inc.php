@@ -80,8 +80,10 @@ function plugin_tracker_convert()
 		$_SESSION['tracker'] = md5(get_ticket() . $config_name);
 	}
 
+	// For QA/196, BugTrack/113
+	$form_enctype = is_mobile() ? '' : 'enctype="multipart/form-data"';
 	return <<<EOD
-<form enctype="multipart/form-data" action="$script" method="post">
+<form $form_enctype action="$script" method="post">
 <div>
 $retval
 $hiddens

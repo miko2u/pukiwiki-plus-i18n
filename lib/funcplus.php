@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: funcplus.php,v 0.1.29 2007/04/28 19:13:00 upk Exp $
+// $Id: funcplus.php,v 0.1.30 2007/05/04 01:54:00 upk Exp $
 // Copyright (C)
 //   2005-2007 PukiWiki Plus! Team
 // License: GPL v2 or (at your option) any later version
@@ -457,5 +457,10 @@ function make_thumbnail($ofile, $sfile, $maxw, $maxh, $refresh=FALSE, $zoom='10,
 	@imagedestroy($imdst);
 	@imagedestroy($imsrc);
 	return $ofile;
+}
+
+function is_mobile()
+{
+	return (UA_PROFILE == 'mobile' || UA_PROFILE == 'keitai');
 }
 ?>

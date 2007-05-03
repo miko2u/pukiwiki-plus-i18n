@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: html.php,v 1.59.13 2007/05/03 21:22:00 upk Exp $
+// $Id: html.php,v 1.59.13 2007/05/04 01:56:00 upk Exp $
 // Copyright (C)
 //   2005-2007 PukiWiki Plus! Team
 //   2002-2006 PukiWiki Developers Team
@@ -260,7 +260,7 @@ EOD;
 		$_SESSION['origin' . $s_ticket] = md5(get_ticket() . str_replace("\r", '', $s_original));
 	}
 
-	if ($ajax && UA_PROFILE == 'default') {
+	if ($ajax && ! is_mobile()) {
 		$add_ajax = '<input type="button" name="add_ajax" value="' . $btn_preview . '" accesskey="p" onclick="pukiwiki_apx(this.form.page.value)" />';
 	} else {
 		$add_ajax = '<input type="submit" name="preview" value="' . $btn_preview . '" accesskey="p" />';
@@ -325,7 +325,7 @@ function edit_form_assistant()
 	static $assist_loaded = FALSE;	// for non-reentry
 
 	// if Mobile-Phone, do not use.
-	if (defined('UA_PROFILE') && UA_PROFILE != 'default')
+	if (defined('UA_PROFILE') && is_mobile())
 		return;
 
 	// XHTML 1.0 Transitional
