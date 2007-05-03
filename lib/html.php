@@ -1,8 +1,8 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: html.php,v 1.59.12 2006/10/12 13:26:00 miko Exp $
+// $Id: html.php,v 1.59.13 2007/05/03 21:22:00 upk Exp $
 // Copyright (C)
-//   2005-2006 PukiWiki Plus! Team
+//   2005-2007 PukiWiki Plus! Team
 //   2002-2006 PukiWiki Developers Team
 //   2001-2002 Originally written by yu-ji
 // License: GPL v2 or (at your option) any later version
@@ -66,6 +66,7 @@ function catbody($title, $page, $body)
 	$_LINK['refer']    = "$script?plugin=referer&amp;page=$r_page";
 	$_LINK['reload']   = "$script?$r_page";
 	$_LINK['rename']   = "$script?plugin=rename&amp;refer=$r_page";
+	$_LINK['print']    = "$script?plugin=print&amp;page=$r_page";
 	$_LINK['rss']      = "$script?cmd=rss";
 	$_LINK['rss10']    = "$script?cmd=rss&amp;ver=1.0"; // Same as 'rdf'
 	$_LINK['rss20']    = "$script?cmd=rss&amp;ver=2.0";

@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: toolbar.php,v 0.2.4 2007/02/19 08:21:00 miko Exp $
+// $Id: toolbar.php,v 0.2.5 2007/05/03 21:12:00 upk Exp $
 // Copyright (C) 2005,2007 PukiWiki Plus! Team
 // License: GPL v2
 //
@@ -81,6 +81,7 @@ function plugin_toolbar_convert()
 		case 'diff':
 		case 'copy':
 		case 'rename':
+		case 'print':
 			if (!$is_read) break;
 		default:
 			if ($body != '') { $body .= "\n"; }
@@ -120,6 +121,8 @@ $_IMAGE['skin']['mixirss']  = 'feed.png';
 $_IMAGE['skin']['skeylist'] = 'plus/skeylist.png';
 $_IMAGE['skin']['linklist'] = 'plus/linklist.png';
 $_IMAGE['skin']['log']      = 'log.png';
+$_IMAGE['skin']['print']    = 'plus/print.png';
+
 
 	$lang = $_LANG['skin'];
 	$link = $_LINK;
