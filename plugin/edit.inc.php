@@ -197,6 +197,10 @@ function plugin_edit_write()
 	if (!isset($post['encode_hint']) && PKWK_ENCODING_HINT != '')
 		return plugin_edit_honeypot();
 
+	// Validate
+	if (is_spampost(array('msg')))
+		return plugin_edit_honeypot();
+
 	// Paragraph edit mode
 	if ($partid) {
 		$source = preg_split('/([^\n]*\n)/', $vars['original'], -1, PREG_SPLIT_NO_EMPTY|PREG_SPLIT_DELIM_CAPTURE);
