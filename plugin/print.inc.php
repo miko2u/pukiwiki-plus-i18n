@@ -3,7 +3,7 @@
  * PukiWiki Plus! PRINT Plugin
  *
  * @copyright   Copyright &copy; 2007, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: xbel.inc.php,v 0.4 2007/05/06 14:15:00 upk Exp $
+ * @version     $Id: xbel.inc.php,v 0.5 2007/05/07 02:09:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  *
  */
@@ -46,14 +46,14 @@ function plugin_print_action()
 	$noexists_pattern = '#<span class="noexists">([^<]*)<a[^>]+>' . preg_quote($_symbol_noexists, '#') . '</a></span>#';
 	$body = preg_replace($noexists_pattern,'$1',$body);
 
-	if ($noa) {
-		$body = preg_replace('#<a href="(.*?)"[^>]*>(.*?)</a>#si', '$2', $body);
-		$body = preg_replace('#<a class="ext" href="(.*?)" .*?>(.*?)<img src="' . IMAGE_URI . 'plus/ext.png".*?</a>#si','$2',$body);
-	}
-
 	// List of footnotes
 	ksort($foot_explain, SORT_NUMERIC);
 	$notes = ! empty($foot_explain) ? $note_hr . join("\n", $foot_explain) : '';
+
+	if ($noa) {
+		$body = print_strip_a($body);
+		$notes = print_strip_a($notes);
+	}
 
 	// Tags will be inserted into <head></head>
 	$head_tag = ! empty($head_tags) ? join("\n", $head_tags) ."\n" : '';
@@ -203,7 +203,12 @@ EOD;
 	die();
 }
 
-
+function print_strip_a($x)
+{
+	$x = preg_replace('#<a href="(.*?)"[^>]*>(.*?)</a>#si', '$2', $x);
+	$x = preg_replace('#<a class="ext" href="(.*?)" .*?>(.*?)<img src="' . IMAGE_URI . 'plus/ext.png".*?</a>#si','$2',$x);
+	return $x;
+}
 
 function print_display()
 {
