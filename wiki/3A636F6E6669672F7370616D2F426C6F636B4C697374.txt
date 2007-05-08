@@ -10,6 +10,7 @@
 |bsb.spamlookup.net   |  0|Blog Spam|http://bradchoate.com/projects/spamlookup|
 |niku.2ch.net         |  1|BBQ あらしお断りシステム|http://bbq.uso800.net/code.html|
 |relays.ordb.org      |  0|Open Relay|http://www.ordb.org/faq/#usage_dns|
+|all.rbl.jp           |  0|RBL.JP|http://www.rbl.jp/|
 
 *HOST
 
@@ -21,6 +22,8 @@
 |sbl.spamhaus.org     |  0|Spam Source|http://www.spamhaus.org/|
 |xbl.spamhaus.org     |  0|Open Proxy|http://www.spamhaus.org/|
 |multi.surbl.org      |  1|Content Based|http://www.surbl.org/lists.html|
+|multi.uribl.com      |  1|URI.COM|http://www.uribl.com/usage.shtml|
+|url.rbl.jp           |  1|RBL.JP|http://www.rbl.jp/|
 |bsb.empty.us         |  0|Blog Spam|http://bsb.empty.us/|
 |bsb.spamlookup.net   |  0|Blog Spam|http://bradchoate.com/projects/spamlookup|
 |cbl.abuseat.org      |  0|Open Proxy|http://cbl.abuseat.org/|
