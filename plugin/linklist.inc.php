@@ -1,10 +1,13 @@
 <?php
-// $Id: linklist.inc.php,v 0.4 2006/02/16 01:31:00 upk Exp $
 /*
  * PukiWiki 自動相互リンク作成プラグイン
- * (C) 2004-2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * License: GPL
-*/
+ *
+ * @copyright   Copyright &copy; 2004-2007, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * @version     $Id: linklist.inc.php,v 0.5 2007/05/11 20:18:00 upk Exp $
+ * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
+ */
+
+require_once(LIB_DIR . 'trackback.php'); // TrackBack
 
 // 構成定義ファイル
 define('CONFIG_REFERER','plugin/referer/config');
