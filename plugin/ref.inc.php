@@ -1,8 +1,8 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: ref.inc.php,v 1.50.9 2006/06/16 23:34:00 miko Exp $
+// $Id: ref.inc.php,v 1.50.10 2007/05/29 09:34:00 miko Exp $
 // Copyright (C)
-//   2005-2006 PukiWiki Plus! Team
+//   2005-2007 PukiWiki Plus! Team
 //   2002-2006 PukiWiki Developers Team
 //   2001-2002 Originally written by yu-ji
 // License: GPL v2 or (at your option) any later version
@@ -20,16 +20,19 @@ if (! defined('FILE_ICON'))
 // Default settings
 
 // Horizontal alignment
-define('PLUGIN_REF_DEFAULT_ALIGN', 'left'); // 'left', 'center', 'right'
+defined('PLUGIN_REF_DEFAULT_ALIGN')||define('PLUGIN_REF_DEFAULT_ALIGN', 'left'); // 'left', 'center', 'right'
 
 // Text wrapping
-define('PLUGIN_REF_WRAP_TABLE', FALSE); // TRUE, FALSE
+defined('PLUGIN_REF_WRAP_TABLE')||define('PLUGIN_REF_WRAP_TABLE', FALSE); // TRUE, FALSE
 
 // URL指定時に画像サイズを取得するか
-define('PLUGIN_REF_URL_GET_IMAGE_SIZE', TRUE); // FALSE, TRUE
+defined('PLUGIN_REF_URL_GET_IMAGE_SIZE')||define('PLUGIN_REF_URL_GET_IMAGE_SIZE', TRUE); // FALSE, TRUE
+
+// URL指定で除外するサイト(デフォルト:なし(FALSE))
+defined('PLUGIN_REF_URL_EXCLUSIVE')||define('PLUGIN_REF_URL_EXCLUSIVE', FALSE);
 
 // UPLOAD_DIR のデータ(画像ファイルのみ)に直接アクセスさせる
-define('PLUGIN_REF_DIRECT_ACCESS', FALSE); // FALSE or TRUE
+defined('PLUGIN_REF_DIRECT_ACCESS')||define('PLUGIN_REF_DIRECT_ACCESS', FALSE); // FALSE or TRUE
 // - これは従来のインラインイメージ処理を互換のために残すもので
 //   あり、高速化のためのオプションではありません
 // - UPLOAD_DIR をWebサーバー上に露出させており、かつ直接アクセス
@@ -39,10 +42,10 @@ define('PLUGIN_REF_DIRECT_ACCESS', FALSE); // FALSE or TRUE
 //   イメージだけを表示」させた時などに不具合が出る場合があります
 
 // 携帯電話での小さい画像の表示
-define('PLUGIN_REF_SHOW_IMAGE_TO_MOBILEPHONE', FALSE); // FALSE, TRUE
+defined('PLUGIN_REF_SHOW_IMAGE_TO_MOBILEPHONE')||define('PLUGIN_REF_SHOW_IMAGE_TO_MOBILEPHONE', FALSE); // FALSE, TRUE
 
 // ダウンロードするときは他ウィンドウにする
-define('PLUGIN_REF_DOWNLOAD_OTHERWINDOW', FALSE); // FALSE, TRUE
+defined('PLUGIN_REF_DOWNLOAD_OTHERWINDOW')||define('PLUGIN_REF_DOWNLOAD_OTHERWINDOW', FALSE); // FALSE, TRUE
 // 主に MSIE5.5 などでダウンロードが停止してしまう場合に使用します。
 // http://support.microsoft.com/kb/266305/ja
 
