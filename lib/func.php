@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: func.php,v 1.86.18 2007/04/01 10:59:05 miko Exp $
+// $Id: func.php,v 1.86.19 2007/05/30 19:17:00 upk Exp $
 // Copyright (C)
 //   2005-2007 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
@@ -751,11 +751,15 @@ EOD;
 				if ($count == $max) break;
 				$name = trim($value[1]);
 				if (! isset($pairs[$name])) {
-					++$count;
-					$pairs[$name] = trim($value[2]);
-				}
+					$paris[$name] = array();
+				} 
+				++$count;
+				$pairs[$name][] = trim($value[2]);
 				unset($matches[$key]);
 			}
+		}
+		foreach (array_keys($pairs) as $name) {
+			$pairs[$name] = array_unique($pairs[$name]);
 		}
 	}
 
@@ -763,7 +767,7 @@ EOD;
 	if ($word === '') return $pairs;
 
 	// A string: Seek the pair
-	return isset($pairs[$word]) ? $pairs[$word]:'';
+	return isset($pairs[$word]) ? $pairs[$word] : array();
 }
 
 // Load/get setting pairs from Glossary

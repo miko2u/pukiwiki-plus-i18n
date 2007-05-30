@@ -7,13 +7,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PukiWiki Plus! 1.4.7-u2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-05-03 21:29+0900\n"
+"POT-Creation-Date: 2007-05-30 19:25+0900\n"
 "PO-Revision-Date: 2007-05-03 21:30+0900\n"
 "Last-Translator: Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>\n"
 "Language-Team: Japanese <ja@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#: ../../lib/file.php:83
+msgid "PKWK_CREATE_PAGE prohibits editing"
+msgstr "PKWK_CREATE_PAGE 編集禁止"
 
 #: ../../lib/resource.php:13
 msgid "Sun"

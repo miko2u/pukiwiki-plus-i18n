@@ -1,8 +1,8 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: make_link.php,v 1.35.15 2006/09/30 02:10:50 miko Exp $
+// $Id: make_link.php,v 1.35.16 2007/05/30 19:18:00 upk Exp $
 // Copyright (C)
-//   2005-2006 PukiWiki Plus! Team
+//   2005-2007 PukiWiki Plus! Team
 //   2003-2006 PukiWiki Developers Team
 //   2001-2002 Originally written by yu-ji
 // License: GPL v2 or (at your option) any later version
@@ -730,7 +730,7 @@ class Link_autoalias extends Link
 	var $forceignorepages = array();
 	var $auto;
 	var $auto_a; // alphabet only
-	var $alias;
+	var $aliases;
 
 	function Link_autoalias($start)
 	{
@@ -746,7 +746,7 @@ class Link_autoalias extends Link
 		$this->auto = $auto;
 		$this->auto_a = $auto_a;
 		$this->forceignorepages = explode("\t", trim($forceignorepages));
-		$this->alias = '';
+		$this->aliases = array();
 	}
 	function get_pattern()
 	{
@@ -769,9 +769,9 @@ class Link_autoalias extends Link
 	}
 	function toString()
 	{
-		$this->alias = get_autoaliases($this->name);
-		if ($this->alias != '') {
-			$link = '[[' . $this->name . '>' . $this->alias . ']]';
+		$this->aliases = get_autoaliases($this->name);
+		if (! empty($this->aliases)) {
+			$link = '[[' . $this->name  . ']]';
 			return make_link($link);
 		}
 		return '';
@@ -892,12 +892,21 @@ function make_pagelink($page, $alias = '', $anchor = '', $refer = '', $isautolin
 	global $script, $vars, $link_compact, $related, $_symbol_noexists;
 
 	$s_page = htmlspecialchars(strip_bracket($page));
+	$r_page = rawurlencode($page);
+	if (! is_page($page)) {
+		$realpages = get_autoaliases(strip_bracket($page));
+		foreach ($realpages as $realpage) {
+			if (is_page($realpage)) {
+				$page = $realpage;
+				break;
+			}
+		}
+	}
 	$s_alias = ($alias == '') ? $s_page : $alias;
 
 	if ($page == '') return '<a href="' . $anchor . '">' . $s_alias . '</a>';
 //	if ($page == '') return open_uri_in_new_window('<a href="' . $anchor . '">' . $s_alias . '</a>', 'make_pagelink');
 
-	$r_page  = rawurlencode($page);
 	$r_refer = ($refer == '') ? '' : '&amp;refer=' . rawurlencode($refer);
 
 	if (! isset($related[$page]) && $page != $vars['page'] && is_page($page))

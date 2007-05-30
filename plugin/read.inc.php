@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: read.inc.php,v 1.8.1 2006/01/11 23:56:00 upk Exp $
+// $Id: read.inc.php,v 1.8.2 2007/05/30 19:14:00 upk Exp $
 //
 // Read plugin: Show a page and InterWiki
 
@@ -21,6 +21,20 @@ function plugin_read_action()
 		return do_plugin_action('interwiki'); // InterWikiNameを処理
 
 	} else if (is_pagename($page)) {
+		$realpages = get_autoaliases($page);
+		if (! empty($realpages)) {
+			if (count($realpages) == 1) {
+				header('Location: ' . get_script_uri() . '?' . $realpages[0]);
+				return;
+			}
+			$body = '<p>';
+			$body .= _('This pagename is an alias to') . '<br />';
+			foreach ($realpages as $realpage) {
+				$body .= make_pagelink($realpage) . '<br />';
+			}
+			$body .= '</p>';
+			return array('msg'=>_('Redirect'), 'body'=>$body);
+		}
 		$vars['cmd'] = 'edit';
 		return do_plugin_action('edit'); // 存在しないので、編集フォームを表示
 

@@ -1,8 +1,8 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: link.php,v 1.14.3 2006/09/18 05:23:12 miko Exp $
+// $Id: link.php,v 1.14.4 2007/05/30 19:18:00 upk Exp $
 // Copyright (C)
-//   2005-2006 PukiWiki Plus! Team
+//   2005-2007 PukiWiki Plus! Team
 //   2003-2006 PukiWiki Developers Team
 // License: GPL v2 or (at your option) any later version
 //
@@ -75,9 +75,11 @@ function links_update($page)
 		if (is_a($_obj, 'Link_autolink')) { // 行儀が悪い
 			$rel_auto[] = $_obj->name;
 		} else if (is_a($_obj, 'Link_autoalias')) {
-			$_alias = get_autoaliases($_obj->name);
-			if (is_pagename($_alias)) {
-				$rel_auto[] = $_alias;
+			$_aliases = get_autoaliases($_obj->name);
+			foreach ($_aliases as $_alias) {
+				if (is_pagename($_alias)) {
+					$rel_auto[] = $_alias;
+				}
 			}
 		} else {
 			$rel_new[]  = $_obj->name;
@@ -161,20 +163,24 @@ function links_init()
 			    $_obj->name == $page || $_obj->name == '')
 				continue;
 
-			$_name = $_obj->name;
 			if (is_a($_obj, 'Link_autoalias')) {
-				$_alias = get_autoaliases($_obj->name);
-				if (! is_pagename($_alias))
-					continue;	// not PageName
-				$_name = $_alias;
+				$_aliases = get_autoaliases($_obj->name);
+				foreach ($_aliases as $_alias) {
+					if (is_pagename($_alias)) {
+						$rel[] = $_alias;
+					}
+				}
+			} else {
+				$rel[] = $_obj->name;
 			}
-			$rel[] = $_name;
+		}
+		$rel = array_unique($rel);
+		foreach ($rel as $_name) {
 			if (! isset($ref[$_name][$page]))
 				$ref[$_name][$page] = 1;
 			if (! is_a($_obj, 'Link_autolink'))
 				$ref[$_name][$page] = 0;
 		}
-		$rel = array_unique($rel);
 		if (! empty($rel)) {
 			$fp = fopen(CACHE_DIR . encode($page) . '.rel', 'w')
 				or die_message('cannot write ' . htmlspecialchars(CACHE_DIR . encode($page) . '.rel'));
