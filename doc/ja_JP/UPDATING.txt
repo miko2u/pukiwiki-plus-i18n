@@ -1,4 +1,132 @@
-PukiWiki Plus! UPDATING
+PukiWiki Plus! I18N
 
-準備中
+PukiWiki Plus! I18N版は、以下の機能が追加・強化されています。
 
+
+o 国際化対応
+
+  + 日本語・英語・中国語(台湾)の locale をサポート
+  + multilang の cookie対応
+  + JavaScriptの国際化
+  + 設置場所基準の時刻設定 (質問箱/45)
+  + タイムゾーンの自動設定(クライアントの時刻に順ずる対策)
+
+o ログイング機能の追加
+
+  + 閲覧ログ、更新ログ、ダウンロードログ、各種コマンド実行ログ
+    の各種ログの取得が可能となっています。
+
+o セキュリティ対策
+
+  + 外部認証APIの実装
+  + ダイジェスト認証への対応
+  + 役割の見直し(BugTrack/62)
+  + 新規ページ作成制御(PKWK_CREATE_PAGE)の強化(rev.1473)
+  + SAFE_MODE対応
+    - 検索処理の対象ページの見直し(:で開始されるページの表示除外)
+  + 使用しないプラグインの定義($exclude_plugin)
+  + 添付ファイルの自動圧縮(JVN#465742E4回避策の一環)
+  + 閲覧できないページ名の隠蔽(質問箱/143)
+
+o SPAM対策
+
+  + スパムフィルタを添付ファイルにも適用(rev.1423)
+  + 編集をおこなうプラグインに簡易書き込みSPAMチェック機能を追加
+  + 詳細は、[[Documents/Blocking SPAM]]をご覧下さい。
+  + セッションやNGワードにおけるSPAM対策を追加
+
+o ajax 機能によるリアルタイムプレビュー機能の実装
+
+  + ajax 導入に伴い、いつくかの高機能化
+    - 検索結果のツールチップ表示
+    - グロッサリの画像サポート
+  + ajax 化による擬似WYISWYGリアルタイムプレビュー
+
+o 拡張プラグインへの配慮
+
+  + 拡張(自作)プラグインを別場所に配置できるようにしました。
+    (デフォルトでは extend/)
+
+o プラグインの追加
+
+  + サイトのイメージ画像を表示する "siteimage"
+  + Digest認証が可能になる "htdigest"プラグイン
+  + ユーザ認証管理 "passwd" プラグイン
+  + リンク切れチェック "brokenlink" プラグイン
+  + ブックマーク保存用 XBEL フォーマット生成 "xbel" プラグイン
+  + マーク付きキーワードを一覧表示 "todo" プラグイン
+  + グラフ表示可能な "chart" プラグイン
+  + ページの編集を制限する "check_role" プラグイン
+  + 文書数をカウントする "count" プラグイン
+  + bubbles
+  + print
+  + nonlist
+  + u2b(youtube)
+  + redirect
+  + csv2newpage
+  + _get
+  + skype
+  + tz
+  + GreyBox
+  + bliki
+  + passage
+  + pg_passage
+  + toc
+  + phpinfo
+  + role
+  + 国際化に関するプラグインの追加(multilangプラグイン,gettextプラグイン)
+  + その他プラグインの追加(worldtimeプラグインなど)
+
+o スキン
+
+  + eucjp版で好評だったスキンを追加(bluebox, cloudwalk, irid, iridorange, orangebox)
+  + tdiaryテーマ対応
+
+o TrackBack関連
+
+  + trackback機能とreferer機能の分離(rev.1426)
+  + tbプラグインのインライン機能の追加
+  + TrackBack Ping送信時の処理改善
+    - showrss などのプラグインを自動で無効化する対応
+    - 同一サイトの内からの送信を抑止する対応
+    - ホスト名の妥当性確認
+      o RFC2606 で定義されている予約されたドメイン(example,invalid,localhost,test)が
+        トップレベルになる場合
+      o ループバックアドレス(127/8)の場合
+      o プライベートＩＰアドレス(10/8,172.16/12,192.168/16)の場合
+    - ページ名の評価
+      Navigation,RecentChanges,RecentDeleted,InterWikiName,MenuBar,
+      SideBar, :Header,:Footer のページの場合(下位ページになった場合も含みます)
+
+o その他いろいろな最適化、バグ修正など
+
+  + BugTrack/95, BugTrack/96の対応
+  + popularプラグインのstrtotime対応(質問箱/80)
+  + Plus! のロゴの入れ替え (thanks maino)
+  + PukiWiki Plus!バナーを追加しました。(thanks maino)
+  + RSSアイコンの変更(rev.1429)
+  + 本家 cvs版(1.4.8_alpha/2007-03-06)と同期(rev.1434)
+  + APIの整備
+    - プラグイン補助API "get_plugin_option" の追加
+  + ログの肥大化対応
+  + 常にメニューバーを表示するオプションの追加(default.ini.php)
+  + proxy.phpの再構築による、リクエストの最適化
+  + popular プラグインを拡張し、「今日の人気n件」などを取得できるようにしました。(thanks sonots)
+
+  + 追加機能
+    - vote2プラグインの棒グラフ対応
+  + 各種チューニング
+    - ページ名変更における関連ファイルの見直し(Referer,TrackBackデータの追加)
+    - bliki, counter, minicalendar_viewer, adsense の各プラグイン
+    - BugTrack/63 対応
+    - XSSの脆弱性対応
+ 
+  + navibar2 の最新化
+
+  + より携帯からの観閲にこだわり
+    - 携帯の画像表示サポート
+
+※ajax は Opera7.x*1 および Mac IE5.2.3 などのレガシーブラウザでは使用できません。
+これらのすべての機能を使用するには、モダンブラウザである Internet Explorer 6.0SP2,
+FireFox 1.5x(Win), Opera 8.x(Win) および Safari 1.x/2.x(Mac), FireFox 1.0x/1.5x(Mac)
+をお勧めします。
