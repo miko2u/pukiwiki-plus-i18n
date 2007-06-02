@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: func.php,v 1.86.19 2007/05/30 19:17:00 upk Exp $
+// $Id: func.php,v 1.86.20 2007/06/02 14:38:00 upk Exp $
 // Copyright (C)
 //   2005-2007 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
@@ -727,8 +727,38 @@ function get_autolink_pattern_sub(& $pages, $start, $end, $pos)
 	 return generate_trie_regex(& $pages, $start, $end, $pos);
 }
 
-// Load/get setting pairs from AutoAliasName
+// Load/get autoalias pairs
 function get_autoaliases($word = '')
+{
+	global $autobasealias;
+	static $pairs;
+	if (! isset($pairs)) {
+		$pairs = get_autoaliases_from_aliaspage();
+		if ($autobasealias) {
+			$pairs = array_merge($pairs, get_autoaliases_from_autobasealias());
+		}
+	}
+
+	// An array: All pairs
+	if ($word === '') return $pairs;
+
+	// A string: Seek the pair
+	return isset($pairs[$word]) ? $pairs[$word] : array();
+}
+
+// Load/get pairs of AutoBaseAlias
+function get_autoaliases_from_autobasealias()
+{
+	static $paris;
+	if (! isset($pairs)) {
+		$data = file_get_contents(CACHE_DIR . PKWK_AUTOBASEALIAS_CACHE);
+		$pairs = unserialize($data);
+	}
+	return $pairs;
+}
+
+// Load/get setting pairs from AutoAliasName
+function get_autoaliases_from_aliaspage()
 {
 	global $aliaspage, $autoalias_max_words;
 	static $pairs;
@@ -762,12 +792,7 @@ EOD;
 			$pairs[$name] = array_unique($pairs[$name]);
 		}
 	}
-
-	// An array: All pairs
-	if ($word === '') return $pairs;
-
-	// A string: Seek the pair
-	return isset($pairs[$word]) ? $pairs[$word] : array();
+	return $pairs;
 }
 
 // Load/get setting pairs from Glossary

@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: pukiwiki.ini.php,v 1.148.19 2007/05/08 02:15:00 upk Exp $
+// $Id: pukiwiki.ini.php,v 1.148.20 2007/06/02 14:34:00 upk Exp $
 // Copyright (C)
 //   2005-2007 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
@@ -311,8 +311,14 @@ $autolink = 5; // Bytes, 0 = OFF (try 8)
 // Pukiwiki Plus! Recommended "4"
 $autoalias = 4; // Bytes, 0 = OFF (try 8)
 
-// Limit loading valid alias pairs
+// Limit loading valid alias pairs in AutoAliasName page
 $autoalias_max_words = 50; // pairs
+
+// AutoBaseAlias - AutoAlias to each page from its basename automatically
+$autobasealias = 0;
+
+// nonlist for AutoBaseAlias
+$autobasealias = '^\:|(^|\/)template$';
 
 /////////////////////////////////////////////////
 // AutoGlossary feature

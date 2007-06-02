@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: file.php,v 1.78.29 2007/05/27 03:09:00 upk Exp $
+// $Id: file.php,v 1.78.30 2007/06/02 14:37:00 upk Exp $
 // Copyright (C)
 //   2005-2007 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
@@ -21,6 +21,9 @@ define('PKWK_ENTITIES_REGEX_CACHE', 'entities.dat');
 define('PKWK_AUTOLINK_REGEX_CACHE',  'autolink.dat');
 define('PKWK_AUTOALIAS_REGEX_CACHE', 'autoalias.dat');
 define('PKWK_GLOSSARY_REGEX_CACHE',  'glossary.dat');
+
+// AutoAlias AutoBase cache
+define('PKWK_AUTOBASEALIAS_CACHE', 'autobasealias.dat');
 
 // Get source(wiki text) data of the page
 function get_source($page = NULL, $lock = TRUE, $join = FALSE)
@@ -472,10 +475,10 @@ function add_recent($page, $recentpage, $subject = '', $limit = 0)
 // Use without $autolink
 function lastmodified_add($update = '', $remove = '')
 {
-	global $maxshow, $whatsnew, $autolink;
+	global $maxshow, $whatsnew, $autolink, $autobasealias;
 
 	// AutoLink implimentation needs everything, for now
-	if ($autolink) {
+	if ($autolink || $autobasealias) {
 		put_lastmodified(); // Try to (re)create ALL
 		return;
 	}
@@ -550,7 +553,7 @@ function lastmodified_add($update = '', $remove = '')
 // Update RecentChanges
 function put_lastmodified()
 {
-	global $maxshow, $whatsnew, $autolink;
+	global $maxshow, $whatsnew, $autolink, $autobasealias;
 
 	// if (PKWK_READONLY) return; // Do nothing
 	if (auth::check_role('readonly')) return; // Do nothing
@@ -620,6 +623,36 @@ function put_lastmodified()
 		autolink_pattern_write(CACHE_DIR . PKWK_AUTOLINK_REGEX_CACHE,
 			get_autolink_pattern($pages, $autolink));
 	}
+
+	// AutoBaseAlias
+	if ($autobasealias) {
+		autobasealias_write(CACHE_DIR . PKWK_AUTOBASEALIAS_CACHE, $pages);
+	}
+}
+
+// Update AutoBaseAlias data
+function autobasealias_write($filename, &$pages)
+{
+	global $autobasealias_nonlist;
+	$pairs = array();
+	foreach ($pages as $page) {
+		if (preg_match('/' . $autobasealias_nonlist . '/', $page)) continue;
+		$base = get_short_pagename($page);
+		if ($base !== $page) {
+			if (! isset($pairs[$base])) $pairs[$base] = array();
+			$pairs[$base][] = $page;
+		}
+	}
+	$data = serialize($pairs);
+
+	$fp = fopen($filename, 'w') or
+			die_message('Cannot open ' . $filename . '<br />Maybe permission is not writable');
+	set_file_buffer($fp, 0);
+	@flock($fp, LOCK_EX);
+	rewind($fp);
+	fputs($fp, $data);
+	@flock($fp, LOCK_UN);
+	@fclose($fp);
 }
 
 // Update autolink data

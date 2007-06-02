@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: make_link.php,v 1.35.16 2007/05/30 19:18:00 upk Exp $
+// $Id: make_link.php,v 1.35.17 2007/06/02 16:03:00 upk Exp $
 // Copyright (C)
 //   2005-2007 PukiWiki Plus! Team
 //   2003-2006 PukiWiki Developers Team
@@ -922,8 +922,8 @@ function make_pagelink($page, $alias = '', $anchor = '', $refer = '', $isautolin
 
 		// AutoLink marker
 		if ($isautolink) {
-			$al_left  = '<!--autolink-->';
-			$al_right = '<!--/autolink-->';
+			$al_left  = '<!--autolink--><span class="autolink">';
+			$al_right = '</span><!--/autolink-->';
 		} else {
 			$al_left = $al_right = '';
 		}

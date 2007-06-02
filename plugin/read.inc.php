@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: read.inc.php,v 1.8.2 2007/05/30 19:14:00 upk Exp $
+// $Id: read.inc.php,v 1.8.3 2007/06/02 14:28:00 upk Exp $
 //
 // Read plugin: Show a page and InterWiki
 
@@ -24,6 +24,7 @@ function plugin_read_action()
 		$realpages = get_autoaliases($page);
 		if (! empty($realpages)) {
 			if (count($realpages) == 1) {
+				header('HTTP/1.0 301 Moved Permanently');
 				header('Location: ' . get_script_uri() . '?' . $realpages[0]);
 				return;
 			}
