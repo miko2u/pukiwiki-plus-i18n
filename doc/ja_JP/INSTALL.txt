@@ -8,7 +8,7 @@
      2001-2002 Originally written by yu-ji
     License: GPL v2 or (at your option) any later version
 
-    $Id: INSTALL.txt,v 1.7.1 2007/06/02 19:29:00 upk Exp $
+    $Id: INSTALL.txt,v 1.7.2 2007/06/03 02:35:00 upk Exp $
 
 インストール
     PukiWiki Plus!は、PHPスクリプトであるため、(例えばPerlのように)スクリプトに
@@ -41,7 +41,7 @@
         デスクトップPC     : default.ini.php
         携帯電話およびPDA  : mobile.ini.php
 
-      PukiWiki Plus!の管理者パスワードは、pukiwiki.ini.php にある変数 $adminpass
+      PukiWiki Plus!の管理者パスワードは、auth.ini.php にある変数 $adminpass
       です。簡単に試すだけであるならば、以下のような内容で充分でしょう。
       ('YourPassWord' の部分を、あなただけのキーワードで置き換えて下さい)
 
@@ -72,7 +72,9 @@
       image          755	画像ファイル
       image/face     755 	(画像ファイル)フェイスマーク  
       lib            755	ライブラリ
+      locale         755        locale(国際化用メッセージ)ディレクトリ
       plugin         755	プラグイン
+      extend         755        拡張プラグイン
       skin           755	スキン、CSS、JavaScirptファイル
       trackback      777	TrackBackファイル格納ディレクトリ
       wiki           777	データの格納ディレクトリ
