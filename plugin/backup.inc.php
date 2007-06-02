@@ -1,8 +1,8 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: backup.inc.php,v 1.27.16 2006/11/04 18:05:00 upk Exp $
+// $Id: backup.inc.php,v 1.27.17 2007/06/03 01:57:00 upk Exp $
 // Copyright (C)
-//   2005-2006 PukiWiki Plus! Team
+//   2005-2007 PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
 //   2001-2002 Originally written by yu-ji
 // License: GPL v2 or (at your option) any later version
@@ -107,7 +107,8 @@ $_title_backuplist     = _('Backup list');
 	if ($backups_count > 0 && $action != 'visualdiff') {
 		$body .= '  <ul>' . "\n";
 		foreach($backups as $age => $val) {
-			$date = format_date($val['time'], TRUE);
+			$time = (isset($val['real'])) ? $val['real'] : $val['time'];
+			$date = format_date($time, TRUE);
 			$body .= ($age == $s_age) ?
 				'   <li><em>' . $age . ' ' . $date . '</em></li>' . "\n" :
 				'   <li><a href="' . $script . '?cmd=backup&amp;action=' .
@@ -120,7 +121,7 @@ $_title_backuplist     = _('Backup list');
 	$body .= '</ul>'  . "\n";
 
 	if ($action == 'diff') {
-		if (auth::check_role('safemode')) die_message('PKWK_SAFE_MODE prohibits this');
+		if (auth::check_role('safemode')) die_message( _('PKWK_SAFE_MODE prohibits this') );
 		$title = & $_title_backupdiff;
 		$old = ($s_age > 1) ? join('', $backups[$s_age - 1]['data']) : '';
 		$cur = join('', $backups[$s_age]['data']);
@@ -128,7 +129,7 @@ $_title_backuplist     = _('Backup list');
 		auth::is_role_page($cur);
 		$body .= plugin_backup_diff(do_diff($old, $cur));
 	} else if ($s_action == 'nowdiff') {
-		if (auth::check_role('safemode')) die_message('PKWK_SAFE_MODE prohibits this');
+		if (auth::check_role('safemode')) die_message( _('PKWK_SAFE_MODE prohibits this') );
 		$title = & $_title_backupnowdiff;
 		$old = join('', $backups[$s_age]['data']);
 		$cur = join('', get_source($page));
@@ -151,14 +152,14 @@ $_title_backuplist     = _('Backup list');
 		$body = preg_replace('#&amp;spanend;#i', '</span>', $body);
 		$title = & $_title_backupnowdiff;
 	} else if ($s_action == 'source') {
-		if (auth::check_role('safemode')) die_message('PKWK_SAFE_MODE prohibits this');
+		if (auth::check_role('safemode')) die_message( _('PKWK_SAFE_MODE prohibits this') );
 		$title = & $_title_backupsource;
 		auth::is_role_page($backups[$s_age]['data']);
 		$body .= '<pre>' . htmlspecialchars(join('', $backups[$s_age]['data'])) .
 			'</pre>' . "\n";
 	} else {
 		if (PLUGIN_BACKUP_DISABLE_BACKUP_RENDERING) {
-			die_message('This feature is prohibited');
+			die_message( _('This feature is prohibited') );
 		} else {
 			$title = & $_title_backup;
 			auth::is_role_page($backups[$s_age]['data']);
@@ -295,7 +296,8 @@ EOD;
 			$_anchor_from = '<a href="' . $href . $age . '">';
 			$_anchor_to   = '</a>';
 		}
-		$date = format_date($data['time'], TRUE);
+		$time = (isset($data['real'])) ? $data['real'] : $data['time'];
+		$date = format_date($time, TRUE);
 		$retval[1] .= <<<EOD
    <li>$_anchor_from$age $date$_anchor_to
      [ <a href="$href$age&amp;action=diff">$_msg_diff</a>
@@ -314,7 +316,7 @@ function plugin_backup_get_list_all($withfilename = FALSE)
 {
 	global $cantedit;
 
-	if (auth::check_role('safemode')) die_message('PKWK_SAFE_MODE prohibits this');
+	if (auth::check_role('safemode')) die_message( _('PKWK_SAFE_MODE prohibits this') );
 
 	$pages = array_diff(auth::get_existpages(BACKUP_DIR, BACKUP_EXT), $cantedit);
 
@@ -404,15 +406,21 @@ EOD;
 	$retval[1] .= '<option value="' . $script . '?' . $r_page . '" selected="selected">' . _('->') . " $date(No.$maxcnt)</option>\n";
 	$backups = array_reverse($backups, True);
 	foreach ($backups as $age=>$data) {
-		$date = get_date("m/d", $data['time']);
-		$href = "$script?cmd=backup&amp;page=$r_page&amp;age=$age";
-		if ($diff_mode == 2) {
-			$retval[1] .= "<option value=\"$href&amp;action=visualdiff\">$date (No.$age)</option>\n";
-		} else if ($diff_mode == 1) {
-			$retval[1] .= "<option value=\"$href&amp;action=nowdiff\">$date (No.$age)</option>\n";
-		} else {
-			$retval[1] .= "<option value=\"$href\">$date (No.$age)</option>\n";
+		$time = (isset($data['real'])) ? $data['real'] : $data['time'];
+		$date = get_date('m/d', $time);
+		$href = $script . '?cmd=backup&amp;page=' . $r_page . '&amp;age=' . $age;
+
+		$retval[1] .= '<option value="'.$href;
+		switch($diff_mode) {
+		case 2:
+			$retval[1] .= '&amp;action=visualdiff';
+			break;
+		case 1:
+			$retval[1] .= '&amp;action=nowdiff';
+			break;
 		}
+		$retval[1] .= '">'.$date.' (No.'.$age.')</option>'."\n";
+
 	}
 	return join('',$retval);
 }
