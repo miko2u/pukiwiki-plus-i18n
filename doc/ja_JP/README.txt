@@ -1,18 +1,17 @@
 名前
-    PukiWiki - 自由にページを追加・削除・編集できるWebページ構築スクリプト
+    PukiWiki Plus! - 自由にページを追加・削除・編集できるWebページ構築スクリプト
 
-    Version 1.4.6
+    Version 1.4.7plus-u2-i18n
     Copyright (C)
-      2001-2005 PukiWiki Developers Team
-      2001-2002 yu-ji (Based on PukiWiki 1.3 by yu-ji)
-    License: GPL version 2 or (at your option) any later version
+     2005-2007 PukiWiki Plus! Team
+     2002-2007 PukiWiki Developers Team
+     2001-2002 Originally written by yu-ji
+    License: GPL v2 or (at your option) any later version
 
     URL:
-      http://pukiwiki.sourceforge.jp/
-      http://pukiwiki.sourceforge.jp/dev/
-      http://sourceforge.jp/projects/pukiwiki/
+      http://pukiwiki.cafelounge.net/plus/
 
-    $Id: README.txt,v 1.24 2005/09/11 05:58:33 henoheno Exp $
+    $Id: README.txt,v 1.24.1 2007/06/02 19:36:00 upk Exp $
 
 書式
     index.php
@@ -20,18 +19,18 @@
     index.php?plugin=PLUGIN_NAME
 
 概要
-    PukiWiki(ぷきうぃき)はハイパーテキストを素早く自由に追加・削除・編集でき
-    るWebアプリケーション(WikiWikiWeb)です。テキストデータからXHTML1.1を生成
+    PukiWiki(ぷきうぃき) Plus!は、ハイパーテキストを素早く自由に追加・削除・編集
+    できるWebアプリケーション(WikiWikiWeb)です。テキストデータからXHTML1.1を生成
     することができ、そのテキストはWebブラウザから何度でも修正することができま
     す。それぞれのページは自然にハイパーリンクで結びつきます。
 
-    PukiWikiはPHP言語で書かれたスクリプトであるため、PHP(PHP4.1.2～PHP5)が動
-    作するWebサーバに容易に設置でき、軽快に動作します。
+    PukiWiki Plus!は、PHP言語で書かれたスクリプトであるため、PHP(PHP4.1.2～PHP5)
+    が動作するWebサーバに容易に設置でき、軽快に動作します。
 
-    PukiWikiは、yu-jiさんを含む PukiWiki Develpers Team やその貢献者が、各自の
-    著作物にGPLバージョン2(または _あなたの選択で_ それ以降のGPL)を適用してい
-    る「フリーソフトウェア(自由なソフトウェア)」です。最新版はPukiWiki公式サイ
-    トから入手できます。
+    PukiWiki Plus!は、PukiWiki の派生版であり、PukiWiki Plus! Develpers Team や
+    その貢献者が、各自の著作物にGPLバージョン2(または _あなたの選択で_ それ以降のGPL)
+    を適用している「フリーソフトウェア(自由なソフトウェア)」です。
+    最新版はPukiWiki Plus!公式サイトから入手できます。
 
 ページの作成、編集、削除、復旧
 
@@ -96,8 +95,8 @@
       の中でも動作しますので、それらをページに含めた場合、管理者が定期的にそ
       のページをクリンナップする必要があるかもしれません。
 
-    2. PKWK_READONLY でPukiWiki全体を書き込み禁止にする
-      これは閲覧専用のPukiWikiを用意するためのオプションです。
+    2. PKWK_READONLY でPukiWiki Plus!全体を書き込み禁止にする
+      これは閲覧専用のPukiWiki Plus!を用意するためのオプションです。
       有効/無効にするためには管理者による設定変更が必要です。
       (詳しくは: BugTrack/744)
 
@@ -114,24 +113,24 @@
       設定を追加/削除するためには管理者による設定変更が必要です。
 
 ページを秘密にする、パスワードを秘密にする
-    PukiWiki全体を秘密の場所に置くことは簡単です。認証や暗号化をかける場合、
-    そのWebサーバーに関する知識が必要です。
+    PukiWiki Plus!全体を秘密の場所に置くことは簡単です。認証や暗号化をかける
+    場合、そのWebサーバーに関する知識が必要です。
 
-    1. Webサーバーの機能によって、PukiWikiを設置するフォルダ全体にベーシック
+    1. Webサーバーの機能によって、PukiWiki Plus!を設置するフォルダ全体にベーシック
        認証/ダイジェスト認証などをかけることができるでしょう。
 
     2. Webサーバーの拡張機能によって、SSL(TLS)などで全体を暗号化することがで
       き、これによってベーシック認証のパスワードやコンテンツが盗聴される / 漏
       洩する可能性を低下させることができるでしょう。
 
-    PukiWikiのコンテンツを「部分的に」秘密にするためには、PukiWikiの複数の設
-    定やプラグインに関する知識が必要です。以下にいくつかの注意点をまとめます。
+    PukiWiki Plus!のコンテンツを「部分的に」秘密にするためには、PukiWikiの複数の
+    設定やプラグインに関する知識が必要です。以下にいくつかの注意点をまとめます。
 
     1. 公開用の入り口(index.php)とは別に編集用の入り口(例えばsecret.php)を用
       意し、それぞれの設定を調整/改造することができます。
 
      例:
-      * 公開するPukiWikiの編集を PKWK_READONLY で禁止する
+      * 公開するPukiWiki Plus!の編集を PKWK_READONLY で禁止する
       * 編集用の入り口では、編集認証と閲覧認証を全てのページ名に適用する
         (正規表現では '')
 
@@ -149,8 +148,8 @@
 
 プラグインについて
     プラグインを組み込むことで、PukiWikiに様々な機能を追加/拡張することができ
-    ます。PukiWikiには70を越える標準添付のプラグインの他に、多数の自作プラグ
-    インが存在しています。
+    ます。PukiWiki Plus!には70を越える標準添付のプラグインの他に、多数の拡張
+    プラグインが存在しています。
 
     プラグインのスタイルは大きく分けて三種類あります。多くはWebコンテンツ(静
     的なもの/動的なもの)を出力しますが、それ以外の動作をするものも存在します。
@@ -209,20 +208,17 @@ Wikiの様子を見る
     標準添付されているプラグインの簡単な説明は、[[PukiWiki/1.4/Manual/Plugin]]
     のページを参照して下さい。
 
-    その他、リリース版の基本的な使い方に関する情報はPukiWiki.orgをご覧下さい。
+    その他、リリース版の基本的な使い方に関する情報は pukiwiki.cafelounge.net/plus/
+    をご覧下さい。
     以下のようなコンテンツが特に有用です。
 
-    FAQ        http://pukiwiki.sourceforge.jp/?FAQ
-    質問箱     http://pukiwiki.sourceforge.jp/?%E8%B3%AA%E5%95%8F%E7%AE%B1
-    続・質問箱 http://pukiwiki.sourceforge.jp/?%E7%B6%9A%E3%83%BB%E8%B3%AA%E5%95%8F%E7%AE%B1
+    各種ドキュメント http://pukiwiki.cafelounge.net/plus/?Documents
+    質問箱           http://pukiwiki.cafelounge.net/plus/?%E8%B3%AA%E5%95%8F%E7%AE%B1
 
 バグ
-    PukiWikiのセキュリティに関する情報は以下でまとめられています。
-    http://pukiwiki.sourceforge.jp/?PukiWiki/Errata
-
-    バグ報告は devサイトまでお願いします。
-    (我々はPukiWikiでPukiWikiのバグトラッキングを行っています)
-    http://pukiwiki.sourceforge.jp/dev/?BugTrack2
+    バグ報告は 以下までお願いします。
+    (我々はPukiWiki Plus!でPukiWiki Plus!のバグトラッキングを行っています)
+    http://pukiwiki.cafelounge.net/plus/?BugTrack
 
 歴史
     PukiWikiは、結城浩さんが作られたYukiWikiの仕様を参考に独自に開発されまし
@@ -236,8 +232,8 @@ Wikiの様子を見る
  　 バージョン1.4.5 から、RSS 2.0 を出力できるようになりました。
 
 謝辞
-    PukiWiki Develpers Teamの皆さん、PukiWikiユーザの皆さんに感謝します。
-    PukiWiki を開発した、yu-ji(旧sng)さんに感謝します。
+    PukiWiki Plus! Develpers Teamの皆さん、PukiWiki Plus!ユーザの皆さんに感謝します。
+    PukiWiki Develpers Teamの皆さん、PukiWiki を開発した、yu-ji(旧sng)さんに感謝します。
     YukiWiki のクローン化を許可していただいた結城浩さんに感謝します。
     本家のWikiWikiを作ったCunningham & Cunningham, Inc.に 感謝します。
 

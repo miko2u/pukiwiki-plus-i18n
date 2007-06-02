@@ -1,31 +1,31 @@
 名前
-    PukiWiki  - 自由にページを追加・削除・編集できるWebページ構築スクリプト
+    PukiWiki Plus! - 自由にページを追加・削除・編集できるWebページ構築スクリプト
 
-    Version 1.4.6
+    Version 1.4.7plus-u2-i18n
     Copyright (C)
-      2001-2005 PukiWiki Developers Team
-      2001-2002 yu-ji (Based on PukiWiki 1.3 by yu-ji)
-    License: GPL version 2 or (at your option) any later version
+     2005-2007 PukiWiki Plus! Team
+     2002-2007 PukiWiki Developers Team
+     2001-2002 Originally written by yu-ji
+    License: GPL v2 or (at your option) any later version
 
-    $Id: INSTALL.txt,v 1.7 2005/09/25 10:07:52 henoheno Exp $
+    $Id: INSTALL.txt,v 1.7.1 2007/06/02 19:29:00 upk Exp $
 
 インストール
-    PukiWikiはPHPスクリプトであるため、(例えばPerlのように)スクリプトに実行権
-    を付ける必要はありません。CGI起動でないのであれば、スクリプトの一行目を修
-    正する必要もありません。
+    PukiWiki Plus!は、PHPスクリプトであるため、(例えばPerlのように)スクリプトに
+    実行権を付ける必要はありません。CGI起動でないのであれば、スクリプトの一行目
+    を修正する必要もありません。
 
-    Webサーバーへのシェルアクセスが可能であれば、PukiWikiのアーカイブをそのま
-    まサーバーに転送し、サーバー上で解凍(tar pzxf pukiwiki*.tar.gz) するだけ
+    Webサーバーへのシェルアクセスが可能であれば、PukiWiki Plus!のアーカイブをそ
+    のままサーバーに転送し、サーバー上で解凍(tar pzxf pukiwiki*.tar.gz) するだけ
     でパーミッションの設定も行われ、すぐに使い始める事ができるでしょう。
 
-    スクリプトの中の日本語は(あれば、基本的に)EUC-JPで、また改行コードはLFで
-    記述されています。スクリプトを直接編集する場合は、日本語文字コードと改行
-    コードの自動判別ができ、それを元のまま保存できるテキストエディタを使用し
-    て下さい。
+    スクリプトの中の日本語は(あれば、基本的に)UTF-8で、また改行コードはLFで記述
+    されています。スクリプトを直接編集する場合は、日本語文字コードと改行コードの
+    自動判別ができ、それを元のまま保存できるテキストエディタを使用して下さい。
 
     以下に、事前にクライアントPCで作業を行う場合の例を記します。
 
-    1. PukiWikiのアーカイブを展開します。
+    1. PukiWiki Plus!のアーカイブを展開します。
 
     2. 設定ファイル(*.ini.php)の内容を確認します。何も修正せずとも動作します
        が、公開された場所に設置するのであれば、念のため事前に管理者パスワード
@@ -39,10 +39,9 @@
        その他、ユーザーエージェントごとの設定が用意されています。
 
         デスクトップPC     : default.ini.php
-        携帯電話およびPDA  : keitai.ini.php
-           (旧 i_mode.ini.php/jphone.ini.php)
+        携帯電話およびPDA  : mobile.ini.php
 
-      PukiWikiの管理者パスワードは、pukiwiki.ini.php にある変数 $adminpass
+      PukiWiki Plus!の管理者パスワードは、pukiwiki.ini.php にある変数 $adminpass
       です。簡単に試すだけであるならば、以下のような内容で充分でしょう。
       ('YourPassWord' の部分を、あなただけのキーワードで置き換えて下さい)
 
@@ -100,8 +99,8 @@
       plugin/*       644       ASCII
       skin/*         644       ASCII
 
-    5. サーバーに設置した PukiWiki の index.php あるいは pukiwiki.php に、Web
-      ブラウザからアクセスし、PukiWikiが動作するか様子を見ます。
+    5. サーバーに設置した PukiWiki Plus!の index.php あるいは pukiwiki.php に、
+       Webブラウザからアクセスし、PukiWiki Plus!が動作するか様子を見ます。
 
       ※エラーが出る場合: 下記を参照して下さい
 
@@ -123,30 +122,29 @@
     す。詳しくはサーバー管理者がPHPスクリプト向けに提供している情報を確認して
     下さい。
 
-      1. 実行するPHPスクリプト(PukiWikiの場合 index.php か pukiwiki.php)の
-        一行目に、PHPバイナリへのパスを追加する必要があるかもしれません。
+      1. 実行するPHPスクリプト(PukiWiki Plus!の場合 index.php か pukiwiki.php)
+        の一行目に、PHPバイナリへのパスを追加する必要があるかもしれません。
         (例: #!/usr/local/bin/php)この値はサーバーにより異なります。
 
       2. たいていの場合、より厳密なパーミッションが求められます。
 
 エラーが出る場合: .htaccessファイル
-    PukiWiki 1.4.4 から .htaccess ファイルを添付する様になっていますが、
-    Apache Web サーバーの設定によっては "Internal Server Error" を起こす場合
-    があります。
+    .htaccess ファイルが添付されていますが、Apache Web サーバーの設定によっては
+    "Internal Server Error" を起こす場合があります。
 
     具体例:
       Webブラウザに "Internal Server Error" と表示され
       Webサーバーのエラーログには "order not allowed here" というエラーが記録
       される
 
-    これはPukiWikiを設置したい場所で .htaccess による設定変更が許可されていな
-    い(特に "AllowOverride Limit" でない)のが原因です。
+    これはPukiWiki Plus!を設置したい場所で .htaccess による設定変更が許可されて
+    いない(特に "AllowOverride Limit" でない)のが原因です。
 
     回避策: .htaccess、および skin/.htaccess を削除する
 
     解決策：
-      Apache設定ファイル(httpd.conf)の、PukiWikiを設置したいディレクトリに関
-      する部分に "AllowOverride Limit" を追加する
+      Apache設定ファイル(httpd.conf)の、PukiWiki Plus!を設置したいディレクトリに
+      関する部分に "AllowOverride Limit" を追加する
 
 エラーが出る場合: Parse error
     "Parse error: parse error, unexpected XXXX in .... on line NNN"
@@ -191,16 +189,15 @@
     か、また実際に動作するかどうかを確認して下さい。(例: 配置したページの更新
     を試みる)
 
-    PukiWiki 1.4.5 以降では、添付されている dumpプラグイン で、wiki/attach/
-    backup ディレクトリのリモートバックアップ(*.tar.gzないし*.tar形式)が可能で
-    す。
+    添付されている dumpプラグイン で、wiki/attach/ backup ディレクトリのリモート
+    バックアップ(*.tar.gzないし*.tar形式)が可能です。
       起動の例: index.php?plugin=dump
 
-    dumpプラグインにはdumpプラグインで取得したファイルの中身をPukiWikiに展開す
-    る機能(リモートリストア)も用意されています。ただしファイルに含まれていない
-    データをPukiWikiから削除する機能はありません(常に上書きになります)し、Web
-    サーバーやPHPのアップロードファイルサイズ制限を越えるファイルを利用するこ
+    dumpプラグインにはdumpプラグインで取得したファイルの中身をPukiWiki Plus!に
+    展開する機能(リモートリストア)も用意されています。ただしファイルに含まれて
+    いないデータをPukiWiki Plus!から削除する機能はありません(常に上書きになります)し、
+    WebサーバーやPHPのアップロードファイルサイズ制限を越えるファイルを利用するこ
     とはできません。またこの機能はデフォルトで無効になっています。
 
-    その他、PukiWikiの更新内容をメールで通知する機能は、既存のデータを失わない
-    ための機能としてとらえる事ができるでしょう。
+    その他、PukiWiki Plus!の更新内容をメールで通知する機能は、既存のデータを
+    失わないための機能としてとらえる事ができるでしょう。
