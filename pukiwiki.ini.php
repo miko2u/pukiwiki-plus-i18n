@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: pukiwiki.ini.php,v 1.148.20 2007/06/02 14:34:00 upk Exp $
+// $Id: pukiwiki.ini.php,v 1.148.21 2007/06/05 07:30:00 upk Exp $
 // Copyright (C)
 //   2005-2007 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
@@ -318,7 +318,7 @@ $autoalias_max_words = 50; // pairs
 $autobasealias = 0;
 
 // nonlist for AutoBaseAlias
-$autobasealias = '^\:|(^|\/)template$';
+$autobasealias_nonlist = '^\:|(^|\/)template$';
 
 /////////////////////////////////////////////////
 // AutoGlossary feature
