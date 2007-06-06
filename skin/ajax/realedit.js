@@ -23,6 +23,8 @@ function pukiwiki_apx(page)
 	pukiwiki_apv(page,msg);
 }
 
+var ajax_count = 0;
+
 function pukiwiki_apv(page,oSource)
 {
 	if (ajax_apx) {
