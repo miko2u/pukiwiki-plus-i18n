@@ -28,6 +28,7 @@ function pukiwiki_apv(page,oSource)
 	if (ajax_apx) {
 		var source = oSource.value;
 		if (navigator.userAgent.indexOf("Safari",0) == -1) {
+			if (++ajax_count != 1) return;
 			if (oSource.setSelectionRange) {
 				sttlen = oSource.selectionStart;
 				endlen = oSource.value.length - oSource.selectionEnd;
@@ -53,6 +54,12 @@ function pukiwiki_apv(page,oSource)
 			var innbox = document.getElementById("realview_outer");
 			var marker = document.getElementById("editmark");
 			innbox.scrollTop = marker.offsetTop - 8;
+			if (ajax_count==1) {
+				ajax_count = 0;
+			} else {
+				ajax_count = 0;
+				pukiwiki_apv(page,oSource);
+			}
 		};
 		var postdata = 'page=' + encodeURIComponent(page) + '&msg=' + encodeURIComponent(source);
 		var html = new TextLoader(preview_onload,null);
