@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: read.inc.php,v 1.8.3 2007/06/02 14:28:00 upk Exp $
+// $Id: read.inc.php,v 1.8.4 2007/06/07 23:37:00 upk Exp $
 //
 // Read plugin: Show a page and InterWiki
 
@@ -22,12 +22,12 @@ function plugin_read_action()
 
 	} else if (is_pagename($page)) {
 		$realpages = get_autoaliases($page);
-		if (! empty($realpages)) {
-			if (count($realpages) == 1) {
-				header('HTTP/1.0 301 Moved Permanently');
-				header('Location: ' . get_script_uri() . '?' . $realpages[0]);
-				return;
-			}
+		if (count($realpages) == 1) {
+			$r_realpage = rawurlencode($realpages[0]);
+			header('HTTP/1.0 301 Moved Permanently');
+			header('Location: ' . get_script_uri() . '?' . $r_realpage);
+			return;
+		} elseif (count($realpages) >= 2) {
 			$body = '<p>';
 			$body .= _('This pagename is an alias to') . '<br />';
 			foreach ($realpages as $realpage) {
