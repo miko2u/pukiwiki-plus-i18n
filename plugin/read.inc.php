@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: read.inc.php,v 1.8.4 2007/06/07 23:37:00 upk Exp $
+// $Id: read.inc.php,v 1.8.5 2007/06/09 11:26:00 upk Exp $
 //
 // Read plugin: Show a page and InterWiki
 
@@ -23,10 +23,15 @@ function plugin_read_action()
 	} else if (is_pagename($page)) {
 		$realpages = get_autoaliases($page);
 		if (count($realpages) == 1) {
-			$r_realpage = rawurlencode($realpages[0]);
-			header('HTTP/1.0 301 Moved Permanently');
-			header('Location: ' . get_script_uri() . '?' . $r_realpage);
-			return;
+			$realpage = $realpages[0];
+			if (is_page($realpage)) {
+				header('HTTP/1.0 301 Moved Permanently');
+				header('Location: ' . get_script_uri() . '?' . rawurlencode($realpage));
+				return;
+			} else { // 存在しない場合、直接編集フォームに飛ばす // To avoid infinite loop
+				header('Location: ' . get_script_uri() . '?cmd=edit&page=' . rawurlencode($realpage));
+				return;
+			}
 		} elseif (count($realpages) >= 2) {
 			$body = '<p>';
 			$body .= _('This pagename is an alias to') . '<br />';
@@ -38,7 +43,6 @@ function plugin_read_action()
 		}
 		$vars['cmd'] = 'edit';
 		return do_plugin_action('edit'); // 存在しないので、編集フォームを表示
-
 	} else {
 		// 無効なページ名
 		return array(
