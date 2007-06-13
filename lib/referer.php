@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: referer.php,v 1.8.1 2007/02/19 04:37:52 miko Exp $
+// $Id: referer.php,v 1.8.2 2007/06/13 19:11:00 upk Exp $
 // Copyright (C)
 //   2006-2007 PukiWiki Plus! Team
 //   2003      Originally written by upk
@@ -8,8 +8,9 @@
 //
 // Referer function
 
-function ref_get_data($file, $uniquekey=1)
+function ref_get_data($page, $uniquekey=1)
 {
+	$file = ref_get_filename($page);
 	if (! file_exists($file)) return array();
 
 	$result = array();
@@ -81,5 +82,26 @@ function ref_save($page)
 
 	return TRUE;
 }
+
+// Get file name of Referer data
+function ref_get_filename($page)
+{
+	return REFERER_DIR . encode($page) . '.ref';
+}
+
+// Count the number of TrackBack pings included for the page
+function ref_count($page)
+{
+	$filename = ref_get_filename($page);
+	if (!file_exists($filename)) return 0;
+	if (!is_readable($filename)) return 0;
+	if (!($fp = fopen($filename,'r'))) return 0;
+	$i = 0;
+	while ($data = @fgets($fp, 4096)) $i++;
+	fclose($fp);
+	unset($data);
+	return $i;
+}
+
 // vim:ts=3
 ?>

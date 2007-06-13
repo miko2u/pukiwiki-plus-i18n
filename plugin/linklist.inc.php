@@ -3,11 +3,9 @@
  * PukiWiki 自動相互リンク作成プラグイン
  *
  * @copyright   Copyright &copy; 2004-2007, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: linklist.inc.php,v 0.5 2007/05/11 20:18:00 upk Exp $
+ * @version     $Id: linklist.inc.php,v 0.6 2007/06/13 19:12:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
-
-require_once(LIB_DIR . 'trackback.php'); // TrackBack
 
 // 構成定義ファイル
 define('CONFIG_REFERER','plugin/referer/config');
@@ -40,7 +38,7 @@ function plugin_linklist_action()
 	}
 
 	$max  = (empty($vars['max'])) ? -1 : htmlspecialchars($vars['max'], ENT_QUOTES);
-	$data = tb_get(tb_get_filename($page,'.ref'));
+	$data = ref_get_data($page);
 
 	//  データ無し
 	if (count($data) == 0)
@@ -72,7 +70,7 @@ function plugin_linklist_convert()
 	if (empty($page)) $page = $vars['page'];
 	$max  = (empty($max)) ? -1 : htmlspecialchars($max, ENT_QUOTES);
 
-	$data = tb_get(tb_get_filename($page,'.ref'));
+	$data = ref_get_data($page);
 	if (count($data) == 0) return; //  データ無し
 	$data = linklist_analysis($data);
 	// 0:検索キー 1:参照カウンタ

@@ -1,5 +1,5 @@
 <?php
-// $Id: skeylist.inc.php,v 0.9 2007/04/23 00:05:00 upk Exp $
+// $Id: skeylist.inc.php,v 0.10 2007/06/13 19:12:00 upk Exp $
 /*
  * PukiWiki 人気検索キープラグイン
  * (C) 2004-2007, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
@@ -8,9 +8,9 @@
 
 // 検索エンジン
 // Google
-define('SKEYLIST_SEARCH_URL','http://www.google.com/search?ie=utf8&amp;oe=utf8&amp;q=');
+defined('SKEYLIST_SEARCH_URL') or define('SKEYLIST_SEARCH_URL', 'http://www.google.com/search?ie=utf8&amp;oe=utf8&amp;q=');
 // Yahoo!
-// define('SKEYLIST_SEARCH_URL','http://search.yahoo.com/search?ei=UTF-8&p=');
+// defined('SKEYLIST_SEARCH_URL') or define('SKEYLIST_SEARCH_URL', 'http://search.yahoo.com/search?ei=UTF-8&p=');
 
 function plugin_skeylist_init()
 {
@@ -40,7 +40,7 @@ function plugin_skeylist_action()
 
 	$max  = (empty($vars['max']))  ? -1 : htmlspecialchars($vars['max'], ENT_QUOTES);
 	// $data = tb_get(tb_get_filename($page,'.ref'));
-	$data = ref_get_data(REFERER_DIR . encode($page) . '.ref');
+	$data = ref_get_data($page);
 
 	//  データ無し
 	if (count($data) == 0)
@@ -73,7 +73,7 @@ function plugin_skeylist_convert()
 	$max = (empty($max)) ? 10 : htmlspecialchars($max, ENT_QUOTES);
 
 	// $data = tb_get(tb_get_filename($page,'.ref'));
-	$data = ref_get_data(REFERER_DIR . encode($page) . '.ref');
+	$data = ref_get_data($page);
 	if (count($data) == 0) return ''; //  データ無し
 	$data = skeylist_analysis($data);
 	// 0:検索キー 1:参照カウンタ

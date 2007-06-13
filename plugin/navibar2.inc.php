@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: navibar2.inc.php,v 0.1.13 2006/08/13 23:32:00 upk Exp $
+// $Id: navibar2.inc.php,v 0.1.14 2007/06/13 19:12:00 upk Exp $
 //
 function plugin_navibar2_convert()
 {
@@ -205,7 +205,7 @@ function plugin_navibar2_keyword($name)
 	case 'linklist':
 		if ($referer) {
 			if (!isset($refcount))
-				$refcount = tb_count($vars['page'],'.ref');
+				$refcount = ref_count($vars['page']);
 			if ($refcount > 0) {
 				return _navigator2($name);
 			}
