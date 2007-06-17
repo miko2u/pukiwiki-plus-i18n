@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: edit.inc.php,v 1.41.33 2007/04/09 01:12:00 upk Exp $
+// $Id: edit.inc.php,v 1.41.34 2007/06/17 16:55:00 upk Exp $
 // Copyright (C)
 //   2005-2007 PukiWiki Plus! Team
 //   2001-2007 PukiWiki Developers Team
@@ -280,7 +280,7 @@ function plugin_edit_write()
 
 	page_write($page, $postdata, $notimestamp);
 	pkwk_headers_sent();
-	if ($vars['refpage'] != '') {
+	if (isset($vars['refpage']) && $vars['refpage'] != '') {
 		if ($partid) {
 			header('Location: ' . get_script_uri() . '?' . rawurlencode($vars['refpage'])) . '#' . rawurlencode($partid);
 		} else {

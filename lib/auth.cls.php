@@ -3,7 +3,7 @@
  * PukiWiki Plus! 認証処理
  *
  * @author	Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth.cls.php,v 0.40 2007/04/09 01:09:00 upk Exp $
+ * @version     $Id: auth.cls.php,v 0.41 2007/06/17 16:57:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 
@@ -58,7 +58,7 @@ class auth
 		}
 
 		// PHP Digest認証対応
-		if (($data = auth::http_digest_parse($_SERVER['PHP_AUTH_DIGEST']))) {
+		if (isset($_SERVER['PHP_AUTH_DIGEST']) && ($data = auth::http_digest_parse($_SERVER['PHP_AUTH_DIGEST']))) {
 			if (! empty($data['username'])) return $data['username'];
 		}
 
@@ -399,7 +399,7 @@ class auth
 	{
 		// FIXME: なんかかっこ悪いロジックだぁ
 
-		if (empty($_SERVER['PHP_AUTH_DIGEST'])) {
+		if (! isset($_SERVER['PHP_AUTH_DIGEST']) || empty($_SERVER['PHP_AUTH_DIGEST'])) {
 			header('HTTP/1.1 401 Unauthorized');
 			header('WWW-Authenticate: Digest realm="'.$realm.
 				'", qop="auth", nonce="'.uniqid().'", opaque="'.md5($realm).'"');
@@ -408,7 +408,7 @@ class auth
 			return FALSE;
 		}
 
-		if (!($data = auth::http_digest_parse($_SERVER['PHP_AUTH_DIGEST']))) {
+		if (isset($_SERVER['PHP_AUTH_DIGEST']) && !($data = auth::http_digest_parse($_SERVER['PHP_AUTH_DIGEST']))) {
 			header('HTTP/1.1 401 Unauthorized');
 			header('WWW-Authenticate: Digest realm="'.$realm.
 				'", qop="auth", nonce="'.uniqid().'", opaque="'.md5($realm).'"');

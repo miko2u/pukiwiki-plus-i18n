@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: navibar.php,v 0.1.9 2006/08/13 23:36:00 upk Exp $
+// $Id: navibar.php,v 0.1.10 2007/06/17 16:55:00 upk Exp $
 //
 function plugin_navibar_convert()
 {
@@ -78,7 +78,7 @@ function plugin_navibar_convert()
 					$body .= _navigator($name, 'Trackback(' . $tbcount . ')');
 				} else if ($is_read) {
 					$body .= 'no Trackback';
-				} else if ($vars['cmd'] == 'list') {
+				} else if (isset($vars['cmd']) && $vars['cmd'] == 'list') {
 					$body .= _navigator($name, 'Trackback list');
 				}
 			}

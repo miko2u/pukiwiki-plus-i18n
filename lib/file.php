@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: file.php,v 1.78.30 2007/06/02 14:37:00 upk Exp $
+// $Id: file.php,v 1.78.31 2007/06/17 16:56:00 upk Exp $
 // Copyright (C)
 //   2005-2007 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
@@ -41,7 +41,9 @@ function get_source($page = NULL, $lock = TRUE, $join = FALSE)
 
 		if ($join) {
 			// Returns a value
-			$result = str_replace("\r", '', fread($fp, filesize($path)));
+			if (filesize($path) > 0) {
+				$result = str_replace("\r", '', fread($fp, filesize($path)));
+			}
 		} else {
 			// Returns an array
 			// Removing line-feeds: Because file() doesn't remove them.
@@ -221,8 +223,8 @@ function replace_plugin_link2null($data)
 function get_this_time_links($post,$diff)
 {
 	$links = array();
-	$post_links = replace_plugin_link2null($post);
-	$diff_links = get_link_list($diff);
+	$post_links = (array)replace_plugin_link2null($post);
+	$diff_links = (array)get_link_list($diff);
 
 	foreach($diff_links as $d) {
 		foreach($post_links as $p) {

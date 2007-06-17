@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: html.php,v 1.59.13 2007/05/04 01:56:00 upk Exp $
+// $Id: html.php,v 1.59.14 2007/06/17 16:56:00 upk Exp $
 // Copyright (C)
 //   2005-2007 PukiWiki Plus! Team
 //   2002-2006 PukiWiki Developers Team
@@ -282,7 +282,7 @@ EOD;
 		}
 		$add_notimestamp .= '&nbsp;';
 	}
-	$refpage = htmlspecialchars($vars['refpage']);
+	$refpage = isset($vars['refpage']) ? htmlspecialchars($vars['refpage']) : '';
 	$add_assistant = edit_form_assistant();
 
 	$body = <<<EOD
