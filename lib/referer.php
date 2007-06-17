@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: referer.php,v 1.8.2 2007/06/13 19:11:00 upk Exp $
+// $Id: referer.php,v 1.8.3 2007/06/17 14:17:00 upk Exp $
 // Copyright (C)
 //   2006-2007 PukiWiki Plus! Team
 //   2003      Originally written by upk
@@ -53,9 +53,8 @@ function ref_save($page)
 	if (ereg("[,\"\n\r]", $url))
 		$url = '"' . str_replace('"', '""', $url) . '"';
 
-	$filename = REFERER_DIR . encode($page) .'.ref';
-	$data     = ref_get_data($filename, 3);
-	$d_url    = rawurldecode($url);
+	$data  = ref_get_data($page, 3);
+	$d_url = rawurldecode($url);
 	if (! isset($data[$d_url])) {
 		$data[$d_url] = array(
 			'',    // [0]: Last update date
@@ -68,6 +67,7 @@ function ref_save($page)
 	$data[$d_url][0] = UTIME;
 	$data[$d_url][2]++;
 
+   $filename = ref_get_filename($page);
 	$fp = fopen($filename, 'w');
 	if ($fp === FALSE) return FALSE;
 	set_file_buffer($fp, 0);
