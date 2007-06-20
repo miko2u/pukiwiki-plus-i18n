@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////
 // PukiWiki Plus!
 //
-// $Id: zh_CN.js,v 1.0.1 2006/08/09 20:44:00 upk Exp $
+// $Id: zh_CN.js,v 1.0.2 2007/06/20 20:44:00 upk Exp $
 //
 
 // Set masseges.
@@ -22,4 +22,7 @@ var pukiwiki_msg_inline3 = "请输入本文。[ { }内侧 ]";
 var pukiwiki_msg_link = "请输入设定链接的文字。";
 var pukiwiki_msg_url = "请输入链接处的URL。";
 var pukiwiki_msg_elem = "请选择做处理的对象。";
+var pukiwiki_msg_unload = "服务器反映变更吗？";
+var pukiwiki_msg_cancel = "废弃变更吗？";
+var pukiwiki_msg_submit = "服务器发送了变更。请确认一下。";
 

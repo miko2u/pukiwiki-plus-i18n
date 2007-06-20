@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////
 // PukiWiki Plus!
 //
-// $Id: ko_KR.js,v 1.0.1 2006/08/09 20:43:00 upk Exp $
+// $Id: ko_KR.js,v 1.0.2 2007/06/20 20:42:00 upk Exp $
 //
 
 // Set masseges.
@@ -22,4 +22,7 @@ var pukiwiki_msg_inline3 = "본문을 입력해 주세요.[ { } 안 ]";
 var pukiwiki_msg_link = "링크를 설정하는 문자를 입력해 주세요.";
 var pukiwiki_msg_url = "링크처의 URL를 입력해 주세요.";
 var pukiwiki_msg_elem = "처리를 하는 대상을 선택해 주세요.";
+var pukiwiki_msg_unload = "변경을 서버에 반영합니까?";
+var pukiwiki_msg_cancel = "변경을 파기합니까?";
+var pukiwiki_msg_submit = "변경을 서버에 송신했습니다.확인해 주세요.";
 

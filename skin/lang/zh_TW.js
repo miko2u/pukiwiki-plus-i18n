@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////
 // PukiWiki Plus!
 //
-// $Id: zh_TW.js,v 1.0.1 2006/08/09 20:42:00 upk Exp $
+// $Id: zh_TW.js,v 1.0.2 2007/06/20 20:45:00 upk Exp $
 //
 
 // Set masseges.
@@ -22,4 +22,7 @@ var pukiwiki_msg_inline3 = "請輸入本文。[ { }內側 ]";
 var pukiwiki_msg_link = "請輸入設定鏈接的文字。";
 var pukiwiki_msg_url = "請輸入鏈接處的URL。";
 var pukiwiki_msg_elem = "請選擇做處理的對象。";
+var pukiwiki_msg_unload = "服務器反映變更嗎？";
+var pukiwiki_msg_cancel = "廢棄變更嗎？";
+var pukiwiki_msg_submit = "服務器發送了變更。請確認一下。";
 
