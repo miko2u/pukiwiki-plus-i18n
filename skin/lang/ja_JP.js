@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////
 // PukiWiki Plus!
 //
-// $Id: ja_JP.js,v 1.0.1 2006/08/09 20:12:00 upk Exp $
+// $Id: ja_JP.js,v 1.0.2 2007/06/20 13:21:00 upk Exp $
 //
 
 // Set masseges.
@@ -22,4 +22,7 @@ var pukiwiki_msg_inline3 = "本文を入力してください。[ { }内 ]";
 var pukiwiki_msg_link = "リンクを設定する文字を入力してください。";
 var pukiwiki_msg_url = "リンク先のURLを入力してください。";
 var pukiwiki_msg_elem = "処理をする対象を選択してください。";
+var pukiwiki_msg_unload = "変更をサーバーに反映しますか？";
+var pukiwiki_msg_cancel = "変更を破棄しますか？";
+var pukiwiki_msg_submit = "変更をサーバーに送信しました。確認してください。";
 

@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////
 // PukiWiki Plus!
 //
-// $Id: en_US.js,v 1.0.1 2006/08/09 20:13:00 upk Exp $
+// $Id: en_US.js,v 1.0.2 2007/06/20 13:21:00 upk Exp $
 //
 
 // Set masseges.
@@ -22,4 +22,7 @@ var pukiwiki_msg_inline3 = "Please input the text. [ { }Inside ]";
 var pukiwiki_msg_link = "Please input the character that sets the link.";
 var pukiwiki_msg_url = "Please input URL the link ahead.";
 var pukiwiki_msg_elem = "Please select the processed object.";
+var pukiwiki_msg_unload = "Do you submit your change ?"; 
+var pukiwiki_msg_cancel = "Do you discard your change ?"; 
+var pukiwiki_msg_submit = "Your change was sent. Check please!"; 
 

@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: pukiwiki.ini.php,v 1.148.21 2007/06/05 07:30:00 upk Exp $
+// $Id: pukiwiki.ini.php,v 1.148.22 2007/06/20 13:20:00 upk Exp $
 // Copyright (C)
 //   2005-2007 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
@@ -170,7 +170,7 @@ $page_title = 'PukiWiki Plus!';
 $modifier = 'anonymous';
 
 // Site admin's Web page (CHANGE THIS)
-$modifierlink = 'http://pukiwiki.example.com/';
+$modifierlink = dirname($_SCRIPT_NAME);
 
 // Default page name
 $defaultpage  = 'FrontPage';     // Top / Default page
@@ -211,6 +211,9 @@ define('PKWK_ALLOW_JAVASCRIPT', 1);
 
 // Javascript Async Library Extenstion
 $ajax = 1;
+
+// Control of form unloading which you do not intend 
+$ctrl_unload = 1;
 
 // LOG
 require_once('config-log.ini.php');

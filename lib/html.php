@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: html.php,v 1.59.14 2007/06/17 16:56:00 upk Exp $
+// $Id: html.php,v 1.59.15 2007/06/20 13:20:00 upk Exp $
 // Copyright (C)
 //   2005-2007 PukiWiki Plus! Team
 //   2002-2006 PukiWiki Developers Team
@@ -202,7 +202,7 @@ function edit_form($page, $postdata, $digest = FALSE, $b_template = TRUE)
 	global $whatsnew, $load_template_func, $load_refer_related;
 	global $notimeupdate;
 	global $_button, $_string;
-	global $ajax;
+	global $ajax, $ctrl_unload;
 
 	// Newly generate $digest or not
 	if ($digest === FALSE) $digest = md5(get_source($page, TRUE, TRUE));
@@ -287,7 +287,7 @@ EOD;
 
 	$body = <<<EOD
 <div id="realview_outer"><div id="realview"></div><br /></div>
-<form action="$script" method="post">
+<form action="$script" method="post" id="form">
  <div class="edit_form" onmouseup="pukiwiki_pos()" onkeyup="pukiwiki_pos()">
 $template
   $addtag
@@ -304,8 +304,8 @@ $template
   $add_top
   $add_ajax
   $add_notimestamp
-  <input type="submit" name="cancel"  value="{$_button['cancel']}" accesskey="c" />
-  <textarea name="original" rows="1" cols="1" style="display:none">$s_original</textarea>
+  <input type="submit" id="cancel" name="cancel"  value="{$_button['cancel']}" accesskey="c" />
+  <textarea id="original" name="original" rows="1" cols="1" style="display:none">$s_original</textarea>
  </div>
 </form>
 EOD;
@@ -314,6 +314,10 @@ EOD;
 		global $head_tags;
 		$head_tags[] = ' <script type="text/javascript" charset="utf-8" src="' . SKIN_URI . 'ajax/msxml.js"></script>';
 		$head_tags[] = ' <script type="text/javascript" charset="utf-8" src="' . SKIN_URI . 'ajax/realedit.js"></script>';
+	}
+	if ($ctrl_unload) {
+		global $head_tags;
+		$head_tags[] = ' <script type="text/javascript" charset="utf-8" src="' . SKIN_URI . 'ajax/ctrl_unload.js"></script>';
 	}
 
 	return $body;
