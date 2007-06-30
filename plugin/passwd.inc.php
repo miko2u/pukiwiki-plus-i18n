@@ -3,7 +3,7 @@
  * passwd plugin.
  *
  * @copyright   Copyright &copy; 2006-2007, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: passwd.inc.php,v 0.4 2007/04/10 01:16:00 upk Exp $
+ * @version     $Id: passwd.inc.php,v 0.5 2007/06/30 22:51:00 upk Exp $
  *
  * $A1 = md5($data['username'] . ':' . $realm . ':' . $auth_users[$data['username']]);
  */
@@ -12,8 +12,8 @@ if (!defined('USE_PKWK_WRITE_FUNC')) {
 	define('USE_PKWK_WRITE_FUNC', FALSE);
 }
 
-require(LIB_DIR . 'auth_file.cls.php');
-require(LIB_DIR . 'des.php');
+require_once(LIB_DIR . 'auth_file.cls.php');
+require_once(LIB_DIR . 'des.php');
 
 function plugin_passwd_init()
 {

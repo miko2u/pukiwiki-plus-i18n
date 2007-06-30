@@ -2,9 +2,9 @@
 /**
  * PukiWiki Plus! JugemKey 認証処理
  *
- * @copyright   Copyright &copy; 2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * @copyright   Copyright &copy; 2006-2007, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: jugemkey.inc.php,v 0.5 2006/11/25 01:56:00 upk Exp $
+ * @version     $Id: jugemkey.inc.php,v 0.6 2007/06/30 22:26:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'auth_jugemkey.cls.php');
@@ -148,8 +148,8 @@ function plugin_jugemkey_action()
 function plugin_jugemkey_jump_url($inline=0)
 {
 	global $auth_api,$vars,$script;
-	$page = (empty($vars['page'])) ? '' : '&page='.$vars['page'];
-	$callback_url = $script.'?plugin=jugemkey'.$page;
+	$r_page = (empty($vars['page'])) ? '' : '&page='.rawurlencode($vars['page']);
+	$callback_url = $script.'?plugin=jugemkey'.$r_page;
 	$obj = new auth_jugemkey($auth_api['jugemkey']['sec_key'],$auth_api['jugemkey']['api_key']);
 	$url = $obj->make_login_link($callback_url);
 	return ($inline) ? $url : str_replace('&amp;','&',$url);

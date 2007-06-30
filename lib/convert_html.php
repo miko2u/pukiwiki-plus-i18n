@@ -1,8 +1,8 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: convert_html.php,v 1.18.17 2007/06/17 16:56:00 upk Exp $
+// $Id: convert_html.php,v 1.18.16 2006/08/02 07:29:58 miko Exp $
 // Copyright (C)
-//   2005-2007 PukiWiki Plus! Team
+//   2005-2006 PukiWiki Plus! Team
 //   2002-2006 PukiWiki Developers Team
 //   2001-2002 Originally written by yu-ji
 // License: GPL v2 or (at your option) any later version
@@ -98,44 +98,40 @@ function & Factory_Inline($text)
 {
 	// Check the first letter of the line
 	if (substr($text, 0, 1) == '~') {
-		$obj = new Paragraph(' ' . substr($text, 1));
+		return new Paragraph(' ' . substr($text, 1));
 	} else {
-		$obj = new Inline($text);
+		return new Inline($text);
 	}
-	return $obj;
 }
 
 function & Factory_DList(& $root, $text)
 {
 	$out = explode('|', ltrim($text), 2);
 	if (count($out) < 2) {
-		$obj = Factory_Inline($text);
+		return Factory_Inline($text);
 	} else {
-		$obj = new DList($out);
+		return new DList($out);
 	}
-	return $obj;
 }
 
 // '|'-separated table
 function & Factory_Table(& $root, $text)
 {
 	if (! preg_match('/^\|(.+)\|([hHfFcC]?)$/', $text, $out)) {
-		$obj = Factory_Inline($text);
+		return Factory_Inline($text);
 	} else {
-		$obj = new Table($out);
+		return new Table($out);
 	}
-	return $obj;
 }
 
 // Comma-separated table
 function & Factory_YTable(& $root, $text)
 {
 	if ($text == ',') {
-		$obj = Factory_Inline($text);
+		return Factory_Inline($text);
 	} else {
-		$obj = new YTable(csv_explode(',', substr($text, 1)));
+		return new YTable(csv_explode(',', substr($text, 1)));
 	}
-	return $obj;
 }
 
 function & Factory_Div(& $root, $text)
@@ -147,8 +143,7 @@ function & Factory_Div(& $root, $text)
 		// Usual code
 		if (preg_match('/^\#([^\(]+)(?:\((.*)\))?/', $text, $matches) &&
 		    exist_plugin_convert($matches[1])) {
-			$obj = new Div($matches);
-			return $obj;
+			return new Div($matches);
 		}
 	} else {
 		// Hack code
@@ -157,18 +152,15 @@ function & Factory_Div(& $root, $text)
 			$len  = strlen($matches[3]);
 			$body = array();
 			if ($len == 0) {
-				$obj = new Div($matches); // Seems legacy block plugin
-				return $obj;
+				return new Div($matches); // Seems legacy block plugin
 			} else if (preg_match('/\{{' . $len . '}\s*\r(.*)\r\}{' . $len . '}/', $text, $body)) { 
 				$matches[2] .= "\r" . $body[1] . "\r";
-				$obj = new Div($matches); // Seems multiline-enabled block plugin
-				return $obj;
+				return new Div($matches); // Seems multiline-enabled block plugin
 			}
 		}
 	}
 
-	$obj = new Paragraph($text);
-	return $obj;
+	return new Paragraph($text);
 }
 
 // Inline elements
