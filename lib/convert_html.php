@@ -1,8 +1,8 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: convert_html.php,v 1.18.16 2006/08/02 07:29:58 miko Exp $
+// $Id: convert_html.php,v 1.18.17 2007/07/01 15:11:00 upk Exp $
 // Copyright (C)
-//   2005-2006 PukiWiki Plus! Team
+//   2005-2007 PukiWiki Plus! Team
 //   2002-2006 PukiWiki Developers Team
 //   2001-2002 Originally written by yu-ji
 // License: GPL v2 or (at your option) any later version
@@ -880,7 +880,9 @@ class Body extends Element
 					$newbase = convert_html($matches[2]);
 					$newbase = strip_htmltag($newbase);
 					$newbase = trim($newbase);
-					$newtitle = htmlspecialchars($newbase);
+					// For BugTrack/132.
+					// $newtitle = htmlspecialchars($newbase);
+					$newtitle = str_replace('&amp;','&',htmlspecialchars($newbase));
 				}
 				continue;
 			}
