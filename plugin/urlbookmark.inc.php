@@ -24,24 +24,24 @@
 
 /////////////////////////////////////////////////
 // URLテキストエリアのカラム数
-define('URLBOOKMARK_URL_COLS',30);
+defined('URLBOOKMARK_URL_COLS') or define('URLBOOKMARK_URL_COLS',30);
 /////////////////////////////////////////////////
 // タイトルテキストエリアのカラム数
-define('URLBOOKMARK_TITLE_COLS',30);
+defined('URLBOOKMARK_TITLE_COLS') or define('URLBOOKMARK_TITLE_COLS',30);
 /////////////////////////////////////////////////
 // コメントのテキストエリアのカラム数
-define('URLBOOKMARK_COMMENT_COLS',70);
+defined('URLBOOKMARK_COMMENT_COLS') or define('URLBOOKMARK_COMMENT_COLS',70);
 /////////////////////////////////////////////////
 // ブックマークの挿入フォーマット
-define('URLBOOKMARK_NAME_FORMAT','$name');
-define('URLBOOKMARK_MSG_FORMAT',' -- $msg');
-define('URLBOOKMARK_NOW_FORMAT',' SIZE(10){$now}');
+defined('URLBOOKMARK_NAME_FORMAT') or define('URLBOOKMARK_NAME_FORMAT','$name');
+defined('URLBOOKMARK_MSG_FORMAT') or define('URLBOOKMARK_MSG_FORMAT',' -- $msg');
+defined('URLBOOKMARK_NOW_FORMAT') or define('URLBOOKMARK_NOW_FORMAT',' SIZE(10){$now}');
 /////////////////////////////////////////////////
 // ブックマークの挿入フォーマット(コメント内容)
-define('URLBOOKMARK_FORMAT',"\x08NAME\x08 \x08MSG\x08 \x08NOW\x08");
+defined('URLBOOKMARK_FORMAT') or define('URLBOOKMARK_FORMAT',"\x08NAME\x08 \x08MSG\x08 \x08NOW\x08");
 /////////////////////////////////////////////////
 // ブックマークを挿入する位置 1:欄の前 0:欄の後
-define('URLBOOKMARK_INS',1);
+defined('URLBOOKMARK_INS') or define('URLBOOKMARK_INS',1);
 /////////////////////////////////////////////////
 // ブックマークが投稿された場合、内容をメールで送る先
 //define('URLBOOKMARK_MAIL',FALSE);
@@ -49,6 +49,8 @@ define('URLBOOKMARK_INS',1);
 function plugin_urlbookmark_action()
 {
 	global $script,$vars,$post,$now;
+
+	if( auth::check_role('readonly') ) die_message('PKWK_READONLY prohibits editing');
 
 	$post['msg'] = preg_replace("/\n/",'',$post['msg']);
 
@@ -142,6 +144,8 @@ function plugin_urlbookmark_convert()
 {
 	global $script,$vars,$digest;
 	static $numbers = array();
+
+	if( auth::check_role('readonly') ) return '';
 	
 	if (!array_key_exists($vars['page'],$numbers))
 	{
@@ -152,7 +156,7 @@ function plugin_urlbookmark_convert()
 	$options = func_num_args() ? func_get_args() : array();
 	
 	if (in_array('notitle',$options)) {
-		$titletags = "";
+		$titletags = '';
 	}
 	else {
 		$titletags = _("Title: ") . "<input type='text' name='title' size='".URLBOOKMARK_TITLE_COLS."' /><br/>\n";
@@ -191,7 +195,7 @@ EOD;
 }
 
 function plugin_urlbookmark_get_title($url) {
-	$str = "";
+	$str = '';
 	$found_title = false;
 	
 	$data = http_request($url);
@@ -199,7 +203,7 @@ function plugin_urlbookmark_get_title($url) {
 	{
 		return '';
 	}
-	$buf = preg_replace("/(\r|\n)+/i", "", $data['data']);
+	$buf = preg_replace("/(\r|\n)+/i", '', $data['data']);
 	$buf = mb_convert_encoding($buf,SOURCE_ENCODING,"auto");
 
 	$tmpary = array();

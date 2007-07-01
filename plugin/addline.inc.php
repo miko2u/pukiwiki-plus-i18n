@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: addline.inc.php,v 0.13.1 2005/03/09 23:15:10 miko Exp $
+// $Id: addline.inc.php,v 0.13.2 2007/07/01 15:52:00 upk Exp $
 // Original is sha(0.13)
 /* 
 *プラグイン addline
@@ -28,7 +28,7 @@
 
 /////////////////////////////////////////////////
 // コメントを挿入する位置 1:欄の前 0:欄の後
-define('ADDLINE_INS','1');
+defined('ADDLINE_INS') or define('ADDLINE_INS', '1');
 
 function plugin_addline_init()
 {
@@ -48,6 +48,8 @@ function plugin_addline_convert()
 	global $_addline_messages;
 	static $numbers = array();
 	static $no_flag = 0;
+
+	if( auth::check_role('readonly') ) return '';
 
 	if (!array_key_exists($vars['page'],$numbers))
 	{
@@ -115,7 +117,9 @@ function plugin_addline_inline()
 	global $_addline_messages;
 	static $numbers = array();
 	static $no_flag = 0;
-	
+
+	if( auth::check_role('readonly') ) return '';
+
 	if (!array_key_exists($vars['page'],$numbers))
 	{
 		$numbers[$vars['page']] = 0;
@@ -168,7 +172,9 @@ function plugin_addline_action()
 	global $script,$vars,$post,$now;
 	global $_title_updated;
 	global $_addline_messages;
-	
+
+        if( auth::check_role('readonly') ) die_message('PKWK_READONLY prohibits editing');
+
 	$refer         = $vars['refer'];
 	$postdata_old  = get_source($refer);
 	$configname = $vars['configname'];
