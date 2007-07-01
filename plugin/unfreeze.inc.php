@@ -1,15 +1,15 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: unfreeze.inc.php,v 1.11.4 2007/01/21 14:27:08 miko Exp $
+// $Id: unfreeze.inc.php,v 1.11.5 2007/07/02 00:44:00 upk Exp $
 // Copyright (C)
-//	 2004-2007 PukiWiki Plus! Team
+//   2004-2007 PukiWiki Plus! Team
 //   2003-2004 PukiWiki Developers Team
 // License: GPL v2 or (at your option) any later version
 //
 // Unfreeze(Unlock) plugin
 
 // Show edit form when unfreezed
-define('PLUGIN_UNFREEZE_EDIT', TRUE);
+defined('PLUGIN_UNFREEZE_EDIT') or define('PLUGIN_UNFREEZE_EDIT', TRUE);
 
 function plugin_unfreeze_action()
 {
@@ -38,6 +38,8 @@ function plugin_unfreeze_action()
 	if ( (! auth::check_role('role_adm_contents') ) ||
 	     ($pass !== NULL && pkwk_login($pass)) )
 	{
+		// BugTrack2/255
+		check_readable($page, true, true);
 		// Unfreeze
 		$postdata = get_source($page);
 		array_shift($postdata);
@@ -47,6 +49,8 @@ function plugin_unfreeze_action()
 		// Update 
 		is_freeze($page, TRUE);
 		if (PLUGIN_UNFREEZE_EDIT) {
+			// BugTrack2/255
+			check_editable($page, true, true);
 //			$vars['cmd'] = 'read'; // To show 'Freeze' link
 			$vars['cmd'] = 'edit';
 			$msg  = $_title_unfreezed;
