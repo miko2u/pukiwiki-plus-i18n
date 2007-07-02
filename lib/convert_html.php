@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: convert_html.php,v 1.18.17 2007/07/01 15:11:00 upk Exp $
+// $Id: convert_html.php,v 1.18.18 2007/07/02 00:00:00 upk Exp $
 // Copyright (C)
 //   2005-2007 PukiWiki Plus! Team
 //   2002-2006 PukiWiki Developers Team
@@ -879,10 +879,11 @@ class Body extends Element
 					// $newbase = trim($matches[2]);
 					$newbase = convert_html($matches[2]);
 					$newbase = strip_htmltag($newbase);
-					$newbase = trim($newbase);
+					//$newbase = trim($newbase);
+					$newtitle = trim($newbase);
 					// For BugTrack/132.
 					// $newtitle = htmlspecialchars($newbase);
-					$newtitle = str_replace('&amp;','&',htmlspecialchars($newbase));
+					//$newtitle = str_replace('&amp;','&',htmlspecialchars($newbase));
 				}
 				continue;
 			}
