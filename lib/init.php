@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: init.php,v 1.52.27 2007/01/28 19:54:00 upk Exp $
+// $Id: init.php,v 1.52.28 2007/07/03 00:00:00 upk Exp $
 // Copyright (C)
 //   2005-2007 PukiWiki Plus! Team
 //   2002-2006 PukiWiki Developers Team
@@ -45,6 +45,13 @@ $foot_tags    = array();
 /////////////////////////////////////////////////
 // Require INI_FILE
 
+define('USR_INI_FILE', add_homedir('pukiwiki.usr.ini.php'));
+$read_usr_ini_file = false;
+if (file_exists(USR_INI_FILE) && is_readable(USR_INI_FILE)) {
+	require(USR_INI_FILE);
+	$read_usr_ini_file = true;
+}
+
 define('INI_FILE',  add_homedir('pukiwiki.ini.php'));
 $die = '';
 if (! file_exists(INI_FILE) || ! is_readable(INI_FILE)) {
@@ -53,6 +60,11 @@ if (! file_exists(INI_FILE) || ! is_readable(INI_FILE)) {
 	require(INI_FILE);
 }
 if ($die) die_message(nl2br("\n\n" . $die));
+
+if ($read_usr_ini_file) {
+	require(USR_INI_FILE);
+	unset($read_usr_ini_file);
+}
 
 /////////////////////////////////////////////////
 // I18N
