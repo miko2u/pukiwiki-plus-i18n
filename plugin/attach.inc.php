@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: attach.inc.php,v 1.82.27 2007/04/22 21:40:00 upk Exp $
+// $Id: attach.inc.php,v 1.82.28 2007/07/05 02:15:00 upk Exp $
 // Copyright (C)
 //   2005-2007 PukiWiki Plus! Team
 //   2003-2005 PukiWiki Developers Team
@@ -290,35 +290,8 @@ function attach_doupload(&$file, $page, $pass=NULL, $temp='', $copyright=FALSE, 
 	global $_attach_messages;
 	global $notify, $notify_subject, $notify_exclude, $spam;
 
-	$must_compress = 0;
-	if (function_exists('mime_content_type')) {
-		$type = mime_content_type($file['tmp_name']);
-		if (preg_match('/^(text\/)/i', $type)) {
-			// file type is text, gzip compressed.
-			$must_compress = 1;
-		} else if (preg_match('/^(image\/)/i', $type)) {
-			// file type is image, check image.
-			$size = @getimagesize($file['tmp_name']);
-			if (!is_array($size) || !preg_match('/^(image\/)/i', $size['mime'])) {
-				$must_compress = 1;
-			}
-		} else {
-			// FIXME: BugTrack/104
-			// other is user settings.
-			$size = @getimagesize($file['tmp_name']);
-			if (is_array($size) && preg_match('/^(image\/)/i', $size['mime'])) {
-				$must_compress = 0;
-			} else {
-				$must_compress = PLUGIN_ATTACH_UNKNOWN_COMPRESS;
-			}
-		}
-	} else {
-		// file type is image, check image.
-		$size = @getimagesize($file['tmp_name']);
-		if (!is_array($size) || !preg_match('/^(image\/)/i', $size['mime'])) {
-			$must_compress = 1;
-		}
-	}
+	$type = get_mimeinfo($file['tmp_name']);
+	$must_compress = attach_is_compress($type,PLUGIN_ATTACH_UNKNOWN_COMPRESS);
 
 	if ($must_compress) {
 		// if attach spam, filtering attach file.
@@ -414,6 +387,53 @@ function attach_doupload(&$file, $page, $pass=NULL, $temp='', $copyright=FALSE, 
 	return array(
 		'result'=>TRUE,
 		'msg'=>$_attach_messages['msg_uploaded']);
+}
+
+// ファイルタイプによる圧縮添付の判定
+function attach_is_compress($type,$compress=1)
+{
+	if (empty($type)) return $compress;
+
+	// Prefix
+	static $type_pref = array(
+		'text'				=> 1,
+		'image'				=> 0,
+		'video'				=> 0,
+		'audio'				=> 0,
+	);
+	foreach($type_pref as $key=>$val) {
+		if (preg_match('/^('.$key.'\/)/i', $type)) return $val;
+	}
+
+	// All
+	static $type_all = array(
+		'application/msword'		=> 0, // doc
+		'application/vnd.ms-excel'	=> 0, // xls
+		'application/vnd.ms-powerpoint'	=> 0, // ppt
+		'application/vnd.visio'		=> 0,
+		'application/octet-stream'	=> 0, // bin dms lha lzh exe class so dll img iso
+		'application/x-bcpio'		=> 0, // bcpio
+		'application/x-bittorrent'	=> 0, // torrent
+		'application/x-bzip2'		=> 0, // bz2
+		'application/x-compress'	=> 0,
+		'application/x-cpio'		=> 0, // cpio
+		'application/x-dvi'		=> 0, // dvi
+		'application/x-gtar'		=> 0, // gtar
+		'application/x-gzip'		=> 0, // gz tgz
+		'application/x-rpm'		=> 0, // rpm
+		'application/x-shockwave-flash'	=> 0, // swf
+		'application/zip'		=> 0, // zip
+		'application/x-java-archive'	=> 0, // jar
+		'application/x-javascript'	=> 1, // js
+		'application/ogg'		=> 0, // ogg
+		'application/pdf'		=> 0, // pdf
+	);
+	foreach($type_all as $key=>$val) {
+		//$key = str_replace(array('/','-'), array('\/','\-'), $key);
+		//if (preg_match('/^('.$key.'\/)$/i', $type)) return $val;
+		if ($type === $key) return $val;
+	}
+	return $compress;
 }
 
 // 詳細フォームを表示
