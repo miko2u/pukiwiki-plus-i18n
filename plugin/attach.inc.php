@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: attach.inc.php,v 1.82.29 2007/07/05 03:00:00 upk Exp $
+// $Id: attach.inc.php,v 1.82.30 2007/07/05 19:04:00 upk Exp $
 // Copyright (C)
 //   2005-2007 PukiWiki Plus! Team
 //   2003-2005 PukiWiki Developers Team
@@ -428,11 +428,8 @@ function attach_is_compress($type,$compress=1)
 			'pdf'			=> 0, // pdf
 		),
 	);
-
-	if (isset($composite_type[$discrete])) {
-		foreach($composite_type[$discrete] as $key=>$val) {
-			if ($composite === $key) return $val;
-		}
+	if (isset($composite_type[$discrete][$composite])) {
+		return $composite_type[$discrete][$composite];
 	}
 
 	// discrete-type
@@ -442,9 +439,8 @@ function attach_is_compress($type,$compress=1)
 		'audio'                         => 0,
 		'video'                         => 0,
 	);
-	foreach($discrete_type as $key=>$val) {
-		// if (preg_match('/^('.$key.'\/)/i', $type)) return $val;
-		if ($discrete === $key) return $val;
+	if (isset($discrete_type[$discrete])) {
+		return $discrete_type[$discrete];
 	}
 
 	return $compress;
