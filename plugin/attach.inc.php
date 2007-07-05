@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: attach.inc.php,v 1.82.28 2007/07/05 02:15:00 upk Exp $
+// $Id: attach.inc.php,v 1.82.29 2007/07/05 03:00:00 upk Exp $
 // Copyright (C)
 //   2005-2007 PukiWiki Plus! Team
 //   2003-2005 PukiWiki Developers Team
@@ -393,46 +393,60 @@ function attach_doupload(&$file, $page, $pass=NULL, $temp='', $copyright=FALSE, 
 function attach_is_compress($type,$compress=1)
 {
 	if (empty($type)) return $compress;
+	list($discrete,$composite_tmp) = explode('/', strtolower($type));
+	if (strstr($type,';') === false) {
+		$composite = $composite_tmp;
+		$parameter = '';
+	} else {
+		list($composite,$parameter) = explode(';', $composite_tmp);
+		$parameter = trim($parameter);
+	}
+	unset($composite_tmp);
 
-	// Prefix
-	static $type_pref = array(
-		'text'				=> 1,
-		'image'				=> 0,
-		'video'				=> 0,
-		'audio'				=> 0,
+	// type
+	static $composite_type = array(
+		'application' => array(
+			'msword'		=> 0, // doc
+			'vnd.ms-excel'		=> 0, // xls
+			'vnd.ms-powerpoint'	=> 0, // ppt
+			'vnd.visio'		=> 0,
+			'octet-stream'		=> 0, // bin dms lha lzh exe class so dll img iso
+			'x-bcpio'		=> 0, // bcpio
+			'x-bittorrent'		=> 0, // torrent
+			'x-bzip2'		=> 0, // bz2
+			'x-compress'		=> 0,
+			'x-cpio'		=> 0, // cpio
+			'x-dvi'			=> 0, // dvi
+			'x-gtar'		=> 0, // gtar
+			'x-gzip'		=> 0, // gz tgz
+			'x-rpm'			=> 0, // rpm
+			'x-shockwave-flash'	=> 0, // swf
+			'zip'			=> 0, // zip
+			'x-java-archive'	=> 0, // jar
+			'x-javascript'		=> 1, // js
+			'ogg'			=> 0, // ogg
+			'pdf'			=> 0, // pdf
+		),
 	);
-	foreach($type_pref as $key=>$val) {
-		if (preg_match('/^('.$key.'\/)/i', $type)) return $val;
+
+	if (isset($composite_type[$discrete])) {
+		foreach($composite_type[$discrete] as $key=>$val) {
+			if ($composite === $key) return $val;
+		}
 	}
 
-	// All
-	static $type_all = array(
-		'application/msword'		=> 0, // doc
-		'application/vnd.ms-excel'	=> 0, // xls
-		'application/vnd.ms-powerpoint'	=> 0, // ppt
-		'application/vnd.visio'		=> 0,
-		'application/octet-stream'	=> 0, // bin dms lha lzh exe class so dll img iso
-		'application/x-bcpio'		=> 0, // bcpio
-		'application/x-bittorrent'	=> 0, // torrent
-		'application/x-bzip2'		=> 0, // bz2
-		'application/x-compress'	=> 0,
-		'application/x-cpio'		=> 0, // cpio
-		'application/x-dvi'		=> 0, // dvi
-		'application/x-gtar'		=> 0, // gtar
-		'application/x-gzip'		=> 0, // gz tgz
-		'application/x-rpm'		=> 0, // rpm
-		'application/x-shockwave-flash'	=> 0, // swf
-		'application/zip'		=> 0, // zip
-		'application/x-java-archive'	=> 0, // jar
-		'application/x-javascript'	=> 1, // js
-		'application/ogg'		=> 0, // ogg
-		'application/pdf'		=> 0, // pdf
+	// discrete-type
+	static $discrete_type = array(
+		'text'                          => 1,
+		'image'                         => 0,
+		'audio'                         => 0,
+		'video'                         => 0,
 	);
-	foreach($type_all as $key=>$val) {
-		//$key = str_replace(array('/','-'), array('\/','\-'), $key);
-		//if (preg_match('/^('.$key.'\/)$/i', $type)) return $val;
-		if ($type === $key) return $val;
+	foreach($discrete_type as $key=>$val) {
+		// if (preg_match('/^('.$key.'\/)/i', $type)) return $val;
+		if ($discrete === $key) return $val;
 	}
+
 	return $compress;
 }
 
