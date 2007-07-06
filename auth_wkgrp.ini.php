@@ -17,6 +17,10 @@ $auth_wkgrp_user = array(
 		// 'user_name1'	=> ROLE_ADM,
 		// 'user_name2'	=> ROLE_ADM_CONTENTS,
 	),
+	'remoteip'	=> array(
+		// 'user_name1' => ROLE_ADM,
+		// 'user_name2' => ROLE_ADM_CONTENTS,
+	),
 );
 
 ?>

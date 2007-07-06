@@ -3,7 +3,7 @@
  * PukiWiki Plus! 認証処理
  *
  * @author	Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth.cls.php,v 0.41 2007/06/17 16:57:00 upk Exp $
+ * @version     $Id: auth.cls.php,v 0.42 2007/07/07 01:10:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 
@@ -17,13 +17,15 @@ defined('ROLE_AUTH_TEMP')         or define('ROLE_AUTH_TEMP', 4.1);
 defined('ROLE_AUTH_TYPEKEY')      or define('ROLE_AUTH_TYPEKEY', 4.2);
 defined('ROLE_AUTH_HATENA')       or define('ROLE_AUTH_HATENA', 4.3);
 defined('ROLE_AUTH_JUGEMKEY')     or define('ROLE_AUTH_JUGEMKEY', 4.4);
+defined('ROLE_AUTH_REMOTEIP')     or define('ROLE_AUTH_REMOTEIP', 4.5);
 defined('UNAME_ADM_CONTENTS_TEMP') or define('UNAME_ADM_CONTENTS_TEMP', 'admin');
 
+// role level => login plugin name
 $login_api = array(
-	// role level => login plugin name
 	strval(ROLE_AUTH_TYPEKEY)	=> 'typekey',
 	strval(ROLE_AUTH_HATENA)	=> 'hatena',
 	strval(ROLE_AUTH_JUGEMKEY)	=> 'jugemkey',
+	strval(ROLE_AUTH_REMOTEIP)      => 'remoteip',
 );
 
 /**
