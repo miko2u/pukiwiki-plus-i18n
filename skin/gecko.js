@@ -1,9 +1,11 @@
 /////////////////////////////////////////////////
 // PukiWikiPlus! - Yet another WikiWikiWeb clone.
 //
-// $Id: gecko.js,v 1.2.3 2004/10/13 15:56:08 miko Exp $
+// $Id: gecko.js,v 1.2.4 2007/07/07 10:12:00 upk Exp $
 // Original is nao-pon
 //
+var pukiwki_elem;
+
 function pukiwiki_pos()
 {
 	return;

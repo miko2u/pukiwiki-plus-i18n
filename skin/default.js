@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: default.js,v 2.0.11 2006/02/15 02:15:00 upk Exp $
+// $Id: default.js,v 2.0.12 2007/07/07 10:13:00 upk Exp $
 // Original is nao-pon
 //
 
@@ -172,6 +172,7 @@ var __default_onload_save = window.onload;
 window.onload = function() {
 	if (__default_onload_save) __default_onload_save();
 	pukiwiki_initTexts();
+	if (typeof init_ctrl_unload=='function') init_ctrl_unload();
 }
 
 //GreyBox configuration

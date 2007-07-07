@@ -27,5 +27,3 @@ function ctrl_unload() {
 function is_changed() {
 	return (document.getElementById('msg').value != document.getElementById('original').value);
 }
-
-window.onload = init_ctrl_unload;
