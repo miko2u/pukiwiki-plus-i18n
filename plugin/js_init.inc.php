@@ -12,7 +12,8 @@ function plugin_js_init_convert()
 	global $language;
 
 	$rc = '';
-	$const = array('SKIN_URI','IMAGE_URI','DEFAULT_LANG');
+	//$const = array('SKIN_URI','IMAGE_URI','DEFAULT_LANG');
+	$const = array('SKIN_DIR','IMAGE_DIR','DEFAULT_LANG');
 	foreach( $const as $var){
 		$rc .= 'var '.$var.'="'.constant($var).'";'."\n";
 	}
