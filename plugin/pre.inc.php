@@ -19,7 +19,7 @@ define('PLUGIN_PRE_FILE_ICON', true);  // 添付ファイルにダウンロー�
 define('PLUGIN_PRE_HEADER', 'pre_');
 if (! defined('FILE_ICON')) {
 	define('FILE_ICON',
-	'<img src="' . IMAGE_DIR . 'file.png" width="20" height="20"' .
+	'<img src="' . IMAGE_URI . 'file.png" width="20" height="20"' .
 	' alt="file" style="border-width:0px" />');
 }
 define('PLUGIN_PRE_COLOR_REGEX', '/^(#[0-9a-f]{3}|#[0-9a-f]{6}|[a-z-]+)$/i');

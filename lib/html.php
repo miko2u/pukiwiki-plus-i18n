@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: html.php,v 1.59.15 2007/06/20 13:20:00 upk Exp $
+// $Id: html.php,v 1.59.16 2007/07/09 23:42:00 upk Exp $
 // Copyright (C)
 //   2005-2007 PukiWiki Plus! Team
 //   2002-2006 PukiWiki Developers Team
@@ -369,7 +369,7 @@ EOD;
 		$map = '';
 	}
 
-	return $map . "\n" . '<script type="text/javascript" src="' . SKIN_DIR . 'assistant.js"></script>' . "\n";
+	return $map . "\n" . '<script type="text/javascript" src="' . SKIN_URI . 'assistant.js"></script>' . "\n";
 }
 
 // Related pages

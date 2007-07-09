@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: attach.inc.php,v 1.82.30 2007/07/05 19:04:00 upk Exp $
+// $Id: attach.inc.php,v 1.82.31 2007/07/09 23:31:00 upk Exp $
 // Copyright (C)
 //   2005-2007 PukiWiki Plus! Team
 //   2003-2005 PukiWiki Developers Team
@@ -58,7 +58,7 @@ if (!defined('PLUGIN_ATTACH_FILE_MODE')) {
 }
 
 // File icon image
-define('PLUGIN_ATTACH_FILE_ICON', '<img src="' . IMAGE_DIR .  'file.png"' .
+define('PLUGIN_ATTACH_FILE_ICON', '<img src="' . IMAGE_URI .  'file.png"' .
 	' width="20" height="20" alt="file"' .
 	' style="border-width:0px" />');
 

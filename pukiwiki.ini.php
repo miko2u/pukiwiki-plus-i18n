@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: pukiwiki.ini.php,v 1.148.22 2007/06/20 13:20:00 upk Exp $
+// $Id: pukiwiki.ini.php,v 1.148.23 2007/07/09 23:48:00 upk Exp $
 // Copyright (C)
 //   2005-2007 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
@@ -139,21 +139,15 @@ define('EXT_LANG_DIR',  EXTEND_DIR. 'locale/'   ); // Extend Language file
 // Directory settings II (ended with '/')
 
 // Skins / Stylesheets
-define('SKIN_DIR', 'skin/');
-// Skin files (SKIN_DIR/*.skin.php) are needed at
-// ./DATAHOME/SKIN_DIR from index.php, but
-// CSSs(*.css) and JavaScripts(*.js) are needed at
-// ./SKIN_DIR from index.php.
-
-// Static image files
-define('IMAGE_DIR', 'image/');
-// Keep this directory shown via web browsers like
-// ./IMAGE_DIR from index.php.
+define('SKIN_DIR',  WWW_HOME . 'skin/');	// Skin files (SKIN_DIR/*.skin.php) are needed at
+						// ./DATAHOME/SKIN_DIR from index.php.
+define('IMAGE_DIR', WWW_HOME . 'image/');	// Static image files
 
 // for Fancy URL
-define('ROOT_URI', '');
-define('SKIN_URI', ROOT_URI . SKIN_DIR);
-define('IMAGE_URI', ROOT_URI . IMAGE_DIR);
+define('SKIN_URI',  ROOT_URI . 'skin/');	// CSSs(*.css) and JavaScripts(*.js) are needed at
+						// ./SKIN_URI from index.php.
+define('IMAGE_URI', ROOT_URI . 'image/');	// Keep this directory shown via web browsers like
+						// ./IMAGE_URI from index.php.
 
 /////////////////////////////////////////////////
 // Title of your Wikisite (Name this)

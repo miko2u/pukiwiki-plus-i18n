@@ -2,9 +2,9 @@
 /**
  * PukiWiki Plus! Hatena 認証処理
  *
- * @copyright   Copyright &copy; 2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * @copyright   Copyright &copy; 2006-2007, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth_hatena.cls.php,v 0.5 2006/11/23 00:18:00 upk Exp $
+ * @version     $Id: auth_hatena.cls.php,v 0.6 2007/07/09 23:40:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 defined('HATENA_URL_AUTH')	or define('HATENA_URL_AUTH','http://auth.hatena.ne.jp/auth');
@@ -102,7 +102,7 @@ class auth_hatena
 		if (empty($message['name'])) return '';
 		return '<a class="ext" href="'.auth_hatena::hatena_profile_url($message['name']).'" rel="nofollow">'.
 			$message['name'].
-			'<img src="'.IMAGE_DIR.'plus/ext.png" alt="" title="" class="ext" onclick="return open_uri(\''.
+			'<img src="'.IMAGE_URI.'plus/ext.png" alt="" title="" class="ext" onclick="return open_uri(\''.
 			auth_hatena::hatena_profile_url($message['name']).'\',\'_blank\');" /></a>';
         }
 

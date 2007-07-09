@@ -1,9 +1,9 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: expand.inc.php,v 0.1.2 2005/08/11 11:57:36 miko Exp $
+// $Id: expand.inc.php,v 0.1.3 2007/07/09 23:33:00 upk Exp $
 //
 // Expand Plugin
-define('PLUGIN_EXPAND_ICON', IMAGE_DIR . 'plus/expand.gif');
+define('PLUGIN_EXPAND_ICON', IMAGE_URI . 'plus/expand.gif');
 define('PLUGIN_EXPAND_DEFAULT_WIDTH', 380);
 define('PLUGIN_EXPAND_MIN_WIDTH',  PLUGIN_EXPAND_DEFAULT_WIDTH);
 define('PLUGIN_EXPAND_MIN_HEIGHT', 380);

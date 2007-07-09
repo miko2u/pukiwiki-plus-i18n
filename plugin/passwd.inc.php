@@ -3,7 +3,7 @@
  * passwd plugin.
  *
  * @copyright   Copyright &copy; 2006-2007, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: passwd.inc.php,v 0.5 2007/06/30 22:51:00 upk Exp $
+ * @version     $Id: passwd.inc.php,v 0.6 2007/07/09 23:45:00 upk Exp $
  *
  * $A1 = md5($data['username'] . ':' . $realm . ':' . $auth_users[$data['username']]);
  */
@@ -151,10 +151,10 @@ function passwd_menu($msg='&nbsp;')
 {
 	global $script, $head_tags, $_passwd_msg, $auth_type, $realm, $vars;
 
-	$head_tags[] = ' <script type="text/javascript" src="'.SKIN_DIR.'crypt/md5.js"></script>';
-	$head_tags[] = ' <script type="text/javascript" src="'.SKIN_DIR.'crypt/sha1.js"></script>';
-	$head_tags[] = ' <script type="text/javascript" src="'.SKIN_DIR.'crypt/des.js"></script>';
-	$head_tags[] = ' <script type="text/javascript" src="'.SKIN_DIR.'crypt/base64.js"></script>';
+	$head_tags[] = ' <script type="text/javascript" src="'.SKIN_URI.'crypt/md5.js"></script>';
+	$head_tags[] = ' <script type="text/javascript" src="'.SKIN_URI.'crypt/sha1.js"></script>';
+	$head_tags[] = ' <script type="text/javascript" src="'.SKIN_URI.'crypt/des.js"></script>';
+	$head_tags[] = ' <script type="text/javascript" src="'.SKIN_URI.'crypt/base64.js"></script>';
 
 	$func = 'save';
 	$role_level = auth::get_role_level();

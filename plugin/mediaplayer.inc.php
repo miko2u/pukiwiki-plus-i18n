@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
 //
-// $Id: mediaplayer.inc.php,v 0.4 2006/02/16 01:20:00 upk Exp $
+// $Id: mediaplayer.inc.php,v 0.5 2007/07/09 23:36:00 upk Exp $
 //
 
 // Windows Media がサポートできるプロトコルか？
@@ -80,10 +80,10 @@ function plugin_mediaplayer_convert()
 		return $usage . $wmv;
 
 	// 追加 JavaScript
-	$head_tags[] = '<script type="text/javascript" src="'.SKIN_DIR.'mediaplayer.js"></script>';
+	$head_tags[] = '<script type="text/javascript" src="'.SKIN_URI.'mediaplayer.js"></script>';
 
 	// メディアプレイヤーの追加
-	$image_dir = constant('IMAGE_DIR');
+	$image_dir = constant('IMAGE_URI');
 	return <<<EOD
 <div align="center">
 	<div class="playercontainer">

@@ -2,8 +2,8 @@
 /**
  * PukiWiki Plus! ログ閲覧プラグイン
  *
- * @copyright	Copyright &copy; 2004-2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version	$Id: logview.php,v 0.10 2006/11/03 23:16:00 upk Exp $
+ * @copyright	Copyright &copy; 2004-2007, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * @version	$Id: logview.php,v 0.11 2007/07/09 23:35:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 
@@ -118,10 +118,10 @@ EOD;
 	// USER-AGENT クラス
 	$obj_ua = new user_agent(USE_UA_OPTION);
 
-	$path_flag    = IMAGE_DIR .'icon/flags/';
-	$path_browser = IMAGE_DIR .'icon/browser/';
-	$path_os      = IMAGE_DIR .'icon/os/';
-	$path_domain  = IMAGE_DIR .'icon/option/domain/';
+	$path_flag    = IMAGE_URI .'icon/flags/';
+	$path_browser = IMAGE_URI .'icon/browser/';
+	$path_os      = IMAGE_URI .'icon/os/';
+	$path_domain  = IMAGE_URI .'icon/option/domain/';
 
 	$guess = ($log['guess_user']['use']) ? log::read_guess() : log::summary_signature();
 

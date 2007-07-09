@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: toolbar.php,v 0.2.5 2007/05/03 21:12:00 upk Exp $
+// $Id: toolbar.php,v 0.2.6 2007/07/09 23:39:00 upk Exp $
 // Copyright (C) 2005,2007 PukiWiki Plus! Team
 // License: GPL v2
 //
@@ -133,7 +133,7 @@ $_IMAGE['skin']['print']    = 'plus/print.png';
 	if (!isset($image[$key])) { return  '<!--IMAGE NOT FOUND-->'; }
 
 	return '<a href="' . $link[$key] . '" rel="nofollow">' .
-	       '<img src="' . IMAGE_DIR . $image[$key] . '" width="' . $x . '" height="' . $y . '" ' .
+	       '<img src="' . IMAGE_URI . $image[$key] . '" width="' . $x . '" height="' . $y . '" ' .
 	                'alt="' . $lang[$key] . '" title="' . $lang[$key] . '" />' .
 	       '</a>';
 }

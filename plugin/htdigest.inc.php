@@ -2,8 +2,8 @@
 /**
  * htdigest plugin.
  *
- * @copyright   Copyright &copy; 2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: htdigest.inc.php,v 0.8 2006/11/29 02:12:00 upk Exp $
+ * @copyright   Copyright &copy; 2006-2007, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * @version     $Id: htdigest.inc.php,v 0.9 2007/07/09 23:43:00 upk Exp $
  *
  * $A1 = md5($data['username'] . ':' . $realm . ':' . $auth_users[$data['username']]);
  */
@@ -123,11 +123,11 @@ function htdigest_menu($msg='&nbsp;')
 {
 	global $script, $realm, $head_tags, $_htdigest_msg;
 
-	$head_tags[] = ' <script type="text/javascript" src="'.SKIN_DIR.'crypt/md4.js"></script>';
-	$head_tags[] = ' <script type="text/javascript" src="'.SKIN_DIR.'crypt/md5.js"></script>';
-	$head_tags[] = ' <script type="text/javascript" src="'.SKIN_DIR.'crypt/sha1.js"></script>';
-	$head_tags[] = ' <script type="text/javascript" src="'.SKIN_DIR.'crypt/des.js"></script>';
-	$head_tags[] = ' <script type="text/javascript" src="'.SKIN_DIR.'crypt/base64.js"></script>';
+	$head_tags[] = ' <script type="text/javascript" src="'.SKIN_URI.'crypt/md4.js"></script>';
+	$head_tags[] = ' <script type="text/javascript" src="'.SKIN_URI.'crypt/md5.js"></script>';
+	$head_tags[] = ' <script type="text/javascript" src="'.SKIN_URI.'crypt/sha1.js"></script>';
+	$head_tags[] = ' <script type="text/javascript" src="'.SKIN_URI.'crypt/des.js"></script>';
+	$head_tags[] = ' <script type="text/javascript" src="'.SKIN_URI.'crypt/base64.js"></script>';
 
 	// 使用する場合は、変更させることもコピーさせることも不要なので、抑止する
 	$disabled = (USE_APACHE_WRITE_FUNC) ? 'disabled="disabled"' : '';

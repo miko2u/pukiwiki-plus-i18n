@@ -2,9 +2,9 @@
 /**
  * PukiWiki Plus! TypeKey 認証処理
  *
- * @copyright   Copyright &copy; 2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * @copyright   Copyright &copy; 2006-2007, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth_typekey.cls.php,v 0.9 2006/11/23 00:20:00 upk Exp $
+ * @version     $Id: auth_typekey.cls.php,v 0.10 2007/07/09 23:40:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 
@@ -92,7 +92,7 @@ class auth_typekey
 		if (empty($message['nick'])) return '';
 		return '<a class="ext" href="'.auth_typekey::typekey_profile_url($message['name']).'" rel="nofollow">'.
 			$message['nick'].
-			'<img src="'.IMAGE_DIR.'plus/ext.png" alt="" title="" class="ext" onclick="return open_uri(\''.
+			'<img src="'.IMAGE_URI.'plus/ext.png" alt="" title="" class="ext" onclick="return open_uri(\''.
 			auth_typekey::typekey_profile_url($message['name']).'\',\'_blank\');" /></a>';
 	}
 

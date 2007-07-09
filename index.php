@@ -1,8 +1,8 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: index.php,v 1.9.2 2006/05/13 17:57:00 miko Exp $
+// $Id: index.php,v 1.9.3 2007/07/09 23:32:00 upk Exp $
 // Copyright (C)
-//   2005-2006 PukiWiki Plus! Team
+//   2005-2007 PukiWiki Plus! Team
 //   2001-2006 PukiWiki Developers Team
 // License: GPL v2 or (at your option) any later version
 
@@ -23,6 +23,10 @@ error_reporting(E_ERROR | E_PARSE); // Avoid E_WARNING, E_NOTICE, etc
 define('SITE_HOME',	'');
 // define('DATA_HOME',     '../../wiki-data/contents/');
 define('DATA_HOME',	'');
+
+define('ROOT_URI', '');
+define('WWW_HOME', '');
+
 define('LIB_DIR',	SITE_HOME . 'lib/');
 
 require(LIB_DIR . 'pukiwiki.php');

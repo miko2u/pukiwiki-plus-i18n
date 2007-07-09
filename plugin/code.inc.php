@@ -29,14 +29,14 @@ define('PLUGIN_CODE_TABLE',     true);
 // TAB幅
 define('PLUGIN_CODE_WIDTHOFTAB', '    ');
 // 画像ファイルの設定
-define('PLUGIN_CODE_IMAGE_FILE', IMAGE_DIR.'code_dot.png');
+define('PLUGIN_CODE_IMAGE_FILE', IMAGE_URI.'code_dot.png');
 
-define('PLUGIN_CODE_OUTLINE_OPEN_FILE',  IMAGE_DIR.'code_outline_open.png');
-define('PLUGIN_CODE_OUTLINE_CLOSE_FILE', IMAGE_DIR.'code_outline_close.png');
+define('PLUGIN_CODE_OUTLINE_OPEN_FILE',  IMAGE_URI.'code_outline_open.png');
+define('PLUGIN_CODE_OUTLINE_CLOSE_FILE', IMAGE_URI.'code_outline_close.png');
 
 if (! defined('FILE_ICON')) {
 	define('FILE_ICON',
-	'<img src="' . IMAGE_DIR . 'file.png" width="20" height="20"' .
+	'<img src="' . IMAGE_URI . 'file.png" width="20" height="20"' .
 	' alt="file" style="border-width:0px" />');
 }
 
@@ -138,7 +138,7 @@ function plugin_code_convert()
 	
 	if ($plugin_code_jscript_flag && ($option['outline'] || $option['comment'])) {
 		$plugin_code_jscript_flag = false;
-		$title .= '<script type="text/javascript" src="'.SKIN_DIR.'code.js"></script>'."\n";
+		$title .= '<script type="text/javascript" src="'.SKIN_URI.'code.js"></script>'."\n";
 	}
 	$html = $title.$lines;
 	if (PLUGIN_CODE_CACHE && ! $multiline) {

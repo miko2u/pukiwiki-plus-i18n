@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: jphoto.inc.php,v 0.2 2005/12/22 13:17:36 miko Exp $
+// $Id: jphoto.inc.php,v 0.3 2007/07/09 23:45:00 upk Exp $
 //
 // argument:
 // jphoto(pagename,[flashsize],[photosize],[zoom])
@@ -72,7 +72,7 @@ function plugin_jphoto_convert()
 	$bgcolor = '#FFFFFF';
 	$quality = 'high';
 
-	$swf = SKIN_DIR . 'jphoto3p.swf';
+	$swf = SKIN_URI . 'jphoto3p.swf';
 	$id = 'jphoto';
 	$wmode = 'opaque';
 

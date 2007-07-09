@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: navibar2.inc.php,v 0.1.14 2007/06/13 19:12:00 upk Exp $
+// $Id: navibar2.inc.php,v 0.1.15 2007/07/09 23:37:00 upk Exp $
 //
 function plugin_navibar2_convert()
 {
@@ -97,14 +97,14 @@ EOD;
 	}
 	$menubarstr = join("\n",$menubar);
 	$menublkstr = join("\n",$naviblk);
-	$skin_dir = SKIN_DIR;
+	$skin_uri = SKIN_URI;
 
 	return <<<EOD
 <div id="navigator2"><table border="0" cellspacing="0" cellpadding="0"><tbody><tr>
 {$menubarstr}
 </tr></tbody></table></div>
 {$menublkstr}
-<script type="text/javascript" src="{$skin_dir}navibar.js"></script>
+<script type="text/javascript" src="{$skin_uri}navibar.js"></script>
 <script type="text/javascript">
 <!-- <![CDATA[
 startNaviMenu( "navigator2", "navimenutd", "navimenu", "NaviMenuLink", "naviblock", "MenuItem");
@@ -252,7 +252,7 @@ function _navigator2($key, $val = '')
 
 	$text = ($val === '') ? $lang[$key] : $val;
 	if (! empty($image[$key])) {
-		$img = '<img src="' . IMAGE_DIR . $image[$key] . '" style="vertical-align:middle;" alt="'. $text . '"/>';
+		$img = '<img src="' . IMAGE_URI . $image[$key] . '" style="vertical-align:middle;" alt="'. $text . '"/>';
 	} else {
 		$img = '';
 	}

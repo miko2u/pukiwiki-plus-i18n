@@ -3,7 +3,7 @@
  * PukiWiki Plus! PRINT Plugin
  *
  * @copyright   Copyright &copy; 2007, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: xbel.inc.php,v 0.5 2007/05/07 02:09:00 upk Exp $
+ * @version     $Id: xbel.inc.php,v 0.6 2007/07/09 23:38:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  *
  */
@@ -18,7 +18,7 @@ function plugin_print_inline()
 	if (! print_display()) return '';
 
 	// <div class="print" style="text-align:right"></div>
-	return '<img src="'.IMAGE_DIR.'plus/print.png" alt="Print Image" title="Print Image" class="ext" onclick="return open_uri(\''.
+	return '<img src="'.IMAGE_URI.'plus/print.png" alt="Print Image" title="Print Image" class="ext" onclick="return open_uri(\''.
 		'?cmd=print&amp;page='.urlencode($vars['page']).'\', \'_blank\');" />';
 }
 
