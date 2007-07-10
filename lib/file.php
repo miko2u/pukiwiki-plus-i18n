@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: file.php,v 1.78.31 2007/06/17 16:56:00 upk Exp $
+// $Id: file.php,v 1.78.32 2007/07/10 22:03:00 upk Exp $
 // Copyright (C)
 //   2005-2007 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
@@ -719,14 +719,18 @@ function get_existpages($dir = DATA_DIR, $ext = '.txt')
 }
 
 // Get PageReading(pronounce-annotated) data in an array()
-function get_readings()
+function get_readings(&$pages = null)
 {
 	global $pagereading_enable, $pagereading_kanji2kana_converter;
 	global $pagereading_kanji2kana_encoding, $pagereading_chasen_path;
 	global $pagereading_kakasi_path, $pagereading_config_page;
 	global $pagereading_config_dict;
 
-	$pages = get_existpages();
+	// For BugTrack/142
+	// $pages = get_existpages();
+	if (! isset($pages)) {
+		$pages = get_existpages();
+	}
 
 	$readings = array();
 	foreach ($pages as $page) 
