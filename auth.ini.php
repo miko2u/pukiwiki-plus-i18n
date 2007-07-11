@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: auth.ini.php,v 0.0.11 2007/07/07 02:54:00 upk Exp $
+// $Id: auth.ini.php,v 0.0.12 2007/07/11 23:46:00 upk Exp $
 // Copyright (C)
 //   2005-2007 PukiWiki Plus! Team
 // License: GPL v2 or (at your option) any later version
@@ -39,6 +39,11 @@ define('PKWK_AUTH_WKGRP_FILE', add_homedir('auth_wkgrp.ini.php'));
 require_once(PKWK_AUTH_WKGRP_FILE);
 
 /////////////////////////////////////////////////
+// Auth API
+define('PKWK_AUTH_API_FILE', add_homedir('auth_api.ini.php'));
+require_once(PKWK_AUTH_API_FILE);
+
+/////////////////////////////////////////////////
 // Authentication method
 
 $auth_method_type = 'pagename'; // By Page name
@@ -75,37 +80,5 @@ $search_auth = 0;
 /////////////////////////////////////////////////
 // Check Role
 $check_role = 1;
-
-/////////////////////////////////////////////////
-// Auth API
-$auth_api = array(
-	// Basic or Digest
-	'plus'			=> array(
-		'use'		=> 1,
-		'displayname'	=> 'Normal',
-	),
-	// TypeKey
-	'typekey'		=> array(
-		'use'		=> 0,
-		'site_token'	=> '',
-		'need_email'	=> 0,
-	),
-	// Hatena
-	'hatena'		=> array(
-		'use'           => 0,
-		'api_key'       => '',
-		'sec_key'       => '',
-	),
-	// JugemKey
-	'jugemkey'		=> array(
-		'use'		=> 0,
-		'api_key'	=> '',
-		'sec_key'	=> '',
-	),
-	'remoteip'		=> array(
-		'use'		=> 0,
-		'hidden'	=> 1,
-	),
-);
 
 ?>
