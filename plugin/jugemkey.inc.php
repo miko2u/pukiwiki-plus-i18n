@@ -4,7 +4,7 @@
  *
  * @copyright   Copyright &copy; 2006-2007, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: jugemkey.inc.php,v 0.6 2007/06/30 22:26:00 upk Exp $
+ * @version     $Id: jugemkey.inc.php,v 0.7 2007/07/13 01:05:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'auth_jugemkey.cls.php');
@@ -36,7 +36,8 @@ function plugin_jugemkey_convert()
 	if (! function_exists('pkwk_session_start')) return '<p>'.$_jugemkey_msg['msg_not_found'].'</p>';
 	if (pkwk_session_start() == 0) return '<p>'.$_jugemkey_msg['msg_not_start'].'</p>';
 
-	$name = auth_jugemkey::jugemkey_session_get();
+	$obj = new auth_jugemkey();
+	$name = $obj->auth_session_get();
 	if (isset($name['title'])) {
 		// $name = array('title','ts','token');
 		$logout_url = $script.'?plugin=jugemkey';
@@ -80,7 +81,8 @@ function plugin_jugemkey_inline()
 	if (! function_exists('pkwk_session_start')) return $_jugemkey_msg['msg_not_found'];
 	if (pkwk_session_start() == 0) return $_jugemkey_msg['msg_not_start'];
 
-	$name = auth_jugemkey::jugemkey_session_get();
+	$obj = new auth_jugemkey();
+        $name = $obj->auth_session_get();
 	if (isset($name['title'])) {
 		// $name = array('title','ts','token');
 		$link = $name['title'];
@@ -111,17 +113,19 @@ function plugin_jugemkey_action()
 		header('Location: '. plugin_jugemkey_jump_url());
 		die();
 	}
+
+	$obj = new auth_jugemkey();
+
 	// LOGOUT
 	if (isset($vars['logout'])) {
-		auth_jugemkey::jugemkey_session_unset();
+		$obj->auth_session_unset();
 		header('Location: '.$script.'?'.$r_page);
 		die();
 	}
 
 	// Get token info
 	if (isset($vars['userinfo'])) {
-		$obj_token =new auth_jugemkey($auth_api['jugemkey']['sec_key'],$auth_api['jugemkey']['api_key']);
-		$rc = $obj_token->get_userinfo($vars['token']);
+		$rc = $obj->get_userinfo($vars['token']);
 		if ($rc['rc'] != 200) {
 			$msg = (empty($rc['error'])) ? '' : ' ('.$rc['error'].')';
 			die_message('JugemKey: RC='.$rc['rc'].$msg);
@@ -133,24 +137,23 @@ function plugin_jugemkey_action()
 	}
 
 	// AUTH
-	$obj = new auth_jugemkey($auth_api['jugemkey']['sec_key'],$auth_api['jugemkey']['api_key']);
 	$rc = $obj->auth($vars['frob']);
 	if ($rc['rc'] != 200) {
 		$msg = (empty($rc['error'])) ? '' : ' ('.$rc['error'].')';
 		die_message('JugemKey: '.$rc['rc'].$msg);
 	}
 
-	$obj->jugemkey_session_put();
+	$obj->auth_session_put();
 	header('Location: '.$script.'?'.$r_page);
 	die();
 }
 
 function plugin_jugemkey_jump_url($inline=0)
 {
-	global $auth_api,$vars,$script;
+	global $vars,$script;
 	$r_page = (empty($vars['page'])) ? '' : '&page='.rawurlencode($vars['page']);
 	$callback_url = $script.'?plugin=jugemkey'.$r_page;
-	$obj = new auth_jugemkey($auth_api['jugemkey']['sec_key'],$auth_api['jugemkey']['api_key']);
+	$obj = new auth_jugemkey();
 	$url = $obj->make_login_link($callback_url);
 	return ($inline) ? $url : str_replace('&amp;','&',$url);
 }
@@ -159,7 +162,9 @@ function plugin_jugemkey_get_user_name()
 {
 	global $script,$auth_api;
         if (! $auth_api['jugemkey']['use']) return array(ROLE_GUEST,'','','');
-	$login = auth_jugemkey::jugemkey_session_get();
+
+	$obj = new auth_jugemkey();
+	$login = $obj->auth_session_get();
 	// FIXME
 	// Because user information can be acquired by token only at online, it doesn't mount. 
 	// $info = (empty($login['token'])) ? '' : $script.'?plugin=jugemkey&token='.$login['token'].'&userinfo';

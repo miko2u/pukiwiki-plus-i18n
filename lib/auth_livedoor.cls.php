@@ -4,10 +4,11 @@
  *
  * @copyright   Copyright &copy; 2007, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth_livedoor.cls.php,v 0.1 2007/07/11 21:53:00 upk Exp $
+ * @version     $Id: auth_livedoor.cls.php,v 0.2 2007/07/13 01:05:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'hash.php');
+require_once(LIB_DIR . 'auth_api.cls.php');
 
 defined('LIVEDOOR_URL_AUTH')  or define('LIVEDOOR_URL_AUTH','http://auth.livedoor.com/login/');
 defined('LIVEDOOR_VERSION')   or define('LIVEDOOR_VERSION','1.0');
@@ -15,14 +16,17 @@ defined('LIVEDOOR_PERMS')     or define('LIVEDOOR_PERMS','id');	// userhash or i
 defined('LIVEDOOR_URL_GETID') or define('LIVEDOOR_URL_GETID','http://auth.livedoor.com/rpc/auth');
 defined('LIVEDOOR_TIMEOUT')   or define('LIVEDOOR_TIMEOUT', 10*60); // 10min
 
-class auth_livedoor
+class auth_livedoor extends auth_api
 {
-	var $sec_key,$app_key,$response;
+	var $sec_key,$app_key;
 
-	function auth_livedoor($sec_key,$app_key)
+	function auth_livedoor()
 	{
-		$this->sec_key = $sec_key;
-		$this->app_key = $app_key;
+		global $auth_api;
+		$this->auth_name = 'livedoor';
+		$this->sec_key = $auth_api[$this->auth_name]['sec_key'];
+		$this->app_key = $auth_api[$this->auth_name]['app_key'];
+		$this->field_name = array('livedoor_id','ts');
 		$this->response = array();
 	}
 
@@ -38,7 +42,7 @@ class auth_livedoor
 			'userdata' => $userdata,
 		);
 
-		$api_sig = auth_livedoor::make_hash($this->sec_key,$query);
+		$api_sig = $this->make_hash($query);
 
 		$q_str = '';
 		foreach($query as $key=>$val) {
@@ -49,14 +53,14 @@ class auth_livedoor
 		return LIVEDOOR_URL_AUTH.$q_str.'&amp;sig='.$api_sig;
 	}
 
-	function make_hash($sec_key,$array)
+	function make_hash($array)
 	{
 		ksort($array);
-		$sig_str = '';
+		$x = '';
 		foreach($array as $key=>$val) {
-			$sig_str .= $key.$val;
+			$x .= $key.$val;
 		}
-		return hmac_sha1($sec_key, $sig_str);
+		return hmac_sha1($this->sec_key, $x);
 	}
 
 	function auth($vars)
@@ -75,7 +79,7 @@ class auth_livedoor
 			$query[$key] = $vars[$key];
 		}
 
-		$api_sig = auth_livedoor::make_hash($this->sec_key,$query);
+		$api_sig = $this->make_hash($query);
 		if ($api_sig !== $vars['sig']) return array('has_error'=>'true','message'=>'Comparison error of signature.');
 
 		// ログオンしてから 10分経過している場合には、タイムアウトとする
@@ -93,19 +97,12 @@ class auth_livedoor
 			't' => UTIME,
 			'v' => LIVEDOOR_VERSION,
 		);
-		$post['sig'] = auth_livedoor::make_hash($this->sec_key,$post);
+		$post['sig'] = $this->make_hash($post);
 
 		$data = http_request(LIVEDOOR_URL_GETID,'POST','',$post);
 		if ($data['rc'] != 200) return array('has_error'=>'true','message'=>$data['rc']);
 
-		$xml_parser = xml_parser_create();
-		xml_parse_into_struct($xml_parser, $data['data'], $val, $index);
-		xml_parser_free($xml_parser);
-
-		foreach($val as $x) {
-			if ($x['type'] != 'complete') continue;
-			$this->response[strtolower($x['tag'])] = $x['value'];
-                }
+		$this->responce_xml_parser($data['data']);
 
 		$has_error = ($this->response['error'] == 0) ? 'false' : 'true';
 		return array('has_error'=>$has_error,'message'=>$this->response['message']);
@@ -114,40 +111,6 @@ class auth_livedoor
 	function get_return_page()
 	{
 		return $this->response['userdata'];
-	}
-
-	function livedoor_session_get()
-	{
-		global $script;
-		$val = auth::des_session_get(md5('livedoor_message_'.$script.session_id()));
-		if (empty($val)) {
-			return array();
-		}
-		return auth_livedoor::parse_message($val);
-        }
-
-	function livedoor_session_put()
-	{
-		global $script;
-		$message = encode($this->response['livedoor_id']).'::'.encode(UTIME);
-		auth::des_session_put(md5('livedoor_message_'.$script.session_id()),$message);
-	}
-
-	function livedoor_session_unset()
-	{
-		global $script;
-		return session_unregister(md5('livedoor_message_'.$script.session_id()));
-	}
-
-	function parse_message($message)
-	{
-		$rc = array();
-		$tmp = explode('::',trim($message));
-		$name = array('name','ts');
-		for($i=0;$i<count($tmp);$i++) {
-			$rc[$name[$i]] = decode($tmp[$i]);
-		}
-		return $rc;
 	}
 }
 

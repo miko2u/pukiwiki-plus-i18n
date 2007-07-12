@@ -3,10 +3,10 @@
  * PukiWiki Plus! IPアドレス認証プラグイン
  *
  * @copyright   Copyright &copy; 2007, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: remoteip.inc.php,v 0.1 2007/07/07 01:51:00 upk Exp $
+ * @version     $Id: remoteip.inc.php,v 0.2 2007/07/13 01:05:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
-// require_once(LIB_DIR . 'auth_remote.cls.php');
+require_once(LIB_DIR . 'auth_api.cls.php');
 
 defined('REMOTEIP_CONFIG_PAGE') or define('REMOTEIP_CONFIG_PAGE','plugin/remoteip');
 
@@ -18,29 +18,31 @@ function plugin_remoteip_inline()
 	if (! $auth_api['remoteip']['use']) return '';
 
 	// 処理済みか？
-	$msg = auth_remoteip::remoteip_session_get();
+	$obj = new auth_remoteip();
+	$msg = $obj->auth_session_get();
 	if (! empty($msg['uid'])) return '';
 
 	$ip  = & $_SERVER['REMOTE_ADDR'];
 
 	if (!count($config_remoteip)) {
-		$obj = new Config(REMOTEIP_CONFIG_PAGE);
-		$obj->read();
-		$config_remoteip = $obj->get('IP');
-		unset($obj);
+		$obj_cfg = new Config(REMOTEIP_CONFIG_PAGE);
+		$obj_cfg->read();
+		$config_remoteip = $obj_cfg->get('IP');
+		unset($obj_cfg);
 	}
 
-	$uid = $name = $prof = '';
+	$parm = array();
 	foreach($config_remoteip as $data) {
 		if ($ip !== $data[0]) continue;
-		$uid = $data[1];
-		$name = $data[2];
-		$note = $data[3];
+		$parm['uid']  = $data[1];
+		$parm['name'] = $data[2];
+		$parm['note'] = $data[3];
 		break;
 	}
 
-	if (empty($uid)) return '';
-	auth_remoteip::remoteip_session_put($uid,$name,$note);
+	if (empty($parm['uid'])) return '';
+	$parm['ts'] = '';
+	$obj->remoteip_session_put($parm);
 	return '';
 }
 
@@ -55,7 +57,8 @@ function plugin_remoteip_get_user_name()
 	global $auth_api;
 	// role,name,nick,profile
 	if (! $auth_api['remoteip']['use']) return array(ROLE_GUEST,'','','');
-	$msg = auth_remoteip::remoteip_session_get();
+	$obj = new auth_remoteip();
+	$msg = $obj->auth_session_get();
 	if (! empty($msg['uid'])) return array(ROLE_AUTH_REMOTEIP,$msg['uid'],$msg['name'],$msg['note']);
 	return array(ROLE_GUEST,'','','');
 }
@@ -66,44 +69,21 @@ function plugin_remoteip_jump_url()
 	return $scrip.'?'.rawurlencode($vars['page']);
 }
 
-class auth_remoteip
+class auth_remoteip extends auth_api
 {
-	function remoteip_session_get()
+	function auth_remoteip()
 	{
-		global $script;
-		$val = auth::des_session_get(md5('remoteip_message_'.$script.session_id()));
-		if (empty($val)) {
-			return array();
-		}
-		return auth_remoteip::parse_message($val);
+		//global $auth_api;
+		$this->auth_name = 'remoteip';
+		$this->field_name = array('uid','ts','name','note');
+		$this->response = array();
 	}
 
-        function remoteip_session_put($uid,$name,$note)
-        {
-                global $script;
-                $message = encode($uid).'::'.
-                        encode(UTIME).'::'.
-                        encode($name).'::'.
-                        encode($note);
-                auth::des_session_put(md5('remoteip_message_'.$script.session_id()),$message);
-        }
-
-        function remoteip_session_unset()
-        {
-                global $script;
-                return session_unregister(md5('remoteip_message_'.$script.session_id()));
-        }
-
-        function parse_message($message)
-        {
-                $rc = array();
-                $tmp = explode('::',trim($message));
-                $name = array('uid','ts','name','note');
-                for($i=0;$i<count($tmp);$i++) {
-                        $rc[$name[$i]] = decode($tmp[$i]);
-                }
-                return $rc;
-        }
+	function remoteip_session_put($parm)
+	{
+		$this->response = $parm;
+		$this->auth_session_put();
+	}
 }
 
 ?>

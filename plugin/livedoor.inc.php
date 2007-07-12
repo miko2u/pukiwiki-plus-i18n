@@ -4,7 +4,7 @@
  *
  * @copyright   Copyright &copy; 2007, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: livedoor.inc.php,v 0.1 2007/07/11 20:27:00 upk Exp $
+ * @version     $Id: livedoor.inc.php,v 0.2 2007/07/13 01:05:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'auth_livedoor.cls.php');
@@ -34,8 +34,9 @@ function plugin_livedoor_convert()
 	if (! function_exists('pkwk_session_start')) return '<p>'.$_livedoor_msg['msg_not_found'].'</p>';
 	if (pkwk_session_start() == 0) return '<p>'.$_livedoor_msg['msg_not_start'].'</p>';
 
-	$name = auth_livedoor::livedoor_session_get();
-	if (isset($name['name'])) {
+	$obj = new auth_livedoor();
+	$name = $obj->auth_session_get();
+	if (isset($name['livedoor_id'])) {
 		$logout_url = $script.'?plugin=livedoor';
 		if (! empty($vars['page'])) {
 			$logout_url .= '&amp;page='.rawurlencode($vars['page']).'&amp;logout';
@@ -44,7 +45,7 @@ function plugin_livedoor_convert()
 		return <<<EOD
 <div>
 	<label>livedoor</label>:
-	{$name['name']}
+	{$name['livedoor_id']}
 	(<a href="$logout_url">{$_livedoor_msg['msg_logout']}</a>)
 </div>
 
@@ -78,13 +79,14 @@ function plugin_livedoor_inline()
 	if (! function_exists('pkwk_session_start')) return $_livedoor_msg['msg_not_found'];
 	if (pkwk_session_start() == 0) return $_livedoor_msg['msg_not_start'];
 
-	$name = auth_livedoor::livedoor_session_get();
-	if (isset($name['name'])) {
+	$obj = new auth_livedoor();
+	$name = $obj->auth_session_get();
+	if (isset($name['livedoor_id'])) {
 		$logout_url = $script.'?plugin=livedoor';
 		if (! empty($vars['page'])) {
 			$logout_url .= '&amp;page='.rawurlencode($vars['page']).'&amp;logout';
 		}
-		return sprintf($_livedoor_msg['msg_logined'],$name['name']) .
+		return sprintf($_livedoor_msg['msg_logined'],$name['livedoor_id']) .
 			'(<a href="'.$logout_url.'">'.$_livedoor_msg['msg_logout'].'</a>)';
 	}
 
@@ -107,16 +109,18 @@ function plugin_livedoor_action()
 		header('Location: '. plugin_livedoor_jump_url());
 		die();
         }
+
+	$obj = new auth_livedoor();
+
 	// LOGOUT
 	if (isset($vars['logout'])) {
-		auth_livedoor::livedoor_session_unset();
+		$obj->auth_session_unset();
 		header('Location: '.$script.'?'.$r_page);
 		die();
 	}
 
 	// AUTH
-	$obj_livedoor = new auth_livedoor($auth_api['livedoor']['sec_key'],$auth_api['livedoor']['app_key']);
-	$rc = $obj_livedoor->auth($vars);
+	$rc = $obj->auth($vars);
 
 	if (! isset($rc['has_error']) || $rc['has_error'] == 'true') {
 		// ERROR
@@ -124,16 +128,16 @@ function plugin_livedoor_action()
 		die_message($body);
 	}
 
-	$obj_livedoor->livedoor_session_put();
-	$r_page = rawurlencode($obj_livedoor->get_return_page());
+	$obj->auth_session_put();
+	$r_page = rawurlencode($obj->get_return_page());
 	header('Location: '.$script.'?'.$r_page);
 	die();
 }
 
 function plugin_livedoor_jump_url($inline=0)
 {
-	global $auth_api,$vars;
-	$obj = new auth_livedoor($auth_api['livedoor']['sec_key'],$auth_api['livedoor']['app_key']);
+	global $vars;
+	$obj = new auth_livedoor();
 	$url = $obj->make_login_link($vars['page']);
 	return ($inline) ? $url : str_replace('&amp;','&',$url);
 }
@@ -143,8 +147,9 @@ function plugin_livedoor_get_user_name()
 	global $auth_api;
 	// role,name,nick,profile
 	if (! $auth_api['livedoor']['use']) return array(ROLE_GUEST,'','','');
-	$msg = auth_livedoor::livedoor_session_get();
-	if (! empty($msg['name'])) return array(ROLE_AUTH_LIVEDOOR,$msg['name'],$msg['name'],'');
+	$obj = new auth_livedoor();
+	$msg = $obj->auth_session_get();
+	if (! empty($msg['livedoor_id'])) return array(ROLE_AUTH_LIVEDOOR,$msg['livedoor_id'],$msg['livedoor_id'],'');
 	return array(ROLE_GUEST,'','','');
 }
 

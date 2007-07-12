@@ -4,9 +4,10 @@
  *
  * @copyright   Copyright &copy; 2006-2007, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth_typekey.cls.php,v 0.10 2007/07/09 23:40:00 upk Exp $
+ * @version     $Id: auth_typekey.cls.php,v 0.11 2007/07/13 01:05:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
+require_once(LIB_DIR . 'auth_api.cls.php');
 
 defined('TYPEKEY_URL_LOGIN')	or define('TYPEKEY_URL_LOGIN',	 'https://www.typekey.com/t/typekey/login');
 defined('TYPEKEY_URL_LOGOUT')	or define('TYPEKEY_URL_LOGOUT',	 'https://www.typekey.com/t/typekey/logout');
@@ -15,13 +16,16 @@ defined('TYPEKEY_REGKEYS')	or define('TYPEKEY_REGKEYS',	 'http://www.typekey.com
 defined('TYPEKEY_VERSION')	or define('TYPEKEY_VERSION',	 '1.1');
 defined('TYPEKEY_CACHE_TIME')	or define('TYPEKEY_CACHE_TIME',	 60*60*24*2); // 2 day
 
-class auth_typekey
+class auth_typekey extends auth_api
 {
 	var $siteToken, $need_email, $regkeys, $sigKey, $version;
 
-	function auth_typekey($siteToken)
+	function auth_typekey()
 	{
-		$this->siteToken = trim($siteToken);
+		global $auth_api;
+		$this->auth_name = 'typekey';
+		$this->siteToken = trim( $auth_api[$this->auth_name]['site_token']);
+		$this->field_name = array('email','name','nick','ts','site_token');
 		$this->need_email = 0;
 		$this->version = TYPEKEY_VERSION;
 		$this->sigKey = array();
@@ -32,7 +36,8 @@ class auth_typekey
 	function set_regkeys() { $this->regkeys = $this->get_regkeys(); }
 	function set_sigKey($sigKey)
 	{
-		foreach(array('email','name','nick','ts') as $key) {
+		foreach($this->field_name as $key) {
+			if ($key == 'site_token') continue;
 			$this->sigKey[$key] = (empty($sigKey[$key])) ? '' : trim($sigKey[$key]);
 		}
 
@@ -82,13 +87,13 @@ class auth_typekey
 
 	function get_profile($field='nick')
 	{
-		$message = auth_typekey::typekey_session_get();
+		$message = $this->auth_session_get();
 		return (empty($message[$field])) ? '' : $message[$field];
 	}
 
 	function get_profile_link()
 	{
-		$message = auth_typekey::typekey_session_get();
+		$message = $this->auth_session_get();
 		if (empty($message['nick'])) return '';
 		return '<a class="ext" href="'.auth_typekey::typekey_profile_url($message['name']).'" rel="nofollow">'.
 			$message['nick'].
@@ -100,22 +105,19 @@ class auth_typekey
 	{
 		$message = '';
 		// <email>::<name>::<nick>::<ts>::<site-token>
-		foreach(array('email','name','nick','ts') as $key) {
+		foreach($this->field_name as $key) {
+			if ($key == 'site_token') continue;
 			$message .= $this->sigKey[$key].'::';
 		}
 		$message .= $this->siteToken;
 		return $message;
 	}
 
-	function parse_message($message)
+	function typekey_session_put()
 	{
-		$rc = array();
-		$tmp = explode('::',trim($message));
-		$name = array('email','name','nick','ts','site_token');
-		for($i=0;$i<count($tmp);$i++) {
-			$rc[$name[$i]] = $tmp[$i];
-		}
-		return $rc;
+		$this->response = $this->sigKey;
+		$this->response['site_token'] = $this->siteToken;
+		$this->auth_session_put();
 	}
 
 	function typekey_login_url($return='')
@@ -149,29 +151,6 @@ class auth_typekey
 	function typekey_profile_url($name)
 	{
 		return TYPEKEY_URL_PROFILE.rawurlencode($name).'/';
-	}
-
-	function typekey_session_get()
-	{
-		global $script;
-		$val = auth::des_session_get(md5('typekey_message_'.$script.session_id()));
-		if (empty($val)) {
-			return array();
-		}
-		return auth_typekey::parse_message($val);
-	}
-
-	function typekey_session_put()
-	{
-		global $script;
-		$message = $this->gen_message();
-		auth::des_session_put(md5('typekey_message_'.$script.session_id()),$message);
-	}
-
-	function typekey_session_unset()
-	{
-		global $script;
-		return session_unregister(md5('typekey_message_'.$script.session_id()));
 	}
 
 	function auth()

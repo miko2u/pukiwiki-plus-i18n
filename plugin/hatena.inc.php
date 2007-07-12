@@ -4,7 +4,7 @@
  *
  * @copyright   Copyright &copy; 2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: hatena.inc.php,v 0.7 2006/11/25 02:27:00 upk Exp $
+ * @version     $Id: hatena.inc.php,v 0.8 2007/07/13 01:05:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'auth_hatena.cls.php');
@@ -34,7 +34,8 @@ function plugin_hatena_convert()
 	if (! function_exists('pkwk_session_start')) return '<p>'.$_hatena_msg['msg_not_found'].'</p>';
 	if (pkwk_session_start() == 0) return '<p>'.$_hatena_msg['msg_not_start'].'</p>';
 
-	$name = auth_hatena::hatena_session_get();
+	$obj = new auth_hatena();
+	$name = $obj->auth_session_get();
 	if (isset($name['name'])) {
 		// $name = array('name','ts','image_url','thumbnail_url');
 		$logout_url = $script.'?plugin=hatena';
@@ -80,7 +81,8 @@ function plugin_hatena_inline()
 	if (! function_exists('pkwk_session_start')) return $_hatena_msg['msg_not_found'];
 	if (pkwk_session_start() == 0) return $_hatena_msg['msg_not_start'];
 
-	$name = auth_hatena::hatena_session_get();
+	$obj = new auth_hatena();
+	$name = $obj->auth_session_get();
 	if (isset($name['name'])) {
 		// $name = array('name','ts','image_url','thumbnail_url');
 		$link = $name['name'].'<img src="'.$name['thumbnail_url'].'" alt="id:'.$name['name'].'" />';
@@ -111,16 +113,18 @@ function plugin_hatena_action()
 		header('Location: '. plugin_hatena_jump_url());
 		die();
         }
+
+	$obj = new auth_hatena();
+
 	// LOGOUT
 	if (isset($vars['logout'])) {
-		auth_hatena::hatena_session_unset();
+		$obj->auth_session_unset();
 		header('Location: '.$script.'?'.$r_page);
 		die();
 	}
 
 	// AUTH
-	$obj_hatena = new auth_hatena($auth_api['hatena']['sec_key'],$auth_api['hatena']['api_key']);
-	$rc = $obj_hatena->auth($vars['cert']);
+	$rc = $obj->auth($vars['cert']);
 
 	if (! isset($rc['has_error']) || $rc['has_error'] == 'true') {
 		// ERROR
@@ -128,15 +132,15 @@ function plugin_hatena_action()
 		die_message($body);
 	}
 
-	$obj_hatena->hatena_session_put();
+	$obj->auth_session_put();
 	header('Location: '.$script.'?'.$r_page);
 	die();
 }
 
 function plugin_hatena_jump_url($inline=0)
 {
-	global $auth_api,$vars;
-	$obj = new auth_hatena($auth_api['hatena']['sec_key'],$auth_api['hatena']['api_key']);
+	global $vars;
+	$obj = new auth_hatena();
 	$url = $obj->make_login_link(array('page'=>$vars['page'],'plugin'=>'hatena'));
 	return ($inline) ? $url : str_replace('&amp;','&',$url);
 }
@@ -146,7 +150,8 @@ function plugin_hatena_get_user_name()
 	global $auth_api;
 	// role,name,nick,profile
 	if (! $auth_api['hatena']['use']) return array(ROLE_GUEST,'','','');
-	$msg = auth_hatena::hatena_session_get();
+	$obj = new auth_hatena();
+	$msg = $obj->auth_session_get();
 	if (! empty($msg['name'])) return array(ROLE_AUTH_HATENA,$msg['name'],$msg['name'],HATENA_URL_PROFILE.$msg['name']);
 	return array(ROLE_GUEST,'','','');
 }

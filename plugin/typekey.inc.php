@@ -4,7 +4,7 @@
  *
  * @copyright   Copyright &copy; 2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: typekey.inc.php,v 0.10 2006/11/25 02:27:00 upk Exp $
+ * @version     $Id: typekey.inc.php,v 0.11 2007/07/13 01:05:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'auth_typekey.cls.php');
@@ -36,7 +36,9 @@ function plugin_typekey_convert()
 	if ($auth_api['typekey']['use'] != 1) return '<p>'.$_typekey_msg['msg_invalid'].'</p>';
 	if (empty($auth_api['typekey']['site_token'])) return '<p>'.$_typekey_msg['msg_error'].'</p>';
 
-	$user = auth_typekey::get_profile_link();
+	$obj = new auth_typekey();
+
+	$user = $obj->get_profile_link();
 	if (! empty($user)) {
 		$page  = $script.rawurlencode('?plugin=typekey');
 		if (! empty($vars['page'])) {
@@ -74,7 +76,8 @@ function plugin_typekey_inline()
 	if ($auth_api['typekey']['use'] != 1) return $_typekey_msg['msg_invalid'];
 	if (empty($auth_api['typekey']['site_token'])) return $_typekey_msg['msg_error'];
 
-	$link = auth_typekey::get_profile_link();
+	$obj = new auth_typekey();
+	$link = $obj->get_profile_link();
 	if (! empty($link)) {
 		// 既に認証済
 		$page  = $script.rawurlencode('?plugin=typekey');
@@ -98,23 +101,23 @@ function plugin_typekey_action()
 
 	if (empty($auth_api['typekey']['site_token'])) return '';
 
-	$obj_typekey = new auth_typekey($auth_api['typekey']['site_token']);
-	$obj_typekey->set_regkeys();
-	$obj_typekey->set_need_email($auth_api['typekey']['need_email']);
-	$obj_typekey->set_sigKey($vars);
+	$obj = new auth_typekey();
+	$obj->set_regkeys();
+	$obj->set_need_email($auth_api['typekey']['need_email']);
+	$obj->set_sigKey($vars);
 
 	$r_page = (empty($vars['page'])) ? '' : rawurlencode($vars['page']);
 
-	if (! $obj_typekey->auth()) {
+	if (! $obj->auth()) {
 		if (isset($vars['logout'])) {
-			auth_typekey::typekey_session_unset();
+			$obj->auth_session_unset();
 		}
 		header('Location: '.$script.'?'.$r_page);
 		die();
 	}
 
 	// 認証成功
-	$obj_typekey->typekey_session_put();
+	$obj->typekey_session_put();
 	header('Location: '.$script.'?'.$r_page);
 	die();
 }
@@ -138,7 +141,8 @@ function plugin_typekey_get_user_name()
 	global $auth_api;
 	// role,name,nick,profile
 	if (! $auth_api['typekey']['use']) return array(ROLE_GUEST,'','','');
-	$msg = auth_typekey::typekey_session_get();
+	$obj = new auth_typekey();
+	$msg = $obj->auth_session_get();
 	if (! empty($msg['nick']) && ! empty($msg['name'])) {
 		return array(ROLE_AUTH_TYPEKEY,$msg['name'],$msg['nick'],TYPEKEY_URL_PROFILE.$msg['name']);
 	}

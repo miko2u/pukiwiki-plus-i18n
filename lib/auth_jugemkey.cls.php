@@ -4,24 +4,28 @@
  *
  * @copyright   Copyright &copy; 2006-2007, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth_jugemkey.cls.php,v 0.4 2007/07/11 00:00:00 upk Exp $
+ * @version     $Id: auth_jugemkey.cls.php,v 0.5 2007/07/13 01:05:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 
 require_once(LIB_DIR . 'hash.php');
+require_once(LIB_DIR . 'auth_api.cls.php');
 
 defined('JUGEMKEY_URL_AUTH')  or define('JUGEMKEY_URL_AUTH', 'https://secure.jugemkey.jp/?mode=auth_issue_frob');
 defined('JUGEMKEY_URL_TOKEN') or define('JUGEMKEY_URL_TOKEN','http://api.jugemkey.jp/api/auth/token');
 defined('JUGEMKEY_URL_USER')  or define('JUGEMKEY_URL_USER', 'http://api.jugemkey.jp/api/auth/user');
 
-class auth_jugemkey
+class auth_jugemkey extends auth_api
 {
-	var $sec_key,$api_key,$response;
+	var $sec_key,$api_key;
 
-	function auth_jugemkey($sec_key,$api_key)
+	function auth_jugemkey()
 	{
-		$this->sec_key = $sec_key;
-		$this->api_key = $api_key;
+		global $auth_api;
+		$this->auth_name = 'jugemkey';
+		$this->sec_key = $auth_api[$this->auth_name]['sec_key'];
+		$this->api_key = $auth_api[$this->auth_name]['api_key'];
+		$this->field_name = array('title','ts','token');
 		$this->response = array();
 	}
 
@@ -30,42 +34,6 @@ class auth_jugemkey
 		$perms = 'auth';
 		$api_sig = hmac_sha1($this->sec_key, $this->api_key.$callback_url.$perms);
 		return JUGEMKEY_URL_AUTH.'&amp;api_key='.$this->api_key.'&amp;perms='.$perms.'&amp;callback_url='.rawurlencode($callback_url).'&amp;api_sig='.$api_sig;
-	}
-
-        function jugemkey_session_get()
-        {
-		global $script;
-		$val = auth::des_session_get(md5('jugemkey_message_'.$script.session_id()));
-		if (empty($val)) {
-			return array();
-		}
-		return auth_jugemkey::parse_message($val);
-        }
-
-	function jugemkey_session_put()
-	{
-		global $script;
-		$message = encode($this->response['title']).'::'.
-			encode(UTIME).'::'.
-			encode($this->response['token']);
-		auth::des_session_put(md5('jugemkey_message_'.$script.session_id()),$message);
-        }
-
-	function jugemkey_session_unset()
-	{
-		global $script;
-		return session_unregister(md5('jugemkey_message_'.$script.session_id()));
-	}
-
-	function parse_message($message)
-	{
-		$rc = array();
-		$tmp = explode('::',trim($message));
-		$name = array('title','ts','token');
-		for($i=0;$i<count($tmp);$i++) {
-			$rc[$name[$i]] = decode($tmp[$i]);
-		}
-		return $rc;
 	}
 
 	function auth($frob)
@@ -86,14 +54,7 @@ class auth_jugemkey
 			return $this->response;
 		}
 
-		$xml_parser = xml_parser_create();
-		xml_parse_into_struct($xml_parser, $data['data'], $val, $index);
-		xml_parser_free($xml_parser);
-
-		foreach($val as $x) {
-			if ($x['type'] != 'complete') continue;
-			$this->response[strtolower($x['tag'])] = $x['value'];
-		}
+		$this->responce_xml_parser($data['data']);
 		return $this->response;
 	}
 
@@ -109,20 +70,11 @@ class auth_jugemkey
 		);
 
 		$data = http_request(JUGEMKEY_URL_USER, 'GET', $headers);
+		$this->response['rc'] = $data['rc'];
+		if ($data['rc'] != 200 && ($data['rc'] != 401)) return $this->response;
 
-		$rc = array();
-		$rc['rc'] = $data['rc'];
-		if ($data['rc'] != 200 && ($data['rc'] != 401)) return $rc;
-
-		$xml_parser = xml_parser_create();
-		xml_parse_into_struct($xml_parser, $data['data'], $val, $index);
-		xml_parser_free($xml_parser);
-
-		foreach($val as $x) {
-			if ($x['type'] != 'complete') continue;
-			$rc[strtolower($x['tag'])] = $x['value'];
-		}
-		return $rc;
+		$this->responce_xml_parser($data['data']);
+		return $this->response;
 	}
 }
 
