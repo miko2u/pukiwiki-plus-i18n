@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: mixirss.inc.php,v 1.14.5 2006/07/31 01:27:00 miko Exp $
+// $Id: mixirss.inc.php,v 1.14.6 2007/07/13 11:58:00 miko Exp $
 //
 // Publishing RSS feed of RecentChanges
 // Usage: mixirss.inc.php?ver=[0.91|1.0(default)|2.0]
@@ -167,9 +167,16 @@ EOD;
 				$description = ' <description><![CDATA[' . mb_convert_encoding($description,'UTF-8',SOURCE_ENCODING) . ']]></description>';
 //miko added
 				$rdf_li .= '    <rdf:li rdf:resource="' . $self . '?' . $r_page . '" />' . "\n";
+				global $newtitle, $newbase;
+				if (isset($newbase) && $newbase != '') {
+					$anchortitle = $newtitle . ' (' . $title . ')';
+					$newtitle = $newbase = '';
+				} else {
+					$anchortitle = $title;
+				}
 				$items .= <<<EOD
 <item rdf:about="$self?$r_page">
- <title>$title</title>
+ <title>$anchortitle</title>
  <link>$self?$r_page</link>
 $description
  <dc:date>$date</dc:date>
