@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: file.php,v 1.78.32 2007/07/10 22:03:00 upk Exp $
+// $Id: file.php,v 1.78.33 2007/07/13 11:58:00 miko Exp $
 // Copyright (C)
 //   2005-2007 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
@@ -121,6 +121,10 @@ function page_write($page, $postdata, $notimestamp = FALSE)
 
 	// Create wiki text
 	file_write(DATA_DIR, $page, $postdata, $notimestamp);
+
+	if (function_exists('senna_update')) {
+		senna_update($page, $oldpostdata, $postdata);
+	}
 
 	if ($trackback > 1) {
 		// TrackBack Ping
