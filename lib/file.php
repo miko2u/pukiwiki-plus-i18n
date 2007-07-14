@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: file.php,v 1.78.33 2007/07/13 11:58:00 miko Exp $
+// $Id: file.php,v 1.78.34 2007/07/14 23:04:00 miko Exp $
 // Copyright (C)
 //   2005-2007 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
@@ -723,7 +723,7 @@ function get_existpages($dir = DATA_DIR, $ext = '.txt')
 }
 
 // Get PageReading(pronounce-annotated) data in an array()
-function get_readings(&$pages = null)
+function get_readings($pages = null)
 {
 	global $pagereading_enable, $pagereading_kanji2kana_converter;
 	global $pagereading_kanji2kana_encoding, $pagereading_chasen_path;
