@@ -3,7 +3,7 @@
  * PukiWiki Plus! 認証処理
  *
  * @author	Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth.cls.php,v 0.43 2007/07/11 00:00:00 upk Exp $
+ * @version     $Id: auth.cls.php,v 0.44 2007/07/15 23:52:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'auth.def.php');
@@ -115,6 +115,14 @@ class auth
 
 		if (empty($login_api[$str_role])) return 0;
 		$api_name = $login_api[$str_role];
+
+		if ($api_name === 'openid') {
+			require_once(LIB_DIR . 'auth_openid.cls.php');
+			$obj_openid = new auth_openid_plus_verify();
+			$openid_host = $obj_openid->get_host();
+			if (empty($auth_wkgrp_user[$api_name][$openid_host][$user])) return 0;
+			return $auth_wkgrp_user[$api_name][$openid_host][$user];
+		}
 
 		if (empty($auth_wkgrp_user[$api_name][$user])) return 0;
 		return $auth_wkgrp_user[$api_name][$user];
@@ -617,6 +625,7 @@ class auth
 		list($scheme, $salt) = auth::passwd_parse($adminpass);
 		require_once(LIB_DIR . 'des.php');
 		$_SESSION[$session_name] = base64_encode( des($salt, $val, 1, 0, null) );
+		session_write_close();
 	}
 }
 ?>

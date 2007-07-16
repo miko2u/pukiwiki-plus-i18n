@@ -1,0 +1,77 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2007-07-16 20:14+0900\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../plugin/openid.inc.php:19
+msgid "logout"
+msgstr ""
+
+#: ../../plugin/openid.inc.php:20
+#, php-format
+msgid "%s has been approved by openid."
+msgstr ""
+
+#: ../../plugin/openid.inc.php:21
+msgid "The function of opeind is invalid."
+msgstr ""
+
+#: ../../plugin/openid.inc.php:22
+msgid "pkwk_session_start() doesn't exist."
+msgstr ""
+
+#: ../../plugin/openid.inc.php:23
+msgid "The session is not start."
+msgstr ""
+
+#: ../../plugin/openid.inc.php:24
+msgid "OpenID"
+msgstr ""
+
+#: ../../plugin/openid.inc.php:25
+msgid "OpenID URL:"
+msgstr ""
+
+#: ../../plugin/openid.inc.php:26
+msgid "LOGIN"
+msgstr ""
+
+#: ../../plugin/openid.inc.php:27
+msgid "OpenID login form."
+msgstr ""
+
+#: ../../plugin/openid.inc.php:28
+#, php-format
+msgid ""
+"Could not create the FileStore directory %s. Please check the effective "
+"permissions."
+msgstr ""
+
+#: ../../plugin/openid.inc.php:29
+msgid "Verification cancelled."
+msgstr ""
+
+#: ../../plugin/openid.inc.php:30
+msgid "OpenID authentication failed: "
+msgstr ""
+
+#: ../../plugin/openid.inc.php:31
+msgid "nickname must be set."
+msgstr ""
+
+#: ../../plugin/openid.inc.php:32
+msgid "Authentication error."
+msgstr ""

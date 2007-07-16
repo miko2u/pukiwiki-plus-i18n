@@ -24,6 +24,7 @@ $auth_api = array(
                 'api_key'       => '',
                 'sec_key'       => '',
         ),
+	// RemoteIP
         'remoteip'              => array(
                 'use'           => 0,
                 'hidden'        => 1,
@@ -34,6 +35,10 @@ $auth_api = array(
                 'app_key'       => '',
                 'sec_key'       => '',
         ),
+	// OpenID
+	'openid'		=> array(
+		'use'		=> 0,
+	),
 
 );
 
