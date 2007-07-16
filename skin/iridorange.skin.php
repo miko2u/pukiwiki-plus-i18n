@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: iridorange.skin.php,v 1.1.10 2006/10/12 00:19:00 miko Exp $
+// $Id: iridorange.skin.php,v 1.1.11 2007/07/16 23:16:00 upk Exp $
 // Original is ari-
 //
 
@@ -189,8 +189,8 @@ Link: <?php echo $related ?>
 <!-- ◆ Footer ◆ ========================================================== -->
 <div id="footer"><!-- ■BEGIN id:footer -->
 <div id="copyright"><!-- ■BEGIN id:copyright -->
- Webmaster: <a href="<?php echo $modifierlink ?>"><?php echo $modifier ?></a><br />
- Powered by PukiWiki Plus! <?php echo S_VERSION ?> with PHP <?php echo PHP_VERSION ?>.
+ Founded by <a href="<?php echo $modifierlink ?>"><?php echo $modifier ?></a><br />
+ Powered by PukiWiki Plus! <?php echo S_VERSION ?>.
  HTML convert time: <?php echo $taketime ?> sec.
 </div><!-- □END id:copyright -->
 </div><!-- □END id:footer -->

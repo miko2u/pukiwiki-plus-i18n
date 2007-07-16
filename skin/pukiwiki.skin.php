@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: pukiwiki.skin.php,v 1.52.3 2007/02/11 05:53:31 miko Exp $
+// $Id: pukiwiki.skin.php,v 1.52.4 2007/07/16 23:20:00 upk Exp $
 // Copyright (C)
 //   2005-2007 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
@@ -86,7 +86,7 @@ if (isset($pkwk_dtd)) {
 <body>
 
 <div id="header">
- <a href="<?php echo $link['top'] ?>"><img id="logo" src="<?php echo IMAGE_DIR . $image['logo'] ?>" width="80" height="80" alt="[PukiWiki]" title="[PukiWiki]" /></a>
+ <a href="<?php echo $link['top'] ?>"><img id="logo" src="<?php echo IMAGE_URI . $image['logo'] ?>" width="80" height="80" alt="[PukiWiki]" title="[PukiWiki]" /></a>
 
  <h1 class="title"><?php echo $page ?></h1>
 
@@ -220,7 +220,7 @@ function _toolbar($key, $x = 20, $y = 20){
 	if (! isset($image[$key])) { echo 'IMAGE NOT FOUND'; return FALSE; }
 
 	echo '<a href="' . $link[$key] . '">' .
-		'<img src="' . IMAGE_DIR . $image[$key] . '" width="' . $x . '" height="' . $y . '" ' .
+		'<img src="' . IMAGE_URI . $image[$key] . '" width="' . $x . '" height="' . $y . '" ' .
 			'alt="' . $lang[$key] . '" title="' . $lang[$key] . '" />' .
 		'</a>';
 	return TRUE;
@@ -270,9 +270,9 @@ function _toolbar($key, $x = 20, $y = 20){
 <?php } ?>
 
 <div id="footer">
- Site admin: <a href="<?php echo $modifierlink ?>"><?php echo $modifier ?></a><p />
+ Founded by <a href="<?php echo $modifierlink ?>"><?php echo $modifier ?></a><p />
  <?php echo S_COPYRIGHT ?>.
- Powered by PHP <?php echo PHP_VERSION ?>. HTML convert time: <?php echo $taketime ?> sec.
+ HTML convert time: <?php echo $taketime ?> sec.
 </div>
 <?php echo $foot_tag ?>
 </body>

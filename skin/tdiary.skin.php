@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: tdiary.skin.php,v 1.34.3 2007/02/11 05:53:31 miko Exp $
+// $Id: tdiary.skin.php,v 1.34.4 2007/07/16 23:12:00 upk Exp $
 // Copyright (C)
 //   2005-2007 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
@@ -874,7 +874,7 @@ function _toolbar($key, $x = 20, $y = 20){
 	if (! isset($image[$key])) { echo 'IMAGE NOT FOUND'; return FALSE; }
 
 	echo '<a href="' . $link[$key] . '">' .
-		'<img src="' . IMAGE_DIR . $image[$key] . '" width="' . $x . '" height="' . $y . '" ' .
+		'<img src="' . IMAGE_URI . $image[$key] . '" width="' . $x . '" height="' . $y . '" ' .
 			'alt="' . $lang[$key] . '" title="' . $lang[$key] . '" />' .
 		'</a>';
 	return TRUE;
@@ -916,9 +916,8 @@ function _toolbar($key, $x = 20, $y = 20){
 <?php } // PKWK_SKIN_SHOW_TOOLBAR ?>
 
 <!-- Copyright etc -->
- Site admin: <a href="<?php echo $modifierlink ?>"><?php echo $modifier ?></a><p />
- <?php echo S_COPYRIGHT ?>.
- Powered by PHP <?php echo PHP_VERSION ?><br />
+ Founded by <a href="<?php echo $modifierlink ?>"><?php echo $modifier ?></a><p />
+ <?php echo S_COPYRIGHT ?>.<br />
  HTML convert time: <?php echo $taketime ?> sec.
 
 </div><!-- class="footer" -->

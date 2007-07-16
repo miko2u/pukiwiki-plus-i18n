@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
 //
-// $Id: orangebox.skin.php,v 1.18.10 2006/10/12 04:46:00 miko Exp $
+// $Id: orangebox.skin.php,v 1.18.11 2007/07/16 23:18:00 upk Exp $
 // Original is ari-
 
 // Prohibit direct access
@@ -158,14 +158,14 @@ if (isset($pkwk_dtd)) {
 <h2>編集操作</h2>
 <ul>
 <?php if ($is_page) { ?>
-	<li><a href="<?php echo $link_edit ?>"><img src="<?php echo IMAGE_DIR ?>edit.png" width="20" height="20" alt="編集" title="編集" />編集</a></li>
+	<li><a href="<?php echo $link_edit ?>"><img src="<?php echo IMAGE_URI ?>edit.png" width="20" height="20" alt="編集" title="編集" />編集</a></li>
 <?php   if ((bool)ini_get('file_uploads')) { ?>
-	<li><a href="<?php echo $link_upload ?>"><img src="<?php echo IMAGE_DIR ?>file.png" width="20" height="20" alt="添付" title="添付" />添付</a></li>
+	<li><a href="<?php echo $link_upload ?>"><img src="<?php echo IMAGE_URI ?>file.png" width="20" height="20" alt="添付" title="添付" />添付</a></li>
 <?php   } ?>
-	<li><a href="<?php echo $link_diff ?>"><img src="<?php echo IMAGE_DIR ?>diff.png" width="20" height="20" alt="差分" title="差分" />差分</a></li>
+	<li><a href="<?php echo $link_diff ?>"><img src="<?php echo IMAGE_URI ?>diff.png" width="20" height="20" alt="差分" title="差分" />差分</a></li>
 <?php } ?>
 <?php if ($do_backup) { ?>
-	<li><a href="<?php echo $link_backup ?>"><img src="<?php echo IMAGE_DIR ?>backup.png" width="20" height="20" alt="バックアップ" title="バックアップ" />バックアップ</a></li>
+	<li><a href="<?php echo $link_backup ?>"><img src="<?php echo IMAGE_URI ?>backup.png" width="20" height="20" alt="バックアップ" title="バックアップ" />バックアップ</a></li>
 <?php } ?>
 </ul>
 </div>
@@ -186,7 +186,7 @@ if (isset($pkwk_dtd)) {
 
 <div id="footer">
 <div id="copyright">
-	Modified by <a href="<?php echo $modifierlink ?>"><?php echo $modifier ?></a><br />
+	Founded by <a href="<?php echo $modifierlink ?>"><?php echo $modifier ?></a><br />
 	<?php echo S_COPYRIGHT ?>
 </div>
 </div>
