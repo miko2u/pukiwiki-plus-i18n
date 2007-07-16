@@ -26,21 +26,10 @@ $auth_wkgrp_user = array(
 		// 'user_name2' => ROLE_ADM_CONTENTS,
 	),
 	'openid'	=> array(
-		// www.myopenid.com
-		//'www.myopenid.com' => array(
-		// 'user_name1'	=> ROLE_ADM,
-		// 'user_name2' => ROLE_ADM_CONTENTS,
-		//),
-		// auth.livedoor.com
-		//'auth.livedoor.com' => array(
-		// 'user_name1'	=> ROLE_ADM,
-		// 'user_name2' => ROLE_ADM_CONTENTS,
-		//),
-		// www.openid.ne.jp
-		//'www.openid.ne.jp' => array(
-		// 'user_name1'	=> ROLE_ADM,
-		// 'user_name2' => ROLE_ADM_CONTENTS,
-		//),
+		// openid_identity (openid.delegate)
+		// 'http://profile.livedoor.com/YOURNAME/' => ROLE_ADM,
+		// 'http://YOURNAME.openid.ne.jp'          => ROLE_ADM_CONTENTS,
+		// 'http://YOURNAME.myopenid.com/'         => ROLE_ADM_CONTENTS,
 	),
 );
 

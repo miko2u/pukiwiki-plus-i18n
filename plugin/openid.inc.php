@@ -4,7 +4,7 @@
  *
  * @copyright   Copyright &copy; 2007, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: openid.inc.php,v 0.1 2007/07/16 13:37:00 upk Exp $
+ * @version     $Id: openid.inc.php,v 0.2 2007/07/16 22:50:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'auth_openid.cls.php');
@@ -221,7 +221,7 @@ function plugin_openid_finish_auth($consumer)
 	//$session_verify['openid.delegate']
 	// $ret_page = (empty($session_verify['page'])) ? '' : '?'.rawurlencode($session_verify['page']);
 	$ret_page = (empty($session_verify['page'])) ? '' : '?'.$session_verify['page'];
-	// $obj_verify->auth_session_unset();
+	$obj_verify->auth_session_unset();
 
 	// Complete the authentication process using the server's response.
 	$response = $consumer->complete($vars);
