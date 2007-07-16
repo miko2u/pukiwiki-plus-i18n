@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: funcplus.php,v 0.1.32 2007/07/05 02:13:00 upk Exp $
+// $Id: funcplus.php,v 0.1.33 2007/07/16 14:46:00 upk Exp $
 // Copyright (C)
 //   2005-2007 PukiWiki Plus! Team
 // License: GPL v2 or (at your option) any later version
@@ -241,9 +241,9 @@ function add_homedir($file)
 
 function is_ignore_page($page)
 {
-	global $whatsnew,$whatsdeleted,$interwiki,$menubar,$sidebar,$headarea,$footarea;
+	global $navigation,$whatsnew,$whatsdeleted,$interwiki,$menubar,$sidebar,$headarea,$footarea;
 
-	$ignore_regrex = '(Navigation$)|('.$whatsnew.'$)|('.$whatsdeleted.'$)|('.
+	$ignore_regrex = '('.$navigation.'$)|('.$whatsnew.'$)|('.$whatsdeleted.'$)|('.
 		$interwiki.'$)|'.$menubar.'$)|('.$sidebar.'$)|('.$headarea.'$)|('.$footarea.'$)';
 	return (ereg($ignore_regrex, $page)) ? TRUE : FALSE;
 }

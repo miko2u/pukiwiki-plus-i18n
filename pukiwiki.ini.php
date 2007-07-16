@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: pukiwiki.ini.php,v 1.148.23 2007/07/09 23:48:00 upk Exp $
+// $Id: pukiwiki.ini.php,v 1.148.24 2007/07/16 14:42:00 upk Exp $
 // Copyright (C)
 //   2005-2007 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
@@ -175,6 +175,7 @@ $aliaspage    = 'AutoAliasName'; // Set AutoAlias definition here
 $glossarypage = 'Glossary';	 // Set Glossary definition here
 $menubar      = 'MenuBar';       // Menu
 $sidebar      = 'SideBar';       // Side
+$navigation   = 'Navigation';
 $headarea     = ':Header';
 $footarea     = ':Footer';
 

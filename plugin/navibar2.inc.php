@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: navibar2.inc.php,v 0.1.15 2007/07/09 23:37:00 upk Exp $
+// $Id: navibar2.inc.php,v 0.1.16 2007/07/16 14:44:00 upk Exp $
 //
 function plugin_navibar2_convert()
 {
@@ -21,10 +21,11 @@ function plugin_navibar2_convert()
 
 function plugin_navibar2_search_navipage($page)
 {
+	global $navigation;
 	while (1) {
 		$navi_page = $page;
 		if (! empty($page)) $navi_page .= '/';
-		$navi_page .= 'Navigation';
+		$navi_page .= $navigation;
 		if (is_page($navi_page)) return $navi_page;
 		if (empty($page)) break;
 		$page = substr($page,0,strrpos($page,'/'));
