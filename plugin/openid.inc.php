@@ -4,7 +4,7 @@
  *
  * @copyright   Copyright &copy; 2007, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: openid.inc.php,v 0.2 2007/07/16 22:50:00 upk Exp $
+ * @version     $Id: openid.inc.php,v 0.3 2007/07/16 23:53:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'auth_openid.cls.php');
@@ -111,8 +111,6 @@ function plugin_openid_action()
 	if (isset($vars['logout'])) {
 		$obj = new auth_openid_plus();
 		$obj->auth_session_unset();
-		$obj_verify = new auth_openid_plus_verify();
-		$obj_verify->auth_session_unset();
 		$r_page = (empty($vars['page'])) ? '' : '?'.rawurlencode($vars['page']);
 		header('Location: '.$script.$r_page);
 		die();
