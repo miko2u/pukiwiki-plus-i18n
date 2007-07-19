@@ -1,6 +1,10 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: rename.inc.php,v 1.27.5 2006/11/04 18:40:00 upk Exp $
+// $Id: rename.inc.php,v 1.31.5 2007/05/20 14:14:44 miko Exp $
+// Copyright (C)
+//   2005-2007 PukiWiki Plus! Team
+//   2002-2005, 2007 PukiWiki Developers Team
+// License: GPL v2 or (at your option) any later version
 //
 // Rename plugin: Rename page-name and related data
 //
@@ -71,16 +75,16 @@ function plugin_rename_action()
 		$page  = plugin_rename_getvar('page');
 		$refer = plugin_rename_getvar('refer');
 
-		if ($refer == '') {
+		if ($refer === '') {
 			return plugin_rename_phase1();
 
 		} else if (! is_page($refer)) {
 			return plugin_rename_phase1('notpage', $refer);
 
-		} else if ($refer == $whatsnew) {
+		} else if ($refer === $whatsnew) {
 			return plugin_rename_phase1('norename', $refer);
 
-		} else if ($page == '' || $page == $refer) {
+		} else if ($page === '' || $page === $refer) {
 			return plugin_rename_phase2();
 
 		} else if (! is_pagename($page)) {
@@ -198,7 +202,7 @@ $msg
 EOD;
 	if (! empty($related)) {
 		$ret['body'] .= '<hr /><p>' . $_rename_messages['msg_related'] . '</p><ul>';
-		sort($related);
+		sort($related, SORT_STRING);
 		foreach ($related as $name)
 			$ret['body'] .= '<li>' . make_pagelink($name) . '</li>';
 		$ret['body'] .= '</ul>';
@@ -329,7 +333,7 @@ $auth
 <p>{$_rename_messages['msg_confirm']}</p>
 EOD;
 
-	ksort($pages);
+	ksort($pages, SORT_STRING);
 	$ret['body'] .= '<ul>' . "\n";
 	foreach ($pages as $old=>$new)
 		$ret['body'] .= '<li>' .  make_pagelink(decode($old)) .
@@ -443,7 +447,7 @@ function plugin_rename_getrelated($page)
 	$pages = auth::get_existpages();
 	$pattern = '/(?:^|\/)' . preg_quote(strip_bracket($page), '/') . '(?:\/|$)/';
 	foreach ($pages as $name) {
-		if ($name == $page) continue;
+		if ($name === $page) continue;
 		if (preg_match($pattern, $name)) $related[] = $name;
 	}
 	return $related;
@@ -455,14 +459,14 @@ function plugin_rename_getselecttag($page)
 
 	$pages = array();
 	foreach (auth::get_existpages() as $_page) {
-		if ($_page == $whatsnew) continue;
+		if ($_page === $whatsnew) continue;
 
-		$selected = ($_page == $page) ? ' selected' : '';
+		$selected = ($_page === $page) ? ' selected' : '';
 		$s_page = htmlspecialchars($_page);
 		$pages[$_page] = '<option value="' . $s_page . '"' . $selected . '>' .
 			$s_page . '</option>';
 	}
-	ksort($pages);
+	ksort($pages, SORT_STRING);
 	$list = join("\n" . ' ', $pages);
 
 	return <<<EOD
