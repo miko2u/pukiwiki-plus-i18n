@@ -1,9 +1,9 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: attach.inc.php,v 1.82.31 2007/07/09 23:31:00 upk Exp $
+// $Id: attach.inc.php,v 1.86.31 2007/05/13 04:06:27 miko Exp $
 // Copyright (C)
 //   2005-2007 PukiWiki Plus! Team
-//   2003-2005 PukiWiki Developers Team
+//   2003-2007 PukiWiki Developers Team
 //   2002-2003 PANDA <panda@arino.jp> http://home.arino.jp/
 //   2002      Y.MASUI <masui@hisec.co.jp> http://masui.net/pukiwiki/
 //   2001-2002 Originally written by yu-ji
@@ -1023,7 +1023,7 @@ class AttachFiles
 
 		$ret = '';
 		$files = array_keys($this->files);
-		sort($files);
+		sort($files, SORT_STRING);
 
 		foreach ($files as $file) {
 			$_files = array();
@@ -1033,7 +1033,7 @@ class AttachFiles
 			if (! isset($_files[0])) {
 				$_files[0] = htmlspecialchars($file);
 			}
-			ksort($_files);
+			ksort($_files, SORT_NUMERIC);
 			$_file = $_files[0];
 			unset($_files[0]);
 			$ret .= " <li>$_file\n";
@@ -1077,7 +1077,7 @@ class AttachFiles
 
 		$ret = '';
 		$files = array_keys($this->files);
-		sort($files);
+		sort($files, SORT_STRING);
 
 		$cssstyle = '';
 		foreach ($files as $file) {
@@ -1088,7 +1088,7 @@ class AttachFiles
 			if (! isset($_files[0])) {
 				$_files[0] = htmlspecialchars($file);
 			}
-			ksort($_files);
+			ksort($_files, SORT_NUMERIC);
 			$_file = $_files[0];
 			unset($_files[0]);
 			$cssstyle = ($cssstyle == 'attach_td1') ? 'attach_td2':'attach_td1';
@@ -1149,7 +1149,7 @@ class AttachPages
 		$ret = '';
 
 		$pages = array_keys($this->pages);
-		sort($pages);
+		sort($pages, SORT_STRING);
 
 		foreach ($pages as $page) {
 			if (check_non_list($page)) continue;
@@ -1170,7 +1170,7 @@ class AttachPages
 		$ret = '';
 
 		$pages = array_keys($this->pages);
-		sort($pages);
+		sort($pages, SORT_STRING);
 
 		foreach ($pages as $page) {
 			if (check_non_list($page)) continue;

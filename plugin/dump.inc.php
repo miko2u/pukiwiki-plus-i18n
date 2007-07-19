@@ -1,5 +1,10 @@
 <?php
-// $Id: dump.inc.php,v 1.37.7 2006/04/27 00:08:00 miko Exp $
+// $Id: dump.inc.php,v 1.37.7 2007/05/13 22:11:23 miko Exp $
+// Copyright (C)
+//   2005-2007 PukiWiki Plus! Team
+//   2004-2007 PukiWiki Developers Team
+//   2004      teanan / Interfair Laboratory
+// License: GPL v2 or (at your option) any later version
 //
 // Remote dump / restore plugin
 // Originated as tarfile.inc.php by teanan / Interfair Laboratory 2004.
@@ -483,7 +488,7 @@ class tarlib
 		}
 		closedir($dp);
 		
-		sort($files);
+		sort($files, SORT_STRING);
 
 		$matches = array();
 		foreach($files as $name)

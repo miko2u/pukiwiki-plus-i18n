@@ -1,6 +1,10 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: calendar_viewer.inc.php,v 1.34.5 2006/06/05 23:52:00 miko Exp $
+// $Id: calendar_viewer.inc.php,v 1.36.5 2007/05/12 14:24:52 miko Exp $
+// Copyright (C)
+//   2005-2007 PukiWiki Plus! Team
+//   2002-2005, 2007 PukiWiki Developers Team
+// License: GPL v2 or (at your option) any later version
 //
 // Calendar viewer plugin - List pages that calendar/calnedar2 plugin created
 // (Based on calendar and recent plugin)
@@ -152,9 +156,9 @@ function plugin_calendar_viewer_convert()
 	closedir($dir);
 
 	if ($mode == 'past') {
-		rsort($pagelist);	// New => Old
+		rsort($pagelist, SORT_STRING);	// New => Old
 	} else {
-		sort($pagelist);	// Old => New
+		sort($pagelist, SORT_STRING);	// Old => New
 	}
 
 	// Include start
