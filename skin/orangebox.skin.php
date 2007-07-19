@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
 //
-// $Id: orangebox.skin.php,v 1.18.12 2007/07/20 00:14:00 upk Exp $
+// $Id: orangebox.skin.php,v 1.18.11 2007/07/16 23:18:00 upk Exp $
 // Original is ari-
 
 // Prohibit direct access
@@ -72,6 +72,7 @@ if (isset($pkwk_dtd)) {
  <title><?php echo "$title - $page_title" ?></title>
 <?php } ?>
  <link rel="stylesheet" href="<?php echo SKIN_URI ?>orangebox.css" type="text/css" media="screen,print" charset="<?php echo $css_charset ?>" />
+ <link rel="stylesheet" href="<?php echo SKIN_URI ?>greybox/greybox.css" type="text/css" media="all" charset="<?php echo $css_charset ?>" />
  <link rel="alternate" type="application/rss+xml" title="RSS" href="<?php echo $link['rss'] ?>" />
  <script type="text/javascript">
  <!--
@@ -86,6 +87,8 @@ if (isset($pkwk_dtd)) {
 <?php if (! $use_local_time) { ?>
  <script type="text/javascript" src="<?php echo SKIN_URI ?>tzCalculation_LocalTimeZone.js"></script>
 <?php } ?>
+ <script type="text/javascript" src="<?php echo SKIN_URI ?>greybox/AmiJS.js"></script>
+ <script type="text/javascript" src="<?php echo SKIN_URI ?>greybox/greybox.js"></script>
 <?php echo $head_tag ?>
 </head>
 <body>

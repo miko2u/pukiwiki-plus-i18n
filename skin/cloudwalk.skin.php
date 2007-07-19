@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: cloudwalk.skin.php,v 1.1.12 2007/07/20 00:14:00 upk Exp $
+// $Id: cloudwalk.skin.php,v 1.1.11 2007/07/16 23:15:00 upk Exp $
 // Original is ari-
 //
 
@@ -54,6 +54,7 @@ if (isset($pkwk_dtd)) {
  <title><?php echo "$title - $page_title" ?></title>
 <?php } ?>
  <link rel="stylesheet" href="<?php echo SKIN_URI.$irid_style_name.'/'.$irid_style_name.'.css' ?>" title="<?php echo $irid_style_name ?>" type="text/css" charset="<?php echo $css_charset ?>" />
+ <link rel="stylesheet" href="<?php echo SKIN_URI ?>greybox/greybox.css" type="text/css" media="all" charset="<?php echo $css_charset ?>" />
  <link rel="alternate" type="application/rss+xml" title="RSS" href="<?php echo $link['rss'] ?>" />
  <script type="text/javascript">
  <!--
@@ -68,6 +69,8 @@ if (isset($pkwk_dtd)) {
 <?php if (! $use_local_time) { ?>
  <script type="text/javascript" src="<?php echo SKIN_URI ?>tzCalculation_LocalTimeZone.js"></script>
 <?php } ?>
+ <script type="text/javascript" src="<?php echo SKIN_URI ?>greybox/AmiJS.js"></script>
+ <script type="text/javascript" src="<?php echo SKIN_URI ?>greybox/greybox.js"></script>
 <?php echo $head_tag ?>
 </head>
 <body>
