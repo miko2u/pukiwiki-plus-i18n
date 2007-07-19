@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: func.php,v 1.86.20 2007/06/02 14:38:00 upk Exp $
+// $Id: func.php,v 1.91.20 2007/06/24 13:59:46 miko Exp $
 // Copyright (C)
 //   2005-2007 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
@@ -8,6 +8,7 @@
 // License: GPL v2 or (at your option) any later version
 //
 // General functions
+// Plus!NOTE:(policy)not merge official cvs(1.86->1.87)
 
 function is_interwiki($str)
 {
@@ -284,7 +285,7 @@ function do_search($word, $type = 'AND', $non_format = FALSE, $base = '')
 	if (empty($pages))
 		return str_replace('$1', $s_word, $_string['notfoundresult']);
 
-	ksort($pages);
+	ksort($pages, SORT_STRING);
 
 	$retval = '<ul>' . "\n";
 	foreach (array_keys($pages) as $page) {
@@ -321,17 +322,18 @@ function arg_check($str)
 }
 
 // Encode page-name
-function encode($key)
+function encode($str)
 {
-	return ($key == '') ? '' : strtoupper(bin2hex($key));
-	// Equal to strtoupper(join('', unpack('H*0', $key)));
+	$str = strval($str);
+	return ($str == '') ? '' : strtoupper(bin2hex($str));
+	// Equal to strtoupper(join('', unpack('H*0', $str)));
 	// But PHP 4.3.10 says 'Warning: unpack(): Type H: outside of string in ...'
 }
 
 // Decode page name
-function decode($key)
+function decode($str)
 {
-	return hex2bin($key);
+	return hex2bin($str);
 }
 
 // Inversion of bin2hex()
@@ -509,6 +511,14 @@ function getmicrotime()
 {
 	list($usec, $sec) = explode(' ', microtime());
 	return ((float)$sec + (float)$usec);
+}
+
+// Elapsed time by second
+//define('MUTIME', getmicrotime());
+function elapsedtime()
+{
+	$at_the_microtime = MUTIME;
+	return sprintf('%01.03f', getmicrotime() - $at_the_microtime);
 }
 
 // Get the date

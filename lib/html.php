@@ -1,9 +1,9 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: html.php,v 1.59.16 2007/07/09 23:42:00 upk Exp $
+// $Id: html.php,v 1.63.16 2007/07/17 23:42:00 miko Exp $
 // Copyright (C)
 //   2005-2007 PukiWiki Plus! Team
-//   2002-2006 PukiWiki Developers Team
+//   2002-2007 PukiWiki Developers Team
 //   2001-2002 Originally written by yu-ji
 // License: GPL v2 or (at your option) any later version
 //
@@ -189,8 +189,8 @@ function catbody($title, $page, $body)
 		}
 	}
 
-	$longtaketime = getmicrotime() - MUTIME;
-	$taketime     = sprintf('%01.03f', $longtaketime);
+	// Compat: 'HTML convert time' without time about MenuBar and skin
+	$taketime = elapsedtime();
 
 	require(SKIN_FILE);
 }
@@ -228,7 +228,7 @@ function edit_form($page, $postdata, $digest = FALSE, $b_template = TRUE)
 			$pages[$_page] = '   <option value="' . $s_page . '">' .
 				$s_page . '</option>';
 		}
-		ksort($pages);
+		ksort($pages, SORT_STRING);
 		$s_pages  = join("\n", $pages);
 		$template = <<<EOD
   <select name="template_page">
@@ -381,9 +381,9 @@ function make_related($page, $tag = '')
 	$links = links_get_related($page);
 
 	if ($tag) {
-		ksort($links);
+		ksort($links, SORT_STRING);	// Page name, alphabetical order
 	} else {
-		arsort($links);
+		arsort($links, SORT_NUMERIC);	// Last modified date, newer
 	}
 
 	$_links = array();
