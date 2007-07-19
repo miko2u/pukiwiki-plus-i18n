@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: default.skin.php,v 1.34.34 2007/07/16 23:08:00 upk Exp $
+// $Id: default.skin.php,v 1.34.35 2007/07/20 00:14:00 upk Exp $
 //
 if (!defined('DATA_DIR')) { exit; }
 
@@ -44,7 +44,6 @@ if (isset($pkwk_dtd)) {
 <?php } ?>
  <link rel="stylesheet" href="<?php echo SKIN_URI ?>default.css" type="text/css" media="screen" charset="<?php echo $css_charset ?>" />
  <link rel="stylesheet" href="<?php echo SKIN_URI ?>print.css" type="text/css" media="print" charset="<?php echo $css_charset ?>" />
- <link rel="stylesheet" href="<?php echo SKIN_URI ?>greybox/greybox.css" type="text/css" media="all" charset="<?php echo $css_charset ?>" />
  <link rel="alternate" href="<?php echo $_LINK['mixirss'] ?>" type="application/rss+xml" title="RSS" />
  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
  <script type="text/javascript">
@@ -60,8 +59,6 @@ if (isset($pkwk_dtd)) {
 <?php if (! $use_local_time) { ?>
  <script type="text/javascript" src="<?php echo SKIN_URI ?>tzCalculation_LocalTimeZone.js"></script>
 <?php } ?>
- <script type="text/javascript" src="<?php echo SKIN_URI ?>greybox/AmiJS.js"></script>
- <script type="text/javascript" src="<?php echo SKIN_URI ?>greybox/greybox.js"></script>
 <?php echo $head_tag ?>
 </head>
 <body>
