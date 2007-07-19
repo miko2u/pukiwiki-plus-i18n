@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: file.php,v 1.78.34 2007/07/14 23:04:00 miko Exp $
+// $Id: file.php,v 1.80.34 2007/07/14 23:04:00 miko Exp $
 // Copyright (C)
 //   2005-2007 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
@@ -869,7 +869,7 @@ function get_readings($pages = null)
 
 		if($unknownPage || $deletedPage) {
 
-			asort($readings); // Sort by pronouncing(alphabetical/reading) order
+			asort($readings, SORT_STRING); // Sort by pronouncing(alphabetical/reading) order
 			$body = '';
 			foreach ($readings as $page => $reading)
 				$body .= '-[[' . $page . ']] ' . $reading . "\n";
