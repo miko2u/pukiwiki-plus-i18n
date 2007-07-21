@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: funcplus.php,v 0.1.33 2007/07/16 14:46:00 upk Exp $
+// $Id: funcplus.php,v 0.1.34 2007/07/22 02:34:00 upk Exp $
 // Copyright (C)
 //   2005-2007 PukiWiki Plus! Team
 // License: GPL v2 or (at your option) any later version
@@ -486,5 +486,53 @@ function get_mimeinfo($filename)
 		$type = $size['mime'];
 	}
 	return $type;
+}
+
+function get_main_pluginname()
+{
+	$pos = strpos($_SERVER['REQUEST_URI'], '?');
+	if ($pos === false) return 'read';
+
+	$query_string = explode('&',rawurldecode( substr($_SERVER['REQUEST_URI'], $pos+1) ));
+
+	$page = '';
+	foreach($query_string as $q) {
+		$cmd = explode('=',$q);
+		switch($cmd[0]) {
+		case 'cmd':
+		case 'plugin':
+			return $cmd[1];
+		case 'page':
+			$page = $cmd[1];
+		}
+	}
+
+	if (empty($page)) return 'read';
+	return (is_page($page)) ? 'read' : 'edit';
+}
+
+function get_main_pagename()
+{
+	global $defaultpage;
+
+	$pos = strpos($_SERVER['REQUEST_URI'], '?');
+	if ($pos === false) return $defaultpage;
+
+	if (! strpos($_SERVER['REQUEST_URI'], '=')) return rawurldecode( substr($_SERVER['REQUEST_URI'], $pos+1));
+
+	$query_string = explode('&',rawurldecode( substr($_SERVER['REQUEST_URI'], $pos+1) ));
+
+	foreach($query_string as $q) {
+		$cmd = explode('=',$q);
+		switch($cmd[0]) {
+		case 'cmd':
+		case 'plugin':
+			continue;
+		case 'page':
+			return $cmd[1];
+		}
+	}
+
+	return '';
 }
 ?>
