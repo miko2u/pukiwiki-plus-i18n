@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: funcplus.php,v 0.1.34 2007/07/22 02:34:00 upk Exp $
+// $Id: funcplus.php,v 0.1.35 2007/07/22 22:22:00 upk Exp $
 // Copyright (C)
 //   2005-2007 PukiWiki Plus! Team
 // License: GPL v2 or (at your option) any later version
@@ -495,20 +495,18 @@ function get_main_pluginname()
 
 	$query_string = explode('&',rawurldecode( substr($_SERVER['REQUEST_URI'], $pos+1) ));
 
-	$page = '';
+	$query = array();
 	foreach($query_string as $q) {
 		$cmd = explode('=',$q);
-		switch($cmd[0]) {
-		case 'cmd':
-		case 'plugin':
-			return $cmd[1];
-		case 'page':
-			$page = $cmd[1];
-		}
+		$query[$cmd[0]] = $cmd[1];
 	}
 
-	if (empty($page)) return 'read';
-	return (is_page($page)) ? 'read' : 'edit';
+	// 優先順位 (cmd -> plugin)
+	if (!empty($query['cmd'])) return $query['cmd'];
+	if (!empty($query['plugin'])) return $query['plugin'];
+
+	if (empty($query['page'])) return 'read';
+	return (is_page($query['page'])) ? 'read' : 'edit';
 }
 
 function get_main_pagename()
