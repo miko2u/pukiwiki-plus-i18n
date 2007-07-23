@@ -3,7 +3,7 @@
  * ドキュメントの初期化プラグイン
  *
  * @copyright   Copyright &copy; 2007, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: login.php,v 0.2 2007/07/23 16:17:00 upk Exp $
+ * @version     $Id: login.php,v 0.3 2007/07/23 16:42:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 
@@ -84,11 +84,12 @@ function plugin_doc_ini_exec($page)
 {
 	global $_doc_ini_msg;
 
+	$backup = $diff = true;
+
 	if (_backup_file_exists($page)) $backup = _backup_delete($page);
 
 	$filename = DIFF_DIR . encode($page) . '.txt';
-	if (! file_exists($filename)) return;
-	$diff = unlink($filename);
+	if (file_exists($filename)) $diff = unlink($filename);
 
 	if ($backup && $diff) {
 		$msg_body = sprintf($_doc_ini_msg['msg_end'],$page);
