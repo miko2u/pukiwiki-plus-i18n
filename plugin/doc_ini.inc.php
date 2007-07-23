@@ -3,7 +3,7 @@
  * ドキュメントの初期化プラグイン
  *
  * @copyright   Copyright &copy; 2007, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: login.php,v 0.1 2007/07/23 14:12:00 upk Exp $
+ * @version     $Id: login.php,v 0.2 2007/07/23 16:17:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 
@@ -60,9 +60,11 @@ function plugin_doc_ini_action()
 
 	$msg_title = sprintf($_doc_ini_msg['msg_confirmation'],$vars['page']);
 
-	switch($action) {
-	case 'delete':
-		$retval['body'] = <<<EOD
+	if ($action === 'exec') {
+		return plugin_doc_ini_exec($vars['page']);
+	}
+
+	$retval['body'] = <<<EOD
 <form action="$script" method="post">
         <div>
 	$msg_title
@@ -74,13 +76,8 @@ function plugin_doc_ini_action()
 </form>
 
 EOD;
-		$retval['msg'] = $_doc_ini_msg['title_confirmation'];
-		return $retval;
-	case 'exec':
-		return plugin_doc_ini_exec($vars['page']);
-	}
-
-	return '';
+	$retval['msg'] = $_doc_ini_msg['title_confirmation'];
+	return $retval;
 }
 
 function plugin_doc_ini_exec($page)
