@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: backup.inc.php,v 1.27.17 2007/06/03 01:57:00 upk Exp $
+// $Id: backup.inc.php,v 1.27.18 2007/07/23 17:04:00 upk Exp $
 // Copyright (C)
 //   2005-2007 PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
@@ -291,6 +291,7 @@ EOD;
 
 	$href = $script . '?cmd=backup&amp;page=' . $r_page . '&amp;age=';
 	$_anchor_from = $_anchor_to   = '';
+	$safemode = auth::check_role('safemode');
 	foreach ($backups as $age=>$data) {
 		if (! PLUGIN_BACKUP_DISABLE_BACKUP_RENDERING) {
 			$_anchor_from = '<a href="' . $href . $age . '">';
@@ -300,10 +301,18 @@ EOD;
 		$date = format_date($time, TRUE);
 		$retval[1] .= <<<EOD
    <li>$_anchor_from$age $date$_anchor_to
+EOD;
+
+		if (! $safemode) {
+			$retval[1] .= <<<EOD
      [ <a href="$href$age&amp;action=diff">$_msg_diff</a>
      | <a href="$href$age&amp;action=nowdiff">$_msg_nowdiff</a>
      | <a href="$href$age&amp;action=source">$_msg_source</a>
      ]
+EOD;
+		}
+
+		$retval[1] .= <<<EOD
    </li>
 EOD;
 	}
