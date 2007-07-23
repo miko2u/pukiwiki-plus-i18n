@@ -4,7 +4,7 @@
  *
  * @copyright   Copyright &copy; 2007, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: openid.inc.php,v 0.3 2007/07/16 23:53:00 upk Exp $
+ * @version     $Id: openid.inc.php,v 0.4 2007/07/24 01:35:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'auth_openid.cls.php');
@@ -40,7 +40,7 @@ function plugin_openid_convert()
 	global $script,$vars, $auth_api, $_openid_msg;
 
 	if (! isset($auth_api['openid']['use'])) return '';
-	if (! $auth_api['openid']['use']) return '<p>'.$_livedoor_msg['msg_invalid'].'</p>';
+	if (! $auth_api['openid']['use']) return '<p>'.$_openid_msg['msg_invalid'].'</p>';
 
 	if (! function_exists('pkwk_session_start')) return '<p>'.$_openid_msg['msg_not_found'].'</p>';
 	if (pkwk_session_start() == 0) return '<p>'.$_openid_msg['msg_not_start'].'</p>';
@@ -73,7 +73,7 @@ function plugin_openid_inline()
 	global $script,$vars,$auth_api,$_openid_msg;
 
 	if (! isset($auth_api['openid']['use'])) return '';
-	if (! $auth_api['openid']['use']) return $_livedoor_msg['msg_invalid'];
+	if (! $auth_api['openid']['use']) return $_openid_msg['msg_invalid'];
 
 	if (! function_exists('pkwk_session_start')) return $_openid_msg['msg_not_found'];
 	if (pkwk_session_start() == 0) return $_openid_msg['msg_not_start'];
