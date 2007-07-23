@@ -3,7 +3,7 @@
  * PukiWiki Plus! 認証処理
  *
  * @author	Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth.cls.php,v 0.45 2007/07/16 22:51:00 upk Exp $
+ * @version     $Id: auth.cls.php,v 0.46 2007/07/24 01:26:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'auth.def.php');
@@ -626,5 +626,22 @@ class auth
 		$_SESSION[$session_name] = base64_encode( des($salt, $val, 1, 0, null) );
 		session_write_close();
 	}
+
+	// See:
+	// Web Services Security: UsernameToken Profile 1.0
+	// http://www.xmlconsortium.org/wg/sec/oasis-200401-wss-username-token-profile-1.0-jp.pdf
+	function wsse_header($uid,$pass)
+	{
+		$nonce = hex2bin(md5(rand().UTIME));
+		$created = date('Y-m-d\TH:i:s\Z',UTIME);
+		$digest = auth::b64_sha1($nonce.$created.$pass);
+		return 'UsernameToken Username="'.$uid.'", PasswordDigest="'.$digest.'", Nonce="'.base64_encode($nonce).'", Created="'.$created.'"';
+	}
+
+	function b64_sha1($x)
+	{
+		return base64_encode(hex2bin(sha1($x)));
+	}
+
 }
 ?>
