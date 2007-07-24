@@ -3,7 +3,7 @@
  * PukiWiki Plus! ログインプラグイン
  *
  * @copyright	Copyright &copy; 2004-2007, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version	$Id: login.php,v 0.15 2007/07/07 01:12:00 upk Exp $
+ * @version	$Id: login.php,v 0.15 2007/07/24 23:11:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 
@@ -38,9 +38,10 @@ function plugin_login_convert()
 	$user = auth::check_auth();
 
 	if (!empty($user)) {
-		// $role = strval(auth::get_role_level());
-		list($role,$name,$nick,$url) = auth::get_user_name();
-		$role = strval($role);
+		// list($role,$name,$nick,$url) = auth::get_user_name();
+		$auth_key = auth::get_user_name();
+
+		$role = strval($auth_key['role']);
 
 		if (isset($login_api[$role])) {
 			exist_plugin($login_api[$role]);
@@ -120,6 +121,7 @@ function plugin_login_auth_guide()
 	$sw = true;
 	foreach($auth_api as $api=>$val) {
 		if ($val['use']) {
+			if (isset($val['hidden']) && $val['hidden']) continue;
 			$inline .= ($sw) ? '' : ',';
 			$sw = false;
 			$inline .= '&'.$api.'();';

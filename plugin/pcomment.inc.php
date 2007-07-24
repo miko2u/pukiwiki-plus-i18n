@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: pcomment.inc.php,v 1.44.16 2007/04/09 01:04:00 upk Exp $
+// $Id: pcomment.inc.php,v 1.44.17 2007/07/24 23:11:00 upk Exp $
 //
 // pcomment plugin - Show/Insert comments into specified (another) page
 //
@@ -402,7 +402,6 @@ function plugin_pcomment_get_comments($page, $count, $dir, $reply)
 	return array($comments, $digest);
 }
 
-// @return nick,link,disabled
 function plugin_pcomment_get_nick()
 {
 	global $vars;
@@ -410,10 +409,10 @@ function plugin_pcomment_get_nick()
 	$name = (empty($vars['name'])) ? '' : $vars['name'];
 	if (PKWK_READONLY != ROLE_AUTH) return array($name,$name,'');
 
-	list($role,$name,$nick,$url) = auth::get_user_name();
-	if (empty($nick)) return array($name,$name,'');
-	if (auth::get_role_level() < ROLE_AUTH) return array($name,$name,'');
-	$link = (empty($url)) ? $nick : $nick.'>'.$url;
-	return array($nick, $link, "disabled=\"disabled\"");
+	$auth_key = auth::get_user_name();
+	if (empty($auth_key['nick'])) return array($auth_key['nick'],$auth_key['nick'],'');
+	if (auth::get_role_level() < ROLE_AUTH) return array($auth_key['nick'],$auth_key['nick'],'');
+	$link = (empty($auth_key['profile'])) ? $auth_key['nick'] : $auth_key['nick'].'>'.$auth_key['profile'];
+	return array($auth_key['nick'], $link, "disabled=\"disabled\"");
 }
 ?>

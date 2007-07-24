@@ -3,7 +3,7 @@
  * PukiWiki Plus! IPアドレス認証プラグイン
  *
  * @copyright   Copyright &copy; 2007, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: remoteip.inc.php,v 0.2 2007/07/13 01:05:00 upk Exp $
+ * @version     $Id: remoteip.inc.php,v 0.3 2007/07/24 23:12:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'auth_api.cls.php');
@@ -56,11 +56,11 @@ function plugin_remoteip_get_user_name()
 {
 	global $auth_api;
 	// role,name,nick,profile
-	if (! $auth_api['remoteip']['use']) return array(ROLE_GUEST,'','','');
+	if (! $auth_api['remoteip']['use']) return array('role'=>ROLE_GUEST,'nick'=>'');
 	$obj = new auth_remoteip();
 	$msg = $obj->auth_session_get();
-	if (! empty($msg['uid'])) return array(ROLE_AUTH_REMOTEIP,$msg['uid'],$msg['name'],$msg['note']);
-	return array(ROLE_GUEST,'','','');
+	if (! empty($msg['uid'])) return array('role'=>ROLE_AUTH_REMOTEIP,'nick'=>$msg['name'],'uid'=>$msg['uid'],'note'=>$msg['note'],'key'=>$msg['uid']);
+	return array('role'=>ROLE_GUEST,'nick'=>'');
 }
 
 function plugin_remoteip_jump_url()

@@ -4,7 +4,7 @@
  *
  * @copyright   Copyright &copy; 2006-2007, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: jugemkey.inc.php,v 0.7 2007/07/13 01:05:00 upk Exp $
+ * @version     $Id: jugemkey.inc.php,v 0.8 2007/07/24 23:12:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'auth_jugemkey.cls.php');
@@ -15,7 +15,7 @@ function plugin_jugemkey_init()
 	  '_jugemkey_msg' => array(
 		'msg_logout'		=> _("logout"),
 		'msg_logined'		=> _("%s has been approved by JugemKey."),
-		'msg_invalid'		=> _("The function of Hatena is invalid."),
+		'msg_invalid'		=> _("The function of JugemKey is invalid."),
 		'msg_not_found'		=> _("pkwk_session_start() doesn't exist."),
 		'msg_not_start'         => _("The session is not start."),
 		'msg_jugemkey'		=> _("JugemKey"),
@@ -161,7 +161,7 @@ function plugin_jugemkey_jump_url($inline=0)
 function plugin_jugemkey_get_user_name()
 {
 	global $script,$auth_api;
-        if (! $auth_api['jugemkey']['use']) return array(ROLE_GUEST,'','','');
+        if (! $auth_api['jugemkey']['use']) return array('role'=>ROLE_GUEST,'nick'=>'');
 
 	$obj = new auth_jugemkey();
 	$login = $obj->auth_session_get();
@@ -170,8 +170,8 @@ function plugin_jugemkey_get_user_name()
 	// $info = (empty($login['token'])) ? '' : $script.'?plugin=jugemkey&token='.$login['token'].'&userinfo';
 	// Only, it leaves it only as a location of attestation by JugemKey.
 	$info = 'http://jugemkey.jp/';
-	if (! empty($login['title'])) return array(ROLE_AUTH_JUGEMKEY,$login['title'],$login['title'],$info);
-	return array(ROLE_GUEST,'','','');
+	if (! empty($login['title'])) return array('role'=>ROLE_AUTH_JUGEMKEY,'nick'=>$login['title'],'profile'=>$info,'key'=>$login['title']);
+	return array('role'=>ROLE_GUEST,'nick'=>'');
 }
 
 ?>

@@ -3,7 +3,7 @@
  * PukiWiki Plus! 認証処理
  *
  * @author	Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth.cls.php,v 0.46 2007/07/24 01:26:00 upk Exp $
+ * @version     $Id: auth.cls.php,v 0.47 2007/07/24 22:44:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'auth.def.php');
@@ -49,13 +49,13 @@ class auth
 		if (! empty($login)) return $login;
 
 		// 外部認証API
-		list($role,$name,$login,$profile) = auth::get_user_name();
+		$auth_key = auth::get_user_name();
 
 		// 暫定管理者(su)
 		global $vars;
-		if (! isset($vars['pass'])) return $login;
+		if (! isset($vars['pass'])) return $auth_key['nick'];
 		if (pkwk_login($vars['pass'])) return UNAME_ADM_CONTENTS_TEMP;
-		return $login;
+		return $auth_key['nick'];
 	}
 
 	/**
@@ -82,12 +82,13 @@ class auth
 			//return ($login == 'admin' && $temp_admin) ? 3.1 : 4.1;
 			if ($login == UNAME_ADM_CONTENTS_TEMP && $temp_admin) return ROLE_ADM_CONTENTS_TEMP;
 			// 外部認証API
-			list($role,$name,$nick,$profile) = auth::get_user_name();
-			// return (empty($name)) ? ROLE_AUTH_TEMP : $role;
-			if (empty($name)) return ROLE_AUTH_TEMP;
-
-			$wkgrp = auth::get_role_wkgrp($role,$name);
-			return ($wkgrp == 0) ? $role : $wkgrp;
+			$auth_key = auth::get_user_name();
+			if (empty($auth_key['nick'])) return ROLE_AUTH_TEMP;
+			if (! empty($auth_key['key'])) {
+				$wkgrp = auth::get_role_wkgrp($auth_key['role'],$auth_key['key']);
+				return ($wkgrp == 0) ? $auth_key['role'] : $wkgrp;
+			}
+			return $auth_key['role'];
 		}
 
 		// 設定されている役割を取得
@@ -107,7 +108,7 @@ class auth
 		return ROLE_AUTH;
 	}
 
-	function get_role_wkgrp($role,$user)
+	function get_role_wkgrp($role,$key)
 	{
 		global $auth_wkgrp_user, $login_api;
 
@@ -116,15 +117,8 @@ class auth
 		if (empty($login_api[$str_role])) return 0;
 		$api_name = $login_api[$str_role];
 
-		if ($api_name === 'openid') {
-			require_once(LIB_DIR . 'auth_openid.cls.php');
-			$obj_openid = new auth_openid_plus();
-			$name = $obj_openid->auth_session_get();
-			$user = $name['openid_identity'];
-		}
-
-		if (empty($auth_wkgrp_user[$api_name][$user])) return 0;
-		return $auth_wkgrp_user[$api_name][$user];
+		if (empty($auth_wkgrp_user[$api_name][$key])) return 0;
+		return $auth_wkgrp_user[$api_name][$key];
 	}
 
 	function get_user_name()
@@ -142,10 +136,10 @@ class auth
 			if (! $val['use']) continue;
 			if (! exist_plugin($api)) continue;
 			$call_func = 'plugin_'.$api.'_get_user_name';
-			list($role,$name,$nick,$profile) = $call_func();
-			if (! empty($name)) return array($role,$name,$nick,$profile);
+			$auth_key = $call_func();
+			if (! empty($auth_key['nick'])) return $auth_key;
 		}
-		return array(ROLE_GUEST,'','','');
+		return array('role'=>ROLE_GUEST,'nick'=>'');
 	}
 
 	/*
@@ -596,7 +590,7 @@ class auth
 		global $check_role;
 		if (! $check_role) return FALSE;
 		$cmd = use_plugin('check_role',$lines);
-		if ($cmd === FLASE) return FALSE;
+		if ($cmd === FALSE) return FALSE;
 		convert_html($cmd); // die();
 		return TRUE;
 	}

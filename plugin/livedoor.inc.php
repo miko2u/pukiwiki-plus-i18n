@@ -4,7 +4,7 @@
  *
  * @copyright   Copyright &copy; 2007, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: livedoor.inc.php,v 0.2 2007/07/13 01:05:00 upk Exp $
+ * @version     $Id: livedoor.inc.php,v 0.3 2007/07/24 23:11:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'auth_livedoor.cls.php');
@@ -146,11 +146,13 @@ function plugin_livedoor_get_user_name()
 {
 	global $auth_api;
 	// role,name,nick,profile
-	if (! $auth_api['livedoor']['use']) return array(ROLE_GUEST,'','','');
+	if (! $auth_api['livedoor']['use']) return array('role'=>ROLE_GUEST,'nick'=>'');
 	$obj = new auth_livedoor();
 	$msg = $obj->auth_session_get();
-	if (! empty($msg['livedoor_id'])) return array(ROLE_AUTH_LIVEDOOR,$msg['livedoor_id'],$msg['livedoor_id'],'');
-	return array(ROLE_GUEST,'','','');
+	$info = 'http://www.livedoor.com/';
+	if (! empty($msg['livedoor_id']))
+		return array('role'=>ROLE_AUTH_LIVEDOOR,'nick'=>$msg['livedoor_id'],'key'=>$msg['livedoor_id'],'profile'=>$info);
+	return array('role'=>ROLE_GUEST,'nick'=>'');
 }
 
 ?>

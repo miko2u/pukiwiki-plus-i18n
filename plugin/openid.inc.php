@@ -4,7 +4,7 @@
  *
  * @copyright   Copyright &copy; 2007, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: openid.inc.php,v 0.4 2007/07/24 01:35:00 upk Exp $
+ * @version     $Id: openid.inc.php,v 0.4 2007/07/24 23:12:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'auth_openid.cls.php');
@@ -255,12 +255,18 @@ function plugin_openid_get_user_name()
 {
 	global $auth_api;
 	// role,name,nick,profile
-	if (! $auth_api['openid']['use']) return array(ROLE_GUEST,'','','');
+	if (! $auth_api['openid']['use']) return array('role'=>ROLE_GUEST,'nick'=>'');
 	$obj = new auth_openid_plus();
 	$msg = $obj->auth_session_get();
-	$prof = (empty($msg['openid_identity'])) ? $msg['nickname'] : $msg['openid_identity'];
-	if (! empty($msg['nickname'])) return array(ROLE_AUTH_OPENID,$msg['nickname'],$msg['nickname'],$prof);
-	return array(ROLE_GUEST,'','','');
+	if (empty($msg['openid_identity'])) {
+		$key = '';
+		$prof = $msg['nickname'];
+	} else {
+		$key = $prof = $msg['openid_identity'];
+	}
+
+	if (! empty($msg['nickname'])) return array('role'=>ROLE_AUTH_OPENID,'nick'=>$msg['nickname'],'profile'=>$prof,'key'=>$key);
+	return array('role'=>ROLE_GUEST,'nick'=>'');
 }
 
 function plugin_openid_jump_url()
