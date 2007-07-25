@@ -3,7 +3,7 @@
  * passwd plugin.
  *
  * @copyright   Copyright &copy; 2006-2007, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: passwd.inc.php,v 0.6 2007/07/09 23:45:00 upk Exp $
+ * @version     $Id: passwd.inc.php,v 0.7 2007/07/25 23:36:00 upk Exp $
  *
  * $A1 = md5($data['username'] . ':' . $realm . ':' . $auth_users[$data['username']]);
  */
@@ -314,6 +314,7 @@ function set_hash()
  if (objForm.passwd.value == "") {
    objForm.hash.value = "";
    objForm.algorithm.value = "";
+   objForm.key.value = "";
  } else {
 
    ctr = objForm.scheme.length;
@@ -340,6 +341,7 @@ function set_hash()
 
    objForm.hash.value = base64encode( des(des_key, hash, 1, 0) );
    objForm.passwd.value = "";
+   objForm.key.value = "";
  }
 
  if (objForm.hash.value == "") {
