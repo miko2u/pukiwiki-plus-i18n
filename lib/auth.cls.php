@@ -3,7 +3,7 @@
  * PukiWiki Plus! 認証処理
  *
  * @author	Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth.cls.php,v 0.47 2007/07/24 22:44:00 upk Exp $
+ * @version     $Id: auth.cls.php,v 0.48 2007/07/25 23:00:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'auth.def.php');
@@ -627,7 +627,7 @@ class auth
 	function wsse_header($uid,$pass)
 	{
 		$nonce = hex2bin(md5(rand().UTIME));
-		$created = date('Y-m-d\TH:i:s\Z',UTIME);
+		$created = gmdate('Y-m-d\TH:i:s\Z',UTIME);
 		$digest = auth::b64_sha1($nonce.$created.$pass);
 		return 'UsernameToken Username="'.$uid.'", PasswordDigest="'.$digest.'", Nonce="'.base64_encode($nonce).'", Created="'.$created.'"';
 	}
