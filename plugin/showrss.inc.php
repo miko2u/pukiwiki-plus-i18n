@@ -1,9 +1,9 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: showrss.inc.php,v 1.21.6 2006/09/10 18:01:00 upk Exp $
+// $Id: showrss.inc.php,v 1.21.7 2007/07/25 20:44:00 upk Exp $
 //  Id:showrss.inc.php,v 1.40 2003/03/18 11:52:58 hiro Exp
 // Copyright (C):
-//     2005-2006 PukiWiki Plus! Team
+//     2005-2007 PukiWiki Plus! Team
 //     2002-2006 PukiWiki Developers Team
 //     2002      PANDA <panda@arino.jp>
 //     (Original)hiro_do3ob@yahoo.co.jp
@@ -314,7 +314,7 @@ function plugin_showrss_get_timestamp($str)
 	$matches = array();
 	if (preg_match('/(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2}:\d{2})(([+-])(\d{2}):(\d{2}))?/', $str, $matches)) {
 		$str = $matches[1] . ' ' . $matches[2];
-		if ($matches[3]) {
+		if (! empty($matches[3])) {
 			$str .= $matches[4] . $matches[5] . $matches[6];
 		}
 	}
