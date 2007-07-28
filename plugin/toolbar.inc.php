@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: toolbar.php,v 0.2.7 2007/07/29 04:02:00 upk Exp $
+// $Id: toolbar.php,v 0.2.8 2007/07/29 04:27:00 upk Exp $
 // Copyright (C) 2005,2007 PukiWiki Plus! Team
 // License: GPL v2
 //
@@ -25,7 +25,8 @@ function plugin_toolbar_convert()
 		switch ($name) {
 		case 'freeze':
 			if ($is_readonly) break;
-			if ($is_read && $function_freeze) {
+			if (!$is_read) break;
+			if ($function_freeze) {
 				if (!is_freeze($vars['page'])) {
 					$name = 'freeze';
 				} else {
@@ -37,7 +38,9 @@ function plugin_toolbar_convert()
 			break;
 		case 'upload':
 			if ($is_readonly) break;
-			if ($is_read && (bool)ini_get('file_uploads')) {
+			if (!$is_read) break;
+			if ($function_freeze && is_freeze($vars['page'])) break;
+			if ((bool)ini_get('file_uploads')) {
 				if ($body != '') { $body .= "\n"; }
 				$body .= _toolbar($name);
 			}
