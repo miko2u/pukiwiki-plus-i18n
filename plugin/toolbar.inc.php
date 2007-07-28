@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: toolbar.php,v 0.2.9 2007/07/29 04:33:00 upk Exp $
+// $Id: toolbar.php,v 0.2.10 2007/07/29 04:41a00 upk Exp $
 // Copyright (C) 2005,2007 PukiWiki Plus! Team
 // License: GPL v2
 //
@@ -89,7 +89,12 @@ function plugin_toolbar_convert()
 			$body .= _toolbar($name);
 			break;
 		case 'edit':
+			if (!$is_read) break;
+			if ($is_readonly) break;
 			if ($function_freeze && is_freeze($vars['page'])) break;
+			if ($body != '') { $body .= "\n"; }
+			$body .= _toolbar($name);
+			break;
 		case 'new':
 		case 'newsub':
 			if ($is_createpage) break;
