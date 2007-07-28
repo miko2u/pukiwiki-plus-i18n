@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: toolbar.php,v 0.2.6 2007/07/09 23:39:00 upk Exp $
+// $Id: toolbar.php,v 0.2.7 2007/07/29 04:02:00 upk Exp $
 // Copyright (C) 2005,2007 PukiWiki Plus! Team
 // License: GPL v2
 //
@@ -12,6 +12,9 @@ function plugin_toolbar_convert()
 	global $vars;
 
 	$is_read = (arg_check('read') && is_page($vars['page']));
+	$is_readonly = auth::check_role('readonly');
+	$is_safemode = auth::check_role('safemode');
+	$is_createpage = auth::is_check_role(PKWK_CREATE_PAGE);
 
 	$num = func_num_args();
 	$args = $num ? func_get_args() : array();
@@ -21,6 +24,7 @@ function plugin_toolbar_convert()
 		$name = array_shift($args);
 		switch ($name) {
 		case 'freeze':
+			if ($is_readonly) break;
 			if ($is_read && $function_freeze) {
 				if (!is_freeze($vars['page'])) {
 					$name = 'freeze';
@@ -32,6 +36,7 @@ function plugin_toolbar_convert()
 			}
 			break;
 		case 'upload':
+			if ($is_readonly) break;
 			if ($is_read && (bool)ini_get('file_uploads')) {
 				if ($body != '') { $body .= "\n"; }
 				$body .= _toolbar($name);
@@ -74,13 +79,20 @@ function plugin_toolbar_convert()
 		case '|':
 			$body .= "\n&nbsp;\n";
 			break;
-		case 'reload':
+		case 'diff':
+			if (!$is_read) break;
+			if ($is_safemode) break;
+			if ($body != '') { $body .= "\n"; }
+			$body .= _toolbar($name);
+			break;
 		case 'new':
 		case 'newsub':
+			if ($is_createpage) break;
 		case 'edit':
-		case 'diff':
-		case 'copy':
 		case 'rename':
+		case 'copy':
+			if ($is_readonly) break;
+		case 'reload':
 		case 'print':
 			if (!$is_read) break;
 		default:
