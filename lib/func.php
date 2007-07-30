@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: func.php,v 1.91.20 2007/06/24 13:59:46 miko Exp $
+// $Id: func.php,v 1.92.20 2007/07/28 13:50:09 miko Exp $
 // Copyright (C)
 //   2005-2007 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
@@ -53,16 +53,29 @@ function is_page($page, $clearcache = FALSE)
 	return file_exists(get_filename($page));
 }
 
-function is_editable($page)
+function is_cantedit($page)
 {
 	global $cantedit;
+	static $is_cantedit;
+
+	if (! isset($is_cantedit)) {
+		foreach($cantedit as $key) {
+			$is_cantedit[$key] = TRUE;
+		}
+	}
+
+	return isset($is_cantedit[$page]);
+}
+
+function is_editable($page)
+{
 	static $is_editable = array();
 
 	if (! isset($is_editable[$page])) {
 		$is_editable[$page] = (
 			is_pagename($page) &&
 			! is_freeze($page) &&
-			! in_array($page, $cantedit)
+			! is_cantedit($page)
 		);
 	}
 
