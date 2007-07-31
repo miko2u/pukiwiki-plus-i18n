@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: html.php,v 1.63.16 2007/07/17 23:42:00 miko Exp $
+// $Id: html.php,v 1.64.16 2007/07/28 13:50:09 miko Exp $
 // Copyright (C)
 //   2005-2007 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
@@ -15,7 +15,7 @@
 function catbody($title, $page, $body)
 {
 	global $script, $vars, $arg, $defaultpage, $whatsnew, $help_page, $hr;
-	global $attach_link, $related_link, $cantedit, $function_freeze;
+	global $attach_link, $related_link, $function_freeze;
 	global $search_word_color, $foot_explain, $note_hr, $head_tags, $foot_tags;
 	global $trackback, $referer, $javascript;
 	global $newtitle, $newbase, $language, $use_local_time; // Plus! skin extension
@@ -121,7 +121,7 @@ function catbody($title, $page, $body)
 	$link_source    = & $_LINK['source'];   // Plus!
 
 	// Init flags
-	$is_page = (is_pagename($_page) && ! arg_check('backup') && $_page != $whatsnew);
+	$is_page = (is_pagename($_page) && ! arg_check('backup') && ! is_cantedit($_page));
 	$is_read = (arg_check('read') && is_page($_page));
 	$is_freeze = is_freeze($_page);
 
@@ -199,7 +199,7 @@ function catbody($title, $page, $body)
 function edit_form($page, $postdata, $digest = FALSE, $b_template = TRUE)
 {
 	global $script, $vars, $rows, $cols, $hr, $function_freeze;
-	global $whatsnew, $load_template_func, $load_refer_related;
+	global $load_template_func, $load_refer_related;
 	global $notimeupdate;
 	global $_button, $_string;
 	global $ajax, $ctrl_unload;
@@ -222,7 +222,7 @@ function edit_form($page, $postdata, $digest = FALSE, $b_template = TRUE)
 	if($load_template_func && $b_template) {
 		$pages  = array();
 		foreach(get_existpages() as $_page) {
-			if ($_page == $whatsnew || check_non_list($_page))
+			if (is_cantedit($_page) || check_non_list($_page))
 				continue;
 			$s_page = htmlspecialchars($_page);
 			$pages[$_page] = '   <option value="' . $s_page . '">' .
