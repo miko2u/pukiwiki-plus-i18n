@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: file.php,v 1.80.34 2007/07/14 23:04:00 miko Exp $
+// $Id: file.php,v 1.82.34 2007/07/29 12:18:08 miko Exp $
 // Copyright (C)
 //   2005-2007 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
@@ -41,8 +41,11 @@ function get_source($page = NULL, $lock = TRUE, $join = FALSE)
 
 		if ($join) {
 			// Returns a value
-			if (filesize($path) > 0) {
+			$size = filesize($path);
+			if ($size > 0) {
 				$result = str_replace("\r", '', fread($fp, filesize($path)));
+			} else {
+				$result = '';
 			}
 		} else {
 			// Returns an array
@@ -470,7 +473,6 @@ function add_recent($page, $recentpage, $subject = '', $limit = 0)
 	set_file_buffer($fp, 0);
 	@flock($fp, LOCK_EX);
 	rewind($fp);
-	fputs($fp, '#freeze'    . "\n");
 	fputs($fp, '#norelated' . "\n"); // :)
 	fputs($fp, join('', $lines));
 	@flock($fp, LOCK_UN);
