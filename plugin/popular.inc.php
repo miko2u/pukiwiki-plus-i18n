@@ -1,14 +1,15 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: popular.inc.php,v 1.16.6 2006/11/04 19:56:00 upk Exp $
+// $Id: popular.inc.php,v 1.18.6 2007/07/28 19:56:00 miko Exp $
+// Copyright (C)
+//   2005-2007 PukiWiki Plus! Team
+//   2003-2005, 2007 PukiWiki Developers Team
+//   2002 Kazunori Mizushima <kazunori@uc.netyou.jp>
 //
 // Popular pages plugin: Show an access ranking of this wiki
 // -- like recent plugin, using counter plugin's count --
 
 /*
- * (C) 2003-2005 PukiWiki Developers Team
- * (C) 2002 Kazunori Mizushima <kazunori@uc.netyou.jp>
- *
  * 通算および今日に別けて一覧を作ることができます。
  *
  * [Usage]
@@ -30,7 +31,7 @@ define('PLUGIN_POPULAR_DEFAULT', 10);
 
 function plugin_popular_convert()
 {
-	global $vars, $whatsnew;
+	global $vars;
 //	global $_popular_plugin_frame, $_popular_plugin_today_frame;
 	static $localtime;
 
@@ -82,7 +83,7 @@ function plugin_popular_convert()
 	$counters = array();
 	foreach (auth::get_existpages(COUNTER_DIR, '.count') as $file=>$page) {
 		if (($except != '' && ereg($except, $page)) ||
-		    $page == $whatsnew || check_non_list($page) ||
+		    is_cantedit($page) || check_non_list($page) ||
 		    ! is_page($page))
 			continue;
 

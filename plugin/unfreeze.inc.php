@@ -1,9 +1,9 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: unfreeze.inc.php,v 1.11.5 2007/07/02 00:44:00 upk Exp $
+// $Id: unfreeze.inc.php,v 1.13.5 2007/07/28 17:13:05 miko Exp $
 // Copyright (C)
 //   2004-2007 PukiWiki Plus! Team
-//   2003-2004 PukiWiki Developers Team
+//   2003-2004, 2007 PukiWiki Developers Team
 // License: GPL v2 or (at your option) any later version
 //
 // Unfreeze(Unlock) plugin
@@ -23,7 +23,7 @@ function plugin_unfreeze_action()
 	$_btn_unfreeze      = _('Unfreeze');
 
 	$page = isset($vars['page']) ? $vars['page'] : '';
-	if (! $function_freeze || ! is_page($page))
+	if (! $function_freeze || is_cantedit($page) || ! is_page($page))
 		return array('msg' => '', 'body' => '');
 
 	$pass = isset($vars['pass']) ? $vars['pass'] : NULL;
