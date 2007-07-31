@@ -1,9 +1,9 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: rules.ini.php,v 1.9.5 2005/10/02 16:15:05 miko Exp $
+// $Id: rules.ini.php,v 1.10.5 2007/06/10 02:08:40 miko Exp $
 // Copyright (C)
-//   2005      Customized/Patched by Miko.Hoshina
-//   2003-2005 PukiWiki Developers Team
+//   2005-2007 Customized/Patched by Miko.Hoshina
+//   2003-2007 PukiWiki Developers Team
 //   2001-2002 Originally written by yu-ji
 // License: GPL v2 or (at your option) any later version
 //
@@ -44,9 +44,11 @@ $datetime_rules = array(
 //  行末指定は $ を後ろに。
 //
 $str_rules = array(
-	'now\?' 	=> format_date(UTIME),
-	'date\?'	=> get_date($date_format),
-	'time\?'	=> get_date($time_format),
+	// Compat 1.3.x
+	//'now\?' 	=> format_date(UTIME),
+	//'date\?'	=> get_date($date_format),
+	//'time\?'	=> get_date($time_format),
+
 	'&now;' 	=> format_date(UTIME),
 	'&date;'	=> get_date($date_format),
 	'&time;'	=> get_date($time_format),
