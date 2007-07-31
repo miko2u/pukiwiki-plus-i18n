@@ -1,8 +1,8 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: diff.php,v 1.7 2005/12/10 12:48:02 henoheno Exp $
+// $Id: diff.php,v 1.9 2007/06/23 16:30:29 henoheno Exp $
 // Copyright (C)
-//   2003-2005 PukiWiki Developers Team
+//   2003-2005, 2007 PukiWiki Developers Team
 //   2001-2002 Originally written by yu-ji
 // License: GPL v2 or (at your option) any later version
 //
@@ -25,9 +25,19 @@ function do_diff($strlines1, $strlines2)
 function diff_style_to_css($str = '')
 {
 	// Cut diff markers ('+' or '-' or ' ')
-	$str = preg_replace('/^\-(.*)$/m', '<span class="diff_removed">$1</span>', $str);
-	$str = preg_replace('/^\+(.*)$/m', '<span class="diff_added"  >$1</span>', $str);
-	return preg_replace('/^ (.*)$/m',  '$1', $str);
+	return preg_replace(
+		array(
+			'/^\-(.*)$/m',
+			'/^\+(.*)$/m',
+			'/^ (.*)$/m'
+		),
+		array(
+			'<span class="diff_removed">$1</span>',
+			'<span class="diff_added"  >$1</span>',
+			'$1'
+		),
+		$str
+	);
 }
 
 // Merge helper (when it conflicts)
@@ -47,8 +57,8 @@ function do_update_diff($pagestr, $poststr, $original)
 
 	if (PKWK_DIFF_SHOW_CONFLICT_DETAIL) {
 		global $do_update_diff_table;
-
-		$do_update_diff_table = <<<EOD
+		$table = array();
+		$table[] = <<<EOD
 <p>l : between backup data and stored page data.<br />
  r : between backup data and your post data.</p>
 <table class="style_table">
@@ -60,29 +70,32 @@ function do_update_diff($pagestr, $poststr, $original)
 EOD;
 		$tags = array('th', 'th', 'td');
 		foreach ($arr as $_obj) {
-			$do_update_diff_table .= '<tr>';
+			$table[] = ' <tr>';
 			$params = array($_obj->get('left'), $_obj->get('right'), $_obj->text());
-			foreach ($params as $key=>$text) {
-				$text = htmlspecialchars($text);
-				if (trim($text) == '') $text = '&nbsp;';
-				$do_update_diff_table .= '<' . $tags[$key] .
-					' class="style_' . $tags[$key] . '">' . $text .
+			foreach ($params as $key => $text) {
+				$text = htmlspecialchars(rtrim($text));
+				if (empty($text)) $text = '&nbsp;';
+				$table[] = 
+					'  <' . $tags[$key] . ' class="style_' . $tags[$key] . '">' .
+					$text .
 					'</' . $tags[$key] . '>';
 			}
-			$do_update_diff_table .= '</tr>' . "\n";
+			$table[] = ' </tr>';
 		}
-		$do_update_diff_table .= '</table>' . "\n";
+		$table[] =  '</table>';
+
+		$do_update_diff_table = implode("\n", $table) . "\n";
+		unset($table);
 	}
 
-	$body = '';
+	$body = array();
 	foreach ($arr as $_obj) {
-		if ($_obj->get('left') != '-' && $_obj->get('right') != '-')
-			$body .= $_obj->text();
+		if ($_obj->get('left') != '-' && $_obj->get('right') != '-') {
+			$body[] = $_obj->text();
+		}
 	}
 
-	$auto = 1;
-
-	return array(rtrim($body) . "\n", $auto);
+	return array(rtrim(implode('', $body)) . "\n", 1);
 }
 
 
@@ -183,7 +196,7 @@ class line_diff
 			}
 			$fp[$delta] = $this->snake($delta, $fp[$delta - 1], $fp[$delta + 1]);
 			if ($fp[$delta] >= $this->n) {
-				$this->pos = $this->path[$delta]; // çµŒè·¯ã‚’æ±ºå®š
+				$this->pos = $this->path[$delta]; // ·ÐÏ©¤ò·èÄê
 				return;
 			}
 		}
@@ -198,13 +211,13 @@ class line_diff
 			$_k = $k + 1;
 			$y = $y2;
 		}
-		$this->path[$k] = $this->path[$_k];
+		$this->path[$k] = $this->path[$_k];// ¤³¤³¤Þ¤Ç¤Î·ÐÏ©¤ò¥³¥Ô¡¼
 		$x = $y - $k;
 		while ((($x + 1) < $this->m) && (($y + 1) < $this->n)
 			and $this->arr1[$x + 1]->compare($this->arr2[$y + 1]))
 		{
 			++$x; ++$y;
-			$this->path[$k][] = array('x'=>$x, 'y'=>$y);
+			$this->path[$k][] = array('x'=>$x, 'y'=>$y); // ·ÐÏ©¤òÄÉ²Ã
 		}
 		return $y;
 	}
@@ -212,7 +225,7 @@ class line_diff
 	function toArray()
 	{
 		$arr = array();
-		if ($this->reverse) {
+		if ($this->reverse) { // ¸ÈÂ©¤Ê¡Ä
 			$_x = 'y'; $_y = 'x'; $_m = $this->n; $arr1 =& $this->arr2; $arr2 =& $this->arr1;
 		} else {
 			$_x = 'x'; $_y = 'y'; $_m = $this->m; $arr1 =& $this->arr1; $arr2 =& $this->arr2;

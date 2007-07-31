@@ -1,9 +1,9 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: link.php,v 1.14.4 2007/05/30 19:18:00 upk Exp $
+// $Id: link.php,v 1.16.4 2007/07/28 13:50:09 miko Exp $
 // Copyright (C)
 //   2005-2007 PukiWiki Plus! Team
-//   2003-2006 PukiWiki Developers Team
+//   2003-2007 PukiWiki Developers Team
 // License: GPL v2 or (at your option) any later version
 //
 // Backlinks / AutoLinks related functions
@@ -139,8 +139,6 @@ function links_update($page)
 // Init link cache (Called from link plugin)
 function links_init()
 {
-	global $whatsnew;
-
 	// if (PKWK_READONLY) return; // Do nothing
 	if (auth::check_role('readonly')) return; // Do nothing
 
@@ -154,7 +152,7 @@ function links_init()
 
 	$ref   = array(); // 参照元
 	foreach (get_existpages() as $page) {
-		if ($page == $whatsnew) continue;
+		if (is_cantedit($page)) continue;
 
 		$rel   = array(); // 参照先
 		$links = links_get_objects($page);
