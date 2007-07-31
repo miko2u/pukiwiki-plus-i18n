@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: attach.inc.php,v 1.86.31 2007/05/13 04:06:27 miko Exp $
+// $Id: attach.inc.php,v 1.87.31 2007/07/30 14:30:14 miko Exp $
 // Copyright (C)
 //   2005-2007 PukiWiki Plus! Team
 //   2003-2007 PukiWiki Developers Team
@@ -691,7 +691,11 @@ class AttachFile
 		$this->logname  = $this->basename . '.log';
 		$this->exist    = file_exists($this->filename);
 		$this->time     = $this->exist ? filemtime($this->filename) : 0;
-		$this->md5hash  = $this->exist ? md5_file($this->filename) : '';
+	}
+
+	function gethash()
+	{
+		return $this->exist ? md5_file($this->filename) : '';
 	}
 
 	// ファイル情報取得
@@ -807,6 +811,7 @@ class AttachFile
 			}
 		}
 		$info = $this->toString(TRUE, FALSE);
+		$hash = $this->gethash();
 
 		$size = @getimagesize($this->filename);
 		if ($size[2] > 0 && $size[2] < 3) {
@@ -817,6 +822,7 @@ class AttachFile
 			$_attach_setimage .= '" width="' . $w .'" height="' . $h . '" /></div>';
 		} else {
 			$_attach_setimage = '';
+B
 		}
 
 		$msg_auth = '';
@@ -843,7 +849,7 @@ EOD;
  <dd>Content-type:{$this->type}</dd>
  <dd>{$_attach_messages['msg_date']}:{$this->time_str}</dd>
  <dd>{$_attach_messages['msg_dlcount']}:{$this->status['count'][$this->age]}</dd>
- <dd>{$_attach_messages['msg_md5hash']}:{$this->md5hash}</dd>
+ <dd>{$_attach_messages['msg_md5hash']}:{$hash}</dd>
  $msg_freezed
 </dl>
 <div style="clear:right"><hr /></div>
