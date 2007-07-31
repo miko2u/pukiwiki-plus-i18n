@@ -1,5 +1,5 @@
 <?php
-// $Id: dump.inc.php,v 1.37.7 2007/05/13 22:11:23 miko Exp $
+// $Id: dump.inc.php,v 1.40.7 2007/05/13 22:11:23 miko Exp $
 // Copyright (C)
 //   2005-2007 PukiWiki Plus! Team
 //   2004-2007 PukiWiki Developers Team
