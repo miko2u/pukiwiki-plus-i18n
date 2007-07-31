@@ -822,7 +822,6 @@ class AttachFile
 			$_attach_setimage .= '" width="' . $w .'" height="' . $h . '" /></div>';
 		} else {
 			$_attach_setimage = '';
-B
 		}
 
 		$msg_auth = '';
