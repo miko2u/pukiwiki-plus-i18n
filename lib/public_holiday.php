@@ -13,7 +13,7 @@
  *          2:Substitute holiday (振替休日)
  *          3:National holiday   (国民の休日)
  * ['name'] Public holiday name  (祝日名称)
- * ['w']    0-6: day of the
+ * ['w']    0-6: day of the week
  */
 
 /* *************************************************************************
