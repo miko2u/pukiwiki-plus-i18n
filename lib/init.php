@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: init.php,v 1.53.28 2007/07/03 00:00:00 upk Exp $
+// $Id: init.php,v 1.53.29 2007/08/12 17:10:00 upk Exp $
 // Copyright (C)
 //   2005-2007 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
@@ -239,6 +239,8 @@ if (PKWK_QUERY_STRING_MAX && strlen($arg) > PKWK_QUERY_STRING_MAX) {
 	exit;
 }
 $arg = input_filter($arg); // \0 除去
+// for QA/250
+$arg = str_replace('+','%20',$arg);
 
 // unset QUERY_STRINGs
 foreach (array('QUERY_STRING', 'argv', 'argc') as $key) {
