@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PukiWiki Plus! 1.4.7-u2-i18n\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-07-23 15:00+0900\n"
+"POT-Creation-Date: 2007-08-12 18:22+0900\n"
 "PO-Revision-Date: 2007-07-23 15:01+0900\n"
 "Last-Translator: Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>\n"
 "Language-Team: Japanese <ja@li.org>\n"
@@ -16,8 +16,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: ../../plugin/doc_ini.inc.php:14
-msgid "May I really initialize page?"
-msgstr "本当にページを初期化してもよろしいでしょうか？"
+msgid "Confirmation of page initialization"
+msgstr "ページ初期化の確認"
 
 #: ../../plugin/doc_ini.inc.php:15
 #, php-format
@@ -25,8 +25,8 @@ msgid "May I really initialize the page of %s"
 msgstr "%s のページを本当に初期化してもよろしいでしょうか？"
 
 #: ../../plugin/doc_ini.inc.php:16
-msgid "Initialization ended."
-msgstr "初期化が終わりました。"
+msgid "Initialization ended"
+msgstr "初期化終了"
 
 #: ../../plugin/doc_ini.inc.php:17
 #, php-format

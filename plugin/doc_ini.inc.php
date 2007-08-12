@@ -3,7 +3,7 @@
  * ドキュメントの初期化プラグイン
  *
  * @copyright   Copyright &copy; 2007, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: login.php,v 0.3 2007/07/23 16:42:00 upk Exp $
+ * @version     $Id: login.php,v 0.4 2007/08/12 18:17:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 
@@ -11,9 +11,9 @@ function plugin_doc_ini_init()
 {
 	$msg = array(
 	'_doc_ini_msg' => array(
-		'title_confirmation'	=> _('May I really initialize page?'),		// 本当にページを初期化してもよろしいでしょうか？
+		'title_confirmation'	=> _('Confirmation of page initialization'),	// ページ初期化の確認
 		'msg_confirmation'	=> _('May I really initialize the page of %s'),	// %s のページを本当に初期化してもよろしいでしょうか？
-		'title_end'		=> _('Initialization ended.'),			// 初期化が終わりました。
+		'title_end'		=> _('Initialization ended'),			// 初期化終了
 		'msg_end'		=> _('The initialization of %s ended.'),
 		'msg_abend_diff'	=> _('It failed in the initialization of the DIFF file.'),
 		'msg_abend_backup'	=> _('It failed in the initialization of the BACKUP file.'),
