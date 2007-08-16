@@ -4,7 +4,7 @@
  *
  * @copyright   Copyright &copy; 2007, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: openid.inc.php,v 0.4 2007/07/24 23:12:00 upk Exp $
+ * @version     $Id: openid.inc.php,v 0.5 2007/08/16 20:05:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'auth_openid.cls.php');
@@ -104,8 +104,10 @@ function plugin_openid_action()
 {
 	global $script,$vars,$_openid_msg;
 
-	if (! function_exists('pkwk_session_start')) die_message($_openid_msg['msg_not_found']);
-	if (pkwk_session_start() == 0) die_message($_openid_msg['msg_not_start']);
+	$die_message = (PLUS_PROTECT_MODE) ? 'die_msg' : 'die_message';
+
+	if (! function_exists('pkwk_session_start')) $die_message($_openid_msg['msg_not_found']);
+	if (pkwk_session_start() == 0) $die_message($_openid_msg['msg_not_start']);
 
 	// LOGOUT
 	if (isset($vars['logout'])) {
@@ -123,7 +125,7 @@ function plugin_openid_action()
 
 	// AUTH
 	if (!file_exists(PLUGIN_OPENID_STORE_PATH) && !mkdir(PLUGIN_OPENID_STORE_PATH)) {
-		die_mesage( sprintf($_openid_msg['err_store_path'],PLUGIN_OPENID_STORE_PATH) );
+		$die_mesage( sprintf($_openid_msg['err_store_path'],PLUGIN_OPENID_STORE_PATH) );
 	}
 
 	// function_exists('Auth_OpenID_FileStore') 
@@ -176,6 +178,8 @@ function plugin_openid_verify($consumer)
 {
 	global $script,$vars,$_openid_msg;
 
+	$die_message = (PLUS_PROTECT_MODE) ? 'die_msg' : 'die_message';
+
 	$page = (empty($vars['page'])) ? '' : ''.$vars['page'];
 	$openid = $vars['openid_url'];
 	$process_url = $script.'?plugin=openid&action=finish_auth';
@@ -186,7 +190,7 @@ function plugin_openid_verify($consumer)
 
 	// Handle failure status return values.
 	if (!$auth_request) {
-		die_message( $_openid_msg['err_authentication'] );
+		$die_message( $_openid_msg['err_authentication'] );
 	}
 
 	//nickname,email,fullname,dob,gender,postcode,country,language,timezone
@@ -213,6 +217,8 @@ function plugin_openid_finish_auth($consumer)
 {
 	global $vars,$script,$_openid_msg;
 
+	$die_message = (PLUS_PROTECT_MODE) ? 'die_msg' : 'die_message';
+
 	$obj_verify = new auth_openid_plus_verify();
 	$session_verify = $obj_verify->auth_session_get();
 	//$session_verify['openid.server']
@@ -227,9 +233,9 @@ function plugin_openid_finish_auth($consumer)
 	switch($response->status) {
 	case Auth_OpenID_CANCEL:
 		// This means the authentication was cancelled.
-		die_message( $_openid_msg['err_cancel'] );
+		$die_message( $_openid_msg['err_cancel'] );
 	case Auth_OpenID_FAILURE:
-		die_message( $_openid_msg['err_failure'] . $response->message );
+		$die_message( $_openid_msg['err_failure'] . $response->message );
 	case Auth_OpenID_SUCCESS:
 		// This means the authentication succeeded.
 		$openid = $response->identity_url;
@@ -237,7 +243,7 @@ function plugin_openid_finish_auth($consumer)
 		$sreg = $response->extensionResponse('sreg');
 
 		// FIXME: 認証状態を保持で戻ると、email しか戻ってこないなぁ。
-		if (! isset($sreg['nickname'])) die_message( $_openid_msg['err_nickname'] );
+		if (! isset($sreg['nickname'])) $die_message( $_openid_msg['err_nickname'] );
 
 		$obj = new auth_openid_plus();
 		$parm = $sreg;

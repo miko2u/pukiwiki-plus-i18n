@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-10 20:53+0900\n"
+"POT-Creation-Date: 2007-08-16 18:30+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -33,5 +33,9 @@ msgid "Contents manager"
 msgstr ""
 
 #: ../../plugin/role.inc.php:21
+msgid "Enrollee"
+msgstr ""
+
+#: ../../plugin/role.inc.php:22
 msgid "Authorized"
 msgstr ""

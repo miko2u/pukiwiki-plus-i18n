@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: pukiwiki.php,v 1.20.12 2007/07/03 14:53:35 miko Exp $
+// $Id: pukiwiki.php,v 1.20.13 2007/08/16 20:01:00 upk Exp $
 //
 // PukiWiki Plus! 1.4.*
 //  Copyright (C) 2002-2007 by PukiWiki Plus! Team
@@ -145,8 +145,20 @@ if ($spam && $method != 'GET') {
 	}
 }
 
+$is_protect = auth::is_protect();
+
 // Plugin execution
 if ($plugin != '') {
+	if ($is_protect) {
+		$plugin_arg = '';
+		if (auth::is_auth_api($plugin)) {
+			if (exist_plugin_action($plugin)) do_plugin_action($plugin);
+			// Location で飛ばないプラグインの場合
+			$plugin_arg = $plugin;
+		}
+		if (exist_plugin_convert('protect')) do_plugin_convert('protect',$plugin_arg);
+	}
+
 	if (exist_plugin_action($plugin)) {
 		$retvars = do_plugin_action($plugin);
 		if ($retvars === FALSE) exit; // Done
@@ -161,6 +173,13 @@ if ($plugin != '') {
 		$retvars = array('msg'=>$msg,'body'=>$msg);
 		$base    = & $defaultpage;
 	}
+}
+
+// Location で飛ぶようなプラグインの対応のため
+// 上のアクションプラグインの実行後に処理を実施
+if ($is_protect) {
+ 	if (exist_plugin_convert('protect')) do_plugin_convert('protect');
+	die('PLUS_PROTECT_MODE is set.');
 }
 
 // If page output, enable session.

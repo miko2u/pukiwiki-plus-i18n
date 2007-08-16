@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: func.php,v 1.92.20 2007/07/28 13:50:09 miko Exp $
+// $Id: func.php,v 1.92.21 2007/08/16 20:00:00 upk Exp $
 // Copyright (C)
 //   2005-2007 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
@@ -518,6 +518,8 @@ EOD;
 	}
 	exit;
 }
+
+function die_msg($msg) { die($msg); }
 
 // Have the time (as microtime)
 function getmicrotime()

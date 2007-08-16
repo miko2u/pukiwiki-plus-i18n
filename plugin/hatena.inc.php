@@ -4,7 +4,7 @@
  *
  * @copyright   Copyright &copy; 2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: hatena.inc.php,v 0.9 2007/07/24 23:12:00 upk Exp $
+ * @version     $Id: hatena.inc.php,v 0.10 2007/08/16 20:04:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'auth_hatena.cls.php');
@@ -108,6 +108,8 @@ function plugin_hatena_action()
 
 	$r_page = (empty($vars['page'])) ? '' : rawurlencode( decode($vars['page']) );
 
+	$die_message = (PLUS_PROTECT_MODE) ? 'die_msg' : 'die_message';
+
 	// LOGIN
 	if (isset($vars['login'])) {
 		header('Location: '. plugin_hatena_jump_url());
@@ -129,7 +131,7 @@ function plugin_hatena_action()
 	if (! isset($rc['has_error']) || $rc['has_error'] == 'true') {
 		// ERROR
 		$body = (isset($rc['message'])) ? $rc['message'] : 'unknown error.';
-		die_message($body);
+		$die_message($body);
 	}
 
 	$obj->auth_session_put();

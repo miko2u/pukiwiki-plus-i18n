@@ -1,7 +1,8 @@
 <?php
 /*
-|2  |ROLE_ADM          |
-|3  |ROLE_ADM_CONTENTS |
+| 2 |ROLE_ADM          |サイト管理者    |
+| 3 |ROLE_ADM_CONTENTS |コンテンツ管理者|
+| 4 |ROLE_ENROLLEE     |登録者(会員)    |
 */
 
 $auth_wkgrp_user = array(

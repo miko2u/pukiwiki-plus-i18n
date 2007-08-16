@@ -2,8 +2,8 @@
 /**
  * PukiWiki Plus! role確認プラグイン
  *
- * @copyright	Copyright &copy; 2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version	$Id: role.inc.php,v 0.1 2006/02/09 23:03:00 upk Exp $
+ * @copyright	Copyright &copy; 2006-2007, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * @version	$Id: role.inc.php,v 0.2 2007/08/16 18:27:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
@@ -18,7 +18,8 @@ function plugin_role_init()
 		'role_0'	=> _('Guest'),
 		'role_2'	=> _('Webmaster'),
 		'role_3'	=> _('Contents manager'),
-		'role_4'	=> _('Authorized'),
+		'role_4'	=> _('Enrollee'),
+		'role_5'	=> _('Authorized'),
 		)
 	);
 	set_plugin_messages($msg);
@@ -40,6 +41,7 @@ function plugin_role_convert()
 		$_role_msg['role_2'],
 		$_role_msg['role_3'],
 		$_role_msg['role_4'],
+		$_role_msg['role_5'],
 	);
 
 	$rc = <<<EOD

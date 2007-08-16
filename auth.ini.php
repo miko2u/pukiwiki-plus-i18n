@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: auth.ini.php,v 0.0.12 2007/07/11 23:46:00 upk Exp $
+// $Id: auth.ini.php,v 0.0.13 2007/08/16 19:58:00 upk Exp $
 // Copyright (C)
 //   2005-2007 PukiWiki Plus! Team
 // License: GPL v2 or (at your option) any later version
@@ -27,9 +27,6 @@ $adminpass = '{x-php-md5}1a1dc91c907325c69271ddf0c944bc72'; // md5('pass')
 /////////////////////////////////////////////////
 // User definition
 // 役割(ROLE)
-// 2 - サイト管理者
-// 3 - コンテンツ管理者
-// 4 - 認証者(未設定時のデフォルト)
 //
 // プラグインによりデータを管理
 define('PKWK_AUTH_FILE', add_homedir('auth_users.ini.php'));

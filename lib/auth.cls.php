@@ -3,7 +3,7 @@
  * PukiWiki Plus! 認証処理
  *
  * @author	Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth.cls.php,v 0.48 2007/07/25 23:00:00 upk Exp $
+ * @version     $Id: auth.cls.php,v 0.49 2007/08/16 20:03:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'auth.def.php');
@@ -635,6 +635,21 @@ class auth
 	function b64_sha1($x)
 	{
 		return base64_encode(hex2bin(sha1($x)));
+	}
+
+	function is_auth_api($x)
+	{
+		global $auth_api;
+		if ($x == 'login') return true;
+		foreach($auth_api as $api=>$val) {
+			if ($api == $x) return true;
+		}
+		return false;
+	}
+
+	function is_protect()
+	{
+		return (PLUS_PROTECT_MODE && auth::is_check_role(PLUS_PROTECT_MODE));
 	}
 
 }

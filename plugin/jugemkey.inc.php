@@ -4,7 +4,7 @@
  *
  * @copyright   Copyright &copy; 2006-2007, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: jugemkey.inc.php,v 0.8 2007/07/24 23:12:00 upk Exp $
+ * @version     $Id: jugemkey.inc.php,v 0.9 2007/08/16 20:04:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'auth_jugemkey.cls.php');
@@ -108,6 +108,8 @@ function plugin_jugemkey_action()
 
 	$r_page = (empty($vars['page'])) ? '' : rawurlencode($vars['page']);
 
+	$die_message = (PLUS_PROTECT_MODE) ? 'die_msg' : 'die_message';
+
 	// LOGIN
 	if (isset($vars['login'])) {
 		header('Location: '. plugin_jugemkey_jump_url());
@@ -128,7 +130,7 @@ function plugin_jugemkey_action()
 		$rc = $obj->get_userinfo($vars['token']);
 		if ($rc['rc'] != 200) {
 			$msg = (empty($rc['error'])) ? '' : ' ('.$rc['error'].')';
-			die_message('JugemKey: RC='.$rc['rc'].$msg);
+			$die_message('JugemKey: RC='.$rc['rc'].$msg);
 		}
 
 		$body = '<h3>'.$_jugemkey_msg['msg_userinfo'].'</h3>'.
@@ -140,7 +142,7 @@ function plugin_jugemkey_action()
 	$rc = $obj->auth($vars['frob']);
 	if ($rc['rc'] != 200) {
 		$msg = (empty($rc['error'])) ? '' : ' ('.$rc['error'].')';
-		die_message('JugemKey: '.$rc['rc'].$msg);
+		$die_message('JugemKey: '.$rc['rc'].$msg);
 	}
 
 	$obj->auth_session_put();
