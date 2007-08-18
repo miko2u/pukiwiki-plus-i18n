@@ -3,7 +3,7 @@
  * PukiWiki Plus! 認証処理
  *
  * @author	Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth.cls.php,v 0.49 2007/08/16 20:03:00 upk Exp $
+ * @version     $Id: auth.cls.php,v 0.50 2007/08/18 16:24:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'auth.def.php');
@@ -218,6 +218,9 @@ class auth
 			break;
 		case 'role_adm_contents':
 			$chk_role = ROLE_ADM_CONTENTS;
+			break;
+		case 'role_enrollee':
+			$chk_role = ROLE_ENROLLEE;
 			break;
 		case 'role_auth':
 			$chk_role = ROLE_AUTH;
