@@ -4,7 +4,7 @@
  *
  * @copyright   Copyright &copy; 2007, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: openid.inc.php,v 0.5 2007/08/16 20:05:00 upk Exp $
+ * @version     $Id: openid.inc.php,v 0.6 2007/08/19 02:15:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'auth_openid.cls.php');
@@ -44,6 +44,10 @@ function plugin_openid_convert()
 
 	if (! function_exists('pkwk_session_start')) return '<p>'.$_openid_msg['msg_not_found'].'</p>';
 	if (pkwk_session_start() == 0) return '<p>'.$_openid_msg['msg_not_start'].'</p>';
+
+	// 他でログイン
+	$auth_key = auth::get_user_name();
+	if (! empty($auth_key['nick'])) return '';
 
 	// 処理済みか？
 	$obj = new auth_openid_plus();
@@ -96,6 +100,9 @@ function plugin_openid_inline()
 		return sprintf($_openid_msg['msg_logined'],$link) .
                         '(<a href="'.$logout_url.'">'.$_openid_msg['msg_logout'].'</a>)';
 	}
+
+	 $auth_key = auth::get_user_name();
+	if (! empty($auth_key['nick'])) return $_openid_msg['msg_openid'];
 
 	return '<a href="'.$script.'?plugin=openid'.$r_page.'">'.$_openid_msg['msg_openid'].'</a>';
 }

@@ -4,7 +4,7 @@
  *
  * @copyright   Copyright &copy; 2007, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: livedoor.inc.php,v 0.4 2007/08/16 20:04:00 upk Exp $
+ * @version     $Id: livedoor.inc.php,v 0.5 2007/08/19 02:11:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'auth_livedoor.cls.php');
@@ -52,6 +52,10 @@ function plugin_livedoor_convert()
 EOD;
 	}
 
+	// 他でログイン
+	$auth_key = auth::get_user_name();
+	if (! empty($auth_key['nick'])) return '';
+
 	// ボタンを表示するだけ
 	$login_url = $script.'?plugin=livedoor';
 	if (! empty($vars['page'])) {
@@ -89,6 +93,9 @@ function plugin_livedoor_inline()
 		return sprintf($_livedoor_msg['msg_logined'],$name['livedoor_id']) .
 			'(<a href="'.$logout_url.'">'.$_livedoor_msg['msg_logout'].'</a>)';
 	}
+
+	$auth_key = auth::get_user_name();
+	if (! empty($auth_key['nick'])) return $_livedoor_msg['msg_livedoor'];
 
 	$login_url = plugin_livedoor_jump_url(1);
 	return '<a href="'.$login_url.'">'.$_livedoor_msg['msg_livedoor'].'</a>';

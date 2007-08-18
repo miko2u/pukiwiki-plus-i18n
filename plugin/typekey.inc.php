@@ -4,7 +4,7 @@
  *
  * @copyright   Copyright &copy; 2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: typekey.inc.php,v 0.12 2007/07/24 23:11:00 upk Exp $
+ * @version     $Id: typekey.inc.php,v 0.13 2007/08/19 02:14:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'auth_typekey.cls.php');
@@ -54,8 +54,12 @@ function plugin_typekey_convert()
 EOD;
 	}
 
-	$login_url = plugin_typekey_jump_url();
+	// 他でログイン
+	$auth_key = auth::get_user_name();
+	if (! empty($auth_key['nick'])) return '';
+
 	// ボタンを表示するだけ
+	$login_url = plugin_typekey_jump_url();
 	return <<<EOD
 <form action="$login_url" method="post">
 	<div>
@@ -88,6 +92,9 @@ function plugin_typekey_inline()
 			'(<a href="'.auth_typekey::typekey_logout_url($page).rawurlencode('&logout').'">' .
 			$_typekey_msg['msg_logout'].'</a>)';
 	}
+
+	$auth_key = auth::get_user_name();
+	if (! empty($auth_key['nick'])) return $_typekey_msg['msg_typekey'];
 
 	return '<a href="'.plugin_typekey_jump_url().'">'.$_typekey_msg['msg_typekey'].'</a>';
 }

@@ -4,7 +4,7 @@
  *
  * @copyright   Copyright &copy; 2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: hatena.inc.php,v 0.10 2007/08/16 20:04:00 upk Exp $
+ * @version     $Id: hatena.inc.php,v 0.11 2007/08/19 02:07:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'auth_hatena.cls.php');
@@ -54,6 +54,10 @@ function plugin_hatena_convert()
 EOD;
 	}
 
+	// 他でログイン
+	$auth_key = auth::get_user_name();
+	if (! empty($auth_key['nick'])) return '';
+
 	// ボタンを表示するだけ
 	$login_url = $script.'?plugin=hatena';
 	if (! empty($vars['page'])) {
@@ -93,6 +97,9 @@ function plugin_hatena_inline()
 		return sprintf($_hatena_msg['msg_logined'],$link) .
 			'(<a href="'.$logout_url.'">'.$_hatena_msg['msg_logout'].'</a>)';
 	}
+
+	$auth_key = auth::get_user_name();
+	if (! empty($auth_key['nick'])) return $_hatena_msg['msg_hatena'];
 
 	$login_url = plugin_hatena_jump_url(1);
 	return '<a href="'.$login_url.'">'.$_hatena_msg['msg_hatena'].'</a>';

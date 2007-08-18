@@ -4,7 +4,7 @@
  *
  * @copyright   Copyright &copy; 2006-2007, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: jugemkey.inc.php,v 0.9 2007/08/16 20:04:00 upk Exp $
+ * @version     $Id: jugemkey.inc.php,v 0.10 2007/08/19 02:09:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'auth_jugemkey.cls.php');
@@ -55,6 +55,10 @@ function plugin_jugemkey_convert()
 EOD;
         }
 
+	// 他でログイン
+	$auth_key = auth::get_user_name();
+	if (! empty($auth_key['nick'])) return '';
+
 	// ボタンを表示するだけ
 	$login_url = $script.'?plugin=jugemkey';
 	if (! empty($vars['page'])) {
@@ -93,6 +97,9 @@ function plugin_jugemkey_inline()
 		return sprintf($_jugemkey_msg['msg_logined'],$link) .
 			'(<a href="'.$logout_url.'">'.$_jugemkey_msg['msg_logout'].'</a>)';
         }
+
+	$auth_key = auth::get_user_name();
+	if (! empty($auth_key['nick'])) return $_jugemkey_msg['msg_jugemkey'];
 
 	$login_url = plugin_jugemkey_jump_url(1);
 	return '<a href="'.$login_url.'">'.$_jugemkey_msg['msg_jugemkey'].'</a>';
