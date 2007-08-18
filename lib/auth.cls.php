@@ -3,7 +3,7 @@
  * PukiWiki Plus! 認証処理
  *
  * @author	Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth.cls.php,v 0.50 2007/08/18 16:24:00 upk Exp $
+ * @version     $Id: auth.cls.php,v 0.51 2007/08/18 16:30:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'auth.def.php');
@@ -194,6 +194,7 @@ class auth
 				// 未認証者は、単に管理者パスワードを要求
 				$user = UNAME_ADM_CONTENTS_TEMP;
 				break;
+			case ROLE_ENROLLEE:
 			case ROLE_AUTH:
 				// 認証済ユーザは、ユーザ名を維持しつつ管理者パスワードを要求
 				$user = auth::check_auth();
