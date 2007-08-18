@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: pukiwiki.php,v 1.20.13 2007/08/16 20:01:00 upk Exp $
+// $Id: pukiwiki.php,v 1.20.14 2007/08/19 01:08:00 upk Exp $
 //
 // PukiWiki Plus! 1.4.*
 //  Copyright (C) 2002-2007 by PukiWiki Plus! Team
@@ -151,7 +151,7 @@ $is_protect = auth::is_protect();
 if ($plugin != '') {
 	if ($is_protect) {
 		$plugin_arg = '';
-		if (auth::is_auth_api($plugin)) {
+		if (auth::is_protect_plugin_action($plugin)) {
 			if (exist_plugin_action($plugin)) do_plugin_action($plugin);
 			// Location で飛ばないプラグインの場合
 			$plugin_arg = $plugin;

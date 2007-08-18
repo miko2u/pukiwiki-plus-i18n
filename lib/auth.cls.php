@@ -3,7 +3,7 @@
  * PukiWiki Plus! 認証処理
  *
  * @author	Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth.cls.php,v 0.51 2007/08/18 16:30:00 upk Exp $
+ * @version     $Id: auth.cls.php,v 0.52 2007/08/18 23:30:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'auth.def.php');
@@ -28,21 +28,18 @@ class auth
 	 */
 	function check_auth()
 	{
-		foreach (array('PHP_AUTH_USER', 'AUTH_USER', 'REMOTE_USER', 'LOGON_USER') as $x) {
-			if (isset($_SERVER[$x]) && ! empty($_SERVER[$x])) {
-				if (! empty($_SERVER['AUTH_TYPE']) && $_SERVER['AUTH_TYPE'] == 'Digest') return $_SERVER[$x];
-				$ms = explode('\\', $_SERVER[$x]);
-				if (count($ms) == 3) return $ms[2]; // DOMAIN\\USERID
-				foreach (array('PHP_AUTH_PW', 'AUTH_PASSWORD', 'HTTP_AUTHORIZATION') as $pw) {
-					if (! empty($_SERVER[$pw])) return $_SERVER[$x];
-				}
-			}
+		global $auth_type;
+
+		switch ($auth_type) {
+		case 1:
+			$login = auth::check_auth_basic();
+			break;
+		case 2:
+			$login = auth::check_auth_digest();
+			break;
 		}
 
-		// PHP Digest認証対応
-		if (isset($_SERVER['PHP_AUTH_DIGEST']) && ($data = auth::http_digest_parse($_SERVER['PHP_AUTH_DIGEST']))) {
-			if (! empty($data['username'])) return $data['username'];
-		}
+		if (! empty($login)) return $login;
 
 		// NTLM対応
 		list($domain, $login, $host, $pass) = auth::ntlm_decode();
@@ -58,6 +55,30 @@ class auth
 		return $auth_key['nick'];
 	}
 
+	function check_auth_basic()
+	{
+		foreach (array('PHP_AUTH_USER', 'AUTH_USER', 'REMOTE_USER', 'LOGON_USER') as $x) {
+			if (isset($_SERVER[$x]) && ! empty($_SERVER[$x])) {
+				if (! empty($_SERVER['AUTH_TYPE']) && $_SERVER['AUTH_TYPE'] == 'Digest') return $_SERVER[$x];
+				$ms = explode('\\', $_SERVER[$x]);
+				if (count($ms) == 3) return $ms[2]; // DOMAIN\\USERID
+				foreach (array('PHP_AUTH_PW', 'AUTH_PASSWORD', 'HTTP_AUTHORIZATION') as $pw) {
+					if (! empty($_SERVER[$pw])) return $_SERVER[$x];
+				}
+			}
+		}
+		return '';
+        }
+
+	function check_auth_digest()
+	{
+		// PHP Digest認証対応
+		if (isset($_SERVER['PHP_AUTH_DIGEST']) && ($data = auth::http_digest_parse($_SERVER['PHP_AUTH_DIGEST']))) {
+			if (! empty($data['username'])) return $data['username'];
+		}
+		return '';
+        }
+
 	/**
 	 * ユーザのROLEを取得
 	 * @static
@@ -69,18 +90,14 @@ class auth
 		$login = auth::check_auth();
 		if (empty($login)) return ROLE_GUEST; // 未認証者
 
-		// 管理者パスワードなのかどうか？
-		$temp_admin = ( pkwk_hash_compute($_SERVER['PHP_AUTH_PW'], $adminpass) !== $adminpass) ? FALSE : TRUE;
-		if (! $temp_admin && $login == UNAME_ADM_CONTENTS_TEMP) {
-			global $vars;
-			if (isset($vars['pass']) && pkwk_login($vars['pass'])) $temp_admin = TRUE;
-		}
+		// $temp_admin = auth::is_temp_admin(); // 管理者パスワードなのかどうか
 
+		// 登録者かどうか
 		if (! isset($auth_users[$login])) {
 			// 未登録者の場合
-			// 管理者パスワードと偶然一致した場合でも見做し認証者(4.1)
-			//return ($login == 'admin' && $temp_admin) ? 3.1 : 4.1;
-			if ($login == UNAME_ADM_CONTENTS_TEMP && $temp_admin) return ROLE_ADM_CONTENTS_TEMP;
+			// 管理者パスワードと偶然一致した場合でも見做し認証者(ROLE_AUTH_TEMP)
+			//if ($login == UNAME_ADM_CONTENTS_TEMP && $temp_admin) return ROLE_ADM_CONTENTS_TEMP;
+
 			// 外部認証API
 			$auth_key = auth::get_user_name();
 			if (empty($auth_key['nick'])) return ROLE_AUTH_TEMP;
@@ -96,14 +113,17 @@ class auth
 		switch ($role) {
 		case ROLE_ADM: // サイト管理者
 		case ROLE_ADM_CONTENTS: // コンテンツ管理者
+		case ROLE_ENROLLEE: // 登録者
 			// パスワードまで一致していること
-			if ($auth_type == 2) {
-				return (auth::auth_digest($realm,$auth_users)) ? $role : ROLE_AUTH;
-			} else {
+			switch ($auth_type) {
+			case 1:
 				return (auth::auth_pw($auth_users)) ? $role : ROLE_AUTH;
+			case 2:
+				return (auth::auth_digest($realm,$auth_users)) ? $role : ROLE_AUTH;
 			}
-		case ROLE_AUTH: // 認証者(pukiwiki)
-			return ($temp_admin) ? ROLE_ADM_CONTENTS_TEMP : ROLE_AUTH;
+			return ROLE_AUTH;
+		//case ROLE_AUTH: // 認証者(pukiwiki)
+		//	return ($temp_admin) ? ROLE_ADM_CONTENTS_TEMP : ROLE_AUTH;
 		}
 		return ROLE_AUTH;
 	}
@@ -114,10 +134,10 @@ class auth
 
 		$str_role = strval($role);
 
-		if (empty($login_api[$str_role])) return 0;
+		if (empty($login_api[$str_role])) return ROLE_GUEST;
 		$api_name = $login_api[$str_role];
 
-		if (empty($auth_wkgrp_user[$api_name][$key])) return 0;
+		if (empty($auth_wkgrp_user[$api_name][$key])) return ROLE_GUEST;
 		return $auth_wkgrp_user[$api_name][$key];
 	}
 
@@ -158,12 +178,30 @@ class auth
 		}
 
 		$now_role = auth::get_role_level();
-		if (($now_role == ROLE_AUTH_TEMP && $role == ROLE_AUTH) || ($now_role == ROLE_ADM_CONTENTS_TEMP && $role == ROLE_ADM_CONTENTS))
+		// if (($now_role == ROLE_AUTH_TEMP && $role == ROLE_AUTH) || ($now_role == ROLE_ADM_CONTENTS_TEMP && $role == ROLE_ADM_CONTENTS))
+		if (($now_role == ROLE_AUTH_TEMP && $role == ROLE_AUTH))
 		{
 			$rc[] = auth::check_auth();
 		}
 
 		return $rc;
+	}
+
+	/*
+	 * 管理者パスワードなのかどうか
+	 * @return bool
+	 * @static
+	 */
+	function is_temp_admin()
+	{
+		global $adminpass;
+		// 管理者パスワードなのかどうか？
+		$temp_admin = ( pkwk_hash_compute($_SERVER['PHP_AUTH_PW'], $adminpass) !== $adminpass) ? false : true;
+		if (! $temp_admin && $login == UNAME_ADM_CONTENTS_TEMP) {
+			global $vars;
+			if (isset($vars['pass']) && pkwk_login($vars['pass'])) $temp_admin = true;
+		}
+		return $temp_admin;
 	}
 
 	/*
@@ -585,7 +623,6 @@ class auth
 			if ($is_colon) continue;
 			$rc[$file] = $page;
 		}
-
 		return $rc;
 	}
 
@@ -641,10 +678,15 @@ class auth
 		return base64_encode(hex2bin(sha1($x)));
 	}
 
-	function is_auth_api($x)
+	function is_protect_plugin_action($x)
 	{
 		global $auth_api;
-		if ($x == 'login') return true;
+		static $plugin_list = array('login','redirect');
+
+		foreach($plugin_list as $val) {
+			if ($val == $x) return true;
+		}
+
 		foreach($auth_api as $api=>$val) {
 			if ($api == $x) return true;
 		}
