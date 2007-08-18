@@ -3,7 +3,7 @@
  * PukiWiki Plus! 認証処理
  *
  * @author	Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth.cls.php,v 0.52 2007/08/18 23:30:00 upk Exp $
+ * @version     $Id: auth.cls.php,v 0.53 2007/08/19 01:26:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'auth.def.php');
@@ -109,7 +109,7 @@ class auth
 		}
 
 		// 設定されている役割を取得
-		$role = (empty($auth_users[$login][1])) ? ROLE_AUTH : $auth_users[$login][1];
+		$role = (empty($auth_users[$login][1])) ? ROLE_ENROLLEE : $auth_users[$login][1];
 		switch ($role) {
 		case ROLE_ADM: // サイト管理者
 		case ROLE_ADM_CONTENTS: // コンテンツ管理者
