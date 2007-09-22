@@ -3,7 +3,7 @@
  * passwd plugin.
  *
  * @copyright   Copyright &copy; 2006-2007, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: passwd.inc.php,v 0.7 2007/07/25 23:36:00 upk Exp $
+ * @version     $Id: passwd.inc.php,v 0.8 2007/09/23 04:42:00 upk Exp $
  *
  * $A1 = md5($data['username'] . ':' . $realm . ':' . $auth_users[$data['username']]);
  */
@@ -160,6 +160,8 @@ function passwd_menu($msg='&nbsp;')
 	$role_level = auth::get_role_level();
 	$old_algorithm = '';
 
+	$r_realm = rawurlencode($realm);
+
 	$checked_md5 = 'checked="checked"';
 	$checked_sha1 = '';
 
@@ -216,7 +218,8 @@ EOD;
 				break;
 			}
 
-			$a1_des = 'a1 = objForm.username.value+\':' . $realm . ":'+objForm.key.value;\n";
+			// $a1_des = 'a1 = objForm.username.value+\':' . $realm . ":'+objForm.key.value;\n";
+			$a1_des = 'a1 = objForm.username.value+\':\'+decodeURIComponent(objForm.realm.value)+\':\'+objForm.key.value;'."\n";
 		}
 
 		$func = 'update';
@@ -261,7 +264,8 @@ EOD;
 		// digest
 		$pref = 'digest';
 		$submit_sha1 = '';
-		$a1 = 'a1 = objForm.username.value+\':' . $realm . ":'+objForm.passwd.value;\n";
+		// $a1 = 'a1 = objForm.username.value+\':' . $realm . ":'+objForm.passwd.value;\n";
+		$a1 = 'a1 = objForm.username.value+\':\'+decodeURIComponent(objForm.realm.value)+\':\'+objForm.passwd.value;'."\n";
 		$checked_md5 = 'checked="checked"';
 		$checked_sha1 = '';
 		$disabled_sha1 = 'disabled="disabled"';
@@ -365,6 +369,7 @@ function set_hash()
   <input type="hidden" name="algorithm" />
   <input type="hidden" name="old_algorithm" value="$old_algorithm"/>
   <input type="hidden" name="hash" />
+  <input type="hidden" name="realm" value="$r_realm"/>
   <table class="indented">
 $msg_username
     <tr>
