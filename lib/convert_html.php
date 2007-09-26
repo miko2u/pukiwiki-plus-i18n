@@ -1,9 +1,9 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: convert_html.php,v 1.18.18 2007/07/02 00:00:00 upk Exp $
+// $Id: convert_html.php,v 1.19.19 2007/08/19 13:59:07 miko Exp $
 // Copyright (C)
 //   2005-2007 PukiWiki Plus! Team
-//   2002-2006 PukiWiki Developers Team
+//   2002-2007 PukiWiki Developers Team
 //   2001-2002 Originally written by yu-ji
 // License: GPL v2 or (at your option) any later version
 //
@@ -714,8 +714,9 @@ class YTable extends Element
 	function toString()
 	{
 		$rows = '';
-		foreach ($this->elements as $str)
+		foreach ($this->elements as $str) {
 			$rows .= "\n" . '<tr class="style_tr">' . $str . '</tr>' . "\n";
+		}
 		$rows = $this->wrap($rows, 'table', ' class="style_table" cellspacing="1" border="0"');
 		return $this->wrap($rows, 'div', ' class="ie5"');
 	}
