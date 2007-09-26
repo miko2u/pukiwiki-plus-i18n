@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: file.php,v 1.82.34 2007/07/29 12:18:08 miko Exp $
+// $Id: file.php,v 1.87.34 2007/09/23 04:23:40 miko Exp $
 // Copyright (C)
 //   2005-2007 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
@@ -26,36 +26,47 @@ define('PKWK_GLOSSARY_REGEX_CACHE',  'glossary.dat');
 define('PKWK_AUTOBASEALIAS_CACHE', 'autobasealias.dat');
 
 // Get source(wiki text) data of the page
+// Returns FALSE if error occurerd
 function get_source($page = NULL, $lock = TRUE, $join = FALSE)
 {
+	// $result = NULL;	// File is not found
 	$result = $join ? '' : array();
+		// Compat for "implode('', get_source($file))",
+		//      -- this is slower than "get_source($file, TRUE, TRUE)"
+		// Compat for foreach(get_source($file) as $line) {} not to warns
 
-	if (is_page($page)) {
-		$path  = get_filename($page);
+	$path = get_filename($page);
+	if (file_exists($path)) {
 
-		if ($lock) {
+		if ($lock || $join) {
 			$fp = @fopen($path, 'r');
 			if ($fp == FALSE) return $result;
+		}
+		if ($lock) {
 			@flock($fp, LOCK_SH);
 		}
-
 		if ($join) {
 			// Returns a value
 			$size = filesize($path);
-			if ($size > 0) {
-				$result = str_replace("\r", '', fread($fp, filesize($path)));
-			} else {
+			if ($size === FALSE) {
+				$result = FALSE;
+			} else if ($size == 0) {
 				$result = '';
+			} else {
+				$result = fread($fp, $size);	// Returns a value
 			}
 		} else {
-			// Returns an array
-			// Removing line-feeds: Because file() doesn't remove them.
-			$result = str_replace("\r", '', file($path));
+			$result = file($path);	// Returns an array
 		}
-
 		if ($lock) {
 			@flock($fp, LOCK_UN);
+		}
+		if ($lock || $join) {
 			@fclose($fp);
+		}
+		if ($result !== FALSE) {
+			// Removing line-feeds
+			$result = str_replace("\r", '', $result);
 		}
 	}
 
@@ -449,9 +460,11 @@ function add_recent($page, $recentpage, $subject = '', $limit = 0)
 
 	// Load
 	$lines = $matches = array();
-	foreach (get_source($recentpage) as $line)
-		if (preg_match('/^-(.+) - (\[\[.+\]\])$/', $line, $matches))
+	foreach (get_source($recentpage) as $line) {
+		if (preg_match('/^-(.+) - (\[\[.+\]\])$/', $line, $matches)) {
 			$lines[$matches[2]] = $line;
+		}
+	}
 
 	$_page = '[[' . $page . ']]';
 
