@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: pukiwiki.php,v 1.20.14 2007/08/19 01:08:00 upk Exp $
+// $Id: pukiwiki.php,v 1.21.14 2007/08/26 15:17:28 miko Exp $
 //
 // PukiWiki Plus! 1.4.*
 //  Copyright (C) 2002-2007 by PukiWiki Plus! Team
@@ -117,12 +117,15 @@ if ($spam && $method != 'GET') {
 	// Adjustment
 	$_spam   = ! empty($spam);
 	$_plugin = strtolower($plugin);
+	$_ignore = array();
 	switch ($_plugin) {
 		case 'search': $_spam = FALSE; break;
 		case 'edit':
 			$_page = & $page;
 			if (isset($vars['add']) && $vars['add']) {
 				$_plugin = 'add';
+			} else {
+				$_ignore[] = 'original';
 			}
 			break;
 		case 'bugtrack': $_page = & $vars['base'];  break;
@@ -130,9 +133,11 @@ if ($spam && $method != 'GET') {
 		case 'read':     $_page = & $page;  break;
 		default: $_page = & $refer; break;
 	}
+
 	if ($_spam) {
 		require(LIB_DIR . 'spam.php');
 		require(LIB_DIR . 'spam_pickup.php');
+
 		if (isset($spam['method'][$_plugin])) {
 			$_method = & $spam['method'][$_plugin];
 		} else if (isset($spam['method']['_default'])) {
@@ -141,7 +146,20 @@ if ($spam && $method != 'GET') {
 			$_method = array();
 		}
 		$exitmode = isset($spam['exitmode']) ? $spam['exitmode'] : '';
-		pkwk_spamfilter($method . ' to #' . $_plugin, $_page, $vars, $_method, $exitmode);
+
+		// Hack: ignorance several keys
+		if ($_ignore) {
+			$_vars = array();
+			foreach($vars as $key => $value) {
+				$_vars[$key] = & $vars[$key];
+			}
+			foreach($_ignore as $key) {
+				unset($_vars[$key]);
+			}
+		} else {
+			$_vars = & $vars;
+		}
+		pkwk_spamfilter($method . ' to #' . $_plugin, $_page, $_vars, $_method, $exitmode);
 	}
 }
 

@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: init.php,v 1.53.29 2007/08/12 17:10:00 upk Exp $
+// $Id: init.php,v 1.54.29 2007/09/02 12:31:50 miko Exp $
 // Copyright (C)
 //   2005-2007 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
@@ -165,7 +165,7 @@ unset($die, $temp);
 // 必須のページが存在しなければ、空のファイルを作成する
 
 foreach(array($defaultpage, $whatsnew, $interwiki) as $page){
-	if (! is_page($page)) touch(get_filename($page));
+	if (! is_page($page)) pkwk_touch_file(get_filename($page));
 }
 
 /////////////////////////////////////////////////
