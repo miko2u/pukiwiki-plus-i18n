@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: memo.inc.php,v 1.15.3 2006/01/11 23:34:00 miko Exp $
+// $Id: memo.inc.php,v 1.16.3 2007/08/19 14:20:58 miko Exp $
 //
 // Memo box plugin
 
@@ -45,7 +45,7 @@ $_msg_collided = _('It seems that someone has already updated this page while yo
 	$postdata_input = $memo_body . "\n";
 
 	$body = '';
-	if (md5(@join('', get_source($vars['refer']))) != $vars['digest']) {
+	if (md5(get_source($vars['refer'], TRUE, TRUE)) !== $vars['digest']) {
 		$title = $_title_collided;
 		$body  = $_msg_collided . "\n";
 
