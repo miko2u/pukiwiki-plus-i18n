@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: attach.inc.php,v 1.87.31 2007/07/30 14:30:14 miko Exp $
+// $Id: attach.inc.php,v 1.87.31 2007/10/11 01:27:00 upk Exp $
 // Copyright (C)
 //   2005-2007 PukiWiki Plus! Team
 //   2003-2007 PukiWiki Developers Team
@@ -15,47 +15,26 @@
 //    This feature is disabled at newer version of PHP.
 //    Set this at php.ini if you want.
 // Max file size for upload on PHP (PHP default: 2MB)
-if (!defined('PLUGIN_ATTACH_UPLOAD_MAX_FILESIZE')) {
-	define('PLUGIN_ATTACH_UPLOAD_MAX_FILESIZE', '4M'); // default: 4MB
-}
+
+defined('PLUGIN_ATTACH_UPLOAD_MAX_FILESIZE')	or define('PLUGIN_ATTACH_UPLOAD_MAX_FILESIZE', '4M');		// default: 4MB
 ini_set('upload_max_filesize', PLUGIN_ATTACH_UPLOAD_MAX_FILESIZE);
 
 // Max file size for upload on script of PukiWikiX_FILESIZE
-if (!defined('PLUGIN_ATTACH_MAX_FILESIZE')) {
-	define('PLUGIN_ATTACH_MAX_FILESIZE', (2048 * 1024)); // default: 1MB
-}
-
+defined('PLUGIN_ATTACH_MAX_FILESIZE')		or define('PLUGIN_ATTACH_MAX_FILESIZE', (2048 * 1024));		// default: 1MB
 // 管理者だけが添付ファイルをアップロードできるようにする
-if (!defined('PLUGIN_ATTACH_UPLOAD_ADMIN_ONLY')) {
-	define('PLUGIN_ATTACH_UPLOAD_ADMIN_ONLY', FALSE); // FALSE or TRUE
-}
-
+defined('PLUGIN_ATTACH_UPLOAD_ADMIN_ONLY')	or define('PLUGIN_ATTACH_UPLOAD_ADMIN_ONLY', FALSE);		// FALSE or TRUE
 // 管理者だけが添付ファイルを削除できるようにする
-if (!defined('PLUGIN_ATTACH_DELETE_ADMIN_ONLY')) {
-	define('PLUGIN_ATTACH_DELETE_ADMIN_ONLY', FALSE); // FALSE or TRUE
-}
-
+defined('PLUGIN_ATTACH_DELETE_ADMIN_ONLY')	or define('PLUGIN_ATTACH_DELETE_ADMIN_ONLY', FALSE);		// FALSE or TRUE
 // 管理者が添付ファイルを削除するときは、バックアップを作らない
 // PLUGIN_ATTACH_DELETE_ADMIN_ONLY=TRUEのとき有効
-if (!defined('PLUGIN_ATTACH_DELETE_ADMIN_NOBACKUP')) {
-	define('PLUGIN_ATTACH_DELETE_ADMIN_NOBACKUP', FALSE); // FALSE or TRUE
-}
-
+defined('PLUGIN_ATTACH_DELETE_ADMIN_NOBACKUP')	or define('PLUGIN_ATTACH_DELETE_ADMIN_NOBACKUP', FALSE);	// FALSE or TRUE
 // アップロード/削除時にパスワードを要求する(ADMIN_ONLYが優先)
-if (!defined('PLUGIN_ATTACH_PASSWORD_REQUIRE')) {
-	define('PLUGIN_ATTACH_PASSWORD_REQUIRE', FALSE); // FALSE or TRUE
-}
-
+defined('PLUGIN_ATTACH_PASSWORD_REQUIRE')	or define('PLUGIN_ATTACH_PASSWORD_REQUIRE', FALSE);		// FALSE or TRUE
 // 添付ファイル名を変更できるようにする
-if (!defined('PLUGIN_ATTACH_RENAME_ENABLE')) {
-	define('PLUGIN_ATTACH_RENAME_ENABLE', TRUE); // FALSE or TRUE
-}
-
+defined('PLUGIN_ATTACH_RENAME_ENABLE')		or define('PLUGIN_ATTACH_RENAME_ENABLE', TRUE);			// FALSE or TRUE
 // ファイルのアクセス権
-if (!defined('PLUGIN_ATTACH_FILE_MODE')) {
-	define('PLUGIN_ATTACH_FILE_MODE', 0644);
-	//define('PLUGIN_ATTACH_FILE_MODE', 0604); // for XREA.COM
-}
+defined('PLUGIN_ATTACH_FILE_MODE')		or define('PLUGIN_ATTACH_FILE_MODE', 0644);
+						// define('PLUGIN_ATTACH_FILE_MODE', 0604);			// for XREA.COM
 
 // File icon image
 define('PLUGIN_ATTACH_FILE_ICON', '<img src="' . IMAGE_URI .  'file.png"' .
@@ -65,9 +44,8 @@ define('PLUGIN_ATTACH_FILE_ICON', '<img src="' . IMAGE_URI .  'file.png"' .
 // mime-typeを記述したページ
 define('PLUGIN_ATTACH_CONFIG_PAGE_MIME', 'plugin/attach/mime-type');
 
-if (!defined('PLUGIN_ATTACH_UNKNOWN_COMPRESS')) {
-	define('PLUGIN_ATTACH_UNKNOWN_COMPRESS', 1); // 1(compress) or 0(raw)
-}
+defined('PLUGIN_ATTACH_UNKNOWN_COMPRESS')	or define('PLUGIN_ATTACH_UNKNOWN_COMPRESS', 1);			// 1(compress) or 0(raw)
+defined('PLUGIN_ATTACH_COMPRESS_TYPE')		or define('PLUGIN_ATTACH_COMPRESS_TYPE', 'TGZ');		// TGZ or GZ
 
 function plugin_attach_init()
 {
@@ -313,8 +291,8 @@ function attach_doupload(&$file, $page, $pass=NULL, $temp='', $copyright=FALSE, 
 		}
 	}
 
-	if ($must_compress && exist_plugin('dump')) {
-		if (is_uploaded_file($file['tmp_name'])) {
+	if ($must_compress && is_uploaded_file($file['tmp_name'])) {
+		if (PLUGIN_ATTACH_COMPRESS_TYPE == 'TGZ' && exist_plugin('dump')) {
 			$obj = & new AttachFile($page, $file['name'] . '.tgz');
 			if ($obj->exist)
 				return array('result'=>FALSE,
@@ -329,6 +307,23 @@ function attach_doupload(&$file, $page, $pass=NULL, $temp='', $copyright=FALSE, 
 			@rename($tar->filename, $obj->filename);
 			chmod($obj->filename, PLUGIN_ATTACH_FILE_MODE);
 			@unlink($tar->filename);
+		} else
+		if (PLUGIN_ATTACH_COMPRESS_TYPE == 'GZ' && extension_loaded('zlib')) {
+			$obj = & new AttachFile($page, $file['name'] . '.gz');
+			if ($obj->exist)
+				return array('result'=>FALSE,
+					'msg'=>$_attach_messages['err_exists']);
+
+			$tp = fopen($file['tmp_name'],'rb') or
+				die_message( _("The uploaded file cannot be read.") ); // アップロードされたファイルが読めません。
+			$zp = gzopen($obj->filename, 'wb') or
+				die_message( _("The compression file cannot be written.") );	// 圧縮ファイルが書けません。
+
+			while (!feof($tp)) { gzwrite($zp,fread($tp, 8192)); }
+			gzclose($zp);
+			fclose($tp);
+			chmod($obj->filename, PLUGIN_ATTACH_FILE_MODE);
+			@unlink($file['tmp_name']);
 		}
 	} else {
 //miko
