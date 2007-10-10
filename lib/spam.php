@@ -1,5 +1,5 @@
 <?php
-// $Id: spam.php,v 1.32.1 2007/08/18 14:47:32 miko Exp $
+// $Id: spam.php,v 1.32.2 2007/10/10 20:47:32 miko Exp $
 // Copyright (C) 2006-2007 PukiWiki Developers Team
 // License: GPL v2 or (at your option) any later version
 //
@@ -7,8 +7,8 @@
 //
 // (PHP 4 >= 4.3.0): preg_match_all(PREG_OFFSET_CAPTURE): $method['uri_XXX'] related feature
 
-if (! defined('SPAM_INI_FILE'))   define('SPAM_INI_FILE',   'spam.ini.php');
-if (! defined('DOMAIN_INI_FILE')) define('DOMAIN_INI_FILE', 'domain.ini.php');
+if (! defined('SPAM_INI_FILE'))   define('SPAM_INI_FILE',   add_homedir('spam.ini.php'));
+if (! defined('DOMAIN_INI_FILE')) define('DOMAIN_INI_FILE', add_homedir('domain.ini.php'));
 
 // ---------------------
 // Compat etc
