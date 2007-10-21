@@ -1,5 +1,5 @@
 <?php
-// $Id: bugtrack.inc.php,v 1.26.2 2006/11/04 18:26:00 upk Exp $
+// $Id: bugtrack.inc.php,v 1.26.3 2007/10/21 17:10:00 upk Exp $
 //
 // PukiWiki BugTrack plugin
 //
@@ -266,7 +266,7 @@ function plugin_bugtrack_template($base, $summary, $name, $priority, $state, $ca
 - ${_plugin_bugtrack['priority']}: $priority
 - ${_plugin_bugtrack['state'   ]}: $state
 - ${_plugin_bugtrack['category']}: $category
-- ${_plugin_bugtrack['date'    ]}: now?
+- ${_plugin_bugtrack['date'    ]}: &now;
 - ${_plugin_bugtrack['version' ]}: $version
 
 ** ${_plugin_bugtrack['body']}

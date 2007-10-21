@@ -1,5 +1,5 @@
 <?php
-// $Id: tb.inc.php,v 1.19.30 2007/02/19 07:06:00 miko Exp $
+// $Id: tb.inc.php,v 1.19.31 2007/10/21 17:11:00 upk Exp $
 /*
  * PukiWiki/TrackBack: TrackBack Ping receiver and viewer
  * (C) 2007      PukiWiki Plus! Team
@@ -18,17 +18,18 @@
  */
 
 // Trackback site check.(Is foreign site linked my site?)
-defined('PLUGIN_TB_SITE_CHECK')||define('PLUGIN_TB_SITE_CHECK', TRUE);
-
+defined('PLUGIN_TB_SITE_CHECK') or define('PLUGIN_TB_SITE_CHECK', TRUE);
 // If trackback error, 'HTTP/1.0 400 Bad Request'
-defined('PLUGIN_TB_HTTP_ERROR')||define('PLUGIN_TB_HTTP_ERROR', FALSE);
+defined('PLUGIN_TB_HTTP_ERROR') or define('PLUGIN_TB_HTTP_ERROR', FALSE);
 
 define('PLUGIN_TB_OK',      0); 
 define('PLUGIN_TB_ERROR',   1); 
 
 function plugin_tb_convert()
 {
-	global $vars;
+	global $vars,$trackback;
+
+	if (! $trackback) return;
 
 	$argv = func_get_args();
 	$argc = func_num_args();
