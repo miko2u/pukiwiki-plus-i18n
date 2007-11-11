@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: edit.inc.php,v 1.41.34 2007/06/17 16:55:00 upk Exp $
+// $Id: edit.inc.php,v 1.41.35 2007/11/12 00:53:00 upk Exp $
 // Copyright (C)
 //   2005-2007 PukiWiki Plus! Team
 //   2001-2007 PukiWiki Developers Team
@@ -319,12 +319,13 @@ function plugin_edit_honeypot()
 function plugin_edit_parts($id, &$source, $postdata='')
 {
 	$postdata = rtrim($postdata) . "\n";
+	$id = preg_quote($id);
 	if (PLUGIN_EDIT_PARTAREA == 'level') {
 		$start = -1;
-        $final = count($source);
-        $multiline = 0;
-        $matches = array();
-        foreach ($source as $i => $line) {
+	        $final = count($source);
+	        $multiline = 0;
+	        $matches = array();
+	        foreach ($source as $i => $line) {
 			// multiline plugin. refer lib/convert_html
 			if(defined('PKWKEXP_DISABLE_MULTILINE_PLUGIN_HACK') && PKWKEXP_DISABLE_MULTILINE_PLUGIN_HACK === 0) {
 				if ($multiline < 2) {
@@ -340,7 +341,7 @@ function plugin_edit_parts($id, &$source, $postdata='')
 			}
 
 			if ($start === -1) {
-				if (preg_match('/^(\*{1,3})(.*?)\[#(' . preg_quote($id) . ')\](.*?)$/m', $line, $matches)) {
+				if (preg_match('/^(\*{1,3})(.*?)\[#(' . $id . ')\](.*?)$/m', $line, $matches)) {
 					$start = $i;
 					$hlen = strlen($matches[1]);
 				}
@@ -350,7 +351,7 @@ function plugin_edit_parts($id, &$source, $postdata='')
 					break;
 				}
 			}
-        }
+		}
 		if ($start !== -1) {
 			return join('', array_splice($source, $start, $final - $start, $postdata));
 		}
