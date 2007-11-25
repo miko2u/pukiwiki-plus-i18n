@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: funcplus.php,v 0.1.35 2007/07/22 22:22:00 upk Exp $
+// $Id: funcplus.php,v 0.1.36 2007/11/25 18:14:00 upk Exp $
 // Copyright (C)
 //   2005-2007 PukiWiki Plus! Team
 // License: GPL v2 or (at your option) any later version
@@ -201,6 +201,7 @@ function is_inside_uri($anchor)
 {
 	global $open_uri_in_new_window_servername;
 
+	$open_uri_in_new_window_servername[] = get_script_uri();
 	foreach ($open_uri_in_new_window_servername as $servername) {
 		if (stristr($anchor, $servername)) {
 			return true;
