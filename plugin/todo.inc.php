@@ -22,7 +22,14 @@
  *
  * MODIFICATION
  * 2006-08-26 Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * 2007-11-26 Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ *            - BaseTopic を指定した場合の文書名は、BaseTopic を外して表示
+ *            - token を外して表示
+ *            - ファイル名順で整列
+ *            - 番号付き・番号なしリストの定義を追加(TODOが増えると、番号がないと厳しい)
  */
+
+defined('TODO_LABEL_PREFIX') or define('TODO_LABEL_PREFIX','+');
 
 /***************************************************************************
  * プラグインモジュールインタフェースの実装
@@ -78,12 +85,27 @@ function plugin_todo_convert()
  ***************************************************************************/
 function todo_generate_index($vars, $page, $mark)
 {
-	$todo = todo_search($vars, trim($page), trim($mark));
+	$page = trim($page);
+	$page_len = ($page == "''") ? 0 : strlen($page);
+	$mark = trim($mark);
+	if (empty($mark)) $mark = 'todo';
+
+	$todo = todo_search($vars, $page, $mark);
 
 	foreach ($todo as $page => $list) {
 		//sort($list);
 		foreach ($list as $line) {
-			$html .= '- ' . $line . ' ([[' . $page . "]])\n";
+			$msg = substr($line,strlen($mark)+2);
+			$name = ($page_len > 0) ? substr($page,$page_len) : $page;
+			if (substr($name,0,1) == '/') $name = substr($name,1);
+			$html .= TODO_LABEL_PREFIX . ' ' . $msg;
+			// 自身のページ
+			if (! empty($name)) {
+				$html .= ' ([[' . $name. '>' . $page . "]])\n";
+			} else {
+				$html .= "\n";
+			}
+
 		}
 	}
 	return convert_html($html);
@@ -91,7 +113,6 @@ function todo_generate_index($vars, $page, $mark)
 
 function todo_search($vars, $page, $mark)
 {
-	if ($mark == '')   $mark = 'todo';
 	if ($page == "''") $page = '';
 
 	// 検索対象を選択
@@ -116,6 +137,7 @@ function todo_search($vars, $page, $mark)
 		}
 	}
 
+	ksort($link);
 	return $link;
 }
 
