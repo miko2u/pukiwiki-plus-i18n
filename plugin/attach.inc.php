@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: attach.inc.php,v 1.87.31 2007/10/11 01:27:00 upk Exp $
+// $Id: attach.inc.php,v 1.87.32 2007/12/06 01:54:00 upk Exp $
 // Copyright (C)
 //   2005-2007 PukiWiki Plus! Team
 //   2003-2007 PukiWiki Developers Team
@@ -164,7 +164,7 @@ function plugin_attach_action()
 		case 'freeze':
 		case 'unfreeze':
 			// if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
-			if (auth::check_role('readonly')) die_message('PKWK_READONLY prohibits editing');
+			if (auth::check_role('readonly')) die_message( _('PKWK_READONLY prohibits editing') );
 		}
 		switch ($pcmd) {
 		case 'info'     : return attach_info();
@@ -533,6 +533,8 @@ function attach_list()
 {
 	global $vars, $_attach_messages;
 
+	if (auth::check_role('safemode')) die_message( _('PKWK_SAFE_MODE prohibits this') );
+
 	$refer = isset($vars['refer']) ? $vars['refer'] : '';
 
 	$obj = & new AttachPages($refer);
@@ -549,6 +551,8 @@ function attach_list()
 function attach_showform()
 {
 	global $vars, $_attach_messages;
+
+	if (auth::check_role('safemode')) die_message( _('PKWK_SAFE_MODE prohibits this') );
 
 	$page = isset($vars['page']) ? $vars['page'] : '';
 	check_editable($page, true, true);
