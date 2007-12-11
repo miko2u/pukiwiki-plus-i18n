@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: file.php,v 1.87.34 2007/09/23 04:23:40 miko Exp $
+// $Id: file.php,v 1.87.35 2007/12/12 02:16:00 upk Exp $
 // Copyright (C)
 //   2005-2007 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
@@ -121,6 +121,9 @@ function page_write($page, $postdata, $notimestamp = FALSE)
 		}
 		if ($use_spam_check['page_contents'] && SpamCheck($links)) {
 			die_message('Writing was limited by DNSBL (Blocking SPAM).');
+		}
+		if ($use_spam_check['check_proxy'] && is_proxy()) {
+			die_message('Writing was limited by PROXY (Blocking SPAM).');
 		}
 	}
 
