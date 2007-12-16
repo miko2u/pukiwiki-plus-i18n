@@ -3,9 +3,11 @@
  * PukiWiki Plus! Proxy判定クラス
  *
  * @copyright	Copyright &copy; 2004-2007, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version	$Id: proxy.cls.php,v 0.6 2007/12/07 22:13:00 upk Exp $
+ * @version	$Id: proxy.cls.php,v 0.7 2007/12/16 23:13:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License
  */
+
+require_once(LIB_DIR . 'spamplus.php');
 
 /**
  * Proxy関連クラス
@@ -94,7 +96,45 @@ function proxy_get_real_ip()
 function is_proxy()
 {
 	$obj = new check_proxy();
+	$ip = $obj->get_realip();
+	if (!empty($ip) && MyNetCheck($ip)) return false;
 	return $obj->is_proxy();
+}
+
+function MyNetCheck($ip)
+{
+	global $log_common, $log_ua;
+
+	$config = new Config(CONFIG_SPAM_WL_PRIVATE_NET);
+	$config->read();
+	$private_ip = $config->get('IP');
+	$dynm_host = $config->get('DYNAMIC_HOST');
+	// $hosts = $config->get('HOST');
+	unset($config);
+
+	$dynm_ip = array();
+	foreach($dynm_host as $host){
+		$tmp = gethostbyname($host);
+		if ($host == $tmp) continue; // IPが求まらない
+		$dynm_ip[] = $tmp;
+	}
+	unset($tmp);
+
+        $obj = new IPBL();
+
+	if (! empty($log_common['nolog_ip'])) {
+		$obj->setMyNetList( array_merge($private_ip, $log_common['nolog_ip'], $dynm_ip) );
+	} else {
+		$obj->setMyNetList( array_merge($private_ip, $dynm_ip) );
+	}
+
+	$hosts = (! is_array($ip)) ? array($ip) : $ip;
+
+	foreach($hosts as $host) {
+		$obj->setName($host);
+		if ($obj->isMyNet()) return true;;
+	}
+	return false;
 }
 
 ?>

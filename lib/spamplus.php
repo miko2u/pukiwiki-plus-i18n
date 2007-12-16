@@ -3,7 +3,7 @@
  * PukiWiki Plus! Blocking SPAM
  *
  * @copyright   Copyright &copy; 2006-2007, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: spamplus.php,v 0.7 2007/04/28 23:26:00 upk Exp $
+ * @version     $Id: spamplus.php,v 0.8 2007/12/16 22:35:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License
  *
  * Plus! - lib/file.php, lib/func.php, lib/config.php
@@ -27,10 +27,10 @@ function SpamCheck($link,$mode='dns')
 function SpamCheckBAN($ip)
 {
 	global $log_ua, $use_spam_check;
-	if (! $use_spam_check['page_view']) return FALSE;
+	if (! $use_spam_check['page_view']) return false;
 	$obj = new SPAMBAN();
-	if ($obj->BlackCheck($ip,$log_ua)) return TRUE;
-	return FALSE;
+	if ($obj->BlackCheck($ip,$log_ua)) return true;
+	return false;
 }
 
 function SpamCheckDNSBL($bl,$link)
@@ -53,12 +53,12 @@ function SpamCheckDNSBL($bl,$link)
 		$url = parse_url($host);
 		$domain = (empty($url['host'])) ? $host : $url['host'];
 		$obj->setName($domain);
-		if ($obj->isListed()) return TRUE;
+		if ($obj->isListed()) return true;
 		if (SPAM_MAX_COUNTER == 0) continue;
 		$i++;
-		if ($i > SPAM_MAX_COUNTER) return FALSE;
+		if ($i > SPAM_MAX_COUNTER) return false;
 	}
-	return FALSE;
+	return false;
 }
 
 function SpamCheckIPBL($bl,$ip)
@@ -66,7 +66,7 @@ function SpamCheckIPBL($bl,$ip)
 	global $log_common, $log_ua;
 
 	$obj_bl = new SPAMBL();
-	if ($obj_bl->BlackCheck($ip,$log_ua)) return TRUE;
+	if ($obj_bl->BlackCheck($ip,$log_ua)) return true;
 
 	$obj = new IPBL();
 
@@ -83,6 +83,7 @@ function SpamCheckIPBL($bl,$ip)
 	$private_ip = $config->get('IP');
 	$dynm_host = $config->get('DYNAMIC_HOST');
 	unset($config);
+
 	$dynm_ip = array();
 	foreach($dynm_host as $host){
 		$tmp = gethostbyname($host);
@@ -101,12 +102,12 @@ function SpamCheckIPBL($bl,$ip)
 	$i = 0;
 	foreach($hosts as $host) {
 		$obj->setName($host);
-		if ($obj->isListed()) return TRUE;
+		if ($obj->isListed()) return true;
 		if (SPAM_MAX_COUNTER == 0) continue;
 		$i++;
-		if ($i > SPAM_MAX_COUNTER) return FALSE;
+		if ($i > SPAM_MAX_COUNTER) return false;
 	}
-	return FALSE;
+	return false;
 }
 
 class SPAMCHECK
@@ -153,7 +154,7 @@ class SPAMBL extends SPAMCHECK
 			if (! empty($this->BlackList[0])) {
 				$ips = (is_ipaddr($this->target)) ? array($this->target) : gethostbynamel($this->target);
 				foreach($ips as $ip) {
-					if ($this->RangeCheck($ip)) return TRUE;
+					if ($this->RangeCheck($ip)) return true;
 				}
 			}
 			// HOST
@@ -164,7 +165,7 @@ class SPAMBL extends SPAMCHECK
 					// 後方一致のために、長さを確認
 					if (strlen($x) > $len_host) continue;
 					// 部分一致(後方一致)
-					if(stristr($host, $x) !== FALSE) return TRUE;
+					if(stristr($host, $x) !== FALSE) return true;
 				}
 			}
 		}
@@ -172,11 +173,11 @@ class SPAMBL extends SPAMCHECK
 		// UA
 		if (! empty($this->ua)) {
 			foreach($this->BlackList[2] as $x) {
-				if ($this->ua == $x) return TRUE;
+				if ($this->ua == $x) return true;
 			}
 		}
 
-		return FALSE;
+		return false;
 	}
 
 	function RangeCheck($ip)
@@ -190,9 +191,9 @@ class SPAMBL extends SPAMCHECK
 				$to = '';
 			}
 
-			if (ip_range_check($ip,$from,$to)) return TRUE;
+			if (ip_range_check($ip,$from,$to)) return true;
 		}
-		return FALSE;
+		return false;
 	}
 }
 
@@ -252,13 +253,13 @@ class DNSBL extends SPAMCHECK
 	{
 		// 指定されたホスト名でチェック
 		foreach($this->MyNetList as $My) {
-			if (strpos($this->host,$My) === 0) return FALSE;
+			if (strpos($this->host,$My) === 0) return false;
 		}
 		// ドメイン名のレベル合わせ
 		$host = $this->getDomain();
-		if (empty($host)) return FALSE;
+		if (empty($host)) return false;
 		// White List に存在するドメインは除く
-		if (isset($this->WhiteList[$host]) && $this->WhiteList[$host][0]) return FALSE;
+		if (isset($this->WhiteList[$host]) && $this->WhiteList[$host][0]) return false;
 
 		foreach($this->BlockList as $zone) {
 			if (! $zone[1]) continue;
@@ -269,9 +270,9 @@ class DNSBL extends SPAMCHECK
 				$this->debug_result[] = array($zone[0],$host,$result);
 				continue;
 			}
-			if ($ip != $lookup) return TRUE;
+			if ($ip != $lookup) return true;
 		}
-		return FALSE;
+		return false;
 	}
 
 	function setDebug($x) { $this->debug = $x; }
@@ -288,10 +289,16 @@ class IPBL extends DNSBL
 {
 	// function IPBL() { }
 
+	function isMyNet()
+	{
+		if (is_localIP($this->host)) return true;
+		if (ip_scope_check($this->host,$this->MyNetList)) return true;
+		return false;
+	}
+
 	function isListed()
 	{
-		if (is_localIP($this->host)) return FALSE;
-		if (ip_scope_check($this->host,$this->MyNetList)) return FALSE;
+		if ($this->isMyNet()) return false;
 		// reverse ip を生成
 		$host = implode('.', $this->reverse);
 
@@ -304,9 +311,9 @@ class IPBL extends DNSBL
 				$this->debug_result[] = array($zone[0],$host,$result);
 				continue;
 			}
-			if ($ip != $lookup) return TRUE;
+			if ($ip != $lookup) return true;
 		}
-		return FALSE;
+		return false;
 	}
 }
 
