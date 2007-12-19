@@ -3,7 +3,7 @@
  * PukiWiki Plus! Proxy判定クラス
  *
  * @copyright	Copyright &copy; 2004-2007, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version	$Id: proxy.cls.php,v 0.7 2007/12/16 23:13:00 upk Exp $
+ * @version	$Id: proxy.cls.php,v 0.8 2007/12/20 04:34:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
@@ -123,9 +123,9 @@ function MyNetCheck($ip)
         $obj = new IPBL();
 
 	if (! empty($log_common['nolog_ip'])) {
-		$obj->setMyNetList( array_merge($private_ip, $log_common['nolog_ip'], $dynm_ip) );
+		$obj->setMyNetList( array(array_merge($private_ip, $log_common['nolog_ip'], $dynm_ip)) );
 	} else {
-		$obj->setMyNetList( array_merge($private_ip, $dynm_ip) );
+		$obj->setMyNetList( array(array_merge($private_ip, $dynm_ip)) );
 	}
 
 	$hosts = (! is_array($ip)) ? array($ip) : $ip;
