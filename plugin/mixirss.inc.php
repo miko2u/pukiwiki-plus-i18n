@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: mixirss.inc.php,v 1.14.8 2007/12/15 04:27:00 upk Exp $
+// $Id: mixirss.inc.php,v 1.14.9 2007/12/22 16:02:00 upk Exp $
 //
 // Publishing RSS feed of RecentChanges
 // Usage: mixirss.inc.php?ver=[0.91|1.0(default)|2.0]
@@ -8,6 +8,8 @@
 // View Description Letters
 define('MIXIRSS_DESCRIPTION_LENGTH', 256);
 define('MIXIRSS_LANG', 'ja_JP');
+
+defined('EXT_PLUGIN_INCLUDE_MAX') or define('EXT_PLUGIN_INCLUDE_MAX', 20);
 
 // upk 2006-03-22
 // define('MIXIRSS_IGNORE_REGEX', 'Navigation|RecentDeleted|MenuBar|SideBar');
@@ -56,6 +58,9 @@ function plugin_mixirss_action()
 	$page_title_utf8 = mb_convert_encoding($page_title, 'UTF-8', SOURCE_ENCODING);
 	$self  = get_script_uri();
 	$rss_description_utf8 = mb_convert_encoding(htmlspecialchars($rss_description), 'UTF-8', SOURCE_ENCODING);
+
+	// For includenc.php (default: 4)
+	define('PLUGIN_INCLUDE_MAX', EXT_PLUGIN_INCLUDE_MAX);
 
 	// Creating <item>
 	$items = $rdf_li = '';
