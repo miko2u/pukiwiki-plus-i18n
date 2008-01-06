@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: read.inc.php,v 1.8.5 2007/06/09 11:26:00 upk Exp $
+// $Id: read.inc.php,v 1.8.6 2008/01/07 01:55:00 upk Exp $
 //
 // Read plugin: Show a page and InterWiki
 
@@ -28,6 +28,14 @@ function plugin_read_action()
 				header('HTTP/1.0 301 Moved Permanently');
 				header('Location: ' . get_script_uri() . '?' . rawurlencode($realpage));
 				return;
+			} elseif (is_url($realpage)) {
+				header('HTTP/1.0 301 Moved Permanently');
+				header('Location: ' . $realpage);
+				return;
+			} elseif (is_interwiki($realpage)) {
+				header('HTTP/1.0 301 Moved Permanently');
+				$vars['page'] = $realpage;
+				return do_plugin_action('interwiki'); // header('Location');
 			} else { // 存在しない場合、直接編集フォームに飛ばす // To avoid infinite loop
 				header('Location: ' . get_script_uri() . '?cmd=edit&page=' . rawurlencode($realpage));
 				return;
@@ -35,9 +43,11 @@ function plugin_read_action()
 		} elseif (count($realpages) >= 2) {
 			$body = '<p>';
 			$body .= _('This pagename is an alias to') . '<br />';
+			$link = '';
 			foreach ($realpages as $realpage) {
-				$body .= make_pagelink($realpage) . '<br />';
+				$link .= '[[' . $realpage . '>' . $realpage . ']]&br;';
 			}
+			$body .= make_link($link);
 			$body .= '</p>';
 			return array('msg'=>_('Redirect'), 'body'=>$body);
 		}

@@ -1,8 +1,8 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: referer.php,v 1.8.3 2007/06/17 14:17:00 upk Exp $
+// $Id: referer.php,v 1.8.4 2008/01/07 01:53:00 upk Exp $
 // Copyright (C)
-//   2006-2007 PukiWiki Plus! Team
+//   2006-2008 PukiWiki Plus! Team
 //   2003      Originally written by upk
 // License: GPL v2 or (at your option) any later version
 //
@@ -33,7 +33,8 @@ function ref_save($page)
 	global $referer, $use_spam_check;
 
 	// if (PKWK_READONLY || ! $referer || empty($_SERVER['HTTP_REFERER'])) return TRUE;
-	if (auth::check_role('readonly') || ! $referer || empty($_SERVER['HTTP_REFERER'])) return TRUE;
+	// if (auth::check_role('readonly') || ! $referer || empty($_SERVER['HTTP_REFERER'])) return TRUE;
+	if (! $referer || empty($_SERVER['HTTP_REFERER'])) return TRUE;
 
 	$url = $_SERVER['HTTP_REFERER'];
 
@@ -67,7 +68,7 @@ function ref_save($page)
 	$data[$d_url][0] = UTIME;
 	$data[$d_url][2]++;
 
-   $filename = ref_get_filename($page);
+	$filename = ref_get_filename($page);
 	$fp = fopen($filename, 'w');
 	if ($fp === FALSE) return FALSE;
 	set_file_buffer($fp, 0);
@@ -102,6 +103,4 @@ function ref_count($page)
 	unset($data);
 	return $i;
 }
-
-// vim:ts=3
 ?>
