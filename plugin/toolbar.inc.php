@@ -1,7 +1,7 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: toolbar.php,v 0.2.10 2007/07/29 04:41a00 upk Exp $
-// Copyright (C) 2005,2007 PukiWiki Plus! Team
+// $Id: toolbar.php,v 0.2.11 2008/01/07 03:00:00 upk Exp $
+// Copyright (C) 2005,2007-2008 PukiWiki Plus! Team
 // License: GPL v2
 //
 
@@ -11,7 +11,8 @@ function plugin_toolbar_convert()
 	global $function_freeze;
 	global $vars;
 
-	$is_read = (arg_check('read') && is_page($vars['page']));
+	// $is_read = (arg_check('read') && is_page($vars['page']));
+	$is_read = is_page($vars['page']);
 	$is_readonly = auth::check_role('readonly');
 	$is_safemode = auth::check_role('safemode');
 	$is_createpage = auth::is_check_role(PKWK_CREATE_PAGE);
