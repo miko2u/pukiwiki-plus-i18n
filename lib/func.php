@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: func.php,v 1.93.23 2008/01/10 02:51:00 upk Exp $
+// $Id: func.php,v 1.93.24 2008/01/10 02:52:00 upk Exp $
 // Copyright (C)
 //   2005-2008 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
@@ -892,11 +892,11 @@ function get_script_absuri()
 	// Get
 	if (isset($uri)) return $uri;
 
-	if (isset($script) && is_url($script,true) {
+	if (isset($script) && is_url($script,true)) {
 		$uri = $script;
 		return $uri;
 	} else
-	if (isset($script_abs) && is_url($script_abs,true) {
+	if (isset($script_abs) && is_url($script_abs,true)) {
 		$uri = $script_abs;
 		return $uri;
 	}
