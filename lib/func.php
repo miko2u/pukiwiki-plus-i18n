@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: func.php,v 1.93.22 2008/01/05 17:32:00 upk Exp $
+// $Id: func.php,v 1.93.23 2008/01/10 02:51:00 upk Exp $
 // Copyright (C)
 //   2005-2008 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
@@ -892,6 +892,15 @@ function get_script_absuri()
 	// Get
 	if (isset($uri)) return $uri;
 
+	if (isset($script) && is_url($script,true) {
+		$uri = $script;
+		return $uri;
+	} else
+	if (isset($script_abs) && is_url($script_abs,true) {
+		$uri = $script_abs;
+		return $uri;
+	}
+
 	// Set automatically
 	$msg     = 'get_script_absuri() failed: Please set [$script or $script_abs] at INI_FILE manually';
 
@@ -902,27 +911,13 @@ function get_script_absuri()
 	// SCRIPT_NAME が'/'で始まっていない場合(cgiなど) REQUEST_URIを使ってみる
 	$path    = SCRIPT_NAME;
 	if ($path{0} != '/') {
-		$check_base_url = (isset($script_abs)) ? array($script, $script_abs) : array($script);
-
 		if (! isset($_SERVER['REQUEST_URI']) || $_SERVER['REQUEST_URI']{0} != '/') {
-			foreach($check_base_url as $x) {
-				if (is_url($x, true)) {
-					$uri = $x;
-					return $uri;
-				}
-			}
 			die_message($msg);
 		}
 
 		// REQUEST_URIをパースし、path部分だけを取り出す
 		$parse_url = parse_url($uri . $_SERVER['REQUEST_URI']);
 		if (! isset($parse_url['path']) || $parse_url['path']{0} != '/') {
-			foreach($check_base_url as $x) {
-				if (is_url($x, true)) {
-					$uri = $x;
-					return $uri;
-				}
-			}
 			die_message($msg);
 		}
 
