@@ -2,11 +2,10 @@
 /**
  * PukiWiki Plus! ログインプラグイン
  *
- * @copyright	Copyright &copy; 2004-2007, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version	$Id: login.php,v 0.15 2007/07/24 23:11:00 upk Exp $
- * @license	http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
+ * @copyright   Copyright &copy; 2004-2008, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * @version     $Id: login.php,v 0.16 2008/01/05 18:22:00 upk Exp $
+ * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
-
 require_once(LIB_DIR . 'auth.cls.php');
 
 // defined('LOGIN_USE_AUTH_DEFAULT') or define('LOGIN_USE_AUTH_DEFAULT', 1);
@@ -93,7 +92,7 @@ EOD;
 
 function plugin_login_inline()
 {
-	global $script, $_login_msg, $login_api;
+	global $_login_msg, $login_api;
 
 	if (PKWK_READONLY != ROLE_AUTH) return '';
 
@@ -177,10 +176,10 @@ function plugin_login_action()
 
 function login_return_page()
 {
-	global $vars, $script;
+	global $vars;
 
-	$retloc = (isset($vars['page'])) ? $script.'?'.rawurlencode($vars['page']) : $script;
-	header( 'Location: ' . $retloc );
+	$page = (empty($vars['page'])) ? '' : $vars['page'];
+	header( 'Location: ' . get_page_location_uri($page));
 	die();
 }
 

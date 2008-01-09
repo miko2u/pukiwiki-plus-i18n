@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: mixirss.inc.php,v 1.14.10 2007/12/22 17:59:00 upk Exp $
+// $Id: mixirss.inc.php,v 1.14.11 2008/01/06 01:25:00 upk Exp $
 //
 // Publishing RSS feed of RecentChanges
 // Usage: mixirss.inc.php?ver=[0.91|1.0(default)|2.0]
@@ -18,9 +18,10 @@ define('MIXIRSS_LANG', 'ja_JP');
 
 function plugin_mixirss_action()
 {
-	global $vars, $get, $post, $rss_max, $rss_description, $page_title, $whatsnew, $trackback;
+	global $vars, $get, $post, $rss_max, $rss_description, $page_title, $whatsnew, $trackback, $absolute_uri;
 	global $modifier;
 	global $exclude_plugin;
+	global $script;
 
 	$version = isset($vars['ver']) ? $vars['ver'] : '';
 	switch($version){
@@ -55,11 +56,14 @@ function plugin_mixirss_action()
 
 	// Official Main routine ...
 	$page_title_utf8 = mb_convert_encoding($page_title, 'UTF-8', SOURCE_ENCODING);
-	$self  = get_script_uri();
+	$self  = get_script_absuri();
 	$rss_description_utf8 = mb_convert_encoding(htmlspecialchars($rss_description), 'UTF-8', SOURCE_ENCODING);
 
 	// Disable plugin
 	$exclude_plugin[] = 'include';
+
+	$absolute_uri = 1; // get_page_uri
+	$script = $self; // FIXME: convert_html() において、一律 absolute_uri にさせるため
 
 	// Creating <item>
 	$items = $rdf_li = '';
@@ -67,6 +71,7 @@ function plugin_mixirss_action()
 	foreach (array_splice($source, 0, $rss_max) as $line) {
 		list($time, $page) = explode("\t", rtrim($line));
 		$r_page = rawurlencode($page);
+		$url    = get_page_uri($page);
 		$title  = mb_convert_encoding($page, 'UTF-8', SOURCE_ENCODING);
 
 		switch ($version) {
@@ -79,7 +84,7 @@ function plugin_mixirss_action()
 			$items .= <<<EOD
 <item>
  <title>$title</title>
- <link>$self?$r_page</link>
+ <link>$url</link>
 $date
 </item>
 
@@ -88,8 +93,7 @@ EOD;
 
 		case '1.0':
 			// Add <item> into <items>
-//			$rdf_li .= '    <rdf:li rdf:resource="' . $self .
-//				'?' . $r_page . '" />' . "\n";
+//			$rdf_li .= '    <rdf:li rdf:resource="' . $url . '" />' . "\n";
 
 			$date = substr_replace(get_date('Y-m-d\TH:i:sO', $time), ':', -2, 0);
 			$trackback_ping = '';
@@ -112,13 +116,13 @@ EOD;
 						$anchortitle = preg_replace("/[\r\n]/",' ',$anchortitle);
 						$anchortitle = '<![CDATA[' . mb_convert_encoding($anchortitle, 'UTF-8', SOURCE_ENCODING) . '(' . $title . ')' . ']]>';
 						$sharp = '#';
-						$rdf_hx .= '    <rdf:li rdf:resource="' . $self . '?' . $r_page . $sharp . $matches[3] . '" />' . "\n";
+						$rdf_hx .= '    <rdf:li rdf:resource="' . $url . $sharp . $matches[3] . '" />' . "\n";
 						$itemhx .= <<<EOD
-<item rdf:about="$self?$r_page{$sharp}{$matches[3]}">
+<item rdf:about="$url{$sharp}{$matches[3]}">
  <title>{$anchortitle}</title>
- <link>$self?$r_page{$sharp}{$matches[3]}</link>
+ <link>$url{$sharp}{$matches[3]}</link>
  <dc:date>$date</dc:date>
- <dc:identifier>$self?$r_page{$sharp}{$matches[3]}</dc:identifier>
+ <dc:identifier>$url{$sharp}{$matches[3]}</dc:identifier>
 $trackback_ping
 </item>
 
@@ -128,13 +132,13 @@ EOD;
 						$anchortitle = preg_replace("/[\r\n]/",' ',$anchortitle);
 						$anchortitle = '<![CDATA[' . mb_convert_encoding($anchortitle, 'UTF-8', SOURCE_ENCODING) . '(' . $title . ')' . ']]>';
 						$sharp = '#';
-						$rdf_lx .= '    <rdf:li rdf:resource="' . $self . '?' . $r_page . '" />' . "\n";
+						$rdf_lx .= '    <rdf:li rdf:resource="' . $url . '" />' . "\n";
 						$itemlx .= <<<EOD
-<item rdf:about="$self?$r_page">
+<item rdf:about="$url">
  <title>{$anchortitle}</title>
- <link>$self?$r_page</link>
+ <link>$url</link>
  <dc:date>$date</dc:date>
- <dc:identifier>$self?$r_page</dc:identifier>
+ <dc:identifier>$url</dc:identifier>
 $trackback_ping
 </item>
 
@@ -149,14 +153,14 @@ EOD;
 					$items .= $itemlx;
 				} else {
 					// default
-					$rdf_li .= '    <rdf:li rdf:resource="' . $self . '?' . $r_page . '" />' . "\n";
+					$rdf_li .= '    <rdf:li rdf:resource="' . $url . '" />' . "\n";
 					$items .= <<<EOD
-<item rdf:about="$self?$r_page">
+<item rdf:about="$url">
  <title>$title</title>
- <link>$self?$r_page</link>
+ <link>$url</link>
 $description
  <dc:date>$date</dc:date>
- <dc:identifier>$self?$r_page</dc:identifier>
+ <dc:identifier>$url</dc:identifier>
 $trackback_ping
 </item>
 
@@ -171,7 +175,7 @@ EOD;
 				$description = mb_strimwidth(preg_replace("/[\r\n]/",' ',$description),0,MIXIRSS_DESCRIPTION_LENGTH,'...');
 				$description = ' <description><![CDATA[' . mb_convert_encoding($description,'UTF-8',SOURCE_ENCODING) . ']]></description>';
 //miko added
-				$rdf_li .= '    <rdf:li rdf:resource="' . $self . '?' . $r_page . '" />' . "\n";
+				$rdf_li .= '    <rdf:li rdf:resource="' . $url . '" />' . "\n";
 				global $newtitle, $newbase;
 				if (isset($newbase) && $newbase != '') {
 					$anchortitle = $newtitle . ' (' . $title . ')';
@@ -180,12 +184,12 @@ EOD;
 					$anchortitle = $title;
 				}
 				$items .= <<<EOD
-<item rdf:about="$self?$r_page">
+<item rdf:about="$url">
  <title>$anchortitle</title>
- <link>$self?$r_page</link>
+ <link>$url</link>
 $description
  <dc:date>$date</dc:date>
- <dc:identifier>$self?$r_page</dc:identifier>
+ <dc:identifier>$url</dc:identifier>
 $trackback_ping
 </item>
 
@@ -200,7 +204,7 @@ EOD;
 	header('Content-type: application/xml');
 	print '<?xml version="1.0" encoding="UTF-8"?>' . "\n\n";
 
-	$r_whatsnew = rawurlencode($whatsnew);
+	$url_whatsnew = get_page_uri($whatsnew);
 	$html = '';
 	switch ($version) {
 	case '0.91':
@@ -213,7 +217,7 @@ EOD;
 <rss version="$version">
  <channel>
   <title><![CDATA[$page_title_utf8]]></title>
-  <link>$self?$r_whatsnew</link>
+  <link>$url_whatsnew</link>
   <description><![CDATA[$rss_description_utf8]]></description>
   <language>ja</language>
 
@@ -233,9 +237,9 @@ $xmlns_trackback
   xmlns="http://purl.org/rss/1.0/"
   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
   xml:lang="ja">
- <channel rdf:about="$self?$r_whatsnew">
+ <channel rdf:about="$url_whatsnew">
   <title><![CDATA[$page_title_utf8]]></title>
-  <link>$self?$r_whatsnew</link>
+  <link>$url_whatsnew</link>
   <description><![CDATA[$rss_description_utf8]]></description>
   <items>
    <rdf:Seq>

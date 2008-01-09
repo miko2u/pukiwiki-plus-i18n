@@ -53,7 +53,7 @@ function plugin_ajaxrss_output_xml()
 
 	$lang = LANG;
 	$page_title_utf8 = mb_convert_encoding($page_title, 'UTF-8', SOURCE_ENCODING);
-	$self = get_script_uri();
+	$self = get_script_absuri();
 	$version = '0.91';
 
 	$items = '';

@@ -1,8 +1,8 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: calendar_viewer.inc.php,v 1.36.5 2007/05/12 14:24:52 miko Exp $
+// $Id: calendar_viewer.inc.php,v 1.36.6 2008/01/05 18:12:00 upk Exp $
 // Copyright (C)
-//   2005-2007 PukiWiki Plus! Team
+//   2005-2008 PukiWiki Plus! Team
 //   2002-2005, 2007 PukiWiki Developers Team
 // License: GPL v2 or (at your option) any later version
 //
@@ -53,7 +53,7 @@ define('PLUGIN_CALENDAR_VIEWER_USAGE',
 
 function plugin_calendar_viewer_convert()
 {
-	global $vars, $get, $post, $script, $weeklabels;
+	global $vars, $get, $post, $weeklabels;
 //	global $_msg_calendar_viewer_right, $_msg_calendar_viewer_left;
 //	global $_msg_calendar_viewer_restrict, $_err_calendar_viewer_param2;
 
@@ -180,8 +180,6 @@ function plugin_calendar_viewer_convert()
 			$body = str_replace('$1', $page, $_msg_calendar_viewer_restrict);
 		}
 
-		$r_page = rawurlencode($page);
-
 		if (PLUGIN_CALENDAR_VIEWER_DATE_FORMAT !== FALSE) {
 			$time = strtotime(basepagename($page)); // $date_sep must be assumed '-' or ''!
 			if ($time == -1 || $time == FALSE) {
@@ -200,9 +198,9 @@ function plugin_calendar_viewer_convert()
 
 		// if (PKWK_READONLY) {
 		if (auth::check_role('readonly')) {
-			$link   = $script . '?' . $r_page;
+			$link   = get_page_uri($page);
 		} else {
-			$link   = $script . '?cmd=edit&amp;page=' . $r_page;
+			$link   = get_resolve_uri('edit',$page);
 		}
 		$link   = '<a href="' . $link . '">' . $s_page . '</a>';
 
@@ -271,7 +269,7 @@ function plugin_calendar_viewer_convert()
 	if ($left_YM != '' || $right_YM != '') {
 		$s_date_sep = htmlspecialchars($date_sep);
 		$left_link = $right_link = '';
-		$link = $script . '?plugin=calendar_viewer&amp;mode=' . $mode .
+		$link = get_resolve_uri('calendar_viewer').'&amp;mode=' . $mode .
 			'&amp;file=' . $enc_pagename . '&amp;date_sep=' . $s_date_sep . '&amp;';
 		if ($left_YM != '')
 			$left_link = '<a href="' . $link .
@@ -294,7 +292,7 @@ function plugin_calendar_viewer_convert()
 
 function plugin_calendar_viewer_action()
 {
-	global $vars, $get, $post, $script;
+	global $vars, $get, $post;
 
 	$date_sep = '-';
 

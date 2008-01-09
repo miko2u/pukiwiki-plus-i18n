@@ -1,8 +1,8 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: topicpath.inc.php,v 1.7.5 2007/04/22 18:09:00 upk Exp $
+// $Id: topicpath.inc.php,v 1.7.6 2008/01/05 18:54:00 upk Exp $
 // Copyright (C)
-//   2004-2007 PukiWiki Plus! Team
+//   2004-2008 PukiWiki Plus! Team
 //   2004-2005 PukiWiki Developers Team
 // License: GPL (any version)
 //
@@ -28,7 +28,7 @@ function plugin_topicpath_convert()
 
 function plugin_topicpath_inline()
 {
-	global $script, $vars, $defaultpage, $topicpath;
+	global $vars, $defaultpage, $topicpath;
 
 	if (isset($topicpath) && $topicpath == false) return '';
 
@@ -47,7 +47,6 @@ function plugin_topicpath_inline()
 	$topic_path = array();
 	while (! empty($parts)) {
 		$_landing = join('/', $parts);
-		$landing  = rawurlencode($_landing);
 		$element = htmlspecialchars(array_pop($parts));
 		if (! $b_link)  {
 			// This page ($_landing == $page)
@@ -59,7 +58,7 @@ function plugin_topicpath_inline()
 			$topic_path[] = $element;
 		} else {
 			// Page exists or not exists
-			$topic_path[] = '<a href="' . $script . '?' . $landing . '">' .
+			$topic_path[] = '<a href="' . get_page_uri($_landing) . '">' .
 				$element . '</a>';
 		}
 	}

@@ -9,7 +9,7 @@
  *   http://masui.net/pukiwiki/ masui@masui.net
  *
  * MODIFICATION BY:
- * (C) 2006 PukiWiki Plus! Developers Team
+ * (C) 2006,2008 PukiWiki Plus! Developers Team
  *
  * This software is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -332,11 +332,11 @@ function bliki_convert_html($entries, $page_num)
 
 function bliki_get_more($page)
 {
-	global $script, $_bliki_msg;
+	global $_bliki_msg;
 
 	return sprintf($_bliki_msg['msg_more'],
 		htmlspecialchars($page),
-		$script . '?cmd=read&page=' . rawurlencode($page) . '#more' );
+		get_page_uri($page) . '#more' );
 }
 
 ?>

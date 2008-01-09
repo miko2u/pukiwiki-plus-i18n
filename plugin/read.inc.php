@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: read.inc.php,v 1.8.6 2008/01/07 01:55:00 upk Exp $
+// $Id: read.inc.php,v 1.8.7 2008/01/07 02:46:00 upk Exp $
 //
 // Read plugin: Show a page and InterWiki
 
@@ -26,7 +26,7 @@ function plugin_read_action()
 			$realpage = $realpages[0];
 			if (is_page($realpage)) {
 				header('HTTP/1.0 301 Moved Permanently');
-				header('Location: ' . get_script_uri() . '?' . rawurlencode($realpage));
+				header('Location: ' . get_page_location_uri($realpage));
 				return;
 			} elseif (is_url($realpage)) {
 				header('HTTP/1.0 301 Moved Permanently');
@@ -37,7 +37,7 @@ function plugin_read_action()
 				$vars['page'] = $realpage;
 				return do_plugin_action('interwiki'); // header('Location');
 			} else { // 存在しない場合、直接編集フォームに飛ばす // To avoid infinite loop
-				header('Location: ' . get_script_uri() . '?cmd=edit&page=' . rawurlencode($realpage));
+				header('Location: ' . get_location_uri('edit',$realpage));
 				return;
 			}
 		} elseif (count($realpages) >= 2) {

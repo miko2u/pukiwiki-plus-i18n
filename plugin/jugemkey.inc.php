@@ -2,9 +2,9 @@
 /**
  * PukiWiki Plus! JugemKey 認証処理
  *
- * @copyright   Copyright &copy; 2006-2007, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * @copyright   Copyright &copy; 2006-2008, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: jugemkey.inc.php,v 0.10 2007/08/19 02:09:00 upk Exp $
+ * @version     $Id: jugemkey.inc.php,v 0.11 2008/01/05 18:20:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'auth_jugemkey.cls.php');
@@ -107,13 +107,13 @@ function plugin_jugemkey_inline()
 
 function plugin_jugemkey_action()
 {
-	global $script,$vars,$auth_api,$_jugemkey_msg;
+	global $vars,$auth_api,$_jugemkey_msg;
 
 	if (! $auth_api['jugemkey']['use']) return '';
 	if (! function_exists('pkwk_session_start')) return '';
 	if (pkwk_session_start() == 0) return '';
 
-	$r_page = (empty($vars['page'])) ? '' : rawurlencode($vars['page']);
+	$page = (empty($vars['page'])) ? '' : $vars['page'];
 
 	$die_message = (PLUS_PROTECT_MODE) ? 'die_msg' : 'die_message';
 
@@ -128,7 +128,7 @@ function plugin_jugemkey_action()
 	// LOGOUT
 	if (isset($vars['logout'])) {
 		$obj->auth_session_unset();
-		header('Location: '.$script.'?'.$r_page);
+		header('Location: '. get_page_location_uri($page));
 		die();
 	}
 
@@ -153,15 +153,15 @@ function plugin_jugemkey_action()
 	}
 
 	$obj->auth_session_put();
-	header('Location: '.$script.'?'.$r_page);
+	header('Location: '. get_page_location_uri($page));
 	die();
 }
 
 function plugin_jugemkey_jump_url($inline=0)
 {
-	global $vars,$script;
-	$r_page = (empty($vars['page'])) ? '' : '&page='.rawurlencode($vars['page']);
-	$callback_url = $script.'?plugin=jugemkey'.$r_page;
+	global $vars;
+	$page = (empty($vars['page'])) ? '' : $vars['page'];
+	$callback_url = get_location_uri('jugemkey',$page);
 	$obj = new auth_jugemkey();
 	$url = $obj->make_login_link($callback_url);
 	return ($inline) ? $url : str_replace('&amp;','&',$url);
@@ -169,14 +169,14 @@ function plugin_jugemkey_jump_url($inline=0)
 
 function plugin_jugemkey_get_user_name()
 {
-	global $script,$auth_api;
+	global $auth_api;
         if (! $auth_api['jugemkey']['use']) return array('role'=>ROLE_GUEST,'nick'=>'');
 
 	$obj = new auth_jugemkey();
 	$login = $obj->auth_session_get();
 	// FIXME
 	// Because user information can be acquired by token only at online, it doesn't mount. 
-	// $info = (empty($login['token'])) ? '' : $script.'?plugin=jugemkey&token='.$login['token'].'&userinfo';
+	// $info = (empty($login['token'])) ? '' : get_resolve_uri('jugemkey','','token='.$login['token'].'%amp;userinfo');
 	// Only, it leaves it only as a location of attestation by JugemKey.
 	$info = 'http://jugemkey.jp/';
 	if (! empty($login['title'])) return array('role'=>ROLE_AUTH_JUGEMKEY,'nick'=>$login['title'],'profile'=>$info,'key'=>$login['title']);

@@ -1,7 +1,7 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: ls2.inc.php,v 1.25.5 2006/11/04 03:02:00 upk Exp $
+// $Id: ls2.inc.php,v 1.25.6 2008/01/05 18:24:00 upk Exp $
 //
 // List plugin 2
 
@@ -115,17 +115,15 @@ function plugin_ls2_show_lists($prefix, & $params)
 
 function plugin_ls2_get_headings($page, & $params, $level, $include = FALSE)
 {
-	global $script;
 	static $_ls2_anchor = 0;
 
 	// ページが未表示のとき
 	$is_done = (isset($params["page_$page"]) && $params["page_$page"] > 0);
 	if (! $is_done) $params["page_$page"] = ++$_ls2_anchor;
 
-	$r_page = rawurlencode($page);
 	$s_page = htmlspecialchars($page);
 	$title  = $s_page . ' ' . get_pg_passage($page, FALSE);
-	$href   = $script . '?cmd=read&amp;page=' . $r_page;
+	$href   = get_page_uri($page);
 
 	plugin_ls2_list_push($params, $level);
 	$ret = $include ? '<li>include ' : '<li>';

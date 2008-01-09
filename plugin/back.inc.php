@@ -1,6 +1,7 @@
 <?php
-// $Id: back.inc.php,v 1.9.2 2006/01/11 23:52:00 upk Exp $
+// $Id: back.inc.php,v 1.9.3 2008/01/05 18:05:00 upk Exp $
 // Copyright (C)
+//   2008 PukiWiki Plus! Developers Team
 //   2003-2004 PukiWiki Developers Team
 //   2002,2006 Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
 //
@@ -18,8 +19,6 @@ define('PLUGIN_BACK_ALLOW_JAVASCRIPT', TRUE); // TRUE(Compat), FALSE, PKWK_ALLOW
 define('PLUGIN_BACK_USAGE', '#back([text],[center|left|right][,0(no hr)[,Page-or-URI-to-back]])');
 function plugin_back_convert()
 {
-	global $script;
-
 	$_msg_back_word = _('Back');
 	if (func_num_args() > 4) return PLUGIN_BACK_USAGE;
 	list($word, $align, $hr, $href) = array_pad(func_get_args(), 4, '');
@@ -47,9 +46,8 @@ function plugin_back_convert()
 				$href = rawurlencode($href);
 			} else {
 				$array = anchor_explode($href);
-				$array[0] = rawurlencode($array[0]);
 				$array[1] = ($array[1] != '') ? '#' . rawurlencode($array[1]) : '';
-				$href = $script . '?' . $array[0] .  $array[1];
+				$href = get_page_uri($array[0]) .  $array[1];
 				$link = is_page($array[0]);
 			}
 		} else {

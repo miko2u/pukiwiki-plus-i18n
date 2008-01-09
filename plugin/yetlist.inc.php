@@ -1,8 +1,8 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: yetlist.inc.php,v 1.28.3 2006/11/04 18:32:00 upk Exp $
+// $Id: yetlist.inc.php,v 1.28.4 2008/01/05 18:57:00 upk Exp $
 // Copyright (C)
-//   2005-2006 PukiWiki Plus! Team
+//   2005-2006,2008 PukiWiki Plus! Team
 //   2001-2006 PukiWiki Developers Team
 // License: GPL v2 or (at your option) any later version
 //
@@ -28,7 +28,6 @@ function plugin_yetlist_action()
 	$empty = TRUE;
 
 	// Load .ref files and Output
-	$script      = get_script_uri();
 	$refer_regex = '/' . $non_list . '|^' . preg_quote($whatsdeleted, '/') . '$/S';
 	asort($pages, SORT_STRING);
 	foreach ($pages as $file=>$page) {
@@ -48,7 +47,7 @@ function plugin_yetlist_action()
 			$link_refs = array();
 			foreach ($refer as $_refer) {
 				$r_refer = rawurlencode($_refer);
-				$link_refs[] = '<a href="' . $script . '?' . $r_refer . '">' .
+				$link_refs[] = '<a href="' . get_page_uri($_refer) . '">' .
 					htmlspecialchars($_refer) . '</a>';
 			}
 			$link_ref = join(' ', $link_refs);
@@ -61,9 +60,8 @@ function plugin_yetlist_action()
 			} else {
 				// Dangling link
 				$href = '<span class="noexists">' . $s_page . '<a href="' .
-					$script . '?cmd=edit&amp;page=' . rawurlencode($page) .
-					'&amp;refer=' . $r_refer . '">' . $_symbol_noexists .
-					'</a></span>';
+					get_resolve_uri('edit',$page,'refer='.$r_refer) . '">' .
+					$_symbol_noexists . '</a></span>';
 			}
 			$retval['body'] .= '<li>' . $href . ' <em>(' . $link_ref . ')</em></li>' . "\n";
 		}

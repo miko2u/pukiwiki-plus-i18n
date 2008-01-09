@@ -1,5 +1,5 @@
 <?php
-// $Id: newpage_subdir.inc.php,v 1.2.2 2007/04/27 01:26:00 upk Exp $
+// $Id: newpage_subdir.inc.php,v 1.2.3 2008/01/05 18:36:00 upk Exp $
 // @based_on newpage.inc.php
 // @based_on ls2.inc.php
 // @thanks to panda (auther of newpage.inc.php/ls2.inc.php)
@@ -7,7 +7,7 @@
 
 function build_directory_list($roots, $option) {
 
-	global $WikiName,$BracketName,$script;
+	global $WikiName,$BracketName;
 	
 	$existingPages = auth::get_existpages();
 	foreach($roots as $root) {
@@ -32,7 +32,7 @@ function build_directory_list($roots, $option) {
 
 			$warnings[] = 
 				"<font color=\"red\">" . sprintf( _("#%s doesn't have the corresponding page. "),$root) . "</font>" .
-				"(<a href=\"$script?" . rawurlencode($root) . "\">" . _("making") . "</a>)<br />\n";
+				"(<a href=\"" . get_page_uri($root) . "\">" . _("making") . "</a>)<br />\n";
 		}
 	}
 	$list['directory'] = array_unique($list['directory']);
@@ -147,7 +147,7 @@ function plugin_newpage_subdir_convert()
 
 function plugin_newpage_subdir_action()
 {
-	global $script, $vars;
+	global $vars;
 
         if (auth::check_role('readonly')) return '';
         if (auth::is_check_role(PKWK_CREATE_PAGE)) return '';
@@ -163,8 +163,8 @@ function plugin_newpage_subdir_action()
 		$action_messages['body'] = print_form_string(build_directory_list($roots));
 		return $action_messages;
 	}
-	
-	header('Location: '.$script.'?'.rawurlencode($vars['directory'].$vars['page']));
+
+	header('Location: '.get_page_location_uri($vars['directory'].$vars['page']));
 	die();
 }
 ?>

@@ -1,7 +1,7 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
 //
-// $Id: paint.inc.php,v 1.18.2 2006/01/11 23:37:00 upk Exp $
+// $Id: paint.inc.php,v 1.18.3 2008/01/05 18:43:00 upk Exp $
 //
 // Paint plugin
 
@@ -100,13 +100,14 @@ function plugin_paint_action()
 	else
 	{
 		$message = '';
-		$r_refer = $s_refer = '';
+		$refer = $s_refer = '';
 		if (array_key_exists('refer',$vars))
 		{
-			$r_refer = rawurlencode($vars['refer']);
+			$refer = $vars['refer'];
 			$s_refer = htmlspecialchars($vars['refer']);
 		}
-		$link = "<p><a href=\"$script?$r_refer\">$s_refer</a></p>";;
+		$url = get_page_uri($refer);
+		$link = "<p><a href=\"$url\">$s_refer</a></p>";;
 
 		$w = PAINT_APPLET_WIDTH;
 		$h = PAINT_APPLET_HEIGHT;
@@ -158,7 +159,7 @@ function plugin_paint_action()
  <param name="param4" value="max_file_size=1000000" />
  <param name="param5" value="paint_no=$f_no" />
  <param name="enctype" value="multipart/form-data" />
- <param name="return.URL" value="$script?$r_refer" />
+ <param name="return.URL" value="$url" />
  </applet>
  </div>
 EOD;

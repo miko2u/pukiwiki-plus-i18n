@@ -1,5 +1,5 @@
 <?php
-// $Id: calendar2.inc.php,v 1.23.3 2005/05/01 07:38:57 miko Exp $
+// $Id: calendar2.inc.php,v 1.23.4 2008/01/05 18:11:00 upk Exp $
 //
 // Calendar2 plugin
 //
@@ -88,7 +88,7 @@ function plugin_calendar2_convert()
 EOD;
 
 	if ($prefix) $ret .= "\n" .
-		'      <br />[<a href="' . $script . '?' . $r_base . '">' . $s_base . '</a>]';
+		'      <br />[<a href="' . get_page_uri($base) . '">' . $s_base . '</a>]';
 
 	$ret .= "\n" .
 		'     </td>' . "\n" .
@@ -129,7 +129,7 @@ EOD;
 		}
 
 		if (is_page($page)) {
-			$link = '<a href="' . $script . '?' . $r_page . '" title="' . $s_page .
+			$link = '<a href="' . get_page_uri($page) . '" title="' . $s_page .
 				'"><strong>' . $day . '</strong></a>';
 		} else {
 			// if (PKWK_READONLY) {

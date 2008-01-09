@@ -1,8 +1,8 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: backup.inc.php,v 1.27.18 2007/07/23 17:04:00 upk Exp $
+// $Id: backup.inc.php,v 1.27.19 2008/01/05 18:07:00 upk Exp $
 // Copyright (C)
-//   2005-2007 PukiWiki Plus! Team
+//   2005-2008 PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
 //   2001-2002 Originally written by yu-ji
 // License: GPL v2 or (at your option) any later version
@@ -15,7 +15,7 @@ define('PLUGIN_BACKUP_DISABLE_BACKUP_RENDERING', auth::check_role('safemode') ||
 
 function plugin_backup_action()
 {
-	global $vars, $do_backup, $hr;
+	global $vars, $do_backup, $hr, $script;
 //	global $_msg_backuplist, $_msg_diff, $_msg_nowdiff, $_msg_source, $_msg_backup;
 //	global $_msg_view, $_msg_goto, $_msg_deleted;
 //	global $_msg_visualdiff;
@@ -59,8 +59,6 @@ $_title_backuplist     = _('Backup list');
 	$s_age  = (isset($vars['age']) && is_numeric($vars['age'])) ? $vars['age'] : 0;
 	if ($s_age <= 0) return array( 'msg'=>$_title_pagebackuplist, 'body'=>plugin_backup_get_list($page));
 
-	$script = get_script_uri();
-
 	$body  = '<ul>' . "\n";
 	$body .= ' <li><a href="' . $script . '?cmd=backup">' . $_msg_backuplist . '</a></li>' ."\n";
 
@@ -94,7 +92,7 @@ $_title_backuplist     = _('Backup list');
 
 	if ($is_page) {
 		$body .= ' <li>' . str_replace('$1',
-			'<a href="' . $script . '?' . $r_page . '">' . $s_page . '</a>',
+			'<a href="' . get_page_uri($page) . '">' . $s_page . '</a>',
 			$_msg_goto) . "\n";
 	} else {
 		$body .= ' <li>' . str_replace('$1', $s_page, $_msg_deleted) . "\n";
@@ -174,7 +172,7 @@ $_title_backuplist     = _('Backup list');
 // Delete backup
 function plugin_backup_delete($page)
 {
-	global $vars;
+	global $vars,$script;
 //	global $_title_backup_delete, $_title_pagebackuplist, $_msg_backup_deleted;
 //	global $_msg_backup_adminpass, $_btn_delete, $_msg_invalidpass;
 
@@ -211,7 +209,6 @@ $_msg_invalidpass = _('Invalid password.');
 		}
 	}
 
-	$script = get_script_uri();
 	$s_page = htmlspecialchars($page);
 	$body .= <<<EOD
 <p>$_msg_backup_adminpass</p>
@@ -248,6 +245,7 @@ EOD;
 
 function plugin_backup_get_list($page)
 {
+	global $script;
 //	global $_msg_backuplist, $_msg_diff, $_msg_nowdiff, $_msg_source, $_msg_nobackup;
 //	global $_title_backup_delete;
 
@@ -257,8 +255,6 @@ $_msg_diff             = _('diff');
 $_msg_nowdiff          = _('diff current');
 $_msg_source           = _('source');
 $_title_backup_delete  = _('Deleting backup of $1');
-
-	$script = get_script_uri();
 
 	$r_page = rawurlencode($page);
 	$s_page = htmlspecialchars($page);
@@ -352,7 +348,7 @@ function plugin_backup_visualdiff($str)
 // Plus! Extend - Create Combobox for Backup
 function plugin_backup_convert()
 {
-	global $vars;
+	global $vars, $script;
 //	global $_msg_backuplist, $_msg_diff, $_msg_nowdiff, $_msg_source, $_msg_nobackup;
 //	global $_title_backup_delete;
 
@@ -362,8 +358,6 @@ $_msg_nowdiff          = _('diff current');
 $_msg_source           = _('source');
 $_msg_nobackup         = _('There are no backup(s) of $1.');
 $_title_backup_delete  = _('Deleting backup of $1');
-
-	$script = get_script_uri();
 
 	// Get arguments
 	$with_label = TRUE;
@@ -408,11 +402,11 @@ EOD;
 	$backups = _backup_file_exists($page) ? get_backup($page) : array();
 	if (count($backups) == 0)
 	{
-		$retval[1] .= '<option value="' . $script . '?' . $r_page . '" selected="selected">' . _('->') . " $date(No.1)</option>\n";
+		$retval[1] .= '<option value="' . get_page_uri($page) . '" selected="selected">' . _('->') . " $date(No.1)</option>\n";
 		return join('',$retval);
 	}
 	$maxcnt = count($backups) + 1;
-	$retval[1] .= '<option value="' . $script . '?' . $r_page . '" selected="selected">' . _('->') . " $date(No.$maxcnt)</option>\n";
+	$retval[1] .= '<option value="' . get_page_uri($page) . '" selected="selected">' . _('->') . " $date(No.$maxcnt)</option>\n";
 	$backups = array_reverse($backups, True);
 	foreach ($backups as $age=>$data) {
 		$time = (isset($data['real'])) ? $data['real'] : $data['time'];

@@ -2,12 +2,12 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: cloudwalk.skin.php,v 1.1.11 2007/07/16 23:15:00 upk Exp $
+// $Id: cloudwalk.skin.php,v 1.1.12 2008/01/05 18:58:00 upk Exp $
 // Original is ari-
 //
 
 // 使用するスタイル
-$irid_style_name = "cloudwalk";
+$irid_style_name = 'cloudwalk';
 
 // Prohibit direct access
 if (! defined('UI_LANG')) die('UI_LANG is not set');
@@ -149,7 +149,7 @@ Link: <?php echo $related ?>
 <h2>編集操作</h2>
 <ul>
 <?php if ($is_page) { ?>
-	<li class="pa_reload"><a href="<?php echo "$script?$r_page" ?>">リロード</a></li>
+	<li class="pa_reload"><a href="<?php echo $link_reload ?>">リロード</a></li>
 	<li class="pa_newpage"><a href="<?php echo "$script?plugin=newpage&amp;refer=$r_page" ?>">新規</a></li>
 	<li class="pa_edit"><a href="<?php echo $link_edit ?>">編集</a></li>
 <?php   if ($is_read and $function_freeze) { ?>

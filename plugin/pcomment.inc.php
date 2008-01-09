@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: pcomment.inc.php,v 1.44.17 2007/07/24 23:11:00 upk Exp $
+// $Id: pcomment.inc.php,v 1.44.18 2008/01/05 18:44:00 upk Exp $
 //
 // pcomment plugin - Show/Insert comments into specified (another) page
 //
@@ -79,13 +79,13 @@ function plugin_pcomment_action()
 	}
 
 	pkwk_headers_sent();
-	header('Location: ' . get_script_uri() . '?' . rawurlencode($refer));
+	header('Location: ' . get_page_location_uri($refer));
 	exit;
 }
 
 function plugin_pcomment_convert()
 {
-	global $vars;
+	global $vars, $script;
 //	global $_pcmt_messages;
 	$_pcmt_messages = array(
 		'btn_name'       => _('Name: '),
@@ -107,7 +107,7 @@ function plugin_pcomment_convert()
 	);
 
 	foreach(func_get_args() as $arg)
-		check_plugin_option($arg, &$params);
+		check_plugin_option($arg, $params);
 
 	$vars_page = isset($vars['page']) ? $vars['page'] : '';
 	$page  = (isset($params['_args'][0]) && $params['_args'][0] != '') ? $params['_args'][0] :
@@ -159,7 +159,7 @@ function plugin_pcomment_convert()
 		$s_nodate = htmlspecialchars($params['nodate']);
 		$helptags = edit_form_assistant();
 
-		$form_start = '<form action="' . get_script_uri() . '" method="post">' . "\n";
+		$form_start = '<form action="' . $script . '" method="post">' . "\n";
 		$form = <<<EOD
   <div class="pcommentform" onmouseup="pukiwiki_pos()" onkeyup="pukiwiki_pos()">
   <input type="hidden" name="digest" value="$digest" />

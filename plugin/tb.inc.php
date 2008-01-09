@@ -126,7 +126,7 @@ function plugin_tb_save($url, $tb_id)
 	if (PLUGIN_TB_SITE_CHECK === TRUE) {
 		$result = http_request($url);
 		if ($result['rc'] !== 200) plugin_tb_return(PLUGIN_TB_ERROR, 'URL is fictitious.');
-		$urlbase = get_script_uri();
+		$urlbase = get_script_absuri();
 		$matches = array();
 		if (preg_match_all('#' . preg_quote($urlbase, '#') . '#i', $result['data'], $matches) == 0) {
 			honeypot_write();
@@ -218,7 +218,7 @@ function plugin_tb_return($rc, $msg = '')
 // Show pings for the page via RSS (?__mode=rss)
 function plugin_tb_mode_rss($tb_id)
 {
-	global $script, $vars, $entity_pattern, $language;
+	global $vars, $entity_pattern, $language;
 
 	$page = tb_id2page($tb_id);
 	if ($page === FALSE) return FALSE;
@@ -240,7 +240,7 @@ EOD;
 	}
 
 	$title = htmlspecialchars($page);
-	$link  = $script . '?' . rawurlencode($page);
+	$link  = get_page_absuri($page);
 	$vars['page'] = $page;
 	$excerpt = strip_htmltag(convert_html(get_source($page)));
 	$excerpt = preg_replace("/&$entity_pattern;/", '', $excerpt);
@@ -272,7 +272,7 @@ EOD;
 // Show pings for the page via XHTML (?__mode=view)
 function plugin_tb_mode_view($tb_id)
 {
-	global $script, $vars;
+	global $vars;
 
 	$page = tb_id2page($tb_id);
 	if ($page === FALSE) return FALSE;

@@ -442,7 +442,7 @@ function file_write($dir, $page, $str, $notimestamp = FALSE)
 			if ($notify_diff_only) $str = preg_replace('/^[^-+].*\n/m', '', $str);
 			$summary['ACTION'] = 'Page update';
 			$summary['PAGE']   = & $page;
-			$summary['URI']    = get_script_uri() . '?' . rawurlencode($page);
+			$summary['URI']    = get_page_absuri($page);
 			$summary['USER_AGENT']  = TRUE;
 			$summary['REMOTE_ADDR'] = TRUE;
 			pkwk_mail_notify($notify_subject, $str, $summary);

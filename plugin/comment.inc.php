@@ -1,8 +1,8 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: comment.inc.php,v 1.36.19 2007/07/24 23:11:00 upk Exp $
+// $Id: comment.inc.php,v 1.36.20 2008/01/05 18:13:00 upk Exp $
 // Copyright (C)
-//   2005-2007 PukiWiki Plus! Team
+//   2005-2008 PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
 //   2001-2002 Originally written by yu-ji
 // License: GPL v2 or (at your option) any later version
@@ -46,7 +46,7 @@ function plugin_comment_action()
 
 function plugin_comment_write()
 {
-	global $script, $vars, $now;
+	global $vars, $now;
 	global $_no_name;
 //	global $_msg_comment_collided, $_title_comment_collided, $_title_updated;
 	$_title_updated = _("$1 was updated");
@@ -115,7 +115,7 @@ function plugin_comment_write()
 	$retvars['body'] = $body;
 
 	if ($vars['refpage']) {
-		header("Location: $script?".rawurlencode($vars['refpage']));
+		header('Location: ' . get_page_location_uri($vars['refpage']));
 		exit;
 	}
 
@@ -150,7 +150,7 @@ function plugin_comment_honeypot()
 
 function plugin_comment_convert()
 {
-	global $vars, $digest;	//, $_btn_comment, $_btn_name, $_msg_comment;
+	global $vars, $digest, $script;	//, $_btn_comment, $_btn_name, $_msg_comment;
 	static $numbers = array();
 	static $all_numbers = 0;
 	static $comment_cols = PLUGIN_COMMENT_SIZE_MSG;
@@ -192,7 +192,6 @@ function plugin_comment_convert()
 		(in_array('below', $options) ? '0' : PLUGIN_COMMENT_DIRECTION_DEFAULT);
 	$refpage = '';
 
-	$script = get_script_uri();
 	$s_page = htmlspecialchars($vars['page']);
 
 	$ticket = md5(MUTIME);

@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: include.inc.php,v 1.21.3 2005/03/09 13:26:43 miko Exp $
+// $Id: include.inc.php,v 1.21.4 2008/01/05 18:18:00 upk Exp $
 //
 // Include-once plugin
 
@@ -42,10 +42,10 @@
 // ----
 
 // Default value of 'title|notitle' option
-define('PLUGIN_INCLUDE_WITH_TITLE', TRUE);	// Default: TRUE(title)
+defined('PLUGIN_INCLUDE_WITH_TITLE') or define('PLUGIN_INCLUDE_WITH_TITLE', TRUE);	// Default: TRUE(title)
 
 // Max pages allowed to be included at a time
-define('PLUGIN_INCLUDE_MAX', 4);
+defined('PLUGIN_INCLUDE_MAX') or define('PLUGIN_INCLUDE_MAX', 4);
 
 // ----
 define('PLUGIN_INCLUDE_USAGE', '#include(): Usage: (a-page-name-you-want-to-include[,title|,notitle])');
@@ -81,7 +81,7 @@ function plugin_include_convert()
 
 	$s_page = htmlspecialchars($page);
 	$r_page = rawurlencode($page);
-	$link = '<a href="' . $script . '?' . $r_page . '">' . $s_page . '</a>'; // Read link
+	$link = '<a href="' . get_page_uri($page) . '">' . $s_page . '</a>'; // Read link
 
 	// I'm stuffed
 	if (isset($included[$page])) {

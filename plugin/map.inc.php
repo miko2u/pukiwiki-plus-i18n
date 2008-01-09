@@ -1,7 +1,9 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: map.inc.php,v 1.17.2 2007/05/12 09:17:14 miko Exp $
-// Copyright (C) 2002-2005, 2007 PukiWiki Developers Team
+// $Id: map.inc.php,v 1.17.3 2008/01/05 23:13:00 upk Exp $
+// Copyright (C)
+//   2008 PukiWiki Plus! Developers Team
+//   2002-2005, 2007 PukiWiki Developers Team
 // License: GPL v2 or (at your option) any later version
 //
 // Relation map plugin
@@ -111,11 +113,10 @@ class MapNode
 
 	function MapNode($page, $reverse = FALSE)
 	{
-		global $non_list;
-		static $script, $_hide_pattern, $id = 0;
+		global $non_list, $script;
+		static $_hide_pattern, $id = 0;
 
-		if (! isset($script)) {
-			$script = get_script_uri();
+		if (! isset($_hide_pattern)) {
 			$_hide_pattern = '/' . $non_list . '/';
 		}
 

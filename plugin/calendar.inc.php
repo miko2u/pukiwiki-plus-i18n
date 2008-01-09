@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: calendar.inc.php,v 2.1.1 2005/12/07 10:13:43 miko Exp $
+// $Id: calendar.inc.php,v 2.1.2 2008/01/09 23:12:00 upk Exp $
 //
 // Calendar plugin - renewal
 
@@ -8,11 +8,8 @@ define('PLUGIN_CALENDAR_ACTION', 'minicalendar');
 
 function plugin_calendar_convert()
 {
-	global $vars;
+	global $vars, $weeklabels;
 
-	$cal_week_labels = array(_('Su'),_('Mo'),_('Tu'),_('We'),_('Th'),_('Fr'),_('Sa'));
-
-	$script = get_script_uri();
 	$read_only = 0;
 	$around = 0;
 	$align = '';
@@ -90,18 +87,18 @@ function plugin_calendar_convert()
 
 	// create header
 	$calendar_head .=
-		'   <a href="'.$script.'?plugin='.PLUGIN_CALENDAR_ACTION.'&amp;file='.$r_base.'&amp;date='.$prev_date_str.'&amp;mode='.$mode.'">&lt;&lt;</a>' . "\n" .
-	    '   <strong>'.$m_name.'</strong>' . "\n" .
-	    '   <a href="'.$script.'?plugin='.PLUGIN_CALENDAR_ACTION.'&amp;file='.$r_base.'&amp;date='.$next_date_str.'&amp;mode='.$mode.'">&gt;&gt;</a>';
+		'   <a href="'.get_resolve_uri(PLUGIN_CALENDAR_ACTION,'','file='.$r_base.'&amp;date='.$prev_date_str.'&amp;mode='.$mode).'">&lt;&lt;</a>' . "\n" .
+		'   <strong>'.$m_name.'</strong>' . "\n" .
+		'   <a href="'.get_resolve_uri(PLUGIN_CALENDAR_ACTION,'','file='.$r_base.'&amp;date='.$next_date_str.'&amp;mode='.$mode).'">&gt;&gt;</a>';
 
 	if ($prefix) {
 		$calendar_head .= 
 			"\n" . '   <br />' . "\n" .
-			'[<a href="'.$script.'?plugin='.PLUGIN_CALENDAR_ACTION.'&amp;file='.$r_base.'&amp;date='.$this_date_str.'&amp;mode='.$mode.'">'.$s_base.'</a>]';
+			'[<a href="'.get_resolve_uri(PLUGIN_CALENDAR_ACTION,'','file='.$r_base.'&amp;date='.$this_date_str.'&amp;mode='.$mode).'">'.$s_base.'</a>]';
 	}
 
 	// create week label
-	foreach($cal_week_labels as $label) {
+	foreach($weeklabels as $label) {
 		$calendar_week .= '  <td class="calendar_td_week">'.$label.'</td>' . "\n";
 	}
 
@@ -113,7 +110,6 @@ function plugin_calendar_convert()
 	while (checkdate($m_num, $day, $y_num)) {
 		$dt = sprintf('%4d-%02d-%02d', $y_num, $m_num, $day);
 		$page = $prefix . $dt;
-		$r_page = rawurlencode($page);
 		$s_page = htmlspecialchars($page);
 
 		$h_today = public_holiday($y_num, $m_num, $day);
@@ -135,11 +131,11 @@ function plugin_calendar_convert()
 		}
 
 		if (is_page($page)) {
-			$link = '<a href="'.$script.'?'.$r_page.'" title="'.$s_page.'"><strong>'.$day.'</strong></a>';
+			$link = '<a href="'.get_page_uri($page).'" title="'.$s_page.'"><strong>'.$day.'</strong></a>';
 		} elseif ($read_only) {
 			$link = $day;
 		} else {
-			$link = '<a href="'.$script.'?cmd=edit&amp;page='.$r_page.'&amp;refer='.$r_base.'" title="'.$s_page.'">'.$day.'</a>';
+			$link = '<a href="'.get_resolve_uri('edit',$page,'refer='.$base).'" title="'.$s_page.'">'.$day.'</a>';
 		}
 		$calendar_body .= '  <td class="'.$style.'">'.$link.'</td>' . "\n";
 		$day++;

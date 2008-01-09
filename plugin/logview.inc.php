@@ -2,20 +2,14 @@
 /**
  * PukiWiki Plus! ログ閲覧プラグイン
  *
- * @copyright	Copyright &copy; 2004-2007, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version	$Id: logview.php,v 0.11 2007/07/09 23:35:00 upk Exp $
+ * @copyright	Copyright &copy; 2004-2008, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * @version	$Id: logview.php,v 0.12 2008/01/05 18:23:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 
-if (!defined('MAX_LINE')) {
-	define('MAX_LINE', 200);
-}
-if (!defined('VIEW_ROBOTS')) {
-	define('VIEW_ROBOTS', '0'); // robots は表示しない
-}
-if (!defined('USE_UA_OPTION')) {
-	define('USE_UA_OPTION', '0'); // オプション
-}
+defined('MAX_LINE')      or define('MAX_LINE', 200);
+defined('VIEW_ROBOTS')   or define('VIEW_ROBOTS', '0');   // robots は表示しない
+defined('USE_UA_OPTION') or define('USE_UA_OPTION', '0'); // オプション
 
 /**
  * 初期処理
@@ -146,7 +140,7 @@ EOD;
 				$age = log::get_backup_age($page,$data['ts']);
 				switch($age) {
 				case -1: // データなし
-					$body .= '<a class="ext" href="'.$script.'?'.rawurlencode($page).
+					$body .= '<a class="ext" href="'.get_page_uri($page).
 						'" rel="nofollow">none</a>';
 					break;
 				case 0:  // diff

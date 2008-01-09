@@ -1,8 +1,8 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: aname.inc.php,v 1.27.6 2006/07/21 09:32:55 miko Exp $
+// $Id: aname.inc.php,v 1.27.7 2008/01/05 17:56:00 upk Exp $
 // Copyright (C)
-//   2005-2006 PukiWiki Plus! Team
+//   2005-2006,2008 PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
 //   2001-2002 Originally written by yu-ji
 // License: GPL v2 or (at your option) any later version
@@ -15,13 +15,11 @@
 // NOTE: Use 'id="key"' instead of 'name="key"' at XHTML 1.1
 
 // Check ID is unique or not (compatible: no-check)
-define('PLUGIN_ANAME_ID_MUST_UNIQUE', 0);
-
+defined('PLUGIN_ANAME_ID_MUST_UNIQUE') or define('PLUGIN_ANAME_ID_MUST_UNIQUE', 0);
 // Max length of ID
-define('PLUGIN_ANAME_ID_MAX',   40);
-
+defined('PLUGIN_ANAME_ID_MAX') or define('PLUGIN_ANAME_ID_MAX',   40);
 // Pattern of ID
-define('PLUGIN_ANAME_ID_REGEX', '/^[A-Za-z][\w\-]*$/');
+defined('PLUGIN_ANAME_ID_REGEX') or define('PLUGIN_ANAME_ID_REGEX', '/^[A-Za-z][\w\-]*$/');
 
 // Show usage
 function plugin_aname_usage($convert = TRUE, $message = '')
@@ -117,7 +115,7 @@ function plugin_aname_tag($args = array(), $convert = TRUE)
 		$attr_id = ' id="' . $id . '"';
 	}
 //miko
-	$url     = $f_full  ? get_script_uri() . '?' . rawurlencode($vars['page']) : '';
+	$url     = $f_full  ? get_page_uri($vars['page']) : '';
 	if ($body != '') {
 		$href  = ' href="' . $url . '#' . $id . '"';
 		$title = ' title="' . $id . '"';

@@ -1,8 +1,8 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: html.php,v 1.65.16 2007/08/19 13:59:07 miko Exp $
+// $Id: html.php,v 1.65.17 2008/01/05 17:33:00 upk Exp $
 // Copyright (C)
-//   2005-2007 PukiWiki Plus! Team
+//   2005-2008 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
 //   2001-2002 Originally written by yu-ji
 // License: GPL v2 or (at your option) any later version
@@ -14,7 +14,7 @@
 // Show page-content
 function catbody($title, $page, $body)
 {
-	global $script, $vars, $arg, $defaultpage, $whatsnew, $help_page, $hr;
+	global $vars, $arg, $defaultpage, $whatsnew, $help_page, $hr;
 	global $attach_link, $related_link, $function_freeze;
 	global $search_word_color, $foot_explain, $note_hr, $head_tags, $foot_tags;
 	global $trackback, $referer, $javascript;
@@ -48,45 +48,45 @@ function catbody($title, $page, $body)
 	$r_page = rawurlencode($_page);
 
 	// Set $_LINK for skin
-	$_LINK['add']      = "$script?cmd=add&amp;page=$r_page";
-	$_LINK['backup']   = "$script?cmd=backup&amp;page=$r_page";
-	$_LINK['copy']     = "$script?plugin=template&amp;refer=$r_page";
-	$_LINK['diff']     = "$script?cmd=diff&amp;page=$r_page";
-	$_LINK['edit']     = "$script?cmd=edit&amp;page=$r_page";
-	$_LINK['filelist'] = "$script?cmd=filelist";
-	$_LINK['freeze']   = "$script?cmd=freeze&amp;page=$r_page";
-	$_LINK['help']     = "$script?cmd=help";
-	$_LINK['list']     = "$script?cmd=list";
-	$_LINK['menu']     = "$script?$menubar";
-	$_LINK['new']      = "$script?plugin=newpage&amp;refer=$r_page";
-	$_LINK['newsub']   = "$script?plugin=newpage_subdir&amp;directory=$r_page";
-	$_LINK['read']     = "$script?cmd=read&amp;page=$r_page";
-	$_LINK['rdf']      = "$script?cmd=rss&amp;ver=1.0";
-	$_LINK['recent']   = "$script?" . rawurlencode($whatsnew);
-	$_LINK['refer']    = "$script?plugin=referer&amp;page=$r_page";
-	$_LINK['reload']   = "$script?$r_page";
-	$_LINK['rename']   = "$script?plugin=rename&amp;refer=$r_page";
-	$_LINK['print']    = "$script?plugin=print&amp;page=$r_page";
-	$_LINK['rss']      = "$script?cmd=rss";
-	$_LINK['rss10']    = "$script?cmd=rss&amp;ver=1.0"; // Same as 'rdf'
-	$_LINK['rss20']    = "$script?cmd=rss&amp;ver=2.0";
-	$_LINK['mixirss']  = "$script?cmd=mixirss";         // Same as 'rdf' for mixi
-	$_LINK['skeylist']   = "$script?cmd=skeylist&amp;page=$r_page";
-	$_LINK['linklist']   = "$script?cmd=linklist&amp;page=$r_page";
-	$_LINK['log_browse'] = "$script?cmd=logview&amp;kind=browse&amp;page=$r_page";
-	$_LINK['log_update'] = "$script?cmd=logview&amp;page=$r_page";
-	$_LINK['log_down']   = "$script?cmd=logview&amp;kind=download&amp;page=$r_page";
-	$_LINK['search']   = "$script?cmd=search";
-	$_LINK['side']     = "$script?$sidebar";
-	$_LINK['source']   = "$script?plugin=source&amp;page=$r_page";
-	$_LINK['template'] = "$script?plugin=template&amp;refer=$r_page";
-	$_LINK['top']      = "$script?" . rawurlencode($defaultpage);
+	$_LINK['add']        = get_resolve_uri('add',$_page);
+	$_LINK['backup']     = get_resolve_uri('backup',$_page);
+	$_LINK['copy']       = get_resolve_uri('template','','refer='.$r_page);
+	$_LINK['diff']       = get_resolve_uri('diff',$_page);
+	$_LINK['edit']       = get_resolve_uri('edit',$_page);
+	$_LINK['filelist']   = get_resolve_uri('filelist');
+	$_LINK['freeze']     = get_resolve_uri('freeze',$_page);
+	$_LINK['help']       = get_resolve_uri('help');
+	$_LINK['list']       = get_resolve_uri('list');
+	$_LINK['menu']       = get_page_uri($menubar);
+	$_LINK['new']        = get_resolve_uri('newpage','','refer='.$r_page);
+	$_LINK['newsub']     = get_resolve_uri('newpage_subdir','','directory='.$r_page);
+	$_LINK['read']       = get_page_uri($_page);
+	$_LINK['rdf']        = get_resolve_absuri('rss','','ver=1.0');
+	$_LINK['recent']     = get_page_uri($whatsnew);
+	$_LINK['refer']      = get_resolve_uri('referer',$_page);
+	$_LINK['reload']     = get_page_absuri($_page); // 本当は、get_script_uri でいいけど、絶対パスでないと、スキンに影響が出る
+	$_LINK['rename']     = get_resolve_uri('rename','','refer='.$r_page);
+	$_LINK['print']      = get_resolve_uri('print',$_page);
+	$_LINK['rss']        = get_resolve_absuri('rss');
+	$_LINK['rss10']      = get_resolve_absuri('rss','','ver=1.0'); // Same as 'rdf'
+	$_LINK['rss20']      = get_resolve_absuri('rss','','ver=2.0');
+	$_LINK['mixirss']    = get_resolve_absuri('mixirss');         // Same as 'rdf' for mixi
+	$_LINK['skeylist']   = get_resolve_uri('skeylist',$_page);
+	$_LINK['linklist']   = get_resolve_uri('linklist',$_page);
+	$_LINK['log_browse'] = get_resolve_uri('logview',$_page,'kind=browse');
+	$_LINK['log_update'] = get_resolve_uri($_page,'logview',$_page);
+	$_LINK['log_down']   = get_resolve_uri('logview',$_page,'kind=download');
+	$_LINK['search']     = get_resolve_uri('search');
+	$_LINK['side']       = get_page_uri($sidebar);
+	$_LINK['source']     = get_resolve_uri('source',$_page);
+	$_LINK['template']   = get_resolve_uri('template','','refer='.$r_page);
+	$_LINK['top']        = get_page_uri($defaultpage);
 	if ($trackback) {
 		$tb_id = tb_get_id($_page);
-		$_LINK['trackback'] = "$script?plugin=tb&amp;__mode=view&amp;tb_id=$tb_id";
+		$_LINK['trackback'] = get_resolve_absuri('tb','','__mode=view&amp;tb_id='.$tb_id);
 	}
-	$_LINK['unfreeze'] = "$script?cmd=unfreeze&amp;page=$r_page";
-	$_LINK['upload']   = "$script?plugin=attach&amp;pcmd=upload&amp;page=$r_page";
+	$_LINK['unfreeze'] = get_resolve_uri('unfreeze',$_page);
+	$_LINK['upload']   = get_resolve_uri('attach',$_page,'pcmd=upload');
 
 	// Compat: Skins for 1.4.4 and before
 	$link_add       = & $_LINK['add'];
@@ -375,7 +375,7 @@ EOD;
 // Related pages
 function make_related($page, $tag = '')
 {
-	global $script, $vars, $rule_related_str, $related_str;
+	global $vars, $rule_related_str, $related_str;
 	global $_ul_left_margin, $_ul_margin, $_list_pad_str;
 
 	$links = links_get_related($page);
@@ -390,13 +390,12 @@ function make_related($page, $tag = '')
 	foreach ($links as $page=>$lastmod) {
 		if (check_non_list($page)) continue;
 
-		$r_page   = rawurlencode($page);
 		$s_page   = htmlspecialchars($page);
 		$passage  = get_passage($lastmod);
 		$_links[] = $tag ?
-			'<a href="' . $script . '?' . $r_page . '" title="' .
+			'<a href="' . get_page_uri($page) . '" title="' .
 			$s_page . ' ' . $passage . '">' . $s_page . '</a>' :
-			'<a href="' . $script . '?' . $r_page . '">' .
+			'<a href="' . get_page_uri($page) . '">' .
 			$s_page . '</a>' . $passage;
 	}
 	if (empty($_links)) return ''; // Nothing

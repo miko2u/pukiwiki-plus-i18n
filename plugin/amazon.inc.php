@@ -202,18 +202,18 @@ function plugin_amazon_action() {
 
   $s_page = $vars['refer'];
   $r_page = $s_page . '/' . $check->asin;
-  $r_page_url = rawurlencode($r_page);
+  // $r_page_url = rawurlencode($r_page);
 
-  if (!check_readable($r_page, false, false)) header("Location: $script?cmd=read&page=$r_page_url");
+  if (!check_readable($r_page, false, false)) header('Location: ' . get_page_location_uri($r_page));
   elseif (check_editable($r_page, false, false)) {
     $info = new amazon_getinfo($check->asin, 'heavy');
     $title = $info->items['title'];
     if ($title == '' or preg_match('/^\//', $s_page)) {
-      header("Location: $script?cmd=read&page=" . encode($s_page));
+      header('Location: '.get_script_absuri().'?'.encode($s_page));
     }
     $body = "#amazon($check->asin,,image)\n*$title\n" . $amazon_body;
     amazon_review_save($r_page, $body);
-    header("Location: $script?cmd=edit&page=$r_page_url");
+    header('Location: '.get_location_uri('edit',$r_page));
   } else return false;
   die();
 }

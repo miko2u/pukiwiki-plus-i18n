@@ -86,7 +86,7 @@ function tb_send($page, $links)
 	// No link, END
 	if (! is_array($links) || empty($links)) return;
 
-	$script = get_script_uri();
+	$script = get_script_absuri();
 
 	// PROHIBITION OF INVALID TRANSMISSION
 	$url = parse_url($script);
@@ -154,7 +154,7 @@ function tb_get($file, $key = 1)
 // Get a RDF comment to bury TrackBack-ping-URI under HTML(XHTML) output
 function tb_get_rdf($page)
 {
-	$_script = get_script_uri(); // Get absolute path
+	$_script = get_script_absuri(); // Get absolute path
 	$r_page = rawurlencode($page);
 	$tb_id  = tb_get_id($page);
 	// $dcdate = substr_replace(get_date('Y-m-d\TH:i:sO', $time), ':', -2, 0);

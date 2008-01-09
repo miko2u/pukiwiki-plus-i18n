@@ -1,8 +1,8 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: plugin.php,v 1.15.14 2006/10/04 01:06:00 miko Exp $
+// $Id: plugin.php,v 1.15.15 2008/01/05 23:02:00 upk Exp $
 // Copyright (C)
-//   2005-2006 PukiWiki Plus! Team
+//   2005-2006,2008 PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
 //   2001-2002 Originally written by yu-ji
 // License: GPL v2 or (at your option) any later version
@@ -73,9 +73,9 @@ function limit_plugin($name)
 		die('Alert: plugin "' . htmlspecialchars($name) .
 		'" was called over ' . PKWK_PLUGIN_CALL_TIME_LIMIT .
 		' times. SPAM or someting?<br />' . "\n" .
-		'<a href="' . get_script_uri() . '?cmd=edit&amp;page='.
-		rawurlencode($vars['page']) . '">Try to edit this page</a><br />' . "\n" .
-		'<a href="' . get_script_uri() . '">Return to frontpage</a>');
+		'<a href="' . get_resolve_uri('edit',$vars['page']) .
+		'">Try to edit this page</a><br />' . "\n" .
+		'<a href="' . get_resolve_uri() . '">Return to frontpage</a>');
 	}
 	return TRUE;
 }

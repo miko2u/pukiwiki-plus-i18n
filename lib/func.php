@@ -1,8 +1,8 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: func.php,v 1.93.21 2007/08/19 13:59:07 miko Exp $
+// $Id: func.php,v 1.93.22 2008/01/05 17:32:00 upk Exp $
 // Copyright (C)
-//   2005-2007 PukiWiki Plus! Team
+//   2005-2008 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
 //   2001-2002 Originally written by yu-ji
 // License: GPL v2 or (at your option) any later version
@@ -306,7 +306,7 @@ function do_search($word, $type = 'AND', $non_format = FALSE, $base = '')
 		$s_page  = htmlspecialchars($page);
 		$passage = $show_passage ? ' ' . get_passage(get_filetime($page)) : '';
 		if ($search_word_color) {
-			$uri = $script . '?' . 'cmd=read&amp;page=' . $r_page . '&amp;word=' . $r_word;
+			$uri = get_page_uri($page, 'word='.$r_word);
 			if ($ajax && UA_PROFILE == 'default') {
 				$pre = $script . '?' . 'cmd=preview&amp;page=' . $r_page . '&amp;word=' . $r_word;
 				$pre = ' onmouseover="showGlossaryPopup(' . "'" . $pre . "'" . ',event,0.2);" onmouseout="hideGlossaryPopup();"';
@@ -314,7 +314,7 @@ function do_search($word, $type = 'AND', $non_format = FALSE, $base = '')
 				$pre = '';
 			}
 		} else {
-			$uri = $script . '?' . $r_page;
+			$uri = get_page_uri($page);
 			$pre = '';
 		}
 		$retval .= ' <li><a href="' . $uri . '"' . $pre . '>' . $s_page . '</a>' . $passage . '</li>' . "\n";
@@ -389,19 +389,18 @@ function page_list($pages, $cmd = 'read', $withfilename = FALSE)
 
 	$list = $matches = array();
 
-	// Shrink URI for read
-	if ($cmd == 'read') {
-		$href = $script . '?';
-	} else {
-		$href = $script . '?cmd=' . $cmd . '&amp;page=';
-	}
-
 	foreach($pages as $file=>$page) {
-		$r_page  = rawurlencode($page);
 		$s_page  = htmlspecialchars($page, ENT_QUOTES);
 		$passage = get_pg_passage($page);
 
-		$str = '   <li><a href="' . $href . $r_page . '">' .
+		// Shrink URI for read
+		if ($cmd == 'read') {
+			$url = get_page_uri($page);
+		} else {
+			$url = get_resolve_uri($cmd,$page);
+		}
+
+		$str = '   <li><a href="' . $url . '">' .
 			$s_page . '</a>' . $passage;
 
 		if ($withfilename) {
@@ -749,7 +748,7 @@ function generate_trie_regex(& $array, $offset = 0, $sentry = NULL, $pos = 0)
 // Compat
 function get_autolink_pattern_sub(& $pages, $start, $end, $pos)
 {
-	 return generate_trie_regex(& $pages, $start, $end, $pos);
+	 return generate_trie_regex($pages, $start, $end, $pos);
 }
 
 // Load/get autoalias pairs
@@ -861,39 +860,14 @@ function get_script_uri($init_uri = '')
 	if ($init_uri == '') {
 		// Get
 		if (isset($script)) return $script;
-
-		// Set automatically
-		$msg     = 'get_script_uri() failed: Please set $script at INI_FILE manually';
-
-		$script  = (SERVER_PORT == 443 ? 'https://' : 'http://'); // scheme
-		$script .= SERVER_NAME;	// host
-		$script .= (SERVER_PORT == 80 ? '' : ':' . SERVER_PORT);  // port
-
-		// SCRIPT_NAME が'/'で始まっていない場合(cgiなど) REQUEST_URIを使ってみる
-		$path    = SCRIPT_NAME;
-		if ($path{0} != '/') {
-			if (! isset($_SERVER['REQUEST_URI']) || $_SERVER['REQUEST_URI']{0} != '/')
-				die_message($msg);
-
-			// REQUEST_URIをパースし、path部分だけを取り出す
-			$parse_url = parse_url($script . $_SERVER['REQUEST_URI']);
-			if (! isset($parse_url['path']) || $parse_url['path']{0} != '/')
-				die_message($msg);
-
-			$path = $parse_url['path'];
-		}
-		$script .= $path;
-
-		if (! is_url($script, TRUE) && php_sapi_name() == 'cgi')
-			die_message($msg);
-		unset($msg);
-
-	} else {
-		// Set manually
-		if (isset($script)) die_message('$script: Already init');
-		if (! is_url($init_uri, TRUE)) die_message('$script: Invalid URI');
-		$script = $init_uri;
+		$script = get_script_absuri();
+		return $script;
 	}
+
+	// Set manually
+	if (isset($script)) die_message('$script: Already init');
+	if ($init_uri != './'  && ! is_url($init_uri, TRUE)) die_message('$script: Invalid URI');
+	$script = $init_uri;
 
 	// Cut filename or not
 	if (isset($script_directory_index)) {
@@ -906,6 +880,142 @@ function get_script_uri($init_uri = '')
 	}
 
 	return $script;
+}
+
+// Get absolute-URI of this script
+function get_script_absuri()
+{
+	global $script_abs, $script_directory_index;
+	global $script;
+	static $uri;
+
+	// Get
+	if (isset($uri)) return $uri;
+
+	// Set automatically
+	$msg     = 'get_script_absuri() failed: Please set [$script or $script_abs] at INI_FILE manually';
+
+	$uri  = (SERVER_PORT == 443 ) ? 'https://' : 'http://'; // scheme
+	$uri .= SERVER_NAME; // host
+	$uri .= (SERVER_PORT == 80 || SERVER_PORT == 443) ? '' : ':' . SERVER_PORT;  // port
+
+	// SCRIPT_NAME が'/'で始まっていない場合(cgiなど) REQUEST_URIを使ってみる
+	$path    = SCRIPT_NAME;
+	if ($path{0} != '/') {
+		$check_base_url = (isset($script_abs)) ? array($script, $script_abs) : array($script);
+
+		if (! isset($_SERVER['REQUEST_URI']) || $_SERVER['REQUEST_URI']{0} != '/') {
+			foreach($check_base_url as $x) {
+				if (is_url($x, true)) {
+					$uri = $x;
+					return $uri;
+				}
+			}
+			die_message($msg);
+		}
+
+		// REQUEST_URIをパースし、path部分だけを取り出す
+		$parse_url = parse_url($uri . $_SERVER['REQUEST_URI']);
+		if (! isset($parse_url['path']) || $parse_url['path']{0} != '/') {
+			foreach($check_base_url as $x) {
+				if (is_url($x, true)) {
+					$uri = $x;
+					return $uri;
+				}
+			}
+			die_message($msg);
+		}
+
+		$path = $parse_url['path'];
+	}
+	$uri .= $path;
+
+	if (! is_url($uri, true) && php_sapi_name() == 'cgi') {
+		die_message($msg);
+	}
+	unset($msg);
+
+	// Cut filename or not
+	if (isset($script_directory_index)) {
+		if (! file_exists($script_directory_index))
+			die_message('Directory index file not found: ' .
+			htmlspecialchars($script_directory_index));
+		$matches = array();
+		if (preg_match('#^(.+/)' . preg_quote($script_directory_index, '#') . '$#',
+			$uri, $matches)) $uri = $matches[1];
+	}
+
+        return $uri;
+}
+
+function get_resolve_uri($cmd='', $page='', $query='', $abs=0, $location=0)
+{
+	global $script, $absolute_uri;
+
+	if ($abs) {
+		$ret = get_script_absuri();
+	} else {
+		$ret = $absolute_uri ? get_script_absuri() : $script;
+	}
+	// $ret = ($abs) ? get_script_absuri() : ($absolute_uri ? get_script_absuri() : $script);
+
+	$flag = '?';
+	$amp = ($location) ? '&' : '&amp;';
+	$page_pref = '';
+
+	if (! empty($cmd)) {
+		$ret .= $flag.'cmd='.$cmd;
+		$flag = $amp;
+		$page_pref = 'page=';
+	}
+
+	if (! empty($page)) {
+		$ret .= $flag.$page_pref.rawurlencode($page);
+		$flag = $amp;
+	}
+
+	if (is_array($query)) {
+		foreach($query as $key=>$val) {
+			$ret .= $flag . $key . '='. rawurlencode($val);
+			$flag = $amp;
+		}
+	} else
+	if (! empty($query)) {
+		$ret .= $flag . $query;
+	}
+
+	unset($flag, $page_pref);
+	return $ret;
+}
+
+function get_resolve_absuri($cmd='', $page='', $query='')
+{
+	//$args = func_get_args();
+	//$args[] = 1;
+	//return call_user_func_array('get_resolve_uri',$args);
+	return get_resolve_uri($cmd,$page,$query,1);
+}
+
+// get_resolve_uri
+function get_page_uri($page, $query='')
+{
+	return get_resolve_uri('', $page, $query);
+}
+
+function get_page_absuri($page, $query='')
+{
+	return get_resolve_uri('', $page, $query,1);
+}
+
+function get_page_location_uri($page='', $query='')
+{
+	return get_resolve_uri('', $page, $query, 1, 1);
+}
+
+// get_resolve_uri
+function get_location_uri($cmd='', $page='', $query='')
+{
+	return get_resolve_uri($cmd, $page, $query, 1, 1);
 }
 
 // Remove null(\0) bytes from variables

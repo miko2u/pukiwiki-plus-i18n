@@ -1,8 +1,8 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: diff.inc.php,v 1.18.5 2006/09/06 01:25:00 upk Exp $
+// $Id: diff.inc.php,v 1.18.7 2008/01/05 18:14:00 upk Exp $
 // Copyright (C)
-//   2005-2006 PukiWiki Plus! Team
+//   2005-2006,2008 PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
 //   2002      Originally written by yu-ji
 // License: GPL v2 or (at your option) any later version
@@ -50,7 +50,7 @@ function plugin_diff_view($page)
 
 	$is_page = is_page($page);
 	if ($is_page) {
-		$menu[] = ' <li>' . str_replace('$1', '<a href="' . $script . '?' . $r_page . '">' .
+		$menu[] = ' <li>' . str_replace('$1', '<a href="' . get_page_uri($page) . '">' .
 			$s_page . '</a>', $_msg_goto) . '</li>';
 	} else {
 		$menu[] = ' <li>' . str_replace('$1', $s_page, $_msg_deleted) . '</li>';

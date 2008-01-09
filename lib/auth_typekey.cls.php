@@ -2,9 +2,9 @@
 /**
  * PukiWiki Plus! TypeKey 認証処理
  *
- * @copyright   Copyright &copy; 2006-2007, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * @copyright   Copyright &copy; 2006-2008, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth_typekey.cls.php,v 0.11 2007/07/13 01:05:00 upk Exp $
+ * @version     $Id: auth_typekey.cls.php,v 0.12 2008/01/10 01:03:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'auth_api.cls.php');
@@ -123,8 +123,7 @@ class auth_typekey extends auth_api
 	function typekey_login_url($return='')
 	{
 		if (empty($return)) {
-			global $script;
-			$return = $script;
+			$return = get_script_absuri();
 		}
 		$rc = TYPEKEY_URL_LOGIN.'?t='.$this->siteToken.'&amp;v='.$this->version;
 		if ($this->need_email != 0) {
@@ -136,8 +135,7 @@ class auth_typekey extends auth_api
 	function typekey_logout_url($return='')
 	{
 		if (empty($return)) {
-			global $script;
-			$return = $script;
+			$return = get_script_absuri();
 		}
 		return TYPEKEY_URL_LOGOUT.'?_return='.$return;
         }

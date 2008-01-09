@@ -1,7 +1,7 @@
 <?php
-// $Id: article.inc.php,v 1.25.5 2006/01/11 23:17:00 upk Exp $
+// $Id: article.inc.php,v 1.25.6 2008/01/05 17:58:00 upk Exp $
 // Copyright (C)
-//   2005-2006 PukiWiki Plus! Team
+//   2005-2006,2008 PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
 //   2002      Originally written by OKAWARA,Satoshi <kawara@dml.co.jp>
 //             http://www.dml.co.jp/~kawara/pukiwiki/pukiwiki.php
@@ -23,20 +23,20 @@
 
  */
 
-define('PLUGIN_ARTICLE_COLS',	70); // テキストエリアのカラム数
-define('PLUGIN_ARTICLE_ROWS',	 5); // テキストエリアの行数
-define('PLUGIN_ARTICLE_NAME_COLS',	24); // 名前テキストエリアのカラム数
-define('PLUGIN_ARTICLE_SUBJECT_COLS',	60); // 題名テキストエリアのカラム数
-define('PLUGIN_ARTICLE_NAME_FORMAT',	'[[$name]]'); // 名前の挿入フォーマット
-define('PLUGIN_ARTICLE_SUBJECT_FORMAT',	'**$subject'); // 題名の挿入フォーマット
+defined('PLUGIN_ARTICLE_COLS')           or define('PLUGIN_ARTICLE_COLS',	70); // テキストエリアのカラム数
+defined('PLUGIN_ARTICLE_ROWS')           or define('PLUGIN_ARTICLE_ROWS',	 5); // テキストエリアの行数
+defined('PLUGIN_ARTICLE_NAME_COLS')      or define('PLUGIN_ARTICLE_NAME_COLS',	24); // 名前テキストエリアのカラム数
+defined('PLUGIN_ARTICLE_SUBJECT_COLS')   or define('PLUGIN_ARTICLE_SUBJECT_COLS',	60); // 題名テキストエリアのカラム数
+defined('PLUGIN_ARTICLE_NAME_FORMAT')    or define('PLUGIN_ARTICLE_NAME_FORMAT',	'[[$name]]'); // 名前の挿入フォーマット
+defined('PLUGIN_ARTICLE_SUBJECT_FORMAT') or define('PLUGIN_ARTICLE_SUBJECT_FORMAT',	'**$subject'); // 題名の挿入フォーマット
 
-define('PLUGIN_ARTICLE_INS',	0); // 挿入する位置 1:欄の前 0:欄の後
-define('PLUGIN_ARTICLE_COMMENT',	1); // 書き込みの下に一行コメントを入れる 1:入れる 0:入れない
-define('PLUGIN_ARTICLE_AUTO_BR',	1); // 改行を自動的変換 1:する 0:しない
+defined('PLUGIN_ARTICLE_INS')            or define('PLUGIN_ARTICLE_INS',	0); // 挿入する位置 1:欄の前 0:欄の後
+defined('PLUGIN_ARTICLE_COMMENT')        or define('PLUGIN_ARTICLE_COMMENT',	1); // 書き込みの下に一行コメントを入れる 1:入れる 0:入れない
+defined('PLUGIN_ARTICLE_AUTO_BR')        or define('PLUGIN_ARTICLE_AUTO_BR',	1); // 改行を自動的変換 1:する 0:しない
 
-define('PLUGIN_ARTICLE_MAIL_AUTO_SEND',	0); // 投稿内容のメール自動配信 1:する 0:しない
-define('PLUGIN_ARTICLE_MAIL_FROM',	''); // 投稿内容のメール送信時の送信者メールアドレス
-define('PLUGIN_ARTICLE_MAIL_SUBJECT_PREFIX', "[someone's PukiWiki]"); // 投稿内容のメール送信時の題名
+defined('PLUGIN_ARTICLE_MAIL_AUTO_SEND') or define('PLUGIN_ARTICLE_MAIL_AUTO_SEND',	0); // 投稿内容のメール自動配信 1:する 0:しない
+defined('PLUGIN_ARTICLE_MAIL_FROM')      or define('PLUGIN_ARTICLE_MAIL_FROM',	''); // 投稿内容のメール送信時の送信者メールアドレス
+defined('PLUGIN_ARTICLE_MAIL_SUBJECT_PREFIX') or define('PLUGIN_ARTICLE_MAIL_SUBJECT_PREFIX', "[someone's PukiWiki]"); // 投稿内容のメール送信時の題名
 
 // 投稿内容のメール自動配信先
 global $_plugin_article_mailto;
@@ -132,7 +132,7 @@ EOD;
 			$mailbody .= "\n\n" . '---' . "\n";
 			$mailbody .= _('Author: ') . $post['name'] . ' (' . $now . ')' . "\n";
 			$mailbody .= _('Page: ') . $post['refer'] . "\n";
-			$mailbody .= '　 URL: ' . $script . '?' . rawurlencode($post['refer']) . "\n";
+			$mailbody .= '　 URL: ' . get_page_absuri($post['refer']) . "\n";
 			$mailbody = mb_convert_encoding($mailbody, 'JIS');
 
 			$mailaddheader = 'From: ' . PLUGIN_ARTICLE_MAIL_FROM;

@@ -1,8 +1,8 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: edit.inc.php,v 1.41.35 2007/11/12 00:53:00 upk Exp $
+// $Id: edit.inc.php,v 1.41.36 2008/01/05 18:15:00 upk Exp $
 // Copyright (C)
-//   2005-2007 PukiWiki Plus! Team
+//   2005-2008 PukiWiki Plus! Team
 //   2001-2007 PukiWiki Developers Team
 // License: GPL v2 or (at your option) any later version
 //
@@ -282,15 +282,15 @@ function plugin_edit_write()
 	pkwk_headers_sent();
 	if (isset($vars['refpage']) && $vars['refpage'] != '') {
 		if ($partid) {
-			header('Location: ' . get_script_uri() . '?' . rawurlencode($vars['refpage'])) . '#' . rawurlencode($partid);
+			header('Location: ' . get_page_location_uri($vars['refpage']).'#'.rawurlencode($partid));
 		} else {
-			header('Location: ' . get_script_uri() . '?' . rawurlencode($vars['refpage']));
+			header('Location: ' . get_page_location_uri($vars['refpage']));
 		}
 	} else {
 		if ($partid) {
-			header('Location: ' . get_script_uri() . '?' . rawurlencode($page)) . '#' . rawurlencode($partid);
+			header('Location: ' . get_page_location_uri($page).'#'.rawurlencode($partid));
 		} else {
-			header('Location: ' . get_script_uri() . '?' . rawurlencode($page));
+			header('Location: ' . get_page_location_uri($page));
 		}
 	}
 	exit;
@@ -301,7 +301,7 @@ function plugin_edit_cancel()
 {
 	global $vars;
 	pkwk_headers_sent();
-	header('Location: ' . get_script_uri() . '?' . rawurlencode($vars['page']));
+	header('Location: ' . get_page_location_uri($vars['page']));
 	exit;
 }
 

@@ -2,9 +2,9 @@
 /**
  * PukiWiki Plus! OpenID 認証処理
  *
- * @copyright   Copyright &copy; 2007, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * @copyright   Copyright &copy; 2007-2008, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: openid.inc.php,v 0.7 2007/12/17 01:18:00 upk Exp $
+ * @version     $Id: openid.inc.php,v 0.8 2008/01/05 18:43:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'auth_openid.cls.php');
@@ -109,7 +109,7 @@ function plugin_openid_inline()
 
 function plugin_openid_action()
 {
-	global $script,$vars,$_openid_msg;
+	global $vars,$_openid_msg;
 
 	$die_message = (PLUS_PROTECT_MODE) ? 'die_msg' : 'die_message';
 
@@ -120,8 +120,8 @@ function plugin_openid_action()
 	if (isset($vars['logout'])) {
 		$obj = new auth_openid_plus();
 		$obj->auth_session_unset();
-		$r_page = (empty($vars['page'])) ? '' : '?'.rawurlencode($vars['page']);
-		header('Location: '.$script.$r_page);
+		$page = (empty($vars['page'])) ? '' : $vars['page'];
+		header('Location: '.get_page_location_uri($page));
 		die();
 	}
 
@@ -156,7 +156,7 @@ function plugin_openid_action()
 	}
 
 	// Error.
-	header('Location: '.$script);
+	header('Location: '.get_location_uri());
 }
 
 function plugin_openid_login_form()
@@ -183,14 +183,14 @@ EOD;
 
 function plugin_openid_verify($consumer)
 {
-	global $script,$vars,$_openid_msg;
+	global $vars,$_openid_msg;
 
 	$die_message = (PLUS_PROTECT_MODE) ? 'die_msg' : 'die_message';
 
 	$page = (empty($vars['page'])) ? '' : ''.$vars['page'];
 	$openid = $vars['openid_url'];
-	$process_url = $script.'?plugin=openid&action=finish_auth';
-	$trust_root = $script;
+	$process_url = get_location_uri('openid','','action=finish_auth');
+	$trust_root = get_script_absuri();
 
 	// Begin the OpenID authentication process.
 	$auth_request = $consumer->begin($openid);
@@ -222,7 +222,7 @@ function plugin_openid_verify($consumer)
 
 function plugin_openid_finish_auth($consumer)
 {
-	global $vars,$script,$_openid_msg;
+	global $vars,$_openid_msg;
 
 	$die_message = (PLUS_PROTECT_MODE) ? 'die_msg' : 'die_message';
 
@@ -230,8 +230,7 @@ function plugin_openid_finish_auth($consumer)
 	$session_verify = $obj_verify->auth_session_get();
 	//$session_verify['openid.server']
 	//$session_verify['openid.delegate']
-	// $ret_page = (empty($session_verify['page'])) ? '' : '?'.rawurlencode($session_verify['page']);
-	$ret_page = (empty($session_verify['page'])) ? '' : '?'.$session_verify['page'];
+	$page = (empty($session_verify['page'])) ? '' : rawurldecode($session_verify['page']);
 	$obj_verify->auth_session_unset();
 
 	// Complete the authentication process using the server's response.
@@ -261,7 +260,7 @@ function plugin_openid_finish_auth($consumer)
 	}
 
 	// オリジナルの画面に戻る
-	header('Location: '. $script.$ret_page);
+	header('Location: '. get_page_location_uri($page));
 }
 
 function plugin_openid_get_user_name()
@@ -284,9 +283,9 @@ function plugin_openid_get_user_name()
 
 function plugin_openid_jump_url()
 {
-	global $script, $vars;
-        $r_page = (empty($vars['page'])) ? '' : '&page='.rawurlencode($vars['page']);
-	return $script.'?plugin=openid'.$r_page;
+	global $vars;
+	$page = (empty($vars['page'])) ? '' : $vars['page'];
+	return get_location_uri('openid',$page);
 }
 
 ?>

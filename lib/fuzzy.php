@@ -1,11 +1,11 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: fuzzy.php,v 0.2.1 2005/03/10 13:26:37 miko Exp $
+// $Id: fuzzy.php,v 0.2.2 2008/01/05 17:32:00 upk Exp $
 //
 // 'Search' main function
 function do_search_fuzzy($word, $type = 'AND', $non_format = FALSE, $non_fuzzy = FALSE)
 {
-	global $script, $whatsnew, $non_list, $search_non_list;
+	global $whatsnew, $non_list, $search_non_list;
  	global $search_auth, $search_fuzzy;
 
 	static $fuzzypattern = array(
@@ -76,11 +76,10 @@ function do_search_fuzzy($word, $type = 'AND', $non_format = FALSE, $non_fuzzy =
 	ksort($pages);
 	$retval = '<ul>' . "\n";
 	foreach ($pages as $page=>$time) {
-		$r_page  = rawurlencode($page);
 		$s_page  = htmlspecialchars($page);
 		$passage = get_passage($time);
-		$retval .= ' <li><a href="' . $script . '?cmd=read&amp;page=' .
-			$r_page . '&amp;word=' . $r_word . '">' . $s_page .
+		$retval .= ' <li><a href="' .
+			get_page_uri($page, 'word=' . $r_word) . '">' . $s_page .
 			'</a>' . $passage . '</li>' . "\n";
 	}
 	$retval .= '</ul>' . "\n";

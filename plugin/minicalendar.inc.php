@@ -1,6 +1,6 @@
 <?php
 //
-// $Id: minicalendar.inc.php,v 1.20.2 2003/06/03 11:59:07 miko Exp $
+// $Id: minicalendar.inc.php,v 1.20.3 2008/01/05 18:28:00 upk Exp $
 // *引数にoffと書くことで今日の日記を表示しないようにした。
 // *携帯電話用に拡張
 //
@@ -103,7 +103,7 @@ if (!defined('UA_MOBILE') || UA_MOBILE == 0) {
 EOD;
 	
 	if ($prefix) {
-//		$ret .= "\n      <br />[<a href=\"$script?$r_base\">$s_base</a>]";
+//		$ret .= "\n      <br />[<a href=\"" . get_page_uri($base) . "\">$s_base</a>]";
 		$ret .= "\n      <br />[<a href=\"$script?plugin=minicalendar&amp;file=$r_base&amp;date=$this_date_str&amp;mode=$today_args\">$s_base</a>]";
 	}
 	
@@ -147,7 +147,7 @@ EOD;
 		}
 		
 		if (is_page($page)) {
-			$link = "<a class=\"small\" href=\"$script?$r_page\" title=\"$s_page\"><strong>$day</strong></a>";
+			$link = "<a class=\"small\" href=\"" . get_page_uri($page) . "\" title=\"$s_page\"><strong>$day</strong></a>";
 		}
 		else {
 			$link = "<a class=\"small\" href=\"$script?cmd=edit&amp;page=$r_page&amp;refer=$r_base\" title=\"$s_page\">$day</a>";
@@ -204,7 +204,7 @@ EOD;
 EOD;
 	
 	if ($prefix) {
-//		$ret .= "\n      <br />[<a href=\"$script?$r_base\">$s_base</a>]";
+//		$ret .= "\n      <br />[<a href=\"" . get_page_uri($base) . "\">$s_base</a>]";
 		$ret .= "\n      <br />[<a href=\"$script?plugin=minicalendar&amp;file=$r_base&amp;date=$this_date_str&amp;mode=$today_args\">$s_base</a>]";
 	}
 	
@@ -249,7 +249,7 @@ EOD;
 		
 		if (is_page($page)) {
 			if ($day < 10) { $spc = '&nbsp;'; } else { $spc = ''; }
-			$link = "$spc<a class=\"small\" href=\"$script?$r_page\" title=\"$s_page\"><font color=\"red\">$day</font></a>";
+			$link = "$spc<a class=\"small\" href=\"" . get_page_uri($page) . "\" title=\"$s_page\"><font color=\"red\">$day</font></a>";
 		}
 		else {
 			if ($day < 10) { $spc = '&nbsp;'; } else { $spc = ''; }

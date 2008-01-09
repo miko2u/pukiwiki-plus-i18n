@@ -2,15 +2,13 @@
 /**
  * PukiWiki Plus! XBEL Plugin
  *
- * @copyright   Copyright &copy; 2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: xbel.inc.php,v 0.2 2006/11/04 18:20:00 upk Exp $
+ * @copyright   Copyright &copy; 2006,2008, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * @version     $Id: xbel.inc.php,v 0.3 2008/01/05 18:56:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  *
  */
 
-if (!defined('XBEL_PREF_PAGE')) {
-	define('XBEL_PREF_PAGE', 'Favorite');
-}
+defined('XBEL_PREF_PAGE') or define('XBEL_PREF_PAGE', 'Favorite');
 
 function plugin_xbel_init()
 {
@@ -111,11 +109,11 @@ EOD;
 	foreach($page_pref as $_page) {
 		$i++;
 
-		$r_page = rawurlencode($_page);
+		$url = get_page_uri($_page);
 		$rc .= <<<EOD
 <tr>
  <td><input type="checkbox" name="{$i}_c" /></td>
- <td><input type="hidden" name="{$i}_n" value="$_page" /><a href="$script?$r_page">$_page</a></td>
+ <td><input type="hidden" name="{$i}_n" value="$_page" /><a href="$url">$_page</a></td>
 </tr>
 
 EOD;
@@ -144,7 +142,7 @@ class xbel
 	        $html  = convert_html($data);
 		preg_match_all("'href=\"(https?://[^\"]+).*?>(.*?)<'si", $html, $tmp, PREG_PATTERN_ORDER);
 
-		$str_redirect = get_script_uri().'?plugin=redirect&amp;u=';
+		$str_redirect = get_resolve_absuri('redirect','','u=');
 		$spos = (PKWK_USE_REDIRECT) ? strlen($str_redirect) : 0;
 
 		$ctr = count($tmp[1]);
@@ -186,7 +184,7 @@ class xbel
 	{
 		static $my, $ignore_link;
 
-		if (!isset($my)) $my = get_script_uri();
+		if (!isset($my)) $my = get_script_absuri();
 		if (!isset($ignore_link)) {
 			$ignore_link = array(
 				// えんぴつマークのリンクのため迂回

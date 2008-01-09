@@ -2,9 +2,9 @@
 /**
  * PukiWiki Plus! Hatena 認証処理
  *
- * @copyright   Copyright &copy; 2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * @copyright   Copyright &copy; 2006,2008, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: hatena.inc.php,v 0.11 2007/08/19 02:07:00 upk Exp $
+ * @version     $Id: hatena.inc.php,v 0.12 2008/01/05 18:16:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'auth_hatena.cls.php');
@@ -107,13 +107,13 @@ function plugin_hatena_inline()
 
 function plugin_hatena_action()
 {
-	global $script,$vars,$auth_api,$_hatena_msg;
+	global $vars,$auth_api,$_hatena_msg;
 
 	if (! $auth_api['hatena']['use']) return '';
 	if (! function_exists('pkwk_session_start')) return '';
 	if (pkwk_session_start() == 0) return '';
 
-	$r_page = (empty($vars['page'])) ? '' : rawurlencode( decode($vars['page']) );
+	$page = (empty($vars['page'])) ? '' : decode($vars['page']);
 
 	$die_message = (PLUS_PROTECT_MODE) ? 'die_msg' : 'die_message';
 
@@ -128,7 +128,7 @@ function plugin_hatena_action()
 	// LOGOUT
 	if (isset($vars['logout'])) {
 		$obj->auth_session_unset();
-		header('Location: '.$script.'?'.$r_page);
+		header('Location: '. get_page_location_uri($page));
 		die();
 	}
 
@@ -142,7 +142,7 @@ function plugin_hatena_action()
 	}
 
 	$obj->auth_session_put();
-	header('Location: '.$script.'?'.$r_page);
+	header('Location: '. get_page_location_uri($page));
 	die();
 }
 

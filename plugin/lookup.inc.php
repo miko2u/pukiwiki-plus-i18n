@@ -1,7 +1,8 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: lookup.inc.php,v 1.22 2005/07/18 18:59:27 teanan Exp $
+// $Id: lookup.inc.php,v 1.22.1 2008/01/05 23:10:00 upk Exp $
 // Copyright (C)
+//   2008 PukiWiki Plus! Developers Team
 //   2002-2005 PukiWiki Developers Team
 //   2001-2002 Originally written by yu-ji
 // License: GPL v2 or (at your option) any later version
@@ -12,7 +13,7 @@ define('PLUGIN_LOOKUP_USAGE', '#lookup(interwikiname[,button_name[,default]])');
 
 function plugin_lookup_convert()
 {
-	global $vars;
+	global $vars, $script;
 	static $id = 0;
 
 	$num = func_num_args();
@@ -26,7 +27,6 @@ function plugin_lookup_convert()
 	$s_page    = htmlspecialchars($vars['page']);
 	++$id;
 
-	$script = get_script_uri();
 	$ret = <<<EOD
 <form action="$script" method="post">
  <div>

@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: rss.inc.php,v 1.21.2 2006/09/30 02:19:38 miko Exp $
+// $Id: rss.inc.php,v 1.21.3 2008/01/06 01:24:00 upk Exp $
 //
 // RSS plugin: Publishing RSS of RecentChanges
 //
@@ -33,7 +33,7 @@ function plugin_rss_action()
 
 	$lang = LANG;
 	$page_title_utf8 = mb_convert_encoding($page_title, 'UTF-8', SOURCE_ENCODING);
-	$self = get_script_uri();
+	$self = get_script_absuri();
 	$rss_description_utf8 = mb_convert_encoding(htmlspecialchars($rss_description), 'UTF-8', SOURCE_ENCODING);
 
 	// Creating <item>
@@ -42,6 +42,7 @@ function plugin_rss_action()
 	foreach (file_head($recent, $rss_max) as $line) {
 		list($time, $page) = explode("\t", rtrim($line));
 		$r_page = rawurlencode($page);
+		$url    = get_page_absuri($page);
 		$title  = mb_convert_encoding($page, 'UTF-8', SOURCE_ENCODING);
 
 		switch ($version) {
@@ -54,7 +55,7 @@ function plugin_rss_action()
 			$items .= <<<EOD
 <item>
  <title>$title</title>
- <link>$self?$r_page</link>
+ <link>$url</link>
 $date
 </item>
 
@@ -63,8 +64,7 @@ EOD;
 
 		case '1.0':
 			// Add <item> into <items>
-			$rdf_li .= '    <rdf:li rdf:resource="' . $self .
-				'?' . $r_page . '" />' . "\n";
+			$rdf_li .= '    <rdf:li rdf:resource="' . $url . '" />' . "\n";
 
 			$date = substr_replace(get_date('Y-m-d\TH:i:sO', $time), ':', -2, 0);
 			$trackback_ping = '';
@@ -73,11 +73,11 @@ EOD;
 				$trackback_ping = ' <trackback:ping rdf:resource="' . "$self?tb_id=$tb_id" . '"/>';
 			}
 			$items .= <<<EOD
-<item rdf:about="$self?$r_page">
+<item rdf:about="$url">
  <title>$title</title>
- <link>$self?$r_page</link>
+ <link>$url</link>
  <dc:date>$date</dc:date>
- <dc:identifier>$self?$r_page</dc:identifier>
+ <dc:identifier>$url</dc:identifier>
 $trackback_ping
 </item>
 
@@ -91,7 +91,7 @@ EOD;
 	header('Content-type: application/xml');
 	print '<?xml version="1.0" encoding="UTF-8"?>' . "\n\n";
 
-	$r_whatsnew = rawurlencode($whatsnew);
+	$url_whatsnew = get_page_absuri($whatsnew);
 	switch ($version) {
 	case '0.91':
 		print '<!DOCTYPE rss PUBLIC "-//Netscape Communications//DTD RSS 0.91//EN"' .
@@ -103,7 +103,7 @@ EOD;
 <rss version="$version">
  <channel>
   <title><![CDATA[$page_title_utf8]]></title>
-  <link>$self?$r_whatsnew</link>
+  <link>$url_whatsnew</link>
   <description><![CDATA[$rss_description_utf8]]></description>
   <language>$lang</language>
 
@@ -123,9 +123,9 @@ $xmlns_trackback
   xmlns="http://purl.org/rss/1.0/"
   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
   xml:lang="$lang">
- <channel rdf:about="$self?$r_whatsnew">
+ <channel rdf:about="$url_whatsnew">
   <title><![CDATA[$page_title_utf8]]></title>
-  <link>$self?$r_whatsnew</link>
+  <link>$url_whatsnew</link>
   <description><![CDATA[$rss_description_utf8]]></description>
   <items>
    <rdf:Seq>

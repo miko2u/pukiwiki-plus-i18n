@@ -1,8 +1,8 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: pukiwiki.ini.php,v 1.148.29 2007/12/12 02:38:00 upk Exp $
+// $Id: pukiwiki.ini.php,v 1.148.30 2008/01/05 01:17:00 upk Exp $
 // Copyright (C)
-//   2005-2007 PukiWiki Plus! Team
+//   2005-2008 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
 //   2001-2002 Originally written by yu-ji
 // License: GPL v2 or (at your option) any later version
@@ -150,16 +150,33 @@ defined('IMAGE_URI')      or define('IMAGE_URI', ROOT_URI . 'image/');	// Keep t
 // Also used as RSS feed's channel name etc
 $page_title = 'PukiWiki Plus!';
 
-// Specify PukiWiki URL (default: auto)
+// Specify PukiWiki Plus! URI(absoluteURI or relativeURI) (default: auto)
+// 必要であれば、絶対URIまたは相対URIを指定して下さい。
+// 省略時は、絶対URIが自動で設定されます。
 //$script = 'http://example.com/pukiwiki/';
+//$script = './';
 
 // Shorten $script: Cut its file name (default: not cut)
 //$script_directory_index = 'index.php';
+
+// absoluteURI
+// $script の値に、相対URIを指定した場合に効果があります。
+//
+// 0: It depends on the value of $script.
+// 1: The value of absoluteURI is always returned.
+// ----
+// 0: $script の値に準ずる
+// 1: 常に、絶対URIを戻す
+$absolute_uri = 0;
+// Specify PukiWiki Plus! absoluteURI (Only when you set $script to relativeURI)
+// $script に相対URIを指定した際に、必要であれば、絶対URIを指定して下さい。
+//$script_abs = '';
 
 // Site admin's name (CHANGE THIS)
 $modifier = 'anonymous';
 
 // Site admin's Web page (CHANGE THIS)
+//$modifierlink = get_script_absuri();
 $modifierlink = dirname($_SCRIPT_NAME);
 
 // Default page name

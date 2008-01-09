@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: minicalendar_viewer.inc.php,v 1.34.24 2006/06/05 18:21:00 miko Exp $
+// $Id: minicalendar_viewer.inc.php,v 1.34.25 2008/01/05 18:29:00 upk Exp $
 //
 // Calendar viewer plugin - List pages that calendar/calnedar2 plugin created
 // (Based on calendar and recent plugin)
@@ -219,9 +219,9 @@ function plugin_minicalendar_viewer_convert()
 
 		// if (PKWK_READONLY) {
 		if (auth::check_role('readonly')) {
-			$link = $script . '?' . $r_page;
+			$link = get_page_uri($page);
 		} else {
-			$link = $script . '?cmd=edit&amp;page=' . $r_page . '&amp;refpage=' . $refpage;
+			$link = get_resolve_uri('edit',$page,'refpage='.$refpage);
 		}
 		$link = '<a class="anchor_super" href="' . $link . '">' . $_symbol_paraedit . '</a>';
 		$head = '<h3 class="minicalendar">' . $s_page_title . ' ' . $link . '</h3>' . "\n";
@@ -234,7 +234,7 @@ function plugin_minicalendar_viewer_convert()
 				$mm = intval(date('n', $time));
 				$dd = intval(date('d', $time));
 				$monthlabel = array(1 => 
-					'January','Feburary','March',    'April',  'May',     'June',
+					'January','February','March',    'April',  'May',     'June',
 					'July',   'August',  'September','October','November','December'
 				);
 				$mmstr = $monthlabel[$mm];

@@ -2,8 +2,8 @@
 /**
  * PukiWiki Plus! IPアドレス認証プラグイン
  *
- * @copyright   Copyright &copy; 2007, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: remoteip.inc.php,v 0.3 2007/07/24 23:12:00 upk Exp $
+ * @copyright   Copyright &copy; 2007-2008, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * @version     $Id: remoteip.inc.php,v 0.4 2008/01/05 21:30:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'auth_api.cls.php');
@@ -65,8 +65,8 @@ function plugin_remoteip_get_user_name()
 
 function plugin_remoteip_jump_url()
 {
-	global $script, $vars;
-	return $scrip.'?'.rawurlencode($vars['page']);
+	global $vars;
+	return get_page_location_uri($vars['page']);
 }
 
 class auth_remoteip extends auth_api

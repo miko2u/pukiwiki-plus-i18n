@@ -2,9 +2,9 @@
 /**
  * PukiWiki Plus! TypeKey 認証処理
  *
- * @copyright   Copyright &copy; 2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * @copyright   Copyright &copy; 2006-2008, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: typekey.inc.php,v 0.13 2007/08/19 02:14:00 upk Exp $
+ * @version     $Id: typekey.inc.php,v 0.14 2008/01/05 18:56:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'auth_typekey.cls.php');
@@ -28,7 +28,7 @@ function plugin_typekey_init()
 
 function plugin_typekey_convert()
 {
-	global $script,$vars,$_typekey_msg,$auth_api;
+	global $vars,$_typekey_msg,$auth_api;
 
 	if (! function_exists('pkwk_session_start')) return '<p>'.$_typekey_msg['msg_not_found'].'</p>';
 	if (pkwk_session_start() == 0) return '<p>'.$_typekey_msg['msg_not_start'].'</p>';
@@ -40,7 +40,7 @@ function plugin_typekey_convert()
 
 	$user = $obj->get_profile_link();
 	if (! empty($user)) {
-		$page  = $script.rawurlencode('?plugin=typekey');
+		$page  = get_script_absuri().rawurlencode('?plugin=typekey');
 		if (! empty($vars['page'])) {
 			$page .= rawurlencode('&page='.$vars['page']);
 		}
@@ -72,7 +72,7 @@ EOD;
 
 function plugin_typekey_inline()
 {
-	global $script,$vars,$_typekey_msg,$auth_api;
+	global $vars,$_typekey_msg,$auth_api;
 
 	if (! function_exists('pkwk_session_start')) return $_typekey_msg['msg_not_found'];
 	if (pkwk_session_start() == 0) return $_typekey_msg['msg_not_start'];
@@ -84,7 +84,7 @@ function plugin_typekey_inline()
 	$link = $obj->get_profile_link();
 	if (! empty($link)) {
 		// 既に認証済
-		$page  = $script.rawurlencode('?plugin=typekey');
+		$page  = get_script_absuri().rawurlencode('?plugin=typekey');
 		if (! empty($vars['page'])) {
 			$page .= rawurlencode('&page='.$vars['page']);
 		}
@@ -101,7 +101,7 @@ function plugin_typekey_inline()
 
 function plugin_typekey_action()
 {
-	global $script,$vars,$auth_api;
+	global $vars,$auth_api;
 
 	if (! function_exists('pkwk_session_start')) return '';
 	if (pkwk_session_start() == 0) return '';
@@ -113,27 +113,27 @@ function plugin_typekey_action()
 	$obj->set_need_email($auth_api['typekey']['need_email']);
 	$obj->set_sigKey($vars);
 
-	$r_page = (empty($vars['page'])) ? '' : rawurlencode($vars['page']);
+	$page = (empty($vars['page'])) ? '' : $vars['page'];
 
 	if (! $obj->auth()) {
 		if (isset($vars['logout'])) {
 			$obj->auth_session_unset();
 		}
-		header('Location: '.$script.'?'.$r_page);
+		header('Location: '.get_page_location_uri($page));
 		die();
 	}
 
 	// 認証成功
 	$obj->typekey_session_put();
-	header('Location: '.$script.'?'.$r_page);
+	header('Location: '.get_page_location_uri($page));
 	die();
 }
 
 function plugin_typekey_jump_url()
 {
-	global $auth_api,$script,$vars;
+	global $auth_api,$vars;
 
-	$page  = $script.rawurlencode('?plugin=typekey');
+	$page  = get_script_absuri().rawurlencode('?plugin=typekey');
 	if (! empty($vars['page'])) {
 		$page .= rawurlencode('&page='.$vars['page']);
 	}

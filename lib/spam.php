@@ -1013,7 +1013,7 @@ function pkwk_spamnotify($action, $page, $target = array('title' => ''), $progre
 
 	$summary['COMMENT'] = $action;
 	$summary['PAGE']    = '[blocked] ' . (is_pagename($page) ? $page : '');
-	$summary['URI']     = get_script_uri() . '?' . rawurlencode($page);
+	$summary['URI']     = get_script_absuri() . '?' . rawurlencode($page);
 	$summary['USER_AGENT']  = TRUE;
 	$summary['REMOTE_ADDR'] = TRUE;
 	pkwk_mail_notify($notify_subject,  var_export($target, TRUE), $summary, TRUE);

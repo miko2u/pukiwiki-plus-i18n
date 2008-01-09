@@ -2,8 +2,8 @@
 /**
  * PukiWiki Plus! PRINT Plugin
  *
- * @copyright   Copyright &copy; 2007, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: print.inc.php,v 0.6 2007/07/09 23:38:00 upk Exp $
+ * @copyright   Copyright &copy; 2007-2008, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * @version     $Id: print.inc.php,v 0.7 2008/01/06 05:34:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  *
  */
@@ -271,10 +271,9 @@ EOD;
 
 function print_qr_code($page)
 {
-	global $script;
-
 	if (! exist_plugin_inline('qrcode')) return '';
 
+	$script = get_script_absuri();
 	$r_page = rawurlencode($page);
 	$a_script = $script;
 	$a_script = str_replace("\\", "\\\\", $a_script);
@@ -282,7 +281,7 @@ function print_qr_code($page)
 	$a_script = str_replace(';', '\;', $a_script);
 	$a_script = str_replace(',', '\,', $a_script);
 	$a_page = str_replace('%', '%25', $r_page);
-	return plugin_qrcode_inline(1,"$script?$a_page");
+	return plugin_qrcode_inline(1, $script.'?'.$a_page);
 }
 
 ?>

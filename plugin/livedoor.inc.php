@@ -2,9 +2,9 @@
 /**
  * PukiWiki Plus! livedoor 認証処理
  *
- * @copyright   Copyright &copy; 2007, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * @copyright   Copyright &copy; 2007-2008, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: livedoor.inc.php,v 0.5 2007/08/19 02:11:00 upk Exp $
+ * @version     $Id: livedoor.inc.php,v 0.6 2008/01/05 18:21:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'auth_livedoor.cls.php');
@@ -103,13 +103,11 @@ function plugin_livedoor_inline()
 
 function plugin_livedoor_action()
 {
-	global $script,$vars,$auth_api,$_livedoor_msg;
+	global $vars,$auth_api,$_livedoor_msg;
 
 	if (! $auth_api['livedoor']['use']) return '';
 	if (! function_exists('pkwk_session_start')) return '';
 	if (pkwk_session_start() == 0) return '';
-
-	$r_page = (empty($vars['page'])) ? '' : rawurlencode( decode($vars['page']) );
 
 	$die_message = (PLUS_PROTECT_MODE) ? 'die_msg' : 'die_message';
 
@@ -124,7 +122,8 @@ function plugin_livedoor_action()
 	// LOGOUT
 	if (isset($vars['logout'])) {
 		$obj->auth_session_unset();
-		header('Location: '.$script.'?'.$r_page);
+		$page = (empty($vars['page'])) ? '' : decode($vars['page']);
+		header('Location: '.get_page_location_uri($page));
 		die();
 	}
 
@@ -138,8 +137,7 @@ function plugin_livedoor_action()
 	}
 
 	$obj->auth_session_put();
-	$r_page = rawurlencode($obj->get_return_page());
-	header('Location: '.$script.'?'.$r_page);
+	header('Location: '. get_page_location_uri($obj->get_return_page()));
 	die();
 }
 

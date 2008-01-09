@@ -1,8 +1,8 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: md5.inc.php,v 1.24.2 2006/05/04 05:04:43 miko Exp $
+// $Id: md5.inc.php,v 1.24.3 2008/01/05 23:16:00 upk Exp $
 // Copyright (C)
-//   2005-2006 PukiWiki Plus! Team
+//   2005-2006,2008 PukiWiki Plus! Team
 //   2001-2006 PukiWiki Developers Team
 // License: GPL v2 or (at your option) any later version
 //
@@ -59,6 +59,8 @@ function plugin_md5_action()
 // $value    = Default passphrase value
 function plugin_md5_show_form($nophrase = FALSE, $value = '')
 {
+	global $script;
+
 	// if (PKWK_SAFE_MODE || PKWK_READONLY) die_message(_('Prohibited'));
 	if (auth::check_role('safemode') || auth::check_role('readonly')) die_message(_('Prohibited'));
 	if (strlen($value) > PKWK_PASSPHRASE_LIMIT_LENGTH)
@@ -74,8 +76,6 @@ function plugin_md5_show_form($nophrase = FALSE, $value = '')
 		$md5_checked  = 'checked="checked" ';
 	}
 
-	$self = get_script_uri();
-
 	$form = '<p><strong>'
 	      . _("NOTICE: Don't use this feature via untrustful or unsure network")
 	      . '</strong></p>' . "\n" . '<hr />' . "\n";
@@ -83,7 +83,7 @@ function plugin_md5_show_form($nophrase = FALSE, $value = '')
 	if ($nophrase) $form .= '<strong>' . _("NO PHRASE") . '</strong><br />';
 
 	$form .= <<<EOD
-<form action="$self" method="post">
+<form action="$script" method="post">
  <div>
   <input type="hidden" name="plugin" value="md5" />
   <label for="_p_md5_phrase">Phrase:</label>

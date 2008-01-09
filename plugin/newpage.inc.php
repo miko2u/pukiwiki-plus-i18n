@@ -53,13 +53,11 @@ function plugin_newpage_action()
 		return $retvars;
 	} else {
 		$page    = strip_bracket($vars['page']);
-		$r_page  = rawurlencode(isset($vars['refer']) ?
-			get_fullname($page, $vars['refer']) : $page);
+		$r_page  = isset($vars['refer']) ? get_fullname($page, $vars['refer']) : $page;
 		$r_refer = rawurlencode($vars['refer']);
 
 		pkwk_headers_sent();
-		header('Location: ' . get_script_uri() .
-			'?cmd=read&page=' . $r_page . '&refer=' . $r_refer);
+		header('Location: ' . get_page_location_uri($page,'refer='.$r_refer));
 		exit;
 	}
 }

@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: expand.inc.php,v 0.1.3 2007/07/09 23:33:00 upk Exp $
+// $Id: expand.inc.php,v 0.1.4 2008/01/05 23:09:00 upk Exp $
 //
 // Expand Plugin
 define('PLUGIN_EXPAND_ICON', IMAGE_URI . 'plus/expand.gif');
@@ -24,6 +24,8 @@ function plugin_expand_action()
 
 function plugin_expand_convert()
 {
+	global $script;
+
 	$numargs = func_num_args();
 	if ($numargs == 3) {
 		list($width,$height,$source) = func_get_args();
@@ -40,8 +42,6 @@ function plugin_expand_convert()
 	}
 	if (!isset($width) || $width < PLUGIN_EXPAND_MIN_WIDTH) { return _('#expand: too few width. ') . $width; }
 	if (isset($height) && $height < PLUGIN_EXPAND_MIN_HEIGHT) { return _('#expand: too few height. ') . $height; }
-
-	$script = get_script_uri();
 
 	$lines = preg_replace(array("[\\r|\\n]","[\\r]"), array("\n","\n"), $source);
 	$lines = preg_replace(array("'<p>'si","'</p>'si"), array("",""), convert_html($lines));

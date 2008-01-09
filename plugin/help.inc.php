@@ -2,15 +2,12 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: help.inc.php,v 0.3 2004/08/09 15:09:20 miko Exp $
+// $Id: help.inc.php,v 0.4 2008/01/05 18:17:00 upk Exp $
 //
 function plugin_help_action()
 {
-	global $script;
 	global $help_page;
-
-	$url = "$script?".rawurlencode($help_page);
-	header("Location: $url");
+	header('Location: '. get_page_location_uri($help_page));
 	die();
 }
 ?>

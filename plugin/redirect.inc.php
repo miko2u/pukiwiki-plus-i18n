@@ -2,8 +2,8 @@
 /**
  * リダイレクトプラグイン
  *
- * @copyright   Copyright &copy; 2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: redirect.inc.php,v 0.2 2006/05/04 00:17:00 upk Exp $
+ * @copyright   Copyright &copy; 2006,2008, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * @version     $Id: redirect.inc.php,v 0.3 2008/01/06 05:35:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License
  *
  */
@@ -14,7 +14,7 @@ function plugin_redirect_action()
 	if (empty($vars['u'])) return '';
 
 	// 自サイトからのリダイレクトのみ飛ばす
-	if (path_check($_SERVER['HTTP_REFERER'],get_script_uri())) {
+	if (path_check($_SERVER['HTTP_REFERER'],get_script_absuri())) {
 		// 以下の方法は、NG です。
 		// <a href="javascript:location.replace('URL');">Caption</a>
 		//header('Location: ' . $vars['u'] );

@@ -2,32 +2,25 @@
 /**
  * Detect user's language, and show only messages written in that.  
  *
- * @copyright	Copyright &copy; 2005-2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version	$Id: multilang.inc.php,v 0.11 2006/02/14 01:40:00 upk Exp $
+ * @copyright	Copyright &copy; 2005-2006,2008, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * @version	$Id: multilang.inc.php,v 0.12 2008/01/05 18:32:00 upk Exp $
  *
  */
 
 // ja_JP, ko_KR, en_US, zh_TW
 // They are used as delimiters at &multilang(link,ja_JP=Japanese,en_US=English,.....);
-if (!defined('PLUGIN_MULTILANG_INLINE_BEFORE')) {
-	define('PLUGIN_MULTILANG_INLINE_BEFORE', '[ ');
-}
-if (!defined('PLUGIN_MULTILANG_INLINE_DELIMITER')) {
-	define('PLUGIN_MULTILANG_INLINE_DELIMITER', ' | ');
-}
-if (!defined('PLUGIN_MULTILANG_INLINE_AFTER')) {
-	define('PLUGIN_MULTILANG_INLINE_AFTER',  ' ]');
-}
+defined('PLUGIN_MULTILANG_INLINE_BEFORE')    or define('PLUGIN_MULTILANG_INLINE_BEFORE', '[ ');
+defined('PLUGIN_MULTILANG_INLINE_DELIMITER') or define('PLUGIN_MULTILANG_INLINE_DELIMITER', ' | ');
+defined('PLUGIN_MULTILANG_INLINE_AFTER')     or define('PLUGIN_MULTILANG_INLINE_AFTER',  ' ]');
 
 function plugin_multilang_action()
 {
-	global $vars, $script;
-	global $language;
+	global $vars, $language;
 
 	$page = isset($vars['page']) ? $vars['page'] : '';
 	$lang = isset($vars['lang']) ? $vars['lang'] : '';
 
-	$parsed_url = parse_url($script);
+	$parsed_url = parse_url( get_script_absuri() );
 	$path = $parsed_url['path'];
 	if (($pos = strrpos($path, '/')) !== FALSE) {
 		$path = substr($path, 0, $pos + 1);
@@ -42,7 +35,7 @@ function plugin_multilang_action()
 	// Location ヘッダーで飛ばないような環境の場合は、この部分を
 	// 有効にして対応下さい。
 	// if(exist_plugin_action('read')) return plugin_read_action();
-	header('Location: ' . get_script_uri() . '?' . rawurlencode($page) );
+	header('Location: ' . get_page_location_uri($page));
 	exit;
 }
 
@@ -68,11 +61,11 @@ function plugin_multilang_inline()
 
 function plugin_multilang_inline_link($option, $args)
 {
-	global $vars, $script;
+	global $vars;
 
 	$body = array();
 	$page = $vars['page'];
-	$url = $script.'?page='.rawurlencode($page).'&amp;cmd=multilang&amp;lang';
+	$url = get_resolve_uri('multilang',$page,'lang');
 	$obj_l2c = new lang2country();
 
 	foreach( $args as $arg ) {
@@ -96,7 +89,7 @@ function plugin_multilang_inline_link($option, $args)
 			}
 		}
 
-		array_push($body, "<a href=\"$url=$lang\">$title</a>");
+		array_push($body, '<a href="'.$url.'='.$lang.'">'.$title.'</a>');
 	}
 	
 	if($option == 'delim') { // default: nodelim

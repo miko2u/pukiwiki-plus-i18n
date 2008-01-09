@@ -1,8 +1,8 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: make_link.php,v 1.35.17 2007/06/02 16:03:00 upk Exp $
+// $Id: make_link.php,v 1.35.18 2008/01/05 17:41:00 upk Exp $
 // Copyright (C)
-//   2005-2007 PukiWiki Plus! Team
+//   2005-2008 PukiWiki Plus! Team
 //   2003-2006 PukiWiki Developers Team
 //   2001-2002 Originally written by yu-ji
 // License: GPL v2 or (at your option) any later version
@@ -161,7 +161,7 @@ class Link
 	function Link($start)
 	{
 		$this->start = $start;
-		$this->redirect = (PKWK_USE_REDIRECT) ? get_script_uri().'?plugin=redirect&amp;u=' : '';
+		$this->redirect = (PKWK_USE_REDIRECT) ? get_script_absuri().'?plugin=redirect&amp;u=' : '';
 	}
 
 	// Return a regex pattern to match
@@ -318,7 +318,7 @@ EOD;
 		if (PKWK_ALLOW_RELATIVE_FOOTNOTE_ANCHOR) {
 			$script = '';
 		} else {
-			$script = get_script_uri() . '?' . rawurlencode($page);
+			$script = get_page_uri($page);
 		}
 
 		$id   = ++$note_id;
@@ -526,8 +526,6 @@ EOD;
 
 	function set($arr, $page)
 	{
-		global $script;
-
 		list(, $alias, , $name, $this->param) = $this->splice($arr);
 
 		$matches = array();
@@ -536,7 +534,7 @@ EOD;
 
 		$url = get_interwiki_url($name, $this->param);
 		$this->url = ($url === FALSE) ?
-			$script . '?' . rawurlencode('[[' . $name . ':' . $this->param . ']]') :
+			get_page_uri('[[' . $name . ':' . $this->param . ']]') :
 			htmlspecialchars($url);
 
 		return parent::setParam(
@@ -870,9 +868,8 @@ function make_tooltips($term,$glossary_page='')
 
 	$page = strip_bracket($term);
 	if ( is_page($page) ) {
-		$f_page = rawurlencode($page);
 		$passage = get_pg_passage($page,FALSE);
-		return '<a href="' . $script . '?' . $f_page . '" class="linktip" title="' . $s_glossary . $passage . '">' . $term . '</a>';
+		return '<a href="' . get_page_uri($page) . '" class="linktip" title="' . $s_glossary . $passage . '">' . $term . '</a>';
 	} elseif ($ajax) {
 		return '<span class="tooltip"' . 
 			' onmouseover="' . "javascript:this.style.backgroundColor='#ffe4e1';showGlossaryPopup('" . $script . "?plugin=tooltip&amp;q=" . $s_term . "',event,0.2);" . '"' .
@@ -928,10 +925,10 @@ function make_pagelink($page, $alias = '', $anchor = '', $refer = '', $isautolin
 			$al_left = $al_right = '';
 		}
 
-		return $al_left . '<a ' . 'href="' . $script . '?' . $r_page . $anchor .
+		return $al_left . '<a ' . 'href="' . get_page_uri($page) . $anchor .
 			'"' . $title . '>' . $s_alias . '</a>' . $al_right;
 //		return open_uri_in_new_window($al_left .
-//			'<a href="' . $script . '?' . $r_page . $anchor . '"' . $title . '>' .
+//			'<a href="' . get_page_uri($page) . $anchor . '"' . $title . '>' .
 //			$s_alias . '</a>' . $al_right, 'make_pagelink');
 	} else {
 		// Dangling link

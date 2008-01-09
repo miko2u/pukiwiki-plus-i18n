@@ -1,7 +1,7 @@
 <?php
-// $Id: miximixirecent.inc.php,v 1.14.1 2005/06/05 10:24:01 miko Exp $
+// $Id: miximixirecent.inc.php,v 1.14.2 2008/01/05 18:30:00 upk Exp $
 // Copyright (C)
-//   2005      PukiWiki Plus! Team
+//   2005,2008 PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
 //   2002      Y.MASUI http://masui.net/pukiwiki/ masui@masui.net
 // License: GPL version 2
@@ -52,7 +52,6 @@ function plugin_mixirecent_convert()
 		return '#mixirecent(): Cache file of RecentChanges not found' . '<br />';
 	}
 
-	$script = get_script_uri();
 	$date = $items = '';
 	foreach ($lines as $line) {
 		list($time, $page) = explode("\t", rtrim($line));
@@ -69,7 +68,6 @@ function plugin_mixirecent_convert()
 		}
 
 		$s_page = htmlspecialchars($page);
-		$r_page = rawurlencode($page);
 		$pg_passage = get_pg_passage($page, FALSE);
 		if (plugin_mixirecent_isValidDate(substr($page,-10)) && check_readable($page,false,false)) {
 			// for Calendar/MiniCalendar
@@ -85,7 +83,7 @@ function plugin_mixirecent_convert()
 					$anchortitle = preg_replace("/[\r\n]/", ' ', $anchortitle);
 					$anchortitle = PLUGIN_MIXIRECENT_NOTITLE ? $anchortitle : $anchortitle . '(' . $title . ')';
 					$sharp = '#';
-					$itemhx .= "<li><a href=\"$self?$r_page{$sharp}{$matches[3]}\" title=\"$s_page $pg_passage\">{$anchortitle}</a></li>\n";
+					$itemhx .= "<li><a href=\"" . get_page_uri($page) . "{$sharp}{$matches[3]}\" title=\"$s_page $pg_passage\">{$anchortitle}</a></li>\n";
 				}
 			}
 			if ($itemhx != '') {
@@ -94,7 +92,7 @@ function plugin_mixirecent_convert()
 				// No need to link to the page now you read, notifies where you just read
 				$items .= ' <li>' . $s_page . '</li>' . "\n";
 			} else {
-				$items .= ' <li><a href="' . $script . '?' . $r_page . '" title="' .
+				$items .= ' <li><a href="' . get_page_uri($page) . '" title="' .
 					$s_page . ' ' . $pg_passage . '">' . $s_page . '</a></li>' . "\n";
 			}
 			$vars['page'] = $savepage;
@@ -103,7 +101,7 @@ function plugin_mixirecent_convert()
 				// No need to link to the page now you read, notifies where you just read
 				$items .= ' <li>' . $s_page . '</li>' . "\n";
 			} else {
-				$items .= ' <li><a href="' . $script . '?' . $r_page . '" title="' .
+				$items .= ' <li><a href="' . get_page_uri($page) . '" title="' .
 					$s_page . ' ' . $pg_passage . '">' . $s_page . '</a></li>' . "\n";
 			}
 		}

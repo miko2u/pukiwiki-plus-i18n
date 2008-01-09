@@ -1,10 +1,10 @@
 <?php
-// $Id: bugtrack.inc.php,v 1.26.3 2007/10/21 17:10:00 upk Exp $
+// $Id: bugtrack.inc.php,v 1.26.4 2008/01/05 18:09:00 upk Exp $
 //
 // PukiWiki BugTrack plugin
 //
 // Copyright:
-// 2005-2006 PukiWiki Plus! Developers Team
+// 2005-2008 PukiWiki Plus! Developers Team
 // 2002-2005 PukiWiki Developers Team
 // 2002 Y.MASUI GPL2  http://masui.net/pukiwiki/ masui@masui.net
 
@@ -67,7 +67,7 @@ function plugin_bugtrack_convert()
 
 function plugin_bugtrack_print_form($base, $category)
 {
-	global $_plugin_bugtrack;
+	global $_plugin_bugtrack, $script;
 	static $id = 0;
 
 	++$id;
@@ -108,7 +108,6 @@ function plugin_bugtrack_print_form($base, $category)
 		$_SESSION[$keyword] = md5(get_ticket() . $ticket);
 	}
 
-	$script     = get_script_uri();
 	$s_base     = htmlspecialchars($base);
 	$s_name     = htmlspecialchars($_plugin_bugtrack['name']);
 	$s_category = htmlspecialchars($_plugin_bugtrack['category']);
@@ -207,7 +206,7 @@ function plugin_bugtrack_action()
 		$post['version'], $post['body']);
 
 	pkwk_headers_sent();
-	header('Location: ' . get_script_uri() . '?' . rawurlencode($page));
+        header('Location: ' . get_page_location_uri($page));
 	exit;
 }
 
@@ -283,7 +282,7 @@ EOD;
 // #bugtrack_list plugin itself
 function plugin_bugtrack_list_convert()
 {
-	global $script, $vars, $_plugin_bugtrack;
+	global $vars, $_plugin_bugtrack;
 
 	$page = $vars['page'];
 	if (func_num_args()) {

@@ -364,7 +364,7 @@ function attach_doupload(&$file, $page, $pass=NULL, $temp='', $copyright=FALSE, 
 		$footer['FILESIZE'] = & $file['size'];
 		$footer['PAGE']     = & $page;
 
-		$footer['URI']      = get_script_uri() .
+		$footer['URI']      = get_script_absuri() .
 			//'?' . rawurlencode($page);
 
 			// MD5 may heavy
@@ -911,8 +911,7 @@ EOD;
 			$footer['ACTION']   = 'File deleted';
 			$footer['FILENAME'] = & $this->file;
 			$footer['PAGE']     = & $this->page;
-			$footer['URI']      = get_script_uri() .
-				'?' . rawurlencode($this->page);
+			$footer['URI']      = get_page_absuri($this->page);
 			$footer['USER_AGENT']  = TRUE;
 			$footer['REMOTE_ADDR'] = TRUE;
 			pkwk_mail_notify($notify_subject, "\n", $footer) or
