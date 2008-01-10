@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: html.php,v 1.65.17 2008/01/05 17:33:00 upk Exp $
+// $Id: html.php,v 1.65.18 2008/01/11 01:20:00 upk Exp $
 // Copyright (C)
 //   2005-2008 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
@@ -462,13 +462,7 @@ function strip_autolink($str)
 // Make a backlink. searching-link of the page name, by the page name, for the page name
 function make_search($page)
 {
-	global $script;
-
-	$s_page = htmlspecialchars($page);
-	$r_page = rawurlencode($page);
-
-	return '<a href="' . $script . '?plugin=related&amp;page=' . $r_page .
-		'">' . $s_page . '</a> ';
+	return '<a href="' . get_resolve_uri('related',$page) . '">' . htmlspecialchars($page) . '</a> ';
 }
 
 // Make heading string (remove heading-related decorations from Wiki text)

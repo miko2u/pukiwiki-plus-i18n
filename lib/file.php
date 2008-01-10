@@ -1,8 +1,8 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: file.php,v 1.87.36 2007/12/12 02:35:00 upk Exp $
+// $Id: file.php,v 1.87.37 2008/01/11 01:35:00 upk Exp $
 // Copyright (C)
-//   2005-2007 PukiWiki Plus! Team
+//   2005-2008 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
 //   2001-2002 Originally written by yu-ji
 // License: GPL v2 or (at your option) any later version
@@ -182,8 +182,6 @@ function page_write($page, $postdata, $notimestamp = FALSE)
 
 function get_link_list($diffdata)
 {
-	global $script;
-
 	$links = array();
 
 	list($plus, $minus) = get_diff_lines($diffdata);
@@ -206,7 +204,7 @@ function get_link_list($diffdata)
 	unset($plus,$minus);
 
 	// Reject own URL (Pattern _NOT_ started with '$script' and '?')
-	$links = preg_grep('/^(?!' . preg_quote($script, '/') . '\?)./', $links);
+	$links = preg_grep('/^(?!' . preg_quote(get_script_absuri(), '/') . '\?)./', $links);
 
 	// No link, END
 	if (! is_array($links) || empty($links)) return;

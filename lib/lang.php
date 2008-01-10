@@ -2,8 +2,8 @@
 /**
  * Language judgment (言語判定)
  *
- * @copyright   Copyright &copy; 2005-2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: lang.php,v 0.24 2006/06/24 23:05:00 upk Exp $
+ * @copyright   Copyright &copy; 2005-2006,2008, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * @version     $Id: lang.php,v 0.25 2008/01/11 01:09:00 upk Exp $
  *
  */
 
@@ -21,7 +21,6 @@ function set_language()
 	global $language_considering_setting_level;
 	global $language;
 	global $public_holiday_guest_view;
-	global $script;
 
 	$language = get_language($language_considering_setting_level);
 
@@ -29,7 +28,7 @@ function set_language()
 	define('LANG', $language);
 
 	// Set COOKIE['lang']
-	$parsed_url = parse_url($script);
+	$parsed_url = parse_url(get_script_absuri());
 	$path = $parsed_url['path'];
 	if (($pos = strrpos($path, '/')) !== FALSE) {
 		$path = substr($path, 0, $pos + 1);

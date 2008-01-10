@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: funcplus.php,v 0.1.37 2008/01/06 05:29:00 upk Exp $
+// $Id: funcplus.php,v 0.1.38 2008/01/11 01:15:00 upk Exp $
 // Copyright (C)
 //   2005-2008 PukiWiki Plus! Team
 // License: GPL v2 or (at your option) any later version
@@ -123,7 +123,7 @@ function get_fancy_uri()
 {
 	$script  = (SERVER_PORT == 443 ? 'https://' : 'http://'); // scheme
 	$script .= SERVER_NAME; // host
-	$script .= (SERVER_PORT == 80 ? '' : ':' . SERVER_PORT); // port
+	$script .= (SERVER_PORT == 80 || SERVER_PORT == 443) ? '' : ':' . SERVER_PORT;  // port
 
 	// SCRIPT_NAME が'/'で始まっていない場合(cgiなど) REQUEST_URIを使ってみる
 	$path    = SCRIPT_NAME;

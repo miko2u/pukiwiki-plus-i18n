@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: make_link.php,v 1.35.18 2008/01/05 17:41:00 upk Exp $
+// $Id: make_link.php,v 1.35.19 2008/01/11 01:31:00 upk Exp $
 // Copyright (C)
 //   2005-2008 PukiWiki Plus! Team
 //   2003-2006 PukiWiki Developers Team
@@ -886,10 +886,9 @@ function make_tooltips($term,$glossary_page='')
 // Make hyperlink for the page
 function make_pagelink($page, $alias = '', $anchor = '', $refer = '', $isautolink = FALSE)
 {
-	global $script, $vars, $link_compact, $related, $_symbol_noexists;
+	global $vars, $link_compact, $related, $_symbol_noexists;
 
 	$s_page = htmlspecialchars(strip_bracket($page));
-	$r_page = rawurlencode($page);
 	if (! is_page($page)) {
 		$realpages = get_autoaliases(strip_bracket($page));
 		foreach ($realpages as $realpage) {
@@ -936,7 +935,7 @@ function make_pagelink($page, $alias = '', $anchor = '', $refer = '', $isautolin
 		if (auth::check_role('readonly')) return $s_alias; // No dacorations
 
 		$retval = $s_alias . '<a href="' .
-			$script . '?cmd=edit&amp;page=' . $r_page . $r_refer . '">' .
+			get_resolve_uri('edit',$page) . $r_refer . '">' .
 			$_symbol_noexists . '</a>';
 
 		if ($link_compact) {

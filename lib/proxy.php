@@ -1,7 +1,7 @@
 <?php
-// $Id: proxy.php,v 2.1.10 2006/08/11 01:03:29 miko Exp $
+// $Id: proxy.php,v 2.1.11 2008/01/11 01:12:00 upk Exp $
 // Copyright (C)
-//   2005-2006 PukiWiki Plus! Team
+//   2005-2006,2008 PukiWiki Plus! Team
 //   2003-2005 PukiWiki Developers Team
 // License: GPL v2 or (at your option) any later version
 //
@@ -19,9 +19,7 @@ define('PKWK_HTTP_CLIENT', 'PukiWiki/1.4');
  */
 function is_requestable($uri)
 {
-	global $script;
-
-	$arr1 = parse_url($script);
+	$arr1 = parse_url(get_script_absuri());
 	$arr2 = parse_url($uri);
 	$arr1['port']  = isset($arr1['port'])  ? $arr1['port'] : 80;
 	$arr2['port']  = isset($arr2['port'])  ? $arr2['port'] : 80;

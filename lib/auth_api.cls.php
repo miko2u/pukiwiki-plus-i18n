@@ -2,9 +2,9 @@
 /**
  * PukiWiki Plus! 認証処理
  *
- * @copyright   Copyright &copy; 2007, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * @copyright   Copyright &copy; 2007-2008, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth_api.cls.php,v 0.1 2007/07/13 01:05:00 upk Exp $
+ * @version     $Id: auth_api.cls.php,v 0.2 2008/01/11 01:01:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 // require_once(LIB_DIR . 'hash.php');
@@ -61,8 +61,7 @@ class auth_api
 
 	function message_md5()
 	{
-		global $script;
-		return md5($this->auth_name.'_message_'.$script.session_id());
+		return md5($this->auth_name.'_message_'.get_script_absuri().session_id());
 	}
 }
 
