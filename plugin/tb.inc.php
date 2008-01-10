@@ -1,10 +1,10 @@
 <?php
-// $Id: tb.inc.php,v 1.19.31 2007/10/21 17:11:00 upk Exp $
+// $Id: tb.inc.php,v 1.19.32 2008/01/11 00:17:00 upk Exp $
 /*
  * PukiWiki/TrackBack: TrackBack Ping receiver and viewer
- * (C) 2007      PukiWiki Plus! Team
- * (C) 2003,2005-2006 Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * (C) 2007 PukiWiki Plus! Team
  * (C) 2003-2005 PukiWiki Developers Team
+ * (C) 2003,2005-2008 Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * License: GPL
  *
  * plugin_tb_convert()          block plugin
@@ -84,7 +84,7 @@ function plugin_tb_action()
 
 function plugin_tb_inline()
 {
-	global $vars, $trackback, $script;
+	global $vars, $trackback;
 
 	if (! $trackback) return '';
 
@@ -99,7 +99,7 @@ function plugin_tb_inline()
 
 	$tb_id = tb_get_id($page);
 
-	return $script . '?tb_id=' . $tb_id;
+	return get_script_absuri() . '?tb_id=' . $tb_id;
 }
 
 // Save or update TrackBack Ping data
@@ -290,12 +290,12 @@ function plugin_tb_mode_view($tb_id)
 
 function plugin_tb_mode_view_set($page)
 {
-	global $script, $vars;
+	global $vars;
 
 	$tb_id = tb_get_id($page);
 
 	$body = '<div><fieldset><legend>'._('TrackBack URL').'</legend>'.
-		'<p>'.$script . '?tb_id=' . $tb_id.'</p>'.
+		'<p>'. get_script_absuri() . '?tb_id=' . $tb_id.'</p>'.
 		'</fieldset></div>'."\n";
 
 	$_tb_header_Weblog  = _('Blog:');
@@ -331,7 +331,7 @@ function plugin_tb_mode_view_set($page)
 	}
 
 	$body .= '<div style="text-align:right">' .
-		 '<a href="' . $script . '?plugin=tb&amp;__mode=view">' .
+		 '<a href="' . get_resolve_uri('tb','','__mode=view') . '">' .
 		 '<img src="'.IMAGE_URI.'plus/trackback.png" alt="" title="" />' .
 		 'Trackback List' . 
 		 '</a>'. "</div>\n";
