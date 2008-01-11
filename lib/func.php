@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: func.php,v 1.93.24 2008/01/10 02:52:00 upk Exp $
+// $Id: func.php,v 1.93.25 2008/01/11 23:28:00 upk Exp $
 // Copyright (C)
 //   2005-2008 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
@@ -955,32 +955,33 @@ function get_resolve_uri($cmd='', $page='', $query='', $abs=0, $location=0)
 	// $ret = ($abs) ? get_script_absuri() : ($absolute_uri ? get_script_absuri() : $script);
 
 	$flag = '?';
-	$amp = ($location) ? '&' : '&amp;';
 	$page_pref = '';
 
+	if ($cmd == 'read') $cmd = '';
 	if (! empty($cmd)) {
 		$ret .= $flag.'cmd='.$cmd;
-		$flag = $amp;
+		$flag = '&';
 		$page_pref = 'page=';
 	}
 
-	if (! empty($page)) {
+        if (! empty($page)) {
 		$ret .= $flag.$page_pref.rawurlencode($page);
-		$flag = $amp;
-	}
+		$flag = '&';
+        }
 
 	if (is_array($query)) {
 		foreach($query as $key=>$val) {
 			$ret .= $flag . $key . '='. rawurlencode($val);
-			$flag = $amp;
+			$flag = '&';
 		}
 	} else
 	if (! empty($query)) {
-		$ret .= $flag . $query;
+		$ret .= (substr($query,0,1) === '#') ? '' : $flag;
+		$ret .= $query;
 	}
 
 	unset($flag, $page_pref);
-	return $ret;
+	return ($location) ? $ret : htmlspecialchars($ret);
 }
 
 function get_resolve_absuri($cmd='', $page='', $query='')
@@ -991,7 +992,6 @@ function get_resolve_absuri($cmd='', $page='', $query='')
 	return get_resolve_uri($cmd,$page,$query,1);
 }
 
-// get_resolve_uri
 function get_page_uri($page, $query='')
 {
 	return get_resolve_uri('', $page, $query);
@@ -1007,7 +1007,6 @@ function get_page_location_uri($page='', $query='')
 	return get_resolve_uri('', $page, $query, 1, 1);
 }
 
-// get_resolve_uri
 function get_location_uri($cmd='', $page='', $query='')
 {
 	return get_resolve_uri($cmd, $page, $query, 1, 1);

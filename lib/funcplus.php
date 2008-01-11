@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: funcplus.php,v 0.1.38 2008/01/11 01:15:00 upk Exp $
+// $Id: funcplus.php,v 0.1.39 2008/01/12 01:02:00 upk Exp $
 // Copyright (C)
 //   2005-2008 PukiWiki Plus! Team
 // License: GPL v2 or (at your option) any later version
@@ -533,5 +533,46 @@ function get_main_pagename()
 	}
 
 	return '';
+}
+
+function get_baseuri($path='abs')
+{
+	global $script;
+
+	// RFC2396,RFC3986 : relativeURI = ( net_path | abs_path | rel_path ) [ "?" query ]
+	$ret = '';
+	$relativeURI = get_script_absuri();
+	$parsed_url = parse_url($relativeURI);
+
+	switch($path) {
+	case 'net': // net_path      = "//" authority [ abs_path ]
+		$pref = '//';
+		if (isset($parsed_url['user'])) {
+			$ret .= $pref . $parsed_url['user'];
+			$pref = '';
+			$ret .= (isset($parsed_url['pass'])) ? ':'.$parsed_url['pass'] : '';
+			$ret .= '@';
+		}
+		if (isset($parsed_url['host'])) {
+			$ret .= $pref . $parsed_url['host'];
+			$pref = '';
+		}
+		$ret .= (isset($parsed_url['port'])) ? ':'.$parsed_url['port'] : '';
+	case 'abs': // abs_path      = "/"  path_segments
+		if (isset($parsed_url['path']) && ($pos = strrpos($parsed_url['path'], '/')) !== false) {
+			$ret .= substr($parsed_url['path'], 0, $pos + 1);
+		} else {
+			$ret .= '/';
+		}
+		break;
+	case 'rel': // rel_path      = rel_segment [ abs_path ]
+		$ret = (is_url($script, true)) ? './' : $script;
+		break;
+	case 'full':
+		$ret = substr($relativeURI, 0, strrpos($relativeURI, '/')+1);
+		break;
+	}
+
+	return $ret;
 }
 ?>

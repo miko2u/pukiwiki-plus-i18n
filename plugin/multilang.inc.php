@@ -3,7 +3,7 @@
  * Detect user's language, and show only messages written in that.  
  *
  * @copyright	Copyright &copy; 2005-2006,2008, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version	$Id: multilang.inc.php,v 0.12 2008/01/05 18:32:00 upk Exp $
+ * @version	$Id: multilang.inc.php,v 0.13 2008/01/12 02:22:00 upk Exp $
  *
  */
 
@@ -20,13 +20,8 @@ function plugin_multilang_action()
 	$page = isset($vars['page']) ? $vars['page'] : '';
 	$lang = isset($vars['lang']) ? $vars['lang'] : '';
 
-	$parsed_url = parse_url( get_script_absuri() );
-	$path = $parsed_url['path'];
-	if (($pos = strrpos($path, '/')) !== FALSE) {
-		$path = substr($path, 0, $pos + 1);
-	}
 	if ($lang) {
-		setcookie('lang', $lang, 0, $path);
+		setcookie('lang', $lang, 0, get_baseuri());
 		$_COOKIE['lang'] = $lang; /* To effective promptly */
 		// UPDATE
 		$language = get_language(1);

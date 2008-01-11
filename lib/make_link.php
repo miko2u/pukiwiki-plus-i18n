@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: make_link.php,v 1.35.20 2008/01/11 01:45:00 upk Exp $
+// $Id: make_link.php,v 1.35.21 2008/01/12 02:59:00 upk Exp $
 // Copyright (C)
 //   2005-2008 PukiWiki Plus! Team
 //   2003-2006 PukiWiki Developers Team
