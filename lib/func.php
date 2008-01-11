@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: func.php,v 1.93.25 2008/01/11 23:28:00 upk Exp $
+// $Id: func.php,v 1.93.26 2008/01/12 03:50:00 upk Exp $
 // Copyright (C)
 //   2005-2008 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
@@ -981,7 +981,8 @@ function get_resolve_uri($cmd='', $page='', $query='', $abs=0, $location=0)
 	}
 
 	unset($flag, $page_pref);
-	return ($location) ? $ret : htmlspecialchars($ret);
+	// FIXME
+	return ($location) ? $ret : htmlspecialchars( str_replace('&amp;','&',$ret) );
 }
 
 function get_resolve_absuri($cmd='', $page='', $query='')
