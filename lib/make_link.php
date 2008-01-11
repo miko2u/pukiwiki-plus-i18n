@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: make_link.php,v 1.35.19 2008/01/11 01:31:00 upk Exp $
+// $Id: make_link.php,v 1.35.20 2008/01/11 01:45:00 upk Exp $
 // Copyright (C)
 //   2005-2008 PukiWiki Plus! Team
 //   2003-2006 PukiWiki Developers Team
@@ -161,7 +161,7 @@ class Link
 	function Link($start)
 	{
 		$this->start = $start;
-		$this->redirect = (PKWK_USE_REDIRECT) ? get_script_absuri().'?plugin=redirect&amp;u=' : '';
+		$this->redirect = (PKWK_USE_REDIRECT) ? get_resolve_uri('redirect','','u=') : '';
 	}
 
 	// Return a regex pattern to match
