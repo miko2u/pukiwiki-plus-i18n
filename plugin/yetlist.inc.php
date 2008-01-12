@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: yetlist.inc.php,v 1.28.4 2008/01/05 18:57:00 upk Exp $
+// $Id: yetlist.inc.php,v 1.28.5 2008/01/13 03:20:00 upk Exp $
 // Copyright (C)
 //   2005-2006,2008 PukiWiki Plus! Team
 //   2001-2006 PukiWiki Developers Team
@@ -60,7 +60,7 @@ function plugin_yetlist_action()
 			} else {
 				// Dangling link
 				$href = '<span class="noexists">' . $s_page . '<a href="' .
-					get_resolve_uri('edit',$page,'refer='.$r_refer) . '">' .
+					get_cmd_uri('edit',$page,'refer='.$r_refer) . '">' .
 					$_symbol_noexists . '</a></span>';
 			}
 			$retval['body'] .= '<li>' . $href . ' <em>(' . $link_ref . ')</em></li>' . "\n";

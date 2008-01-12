@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: calendar_viewer.inc.php,v 1.36.6 2008/01/05 18:12:00 upk Exp $
+// $Id: calendar_viewer.inc.php,v 1.36.7 2008/01/13 02:30:00 upk Exp $
 // Copyright (C)
 //   2005-2008 PukiWiki Plus! Team
 //   2002-2005, 2007 PukiWiki Developers Team
@@ -200,7 +200,7 @@ function plugin_calendar_viewer_convert()
 		if (auth::check_role('readonly')) {
 			$link   = get_page_uri($page);
 		} else {
-			$link   = get_resolve_uri('edit',$page);
+			$link   = get_cmd_uri('edit',$page);
 		}
 		$link   = '<a href="' . $link . '">' . $s_page . '</a>';
 
@@ -269,8 +269,8 @@ function plugin_calendar_viewer_convert()
 	if ($left_YM != '' || $right_YM != '') {
 		$s_date_sep = htmlspecialchars($date_sep);
 		$left_link = $right_link = '';
-		$link = get_resolve_uri('calendar_viewer').'&amp;mode=' . $mode .
-			'&amp;file=' . $enc_pagename . '&amp;date_sep=' . $s_date_sep . '&amp;';
+		$link = get_cmd_uri('calendar_viewer').'&mode=' . $mode .
+			'&file=' . $enc_pagename . '&date_sep=' . $s_date_sep . '&';
 		if ($left_YM != '')
 			$left_link = '<a href="' . $link .
 				'date=' . $left_YM . '">' . $left_text . '</a>';

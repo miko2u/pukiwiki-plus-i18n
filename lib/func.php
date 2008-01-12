@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: func.php,v 1.93.27 2008/01/12 20:59:00 upk Exp $
+// $Id: func.php,v 1.93.28 2008/01/13 02:06:00 upk Exp $
 // Copyright (C)
 //   2005-2008 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
@@ -859,7 +859,7 @@ function get_script_uri($init_uri = '')
 
 	if ($init_uri == '') {
 		// Get
-		if (isset($script)) return ($absolute_uri) ? get_script_absuri() : $script;
+		if (isset($script)) return $absolute_uri ? get_script_absuri() : $script;
 		$script = get_script_absuri();
 		return $script;
 	}
@@ -879,7 +879,7 @@ function get_script_uri($init_uri = '')
 			$script, $matches)) $script = $matches[1];
 	}
 
-	return $script;
+	return $absolute_uri ? get_script_absuri() : $script;
 }
 
 // Get absolute-URI of this script
@@ -943,7 +943,7 @@ function get_script_absuri()
         return $uri;
 }
 
-function get_resolve_uri($cmd='', $page='', $query='', $abs=0, $location=0)
+function get_resolve_uri($cmd='', $page='', $query='', $fragment='', $abs=1, $location=1)
 {
 	global $script, $absolute_uri;
 
@@ -976,41 +976,47 @@ function get_resolve_uri($cmd='', $page='', $query='', $abs=0, $location=0)
 		}
 	} else
 	if (! empty($query)) {
-		$ret .= (substr($query,0,1) === '#') ? '' : $flag;
-		$ret .= $query;
+		$ret .= $flag . $query;
 	}
 
+	if (! empty($fragment)) {
+		$ret .= '#'.$fragment;
+	}
+
+
 	unset($flag, $page_pref);
-	// FIXME
-	return ($location) ? $ret : htmlspecialchars( str_replace('&amp;','&',$ret) );
+	// return ($location) ? $ret : htmlspecialchars( str_replace('&amp;','&',$ret) );
+	return ($location) ? $ret : htmlspecialchars( $ret );
 }
 
-function get_resolve_absuri($cmd='', $page='', $query='')
+function get_cmd_uri($cmd='', $page='', $query='', $fragment='')
 {
-	//$args = func_get_args();
-	//$args[] = 1;
-	//return call_user_func_array('get_resolve_uri',$args);
-	return get_resolve_uri($cmd,$page,$query,1);
+	return get_resolve_uri($cmd,$page,$query,$fragment,0,0);
 }
 
-function get_page_uri($page, $query='')
+function get_cmd_absuri($cmd='', $page='', $query='', $fragment='')
 {
-	return get_resolve_uri('', $page, $query);
+	return get_resolve_uri($cmd,$page,$query,$fragment,1,0);
 }
 
-function get_page_absuri($page, $query='')
+function get_page_uri($page, $query='', $fragment='')
 {
-	return get_resolve_uri('', $page, $query,1);
+	return get_resolve_uri('',$page,$query,0,0);
 }
 
-function get_page_location_uri($page='', $query='')
+function get_page_absuri($page, $query='', $fragment='')
 {
-	return get_resolve_uri('', $page, $query, 1, 1);
+	return get_resolve_uri('',$page,$query,$fragment,1,0);
 }
 
-function get_location_uri($cmd='', $page='', $query='')
+function get_page_location_uri($page='', $query='', $fragment='')
 {
-	return get_resolve_uri($cmd, $page, $query, 1, 1);
+	return get_resolve_uri('',$page,$query,$fragment,1,1);
+}
+
+function get_location_uri($cmd='', $page='', $query='', $fragment='')
+{
+	return get_resolve_uri($cmd,$page,$query,$fragment,1,1);
 }
 
 // Remove null(\0) bytes from variables

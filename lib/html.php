@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: html.php,v 1.65.19 2008/01/12 17:50:00 upk Exp $
+// $Id: html.php,v 1.65.20 2008/01/13 03:11:00 upk Exp $
 // Copyright (C)
 //   2005-2008 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
@@ -48,45 +48,45 @@ function catbody($title, $page, $body)
 	$r_page = rawurlencode($_page);
 
 	// Set $_LINK for skin
-	$_LINK['add']        = get_resolve_uri('add',$_page);
-	$_LINK['backup']     = get_resolve_uri('backup',$_page);
-	$_LINK['copy']       = get_resolve_uri('template','','refer='.$r_page);
-	$_LINK['diff']       = get_resolve_uri('diff',$_page);
-	$_LINK['edit']       = get_resolve_uri('edit',$_page);
-	$_LINK['filelist']   = get_resolve_uri('filelist');
-	$_LINK['freeze']     = get_resolve_uri('freeze',$_page);
-	$_LINK['help']       = get_resolve_uri('help');
-	$_LINK['list']       = get_resolve_uri('list');
+	$_LINK['add']        = get_cmd_uri('add',$_page);
+	$_LINK['backup']     = get_cmd_uri('backup',$_page);
+	$_LINK['copy']       = get_cmd_uri('template','','refer='.$r_page);
+	$_LINK['diff']       = get_cmd_uri('diff',$_page);
+	$_LINK['edit']       = get_cmd_uri('edit',$_page);
+	$_LINK['filelist']   = get_cmd_uri('filelist');
+	$_LINK['freeze']     = get_cmd_uri('freeze',$_page);
+	$_LINK['help']       = get_cmd_uri('help');
+	$_LINK['list']       = get_cmd_uri('list');
 	$_LINK['menu']       = get_page_uri($menubar);
-	$_LINK['new']        = get_resolve_uri('newpage','','refer='.$r_page);
-	$_LINK['newsub']     = get_resolve_uri('newpage_subdir','','directory='.$r_page);
+	$_LINK['new']        = get_cmd_uri('newpage','','refer='.$r_page);
+	$_LINK['newsub']     = get_cmd_uri('newpage_subdir','','directory='.$r_page);
 	$_LINK['read']       = get_page_uri($_page);
-	$_LINK['rdf']        = get_resolve_absuri('rss','','ver=1.0');
+	$_LINK['rdf']        = get_cmd_absuri('rss','','ver=1.0');
 	$_LINK['recent']     = get_page_uri($whatsnew);
-	$_LINK['refer']      = get_resolve_uri('referer',$_page);
+	$_LINK['refer']      = get_cmd_uri('referer',$_page);
 	$_LINK['reload']     = get_page_absuri($_page); // 本当は、get_script_uri でいいけど、絶対パスでないと、スキンに影響が出る
-	$_LINK['rename']     = get_resolve_uri('rename','','refer='.$r_page);
-	$_LINK['print']      = get_resolve_uri('print',$_page);
-	$_LINK['rss']        = get_resolve_absuri('rss');
-	$_LINK['rss10']      = get_resolve_absuri('rss','','ver=1.0'); // Same as 'rdf'
-	$_LINK['rss20']      = get_resolve_absuri('rss','','ver=2.0');
-	$_LINK['mixirss']    = get_resolve_absuri('mixirss');         // Same as 'rdf' for mixi
-	$_LINK['skeylist']   = get_resolve_uri('skeylist',$_page);
-	$_LINK['linklist']   = get_resolve_uri('linklist',$_page);
-	$_LINK['log_browse'] = get_resolve_uri('logview',$_page,'kind=browse');
-	$_LINK['log_update'] = get_resolve_uri($_page,'logview',$_page);
-	$_LINK['log_down']   = get_resolve_uri('logview',$_page,'kind=download');
-	$_LINK['search']     = get_resolve_uri('search');
+	$_LINK['rename']     = get_cmd_uri('rename','','refer='.$r_page);
+	$_LINK['print']      = get_cmd_uri('print',$_page);
+	$_LINK['rss']        = get_cmd_absuri('rss');
+	$_LINK['rss10']      = get_cmd_absuri('rss','','ver=1.0'); // Same as 'rdf'
+	$_LINK['rss20']      = get_cmd_absuri('rss','','ver=2.0');
+	$_LINK['mixirss']    = get_cmd_absuri('mixirss');         // Same as 'rdf' for mixi
+	$_LINK['skeylist']   = get_cmd_uri('skeylist',$_page);
+	$_LINK['linklist']   = get_cmd_uri('linklist',$_page);
+	$_LINK['log_browse'] = get_cmd_uri('logview',$_page,'kind=browse');
+	$_LINK['log_update'] = get_cmd_uri($_page,'logview',$_page);
+	$_LINK['log_down']   = get_cmd_uri('logview',$_page,'kind=download');
+	$_LINK['search']     = get_cmd_uri('search');
 	$_LINK['side']       = get_page_uri($sidebar);
-	$_LINK['source']     = get_resolve_uri('source',$_page);
-	$_LINK['template']   = get_resolve_uri('template','','refer='.$r_page);
+	$_LINK['source']     = get_cmd_uri('source',$_page);
+	$_LINK['template']   = get_cmd_uri('template','','refer='.$r_page);
 	$_LINK['top']        = get_page_uri($defaultpage);
 	if ($trackback) {
 		$tb_id = tb_get_id($_page);
-		$_LINK['trackback'] = get_resolve_absuri('tb','','__mode=view&tb_id='.$tb_id);
+		$_LINK['trackback'] = get_cmd_absuri('tb','','__mode=view&tb_id='.$tb_id);
 	}
-	$_LINK['unfreeze'] = get_resolve_uri('unfreeze',$_page);
-	$_LINK['upload']   = get_resolve_uri('attach',$_page,'pcmd=upload');
+	$_LINK['unfreeze'] = get_cmd_uri('unfreeze',$_page);
+	$_LINK['upload']   = get_cmd_uri('attach',$_page,'pcmd=upload');
 
 	// Compat: Skins for 1.4.4 and before
 	$link_add       = & $_LINK['add'];
@@ -462,7 +462,7 @@ function strip_autolink($str)
 // Make a backlink. searching-link of the page name, by the page name, for the page name
 function make_search($page)
 {
-	return '<a href="' . get_resolve_uri('related',$page) . '">' . htmlspecialchars($page) . '</a> ';
+	return '<a href="' . get_cmd_uri('related',$page) . '">' . htmlspecialchars($page) . '</a> ';
 }
 
 // Make heading string (remove heading-related decorations from Wiki text)

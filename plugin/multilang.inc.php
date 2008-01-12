@@ -3,7 +3,7 @@
  * Detect user's language, and show only messages written in that.  
  *
  * @copyright	Copyright &copy; 2005-2006,2008, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version	$Id: multilang.inc.php,v 0.13 2008/01/12 02:22:00 upk Exp $
+ * @version	$Id: multilang.inc.php,v 0.14 2008/01/13 03:18:00 upk Exp $
  *
  */
 
@@ -60,7 +60,7 @@ function plugin_multilang_inline_link($option, $args)
 
 	$body = array();
 	$page = $vars['page'];
-	$url = get_resolve_uri('multilang',$page,'lang');
+	$url = get_cmd_uri('multilang',$page,'lang');
 	$obj_l2c = new lang2country();
 
 	foreach( $args as $arg ) {

@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: funcplus.php,v 0.1.39 2008/01/12 01:02:00 upk Exp $
+// $Id: funcplus.php,v 0.1.40 2008/01/13 01:52:00 upk Exp $
 // Copyright (C)
 //   2005-2008 PukiWiki Plus! Team
 // License: GPL v2 or (at your option) any later version
@@ -540,9 +540,10 @@ function get_baseuri($path='abs')
 	global $script;
 
 	// RFC2396,RFC3986 : relativeURI = ( net_path | abs_path | rel_path ) [ "?" query ]
+	//                   absoluteURI = scheme ":" ( hier_part | opaque_part )
 	$ret = '';
-	$relativeURI = get_script_absuri();
-	$parsed_url = parse_url($relativeURI);
+	$absoluteURI = get_script_absuri();
+	$parsed_url = parse_url($absoluteURI);
 
 	switch($path) {
 	case 'net': // net_path      = "//" authority [ abs_path ]
@@ -569,7 +570,7 @@ function get_baseuri($path='abs')
 		$ret = (is_url($script, true)) ? './' : $script;
 		break;
 	case 'full':
-		$ret = substr($relativeURI, 0, strrpos($relativeURI, '/')+1);
+		$ret = substr($absoluteURI, 0, strrpos($absoluteURI, '/')+1);
 		break;
 	}
 

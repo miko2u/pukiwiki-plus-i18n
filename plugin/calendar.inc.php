@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: calendar.inc.php,v 2.1.3 2008/01/12 17:54:00 upk Exp $
+// $Id: calendar.inc.php,v 2.1.4 2008/01/13 03:16:00 upk Exp $
 //
 // Calendar plugin - renewal
 
@@ -87,14 +87,14 @@ function plugin_calendar_convert()
 
 	// create header
 	$calendar_head .=
-		'   <a href="'.get_resolve_uri(PLUGIN_CALENDAR_ACTION,'','file='.$r_base.'&date='.$prev_date_str.'&mode='.$mode).'">&lt;&lt;</a>' . "\n" .
+		'   <a href="'.get_cmd_uri(PLUGIN_CALENDAR_ACTION,'','file='.$r_base.'&date='.$prev_date_str.'&mode='.$mode).'">&lt;&lt;</a>' . "\n" .
 		'   <strong>'.$m_name.'</strong>' . "\n" .
-		'   <a href="'.get_resolve_uri(PLUGIN_CALENDAR_ACTION,'','file='.$r_base.'&date='.$next_date_str.'&mode='.$mode).'">&gt;&gt;</a>';
+		'   <a href="'.get_cmd_uri(PLUGIN_CALENDAR_ACTION,'','file='.$r_base.'&date='.$next_date_str.'&mode='.$mode).'">&gt;&gt;</a>';
 
 	if ($prefix) {
 		$calendar_head .= 
 			"\n" . '   <br />' . "\n" .
-			'[<a href="'.get_resolve_uri(PLUGIN_CALENDAR_ACTION,'','file='.$r_base.'&date='.$this_date_str.'&mode='.$mode).'">'.$s_base.'</a>]';
+			'[<a href="'.get_cmd_uri(PLUGIN_CALENDAR_ACTION,'','file='.$r_base.'&date='.$this_date_str.'&mode='.$mode).'">'.$s_base.'</a>]';
 	}
 
 	// create week label
@@ -135,7 +135,7 @@ function plugin_calendar_convert()
 		} elseif ($read_only) {
 			$link = $day;
 		} else {
-			$link = '<a href="'.get_resolve_uri('edit',$page,'refer='.$base).'" title="'.$s_page.'">'.$day.'</a>';
+			$link = '<a href="'.get_cmd_uri('edit',$page,'refer='.$base).'" title="'.$s_page.'">'.$day.'</a>';
 		}
 		$calendar_body .= '  <td class="'.$style.'">'.$link.'</td>' . "\n";
 		$day++;

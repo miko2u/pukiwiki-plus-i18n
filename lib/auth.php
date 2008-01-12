@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: auth.php,v 1.21.15 2008/01/12 17:45:00 upk Exp $
+// $Id: auth.php,v 1.21.16 2008/01/13 03:09:00 upk Exp $
 // Copyright (C)
 //   2005-2008 PukiWiki Plus! Team
 //   2003-2007 PukiWiki Developers Team
@@ -138,7 +138,7 @@ function check_editable($page, $auth_flag = TRUE, $exit_flag = TRUE)
 			$body = $title = str_replace('$1',
 				htmlspecialchars(strip_bracket($page)), $_title['cannotedit']);
 			if (! is_cantedit($page) && is_freeze($page)) {
-				$body .= '(<a href="' . get_resolve_uri('unfreeze',$page) . '">' . $_string['unfreeze'] . '</a>)';
+				$body .= '(<a href="' . get_cmd_uri('unfreeze',$page) . '">' . $_string['unfreeze'] . '</a>)';
 			}
 			$page = str_replace('$1', make_search($page), $_title['cannotedit']);
 			catbody($title, $page, $body);

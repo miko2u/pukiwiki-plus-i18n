@@ -1,5 +1,5 @@
 <?php
-// $Id: tb.inc.php,v 1.19.32 2008/01/11 00:17:00 upk Exp $
+// $Id: tb.inc.php,v 1.19.33 2008/01/13 03:20:00 upk Exp $
 /*
  * PukiWiki/TrackBack: TrackBack Ping receiver and viewer
  * (C) 2007 PukiWiki Plus! Team
@@ -331,7 +331,7 @@ function plugin_tb_mode_view_set($page)
 	}
 
 	$body .= '<div style="text-align:right">' .
-		 '<a href="' . get_resolve_uri('tb','','__mode=view') . '">' .
+		 '<a href="' . get_cmd_uri('tb','','__mode=view') . '">' .
 		 '<img src="'.IMAGE_URI.'plus/trackback.png" alt="" title="" />' .
 		 'Trackback List' . 
 		 '</a>'. "</div>\n";
