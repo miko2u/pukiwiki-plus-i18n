@@ -1,8 +1,8 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: auth.php,v 1.21.14 2007/08/19 13:59:07 miko Exp $
+// $Id: auth.php,v 1.21.15 2008/01/12 17:45:00 upk Exp $
 // Copyright (C)
-//   2005-2007 PukiWiki Plus! Team
+//   2005-2008 PukiWiki Plus! Team
 //   2003-2007 PukiWiki Developers Team
 // License: GPL v2 or (at your option) any later version
 //
@@ -124,7 +124,6 @@ function pkwk_hash_compute($phrase = '', $scheme = '{php_md5}', $prefix = TRUE, 
 // Check edit-permission
 function check_editable($page, $auth_flag = TRUE, $exit_flag = TRUE)
 {
-	global $script;
 	global $_title, $_string;
 
 	if (edit_auth($page, $auth_flag, $exit_flag) && is_editable($page)) {
@@ -139,8 +138,7 @@ function check_editable($page, $auth_flag = TRUE, $exit_flag = TRUE)
 			$body = $title = str_replace('$1',
 				htmlspecialchars(strip_bracket($page)), $_title['cannotedit']);
 			if (! is_cantedit($page) && is_freeze($page)) {
-				$body .= '(<a href="' . $script . '?cmd=unfreeze&amp;page=' .
-					rawurlencode($page) . '">' . $_string['unfreeze'] . '</a>)';
+				$body .= '(<a href="' . get_resolve_uri('unfreeze',$page) . '">' . $_string['unfreeze'] . '</a>)';
 			}
 			$page = str_replace('$1', make_search($page), $_title['cannotedit']);
 			catbody($title, $page, $body);

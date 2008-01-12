@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: html.php,v 1.65.18 2008/01/11 01:20:00 upk Exp $
+// $Id: html.php,v 1.65.19 2008/01/12 17:50:00 upk Exp $
 // Copyright (C)
 //   2005-2008 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
@@ -83,7 +83,7 @@ function catbody($title, $page, $body)
 	$_LINK['top']        = get_page_uri($defaultpage);
 	if ($trackback) {
 		$tb_id = tb_get_id($_page);
-		$_LINK['trackback'] = get_resolve_absuri('tb','','__mode=view&amp;tb_id='.$tb_id);
+		$_LINK['trackback'] = get_resolve_absuri('tb','','__mode=view&tb_id='.$tb_id);
 	}
 	$_LINK['unfreeze'] = get_resolve_uri('unfreeze',$_page);
 	$_LINK['upload']   = get_resolve_uri('attach',$_page,'pcmd=upload');
