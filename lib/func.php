@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: func.php,v 1.93.26 2008/01/12 03:50:00 upk Exp $
+// $Id: func.php,v 1.93.27 2008/01/12 20:59:00 upk Exp $
 // Copyright (C)
 //   2005-2008 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
@@ -854,12 +854,12 @@ function get_autoglossaries($word = '')
 // Get absolute-URI of this script
 function get_script_uri($init_uri = '')
 {
-	global $script_directory_index;
+	global $script_directory_index, $absolute_uri;
 	static $script;
 
 	if ($init_uri == '') {
 		// Get
-		if (isset($script)) return $script;
+		if (isset($script)) return ($absolute_uri) ? get_script_absuri() : $script;
 		$script = get_script_absuri();
 		return $script;
 	}

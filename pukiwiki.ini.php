@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: pukiwiki.ini.php,v 1.148.30 2008/01/05 01:17:00 upk Exp $
+// $Id: pukiwiki.ini.php,v 1.148.31 2008/01/12 21:06:00 upk Exp $
 // Copyright (C)
 //   2005-2008 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
@@ -167,7 +167,7 @@ $page_title = 'PukiWiki Plus!';
 // ----
 // 0: $script の値に準ずる
 // 1: 常に、絶対URIを戻す
-$absolute_uri = 0;
+$absolute_uri = 1;
 // Specify PukiWiki Plus! absoluteURI (Only when you set $script to relativeURI)
 // $script に相対URIを指定した際に、必要であれば、絶対URIを指定して下さい。
 //$script_abs = '';
