@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: funcplus.php,v 0.1.40 2008/01/13 01:52:00 upk Exp $
+// $Id: funcplus.php,v 0.1.41 2008/01/13 23:44:00 upk Exp $
 // Copyright (C)
 //   2005-2008 PukiWiki Plus! Team
 // License: GPL v2 or (at your option) any later version
@@ -535,6 +535,22 @@ function get_main_pagename()
 	return '';
 }
 
+// FIXME
+function is_reluri($str)
+{
+	// global $script_directory_index;
+
+	switch ($str) {
+	case '':
+	case './':
+	case 'index.php':
+	case './index.php':
+		return true;
+	}
+	// if (! isset($script_directory_index) && $str == 'index.php') return true;
+	return false;
+}
+
 function get_baseuri($path='abs')
 {
 	global $script;
@@ -575,5 +591,35 @@ function get_baseuri($path='abs')
 	}
 
 	return $ret;
+}
+
+function change_uri($cmd='')
+{
+	global $script, $script_abs, $absolute_uri;
+	static $bkup_script, $bkup_script_abs, $bkup_absolute_uri;
+	static $target_fields = array('script'=>'bkup_script','script_abs'=>'bkup_script_abs','absolute_uri'=>'bkup_absolute_uri');
+
+	foreach($target_fields as $org=>$bkup) {
+		if (! isset($$bkup) && isset($org)) $$bkup = $$org;
+	}
+
+	switch($cmd) {
+	case 'abs':
+		$absolute_uri = 1;
+		$script = get_script_absuri();
+		break;
+	case 'rel':
+		$absolute_uri = 0;
+		$script = get_script_uri();
+		break;
+	case 'restore':
+		foreach($target_fields as $org=>$bkup) {
+			if (isset($$bkup)) {
+                                $$org = $$bkup;
+			} else {
+                                if (isset($$org)) unset($$org);
+			}
+		}
+	}
 }
 ?>

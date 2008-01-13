@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: func.php,v 1.93.28 2008/01/13 02:06:00 upk Exp $
+// $Id: func.php,v 1.93.29 2008/01/13 23:43:00 upk Exp $
 // Copyright (C)
 //   2005-2008 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
@@ -866,7 +866,7 @@ function get_script_uri($init_uri = '')
 
 	// Set manually
 	if (isset($script)) die_message('$script: Already init');
-	if ($init_uri != './'  && ! is_url($init_uri, TRUE)) die_message('$script: Invalid URI');
+	if (! is_reluri($init_uri) && ! is_url($init_uri, TRUE)) die_message('$script: Invalid URI');
 	$script = $init_uri;
 
 	// Cut filename or not
@@ -892,12 +892,12 @@ function get_script_absuri()
 	// Get
 	if (isset($uri)) return $uri;
 
-	if (isset($script) && is_url($script,true)) {
-		$uri = $script;
-		return $uri;
-	} else
 	if (isset($script_abs) && is_url($script_abs,true)) {
 		$uri = $script_abs;
+		return $uri;
+	} else
+	if (isset($script) && is_url($script,true)) {
+		$uri = $script;
 		return $uri;
 	}
 

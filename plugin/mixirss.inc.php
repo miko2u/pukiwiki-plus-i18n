@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: mixirss.inc.php,v 1.14.11 2008/01/06 01:25:00 upk Exp $
+// $Id: mixirss.inc.php,v 1.14.12 2008/01/14 00:53:00 upk Exp $
 //
 // Publishing RSS feed of RecentChanges
 // Usage: mixirss.inc.php?ver=[0.91|1.0(default)|2.0]
@@ -18,10 +18,9 @@ define('MIXIRSS_LANG', 'ja_JP');
 
 function plugin_mixirss_action()
 {
-	global $vars, $get, $post, $rss_max, $rss_description, $page_title, $whatsnew, $trackback, $absolute_uri;
+	global $vars, $get, $post, $rss_max, $rss_description, $page_title, $whatsnew, $trackback;
 	global $modifier;
 	global $exclude_plugin;
-	global $script;
 
 	$version = isset($vars['ver']) ? $vars['ver'] : '';
 	switch($version){
@@ -56,14 +55,13 @@ function plugin_mixirss_action()
 
 	// Official Main routine ...
 	$page_title_utf8 = mb_convert_encoding($page_title, 'UTF-8', SOURCE_ENCODING);
-	$self  = get_script_absuri();
 	$rss_description_utf8 = mb_convert_encoding(htmlspecialchars($rss_description), 'UTF-8', SOURCE_ENCODING);
 
 	// Disable plugin
 	$exclude_plugin[] = 'include';
 
-	$absolute_uri = 1; // get_page_uri
-	$script = $self; // FIXME: convert_html() において、一律 absolute_uri にさせるため
+	$self  = get_script_absuri();
+	change_uri('abs'); // Force absoluteURI.
 
 	// Creating <item>
 	$items = $rdf_li = '';
@@ -99,7 +97,7 @@ EOD;
 			$trackback_ping = '';
 			if ($trackback) {
 				$tb_id = md5($r_page);
-				$trackback_ping = ' <trackback:ping rdf:resource="' . "$self?tb_id=$tb_id" . '"/>';
+				$trackback_ping = ' <trackback:ping rdf:resource="' . $self . '?tb_id=' . $tb_id . '"/>';
 			}
 			if (plugin_mixirss_isValidDate(substr($page,-10)) && check_readable($page,false,false)) {
 				// for Calendar/MiniCalendar

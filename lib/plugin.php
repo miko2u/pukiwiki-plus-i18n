@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: plugin.php,v 1.15.16 2008/01/13 01:41:00 upk Exp $
+// $Id: plugin.php,v 1.15.17 2008/01/13 23:29:00 upk Exp $
 // Copyright (C)
 //   2005-2006,2008 PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
@@ -166,14 +166,10 @@ function do_plugin_init($name)
 // Call API 'action' of the plugin
 function do_plugin_action($name)
 {
-	global $absolute_uri, $script;
-
 	if (! exist_plugin_action($name)) return array();
 
 	if(do_plugin_init($name) === FALSE)
 		die_message('Plugin init failed: ' . $name);
-
-	if ($absolute_uri) $script = get_script_absuri(); // It continues.
 
 	textdomain($name);
 	$retvar = call_user_func('plugin_' . $name . '_action');
@@ -192,7 +188,6 @@ function do_plugin_action($name)
 function do_plugin_convert($name, $args = '')
 {
 	global $digest;
-	global $absolute_uri, $script;
 
 	if(do_plugin_init($name) === FALSE)
 		return '[Plugin init failed: ' . $name . ']';
@@ -214,8 +209,6 @@ function do_plugin_convert($name, $args = '')
 	if (! PKWKEXP_DISABLE_MULTILINE_PLUGIN_HACK) {
 		if (isset($body)) $aryargs[] = & $body;     // #plugin(){{body}}
 	}
-
-	if ($absolute_uri) $script = get_script_absuri(); // It continues.
 
 	$_digest = $digest;
 	textdomain($name);
@@ -240,7 +233,6 @@ function do_plugin_convert($name, $args = '')
 function do_plugin_inline($name, $args, & $body)
 {
 	global $digest;
-	global $absolute_uri, $script;
 
 	if(do_plugin_init($name) === FALSE)
 		return '[Plugin init failed: ' . $name . ']';
@@ -253,8 +245,6 @@ function do_plugin_inline($name, $args, & $body)
 
 	// NOTE: A reference of $body is always the last argument
 	$aryargs[] = & $body; // func_num_args() != 0
-
-	if ($absolute_uri) $script = get_script_absuri(); // It continues.
 
 	$_digest = $digest;
 	textdomain($name);
