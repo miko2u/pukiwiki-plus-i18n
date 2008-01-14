@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: func.php,v 1.93.29 2008/01/13 23:43:00 upk Exp $
+// $Id: func.php,v 1.93.30 2008/01/14 22:58:00 upk Exp $
 // Copyright (C)
 //   2005-2008 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
@@ -969,21 +969,22 @@ function get_resolve_uri($cmd='', $page='', $query='', $fragment='', $abs=1, $lo
 		$flag = '&';
         }
 
-	if (is_array($query)) {
-		foreach($query as $key=>$val) {
-			$ret .= $flag . $key . '='. rawurlencode($val);
-			$flag = '&';
-		}
-	} else
+	// query
 	if (! empty($query)) {
-		$ret .= $flag . $query;
+		if (is_array($query)) {
+			$tmp_query = & $query;
+		} else {
+			parse_str($query,$tmp_query);
+		}
+		// (PHP5) http_build_query -> funcplus.php
+		$ret .= $flag . http_build_query($tmp_query);
+		$flag = '&';
 	}
 
+	// fragment
 	if (! empty($fragment)) {
 		$ret .= '#'.$fragment;
 	}
-
-
 	unset($flag, $page_pref);
 	// return ($location) ? $ret : htmlspecialchars( str_replace('&amp;','&',$ret) );
 	return ($location) ? $ret : htmlspecialchars( $ret );

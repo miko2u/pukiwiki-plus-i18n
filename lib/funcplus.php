@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: funcplus.php,v 0.1.47 2008/01/14 21:14:00 upk Exp $
+// $Id: funcplus.php,v 0.1.48 2008/01/14 23:26:00 upk Exp $
 // Copyright (C)
 //   2005-2008 PukiWiki Plus! Team
 // License: GPL v2 or (at your option) any later version
@@ -632,6 +632,25 @@ function change_uri($cmd='')
 	default:
 		$absolute_uri = 1;
 		$script = get_script_absuri();
+	}
+}
+
+// PHP 5
+if (! function_exists('http_build_query')) {
+	// string http_build_query  ( array $formdata  [, string $numeric_prefix  [, string $arg_separator  ]] )
+	function http_build_query($formdata, $numeric_prefix='', $arg_separator='') {
+		$retval = $flag = '';
+		// arg_separator.output -> PHP 4.0.5
+		if (empty($arg_separator)) {
+			$arg_separator = ini_get('arg_separator.output');
+			if (empty($arg_separator)) $arg_separator = '&';
+		}
+		foreach($formdata as $key=>$val) {
+			$key1 = (is_numeric($key)) ? $numeric_prefix.$key : $key;
+			$retval .= $flag . $key1 . '=' . rawurlencode($val);
+			$flag = $arg_separator;
+		}
+		return $retval;
 	}
 }
 ?>
