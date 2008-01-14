@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: mixirss.inc.php,v 1.14.12 2008/01/14 00:53:00 upk Exp $
+// $Id: mixirss.inc.php,v 1.14.13 2008/01/14 13:27:00 upk Exp $
 //
 // Publishing RSS feed of RecentChanges
 // Usage: mixirss.inc.php?ver=[0.91|1.0(default)|2.0]
@@ -61,7 +61,7 @@ function plugin_mixirss_action()
 	$exclude_plugin[] = 'include';
 
 	$self  = get_script_absuri();
-	change_uri('abs'); // Force absoluteURI.
+	change_uri(); // Force absoluteURI.
 
 	// Creating <item>
 	$items = $rdf_li = '';

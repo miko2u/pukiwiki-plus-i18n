@@ -551,18 +551,17 @@ function is_reluri($str)
 	return false;
 }
 
-function get_baseuri($path='abs')
+function get_baseuri($path='')
 {
 	global $script;
 
 	// RFC2396,RFC3986 : relativeURI = ( net_path | abs_path | rel_path ) [ "?" query ]
 	//                   absoluteURI = scheme ":" ( hier_part | opaque_part )
 	$ret = '';
-	$absoluteURI = get_script_absuri();
-	$parsed_url = parse_url($absoluteURI);
 
 	switch($path) {
 	case 'net': // net_path      = "//" authority [ abs_path ]
+		$parsed_url = parse_url(get_script_absuri());
 		$pref = '//';
 		if (isset($parsed_url['user'])) {
 			$ret .= $pref . $parsed_url['user'];
@@ -583,9 +582,19 @@ function get_baseuri($path='abs')
 		}
 		break;
 	case 'rel': // rel_path      = rel_segment [ abs_path ]
-		$ret = (is_url($script, true)) ? './' : $script;
+		if (is_url($script, true)) {
+			$ret = './';
+		} else {
+			$parsed_url = parse_url(get_script_uri());
+			if (isset($parsed_url['path']) && ($pos = strrpos($parsed_url['path'], '/')) !== false) {
+				$ret .= substr($parsed_url['path'], 0, $pos + 1);
+			} else {
+				$ret .= '/';
+			}
+		}
 		break;
-	case 'full':
+	default:
+		$absoluteURI = get_script_absuri();
 		$ret = substr($absoluteURI, 0, strrpos($absoluteURI, '/')+1);
 		break;
 	}
@@ -595,7 +604,7 @@ function get_baseuri($path='abs')
 
 function change_uri($cmd='')
 {
-	global $script, $script_abs, $absolute_uri;
+	global $script, $script_abs, $absolute_uri, $script_directory_index;
 	static $bkup_script, $bkup_script_abs, $bkup_absolute_uri;
 	static $target_fields = array('script'=>'bkup_script','script_abs'=>'bkup_script_abs','absolute_uri'=>'bkup_absolute_uri');
 
@@ -604,15 +613,7 @@ function change_uri($cmd='')
 	}
 
 	switch($cmd) {
-	case 'abs':
-		$absolute_uri = 1;
-		$script = get_script_absuri();
-		break;
-	case 'rel':
-		$absolute_uri = 0;
-		$script = get_script_uri();
-		break;
-	case 'restore':
+	case 'reset':
 		foreach($target_fields as $org=>$bkup) {
 			if (isset($$bkup)) {
                                 $$org = $$bkup;
@@ -620,6 +621,17 @@ function change_uri($cmd='')
                                 if (isset($$org)) unset($$org);
 			}
 		}
+	case 'net':
+	case 'abs':
+	case 'rel':
+		change_uri('restore');
+		$absolute_uri = 0;
+		$script = get_baseuri();
+		if (! isset($script_directory_index)) $script .= 'index.php';
+		break;
+	default:
+		$absolute_uri = 1;
+		$script = get_script_absuri();
 	}
 }
 ?>
