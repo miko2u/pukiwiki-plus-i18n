@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: funcplus.php,v 0.1.44 2008/01/14 13:49:00 upk Exp $
+// $Id: funcplus.php,v 0.1.45 2008/01/14 19:41:00 upk Exp $
 // Copyright (C)
 //   2005-2008 PukiWiki Plus! Team
 // License: GPL v2 or (at your option) any later version
@@ -627,7 +627,7 @@ function change_uri($cmd='')
 	case 'rel':
 		change_uri('reset');
 		$absolute_uri = 0;
-		$script = get_baseuri();
+		$script = get_baseuri($cmd);
 		if (! isset($script_directory_index)) $script .= 'index.php';
 		break;
 	default:
