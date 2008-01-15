@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: funcplus.php,v 0.1.48 2008/01/14 23:26:00 upk Exp $
+// $Id: funcplus.php,v 0.1.49 2008/01/16 00:40:00 upk Exp $
 // Copyright (C)
 //   2005-2008 PukiWiki Plus! Team
 // License: GPL v2 or (at your option) any later version
@@ -539,12 +539,11 @@ function get_main_pagename()
 function is_reluri($str)
 {
 	// global $script_directory_index;
-
 	switch ($str) {
 	case '':
 	case './':
-	case 'index.php':
-	case './index.php':
+	case 'index.php';
+	case './index.php';
 		return true;
 	}
 	// if (! isset($script_directory_index) && $str == 'index.php') return true;
@@ -586,7 +585,7 @@ function get_baseuri($path='')
 		if (is_url($script, true)) {
 			$ret = './';
 		} else {
-			$parsed_url = parse_url(get_script_uri());
+			$parsed_url = parse_url($script);
 			if (isset($parsed_url['path']) && ($pos = strrpos($parsed_url['path'], '/')) !== false) {
 				$ret .= substr($parsed_url['path'], 0, $pos + 1);
 			}
@@ -601,15 +600,20 @@ function get_baseuri($path='')
 	return $ret;
 }
 
-function change_uri($cmd='')
+function change_uri($cmd='',$force=0)
 {
 	global $script, $script_abs, $absolute_uri, $script_directory_index;
-	static $bkup_script, $bkup_script_abs, $bkup_absolute_uri;
+	static $onece, $bkup, $bkup_script, $bkup_script_abs, $bkup_absolute_uri;
 	static $target_fields = array('script'=>'bkup_script','script_abs'=>'bkup_script_abs','absolute_uri'=>'bkup_absolute_uri');
 
-	foreach($target_fields as $org=>$bkup) {
-		if (! isset($$bkup) && isset($org)) $$bkup = $$org;
+	if (! isset($bkup)) {
+		$bkup = true;
+		foreach($target_fields as $org=>$bkup) {
+			if (! isset($$bkup) && isset($org)) $$bkup = $$org;
+		}
 	}
+
+	if (isset($onece)) return;
 
 	switch($cmd) {
 	case 'reset':
@@ -620,19 +624,56 @@ function change_uri($cmd='')
                                 if (isset($$org)) unset($$org);
 			}
 		}
-		break;
+		return;
 	case 'net':
 	case 'abs':
 	case 'rel':
 		change_uri('reset');
 		$absolute_uri = 0;
-		$script = get_baseuri($cmd);
-		if (! isset($script_directory_index)) $script .= 'index.php';
 		break;
 	default:
 		$absolute_uri = 1;
-		$script = get_script_absuri();
 	}
+
+	$script = get_baseuri($cmd);
+	if (! isset($script_directory_index)) $script .= init_script_filename();
+	if ($force === 1) $onece = 1;
+	return;
+}
+
+function init_script_filename()
+{
+	// $scrip にファイル名が設定されていれば、それを求める
+	$script = init_script_uri('',1);
+	$pos = strrpos($script, '/');
+	if ($pos !== false) {
+		return substr($script, $pos + 1);
+	}
+	return '';
+}
+
+function get_script_filename()
+{
+	$default_idx = 'index.php';
+	$path    = SCRIPT_NAME; // ex. /path/index.php
+	if ($path{0} != '/') {
+		if (! isset($_SERVER['REQUEST_URI']) || $_SERVER['REQUEST_URI']{0} != '/') {
+			return $default_idx;
+		}
+
+		$parse_url = parse_url($_SERVER['REQUEST_URI']);
+		if (! isset($parse_url['path']) || $parse_url['path']{0} != '/') {
+			return $default_idx;
+		}
+
+		$path = $parse_url['path'];
+	}
+
+	$pos = strrpos($path, '/');
+	if ($pos !== false) {
+		return substr($path, $pos + 1);
+	}
+	return $default_idx;
 }
 
 // PHP 5

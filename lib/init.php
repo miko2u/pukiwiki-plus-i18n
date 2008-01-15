@@ -1,8 +1,8 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: init.php,v 1.54.29 2007/09/02 12:31:50 miko Exp $
+// $Id: init.php,v 1.54.30 2008/01/15 15:12:00 upk Exp $
 // Copyright (C)
-//   2005-2007 PukiWiki Plus! Team
+//   2005-2008 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
 //   2001-2002 Originally written by yu-ji
 // License: GPL v2 or (at your option) any later version
@@ -91,9 +91,9 @@ define('PKWK_ENCODING_HINT', (isset($_LANG['encode_hint']) && $_LANG['encode_hin
 // INI_FILE: Init $script
 
 if (isset($script)) {
-	get_script_uri($script); // Init manually
+	init_script_uri($script); // Init manually
 } else {
-	$script = get_script_uri(); // Init automatically
+	$script = init_script_uri(); // Init automatically
 }
 
 /////////////////////////////////////////////////

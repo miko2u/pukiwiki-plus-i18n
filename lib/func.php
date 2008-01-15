@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: func.php,v 1.93.30 2008/01/14 22:58:00 upk Exp $
+// $Id: func.php,v 1.93.31 2008/01/15 :21:00 upk Exp $
 // Copyright (C)
 //   2005-2008 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
@@ -852,14 +852,17 @@ function get_autoglossaries($word = '')
 }
 
 // Get absolute-URI of this script
-function get_script_uri($init_uri = '')
+function init_script_uri($init_uri = '',$get_init_value=0)
 {
 	global $script_directory_index, $absolute_uri;
 	static $script;
 
 	if ($init_uri == '') {
 		// Get
-		if (isset($script)) return $absolute_uri ? get_script_absuri() : $script;
+		if (isset($script)) {
+			if ($get_init_value) return $script;
+			return $absolute_uri ? get_script_absuri() : $script;
+		}
 		$script = get_script_absuri();
 		return $script;
 	}
@@ -879,7 +882,18 @@ function get_script_uri($init_uri = '')
 			$script, $matches)) $script = $matches[1];
 	}
 
-	return $absolute_uri ? get_script_absuri() : $script;
+        return $absolute_uri ? get_script_absuri() : $script;
+}
+
+// Get absolute-URI of this script
+function get_script_uri($path='')
+{
+	global $absolute_uri, $script_directory_index;
+
+	if ($absolute_uri) return get_script_absuri();
+	$uri = get_baseuri($path);
+	if (! isset($script_directory_index)) $uri .= init_script_filename();
+	return $uri;
 }
 
 // Get absolute-URI of this script
@@ -947,12 +961,7 @@ function get_resolve_uri($cmd='', $page='', $query='', $fragment='', $abs=1, $lo
 {
 	global $script, $absolute_uri;
 
-	if ($abs) {
-		$ret = get_script_absuri();
-	} else {
-		$ret = $absolute_uri ? get_script_absuri() : $script;
-	}
-	// $ret = ($abs) ? get_script_absuri() : ($absolute_uri ? get_script_absuri() : $script);
+	$ret = ($absolute_uri || $abs) ? get_script_absuri() : $script;
 
 	$flag = '?';
 	$page_pref = '';
