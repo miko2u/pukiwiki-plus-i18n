@@ -1,8 +1,8 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: tracker.inc.php,v 1.35.10 2007/04/27 01:34:00 upk Exp $
+// $Id: tracker.inc.php,v 1.35.11 2008/01/16 23:47:00 upk Exp $
 // Copyright (C)
-//	 2004-2007 PukiWiki Plus! Team
+//	 2004-2008 PukiWiki Plus! Team
 //   2003-2005 PukiWiki Developers Team
 //
 // Issue tracker plugin (See Also bugtrack plugin)
@@ -876,7 +876,7 @@ class Tracker_list
 	}
 	function replace_title($arr)
 	{
-		global $script;
+		// global $script;
 
 		$field = $sort = $arr[1];
 		if ($sort == '_name' or $sort == '_page')
@@ -904,16 +904,21 @@ class Tracker_list
 			unset($order[$sort], $order_keys);
 		}
 		$title = $this->fields[$field]->title;
-		$r_page = rawurlencode($this->page);
-		$r_config = rawurlencode($this->config->config_name);
-		$r_list = rawurlencode($this->list);
+		//$r_page = rawurlencode($this->page);
+		//$r_config = rawurlencode($this->config->config_name);
+		//$r_list = rawurlencode($this->list);
 		$_order = array("$sort:$dir");
 		if (is_array($order))
 			foreach ($order as $key=>$value)
 				$_order[] = "$key:$value";
-		$r_order = rawurlencode(join(';',$_order));
+		//$r_order = rawurlencode(join(';',$_order));
 
-		return "[[$title$arrow>$script?plugin=tracker_list&refer=$r_page&config=$r_config&list=$r_list&order=$r_order]]";
+		// return "[[$title$arrow>$script?plugin=tracker_list&refer=$r_page&config=$r_config&list=$r_list&order=$r_order]]";
+		// ブラケットに引き渡す場合は、make_link にて、再度 htmlspecialchars してしまうので回避
+		return '[['.$title.$arrow.'>' . 
+			get_resolve_uri('tracker_list','',
+				array('refer'=>$this->page, 'config'=>$this->config->config_name, 'list'=>$this->list, 'order'=>join(';',$_order)), 1,1
+			) . ']]';
 	}
 	function toString($limit=NULL,$count=0)
 	{
