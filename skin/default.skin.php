@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: default.skin.php,v 1.34.35 2008/01/05 18:59:00 upk Exp $
+// $Id: default.skin.php,v 1.34.36 2008/01/18 00:53:00 upk Exp $
 //
 if (!defined('DATA_DIR')) { exit; }
 
@@ -154,13 +154,13 @@ if (isset($pkwk_dtd)) {
  <td id="footerltable">
   <?php if (exist_plugin_inline('qrcode')) { ?>
   <?php
-   $a_script = $script;
+   $a_script = get_script_absuri();
    $a_script = str_replace("\\", "\\\\", $a_script);
    $a_script = str_replace(':', '\:', $a_script);
    $a_script = str_replace(';', '\;', $a_script);
    $a_script = str_replace(',', '\,', $a_script);
-   $url = str_replace('%', '%25', get_page_uri($_page));
-   echo plugin_qrcode_inline(1, $url);
+   $a_page = str_replace('%', '%25', $r_page);
+   echo plugin_qrcode_inline(1,get_script_absuri().'?'.$a_page);
   ?>
   <?php } ?>
  </td>

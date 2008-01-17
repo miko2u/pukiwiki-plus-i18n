@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: html.php,v 1.65.20 2008/01/13 03:11:00 upk Exp $
+// $Id: html.php,v 1.65.21 2008/01/18 00:42:00 upk Exp $
 // Copyright (C)
 //   2005-2008 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
@@ -14,6 +14,7 @@
 // Show page-content
 function catbody($title, $page, $body)
 {
+	global $script; // MUST BE SKIN.FILE. Do not delete line.
 	global $vars, $arg, $defaultpage, $whatsnew, $help_page, $hr;
 	global $attach_link, $related_link, $function_freeze;
 	global $search_word_color, $foot_explain, $note_hr, $head_tags, $foot_tags;
