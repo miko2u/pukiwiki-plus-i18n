@@ -57,14 +57,14 @@ function plugin_newpage_action()
 		$page    = strip_bracket($vars['page']);
 		if (isset($vars['refer'])) {
 			$r_page = get_fullname($page, $vars['refer']);
-			$r_refer = & $vars['refer'];
+			$r_refer = 'refer=' .$vars['refer'];
 		} else {
-			$r_page = & $page;
+			$r_page = $page;
 			$r_refer = '';
 		}
 
 		pkwk_headers_sent();
-		header('Location: ' . get_page_location_uri($r_page,'refer='.$r_refer));
+		header('Location: ' . get_page_location_uri($r_page,$r_refer));
 		exit;
 	}
 }
