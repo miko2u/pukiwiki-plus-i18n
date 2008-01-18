@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: default.skin.php,v 1.34.36 2008/01/18 00:53:00 upk Exp $
+// $Id: default.skin.php,v 1.34.37 2008/01/18 23:59:00 upk Exp $
 //
 if (!defined('DATA_DIR')) { exit; }
 
@@ -75,11 +75,6 @@ if (isset($pkwk_dtd)) {
 <div id="header">
  <a href="<?php echo $modifierlink ?>"><img id="logo" src="<?php echo IMAGE_URI; ?>pukiwiki.plus_logo.png" width="80" height="80" alt="[PukiWiki Plus!]" title="[PukiWiki Plus!]" /></a>
  <h1 class="title"><?php echo(($newtitle!='' && $is_read)?$newtitle:$page) ?></h1>
-
-<?php if ($is_page) { ?>
- <a href="<?php echo $_LINK['reload'] ?>"><span class="small"><?php echo $_LINK['reload'] ?></span></a>
-<?php } ?>
-
 </div>
 <?php
  if (exist_plugin('navibar2')) {
@@ -154,11 +149,6 @@ if (isset($pkwk_dtd)) {
  <td id="footerltable">
   <?php if (exist_plugin_inline('qrcode')) { ?>
   <?php
-   $a_script = get_script_absuri();
-   $a_script = str_replace("\\", "\\\\", $a_script);
-   $a_script = str_replace(':', '\:', $a_script);
-   $a_script = str_replace(';', '\;', $a_script);
-   $a_script = str_replace(',', '\,', $a_script);
    $a_page = str_replace('%', '%25', $r_page);
    echo plugin_qrcode_inline(1,get_script_absuri().'?'.$a_page);
   ?>
