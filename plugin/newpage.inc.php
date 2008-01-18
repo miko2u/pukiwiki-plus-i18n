@@ -1,5 +1,7 @@
 <?php
-// $Id: newpage.inc.php,v 1.15.4 2007/04/27 01:04:00 upk Exp $
+// $Id: newpage.inc.php,v 1.15.5 2008/01/18 21:40:00 upk Exp $
+// Copyright (C)
+//   2007-2008 PukiWiki Plus! Team
 //
 // Newpage plugin
 
@@ -53,11 +55,16 @@ function plugin_newpage_action()
 		return $retvars;
 	} else {
 		$page    = strip_bracket($vars['page']);
-		$r_page  = isset($vars['refer']) ? get_fullname($page, $vars['refer']) : $page;
-		$r_refer = rawurlencode($vars['refer']);
+		if (isset($vars['refer'])) {
+			$r_page = get_fullname($page, $vars['refer']);
+			$r_refer = & $vars['refer'];
+		} else {
+			$r_page = & $page;
+			$r_refer = '';
+		}
 
 		pkwk_headers_sent();
-		header('Location: ' . get_page_location_uri($page,'refer='.$r_refer));
+		header('Location: ' . get_page_location_uri($r_page,'refer='.$r_refer));
 		exit;
 	}
 }
