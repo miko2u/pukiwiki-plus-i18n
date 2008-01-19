@@ -3,7 +3,7 @@
  * PukiWiki Plus! XBEL Plugin
  *
  * @copyright   Copyright &copy; 2006,2008, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: xbel.inc.php,v 0.4 2008/01/13 03:21:00 upk Exp $
+ * @version     $Id: xbel.inc.php,v 0.5 2008/01/19 18:09:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  *
  */
@@ -43,6 +43,8 @@ function plugin_xbel_action()
 
 
 EOD;
+
+	change_uri('',1); // Force absoluteURI.
 
 	switch ($adm)
 	{
@@ -190,6 +192,7 @@ class xbel
 				// えんぴつマークのリンクのため迂回
 				$my.'?cmd=edit&amp;page=',
 				// 添付画像などの迂回
+				$my.'?cmd=attach',
 				$my.'?plugin=attach',
 			);
 		}
