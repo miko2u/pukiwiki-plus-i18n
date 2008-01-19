@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: cloudwalk.skin.php,v 1.1.12 2008/01/05 18:58:00 upk Exp $
+// $Id: cloudwalk.skin.php,v 1.1.13 2008/01/19 23:32:00 upk Exp $
 // Original is ari-
 //
 
@@ -14,6 +14,7 @@ if (! defined('UI_LANG')) die('UI_LANG is not set');
 if (! isset($_LANG)) die('$_LANG is not set');
 if (! defined('PKWK_READONLY')) die('PKWK_READONLY is not set');
 
+$lang  = & $_LANG['skin'];
 $link  = & $_LINK;
 $image = & $_IMAGE['skin'];
 $rw    = ! PKWK_READONLY;
@@ -47,11 +48,11 @@ if (isset($pkwk_dtd)) {
  <meta http-equiv="content-script-type" content="text/javascript" />
 <?php if ($nofollow || ! $is_read)  { ?> <meta name="robots" content="NOINDEX,NOFOLLOW" /><?php } ?>
 <?php if ($title == $defaultpage) { ?>
- <title><?php echo "$page_title" ?></title>
+ <title><?php echo $page_title ?></title>
 <?php } elseif ($newtitle != '' && $is_read) { ?>
- <title><?php echo "$newtitle - $page_title" ?></title>
+ <title><?php echo $newtitle.' - '.$page_title ?></title>
 <?php } else { ?>
- <title><?php echo "$title - $page_title" ?></title>
+ <title><?php echo $title.' - '.$page_title ?></title>
 <?php } ?>
  <link rel="stylesheet" href="<?php echo SKIN_URI.$irid_style_name.'/'.$irid_style_name.'.css' ?>" title="<?php echo $irid_style_name ?>" type="text/css" charset="<?php echo $css_charset ?>" />
  <link rel="stylesheet" href="<?php echo SKIN_URI ?>greybox/greybox.css" type="text/css" media="all" charset="<?php echo $css_charset ?>" />
@@ -109,11 +110,11 @@ if (isset($pkwk_dtd)) {
 <?php if ($trackback) {
     $tb_id = tb_get_id($_page);
 ?>
-<a href="<?php echo "$script?plugin=tb&amp;__mode=view&amp;tb_id=$tb_id" ?>">TrackBack(<?php echo tb_count($_page) ?>)</a> | 
+<a href="<?php echo get_cmd_uri('tb','','__mode=view&tb_id='.$tb_id) ?>"><?php echo $lang['trackback'].'('.tb_count($_page).')' ?></a> |
 <?php } ?>
 
 <?php if ($referer) { ?>
-<a href="<?php echo "$script?plugin=referer&amp;page=$r_page" ?>">外部リンク元</a>
+<a href="<?php echo get_cmd_uri('referer',$_page) ?>"><?php echo $lang['refer'] ?></a>
 <?php } ?>
 </div><!-- □ END id:trackback -->
 <?php if ($related != '') { ?><!-- ■ BEGIN id:related -->
@@ -134,46 +135,46 @@ Link: <?php echo $related ?>
 <div id="wrap_sidebar"><!-- ■BEGIN id:wrap_sidebar -->
 <div id="sidebar">
 <div id="search_form" class="bar"><!-- ■BEGIN id:search_form -->
-<h2>検索</h2>
+<h2><?php echo $lang['search'] ?></h2>
 <form action="<?php echo $script ?>?cmd=search" method="post">
 <div>
-	<input type="hidden" name="encode_hint" value="ぷ" />
+	<input type="hidden" name="encode_hint" value="<?php echo $_LANG['encode_hint'] ?>" />
 	<input type="text"  name="word" value="" size="20" />
-	<input type="submit" value="検索" /><br />
-	<input type="radio" name="type" value="AND" checked="checked" id="and_search" /><label for="and_search">AND検索</label>
-  <input type="radio" name="type" value="OR" id="or_search" /><label for="or_search">OR検索</label>
+	<input type="submit" value="<?php echo $lang['search'] ?>" /><br />
+	<input type="radio" name="type" value="AND" checked="checked" id="and_search" /><label for="and_search">AND <?php echo $lang['search'] ?></label>
+  <input type="radio" name="type" value="OR" id="or_search" /><label for="or_search">OR <?php echo $lang['search'] ?></label>
 </div>
 </form>
 </div><!-- END id:search_form -->
 <div id="page_action" class="bar"><!-- ■BEGIN id:page_action -->
-<h2>編集操作</h2>
+<h2><?php echo $lang['edit'] ?></h2>
 <ul>
 <?php if ($is_page) { ?>
-	<li class="pa_reload"><a href="<?php echo $link_reload ?>">リロード</a></li>
-	<li class="pa_newpage"><a href="<?php echo "$script?plugin=newpage&amp;refer=$r_page" ?>">新規</a></li>
-	<li class="pa_edit"><a href="<?php echo $link_edit ?>">編集</a></li>
+	<li class="pa_reload"><a href="<?php echo $link_reload ?>"><?php echo $lang['reload'] ?></a></li>
+	<li class="pa_newpage"><a href="<?php echo get_cmd_uri('newpage',$_page,'refer='.$_page) ?>"><?php echo $lang['new'] ?></a></li>
+	<li class="pa_edit"><a href="<?php echo $link_edit ?>"><?php echo $lang['edit'] ?></a></li>
 <?php   if ($is_read and $function_freeze) { ?>
 <?php     if ($is_freeze) { ?>
-	<li class="pa_unfreeze"><a href="<?php echo $link_unfreeze ?>">凍結解除</a></li>
+	<li class="pa_unfreeze"><a href="<?php echo $link_unfreeze ?>"><?php echo $lang['unfreeze'] ?></a></li>
 <?php     } else { ?>
-	<li class="pa_freeze"><a href="<?php echo $link_freeze ?>">凍結</a></li>
+	<li class="pa_freeze"><a href="<?php echo $link_freeze ?>"><?php echo $lang['freeze'] ?></a></li>
 <?php     } ?>
 <?php   } ?>
 <?php   if ((bool)ini_get('file_uploads')) { ?>
-	<li class="pa_attach"><a href="<?php echo $link_upload ?>">添付</a></li>
+	<li class="pa_attach"><a href="<?php echo $link_upload ?>"><?php echo $lang['upload'] ?></a></li>
 <?php   } ?>
-	<li class="pa_diff"><a href="<?php echo $link_diff ?>">差分</a></li>
+	<li class="pa_diff"><a href="<?php echo $link_diff ?>"><?php echo $lang['diff'] ?></a></li>
 <?php } ?>
-	<li class="pa_list"><a href="<?php echo $link_list ?>">一覧</a></li>
+	<li class="pa_list"><a href="<?php echo $link_list ?>"><?php echo $lang['list'] ?></a></li>
 <?php if (arg_check('list')) { ?>
-	<li class="pa_filelist"><a href="<?php echo $link_filelist ?>">ファイル名一覧</a></li>
+	<li class="pa_filelist"><a href="<?php echo $link_filelist ?>"><?php echo $lang['filelist'] ?></a></li>
 <?php } ?>
-	<li class="pa_serch"><a href="<?php echo $link_search ?>">単語検索</a></li>
-	<li class="pa_whatnew"><a href="<?php echo $link_whatsnew ?>">最終更新</a></li>
+	<li class="pa_serch"><a href="<?php echo $link_search ?>"><?php echo $lang['search'] ?></a></li>
+	<li class="pa_whatnew"><a href="<?php echo $link_whatsnew ?>"><?php echo $lang['recent'] ?></a></li>
 <?php if ($do_backup) { ?>
-	<li class="pa_backup"><a href="<?php echo $link_backup ?>">バックアップ</a></li>
+	<li class="pa_backup"><a href="<?php echo $link_backup ?>"><?php echo $lang['backup'] ?></a></li>
 <?php } ?>
-	<li class="pa_help"><a href="<?php echo $link_help ?>">ヘルプ</a></li>
+	<li class="pa_help"><a href="<?php echo $link_help ?>"><?php echo $lang['help'] ?></a></li>
 </ul>
 </div><!-- □END id:page_action -->
 
