@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: html.php,v 1.65.21 2008/01/18 00:42:00 upk Exp $
+// $Id: html.php,v 1.65.22 2008/01/19 14:15:00 upk Exp $
 // Copyright (C)
 //   2005-2008 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
@@ -75,7 +75,7 @@ function catbody($title, $page, $body)
 	$_LINK['skeylist']   = get_cmd_uri('skeylist',$_page);
 	$_LINK['linklist']   = get_cmd_uri('linklist',$_page);
 	$_LINK['log_browse'] = get_cmd_uri('logview',$_page,'kind=browse');
-	$_LINK['log_update'] = get_cmd_uri($_page,'logview',$_page);
+	$_LINK['log_update'] = get_cmd_uri('logview',$_page);
 	$_LINK['log_down']   = get_cmd_uri('logview',$_page,'kind=download');
 	$_LINK['search']     = get_cmd_uri('search');
 	$_LINK['side']       = get_page_uri($sidebar);
