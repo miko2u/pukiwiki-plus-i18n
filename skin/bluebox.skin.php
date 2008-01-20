@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: bluebox.skin.php,v 1.18.12 2008/01/19 23:26:00 upk Exp $
+// $Id: bluebox.skin.php,v 1.18.13 2008/01/20 13:26:00 upk Exp $
 // Original is ari-
 
 // Prohibit direct access
@@ -121,12 +121,11 @@ if (isset($pkwk_dtd)) {
 <?php } ?>
 <div id="trackback">
 <?php if ($trackback) {
-    $tb_id = tb_get_id($_page);
 ?>
-<a href="<?php echo get_cmd_uri('tb','','__mode=view&tb_id='.$tb_id) ?>"><?php echo $lang['trackback'].'('.tb_count($_page).')' ?></a> | 
+<a href="<?php echo $link_trackback ?>"><?php echo $lang['trackback'].'('.tb_count($_page).')' ?></a> | 
 <?php } ?>
 <?php if ($referer) { ?>
-<a href="<?php echo get_cmd_uri('referer',$_page) ?>"><?php echo $lang['refer'] ?></a>
+<a href="<?php echo $link_refer ?>"><?php echo $lang['refer'] ?></a>
 <?php } ?>
 </div>
 

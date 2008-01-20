@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: html.php,v 1.65.22 2008/01/19 14:15:00 upk Exp $
+// $Id: html.php,v 1.65.22 2008/01/20 14:42:00 upk Exp $
 // Copyright (C)
 //   2005-2008 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
@@ -62,16 +62,17 @@ function catbody($title, $page, $body)
 	$_LINK['new']        = get_cmd_uri('newpage','','refer='.$r_page);
 	$_LINK['newsub']     = get_cmd_uri('newpage_subdir','','directory='.$r_page);
 	$_LINK['read']       = get_page_uri($_page);
-	$_LINK['rdf']        = get_cmd_absuri('rss','','ver=1.0');
+	$_LINK['rdf']        = get_cmd_uri('rss','','ver=1.0');
 	$_LINK['recent']     = get_page_uri($whatsnew);
 	$_LINK['refer']      = get_cmd_uri('referer',$_page);
 	$_LINK['reload']     = get_page_absuri($_page); // 本当は、get_script_uri でいいけど、絶対パスでないと、スキンに影響が出る
+	$_LINK['reload_rel'] = get_page_uri($_page);
 	$_LINK['rename']     = get_cmd_uri('rename','','refer='.$r_page);
 	$_LINK['print']      = get_cmd_uri('print',$_page);
-	$_LINK['rss']        = get_cmd_absuri('rss');
-	$_LINK['rss10']      = get_cmd_absuri('rss','','ver=1.0'); // Same as 'rdf'
-	$_LINK['rss20']      = get_cmd_absuri('rss','','ver=2.0');
-	$_LINK['mixirss']    = get_cmd_absuri('mixirss');         // Same as 'rdf' for mixi
+	$_LINK['rss']        = get_cmd_uri('rss');
+	$_LINK['rss10']      = get_cmd_uri('rss','','ver=1.0'); // Same as 'rdf'
+	$_LINK['rss20']      = get_cmd_uri('rss','','ver=2.0');
+	$_LINK['mixirss']    = get_cmd_uri('mixirss');         // Same as 'rdf' for mixi
 	$_LINK['skeylist']   = get_cmd_uri('skeylist',$_page);
 	$_LINK['linklist']   = get_cmd_uri('linklist',$_page);
 	$_LINK['log_browse'] = get_cmd_uri('logview',$_page,'kind=browse');
@@ -84,42 +85,49 @@ function catbody($title, $page, $body)
 	$_LINK['top']        = get_page_uri($defaultpage);
 	if ($trackback) {
 		$tb_id = tb_get_id($_page);
-		$_LINK['trackback'] = get_cmd_absuri('tb','','__mode=view&tb_id='.$tb_id);
+		$_LINK['trackback'] = get_cmd_uri('tb','','__mode=view&tb_id='.$tb_id);
 	}
 	$_LINK['unfreeze'] = get_cmd_uri('unfreeze',$_page);
 	$_LINK['upload']   = get_cmd_uri('attach',$_page,'pcmd=upload');
 
 	// Compat: Skins for 1.4.4 and before
-	$link_add       = & $_LINK['add'];
-	$link_new       = & $_LINK['new'];	// New!
-	$link_newsub    = & $_LINK['newsub'];
-	$link_edit      = & $_LINK['edit'];
-	$link_diff      = & $_LINK['diff'];
-	$link_top       = & $_LINK['top'];
-	$link_list      = & $_LINK['list'];
-	$link_filelist  = & $_LINK['filelist'];
-	$link_search    = & $_LINK['search'];
-	$link_whatsnew  = & $_LINK['recent'];
-	$link_backup    = & $_LINK['backup'];
-	$link_help      = & $_LINK['help'];
-	$link_trackback = & $_LINK['trackback'];	// New!
-	$link_rdf       = & $_LINK['rdf'];		// New!
-	$link_rss       = & $_LINK['rss'];
-	$link_rss10     = & $_LINK['rss10'];		// New!
-	$link_rss20     = & $_LINK['rss20'];		// New!
-	$link_freeze    = & $_LINK['freeze'];
-	$link_unfreeze  = & $_LINK['unfreeze'];
-	$link_upload    = & $_LINK['upload'];
-	$link_template  = & $_LINK['copy'];
-	$link_refer     = & $_LINK['refer'];	// New!
-	$link_rename    = & $_LINK['rename'];
-
-	$link_mixirss   = & $_LINK['mixirss'];	// Plus!
-	$link_menu      = & $_LINK['menu'];     // Plus!
-	$link_read      = & $_LINK['read'];     // Plus!
-	$link_reload    = & $_LINK['reload'];   // Plus!
-	$link_side      = & $_LINK['side'];     // Plus!
-	$link_source    = & $_LINK['source'];   // Plus!
+	$link_add        = & $_LINK['add'];
+	$link_backup     = & $_LINK['backup'];
+	$link_template   = & $_LINK['copy'];
+	$link_diff       = & $_LINK['diff'];
+	$link_edit       = & $_LINK['edit'];
+	$link_filelist   = & $_LINK['filelist'];
+	$link_freeze     = & $_LINK['freeze'];
+	$link_help       = & $_LINK['help'];
+	$link_list       = & $_LINK['list'];
+	$link_menu       = & $_LINK['menu'];
+	$link_new        = & $_LINK['new'];
+	$link_newsub     = & $_LINK['newsub'];
+	$link_read       = & $_LINK['read'];
+	$link_rdf        = & $_LINK['rdf'];
+	$link_whatsnew   = & $_LINK['recent'];
+	$link_refer      = & $_LINK['refer'];
+	$link_reload     = & $_LINK['reload'];
+	$link_reload_rel = & $_LINK['reload_rel'];
+	$link_rename     = & $_LINK['rename'];
+	$link_print      = & $_LINK['print'];
+	$link_rss        = & $_LINK['rss'];
+	$link_rss10      = & $_LINK['rss10'];
+	$link_rss20      = & $_LINK['rss20'];
+	$link_mixirss    = & $_LINK['mixirss'];
+	$link_skeylist   = & $_LINK['skeylist'];
+	$link_linklist   = & $_LINK['linklist'];
+	$link_log_browse = & $_LINK['log_browse'];
+	$link_log_update = & $_LINK['log_update'];
+	$link_log_down   = & $_LINK['log_down'];
+	$link_search     = & $_LINK['search'];
+	$link_side       = & $_LINK['side'];
+	$link_source     = & $_LINK['source'];
+	//
+	$link_top        = & $_LINK['top'];
+	$link_trackback  = & $_LINK['trackback'];
+	$link_unfreeze   = & $_LINK['unfreeze'];
+	$link_upload     = & $_LINK['upload'];
 
 	// Init flags
 	$is_page = (is_pagename($_page) && ! arg_check('backup') && ! is_cantedit($_page));

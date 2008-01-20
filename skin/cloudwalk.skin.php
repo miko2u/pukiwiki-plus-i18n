@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: cloudwalk.skin.php,v 1.1.13 2008/01/19 23:32:00 upk Exp $
+// $Id: cloudwalk.skin.php,v 1.1.14 2008/01/20 13:23:00 upk Exp $
 // Original is ari-
 //
 
@@ -108,13 +108,12 @@ if (isset($pkwk_dtd)) {
 <?php } ?><!-- □END id:note -->
 <div id="trackback"><!-- ■BEGIN id:trackback -->
 <?php if ($trackback) {
-    $tb_id = tb_get_id($_page);
 ?>
-<a href="<?php echo get_cmd_uri('tb','','__mode=view&tb_id='.$tb_id) ?>"><?php echo $lang['trackback'].'('.tb_count($_page).')' ?></a> |
+<a href="<?php echo $link_trackback ?>"><?php echo $lang['trackback'].'('.tb_count($_page).')' ?></a> |
 <?php } ?>
 
 <?php if ($referer) { ?>
-<a href="<?php echo get_cmd_uri('referer',$_page) ?>"><?php echo $lang['refer'] ?></a>
+<a href="<?php echo $link_refer ?>"><?php echo $lang['refer'] ?></a>
 <?php } ?>
 </div><!-- □ END id:trackback -->
 <?php if ($related != '') { ?><!-- ■ BEGIN id:related -->
@@ -151,7 +150,7 @@ Link: <?php echo $related ?>
 <ul>
 <?php if ($is_page) { ?>
 	<li class="pa_reload"><a href="<?php echo $link_reload ?>"><?php echo $lang['reload'] ?></a></li>
-	<li class="pa_newpage"><a href="<?php echo get_cmd_uri('newpage',$_page,'refer='.$_page) ?>"><?php echo $lang['new'] ?></a></li>
+	<li class="pa_newpage"><a href="<?php echo $link_new ?>"><?php echo $lang['new'] ?></a></li>
 	<li class="pa_edit"><a href="<?php echo $link_edit ?>"><?php echo $lang['edit'] ?></a></li>
 <?php   if ($is_read and $function_freeze) { ?>
 <?php     if ($is_freeze) { ?>

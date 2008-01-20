@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
 //
-// $Id: orangebox.skin.php,v 1.18.11 2007/07/16 23:18:00 upk Exp $
+// $Id: orangebox.skin.php,v 1.18.12 2008/01/20 13:59:00 upk Exp $
 // Original is ari-
 
 // Prohibit direct access
@@ -33,9 +33,9 @@ $_IMAGE['skin']['refer']    = 'plus/referer.png';
 $_IMAGE['skin']['skeylist'] = 'plus/skeylist.png';
 $_IMAGE['skin']['linklist'] = 'plus/linklist.png';
 
-$lang  = $_LANG['skin'];
-$link  = $_LINK;
-$image = $_IMAGE['skin'];
+$lang  = & $_LANG['skin'];
+$link  = & $_LINK;
+$image = & $_IMAGE['skin'];
 
 // Decide charset for CSS
 // $css_charset = 'iso-8859-1';
@@ -65,11 +65,11 @@ if (isset($pkwk_dtd)) {
  <meta http-equiv="content-script-type" content="text/javascript" />
 <?php if ($nofollow || ! $is_read)  { ?> <meta name="robots" content="NOINDEX,NOFOLLOW" /><?php } ?>
 <?php if ($title == $defaultpage) { ?>
- <title><?php echo "$page_title" ?></title>
+ <title><?php echo $page_title ?></title>
 <?php } elseif ($newtitle != '' && $is_read) { ?>
- <title><?php echo "$newtitle - $page_title" ?></title>
+ <title><?php echo $newtitle.' - '.$page_title ?></title>
 <?php } else { ?>
- <title><?php echo "$title - $page_title" ?></title>
+ <title><?php echo $title.' - '.$page_title ?></title>
 <?php } ?>
  <link rel="stylesheet" href="<?php echo SKIN_URI ?>orangebox.css" type="text/css" media="screen,print" charset="<?php echo $css_charset ?>" />
  <link rel="stylesheet" href="<?php echo SKIN_URI ?>greybox/greybox.css" type="text/css" media="all" charset="<?php echo $css_charset ?>" />
@@ -119,12 +119,11 @@ if (isset($pkwk_dtd)) {
 <?php } ?>
 <div id="trackback">
 <?php if ($trackback) {
-    $tb_id = tb_get_id($_page);
 ?>
-<a href="<?php echo "$script?plugin=tb&amp;__mode=view&amp;tb_id=$tb_id" ?>">TrackBack(<?php echo tb_count($_page) ?>)</a> | 
+<a href="<?php echo $link_trackback ?>"><?php echo $lang['trackback'].'('.tb_count($_page).')' ?></a> |
 <?php } ?>
 <?php if ($referer) { ?>
-<a href="<?php echo "$script?plugin=referer&amp;page=$r_page" ?>">外部リンク元</a>
+<a href="<?php echo $link_refer ?>"><?php echo $lang['refer'] ?></a>
 <?php } ?>
 </div>
 
@@ -142,30 +141,30 @@ if (isset($pkwk_dtd)) {
 
 <div id="right_bar">
 <div id="rightbar1" class="side_bar">
-<h2>検索</h2>
+<h2><?php echo $lang['search'] ?></h2>
 <form action="<?php echo $script ?>" method="post">
-<div><input name="encode_hint" value="ぷ" type="hidden" /></div>
+<div><input name="encode_hint" value="<?php echo $_LANG['encode_hint'] ?>" type="hidden" /></div>
 <div>
 <input name="plugin" value="lookup" type="hidden" />
 <input name="refer" value="<?php echo $title ?>" type="hidden" />
 <input name="page" size="20" value="" type="text" accesskey="s" title="serch box"/>
 <input value="Go!" type="submit" accesskey="g"/><br/>
-<input name="inter" value="検索" type="radio" checked="checked" id="serch_site" /><label for="serch_site">サイト内</label>
+<input name="inter" value="<?php $lang['search'] ?>" type="radio" checked="checked" id="serch_site" /><label for="serch_site">This Site</label>
 <input name="inter" value="Google.jp" type="radio" accesskey="w" id="serch_web"/><label for="serch_web">Web</label>
 </div>
 </form></div>
 <div id="rightbar2" class="side_bar">
-<h2>編集操作</h2>
+<h2><?php echo $lang['edit'] ?></h2>
 <ul>
 <?php if ($is_page) { ?>
-	<li><a href="<?php echo $link_edit ?>"><img src="<?php echo IMAGE_URI ?>edit.png" width="20" height="20" alt="編集" title="編集" />編集</a></li>
+	<li><a href="<?php echo $link_edit ?>"><img src="<?php echo IMAGE_URI ?>edit.png" width="20" height="20" alt="<?php echo $lang['edit'] ?>" title="<?php echo $lang['edit'] ?>" /><?php echo $lang['edit'] ?></a></li>
 <?php   if ((bool)ini_get('file_uploads')) { ?>
-	<li><a href="<?php echo $link_upload ?>"><img src="<?php echo IMAGE_URI ?>file.png" width="20" height="20" alt="添付" title="添付" />添付</a></li>
+	<li><a href="<?php echo $link_upload ?>"><img src="<?php echo IMAGE_URI ?>file.png" width="20" height="20" alt="<?php echo $lang['upload'] ?>" title="<?php echo $lang['upload'] ?>" /><?php echo $lang['upload'] ?></a></li>
 <?php   } ?>
-	<li><a href="<?php echo $link_diff ?>"><img src="<?php echo IMAGE_URI ?>diff.png" width="20" height="20" alt="差分" title="差分" />差分</a></li>
+	<li><a href="<?php echo $link_diff ?>"><img src="<?php echo IMAGE_URI ?>diff.png" width="20" height="20" alt="<?php echo $lang['diff'] ?>" title="<?php echo $lang['diff'] ?>" /><?php echo $lang['diff'] ?></a></li>
 <?php } ?>
 <?php if ($do_backup) { ?>
-	<li><a href="<?php echo $link_backup ?>"><img src="<?php echo IMAGE_URI ?>backup.png" width="20" height="20" alt="バックアップ" title="バックアップ" />バックアップ</a></li>
+	<li><a href="<?php echo $link_backup ?>"><img src="<?php echo IMAGE_URI ?>backup.png" width="20" height="20" alt="<?php echo $lang['backup'] ?>" title="<?php echo $lang['backup'] ?>" /><?php echo $lang['backup'] ?></a></li>
 <?php } ?>
 </ul>
 </div>
