@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: make_link.php,v 1.35.22 2008/01/13 03:14:00 upk Exp $
+// $Id: make_link.php,v 1.35.23 2008/02/24 18:46:00 upk Exp $
 // Copyright (C)
 //   2005-2008 PukiWiki Plus! Team
 //   2003-2006 PukiWiki Developers Team
@@ -161,7 +161,7 @@ class Link
 	function Link($start)
 	{
 		$this->start = $start;
-		$this->redirect = (PKWK_USE_REDIRECT) ? get_cmd_uri('redirect','','u=') : '';
+		$this->redirect = (PKWK_USE_REDIRECT) ? get_cmd_uri('redirect','','','u=') : '';
 	}
 
 	// Return a regex pattern to match
@@ -861,7 +861,7 @@ function make_tooltips($term,$glossary_page='')
 	$glossary = plugin_tooltip_get_glossary($term,$glossary_page,FALSE);
 	if ( $glossary === FALSE ) {
 		$glossary = plugin_tooltip_get_page_title($term);
-		if ( $glossary === FALSE ) $glossary = "";
+		if ( $glossary === FALSE ) $glossary = '';
 	}
 	$s_term = str_replace("'", "\\'", htmlspecialchars($term));
 	$s_glossary = htmlspecialchars($glossary);

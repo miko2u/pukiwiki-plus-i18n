@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: fuzzy.php,v 0.2.2 2008/01/05 17:32:00 upk Exp $
+// $Id: fuzzy.php,v 0.2.3 2008/02/24 18:54:00 upk Exp $
 //
 // 'Search' main function
 function do_search_fuzzy($word, $type = 'AND', $non_format = FALSE, $non_fuzzy = FALSE)
@@ -79,7 +79,7 @@ function do_search_fuzzy($word, $type = 'AND', $non_format = FALSE, $non_fuzzy =
 		$s_page  = htmlspecialchars($page);
 		$passage = get_passage($time);
 		$retval .= ' <li><a href="' .
-			get_page_uri($page, 'word=' . $r_word) . '">' . $s_page .
+			get_page_uri($page, '', 'word=' . $r_word) . '">' . $s_page .
 			'</a>' . $passage . '</li>' . "\n";
 	}
 	$retval .= '</ul>' . "\n";

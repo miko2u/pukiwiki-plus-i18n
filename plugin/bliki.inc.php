@@ -336,7 +336,7 @@ function bliki_get_more($page)
 
 	return sprintf($_bliki_msg['msg_more'],
 		htmlspecialchars($page),
-		get_page_uri($page,'','more'));
+		get_page_uri($page,'','','more'));
 }
 
 ?>

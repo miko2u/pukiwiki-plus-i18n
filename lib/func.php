@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: func.php,v 1.93.31 2008/01/15 :21:00 upk Exp $
+// $Id: func.php,v 1.93.32 2008/02/24 18:52:00 upk Exp $
 // Copyright (C)
 //   2005-2008 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
@@ -306,7 +306,7 @@ function do_search($word, $type = 'AND', $non_format = FALSE, $base = '')
 		$s_page  = htmlspecialchars($page);
 		$passage = $show_passage ? ' ' . get_passage(get_filetime($page)) : '';
 		if ($search_word_color) {
-			$uri = get_page_uri($page, 'word='.$r_word);
+			$uri = get_page_uri($page, '', 'word='.$r_word);
 			if ($ajax && UA_PROFILE == 'default') {
 				$pre = $script . '?' . 'cmd=preview&amp;page=' . $r_page . '&amp;word=' . $r_word;
 				$pre = ' onmouseover="showGlossaryPopup(' . "'" . $pre . "'" . ',event,0.2);" onmouseout="hideGlossaryPopup();"';
@@ -957,11 +957,26 @@ function get_script_absuri()
         return $uri;
 }
 
-function get_resolve_uri($cmd='', $page='', $query='', $fragment='', $abs=1, $location=1)
+// function get_cmd_uri($cmd='', $page='', $query='', $fragment='')
+function get_cmd_uri($cmd='', $page='', $path_reference='rel', $query='', $fragment='')
 {
-	global $script, $absolute_uri;
+	return get_resolve_uri($cmd,$page,$path_reference,$query,$fragment,0);
+}
 
-	$ret = ($absolute_uri || $abs) ? get_script_absuri() : $script;
+// function get_page_uri($page, $query='', $fragment='')
+function get_page_uri($page, $path_reference='rel', $query='', $fragment='')
+{
+	return get_resolve_uri('',$page,$path_reference,$query,0);
+}
+
+// Obsolete (svn収容分のみ利用可)
+//function get_resolve_uri($cmd='', $page='', $query='', $fragment='', $abs=1, $location=1)
+function get_resolve_uri($cmd='', $page='', $path_reference='rel', $query='', $fragment='', $location=1)
+{
+	// global $script, $absolute_uri;
+	// $ret = ($absolute_uri || $path_reference == 'abs') ? get_script_absuri() : $script;
+	$path = (empty($path_reference)) ? 'rel' : $path_reference;
+	$ret = get_script_uri($path);
 
 	$flag = '?';
 	$page_pref = '';
@@ -999,34 +1014,26 @@ function get_resolve_uri($cmd='', $page='', $query='', $fragment='', $abs=1, $lo
 	return ($location) ? $ret : htmlspecialchars( $ret );
 }
 
-function get_cmd_uri($cmd='', $page='', $query='', $fragment='')
-{
-	return get_resolve_uri($cmd,$page,$query,$fragment,0,0);
-}
-
+// Obsolete (明示指定用)
 function get_cmd_absuri($cmd='', $page='', $query='', $fragment='')
 {
-	return get_resolve_uri($cmd,$page,$query,$fragment,1,0);
+	return get_resolve_uri($cmd,$page,'full',$query,$fragment,0);
 }
-
-function get_page_uri($page, $query='', $fragment='')
-{
-	return get_resolve_uri('',$page,$query,0,0);
-}
-
+// Obsolete (明示指定用)
 function get_page_absuri($page, $query='', $fragment='')
 {
-	return get_resolve_uri('',$page,$query,$fragment,1,0);
+	return get_resolve_uri('',$page,'full',$query,$fragment,0);
 }
 
+// Obsolete (ポカミス用)
 function get_page_location_uri($page='', $query='', $fragment='')
 {
-	return get_resolve_uri('',$page,$query,$fragment,1,1);
+	return get_resolve_uri('',$page,'full',$query,$fragment,1);
 }
-
+// Obsolete (ポカミス用)
 function get_location_uri($cmd='', $page='', $query='', $fragment='')
 {
-	return get_resolve_uri($cmd,$page,$query,$fragment,1,1);
+	return get_resolve_uri($cmd,$page,'full',$query,$fragment,1);
 }
 
 // Remove null(\0) bytes from variables

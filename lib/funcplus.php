@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: funcplus.php,v 0.1.50 2008/01/16 23:26:00 upk Exp $
+// $Id: funcplus.php,v 0.1.51 2008/02/24 21:10:00 upk Exp $
 // Copyright (C)
 //   2005-2008 PukiWiki Plus! Team
 // License: GPL v2 or (at your option) any later version
@@ -591,6 +591,7 @@ function get_baseuri($path='')
 			}
 		}
 		break;
+	case 'full':
 	default:
 		$absoluteURI = get_script_absuri();
 		$ret = substr($absoluteURI, 0, strrpos($absoluteURI, '/')+1);

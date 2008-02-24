@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: html.php,v 1.65.23 2008/01/20 21:07:00 upk Exp $
+// $Id: html.php,v 1.65.24 2008/02/24 18:46:00 upk Exp $
 // Copyright (C)
 //   2005-2008 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
@@ -51,7 +51,7 @@ function catbody($title, $page, $body)
 	// Set $_LINK for skin
 	$_LINK['add']        = get_cmd_uri('add',$_page);
 	$_LINK['backup']     = get_cmd_uri('backup',$_page);
-	$_LINK['copy']       = get_cmd_uri('template','','refer='.$r_page);
+	$_LINK['copy']       = get_cmd_uri('template','','', 'refer='.$r_page);
 	$_LINK['diff']       = get_cmd_uri('diff',$_page);
 	$_LINK['edit']       = get_cmd_uri('edit',$_page);
 	$_LINK['filelist']   = get_cmd_uri('filelist');
@@ -59,31 +59,31 @@ function catbody($title, $page, $body)
 	$_LINK['help']       = get_cmd_uri('help');
 	$_LINK['linklist']   = get_cmd_uri('linklist',$_page);
 	$_LINK['list']       = get_cmd_uri('list');
-	$_LINK['log_browse'] = get_cmd_uri('logview',$_page,'kind=browse');
+	$_LINK['log_browse'] = get_cmd_uri('logview',$_page,'','kind=browse');
 	$_LINK['log_update'] = get_cmd_uri('logview',$_page);
-	$_LINK['log_down']   = get_cmd_uri('logview',$_page,'kind=download');
+	$_LINK['log_down']   = get_cmd_uri('logview',$_page,'','kind=download');
 	$_LINK['menu']       = get_page_uri($menubar);
-	$_LINK['new']        = get_cmd_uri('newpage','','refer='.$r_page);
-	$_LINK['newsub']     = get_cmd_uri('newpage_subdir','','directory='.$r_page);
+	$_LINK['new']        = get_cmd_uri('newpage','','','refer='.$r_page);
+	$_LINK['newsub']     = get_cmd_uri('newpage_subdir','','','directory='.$r_page);
 	$_LINK['print']      = get_cmd_uri('print',$_page);
 	$_LINK['read']       = get_page_uri($_page);
 	$_LINK['recent']     = get_page_uri($whatsnew);
 	$_LINK['refer']      = get_cmd_uri('referer',$_page);
 	$_LINK['reload']     = get_page_absuri($_page); // 本当は、get_script_uri でいいけど、絶対パスでないと、スキンに影響が出る
 	$_LINK['reload_rel'] = get_page_uri($_page);
-	$_LINK['rename']     = get_cmd_uri('rename','','refer='.$r_page);
+	$_LINK['rename']     = get_cmd_uri('rename','','','refer='.$r_page);
 	$_LINK['skeylist']   = get_cmd_uri('skeylist',$_page);
 	$_LINK['search']     = get_cmd_uri('search');
 	$_LINK['side']       = get_page_uri($sidebar);
 	$_LINK['source']     = get_cmd_uri('source',$_page);
-	$_LINK['template']   = get_cmd_uri('template','','refer='.$r_page);
+	$_LINK['template']   = get_cmd_uri('template','','','refer='.$r_page);
 	$_LINK['top']        = get_page_uri($defaultpage);
 	if ($trackback) {
 		$tb_id = tb_get_id($_page);
-		$_LINK['trackback'] = get_cmd_uri('tb','','__mode=view&tb_id='.$tb_id);
+		$_LINK['trackback'] = get_cmd_uri('tb','','','__mode=view&tb_id='.$tb_id);
 	}
 	$_LINK['unfreeze']   = get_cmd_uri('unfreeze',$_page);
-	$_LINK['upload']     = get_cmd_uri('attach',$_page,'pcmd=upload');
+	$_LINK['upload']     = get_cmd_uri('attach',$_page,'','pcmd=upload');
 	// link rel="alternate" にも利用するため absuri にしておく
 	$_LINK['rdf']        = get_cmd_absuri('rss','','ver=1.0');
 	$_LINK['rss']        = get_cmd_absuri('rss');

@@ -3,7 +3,7 @@
  * PukiWiki Plus! Anchor Plugin
  *
  * @copyright   Copyright &copy; 2008, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: a.inc.php,v 0.1 2008/01/16 23:25:00 upk Exp $
+ * @version     $Id: a.inc.php,v 0.2 2008/02/24 18:47:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  *
  */
@@ -26,7 +26,7 @@ function plugin_a_inline()
 	$is_ext = ($is_url && ! is_inside_uri($href));
 
 	$symbol = $is_ext ? $_symbol_extanchor : $_symbol_innanchor;
-	$r_href = (PKWK_USE_REDIRECT && $is_ext) ? get_cmd_uri('redirect','','u=').rawurlencode($href) : htmlspecialchars($href);
+	$r_href = (PKWK_USE_REDIRECT && $is_ext) ? get_cmd_uri('redirect','','','u=').rawurlencode($href) : htmlspecialchars($href);
 
 	if (! $is_url) {
 		return '<a href="'.$r_href.'"'.$opt.'>'.$name.'</a>';

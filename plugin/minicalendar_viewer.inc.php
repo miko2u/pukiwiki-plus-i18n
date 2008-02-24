@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: minicalendar_viewer.inc.php,v 1.34.26 2008/01/13 03:17:00 upk Exp $
+// $Id: minicalendar_viewer.inc.php,v 1.34.27 2008/02/24 18:49:00 upk Exp $
 //
 // Calendar viewer plugin - List pages that calendar/calnedar2 plugin created
 // (Based on calendar and recent plugin)
@@ -71,9 +71,9 @@ function plugin_minicalendar_viewer_convert()
 	// デフォルト値をセット
 	$pagename   = $func_vars_array[0]; // 基準となるページ名
 	$limit_page = 7;                   // 表示する件数制限
-	$date_YM    = "";                  // 一覧表示する年月
-	$mode       = "past";              // 動作モード
-	$date_sep   = "-";                 // 日付のセパレータ calendar2なら"-" calendarなら""
+	$date_YM    = '';                  // 一覧表示する年月
+	$mode       = 'past';              // 動作モード
+	$date_sep   = '-';                 // 日付のセパレータ calendar2なら"-" calendarなら""
 
 	// Check $func_args[1]
 	if (preg_match("/[0-9]{4}".$date_sep."[0-9]{2}/",$func_vars_array[1])) {
@@ -83,7 +83,7 @@ function plugin_minicalendar_viewer_convert()
 		$limit_page = 31;	//手抜き。31日分をリミットとする。
 	}else if (preg_match("/this/si",$func_vars_array[1])) {
 		//今月の一覧表示
-		$page_YM = get_date("Y".$date_sep."m");
+		$page_YM = get_date('Y'.$date_sep.'m');
 		$limit_base = 0;
 		$limit_page = 31;
 	}else if (preg_match("/^[0-9]+$/",$func_vars_array[1])) {
@@ -91,12 +91,12 @@ function plugin_minicalendar_viewer_convert()
 		$limit_pitch = $func_vars_array[1];
 		$limit_page = $limit_pitch;
 		$limit_base = 0;
-		$page_YM = "";
+		$page_YM = '';
 	}else if (preg_match("/([0-9]+)\*([0-9]+)/",$func_vars_array[1],$reg_array)) {
 		$limit_pitch = $reg_array[2];
 		$limit_page = $reg_array[1] + $limit_pitch;
 		$limit_base = $reg_array[1];
-		$page_YM = "";
+		$page_YM = '';
 	} else {
 		return '#calendar_viewer(): ' . $_err_calendar_viewer_param2 . '<br />' . "\n";
 	}
@@ -115,7 +115,7 @@ function plugin_minicalendar_viewer_convert()
 	if (isset($viewed[$pagename])) {
 		if ($viewed[$pagename] > PLUGIN_MINICALENDAR_MAX_VIEWS) {
 			$s_page = htmlspecialchars($pagename);
-			return "#calendar_viewer(): You already view: $s_page<br />";
+			return '#calendar_viewer(): You already view: '.$s_page.'<br />';
 		}
 		$viewed[$pagename]++; // Valid
 	} else {
@@ -156,10 +156,10 @@ function plugin_minicalendar_viewer_convert()
 			// futureex modeでは今日を含む過去のページはNG
 			// past modeでは未来のページはNG
 			// future modeでは過去のページはNG
-			if (($page_date >= $_date) && ($mode=="pastex")) continue;
-			if (($page_date <= $_date) && ($mode=="futureex")) continue;
-			if (($page_date > $_date) && ($mode=="past")) continue;
-			if (($page_date < $_date) && ($mode=="future")) continue;
+			if (($page_date >= $_date) && ($mode=='pastex')) continue;
+			if (($page_date <= $_date) && ($mode=='futureex')) continue;
+			if (($page_date > $_date) && ($mode=='past')) continue;
+			if (($page_date < $_date) && ($mode=='future')) continue;
 
 			$pagelist[] = $page;
 		}
@@ -174,8 +174,8 @@ function plugin_minicalendar_viewer_convert()
 	}
 
 	// ここからインクルード
-	$tmppage     = $vars["page"];
-	$return_body = "";
+	$tmppage     = $vars['page'];
+	$return_body = '';
 
 	// $limit_pageの件数までインクルード
 	$tmp = max($limit_base, 0); // Skip minus
@@ -221,7 +221,7 @@ function plugin_minicalendar_viewer_convert()
 		if (auth::check_role('readonly')) {
 			$link = get_page_uri($page);
 		} else {
-			$link = get_cmd_uri('edit',$page,'refpage='.$refpage);
+			$link = get_cmd_uri('edit',$page,'','refpage='.$refpage);
 		}
 		$link = '<a class="anchor_super" href="' . $link . '">' . $_symbol_paraedit . '</a>';
 		$head = '<h3 class="minicalendar">' . $s_page_title . ' ' . $link . '</h3>' . "\n";
@@ -276,7 +276,7 @@ function plugin_minicalendar_viewer_convert()
 	//?plugin=minicalendar_viewer&file=ページ名&date=yyyy-mm
 	$enc_pagename = rawurlencode(substr($pagepattern,0,$pagepattern_len -1));
 
-	if ($page_YM != "") {
+	if ($page_YM != '') {
 		// 年月表示時
 		$date_sep_len = strlen($date_sep);
 		$this_year    = substr($page_YM, 0, 4);
@@ -289,8 +289,8 @@ function plugin_minicalendar_viewer_convert()
 			$next_year ++;
 			$next_month = 1;
 		}
-		$next_YM = sprintf("%04d%s%02d",$next_year,$date_sep,$next_month);
-		$next_YMX = sprintf("%04d%02d",$next_year,$next_month);
+		$next_YM = sprintf('%04d%s%02d',$next_year,$date_sep,$next_month);
+		$next_YMX = sprintf('%04d%02d',$next_year,$next_month);
 
 		// 前月
 		$prev_year  = $this_year;
@@ -299,8 +299,8 @@ function plugin_minicalendar_viewer_convert()
 			$prev_year --;
 			$prev_month = 12;
 		}
-		$prev_YM = sprintf("%04d%s%02d",$prev_year,$date_sep,$prev_month);
-		$prev_YMX = sprintf("%04d%02d",$prev_year,$prev_month);
+		$prev_YM = sprintf('%04d%s%02d',$prev_year,$date_sep,$prev_month);
+		$prev_YMX = sprintf('%04d%02d',$prev_year,$prev_month);
 
 //		if ($mode == "past" || $mode == "pastex") {
 //			$right_YM   = $prev_YM;
@@ -341,18 +341,18 @@ function plugin_minicalendar_viewer_convert()
 	$s_date_sep = htmlspecialchars($date_sep);
 	if ($left_YM != '') {
 		if ($left_YMX != '') {
-			$left_link = "<a href=\"$script?plugin=minicalendar&amp;file=$enc_pagename&amp;date=$left_YMX\">$left_text</a>";
+			$left_link = '<a href="'.$script.'?plugin=minicalendar&amp;file='.$enc_pagename.'&amp;date='.$left_YMX.'">'.$left_text.'</a>';
 		} else {
-			$left_link = "<a href=\"$script?plugin=minicalendar_viewer&amp;file=$enc_pagename&amp;date=$left_YM&amp;date_sep=$s_date_sep&amp;mode=$mode\">$left_text</a>";
+			$left_link = '<a href="'.$script.'?plugin=minicalendar_viewer&amp;file='.$enc_pagename.'&amp;date='.$left_YM.'&amp;date_sep='.$s_date_sep.'&amp;mode='.$mode.'">'.$left_text.'</a>';
 		}
 	} else {
 	    $left_link = '';
 	}
 	if ($right_YM != '') {
 		if ($right_YMX != '') {
-			$right_link = "<a href=\"$script?plugin=minicalendar&amp;file=$enc_pagename&amp;date=$right_YMX\">$right_text</a>";
+			$right_link = '<a href="'.$script.'?plugin=minicalendar&amp;file='.$enc_pagename.'&amp;date='.$right_YMX.'">'.$right_text.'</a>';
 		} else {
-			$right_link = "<a href=\"$script?plugin=minicalendar_viewer&amp;file=$enc_pagename&amp;date=$right_YM&amp;date_sep=$s_date_sep&amp;mode=$mode\">$right_text</a>";
+			$right_link = '<a href="'.$script.'?plugin=minicalendar_viewer&amp;file='.$enc_pagename.'&amp;date='.$right_YM.'&amp;date_sep='.$s_date_sep.'&amp;mode='.$mode.'">'.$right_text.'</a>';
 		}
 	} else {
 	    $right_link = '';
@@ -373,7 +373,7 @@ function plugin_minicalendar_viewer_action()
 {
 	global $vars, $get, $post, $script;
 
-	$date_sep = "-";
+	$date_sep = '-';
 	$return_vars_array = array();
 
 	$page = strip_bracket($vars['page']);
@@ -387,16 +387,16 @@ function plugin_minicalendar_viewer_action()
 	$mode = $vars['mode'];
 
 	$args_array = array($vars['page'], $page_YM, $mode, $date_sep);
-	$return_vars_array["body"] = call_user_func_array('plugin_minicalendar_viewer_convert',$args_array);
+	$return_vars_array['body'] = call_user_func_array('plugin_minicalendar_viewer_convert',$args_array);
 
 	//$return_vars_array["msg"] = "minicalendar_viewer ".$vars["page"]."/".$page_YM;
-	$return_vars_array["msg"] = "minicalendar_viewer ".htmlspecialchars($vars["page"]);
-	if ($vars["page"] != '') $return_vars_array['msg'] .= '/';
+	$return_vars_array['msg'] = 'minicalendar_viewer '.htmlspecialchars($vars["page"]);
+	if ($vars['page'] != '') $return_vars_array['msg'] .= '/';
 
 	if (preg_match("/\*/",$page_YM)) {
 		//うーん、n件表示の時はなんてページ名にしたらいい？
 	} else {
-		$return_vars_array["msg"] .= htmlspecialchars($page_YM);
+		$return_vars_array['msg'] .= htmlspecialchars($page_YM);
 	}
 
 	// Patched By miko - 読み込みモードにする.
@@ -405,7 +405,7 @@ function plugin_minicalendar_viewer_action()
 	return $return_vars_array;
 }
 
-function plugin_minicalendar_viewer_isValidDate($aStr, $aSepList="-/ .")
+function plugin_minicalendar_viewer_isValidDate($aStr, $aSepList='-/ .')
 {
 	if ($aSepList == '') {
 		// yyyymmddとしてチェック（手抜き(^^;）

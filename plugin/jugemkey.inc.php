@@ -4,7 +4,7 @@
  *
  * @copyright   Copyright &copy; 2006-2008, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: jugemkey.inc.php,v 0.11 2008/01/05 18:20:00 upk Exp $
+ * @version     $Id: jugemkey.inc.php,v 0.12 2008/02/24 18:39:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'auth_jugemkey.cls.php');
@@ -176,7 +176,7 @@ function plugin_jugemkey_get_user_name()
 	$login = $obj->auth_session_get();
 	// FIXME
 	// Because user information can be acquired by token only at online, it doesn't mount. 
-	// $info = (empty($login['token'])) ? '' : get_resolve_uri('jugemkey','','token='.$login['token'].'%amp;userinfo');
+	// $info = (empty($login['token'])) ? '' : get_resolve_uri('jugemkey','', '', 'token='.$login['token'].'%amp;userinfo');
 	// Only, it leaves it only as a location of attestation by JugemKey.
 	$info = 'http://jugemkey.jp/';
 	if (! empty($login['title'])) return array('role'=>ROLE_AUTH_JUGEMKEY,'nick'=>$login['title'],'profile'=>$info,'key'=>$login['title']);

@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: tracker.inc.php,v 1.35.11 2008/01/16 23:47:00 upk Exp $
+// $Id: tracker.inc.php,v 1.35.12 2008/02/24 18:41:00 upk Exp $
 // Copyright (C)
 //	 2004-2008 PukiWiki Plus! Team
 //   2003-2005 PukiWiki Developers Team
@@ -916,8 +916,8 @@ class Tracker_list
 		// return "[[$title$arrow>$script?plugin=tracker_list&refer=$r_page&config=$r_config&list=$r_list&order=$r_order]]";
 		// ブラケットに引き渡す場合は、make_link にて、再度 htmlspecialchars してしまうので回避
 		return '[['.$title.$arrow.'>' . 
-			get_resolve_uri('tracker_list','',
-				array('refer'=>$this->page, 'config'=>$this->config->config_name, 'list'=>$this->list, 'order'=>join(';',$_order)), 1,1
+			get_resolve_uri('tracker_list','', 'full',
+				array('refer'=>$this->page, 'config'=>$this->config->config_name, 'list'=>$this->list, 'order'=>join(';',$_order)), 1
 			) . ']]';
 	}
 	function toString($limit=NULL,$count=0)
