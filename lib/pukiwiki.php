@@ -1,9 +1,9 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: pukiwiki.php,v 1.21.14 2007/08/26 15:17:28 miko Exp $
+// $Id: pukiwiki.php,v 1.21.15 2008/03/02 22:27:00 upk Exp $
 //
 // PukiWiki Plus! 1.4.*
-//  Copyright (C) 2002-2007 by PukiWiki Plus! Team
+//  Copyright (C) 2002-2008 by PukiWiki Plus! Team
 //  http://pukiwiki.cafelounge.net/plus/
 //
 // PukiWiki 1.4.*
@@ -181,11 +181,14 @@ if ($plugin != '') {
 		$retvars = do_plugin_action($plugin);
 		if ($retvars === FALSE) exit; // Done
 		// Rescan $vars (Some plugins rewrite it)
+		/*
 		if (isset($vars['cmd'])) {
 			$base = isset($vars['page'])  ? $vars['page']  : '';
 		} else {
 			$base = isset($vars['refer']) ? $vars['refer'] : '';
 		}
+		*/
+		$base = (!empty($page)) ? $page : $refer;
 	} else {
 		$msg = 'plugin=' . htmlspecialchars($plugin) . ' is not implemented.';
 		$retvars = array('msg'=>$msg,'body'=>$msg);
