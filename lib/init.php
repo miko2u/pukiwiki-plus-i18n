@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: init.php,v 1.54.30 2008/01/15 15:12:00 upk Exp $
+// $Id: init.php,v 1.54.31 2008/03/05 22:22:00 upk Exp $
 // Copyright (C)
 //   2005-2008 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
@@ -73,7 +73,7 @@ set_time();
 require(LIB_DIR . 'public_holiday.php');
 
 // Init Resource(for gettext)
-putenv('LC_ALL=' . PO_LANG);
+if (! ini_get('safe_mode')) putenv('LC_ALL=' . PO_LANG);
 setlocale(LC_ALL, PO_LANG);
 bindtextdomain(DOMAIN, LANG_DIR);
 bind_textdomain_codeset(DOMAIN, SOURCE_ENCODING);
