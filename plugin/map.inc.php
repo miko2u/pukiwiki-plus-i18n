@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: map.inc.php,v 1.17.3 2008/01/05 23:13:00 upk Exp $
+// $Id: map.inc.php,v 1.17.4 2008/03/09 19:04:00 upk Exp $
 // Copyright (C)
 //   2008 PukiWiki Plus! Developers Team
 //   2002-2005, 2007 PukiWiki Developers Team
@@ -26,7 +26,7 @@ function plugin_map_action()
 		$vars['refer'] = $refer = $defaultpage;
 	}
 
-	$retval['msg']  = $reverse ? 'Relation map (link from)' : 'Relation map, from $1';
+	$retval['msg']  = $reverse ? _('Relation map (link from)') : sprintf(_('Relation map, from %s'),$refer);
 
 	// Get pages
 	$pages = array_values(array_diff(auth::get_existpages(), array($whatsnew)));
@@ -34,7 +34,7 @@ function plugin_map_action()
 		$pages = array_diff($pages, preg_grep('/' . $non_list . '/', $pages));
 	}
 	if (empty($pages)) {
-		$retval['body'] = 'No pages.';
+		$retval['body'] = _('No pages.');
 		return $retval;
 	}
 
@@ -67,7 +67,7 @@ function plugin_map_action()
 		$body[] = '</ul>';
 		if (! empty($alone)) {
 			$body[] = '<hr />';
-			$body[] = '<p>No link from anywhere in this site.</p>';
+			$body[] = _('<p>No link from anywhere in this site.</p>');
 			$body[] = '<ul>';
 			foreach ($alone as $page) {
 				$body[] = $nodes[$page]->toString($nodes, 1, $nodes[$page]->parent_id);
@@ -79,7 +79,7 @@ function plugin_map_action()
 		$body[] = '<ul>';
 		$body[] = $nodes[$refer]->toString($nodes) . '</ul>';
 		$body[] = '<hr />';
-		$body[] = '<p>Not related from ' . htmlspecialchars($refer) . '</p>';
+		$body[] = sprintf(_('<p>Not related from %s.</p>'),htmlspecialchars($refer));
 		$keys = array_keys($nodes);
 		sort($keys, SORT_STRING);
 		$body[] = '<ul>';
@@ -93,9 +93,7 @@ function plugin_map_action()
 	}
 	
 	$body[] = '<hr />';
-	$body[] = '<p>Total: ' . count($pages) . ' page(s) on this site.</p>';
-
-	
+	$body[] = sprintf(_('<p>Total: %d page(s) on this site.</p>'),count($pages));
 	$retval['body'] = implode("\n", $body) . "\n";
 	return $retval;
 }
