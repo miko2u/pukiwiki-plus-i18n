@@ -1,8 +1,8 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: attach.inc.php,v 1.87.32 2007/12/06 01:54:00 upk Exp $
+// $Id: attach.inc.php,v 1.87.33 2008/03/15 01:05:00 upk Exp $
 // Copyright (C)
-//   2005-2007 PukiWiki Plus! Team
+//   2005-2008 PukiWiki Plus! Team
 //   2003-2007 PukiWiki Developers Team
 //   2002-2003 PANDA <panda@arino.jp> http://home.arino.jp/
 //   2002      Y.MASUI <masui@hisec.co.jp> http://masui.net/pukiwiki/
@@ -45,7 +45,7 @@ define('PLUGIN_ATTACH_FILE_ICON', '<img src="' . IMAGE_URI .  'file.png"' .
 define('PLUGIN_ATTACH_CONFIG_PAGE_MIME', 'plugin/attach/mime-type');
 
 defined('PLUGIN_ATTACH_UNKNOWN_COMPRESS')	or define('PLUGIN_ATTACH_UNKNOWN_COMPRESS', 1);			// 1(compress) or 0(raw)
-defined('PLUGIN_ATTACH_COMPRESS_TYPE')		or define('PLUGIN_ATTACH_COMPRESS_TYPE', 'TGZ');		// TGZ or GZ
+defined('PLUGIN_ATTACH_COMPRESS_TYPE')		or define('PLUGIN_ATTACH_COMPRESS_TYPE', 'TGZ');		// TGZ or GZ or ZIP
 
 function plugin_attach_init()
 {
@@ -322,6 +322,25 @@ function attach_doupload(&$file, $page, $pass=NULL, $temp='', $copyright=FALSE, 
 			while (!feof($tp)) { gzwrite($zp,fread($tp, 8192)); }
 			gzclose($zp);
 			fclose($tp);
+			chmod($obj->filename, PLUGIN_ATTACH_FILE_MODE);
+			@unlink($file['tmp_name']);
+		} else
+		if (PLUGIN_ATTACH_COMPRESS_TYPE == 'ZIP' && class_exists('ZipArchive')) {
+			$obj = & new AttachFile($page, $file['name'] . '.zip');
+			if ($obj->exist)
+				return array('result'=>FALSE,
+					'msg'=>$_attach_messages['err_exists']);
+
+			$zip = new ZipArchive();
+			if ($zip->open($obj->filename, ZIPARCHIVE::CREATE) !== TRUE) {
+				return array('result'=>FALSE,
+					'msg'=>$_attach_messages['err_exists']);
+			}
+
+			$zip->addFile($file['tmp_name'],$file['name']);
+			if ($zip->status !== ZIPARCHIVE::ER_OK)
+				die_message( _('The error occurred('.$zip->status.').') );
+			$zip->close();
 			chmod($obj->filename, PLUGIN_ATTACH_FILE_MODE);
 			@unlink($file['tmp_name']);
 		}

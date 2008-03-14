@@ -3,7 +3,7 @@
  * Detect user's language, and show only messages written in that.  
  *
  * @copyright	Copyright &copy; 2005-2006,2008, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version	$Id: multilang.inc.php,v 0.17 2008/02/24 18:50:00 upk Exp $
+ * @version	$Id: multilang.inc.php,v 0.18 2008/03/15 01:24:00 upk Exp $
  *
  */
 
@@ -41,7 +41,7 @@ function plugin_multilang_inline()
 	
 	if (strpos($lang, 'link') === 0) {
 		array_pop($args); // drop {}
-		list($link, $option) = split('=', $lang);
+		@list($link, $option) = split('=', $lang);
 		return plugin_multilang_inline_link($option, $args);
 	} else {
 	
@@ -66,13 +66,13 @@ function plugin_multilang_inline_link($option, $args)
 	foreach( $args as $arg ) {
 		$arg = htmlspecialchars($arg);
 
-		list($lang, $style) = split('\+', $arg);	 // en_US=English+flag=us
-		list($lang, $title) = split('=', $lang);
-		list($style, $country) = split('=', $style);
+		@list($lang, $style) = split('\+', $arg);	 // en_US=English+flag=us
+		@list($lang, $title) = split('=', $lang);
+		@list($style, $country) = split('=', $style);
 		
 		if($style != 'text') { // flag or text : default is flag
 			if (empty($country)) {
-				list($lng, $country) = split('_', $lang); // en_US -> en, US
+				@list($lng, $country) = split('_', $lang); // en_US -> en, US
 				if(empty($country)) {
 					$country = $obj_l2c->get_lang2country( strtolower($lng) );
 				}
