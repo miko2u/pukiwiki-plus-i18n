@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: navibar2.inc.php,v 0.1.16 2007/07/16 14:44:00 upk Exp $
+// $Id: navibar2.inc.php,v 0.1.17 2008/03/21 00:01:00 upk Exp $
 //
 function plugin_navibar2_convert()
 {
@@ -40,6 +40,7 @@ function plugin_navibar2_makehtml($page)
 	$lines = get_source($page);
 	convert_html( $lines ); // Processing for prior execution of plug-in.
 
+	$menubar = $menublk = $naviblk = array();
 	foreach ($lines as $line) {
 		if ($line == '') continue;
 
@@ -85,7 +86,7 @@ function plugin_navibar2_makehtml($page)
 		}
 	}
 	for ($i=0;$i<=$menubarcount;$i++) {
-		$menublkstr = join("\n",$menublk[$i]);
+		$menublkstr = empty($menublk[$i]) ? '' : join("\n",$menublk[$i]);
 		if ($menublkstr != '') {
 			$naviblk[$i] = <<<EOD
 <div class="naviblock" id="naviblock{$i}">
