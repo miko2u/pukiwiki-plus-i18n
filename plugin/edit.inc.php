@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: edit.inc.php,v 1.41.38 2008/01/13 02:33:00 upk Exp $
+// $Id: edit.inc.php,v 1.41.39 2008/03/30 23:19:00 upk Exp $
 // Copyright (C)
 //   2005-2008 PukiWiki Plus! Team
 //   2001-2007 PukiWiki Developers Team
@@ -145,7 +145,7 @@ function plugin_edit_inline()
 	global $script, $vars, $fixed_heading_edited;
 	global $_symbol_paraedit;
 
-	if (!$fixed_heading_edited || is_freeze($vars['page'])) {
+	if (!$fixed_heading_edited || is_freeze($vars['page']) || auth::check_role('readonly')) {
 		return '';
 	}
 
