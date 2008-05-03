@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: convert_html.php,v 1.19.20 2008/05/03 15:53:00 upk Exp $
+// $Id: convert_html.php,v 1.19.21 2008/05/03 16:28:00 upk Exp $
 // Copyright (C)
 //   2005-2008 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
@@ -260,11 +260,8 @@ class Heading extends Element
 
 	function toString()
 	{
-		global $fixed_heading_anchor;
-
-		$id = ($fixed_heading_anchor) ? make_heading($this->text, FALSE) :
-						// autoid
-						'h' . $this->level . '_' . $this->id;
+		$fixed_anchor = make_heading($this->text, FALSE);
+		$id = (empty($fixed_anchor)) ? 'h' . $this->level . '_' . $this->id : $fixed_anchor;
 		return $this->msg_top .  $this->wrap(parent::toString(),
 			'h' . $this->level, ' id="' . $id . '"');
 	}
@@ -981,7 +978,6 @@ class Body extends Element
 	{
 		global $top, $_symbol_anchor;
 		global $fixed_heading_edited;
-		global $fixed_heading_anchor;
 
 		// Heading id (auto-generated)
 		$autoid = 'content_' . $this->id . '_' . $this->count;
@@ -994,9 +990,9 @@ class Body extends Element
 			$id     = & $autoid;
 			$anchor = '';
 		} else {
-			$anchor = ($fixed_heading_anchor) ? '' : ' &aname(' . $id . ',super,full){' . $_symbol_anchor . '};';
 			// $anchor = ' &aname(' . $id . ',super,full){' . $_symbol_anchor . '};';
-			if ($fixed_heading_edited) $anchor .= " &edit(,$id);";
+			//if ($fixed_heading_edited) $anchor .= " &edit(,$id);";
+			if ($fixed_heading_edited) $anchor = " &edit(,$id);";
 		}
 
 		$text = ' ' . $text;
