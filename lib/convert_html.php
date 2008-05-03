@@ -1,8 +1,8 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: convert_html.php,v 1.19.19 2007/08/19 13:59:07 miko Exp $
+// $Id: convert_html.php,v 1.19.20 2008/05/03 15:53:00 upk Exp $
 // Copyright (C)
-//   2005-2007 PukiWiki Plus! Team
+//   2005-2008 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
 //   2001-2002 Originally written by yu-ji
 // License: GPL v2 or (at your option) any later version
@@ -234,11 +234,13 @@ class Heading extends Element
 	var $level;
 	var $id;
 	var $msg_top;
+	var $text;
 
 	function Heading(& $root, $text)
 	{
 		parent::Element();
 
+		$this->text = $text;
 		$this->level = min(3, strspn($text, '*'));
 		list($text, $this->msg_top, $this->id) = $root->getAnchor($text, $this->level);
 		$this->insert(Factory_Inline($text));
@@ -258,8 +260,13 @@ class Heading extends Element
 
 	function toString()
 	{
+		global $fixed_heading_anchor;
+
+		$id = ($fixed_heading_anchor) ? make_heading($this->text, FALSE) :
+						// autoid
+						'h' . $this->level . '_' . $this->id;
 		return $this->msg_top .  $this->wrap(parent::toString(),
-			'h' . $this->level, ' id="' . 'h' . $this->level . '_' . $this->id . '"');
+			'h' . $this->level, ' id="' . $id . '"');
 	}
 }
 
@@ -974,6 +981,7 @@ class Body extends Element
 	{
 		global $top, $_symbol_anchor;
 		global $fixed_heading_edited;
+		global $fixed_heading_anchor;
 
 		// Heading id (auto-generated)
 		$autoid = 'content_' . $this->id . '_' . $this->count;
@@ -986,7 +994,8 @@ class Body extends Element
 			$id     = & $autoid;
 			$anchor = '';
 		} else {
-			$anchor = ' &aname(' . $id . ',super,full){' . $_symbol_anchor . '};';
+			$anchor = ($fixed_heading_anchor) ? '' : ' &aname(' . $id . ',super,full){' . $_symbol_anchor . '};';
+			// $anchor = ' &aname(' . $id . ',super,full){' . $_symbol_anchor . '};';
 			if ($fixed_heading_edited) $anchor .= " &edit(,$id);";
 		}
 
