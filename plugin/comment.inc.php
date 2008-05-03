@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: comment.inc.php,v 1.36.20 2008/01/05 18:13:00 upk Exp $
+// $Id: comment.inc.php,v 1.36.21 2008/05/03 23:25:00 upk Exp $
 // Copyright (C)
 //   2005-2008 PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
@@ -126,14 +126,14 @@ function plugin_comment_write()
 
 function plugin_comment_get_nick()
 {
-	global $vars;
+	global $vars, $_no_name;
 
-	$name = (empty($vars['name'])) ? '' : $vars['name'];
+	$name = (empty($vars['name'])) ? $_no_name : $vars['name'];
 	if (PKWK_READONLY != ROLE_AUTH) return array($name,$name,'');
 
 	$auth_key = auth::get_user_name();
-	if (empty($auth_key['nick'])) return array($auth_key['nick'],$auth_key['nick'],'');
-	if (auth::get_role_level() < ROLE_AUTH) return array($auth_key['nick'],$auth_key['nick'],'');
+	if (empty($auth_key['nick'])) return array($name,$name,'');
+	if (auth::get_role_level() < ROLE_AUTH) return array($auth_key['nick'],$name,'');
 	$link = (empty($auth_key['profile'])) ? $auth_key['nick'] : $auth_key['nick'].'>'.$auth_key['profile'];
 	return array($auth_key['nick'], $link, "disabled=\"disabled\"");
 }
