@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: convert_html.php,v 1.19.21 2008/05/03 16:28:00 upk Exp $
+// $Id: convert_html.php,v 1.19.22 2008/05/04 19:53:00 upk Exp $
 // Copyright (C)
 //   2005-2008 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
@@ -985,10 +985,10 @@ class Body extends Element
 
 		// Heading id (specified by users)
 		$id = make_heading($text, FALSE); // Cut fixed-anchor from $text
+		$anchor = '';
 		if ($id == '') {
 			// Not specified
 			$id     = & $autoid;
-			$anchor = '';
 		} else {
 			// $anchor = ' &aname(' . $id . ',super,full){' . $_symbol_anchor . '};';
 			//if ($fixed_heading_edited) $anchor .= " &edit(,$id);";
