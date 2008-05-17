@@ -7,7 +7,7 @@
 var nIE4 = false;	// Internet Explorer 4,5,6
 var nDOM = false;	// Netscape 6,7
 var nOP6 = false;	// Opera 6,7
-var nSAF = false;   // Safari
+var nSAF = false;	// Safari
 
 // 特有のオブジェクトを取得してバージョン確認
 objSaf = (navigator.userAgent.indexOf("Safari",0) != -1)?1:0;
@@ -53,7 +53,8 @@ function startNaviMenu(NaviBarID, NaviMenuID, NaviMenuClass, NaviLinkID, MenuBlo
 function GetPositionTop(o){
  var p = o.offsetParent;
 
- if(p.tagName == 'BODY'){
+ // if(p.tagName == 'BODY'){
+ if(p.tagName == 'BODY' || p.tagName == 'HTML' || p.offsetParent == null){
   return o.offsetTop;
  }
  else{
@@ -63,7 +64,8 @@ function GetPositionTop(o){
 function GetPositionLeft(o){
  var p = o.offsetParent;
 
- if(p.tagName == 'BODY'){
+ // if(p.tagName == 'BODY'){
+ if(p.tagName == 'BODY' || p.tagName == 'HTML' || p.offsetParent == null){
   return o.offsetLeft;
  }
  else{
