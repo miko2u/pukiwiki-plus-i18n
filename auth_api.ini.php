@@ -39,6 +39,15 @@ $auth_api = array(
 	'openid'		=> array(
 		'use'		=> 0,
 	),
+	// mixi
+	'mixi'			=> array(
+		'use'		=> 0,
+	),
+	// QueryStringAuth
+	'querystringauth'	=> array(
+		'use'		=> 0,
+		'hidden'	=> 1,
+	),
 
 );
 
