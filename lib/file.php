@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: file.php,v 1.87.37 2008/01/11 01:35:00 upk Exp $
+// $Id: file.php,v 1.87.38 2008/06/17 00:48:00 upk Exp $
 // Copyright (C)
 //   2005-2008 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
@@ -631,7 +631,8 @@ function put_lastmodified()
 	rewind($fp);
 	foreach (array_keys($recent_pages) as $page) {
 		$time      = $recent_pages[$page];
-		$s_lastmod = htmlspecialchars(format_date($time));
+		// $s_lastmod = htmlspecialchars(format_date($time));
+		$s_lastmod = '&epoch('.$time.');';
 		$s_page    = htmlspecialchars($page);
 		fputs($fp, '-' . $s_lastmod . ' - [[' . $s_page . ']]' . "\n");
 	}
