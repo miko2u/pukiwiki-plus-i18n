@@ -1,26 +1,23 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: attachref.inc.php,v 0.14.11 2005/06/21 04:10:29 miko Exp $
+// $Id: attachref.inc.php,v 0.14.12 2008/06/19 22:46:00 upk Exp $
 // Copyright (C)
-//   2005-2006 PukiWiki Plus! Team
+//   2005-2006,2008 PukiWiki Plus! Team
 //   2002-2004 sha
 //
 // File attach & ref plugin
 
+defined('ATTACHREF_UPLOAD_MAX_FILESIZE') or define('ATTACHREF_UPLOAD_MAX_FILESIZE', '4M'); // default: 4MB
 // max file size for upload on PHP(PHP default 2MB)
-ini_set('upload_max_filesize', '4M'); // default: 4MB
-
+ini_set('upload_max_filesize', ATTACHREF_UPLOAD_MAX_FILESIZE);
 // max file size for upload on script of PukiWiki(default 2MB)
-define('ATTACHREF_MAX_FILESIZE',(2048 * 1024));
-
+defined('ATTACHREF_MAX_FILESIZE')        or define('ATTACHREF_MAX_FILESIZE',(2048 * 1024));
 // Admin Only for upload/delete
-define('ATTACHREF_UPLOAD_ADMIN_ONLY', FALSE); // FALSE or TRUE
-
+defined('ATTACHREF_UPLOAD_ADMIN_ONLY')   or define('ATTACHREF_UPLOAD_ADMIN_ONLY', FALSE); // FALSE or TRUE
 // Requied password for upload/delete (ATTACHREF_UPLOAD_ADMIN_ONLY gives priority)
-define('ATTACHREF_PASSWORD_REQUIRE', FALSE);  // FALSE or TRUE
-
+defined('ATTACHREF_PASSWORD_REQUIRE')    or define('ATTACHREF_PASSWORD_REQUIRE', FALSE);  // FALSE or TRUE
 // Text wrapping
-define('PLUGIN_ATTACHREF_WRAP_TABLE', FALSE); // FALSE or TRUE
+defined('PLUGIN_ATTACHREF_WRAP_TABLE')   or define('PLUGIN_ATTACHREF_WRAP_TABLE', FALSE); // FALSE or TRUE
 
 function plugin_attachref_init()
 {
@@ -57,22 +54,26 @@ function plugin_attachref_options(&$extra_options, $args)
 
 	$attachref_no = $numbers[$vars['page']]++;
 
-    $options = array();
-    foreach ($args as $opt) {
-	    if ($opt === 'button') {
-	        $button = 1;
-	    } else if ($opt === 'number') {
+	$options = array();
+	foreach ($args as $opt) {
+		switch ($opt) {
+		case 'button':
+			$button = 1;
+			break;
+		case 'number':
 			$no_flag = 1;
-	    } else if ($opt === 'nonumber') {
+			break;
+		case 'nonumber':
 			$no_flag = 0;
-	    } else {
-	        array_push($options, $opt);
-	    }
+			break;
+		default:
+			array_push($options, $opt);
+		}
 	}
 
 	$extra_options['button'] = $button;
 	$extra_options['refnum'] = $attachref_no;
-	$extra_options['text'] = $no_flag ? "[$attachref_no]":'';
+	$extra_options['text'] = $no_flag ? '['.$attachref_no.']':'';
 	return $options;
 }
 
@@ -257,15 +258,16 @@ function plugin_attachref_action()
 		
 		$file['name'] = $attachname;
 		
-		require_once(PLUGIN_DIR."attach.inc.php");
+		require_once(PLUGIN_DIR.'attach.inc.php');
 		if (!exist_plugin('attach') or !function_exists('attach_upload'))
 		{
 			return array('msg'=>'attach.inc.php not found or not correct version.');
 		}
+		$attach_filename = attachref_get_attach_filename($file);
 		$pass = isset($vars['pass']) ? md5($vars['pass']) : NULL;
-	    $retval = attach_upload($file, $vars['refer'], $pass);
+		$retval = attach_upload($file, $vars['refer'], $pass);
 		if ($retval['result'] == TRUE) {
-			$retval = attachref_insert_ref($file['name']);
+			$retval = attachref_insert_ref($attach_filename);
 		}
 	}
 	else
@@ -276,6 +278,25 @@ function plugin_attachref_action()
 			$pkwk_dtd = PKWK_DTD_XHTML_1_0_TRANSITIONAL;
 	}
 	return $retval;
+}
+
+function attachref_get_attach_filename(&$file)
+{
+	$type = get_mimeinfo($file['tmp_name']);
+	$must_compress = attach_is_compress($type,PLUGIN_ATTACH_UNKNOWN_COMPRESS);
+
+	if ($must_compress && is_uploaded_file($file['tmp_name'])) {
+		if (PLUGIN_ATTACH_COMPRESS_TYPE == 'TGZ' && exist_plugin('dump')) {
+			return $file['name'] . '.tgz';
+		} else
+		if (PLUGIN_ATTACH_COMPRESS_TYPE == 'GZ' && extension_loaded('zlib')) {
+			return $file['name'] . '.gz';
+		} else
+		if (PLUGIN_ATTACH_COMPRESS_TYPE == 'ZIP' && class_exists('ZipArchive')) {
+			return $file['name'] . '.zip';
+		}
+	}
+	return $file['name'];
 }
 
 function attachref_insert_ref($filename)
@@ -292,8 +313,8 @@ function attachref_insert_ref($filename)
 	} else {
 	    $s_args = './' . $filename;
 	}
-	$msg = "&attachref($s_args)";
-	$msg_block = "#attachref($s_args)";
+	$msg = '&attachref('.$s_args.')';
+	$msg_block = '#attachref('.$s_args.')';
 	
 	$refer = $vars['refer'];
 	$digest = $vars['digest'];
