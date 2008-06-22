@@ -4,13 +4,15 @@
  *
  * @copyright   Copyright &copy; 2007-2008, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth_api.cls.php,v 0.2 2008/01/11 01:01:00 upk Exp $
+ * @version     $Id: auth_api.cls.php,v 0.3 2008/06/21 23:15:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 // require_once(LIB_DIR . 'hash.php');
 
 class auth_api
 {
+	// auth_session_put    - auth_name, field_name, response
+	// responce_xml_parser - response
 	var $auth_name, $field_name, $response;
 
         function auth_session_get()
@@ -18,6 +20,7 @@ class auth_api
 		$val = auth::des_session_get($this->message_md5());
 		if (empty($val)) {
 			return array();
+		
 		}
 		return $this->parse_message($val);
         }
@@ -25,9 +28,20 @@ class auth_api
 	function auth_session_put()
 	{
 		$message = '';
-		foreach($this->field_name as $key) {
-			$message .= (empty($message)) ? '' : '::';
-			$message .= ($key == 'ts') ? UTIME : encode($this->response[$key]);
+		foreach(array_merge(array('api','ts'),$this->field_name) as $key) {
+		// foreach($this->field_name as $key) {
+			$message .= (empty($message)) ? '' : '::'; // delm
+			$message .= $key.'$$';
+			switch($key) {
+			case 'api':
+				$message .= $this->auth_name;
+				break;
+			case 'ts':
+				$message .= UTIME;
+				break;
+			default:
+				$message .= encode($this->response[$key]);
+			}
 		}
 		auth::des_session_put($this->message_md5(),$message);
         }
@@ -42,11 +56,13 @@ class auth_api
 		$rc = array();
 		$tmp = explode('::',trim($message));
 		for($i=0;$i<count($tmp);$i++) {
-			$rc[$this->field_name[$i]] = decode($tmp[$i]);
+			$tmp2 = explode('$$',$tmp[$i]);
+                        $rc[$tmp2[0]] = decode($tmp2[1]);
 		}
 		return $rc;
 	}
 
+	// response
 	function responce_xml_parser($data)
 	{
 		$xml_parser = xml_parser_create();
@@ -61,8 +77,10 @@ class auth_api
 
 	function message_md5()
 	{
-		return md5($this->auth_name.'_message_'.get_script_absuri().session_id());
+		// return md5($this->auth_name.'_message_'.get_script_absuri().session_id());
+		return md5('plus_auth_msg_'.get_script_absuri().session_id());
 	}
+
 }
 
 ?>

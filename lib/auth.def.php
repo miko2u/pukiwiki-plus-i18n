@@ -3,7 +3,7 @@
  * PukiWiki Plus! 認証処理
  *
  * @author	Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth.def.php,v 0.4 2008/05/31 01:28:00 upk Exp $
+ * @version     $Id: auth.def.php,v 0.5 2008/06/21 23:13:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 
@@ -22,7 +22,6 @@ defined('ROLE_AUTH_REMOTEIP')        or define('ROLE_AUTH_REMOTEIP', 5.5);
 defined('ROLE_AUTH_LIVEDOOR')        or define('ROLE_AUTH_LIVEDOOR', 5.6);
 defined('ROLE_AUTH_OPENID')          or define('ROLE_AUTH_OPENID', 5.7);
 defined('ROLE_AUTH_MIXI')            or define('ROLE_AUTH_MIXI', 5.8);
-defined('ROLE_AUTH_QUERYSTRINGAUTH') or define('ROLE_AUTH_QUERYSTRINGAUTH', 5.9);
 defined('UNAME_ADM_CONTENTS_TEMP')   or define('UNAME_ADM_CONTENTS_TEMP', 'admin');
 
 // role level => login plugin name
@@ -34,7 +33,6 @@ $login_api = array(
 	strval(ROLE_AUTH_LIVEDOOR)        => 'livedoor',
 	strval(ROLE_AUTH_OPENID)          => 'openid',
 	strval(ROLE_AUTH_MIXI)            => 'mixi',
-	strval(ROLE_AUTH_QUERYSTRINGAUTH) => 'querystringauth',
 );
 
 ?>

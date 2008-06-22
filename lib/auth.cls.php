@@ -3,7 +3,7 @@
  * PukiWiki Plus! 認証処理
  *
  * @author	Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth.cls.php,v 0.53 2007/08/19 01:26:00 upk Exp $
+ * @version     $Id: auth.cls.php,v 0.54 2008/06/21 23:14:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'auth.def.php');
@@ -138,8 +138,23 @@ class auth
 		$api_name = $login_api[$str_role];
 
 		if (empty($auth_wkgrp_user[$api_name][$key])) return ROLE_GUEST;
+
+		if (is_array($auth_wkgrp_user[$api_name][$key])) {
+			// displayname のみの定義などの考慮
+			return (isset($auth_wkgrp_user[$api_name][$key]['role'])) ? $auth_wkgrp_user[$api_name][$key]['role'] : ROLE_GUEST;
+		}
+		// 旧フォーマットの場合
 		return $auth_wkgrp_user[$api_name][$key];
 	}
+
+	function get_wkgrp_displayname($role,$key)
+	{
+		global $auth_wkgrp_user, $login_api;
+
+		$str_role = strval($role);
+		$api_name = $login_api[$str_role];
+		return empty($auth_wkgrp_user[$api_name][$key]['displayname']) ? '' : $auth_wkgrp_user[$api_name][$key]['displayname'];
+        }
 
 	function get_user_name()
 	{
@@ -152,12 +167,22 @@ class auth
 			break;
 		}
 
-		foreach($auth_api as $api=>$val) {
-			if (! $val['use']) continue;
-			if (! exist_plugin($api)) continue;
-			$call_func = 'plugin_'.$api.'_get_user_name';
-			$auth_key = $call_func();
-			if (! empty($auth_key['nick'])) return $auth_key;
+		require_once(LIB_DIR . 'auth_api.cls.php');
+		$obj = new auth_api();
+		$msg = $obj->auth_session_get();
+		if (isset($msg['api']) && $auth_api[$msg['api']]['use']) {
+			if (exist_plugin($msg['api'])) {
+				$call_func = 'plugin_'.$msg['api'].'_get_user_name';
+				$auth_key = $call_func();
+				// $auth_key => role, name, nick, profile, key
+				// key - auth_wkgrp_user において、ユニークになる項目値
+				$displayname = auth::get_wkgrp_displayname($auth_key['role'],$auth_key['key']);
+				if (! empty($displayname)) {
+					$auth_key['nick'] = $displayname;
+					return $auth_key;
+				}
+				if (! empty($auth_key['nick'])) return $auth_key;
+			}
 		}
 		return array('role'=>ROLE_GUEST,'nick'=>'');
 	}

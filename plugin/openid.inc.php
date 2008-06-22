@@ -4,13 +4,46 @@
  *
  * @copyright   Copyright &copy; 2007-2008, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: openid.inc.php,v 0.9 2008/03/15 01:32:00 upk Exp $
+ * @version     $Id: openid.inc.php,v 0.10 2008/06/21 23:30:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
-require_once(LIB_DIR . 'auth_openid.cls.php');
+require_once(LIB_DIR . 'auth_api.cls.php');
 
 defined('PLUGIN_OPENID_SIZE_LOGIN') or define('PLUGIN_OPENID_SIZE_LOGIN', 30);
 defined('PLUGIN_OPENID_STORE_PATH') or define('PLUGIN_OPENID_STORE_PATH', '/tmp/_php_openid_plus');
+
+class auth_openid_plus extends auth_api
+{
+	function auth_openid_plus()
+	{
+		$this->auth_name = 'openid';
+		// nickname,email,fullname,dob,gender,postcode,country,language,timezone
+		$this->field_name = array('nickname','email','openid_identity');
+		$this->response = array();
+        }
+}
+
+class auth_openid_plus_verify extends auth_openid_plus
+{
+	function auth_openid_plus_verify()
+	{
+		$this->auth_name = 'openid_verify';
+		$this->field_name = array('openid.server','openid.delegate','ts','page');
+		$this->response = array();
+	}
+	function get_host()
+	{
+		$msg = $this->auth_session_get();
+		$arr = parse_url($msg['openid.server']);
+		return strtolower($arr['host']);
+	}
+	function get_delegate()
+	{
+		$msg = $this->auth_session_get();
+		return $msg['openid.delegate'];
+
+	}
+}
 
 function plugin_openid_init()
 {
@@ -84,6 +117,8 @@ function plugin_openid_inline()
 
 	$obj = new auth_openid_plus();
 	$name = $obj->auth_session_get();
+
+	if (!empty($name['api']) && $obj->auth_name !== $name['api']) return;
 
 	$r_page = (empty($vars['page'])) ? '' : '&amp;page='.rawurlencode($vars['page']);
 
@@ -211,11 +246,11 @@ function plugin_openid_verify($consumer)
 	// openid.server	=> $auth_request->endpoint->server_url		ex. http://www.myopenid.com/server
 	// openid.delegate	=> $auth_request->endpoint->getServerID()	ex. http://youraccount.myopenid.com/
 	$obj = new auth_openid_plus_verify();
-	$parm = array(	'openid.server'   => $auth_request->endpoint->server_url,
-			'openid.delegate' => $auth_request->endpoint->getServerID(),
-			'page'            => $page
-		);
-	$obj->openid_session_put($parm);
+	$obj->response = array(	'openid.server'   => $auth_request->endpoint->server_url,
+				'openid.delegate' => $auth_request->endpoint->getServerID(),
+				'page'            => $page
+			);
+	$obj->auth_session_put();
 
 	header('Location: '.$redirect_url);
 }
@@ -252,10 +287,10 @@ function plugin_openid_finish_auth($consumer)
 		if (! isset($sreg['nickname'])) $die_message( $_openid_msg['err_nickname'] );
 
 		$obj = new auth_openid_plus();
-		$parm = $sreg;
+		$obj->response = $sreg;
 		// openid.delegate ?
-		$parm['openid_identity'] = (empty($vars['openid_identity'])) ? '' : $vars['openid_identity'];
-		$obj->openid_session_put($parm);
+		$obj->response['openid_identity'] = (empty($vars['openid_identity'])) ? '' : $vars['openid_identity'];
+		$obj->auth_session_put();
 		break;
 	}
 

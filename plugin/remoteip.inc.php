@@ -3,7 +3,7 @@
  * PukiWiki Plus! IPアドレス認証プラグイン
  *
  * @copyright   Copyright &copy; 2007-2008, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: remoteip.inc.php,v 0.4 2008/01/05 21:30:00 upk Exp $
+ * @version     $Id: remoteip.inc.php,v 0.5 2008/06/22 02:58:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'auth_api.cls.php');
@@ -20,6 +20,7 @@ function plugin_remoteip_inline()
 	// 処理済みか？
 	$obj = new auth_remoteip();
 	$msg = $obj->auth_session_get();
+        if (! empty($msg['api']) && $obj->auth_name !== $msg['api']) return '';
 	if (! empty($msg['uid'])) return '';
 
 	$ip  = & $_SERVER['REMOTE_ADDR'];
@@ -31,18 +32,18 @@ function plugin_remoteip_inline()
 		unset($obj_cfg);
 	}
 
-	$parm = array();
 	foreach($config_remoteip as $data) {
 		if ($ip !== $data[0]) continue;
-		$parm['uid']  = $data[1];
-		$parm['name'] = $data[2];
-		$parm['note'] = $data[3];
+		// UID not set.
+		if (empty($data[1])) return '';
+		$obj->response['uid']  = $data[1];
+		$obj->response['name'] = $data[2];
+		$obj->response['note'] = $data[3];
 		break;
 	}
 
-	if (empty($parm['uid'])) return '';
-	$parm['ts'] = '';
-	$obj->remoteip_session_put($parm);
+	// if (empty($obj->response['uid'])) return '';
+	$obj->auth_session_put();
 	return '';
 }
 
@@ -75,14 +76,8 @@ class auth_remoteip extends auth_api
 	{
 		//global $auth_api;
 		$this->auth_name = 'remoteip';
-		$this->field_name = array('uid','ts','name','note');
+		$this->field_name = array('uid','name','note');
 		$this->response = array();
-	}
-
-	function remoteip_session_put($parm)
-	{
-		$this->response = $parm;
-		$this->auth_session_put();
 	}
 }
 
