@@ -77,7 +77,6 @@ function plugin_code_convert()
 
 	static $plugin_code_jscript_flag = true;
 	
-	$title = '';
 	$lang = null;
 	$option = array(
 					'number'      => false,  // 行番号を表示する
@@ -94,29 +93,30 @@ function plugin_code_convert()
 					'nolink'      => false,  // オートリンク 無効
 					);
 	
-    $num_of_arg = func_num_args();
-    $args = func_get_args();
-    if ($num_of_arg < 1) {
-        return PLUGIN_CODE_USAGE;
-    }
+	$num_of_arg = func_num_args();
+	$args = func_get_args();
+	if ($num_of_arg < 1) {
+		return PLUGIN_CODE_USAGE;
+	}
 
 	$arg = $args[$num_of_arg-1];
-    if (strlen($arg) == 0) {
-        return PLUGIN_CODE_USAGE;
-    }
+	if (strlen($arg) == 0) {
+		return PLUGIN_CODE_USAGE;
+	}
 
 	if ($num_of_arg != 1 && ! _plugin_code_check_argment($args[0], $option)) {
 		$is_setlang = true;
-        $lang = htmlspecialchars(strtolower($args[0])); // 言語名かオプションの判定
-	} else
+		$lang = htmlspecialchars(strtolower($args[0])); // 言語名かオプションの判定
+	} else {
 		$lang = PLUGIN_CODE_LANGUAGE; // default
+	}
 
 	$begin = 0;
 	$end = null;
 	// オプションを調べる
 	for ($i = 1;$i < $num_of_arg-1; ++$i) {
-		if (! _plugin_code_check_argment($args[$i], $option))
-			_plugin_code_get_region($args[$i], $begin, $end);
+	if (! _plugin_code_check_argment($args[$i], $option))
+		_plugin_code_get_region($args[$i], $begin, $end);
 	}
 	$multiline = _plugin_code_multiline_argment($arg, $data, $option, $begin, $end);
 	
@@ -129,8 +129,9 @@ function plugin_code_convert()
 	if (isset($data['_error']) && $data['_error'] != '') {
 		return $data['_error'];
 	}
+
 	$lines = $data['data'];
-	$title = $data['title'];
+	$title = (isset($data['title'])) ? $data['title'] : '';
 	
 	$highlight = new CodeHighlight;
 	$lines = $highlight->highlight($lang, $lines, $option);
@@ -144,7 +145,7 @@ function plugin_code_convert()
 	if (PLUGIN_CODE_CACHE && ! $multiline) {
 		_plugin_code_write_cache($arg, $html);
 	}
-    return $html;
+	return $html;
 }
 
 /**

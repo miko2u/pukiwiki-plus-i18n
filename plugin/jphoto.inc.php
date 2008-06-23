@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: jphoto.inc.php,v 0.3 2007/07/09 23:45:00 upk Exp $
+// $Id: jphoto.inc.php,v 0.4 2008/06/23 19:29:00 upk Exp $
 //
 // argument:
 // jphoto(pagename,[flashsize],[photosize],[zoom])
@@ -10,22 +10,23 @@
 // zoom is percent
 // jphoto3p flash is (c)2003 hirax, plugin is (c)2004-2005 miko
 //
-define(JPHOTO_SCREENWIDTH,  400);
-define(JPHOTO_SCREENHEIGHT,  20);
-define(JPHOTO_WIDTH,   96);
-define(JPHOTO_HEIGHT,  72);
-define(JPHOTO_SPARSE,  12);
-define(JPHOTO_ZOOMRATIO, 200);
-define(JPHOTO_BORDERCOLOR, '0x0000FF');
-define(JPHOTO_BGCOLOR, '0xFFFFFF');
-define(JPHOTO_XOFFSET, 0);
-define(JPHOTO_YOFFSET, 0);
-define(JPHOTO_SCALEUPSTEP, 8);
-define(JPHOTO_SCALEDNSTEP, 8);
-define(JPHOTO_SHADOWDISTANCE, 4);
 
+defined('JPHOTO_SCREENWIDTH')    or define('JPHOTO_SCREENWIDTH', 400);
+defined('JPHOTO_SCREENHEIGHT')   or define('JPHOTO_SCREENHEIGHT', 20);
+defined('JPHOTO_WIDTH')          or define('JPHOTO_WIDTH', 96);
+defined('JPHOTO_HEIGHT')         or define('JPHOTO_HEIGHT', 72);
+defined('JPHOTO_SPARSE')         or define('JPHOTO_SPARSE', 12);
+defined('JPHOTO_ZOOMRATIO')      or define('JPHOTO_ZOOMRATIO', 200);
+defined('JPHOTO_BORDERCOLOR')    or define('JPHOTO_BORDERCOLOR', '0x0000FF');
+defined('JPHOTO_BGCOLOR')        or define('JPHOTO_BGCOLOR', '0xFFFFFF');
+defined('JPHOTO_XOFFSET')        or define('JPHOTO_XOFFSET', 0);
+defined('JPHOTO_YOFFSET')        or define('JPHOTO_YOFFSET', 0);
+defined('JPHOTO_SCALEUPSTEP')    or define('JPHOTO_SCALEUPSTEP', 8);
+defined('JPHOTO_SCALEDNSTEP')    or define('JPHOTO_SCALEDNSTEP', 8);
+defined('JPHOTO_SCALEDNSTEP')    or define('JPHOTO_SCALEDNSTEP', 8);
+defined('JPHOTO_SHADOWDISTANCE') or define('JPHOTO_SHADOWDISTANCE', 4);
 // Image suffixes allowed
-define('JPHOTO_REF_IMAGE', '/\.(gif|png|jpe?g)$/i');
+defined('JPHOTO_REF_IMAGE')      or define('JPHOTO_REF_IMAGE', '/\.(gif|png|jpe?g)$/i');
 
 //
 function plugin_jphoto_convert()
@@ -35,6 +36,8 @@ function plugin_jphoto_convert()
 	$argc = func_num_args();
 	$argv = func_get_args();
 	$page = '';
+	$width = $height = $pwidth = $pheight = -1;
+	$zoom = 0;
 
 	if (isset($argv[0]) && $argv[0] != '') {
 		if ( is_page($argv[0]) ) {

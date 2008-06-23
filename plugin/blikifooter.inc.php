@@ -10,7 +10,7 @@
  *   http://kinowiki.net/
  *
  * MODIFICATION BY:
- * (C) 2006 PukiWiki Plus! Developers Team
+ * (C) 2006,2008 PukiWiki Plus! Developers Team
  *
  * This software is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -81,7 +81,7 @@ function plugin_blikifooter_convert()
 
 	$retval .= '[[' . $_blikifooter_msg['msg_permalink'] . '>' . $vars['page'] . ']]';
 
-	if ($trackback && $args[1] != '0') {
+	if ($trackback && isset($args[1]) && $args[1] != '0') {
 		$retval .= $_blikifooter_msg['seplater'] . '[[' .
 			$_blikifooter_msg['msg_trackback'] . '(' . tb_count($vars['page']) . '):' .
 			$script.'?plugin=tb&__mode=view&tb_id=' . tb_get_id($vars['page']) . ']]';

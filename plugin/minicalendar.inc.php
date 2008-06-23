@@ -1,6 +1,6 @@
 <?php
 //
-// $Id: minicalendar.inc.php,v 1.20.3 2008/01/05 18:28:00 upk Exp $
+// $Id: minicalendar.inc.php,v 1.20.4 2008/06/23 19:45:00 upk Exp $
 // *引数にoffと書くことで今日の日記を表示しないようにした。
 // *携帯電話用に拡張
 //
@@ -69,7 +69,7 @@ function plugin_minicalendar_convert()
 	$wday = $f_today['wday'];
 	$day = 1;
 	
-	$m_name = "$year.$m_num";
+	$m_name = $year.'.'.$m_num;
 	
 	$y = substr($date_str,0,4)+0;
 	$m = substr($date_str,4,2)+0;
@@ -187,7 +187,7 @@ EOD;
 				bindtextdomain('minicalendar_viewer', LANG_DIR);
 				bind_textdomain_codeset('minicalendar_viewer', SOURCE_ENCODING);
 				textdomain('minicalendar_viewer');
-				$str .= call_user_func_array('plugin_minicalendar_viewer_convert',$aryargs);
+				$str = call_user_func_array('plugin_minicalendar_viewer_convert',$aryargs);
 				textdomain('minicalendar');
 			}
 		}
@@ -256,7 +256,7 @@ EOD;
 			$link = "$spc<a class=\"small\" href=\"$script?cmd=edit&amp;page=$r_page&amp;refer=$r_base\" title=\"$s_page\">$day</a>";
 		}
 		
-		$ret .= "$link\n";
+		$ret .= $link."\n";
 		$day++;
 		$wday = ++$wday % 7;
 	}
@@ -288,11 +288,11 @@ EOD;
                                 bindtextdomain('minicalendar_viewer', LANG_DIR);
                                 bind_textdomain_codeset('minicalendar_viewer', SOURCE_ENCODING);
                                 textdomain('minicalendar_viewer');
-				$str .= call_user_func_array('plugin_minicalendar_viewer_convert',$aryargs);
+				$str = call_user_func_array('plugin_minicalendar_viewer_convert',$aryargs);
 				textdomain('minicalendar');
 			}
 		}
-		$ret .= "$str\n";
+		$ret .= $str."\n";
 	}
 }
 	return $ret;
@@ -328,7 +328,7 @@ function plugin_minicalendar_action()
 	$aryargs = array($vars['page'],$date,$mode);
 	$s_page = htmlspecialchars($vars['page']);
 	
-	$ret['msg'] = "calendar $s_page/$yy";
+	$ret['msg'] = 'calendar '.$s_page.'/'.$yy;
 	$ret['body'] = call_user_func_array('plugin_minicalendar_convert',$aryargs);
 	
 	$vars['page'] = $page;

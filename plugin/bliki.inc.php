@@ -163,13 +163,13 @@ function bliki_process_args($args)
     $child         = BLIKI_CHILD;
     $cache_name    = $vars['page'];
 
-    if (! is_null($args[0]) && is_numeric($args[0])) {
+    if (isset($args[0]) && ! is_null($args[0]) && is_numeric($args[0])) {
         $page_num = $args[0];
     }
-    if (! is_null($args[1]) && $args[1] != '') {
+    if (isset($args[1]) && ! is_null($args[1]) && $args[1] != '') {
         $cache_name = rtrim($args[1]);
     }
-    if (! is_null($args[2]) && ($args[2] == '0') || ($args[2] == '1')) {
+    if (isset($args[2]) && ! is_null($args[2]) && ($args[2] == '0') || ($args[2] == '1')) {
         $child = ($args[2] == '1') ? TRUE : FALSE;
     }
 

@@ -121,7 +121,7 @@ EOD;
 				$style = 'text-align:' . $params['_align'];
 			}
 			// wrapped "div"
-			$ret = '<div class="' . $img_margin . '" style="' . $style . '">' . $params['_body'] . "</div>\n";
+			$ret = '<div class="img_margin" style="' . $style . '">' . $params['_body'] . "</div>\n";
 			// final --- copy of plugin_ref_convert()
 			$dispattach = 0;
 		}
@@ -161,8 +161,8 @@ function plugin_attachref_inline()
 
 	$extra_options = array();
 	$args = func_get_args();
-    $btn_text = array_pop($args);
-    $btn_text = $btn_text ? $btn_text : $_attachref_messages['btn_submit'];
+	$btn_text = array_pop($args);
+	$btn_text = $btn_text ? $btn_text : $_attachref_messages['btn_submit'];
 	$options = plugin_attachref_options($extra_options, $args);
 	$button = $extra_options['button'];
 	$attachref_no = $extra_options['refnum'];
@@ -206,7 +206,7 @@ function plugin_attachref_inline()
 	    // Escape foreign value
 	    $s_args = trim(join(",", $args));
 	    if ($button) {
-			$s_args .= ",button";
+			$s_args .= ',button';
 			$f_page = htmlspecialchars($vars['page']);
 			$f_args = htmlspecialchars($s_args);
 			$ret = <<<EOD

@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: minicalendar_viewer.inc.php,v 1.34.27 2008/02/24 18:49:00 upk Exp $
+// $Id: minicalendar_viewer.inc.php,v 1.34.28 2008/06/23 19:49:00 upk Exp $
 //
 // Calendar viewer plugin - List pages that calendar/calnedar2 plugin created
 // (Based on calendar and recent plugin)
@@ -239,12 +239,9 @@ function plugin_minicalendar_viewer_convert()
 				);
 				$mmstr = $monthlabel[$mm];
 				$h_today = public_holiday($yy, $mm, $dd); 
-				$hday = $h_today['rc'];
-				$f_today = getdate(mktime(0,0,0,$mm,$dd,$yy) - LOCALZONE + ZONETIME);
-				$wday = $f_today['wday'];
-				if ($hday != 0)      { $classname = 'date_holiday'; }
-				else if ($wday == 0) { $classname = 'date_holiday'; }
-				else if ($wday == 6) { $classname = 'date_weekend'; }
+				if ($h_today['rc'] != 0)     { $classname = 'date_holiday'; }
+				else if ($h_today['w'] == 0) { $classname = 'date_holiday'; }
+				else if ($h_today['w'] == 6) { $classname = 'date_weekend'; }
 				else { $classname = 'date_weekday'; }
 				$head = '<h3 class="'. $classname . '"><span class="day">' . sprintf('%02d', $dd) . '</span> <br />'
 				      . '<b>' . $mmstr . '</b>, <b>' . $yy . '</b>' . $link . '</h3>' . "\n";
@@ -266,8 +263,8 @@ function plugin_minicalendar_viewer_convert()
 			}
 		}
 
-	    if ($tail != '') { $tail = '<div class="trackback">'. $tail . '</div>'; };
-	    $return_body .= $head . '<div class="minicalendar_viewer">' . $body . '</div>' . $tail;
+		if ($tail != '') { $tail = '<div class="trackback">'. $tail . '</div>'; };
+		$return_body .= $head . '<div class="minicalendar_viewer">' . $body . '</div>' . $tail;
 
 		++$tmp;
 	}
