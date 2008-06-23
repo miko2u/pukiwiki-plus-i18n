@@ -2,8 +2,8 @@
 /**
  * PukiWiki Plus! 更新ログ処理
  *
- * @copyright	Copyright &copy; 2004-2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version	$Id: log.php,v 0.7 2006/08/19 00:00:00 upk Exp $
+ * @copyright	Copyright &copy; 2004-2006,2008, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * @version	$Id: log.php,v 0.8 2008/06/23 01:00:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
@@ -443,7 +443,7 @@ class log
 	function ip2host($ip)
 	{
 		if ($ip == NULL) $ip = log::getip();
-		$longisp = gethostbyaddr($ip);
+		$longisp = @gethostbyaddr($ip);
 		return $longisp;
 	}
 

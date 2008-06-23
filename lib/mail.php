@@ -1,8 +1,8 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: mail.php,v 1.12.1 2007/02/21 14:39:05 miko Exp $
+// $Id: mail.php,v 1.12.2 2008/06/23 01:00:00 upk Exp $
 // Copyright (C)
-//   2006-2007 PukiWiki Plus! Team
+//   2006-2008 PukiWiki Plus! Team
 //   2003-2007 PukiWiki Developers Team
 //   2003      Originally written by upk
 // License: GPL v2 or (at your option) any later version
@@ -82,7 +82,7 @@ function pkwk_mail_notify($subject, $message, $summary = array(), $summary_posit
 	}
 
 	ini_set('SMTP', $smtp_server);
-	mb_language(LANG);
+	@mb_language(LANG);
 	if ($_headers == '') {
 		return mb_send_mail($_to, $subject, $message);
 	} else {
