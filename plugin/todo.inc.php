@@ -27,6 +27,8 @@
  *            - token を外して表示
  *            - ファイル名順で整列
  *            - 番号付き・番号なしリストの定義を追加(TODOが増えると、番号がないと厳しい)
+ * 2008-06-25 Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ *            - NOTICE 対策
  */
 
 defined('TODO_LABEL_PREFIX') or define('TODO_LABEL_PREFIX','+');
@@ -91,6 +93,7 @@ function todo_generate_index($vars, $page, $mark)
 	if (empty($mark)) $mark = 'todo';
 
 	$todo = todo_search($vars, $page, $mark);
+	$html = '';
 
 	foreach ($todo as $page => $list) {
 		//sort($list);

@@ -318,6 +318,7 @@ function bliki_convert_html($entries, $page_num)
 {
     global $vars;
 
+    $contents = '';
     for ($cnt = 0; $cnt < sizeof($entries) && $cnt < $page_num; ++$cnt) {
         $page_back    = $vars['page'];
         $vars['page'] = $entries[$cnt]['page'];
