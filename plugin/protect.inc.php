@@ -2,8 +2,8 @@
 /**
  * PukiWiki Plus! PROTECT Plugin
  *
- * @copyright   Copyright &copy; 2007, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: protect.inc.php,v 0.1 2007/08/16 20:20:00 upk Exp $
+ * @copyright   Copyright &copy; 2007-2008, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * @version     $Id: protect.inc.php,v 0.2 2007/06/27 00:38:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  *
  */
@@ -20,7 +20,12 @@ function plugin_protect_convert()
 	$fixed_heading_edited = $autoglossary = 0;
 	$_symbol_paraedit = '&nbsp;';
 
-	list($plugin) = func_get_args();
+	if (func_num_args() == 1) {
+		list($plugin) = func_get_args();
+        } else {
+		$plugin = '';
+	}
+
 	$body = protect_body($plugin);
 
 	// Yetlist

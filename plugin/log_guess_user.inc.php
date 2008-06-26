@@ -2,8 +2,8 @@
 /**
  * PukiWiki Plus! 推定ユーザリスト更新プラグイン
  *
- * @copyright	Copyright &copy; 2004-2005, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version	$Id: log_guess_user.php,v 0.3 2005/06/11 21:54:00 upk Exp $
+ * @copyright	Copyright &copy; 2004-2005,2008, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * @version	$Id: log_guess_user.php,v 0.4 2008/06/27 00:33:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
@@ -29,7 +29,7 @@ function plugin_log_guess_user_convert()
 	global $log;
 
 	// ユーザを推測する
-	$user = log::guess_user( $data['user'], $data['ntlm'], $data['sig'] );
+	// $user = log::guess_user( $data['user'], $data['ntlm'], $data['sig'] );
 
 	$filename = log::set_filename('guess_user','');	// ログファイル名
 
