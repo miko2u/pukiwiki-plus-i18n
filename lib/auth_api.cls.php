@@ -1,10 +1,10 @@
-<?
+<?php
 /**
  * PukiWiki Plus! 認証処理
  *
  * @copyright   Copyright &copy; 2007-2008, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth_api.cls.php,v 0.3 2008/06/21 23:15:00 upk Exp $
+ * @version     $Id: auth_api.cls.php,v 0.4 2008/06/29 01:59:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 // require_once(LIB_DIR . 'hash.php');
