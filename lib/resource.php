@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: resource.php,v 0.4 2007/05/03 21:21:00 upk Exp $
+// $Id: resource.php,v 0.5 2008/06/25 01:43:00 upk Exp $
 //
 // Resource of String
 // Warning: This file is PukiWiki "core" resource strings.
@@ -97,6 +97,8 @@ $_LANG['skin'] = array(
 	'upload'    => _('Upload'),
 	'skeylist'  => _('Search Key List'),
 	'linklist'  => _('Link List'),
+	'log_login' => _('Roll Book'),
+	'log_check' => _('Confirmation list'),
 	'log_browse'=> _('Browse Log'),
 	'log_update'=> _('Update Log'),
 	'log_down'  => _('Download Log'),

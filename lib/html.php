@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: html.php,v 1.65.24 2008/02/24 18:46:00 upk Exp $
+// $Id: html.php,v 1.65.25 2008/06/25 01:41:00 upk Exp $
 // Copyright (C)
 //   2005-2008 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
@@ -59,9 +59,11 @@ function catbody($title, $page, $body)
 	$_LINK['help']       = get_cmd_uri('help');
 	$_LINK['linklist']   = get_cmd_uri('linklist',$_page);
 	$_LINK['list']       = get_cmd_uri('list');
+	$_LINK['log_login']  = get_cmd_uri('logview','','','kind=login');
 	$_LINK['log_browse'] = get_cmd_uri('logview',$_page,'','kind=browse');
 	$_LINK['log_update'] = get_cmd_uri('logview',$_page);
 	$_LINK['log_down']   = get_cmd_uri('logview',$_page,'','kind=download');
+	$_LINK['log_check']  = get_cmd_uri('logview',$_page,'','kind=check');
 	$_LINK['menu']       = get_page_uri($menubar);
 	$_LINK['new']        = get_cmd_uri('newpage','','','refer='.$r_page);
 	$_LINK['newsub']     = get_cmd_uri('newpage_subdir','','','directory='.$r_page);
@@ -102,9 +104,11 @@ function catbody($title, $page, $body)
 	$link_help       = & $_LINK['help'];
 	$link_linklist   = & $_LINK['linklist'];
 	$link_list       = & $_LINK['list'];
+	$link_log_login  = & $_LINK['log_login'];
 	$link_log_browse = & $_LINK['log_browse'];
 	$link_log_update = & $_LINK['log_update'];
 	$link_log_down   = & $_LINK['log_down'];
+	$link_log_check  = & $_LINK['log_check'];
 	$link_menu       = & $_LINK['menu'];
 	$link_new        = & $_LINK['new'];
 	$link_newsub     = & $_LINK['newsub'];

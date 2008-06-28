@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-05-30 19:25+0900\n"
+"POT-Creation-Date: 2008-06-26 02:14+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../lib/file.php:83
+#: ../../lib/file.php:102
 msgid "PKWK_CREATE_PAGE prohibits editing"
 msgstr ""
 
@@ -270,21 +270,29 @@ msgid "Link List"
 msgstr ""
 
 #: ../../lib/resource.php:100
-msgid "Browse Log"
+msgid "Roll Book"
 msgstr ""
 
 #: ../../lib/resource.php:101
-msgid "Update Log"
+msgid "Confirmation list"
 msgstr ""
 
 #: ../../lib/resource.php:102
-msgid "Download Log"
+msgid "Browse Log"
 msgstr ""
 
 #: ../../lib/resource.php:103
-msgid "Log"
+msgid "Update Log"
 msgstr ""
 
 #: ../../lib/resource.php:104
+msgid "Download Log"
+msgstr ""
+
+#: ../../lib/resource.php:105
+msgid "Log"
+msgstr ""
+
+#: ../../lib/resource.php:106
 msgid "Logo"
 msgstr ""

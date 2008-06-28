@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: navibar2.inc.php,v 0.1.17 2008/03/21 00:01:00 upk Exp $
+// $Id: navibar2.inc.php,v 0.1.18 2008/06/25 01:50:00 upk Exp $
 //
 function plugin_navibar2_convert()
 {
@@ -213,8 +213,17 @@ function plugin_navibar2_keyword($name)
 			}
 		}
 		break;
+	case 'log_login':
+		if (log_exist('login',$vars['page'])) {
+			return _navigator2($name);
+		}
+		break;
+	case 'log_check':
+		if (log_exist('check',$vars['page'])) {
+			return _navigator2($name);
+		}
+		break;
 	case 'log_browse':
-		return _navigator2($name);
 		if (log_exist('browse',$vars['page'])) {
 			return _navigator2($name);
 		}
@@ -229,6 +238,7 @@ function plugin_navibar2_keyword($name)
 			return _navigator2($name);	
 		}
 		break;
+
 	// case 'new':
 	case 'newsub':
 	case 'edit':

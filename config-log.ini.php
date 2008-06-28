@@ -29,6 +29,8 @@ $log_common = array(
 |download    |添付ファイルのダウンロードログに関する指定                      |
 |browse      |文書の閲覧に関するログの指定                                    |
 |cmd         |rss, opml, lirs などの情報コマンドの実行状況のログについての指定|
+|login       |ログイン状況に関するログの指定                                  |
+|check       |認証者が閲覧したであろう文書のログに関する指定                  |
 |>|~その他の指定|
 |auth_netbios|NetBIOS でのユーザ確認を実施するかどうか                        |
 |auth_nolog  |認証済みの場合は、ロギングしない                                |
@@ -50,23 +52,32 @@ all:全項目表示 ts:@diff:host のようにコロンで項目名を指定す�
 ***file
 ロギング情報を単一ページに作成する場合のページ名を指定。
 
+***updtkey
+通常のログは追記タイプですが、更新タイプに変更することができます。
+その場合には、ここにキー項目なる項目名を指定して下さい。
+***mustkey
+updtkey が指定されている場合で、更新キーが入力されている場合のみ、
+更新します。更新キーがブランクや、未入力の場合には更新されません。
+
+
 **項目の記述名について
 
-|項目  |説明                     |h
-|ts    |タイムスタンプ (UTIME)   |
-|@diff |差分内容                 |
-|ip    |IPアドレス               |
-|host  |ホスト名 (FQDN)          |
-|@guess|推測                     |
-|user  |ユーザ名(認証済)         |
-|ntlm  |ユーザ名(NTLM認証)       |
-|proxy |Proxy情報                |
-|ua    |ブラウザ情報 (USER-AGENT)|
-|del   |削除フラグ               |
-|sig   |署名(曖昧)               |
-|file  |ファイル名               |
-|cmd   |コマンド名               |
-|page  |ページ名                 |
+|項目       |説明                      |h
+|ts         |タイムスタンプ (UTIME)    |
+|@diff      |差分内容                  |
+|@guess_diff|差分の推測(閲覧状況の確定)|
+|ip         |IPアドレス                |
+|host       |ホスト名 (FQDN)           |
+|@guess     |推測                      |
+|user       |ユーザ名(認証済)          |
+|ntlm       |ユーザ名(NTLM認証)        |
+|proxy      |Proxy情報                 |
+|ua         |ブラウザ情報 (USER-AGENT) |
+|del        |削除フラグ                |
+|sig        |署名(曖昧)                |
+|file       |ファイル名                |
+|cmd        |コマンド名                |
+|page       |ページ名                  |
 
 ***先頭が @ で開始される項目
 ログには書かれていない項目。表示する際にのみ指定できる。
@@ -75,25 +86,45 @@ all:全項目表示 ts:@diff:host のようにコロンで項目名を指定す�
 
 $log = array(
 	'update' => array(
+		// ts:@diff:@guess_diff:ip:host:@guess:user:ntlm:proxy:ua:file:page
 		'use'      => 0,
 		'view'     => 'ts:@diff:host:user:sig:ua:proxy:del',
 		'guest'    => 'ts:ua',
 		'nolog_ip' => $log_common['nolog_ip']
 		),
 	'download' => array(
+		// ts:ip:host:@guess:user:ntlm:proxy:ua:file:page
 		'use'      => 0,
 		'view'     => 'ts:host:@guess:ua:file:proxy',
 		'guest'    => 'ts:ua:file',
 		'nolog_ip' => $log_common['nolog_ip']
 		),
 	'browse' => array(
+		// ts:host:@guess:user:ntlm:proxy:ua:page
 		'use'      => 0,
 		'view'     => 'ts:host:@guess:ua:proxy',
 		'guest'    => 'ts:ua',
 		'nolog_ip' => $log_common['nolog_ip']
 		),
+	'login' => array(
+		// ts:ip:host:auth_api:user:ua
+		'use'      => 0,
+		'updtkey'  => 'auth_api:user',
+		'view'	   => 'ts:user:auth_api',
+		'guest'	   => 'ts:user:auth_api',
+		'file'     => ':log/login',
+	),
+	'check' => array(
+		// ts:@guess_diff:ip:host:auth_api:user:ua
+		'use'      => 0,
+		'mustkey'  => 1,
+		'updtkey'  => 'auth_api:user',
+		'view'     => 'ts:@guess_diff:user:auth_api',
+		'guest'    => 'ts:@guess_diff:user:auth_api',
+	),
 	// cmd - rss, rdf, opml, lirs などの情報コマンドの実行状況
 	'cmd' => array(
+		// ts:ip:host:user:ntlm:proxy:ua:cmd
 		'use'      => 0,
 		'view'     => 'ts:host:cmd:ua:proxy',
 		'guest'    => 'ts:cmd:ua',
@@ -108,7 +139,7 @@ $log = array(
 	'auth_nolog'	   => 0,
 	// 見做しユーザ一覧情報
 	'guess_user' => array(
-		'use'      => 1,
+		'use'      => 0,
 		'file'     => ':log/signature'
 		),
 

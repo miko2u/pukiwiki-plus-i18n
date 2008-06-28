@@ -3,11 +3,13 @@
  * PukiWiki Plus! 更新ログ処理
  *
  * @copyright	Copyright &copy; 2004-2006,2008, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version	$Id: log.php,v 0.8 2008/06/23 01:00:00 upk Exp $
+ * @version	$Id: log.php,v 0.9 2008/06/25 01:42:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
 // require_once('proxy.cls.php');
+
+require_once(LIB_DIR . 'auth_api.cls.php');
 
 $log_ua = log_set_user_agent(); // 保存
 
@@ -58,14 +60,38 @@ function log_write($kind,$page)
 	$rc = log_common_check($kind,$page,'');
 	if (empty($rc)) return '';
 	$filename = log::set_filename($kind,$page); // ログファイル名
-	$data = log::array2table( $rc );
- 	log_put( $filename, $data);
+
+	if (! empty($log[$kind]['updtkey'])) {
+		$mustkey = isset($log[$kind]['mustkey']) ? $log[$kind]['mustkey'] : 0;
+		log_update($kind, $filename, $log[$kind]['updtkey'], $mustkey, $rc);
+	} else {
+		$data = log::array2table( $rc );
+	 	log_put( $filename, $data);
+	}
 
 	// 見做しユーザ
 	if ($kind == 'update' && $log['guess_user']['use']) {
 		log_put_guess($rc);
 	}
 
+}
+
+function log_read($filename, $join = false)
+{
+	$rc = ($join) ? '' : array();
+
+	if ($join) {
+		if (!($fd = fopen($filename,'r'))) {
+			return $rc;
+		}
+		@flock($fd, LOCK_SH);
+		$rc = @fread($fd, filesize($filename));
+		@flock($fd, LOCK_UN);
+		fclose($fd);
+		return $rc;
+	}
+
+	return @file($filename);
 }
 
 /**
@@ -147,9 +173,11 @@ function log_common_check($kind,$page,$parm)
 	unset($obj_log);
 	unset($obj_proxy);
 
-	// ロギング対象外IP
-	foreach ($log[$kind]['nolog_ip'] as $nolog_ip) {
-		if ($ip == $nolog_ip) return '';
+	if (isset($log[$kind]['nolog_ip'])) {
+		// ロギング対象外IP
+		foreach ($log[$kind]['nolog_ip'] as $nolog_ip) {
+			if ($ip == $nolog_ip) return '';
+		}
 	}
 
 	// NetBIOS でのチェックを実施
@@ -187,6 +215,13 @@ function log_common_check($kind,$page,$parm)
 		case 'host': // ホスト名 (FQDN)
 			$rc[$key] = $hostname;
 			break;
+
+		case 'auth_api': // 認証API名
+			$obj = new auth_api();
+			$msg = $obj->auth_session_get();
+			$rc[$key] = (empty($msg['api']) && ! empty($username)) ? 'plus' : $msg['api'];
+			break;
+
 		case 'user': // ユーザ名(認証済)
 			$rc[$key] = $username;
 			break;
@@ -303,6 +338,68 @@ function log_put($filename,$data)
 	@fclose( $fp );
 }
 
+function log_update($kind,$filename,$key,$mustkey,$data)
+{
+	$log_data = log_read($filename);
+
+	$_key = explode(':',$key);
+	$name = log::set_fieldname($kind);
+
+	$put = false;
+	for($i=0;$i<count($log_data);$i++) {
+                $fld = log::line2field($log_data[$i],$name);
+
+		$sw_update = true;
+		foreach($_key as $idx) {
+			if (empty($data[$idx]) || empty($fld[$idx])) {
+				$sw_update = false;
+				break;
+			}
+			if ($data[$idx] != $fld[$idx]) {
+				$sw_update = false;
+				break;
+			}
+		}
+
+		if ($sw_update) {
+			$log_data[$i] = log::array2table($data);
+                        $put = true;
+			break;
+		}
+	}
+
+	// Add
+	if (! $put) {
+		if ($mustkey) {
+			if (log_mustkey_check($_key,$data)) {
+				$log_data[] = log::array2table($data);
+				$put = true;
+			}
+		} else {
+			$log_data[] = log::array2table($data);
+			$put = true;
+		}
+	}
+
+	if (! $put) return '';
+
+	$fp = @fopen($filename, 'wb');
+	if ($fp == false) return '';
+	@flock($fp, LOCK_SH);
+	foreach($log_data as $_log_data) {
+		fputs($fp, $_log_data);
+	}
+	@flock($fp, LOCK_UN);
+	@fclose($fp);
+} 
+
+function log_mustkey_check($key,$data)
+{
+	foreach($key as $idx) {
+		if (empty($data[$idx])) return false;
+	}
+	return true;
+}
 
 /**
  * ログ全般の処理を取り纏めたもの
@@ -331,6 +428,7 @@ class log
 		switch ($kind) {
 		case 'cmd':
 		case 'guess_user':
+		case 'login':
 			if (empty($log[$kind]['file'])) $log[$kind]['file'] = ':log/'.$kind;
 			break;
 		}
@@ -351,27 +449,31 @@ class log
 			'update'	=> 1,
 			'download'	=> 2,
 			'cmd'		=> 3,
+			'login'		=> 4,
+			'check'		=> 5,
 		);
 		$idx = (isset($kind_no[$kind])) ? $kind_no[$kind] : 0;
 
 		// 先頭 @ の項目は、ログには保存されていない項目(表示用)
 		$field = array(
 			// 定義順は、デフォルト(all)表示順
-			//		 略,更,DL,cmd
-			'ts'	=> array( 1, 1, 1, 1), // タイムスタンプ (UTIME)
-			'@diff'	=> array( 0, 1, 0, 0), // 差分内容
-			'ip'	=> array( 1, 1, 1, 1), // IPアドレス
-			'host'	=> array( 1, 1, 1, 1), // ホスト名 (FQDN)
-			'@guess'=> array( 1, 1, 1, 0), // 推測
-			'user'	=> array( 1, 1, 1, 1), // ユーザ名(認証済)
-			'ntlm'	=> array( 1, 1, 1, 1), // ユーザ名(NTLM認証)
-			'proxy'	=> array( 1, 1, 1, 1), // Proxy情報
-			'ua'	=> array( 1, 1, 1, 1), // ブラウザ情報 (USER-AGENT)
-			'del'	=> array( 0, 1, 0, 0), // 削除フラグ
-			'sig'	=> array( 0, 1, 0, 0), // 署名(曖昧)
-			'file'	=> array( 0, 0, 1, 0), // ファイル名
-			'cmd'	=> array( 0, 0, 0, 1), // コマンド名
-			'page'	=> array( 1, 1, 1, 0), // ページ名
+			//                 idx  0  1  2  3  4  5
+			'ts'	      => array( 1, 1, 1, 1, 1, 1), // タイムスタンプ (UTIME)
+			'@diff'	      => array( 0, 1, 0, 0, 0, 0), // 差分内容
+			'@guess_diff' => array( 0, 1, 0, 0, 0, 1), // 推測差分
+			'ip'	      => array( 1, 1, 1, 1, 1, 1), // IPアドレス
+			'host'	      => array( 1, 1, 1, 1, 1, 1), // ホスト名 (FQDN)
+			'@guess'      => array( 1, 1, 1, 0, 0, 0), // 推測
+			'auth_api'    => array( 0, 0, 0, 0, 1, 1), // 認証API
+			'user'	      => array( 1, 1, 1, 1, 1, 1), // ユーザ名(認証済)
+			'ntlm'	      => array( 1, 1, 1, 1, 0, 0), // ユーザ名(NTLM認証)
+			'proxy'	      => array( 1, 1, 1, 1, 0, 0), // Proxy情報
+			'ua'	      => array( 1, 1, 1, 1, 1, 1), // ブラウザ情報 (USER-AGENT)
+			'del'	      => array( 0, 1, 0, 0, 0, 0), // 削除フラグ
+			'sig'	      => array( 0, 1, 0, 0, 0, 0), // 署名(曖昧)
+			'file'	      => array( 0, 0, 1, 0, 0, 0), // ファイル名
+			'cmd'	      => array( 0, 0, 0, 1, 0, 0), // コマンド名
+			'page'	      => array( 1, 1, 1, 0, 0, 0), // ページ名
 		);
 
 		$rc = array();
@@ -504,6 +606,8 @@ class log
 		$i = 0;
 		$rc = array();
 		foreach($name as $_name) {
+			if (substr($_name,0,1) == '@') continue;
+
 			$rc[$_name] = $_fld[$i];
 			$i++;
 		}
@@ -514,9 +618,9 @@ class log
 	 * 更新日時のバックアップデータの世代を確定する
 	 * @static
 	 */
-	function get_backup_age($page,$update_time)
+	function get_backup_age($page,$update_time,$update=true)
 	{
-		static $backup_page;
+		static $_page, $backup_page;
 
 		if (!isset($backup_page)) $backup_page = get_backup($page);
 		if (count($backup_page) == 0) return -1; // 存在しない
@@ -528,12 +632,25 @@ class log
 		$match = -1;
 		foreach ($backup_page as $age => $val)
 		{
-			if ($val['real'] == $update_time) $match = $age;
+			if ($val['real'] == $update_time) {
+				$match = $age;
+			} elseif (! $update && $val['real'] < $update_time) {
+				$match = $age;
+			}
 		}
 		$match++; // ヒットした次が書き込んだ内容(バックアップなため)
 		if ($age < $match) return 0; // カレント(diffを読む)
 		if ($match > 0) return $match;
 		return -1; // 存在しない(一致したものが存在しない)
+	}
+
+	function get_backup_max_age($page)
+	{
+		static $backup_page;
+		if (!isset($backup_page)) $backup_page = get_backup($page);
+		if (count($backup_page) == 0) return -1; // 存在しない
+		ksort($backup_page);
+		return current(array_keys($backup_page,$backup_page[count($backup_page)-1]));
 	}
 
 	/**

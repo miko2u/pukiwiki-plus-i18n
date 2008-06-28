@@ -723,5 +723,32 @@ class auth
 		return (PLUS_PROTECT_MODE && auth::is_check_role(PLUS_PROTECT_MODE));
 	}
 
+	function user_list()
+	{
+		global $auth_users, $auth_wkgrp_user;
+		$rc = array();
+
+		foreach ($auth_users as $user=>$val) {
+			$role  = (empty($val[1])) ? ROLE_ENROLLEE : $val[1];
+			$group = (empty($val[2])) ? '' : $val[2];
+			$rc['plus'][$user] = array('role'=>$role,'displayname'=>$user,'group'=>$group);
+		}
+
+		foreach($auth_wkgrp_user as $api=>$val1) {
+			foreach($val1 as $user=>$val) {
+				if (is_array($val)) {
+					$role  = (empty($val['role'])) ? ROLE_ENROLLEE : $val['role'];
+					$group = (empty($val['group'])) ? '' : $val['group'];
+					$name  = (empty($val['displayname'])) ? $user : $val['displayname'];
+				} else {
+					$role = $val;
+					$group = '';
+					$name = $user;
+				}
+				$rc[$api][$user] = array('role'=>$role, 'displayname'=>$name,'group'=>$group);
+			}
+		}
+		return $rc;
+	}
 }
 ?>

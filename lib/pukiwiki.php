@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: pukiwiki.php,v 1.21.15 2008/03/02 22:27:00 upk Exp $
+// $Id: pukiwiki.php,v 1.21.16 2008/06/25 01:42:00 upk Exp $
 //
 // PukiWiki Plus! 1.4.*
 //  Copyright (C) 2002-2008 by PukiWiki Plus! Team
@@ -251,6 +251,7 @@ if (isset($retvars['body']) && $retvars['body'] != '') {
 
 	if ($trackback) $body .= tb_get_rdf($base); // Add TrackBack-Ping URI
 	if ($referer) ref_save($base);
+	log_write('check',$vars['page']);
 	log_write('browse',$vars['page']);
 }
 

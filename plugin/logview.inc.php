@@ -3,13 +3,14 @@
  * PukiWiki Plus! ログ閲覧プラグイン
  *
  * @copyright	Copyright &copy; 2004-2008, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version	$Id: logview.php,v 0.12 2008/01/05 18:23:00 upk Exp $
+ * @version	$Id: logview.php,v 0.13 2008/06/25 01:47:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 
 defined('MAX_LINE')      or define('MAX_LINE', 200);
 defined('VIEW_ROBOTS')   or define('VIEW_ROBOTS', '0');   // robots は表示しない
 defined('USE_UA_OPTION') or define('USE_UA_OPTION', '0'); // オプション
+defined('PLUGIN_LOGVIEW_COLOR_AUTH_API') or define('PLUGIN_LOGVIEW_COLOR_AUTH_API','#009900');
 
 /**
  * 初期処理
@@ -23,6 +24,7 @@ function plugin_logview_init()
 		'ts'		=> _('Date'),
 		'ip'		=> _('IP Address'),
 		'host'		=> _('Host Name'),
+		'auth_api'	=> _('Authentication API Name'),
 		'user'		=> _('User Name'),
 		'ntlm'		=> _('NTLM Auth Name'),
 		'proxy'		=> _('Proxy Infomation'),
@@ -34,6 +36,11 @@ function plugin_logview_init()
 		'cmd'		=> _('CMD'),
 		'@diff'		=> _('Contents'),
 		'@guess'	=> _('Provisional User Name'),	// Guess
+		'@guess_diff'	=> _('Provisional Browse Contents'),  // Guess
+		'info_user_list'=> _('User information list'),
+		'all_user'	=> _('Number of enrollees'),
+		'number_user'   => _('Number of use'),
+		'availability'  => _('Availability'),
 		)
 	);
 	set_plugin_messages($messages);
@@ -44,7 +51,7 @@ function plugin_logview_init()
  */
 function plugin_logview_action()
 {
-	global $script, $vars, $_logview_msg;
+	global $vars, $_logview_msg;
 	global $log, $sortable_tracker;
 	static $count = 0;
 
@@ -133,24 +140,26 @@ EOD;
 					get_date('Y-m-d H:i:s', $data['ts']) .
 					' '.get_passage($data['ts']) . "</td>\n";
 				break;
+
+			case '@guess_diff':
 			case '@diff': // 差分内容
+				$update = ($field == '@diff') ? true : false;
 				// FIXME: バックアップ/差分 なしの新規の場合
 				// バックアップデータの確定
 				$body .= ' <td class="style_td">';
-				$age = log::get_backup_age($page,$data['ts']);
+				$age = log::get_backup_age($page,$data['ts'],$update);
 				switch($age) {
 				case -1: // データなし
 					$body .= '<a class="ext" href="'.get_page_uri($page).
 						'" rel="nofollow">none</a>';
 					break;
 				case 0:  // diff
-					if (log::diff_exist($page)) {
-						$body .= '<a class="ext" href="'.$script.'?cmd=diff&amp;page='.rawurlencode($page).
-							'" rel="nofollow">now</a>';
-					}
+					$body .= '<a class="ext" href="';
+					$body .= (log::diff_exist($page)) ? get_cmd_uri('diff',$page) : get_page_uri($page);
+					$body .= '" rel="nofollow">now</a>';
 					break;
 				default: // あり
-					$body .= '<a class="ext" href="'.$script.'?cmd=backup&amp;page='.rawurlencode($page).'&amp;age='.$age.'&amp;action=diff"'.
+					$body .= '<a class="ext" href="'.get_cmd_uri('backup',$page,'',array('age'=>$age,'action'=>'visualdiff')).'"'.
 						' rel="nofollow">'.$age.'</a>';
 					break;
 				}
@@ -219,6 +228,13 @@ EOD;
 </table>
 
 EOD;
+
+	switch ($kind) {
+	case 'login':
+	case 'check':
+		$body .= logview_user_list($fld);
+		break;
+	}
 
 	if ($sortable_tracker) {
 		$logviewso = join(',', array_fill(0, $cols, '"String"'));
@@ -297,6 +313,44 @@ function logview_guess_user($data,$guess)
 		}
 	}
 	return $user;
+}
+
+function logview_user_list(& $fld)
+{
+	global $_logview_msg;
+
+	$all_user = auth::user_list();
+	$all_user_idx = count($all_user);
+
+	$user_list = array();
+	foreach($fld as $line) {
+		$user_list[$line['auth_api']][$line['user']] = '';
+	}
+
+	$check_list = array();
+	foreach($all_user as $auth_api=>$val1) {
+	foreach($val1 as $id=>$val) {
+		if (isset($user_list[$auth_api][$val['displayname']])) continue;
+		$check_list[] = array('name'=>$val['displayname'],'auth_api'=>$auth_api);
+	}}
+
+	$ctr = count($check_list);
+	if ($ctr == 0) return '';
+
+	$ret = '<h4>'.$_logview_msg['info_user_list'].'</h4>'."\n"; // 未確認者一覧
+	$ret .= '<div><fieldset>'.$_logview_msg['all_user'].': '.$all_user_idx.' '.
+			$_logview_msg['number_user'].': '.$ctr.' '.
+			$_logview_msg['availability'].': '.floor(($ctr/$all_user_idx)*100).'%</fieldset></div><div>&nbsp;</div>'."\n"; // 人数
+
+	sort($check_list);
+	$ctr = 0;
+	foreach($check_list as $user) {
+		$ctr++;
+		// $ret .= '('.$ctr.') ['.$user['auth_api'].']'.$user['name']."\n";
+		$ret .= '('.$ctr.') '.$user['name'].' <small><span style="color: '.PLUGIN_LOGVIEW_COLOR_AUTH_API.'">'.$user['auth_api']."</span></small>\n";
+	}
+
+	return $ret;
 }
 
 ?>
