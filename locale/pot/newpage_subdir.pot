@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-04-19 01:52+0900\n"
+"POT-Creation-Date: 2008-06-30 00:18+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,62 +16,62 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../plugin/newpage_subdir.inc.php:36
+#: ../../plugin/newpage_subdir.inc.php:33
 #, php-format
 msgid "#%s doesn't have the corresponding page. "
 msgstr ""
 
-#: ../../plugin/newpage_subdir.inc.php:37
+#: ../../plugin/newpage_subdir.inc.php:34
 msgid "making"
 msgstr ""
 
-#: ../../plugin/newpage_subdir.inc.php:54
-#: ../../plugin/newpage_subdir.inc.php:158
+#: ../../plugin/newpage_subdir.inc.php:51
+#: ../../plugin/newpage_subdir.inc.php:164
 msgid "New page"
 msgstr ""
 
-#: ../../plugin/newpage_subdir.inc.php:67
+#: ../../plugin/newpage_subdir.inc.php:64
 msgid "Edit"
 msgstr ""
 
-#: ../../plugin/newpage_subdir.inc.php:84
+#: ../../plugin/newpage_subdir.inc.php:81
 msgid "DESCRIPTION<br />\n"
 msgstr ""
 
-#: ../../plugin/newpage_subdir.inc.php:85
+#: ../../plugin/newpage_subdir.inc.php:82
 msgid ""
 "\t　The field that adds a new page below the directory specified for "
 "[directory] is made.<br />\n"
 msgstr ""
 
-#: ../../plugin/newpage_subdir.inc.php:86
+#: ../../plugin/newpage_subdir.inc.php:83
 msgid "\t　The order of the parameter is arbitrary.<br />"
 msgstr ""
 
-#: ../../plugin/newpage_subdir.inc.php:87
+#: ../../plugin/newpage_subdir.inc.php:84
 msgid ""
 "\t　When an undefined option is specified, Help is displayed with the "
 "message.<br />"
 msgstr ""
 
-#: ../../plugin/newpage_subdir.inc.php:89
+#: ../../plugin/newpage_subdir.inc.php:86
 msgid "OPTION<br />\n"
 msgstr ""
 
-#: ../../plugin/newpage_subdir.inc.php:90
+#: ../../plugin/newpage_subdir.inc.php:87
 msgid ""
 "　-d Directory Only.\tIt limits it only to the one with the child page. (The "
 "directory specified specifying it is an exception. )<br />\n"
 msgstr ""
 
-#: ../../plugin/newpage_subdir.inc.php:91
+#: ../../plugin/newpage_subdir.inc.php:88
 msgid "　-h Help.\t\tThis Description is displayed. <br />\n"
 msgstr ""
 
-#: ../../plugin/newpage_subdir.inc.php:92
+#: ../../plugin/newpage_subdir.inc.php:89
 msgid "　-q Quiet.\t\tWarning is not displayed.<br />\n"
 msgstr ""
 
-#: ../../plugin/newpage_subdir.inc.php:94
+#: ../../plugin/newpage_subdir.inc.php:91
 msgid "EXAMPLE<br />\n"
 msgstr ""
