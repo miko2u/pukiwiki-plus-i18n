@@ -111,7 +111,7 @@ $log = array(
 		'use'      => 0,
 		'updtkey'  => 'auth_api:user',
 		'view'	   => 'ts:user:auth_api',
-		'guest'	   => 'ts:user:auth_api',
+		'guest'	   => 'ts:user',
 		'file'     => ':log/login',
 	),
 	'check' => array(
@@ -120,7 +120,7 @@ $log = array(
 		'mustkey'  => 1,
 		'updtkey'  => 'auth_api:user',
 		'view'     => 'ts:@guess_diff:user:auth_api',
-		'guest'    => 'ts:@guess_diff:user:auth_api',
+		'guest'    => 'ts:@guess_diff:user',
 	),
 	// cmd - rss, rdf, opml, lirs などの情報コマンドの実行状況
 	'cmd' => array(
