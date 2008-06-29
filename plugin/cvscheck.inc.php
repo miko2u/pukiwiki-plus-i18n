@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: cvscheck.inc.php,v 0.19 2006/10/04 01:31:00 miko Exp $
+// $Id: cvscheck.inc.php,v 0.20 2008/06/29 18:20:00 upk Exp $
 /* 
 *プラグイン cvscheck
  cvsのversionと比較して異なるものを表示
@@ -24,31 +24,31 @@ function plugin_cvscheck_init()
 {
 	$messages = array(
 	  '_cvscheck_messages' => array(
-		 'URL'      => 'http://cvs.sourceforge.jp/cgi-bin/viewcvs.cgi/pukiwiki/pukiwiki',
-		 'URL_FILE' => 'http://cvs.sourceforge.jp/cgi-bin/viewcvs.cgi/*checkout*/pukiwiki/pukiwiki/',
+		 'URL'          => 'http://cvs.sourceforge.jp/cgi-bin/viewcvs.cgi/pukiwiki/pukiwiki',
+		 'URL_FILE'     => 'http://cvs.sourceforge.jp/cgi-bin/viewcvs.cgi/*checkout*/pukiwiki/pukiwiki/',
 		 'OPTIONAL_URL' => 'http://pukiwiki.sourceforge.jp/?',
 		 'OPTIONAL_OPT' => 'plugin=ls2&prefix=',
 		 'OPTIONAL_DIR' => '%E8%87%AA%E4%BD%9C%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3%2F',
-		 'DIRS' => array("DATA_HOME"   => '/',
-				 "PLUGIN_DIR"  =>'/plugin/',
-				 "LIB_DIR"     =>'/lib/',
-				 "SKIN_DIR"    =>'/skin/',
-				 "DOC_DIR"     =>'/doc/' ),
-		 'LDIRS' => array("DATA_HOME"  => DATA_HOME ,
-				  "PLUGIN_DIR" => PLUGIN_DIR, 
-				  "LIB_DIR"    => LIB_DIR,
-				  "SKIN_DIR"   => SKIN_DIR,
-				  "DOC_DIR"    => SITE_HOME . 'doc/', ),
-		 'title_name'  => _('file name'),
-		 'title_cvs'    => _('cvs versions'),
-		 'title_local'  => _('local versions'),
-		 'title_not_found' => _('not found'),
-		 'msg_title'    => _('diff in cvscheck'),
-		 'body_title'       => _('Difference of file version of this site and CVS'),
-		 'body_title_local' => _('Version of file where only this site exists'),
-		 'msg_new_files'   => _('It is not necessary to update it.'),
-		 'msg_load_error'  => _('File Load Error'),
-		 'body_load_error' => _('The file was not able to be read.'),
+		 'DIRS' => array('DATA_HOME'   => '/',
+				 'PLUGIN_DIR'  =>'/plugin/',
+				 'LIB_DIR'     =>'/lib/',
+				 'SKIN_DIR'    =>'/skin/',
+				 'DOC_DIR'     =>'/doc/' ),
+		 'LDIRS' => array('DATA_HOME'  => DATA_HOME ,
+				  'PLUGIN_DIR' => PLUGIN_DIR, 
+				  'LIB_DIR'    => LIB_DIR,
+				  'SKIN_DIR'   => SKIN_DIR,
+				  'DOC_DIR'    => SITE_HOME . 'doc/', ),
+		 'title_name'        => _('file name'),
+		 'title_cvs'         => _('cvs versions'),
+		 'title_local'       => _('local versions'),
+		 'title_not_found'   => _('not found'),
+		 'msg_title'         => _('diff in cvscheck'),
+		 'body_title'        => _('Difference of file version of this site and CVS'),
+		 'body_title_local'  => _('Version of file where only this site exists'),
+		 'msg_new_files'     => _('It is not necessary to update it.'),
+		 'msg_load_error'    => _('File Load Error'),
+		 'body_load_error'   => _('The file was not able to be read.'),
 		 'msg_access_error'  => _('Access Error'),
 		 'body_access_error' => _('It was not able to access the CVS site.'),
       ),
@@ -353,16 +353,18 @@ function plugin_cvscheck_localversions()
 		while($file = $dir->read())	{
 			if (!preg_match('/\.\w+$/',$file)) continue;
 			$data = join('',file($sdir.$file));
+			$ary[$file] = '';
 			if (preg_match('/\$'.'Id: (.+),v ([\d\.]+) (\d{4}\/\d{2}\/\d{2} \d{2}:\d{2}:\d{2})/',$data,$matches))
 			{
 				$file = htmlspecialchars($matches[1]);
 				$ver  = htmlspecialchars($matches[2]);
-				if ( plugin_cvscheck_greaterp($ver, $ary[$file]) ) $ary[$file] = $ver;
+				if (!version_compare($ver1, $ary[$file])) $ary[$file] = $ver;
+				// if ( plugin_cvscheck_greaterp($ver, $ary[$file]) ) $ary[$file] = $ver;
 				$debug .= "$adir - $file : $ver ---<br />\n";
 			}
 			else {
 				$file = htmlspecialchars($file);
-				$ary[$file] = '';
+				// $ary[$file] = '';
 			}
 		}
 		$dir->close();
@@ -393,8 +395,10 @@ function plugin_cvscheck_localoptional()
 //	$outs['debug'] = $debug;
 	return $outs;
 }
+/*
 function plugin_cvscheck_greaterp($ver1,$ver2)
 {
+	//if (empty($ver1) || empty($ver2)) return false;
 	$a1 = preg_split("/\./", $ver1); 
 	$a2 = preg_split("/\./", $ver2); 
 	$len1 = count($a1);
@@ -406,5 +410,6 @@ function plugin_cvscheck_greaterp($ver1,$ver2)
 	}
 	return FALSE;
 }
+*/
 
 ?>
