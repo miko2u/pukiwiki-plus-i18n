@@ -3,7 +3,7 @@
  * PukiWiki Plus! ログ閲覧プラグイン
  *
  * @copyright	Copyright &copy; 2004-2008, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version	$Id: logview.php,v 0.16 2008/06/29 17:17:00 upk Exp $
+ * @version	$Id: logview.php,v 0.17 2008/06/30 00:38:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 
@@ -347,7 +347,7 @@ function logview_user_list(& $fld)
 	$ret = '<h4>'.$_logview_msg['info_unused'].'</h4>'."\n"; // 未確認者一覧
 	$ret .= '<div><fieldset>'.$_logview_msg['all_user'].': '.$all_user_idx.' '.
 			$_logview_msg['number_unused'].': '.$ctr.' '.
-			$_logview_msg['availability'].': '.floor(($ctr/$all_user_idx)*100).'%</fieldset></div><div>&nbsp;</div>'."\n"; // 人数
+			$_logview_msg['availability'].': '.floor(100-($ctr/$all_user_idx)*100).'%</fieldset></div><div>&nbsp;</div>'."\n"; // 人数
 
 	sort($check_list);
 	$ctr = 0;
