@@ -3,7 +3,7 @@
  * PukiWiki Plus! ログ閲覧プラグイン
  *
  * @copyright	Copyright &copy; 2004-2008, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version	$Id: logview.php,v 0.15 2008/06/29 17:05:00 upk Exp $
+ * @version	$Id: logview.php,v 0.16 2008/06/29 17:17:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 
@@ -318,6 +318,9 @@ function logview_guess_user($data,$guess)
 function logview_user_list(& $fld)
 {
 	global $_logview_msg;
+
+	// 登録ユーザ以上でなければ、他のユーザを知ることは禁止
+	if (auth::check_role('role_enrollee')) return '';
 
 	$all_user = auth::user_list();
 	$all_user_idx = 0;
