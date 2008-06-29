@@ -4,7 +4,7 @@
  *
  * @copyright   Copyright &copy; 2007-2008, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth_api.cls.php,v 0.4 2008/06/29 01:59:00 upk Exp $
+ * @version     $Id: auth_api.cls.php,v 0.5 2008/06/29 16:56:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 // require_once(LIB_DIR . 'hash.php');
@@ -44,6 +44,10 @@ class auth_api
 			}
 		}
 		auth::des_session_put($this->message_md5(),$message);
+
+		if ($this->auth_name != 'openid_verify') {
+			log_write('login','');
+		}
         }
 
 	function auth_session_unset()
