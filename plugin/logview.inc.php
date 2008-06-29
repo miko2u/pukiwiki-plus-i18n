@@ -3,7 +3,7 @@
  * PukiWiki Plus! ログ閲覧プラグイン
  *
  * @copyright	Copyright &copy; 2004-2008, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version	$Id: logview.php,v 0.13 2008/06/25 01:47:00 upk Exp $
+ * @version	$Id: logview.php,v 0.14 2008/06/29 13:21:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 
@@ -37,9 +37,9 @@ function plugin_logview_init()
 		'@diff'		=> _('Contents'),
 		'@guess'	=> _('Provisional User Name'),	// Guess
 		'@guess_diff'	=> _('Provisional Browse Contents'),  // Guess
-		'info_user_list'=> _('User information list'),
+		'info_unused'   => _('Unused user list'),
 		'all_user'	=> _('Number of enrollees'),
-		'number_user'   => _('Number of use'),
+		'number_unused' => _('Number of Unused'),
 		'availability'  => _('Availability'),
 		)
 	);
@@ -337,9 +337,9 @@ function logview_user_list(& $fld)
 	$ctr = count($check_list);
 	if ($ctr == 0) return '';
 
-	$ret = '<h4>'.$_logview_msg['info_user_list'].'</h4>'."\n"; // 未確認者一覧
+	$ret = '<h4>'.$_logview_msg['info_unused'].'</h4>'."\n"; // 未確認者一覧
 	$ret .= '<div><fieldset>'.$_logview_msg['all_user'].': '.$all_user_idx.' '.
-			$_logview_msg['number_user'].': '.$ctr.' '.
+			$_logview_msg['number_unused'].': '.$ctr.' '.
 			$_logview_msg['availability'].': '.floor(($ctr/$all_user_idx)*100).'%</fieldset></div><div>&nbsp;</div>'."\n"; // 人数
 
 	sort($check_list);
