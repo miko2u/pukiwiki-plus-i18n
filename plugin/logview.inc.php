@@ -3,7 +3,7 @@
  * PukiWiki Plus! ログ閲覧プラグイン
  *
  * @copyright	Copyright &copy; 2004-2008, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version	$Id: logview.php,v 0.14 2008/06/29 13:21:00 upk Exp $
+ * @version	$Id: logview.php,v 0.15 2008/06/29 17:05:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 
@@ -320,7 +320,11 @@ function logview_user_list(& $fld)
 	global $_logview_msg;
 
 	$all_user = auth::user_list();
-	$all_user_idx = count($all_user);
+	$all_user_idx = 0;
+	foreach ($all_user as $auth_api=>$val1) {
+	foreach ($val1 as $user=>$val) {
+		$all_user_idx++;
+	}}
 
 	$user_list = array();
 	foreach($fld as $line) {
