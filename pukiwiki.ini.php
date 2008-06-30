@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: pukiwiki.ini.php,v 1.148.31 2008/01/12 21:06:00 upk Exp $
+// $Id: pukiwiki.ini.php,v 1.148.32 2008/06/30 22:04:00 upk Exp $
 // Copyright (C)
 //   2005-2008 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
@@ -390,6 +390,7 @@ $pagereading_config_dict = ':config/PageReading/dict';
 // Exclude plugin for this site-policy.
 $exclude_plugin = array(
 	'server',
+	'cvscheck',
 	'version',
 	'versionlist',
 );
