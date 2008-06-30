@@ -1,17 +1,20 @@
 <?php
-// $Id: newpage_subdir.inc.php,v 1.2.4 2008/06/29 21:17:00 upk Exp $
+// $Id: newpage_subdir.inc.php,v 1.2.5 2008/06/30 21:55:00 upk Exp $
 // @based_on newpage.inc.php
 // @based_on ls2.inc.php
 // @thanks to panda (auther of newpage.inc.php/ls2.inc.php)
 
-function build_directory_list($roots, $option) {
-
+function build_directory_list($roots, $option=array())
+{
 	global $WikiName,$BracketName;
-	
-	$existingPages = auth::get_existpages();
+
+	$list = $warnings = array();
+	$list['directory'] = $list['warning'] = array();
+	$pages = auth::get_existpages();
+
 	foreach($roots as $root) {
 		$matched = FALSE;
-		foreach($existingPages as $page) {
+		foreach($pages as $page) {
 			// $page = strip_bracket($page);
 //			if (preg_match("/^$root.*$/", $page)){
 			if (strpos($page,$root) === 0){
@@ -28,12 +31,12 @@ function build_directory_list($roots, $option) {
 		}
 		if(!$matched) {
 			$list['directory'][] = $root;
-
 			$warnings[] =
 				'<font color="red">' . sprintf( _("#%s doesn't have the corresponding page. "),$root) . '</font>' .
 				'(<a href="' . get_page_uri($root) . '">' . _('making') . "</a>)<br />\n";
 		}
 	}
+
 	$list['directory'] = array_unique($list['directory']);
 	natcasesort($list['directory']);
 
@@ -43,7 +46,8 @@ function build_directory_list($roots, $option) {
 	return $list;
 }
 
-function print_form_string( $list ) {
+function print_form_string( $list )
+{
 	global $script,$vars;
 	
 	$form_string  = '<form action="'.$script.'" method="post">'."\n".
@@ -59,7 +63,7 @@ function print_form_string( $list ) {
 	}
 	
 	$form_string .= '<input type="hidden" name="plugin" value="newpage_subdir" />'."\n".
-			'<input type="hidden" name="refer" value="'.$vars[page].'" />'."\n".
+			'<input type="hidden" name="refer" value="'.$vars['page'].'" />'."\n".
 			'<input type="text" name="page" size="30" value="" />'."\n".
 			'<input type="submit" value="' . _('Edit') . '" />'."\n".
 			'</div>'."\n".
@@ -74,7 +78,8 @@ function print_form_string( $list ) {
 	return $form_string;
 }
 
-function print_help_message() {
+function print_help_message()
+{
 	return
 		"#newpage_subdir([directory]... ,[option]... )<br />\n" .
 		"<br />\n" .
@@ -105,7 +110,7 @@ function plugin_newpage_subdir_convert()
 	if (auth::check_role('readonly')) return '';
 	if (auth::is_check_role(PKWK_CREATE_PAGE)) return '';
 
-	$roots = array();
+	$roots = $option = array();
 
 	// parsing all parameters
 	foreach(func_get_args() as $arg) {
@@ -151,7 +156,7 @@ function plugin_newpage_subdir_action()
         if (auth::check_role('readonly')) return '';
         if (auth::is_check_role(PKWK_CREATE_PAGE)) return '';
 
-	$roots = array();
+	$roots = $retval = array();
 	$page = (empty($vars['page'])) ? '' : $vars['page'];
 	$dir  = (empty($vars['directory'])) ? '' : strip_bracket($vars['directory']);
 
