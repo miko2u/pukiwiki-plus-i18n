@@ -1,5 +1,5 @@
 <?php
-// $Id: newpage_subdir.inc.php,v 1.2.5 2008/06/30 21:55:00 upk Exp $
+// $Id: newpage_subdir.inc.php,v 1.2.6 2008/07/01 21:05:00 upk Exp $
 // @based_on newpage.inc.php
 // @based_on ls2.inc.php
 // @thanks to panda (auther of newpage.inc.php/ls2.inc.php)
@@ -40,7 +40,7 @@ function build_directory_list($roots, $option=array())
 	$list['directory'] = array_unique($list['directory']);
 	natcasesort($list['directory']);
 
-	if(isset($option['quiet']) ||  !$option['quiet']) {
+	if(isset($option['quiet']) && !$option['quiet']) {
 		$list['warning'] = $warnings;
 	}
 	return $list;
