@@ -3,7 +3,7 @@
  * PukiWiki Plus! 目次プラグイン
  *
  * @copyright	Copyright &copy; 2004-2006,2008, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version	$Id: toc.php,v 0.12 2008/07/02 23:29:00 upk Exp $
+ * @version	$Id: toc.php,v 0.13 2008/07/05 03:22:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License
  * @link	http://jo1upk.blogdns.net/saito/
  */
@@ -227,6 +227,7 @@ function toc_trim_pw($line)
 function toc_convert_index($idx)
 {
 	global $plugin_num_proc;
+	static $num = 0;
 
 	// 不要な行のカウント
 	$off = 0;
@@ -241,7 +242,7 @@ function toc_convert_index($idx)
 		$lines[] = $data['dat'];
 	}
 
-	$plugin_num_proc = 'toc';
+	$plugin_num_proc = 'toc'.$num++;
 	$html = convert_html($lines);
 
 	$rc = array();
