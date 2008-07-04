@@ -2,8 +2,8 @@
 /**
  * PukiWiki Plus! 目次プラグイン
  *
- * @copyright	Copyright &copy; 2004-2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version	$Id: toc.php,v 0.11 2006/02/16 01:31:00 upk Exp $
+ * @copyright	Copyright &copy; 2004-2006,2008, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * @version	$Id: toc.php,v 0.12 2008/07/02 23:29:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License
  * @link	http://jo1upk.blogdns.net/saito/
  */
@@ -42,6 +42,8 @@ function plugin_toc_convert()
 		$idx = toc_make_index($src, $mode, $lvl);
 	}
 
+	$idx = toc_convert_index($idx);
+
 	// 整形処理
 	if ($view == 'tree') {
 		return toc_mode_contents($idx);
@@ -67,7 +69,7 @@ function toc_from_to_check($lvl,$dat_lvl)
 function toc_make_index($src, $mode, $lvl)
 {
 	$rc = array();
-	$i = 0;
+	$i = -1;
 	$sw = ($mode == 'toc') ? 0 : 1;
 
 	foreach ($src as $_src) {
@@ -78,18 +80,20 @@ function toc_make_index($src, $mode, $lvl)
 				continue;
 			}
 		}
-		if (! $sw) continue;
 
 		// * で開始されない行は読み捨てる
 		if (substr($_src,0,1) != '*') continue;
 		$dat_lvl = min(3,strspn($_src, '*'));
 
+		$i++;
+		$rc[$i]['dat'] = $_src;
+		$rc[$i]['sw']  = false;
+
+		if (! $sw) continue;
 		if (! toc_from_to_check($lvl,$dat_lvl)) continue;
 
 		// [レコード][#toc前後]
-		$rc[$i]['dat'] = $_src;
-		$rc[$i]['lvl'] = $dat_lvl;
-		$i++;
+		$rc[$i]['sw'] = true;
 	}
 
 	return $rc;
@@ -99,7 +103,8 @@ function toc_make_index($src, $mode, $lvl)
 function toc_make_index_part($src, $id, $lvl)
 {
 	$rc = array();
-	$start = $i = 0;
+	$start = 0;
+	$i = -1;
 
 	foreach ($src as $_src) {
 		// if (substr($_src,0,5) == '#toc(') {
@@ -110,18 +115,20 @@ function toc_make_index_part($src, $id, $lvl)
 			}
 			if ($start) break;
 		}
-		if (! $start) continue;
 
 		// * で開始されない行は読み捨てる
 		if (substr($_src,0,1) != '*') continue;
 		$dat_lvl = min(3,strspn($_src, '*'));
 
+		$i++;
+		$rc[$i]['dat'] = $_src;
+		$rc[$i]['sw'] = false;
+
+		if (! $start) continue;
 		if (! toc_from_to_check($lvl,$dat_lvl)) continue;
 
 		// [レコード][#toc前後]
-		$rc[$i]['dat'] = $_src;
-		$rc[$i]['lvl'] = $dat_lvl;
-		$i++;
+		$rc[$i]['sw'] = true;
 	}
 
 	return $rc;
@@ -149,7 +156,9 @@ function toc_mode_toc($idx)
 	$rc = '';
 
 	foreach ($idx as $id => $data) {
-		list($text,$tag) = toc_trim_pw($data['dat']);
+		//list($text,$tag) = toc_trim_pw($data['dat']);
+		$text = $data['dat'];
+		$tag = $data['tag'];
 		$link = (empty($tag)) ? $hed.$id : $tag;
 		if ($sw) {
 			$sw = 0;
@@ -181,7 +190,9 @@ function toc_mode_contents($idx)
 		  '<li><a href="%s">%s</a></li></ul>'."\n";
 
 	foreach ($idx as $data) {
-		list($text,$tag) = toc_trim_pw($data['dat']);
+		// list($text,$tag) = toc_trim_pw($data['dat']);
+		$text = $data['dat'];
+		$tag = $data['tag'];
 		$link = (empty($tag)) ? $hed.++$seq : $tag;
 
 		$i = $data['lvl'] - $top_lvl + 1;
@@ -211,6 +222,51 @@ function toc_trim_pw($line)
 	$tag = (isset($regs[2])) ? $regs[2] : ''; // ID の取得
 	$str = trim(strip_htmltag(convert_html($line)));
 	return array($str,$tag);
+}
+
+function toc_convert_index($idx)
+{
+	global $plugin_num_proc;
+
+	// 不要な行のカウント
+	$off = 0;
+	foreach($idx as $id=>$data) {
+		if ($data['sw']) break;
+		$off++;
+	}
+
+	// 全行を変換
+	$lines = array();
+	foreach($idx as $id=>$data) {
+		$lines[] = $data['dat'];
+	}
+
+	$plugin_num_proc = 'toc';
+	$html = convert_html($lines);
+
+	$rc = array();
+	$i = 0;
+	foreach (explode("\n", $html) as $line) {
+		$line = trim($line);
+		if (empty($line)) continue;
+		$matches = array();
+		preg_match("'^<h(.?)(.*?)>(.*?)</h.?>'si", $line, $matches);
+		if (!empty($matches[2])) {
+			preg_match("'^id=\"(.*?)\"'si", trim($matches[2]), $mat);
+			$matches[2] = $mat[1];
+		}
+
+		if ($off > $i) {
+			$i++;
+			continue;
+		}
+
+		$rc[$i]['tag'] = empty($matches[2]) ? '' : '#'.$matches[2];
+		$rc[$i]['dat'] = $matches[3];
+		$rc[$i]['lvl'] = $matches[1]-1;
+		$i++;
+	}
+	return $rc;
 }
 
 ?>
