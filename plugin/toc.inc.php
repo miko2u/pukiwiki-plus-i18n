@@ -3,7 +3,7 @@
  * PukiWiki Plus! 目次プラグイン
  *
  * @copyright	Copyright &copy; 2004-2006,2008, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version	$Id: toc.php,v 0.13 2008/07/05 03:22:00 upk Exp $
+ * @version	$Id: toc.php,v 0.14 2008/07/06 01:05:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License
  * @link	http://jo1upk.blogdns.net/saito/
  */
@@ -156,7 +156,6 @@ function toc_mode_toc($idx)
 	$rc = '';
 
 	foreach ($idx as $id => $data) {
-		//list($text,$tag) = toc_trim_pw($data['dat']);
 		$text = $data['dat'];
 		$tag = $data['tag'];
 		$link = (empty($tag)) ? $hed.$id : $tag;
@@ -190,7 +189,6 @@ function toc_mode_contents($idx)
 		  '<li><a href="%s">%s</a></li></ul>'."\n";
 
 	foreach ($idx as $data) {
-		// list($text,$tag) = toc_trim_pw($data['dat']);
 		$text = $data['dat'];
 		$tag = $data['tag'];
 		$link = (empty($tag)) ? $hed.++$seq : $tag;
@@ -212,21 +210,10 @@ function toc_get_top_level($idx)
 	return $top_lvl;
 }
 
-/*
- * PukiWiki 固有の記述を除去
- */
-function toc_trim_pw($line)
-{
-	preg_match("'(.*?)\[(#.*)\]'si",$line,$regs);
-	if (isset($regs[1])) $line = $regs[1];
-	$tag = (isset($regs[2])) ? $regs[2] : ''; // ID の取得
-	$str = trim(strip_htmltag(convert_html($line)));
-	return array($str,$tag);
-}
-
 function toc_convert_index($idx)
 {
 	global $plugin_num_proc;
+	global $fixed_heading_edited;
 	static $num = 0;
 
 	// 不要な行のカウント
@@ -243,7 +230,10 @@ function toc_convert_index($idx)
 	}
 
 	$plugin_num_proc = 'toc'.$num++;
+	$bkup_fixed_heading_edited = $fixed_heading_edited;
+	$fixed_heading_edited = 0;
 	$html = convert_html($lines);
+	$fixed_heading_edited = $bkup_fixed_heading_edited;
 
 	$rc = array();
 	$i = 0;
