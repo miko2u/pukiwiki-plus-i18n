@@ -3,14 +3,15 @@
  * PukiWiki Plus! ログ閲覧プラグイン
  *
  * @copyright	Copyright &copy; 2004-2008, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version	$Id: logview.php,v 0.17 2008/06/30 00:38:00 upk Exp $
+ * @version	$Id: logview.php,v 0.18 2008/07/06 18:53:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 
 defined('MAX_LINE')      or define('MAX_LINE', 200);
 defined('VIEW_ROBOTS')   or define('VIEW_ROBOTS', '0');   // robots は表示しない
 defined('USE_UA_OPTION') or define('USE_UA_OPTION', '0'); // オプション
-defined('PLUGIN_LOGVIEW_COLOR_AUTH_API') or define('PLUGIN_LOGVIEW_COLOR_AUTH_API','#009900');
+defined('PLUGIN_LOGVIEW_COLOR_AUTH_API')   or define('PLUGIN_LOGVIEW_COLOR_AUTH_API','#009900');
+defined('PLUGIN_LOGVIEW_DISPLAY_AUTH_API') or define('PLUGIN_LOGVIEW_DISPLAY_AUTH_API','1');
 
 /**
  * 初期処理
@@ -354,7 +355,11 @@ function logview_user_list(& $fld)
 	foreach($check_list as $user) {
 		$ctr++;
 		// $ret .= '('.$ctr.') ['.$user['auth_api'].']'.$user['name']."\n";
-		$ret .= '('.$ctr.') '.$user['name'].' <small><span style="color: '.PLUGIN_LOGVIEW_COLOR_AUTH_API.'">'.$user['auth_api']."</span></small>\n";
+		$ret .= '('.$ctr.') '.$user['name'];
+		if (PLUGIN_LOGVIEW_DISPLAY_AUTH_API) {
+			$ret .= ' <small><span style="color: '.PLUGIN_LOGVIEW_COLOR_AUTH_API.'">'.$user['auth_api'].'</span></small>';
+		}
+		$ret .= "\n";
 	}
 
 	return $ret;
