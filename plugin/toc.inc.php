@@ -3,7 +3,7 @@
  * PukiWiki Plus! 目次プラグイン
  *
  * @copyright	Copyright &copy; 2004-2006,2008, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version	$Id: toc.php,v 0.14 2008/07/06 01:05:00 upk Exp $
+ * @version	$Id: toc.php,v 0.15 2008/07/06 12:22:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License
  * @link	http://jo1upk.blogdns.net/saito/
  */
@@ -241,7 +241,7 @@ function toc_convert_index($idx)
 		$line = trim($line);
 		if (empty($line)) continue;
 		$matches = array();
-		preg_match("'^<h(.?)(.*?)>(.*?)</h.?>'si", $line, $matches);
+		preg_match("'<h(.?)(.*?)>(.*?)</h.?>'si", $line, $matches);
 		if (!empty($matches[2])) {
 			preg_match("'^id=\"(.*?)\"'si", trim($matches[2]), $mat);
 			$matches[2] = $mat[1];
@@ -253,7 +253,7 @@ function toc_convert_index($idx)
 		}
 
 		$rc[$i]['tag'] = empty($matches[2]) ? '' : '#'.$matches[2];
-		$rc[$i]['dat'] = $matches[3];
+		$rc[$i]['dat'] = strip_htmltag($matches[3]);
 		$rc[$i]['lvl'] = $matches[1]-1;
 		$i++;
 	}
