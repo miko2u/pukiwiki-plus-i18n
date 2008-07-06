@@ -3,7 +3,7 @@
  * PukiWiki Plus! ログ閲覧プラグイン
  *
  * @copyright	Copyright &copy; 2004-2008, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version	$Id: logview.php,v 0.18 2008/07/06 18:53:00 upk Exp $
+ * @version	$Id: logview.php,v 0.19 2008/07/06 19:08:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 
@@ -354,8 +354,7 @@ function logview_user_list(& $fld)
 	$ctr = 0;
 	foreach($check_list as $user) {
 		$ctr++;
-		// $ret .= '('.$ctr.') ['.$user['auth_api'].']'.$user['name']."\n";
-		$ret .= '('.$ctr.') '.$user['name'];
+		$ret .= '<small><strong>'.$ctr.'.</strong></small>'.$user['name'];
 		if (PLUGIN_LOGVIEW_DISPLAY_AUTH_API) {
 			$ret .= ' <small><span style="color: '.PLUGIN_LOGVIEW_COLOR_AUTH_API.'">'.$user['auth_api'].'</span></small>';
 		}
