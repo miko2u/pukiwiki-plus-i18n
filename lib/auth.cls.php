@@ -28,8 +28,24 @@ class auth
 	 */
 	function check_auth()
 	{
+		$login = auth::check_auth_pw();
+		if (! empty($login)) return $login;
+
+		// 外部認証API
+		$auth_key = auth::get_user_name();
+
+		// 暫定管理者(su)
+		global $vars;
+		if (! isset($vars['pass'])) return $auth_key['nick'];
+		if (pkwk_login($vars['pass'])) return UNAME_ADM_CONTENTS_TEMP;
+		return $auth_key['nick'];
+	}
+
+	function check_auth_pw()
+	{
 		global $auth_type;
 
+		$login = '';
 		switch ($auth_type) {
 		case 1:
 			$login = auth::check_auth_basic();
@@ -43,16 +59,7 @@ class auth
 
 		// NTLM対応
 		list($domain, $login, $host, $pass) = auth::ntlm_decode();
-		if (! empty($login)) return $login;
-
-		// 外部認証API
-		$auth_key = auth::get_user_name();
-
-		// 暫定管理者(su)
-		global $vars;
-		if (! isset($vars['pass'])) return $auth_key['nick'];
-		if (pkwk_login($vars['pass'])) return UNAME_ADM_CONTENTS_TEMP;
-		return $auth_key['nick'];
+		return $login;
 	}
 
 	function check_auth_basic()
@@ -79,86 +86,40 @@ class auth
 		return '';
         }
 
-	/**
-	 * ユーザのROLEを取得
-	 * @static
-	 */
-	function get_role_level()
+	function get_user_info()
 	{
-		global $realm, $auth_type, $auth_users, $adminpass;
+		// Array ( [role] => 0 [nick] => [key] => [group] => [displayname] => [api] => )
+		$retval = auth::get_auth_pw_info();
+		if (!empty($retval['api'])) return $retval;
+		return auth::get_auth_api_info();
+	}
 
-		$login = auth::check_auth();
-		if (empty($login)) return ROLE_GUEST; // 未認証者
+	function get_auth_pw_info()
+	{
+		global $auth_users;
+		$retval = array('role'=>ROLE_GUEST,'nick'=>'','key'=>'','api'=>'','group'=>'','displayname'=>'');
+		$user = auth::check_auth_pw();
+		if (empty($user)) return $retval;
 
-		// $temp_admin = auth::is_temp_admin(); // 管理者パスワードなのかどうか
+		$retval['api'] = 'plus';
+		$retval['key'] = $retval['nick'] = $user;
 
 		// 登録者かどうか
-		if (! isset($auth_users[$login])) {
-			// 未登録者の場合
-			// 管理者パスワードと偶然一致した場合でも見做し認証者(ROLE_AUTH_TEMP)
-			//if ($login == UNAME_ADM_CONTENTS_TEMP && $temp_admin) return ROLE_ADM_CONTENTS_TEMP;
-
-			// 外部認証API
-			$auth_key = auth::get_user_name();
-			if (empty($auth_key['nick'])) return ROLE_AUTH_TEMP;
-			if (! empty($auth_key['key'])) {
-				$wkgrp = auth::get_role_wkgrp($auth_key['role'],$auth_key['key']);
-				return ($wkgrp == 0) ? $auth_key['role'] : $wkgrp;
-			}
-			return $auth_key['role'];
+		if (empty($auth_users[$user])) {
+                        // 未登録者の場合
+                        // 管理者パスワードと偶然一致した場合でも見做し認証者(ROLE_AUTH_TEMP)
+			$retval['role']  = ROLE_AUTH_TEMP;
+			return $retval;
 		}
 
-		// 設定されている役割を取得
-		$role = (empty($auth_users[$login][1])) ? ROLE_ENROLLEE : $auth_users[$login][1];
-		switch ($role) {
-		case ROLE_ADM: // サイト管理者
-		case ROLE_ADM_CONTENTS: // コンテンツ管理者
-		case ROLE_ENROLLEE: // 登録者
-			// パスワードまで一致していること
-			switch ($auth_type) {
-			case 1:
-				return (auth::auth_pw($auth_users)) ? $role : ROLE_AUTH;
-			case 2:
-				return (auth::auth_digest($realm,$auth_users)) ? $role : ROLE_AUTH;
-			}
-			return ROLE_AUTH;
-		//case ROLE_AUTH: // 認証者(pukiwiki)
-		//	return ($temp_admin) ? ROLE_ADM_CONTENTS_TEMP : ROLE_AUTH;
-		}
-		return ROLE_AUTH;
+		$retval['role']  = (empty($auth_users[$user][1])) ? ROLE_ENROLLEE : $auth_users[$user][1];
+		$retval['group'] = (empty($auth_users[$user][2])) ? '' : $auth_users[$user][2];
+		return $retval;
 	}
 
-	function get_role_wkgrp($role,$key)
+	function get_auth_api_info()
 	{
-		global $auth_wkgrp_user, $login_api;
-
-		$str_role = strval($role);
-
-		if (empty($login_api[$str_role])) return ROLE_GUEST;
-		$api_name = $login_api[$str_role];
-
-		if (empty($auth_wkgrp_user[$api_name][$key])) return ROLE_GUEST;
-
-		if (is_array($auth_wkgrp_user[$api_name][$key])) {
-			// displayname のみの定義などの考慮
-			return (isset($auth_wkgrp_user[$api_name][$key]['role'])) ? $auth_wkgrp_user[$api_name][$key]['role'] : ROLE_GUEST;
-		}
-		// 旧フォーマットの場合
-		return $auth_wkgrp_user[$api_name][$key];
-	}
-
-	function get_wkgrp_displayname($role,$key)
-	{
-		global $auth_wkgrp_user, $login_api;
-
-		$str_role = strval($role);
-		$api_name = $login_api[$str_role];
-		return empty($auth_wkgrp_user[$api_name][$key]['displayname']) ? '' : $auth_wkgrp_user[$api_name][$key]['displayname'];
-        }
-
-	function get_user_name()
-	{
-		global $auth_api;
+		global $auth_api, $auth_wkgrp_user;
 
 		foreach($auth_api as $api=>$val) {
 			// どうしても必要な場合のみ開始
@@ -174,17 +135,42 @@ class auth
 			if (exist_plugin($msg['api'])) {
 				$call_func = 'plugin_'.$msg['api'].'_get_user_name';
 				$auth_key = $call_func();
-				// $auth_key => role, name, nick, profile, key
-				// key - auth_wkgrp_user において、ユニークになる項目値
-				$displayname = auth::get_wkgrp_displayname($auth_key['role'],$auth_key['key']);
-				if (! empty($displayname)) {
-					$auth_key['nick'] = $displayname;
-					return $auth_key;
+				$auth_key['api'] = $msg['api'];
+				if (empty($auth_key['nick'])) array('role'=>ROLE_GUEST,'nick'=>'','key'=>'');
+
+				if (! empty($auth_wkgrp_user[$auth_key['api']][$auth_key['key']])) {
+					$val = & $auth_wkgrp_user[$auth_key['api']][$auth_key['key']];
+					$auth_key['role']
+						= (empty($val['role'])) ? ROLE_ENROLLEE : $val['role'];
+					$auth_key['group']
+						= (empty($val['group'])) ? '' : $val['group'];
+					$auth_key['displayname']
+						= (empty($val['displayname'])) ? $user : $val['displayname'];
 				}
-				if (! empty($auth_key['nick'])) return $auth_key;
-			}
+				return $auth_key;
+                        }
+                }
+		return array('role'=>ROLE_GUEST,'nick'=>'','key'=>'','group'=>'','displayname'=>'','api'=>'');
+	}
+
+	function get_user_name()
+	{
+		$auth_key = auth::get_user_info();
+		if (empty($auth_key['nick'])) return $auth_key;
+		if (! empty($auth_key['displayname'])) {
+			$auth_key['nick'] = $auth_key['displayname'];
 		}
-		return array('role'=>ROLE_GUEST,'nick'=>'');
+		return $auth_key;
+	}
+
+	/**
+	 * ユーザのROLEを取得
+	 * @static
+	 */
+	function get_role_level()
+	{
+		$info = auth::get_user_info();
+		return $info['role'];
 	}
 
 	/*
@@ -589,38 +575,53 @@ class auth
 
 	function is_auth_digest() { return version_compare(phpversion(), '5.1', '>='); }
 
-	function is_page_readable($uname, $page)
+	function is_page_readable($page,$uname,$gname='')
 	{
 		global $read_auth, $read_auth_pages;
-		// global $auth_method_type;
+		return auth::is_page_auth($page, $read_auth, $read_auth_pages, $uname, $gname);
+	}
 
-		if (! $read_auth) return TRUE;
+	function is_page_editable($page,$uname,$gname='')
+	{
+		global $edit_auth, $edit_auth_pages;
+                return auth::is_page_auth($page, $edit_auth, $edit_auth_pages, $uname, $gname);
+	}
+
+	function is_page_auth($page, $auth_flag, $auth_pages, $uname, $gname='')
+	{
+		if (! $auth_flag) return true;
 
 		// FIXME:
 		// ページ名一覧を生成する際に、contents の場合は、
 		// 全ページのソースをフルスキャンするため、現実的ではないためロジックからは外す
-		/*
-		$target_str = '';
-		if ($auth_method_type == 'pagename') {
-			$target_str = $page; // Page name
-		} else if ($auth_method_type == 'contents') {
-			$target_str = get_source($page, TRUE, TRUE); // Its contents
-		}
-		*/
+
 		$target_str = $page;
 
-		$user_list = array();
-		foreach($read_auth_pages as $key=>$val)
-			if (preg_match($key, $target_str))
-				$user_list = array_merge($user_list, explode(',', $val));
+		$user_list = $group_list = array();
+		foreach($auth_pages as $key=>$val) {
+			if (preg_match($key, $target_str)) {
+				if (is_array($val)) {
+					$user  = (empty($val['user']))  ? '' : $val['user'];
+					$group = (empty($val['group'])) ? '' : $val['group'];
+				} else {
+					$user = $val;
+					$group = '';
+				}
+				$user_list  = array_merge($user_list, explode(',', $user));
+				$group_list = array_merge($group_list, explode(',', $group));
+			}
+		}
 
-		if (empty($user_list)) return TRUE; // No limit
+		if (empty($user_list) && empty($group_list)) return true; // No limit
 
 		// 未認証者
-		if (empty($uname)) return FALSE;
+		if (empty($uname)) return false;
 
-		if (in_array($uname, $user_list)) return TRUE;
-		return FALSE;
+		// ユーザ名検査
+		if (in_array($uname, $user_list)) return true;
+		// グループ検査
+		if (in_array($gname, $group_list)) return true;
+		return false;
 	}
 
 	function get_existpages($dir = DATA_DIR, $ext = '.txt')
@@ -630,7 +631,7 @@ class auth
 		// ページ名の取得
 		$pages = get_existpages($dir, $ext);
 		// ユーザ名取得
-		$uname = auth::check_auth();
+		$auth_key = auth::get_user_info();
 		// コンテンツ管理者以上は、: のページも閲覧可能
 		$is_colon = auth::check_role('role_adm_contents');
 
@@ -638,7 +639,7 @@ class auth
 		// $now_role = auth::get_role_level();
 
 		foreach($pages as $file=>$page) {
-			if (! auth::is_page_readable($uname, $page)) continue;
+			if (! auth::is_page_readable($page, $auth_key['key'], $auth_key['group'])) continue;
 			if (substr($page,0,1) != ':') {
 				$rc[$file] = $page;
 				continue;

@@ -1,5 +1,5 @@
 <?php
-// $Id: recent.inc.php,v 1.25.2 2008/01/05 18:48:00 upk Exp $
+// $Id: recent.inc.php,v 1.25.3 2008/07/08 00:25:00 upk Exp $
 // Copyright (C)
 //   2005-2008 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
@@ -55,9 +55,11 @@ function plugin_recent_convert()
 	$lines = file_head(PLUGIN_RECENT_CACHE, $recent_lines);
 	if ($lines == FALSE) return '#recent(): File can not open' . '<br />' . "\n";
 
+	$auth_key = auth::get_user_info();
 	$date = $items = '';
 	foreach ($lines as $line) {
 		list($time, $page) = explode("\t", rtrim($line));
+		if (! auth::is_page_readable($page,$auth_key['key'],$auth_key['group'])) continue;
 
 		$_date = get_date($date_format, $time);
 		if ($date != $_date) {
