@@ -3,7 +3,7 @@
  * PukiWiki Plus! ログインプラグイン
  *
  * @copyright   Copyright &copy; 2004-2008, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: login.php,v 0.18 2008/06/25 01:47:00 upk Exp $
+ * @version     $Id: login.php,v 0.19 2008/07/08 02:20:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'auth.cls.php');
@@ -30,24 +30,16 @@ function plugin_login_init()
  */
 function plugin_login_convert()
 {
-	global $script, $vars, $auth_api, $_login_msg, $login_api;
+	global $script, $vars, $auth_api, $_login_msg;
 
 	@list($type) = func_get_args();
 	$type = (isset($type)) ? htmlspecialchars($type, ENT_QUOTES) : '';
-	$user = auth::check_auth();
 
-	if (!empty($user)) {
-		// list($role,$name,$nick,$url) = auth::get_user_name();
-		$auth_key = auth::get_user_name();
+	$auth_key = auth::get_user_info();
 
-		$role = strval($auth_key['role']);
-
-		if (isset($login_api[$role])) {
-			exist_plugin($login_api[$role]);
-			return do_plugin_convert($login_api[$role]);
-		}
-
-		return '<div><label>'.$_login_msg['msg_username'].'</label>:'.$user.'</div>';
+	if (!empty($auth_key['key'])) {
+		exist_plugin($auth_key['api']);
+		return do_plugin_convert($auth_key['api']);
 	}
 
 	$select = '';
@@ -92,23 +84,17 @@ EOD;
 
 function plugin_login_inline()
 {
-	global $_login_msg, $login_api;
-
 	if (PKWK_READONLY != ROLE_AUTH) return '';
 
-	$user = auth::check_auth();
+	$auth_key = auth::get_user_info();
 
 	// Offline
-	if (empty($user)) {
+	if (empty($auth_key['key'])) {
 		return plugin_login_auth_guide();
 	}
 
 	// Online
-	$role = strval(auth::get_role_level());
-	if (isset($login_api[$role])) {
-		return (exist_plugin($login_api[$role])) ? do_plugin_inline($login_api[$role]) : '';
-	}
-	return '';
+	return exist_plugin($auth_key['api']) ? do_plugin_inline($auth_key['api']) : '';
 }
 
 function plugin_login_auth_guide()
