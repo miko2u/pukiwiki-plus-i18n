@@ -3,7 +3,7 @@
  * PukiWiki Plus! ログ閲覧プラグイン
  *
  * @copyright	Copyright &copy; 2004-2008, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version	$Id: logview.php,v 0.19 2008/07/06 19:08:00 upk Exp $
+ * @version	$Id: logview.php,v 0.20 2008/07/09 01:22:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 
@@ -76,6 +76,8 @@ function plugin_logview_action()
 		}
 	}
 	unset($obj);
+
+	check_readable($page, false);
 
 	// 保存データの項目名を取得
 	$name = log::get_log_field($kind);
@@ -233,7 +235,7 @@ EOD;
 	switch ($kind) {
 	case 'login':
 	case 'check':
-		$body .= logview_user_list($fld);
+		$body .= logview_user_list($fld,$page);
 		break;
 	}
 
@@ -316,7 +318,7 @@ function logview_guess_user($data,$guess)
 	return $user;
 }
 
-function logview_user_list(& $fld)
+function logview_user_list(& $fld, $page)
 {
 	global $_logview_msg;
 
@@ -325,8 +327,14 @@ function logview_user_list(& $fld)
 
 	$all_user = auth::user_list();
 	$all_user_idx = 0;
+	$excludes_user = array();
 	foreach ($all_user as $auth_api=>$val1) {
 	foreach ($val1 as $user=>$val) {
+		$group = empty($val['group']) ? '' : $val['group'];
+		if (!auth::is_page_readable($page,$user,$group)) {
+			$excludes_user[$auth_api][$user] = '';
+			continue;
+		}
 		$all_user_idx++;
 	}}
 
@@ -337,8 +345,9 @@ function logview_user_list(& $fld)
 
 	$check_list = array();
 	foreach($all_user as $auth_api=>$val1) {
-	foreach($val1 as $id=>$val) {
+	foreach($val1 as $user=>$val) {
 		if (isset($user_list[$auth_api][$val['displayname']])) continue;
+		if (isset($excludes_user[$auth_api][$user])) continue;
 		$check_list[] = array('name'=>$val['displayname'],'auth_api'=>$auth_api);
 	}}
 
