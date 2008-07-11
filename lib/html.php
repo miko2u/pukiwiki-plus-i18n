@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: html.php,v 1.65.25 2008/06/25 01:41:00 upk Exp $
+// $Id: html.php,v 1.65.26 2008/07/11 21:53:00 upk Exp $
 // Copyright (C)
 //   2005-2008 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
@@ -237,7 +237,7 @@ function edit_form($page, $postdata, $digest = FALSE, $b_template = TRUE)
 
 	if($load_template_func && $b_template) {
 		$pages  = array();
-		foreach(get_existpages() as $_page) {
+		foreach(auth::get_existpages() as $_page) {
 			if (is_cantedit($_page) || check_non_list($_page))
 				continue;
 			$s_page = htmlspecialchars($_page);

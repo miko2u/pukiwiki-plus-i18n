@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: func.php,v 1.93.32 2008/02/24 18:52:00 upk Exp $
+// $Id: func.php,v 1.93.33 2008/07/11 21:52:00 upk Exp $
 // Copyright (C)
 //   2005-2008 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
@@ -238,7 +238,7 @@ function do_search($word, $type = 'AND', $non_format = FALSE, $base = '')
 	foreach ($keys as $key=>$value)
 		$keys[$key] = '/' . $value . '/S';
 
-	$pages = get_existpages();
+	$pages = auth::get_existpages();
 
 	// Avoid
 	if ($base != '') {

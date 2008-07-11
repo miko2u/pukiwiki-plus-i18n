@@ -3,7 +3,7 @@
  * PukiWiki Plus! 認証処理
  *
  * @author	Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth.cls.php,v 0.54 2008/06/21 23:14:00 upk Exp $
+ * @version     $Id: auth.cls.php,v 0.55 2008/07/11 21:57:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'auth.def.php');
@@ -584,6 +584,8 @@ class auth
 	function is_page_editable($page,$uname,$gname='')
 	{
 		global $edit_auth, $edit_auth_pages;
+		global $read_auth, $read_auth_pages;
+		if (! auth::is_page_auth($page, $read_auth, $read_auth_pages, $uname, $gname)) return false;
                 return auth::is_page_auth($page, $edit_auth, $edit_auth_pages, $uname, $gname);
 	}
 
