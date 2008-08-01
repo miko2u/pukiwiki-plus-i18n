@@ -3,7 +3,7 @@
  * PukiWiki Plus! 認証処理
  *
  * @author	Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth.cls.php,v 0.55 2008/07/11 21:57:00 upk Exp $
+ * @version     $Id: auth.cls.php,v 0.56 2008/08/01 20:31:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'auth.def.php');
@@ -611,6 +611,7 @@ class auth
 				}
 				$user_list  = array_merge($user_list, explode(',', $user));
 				$group_list = array_merge($group_list, explode(',', $group));
+				break;
 			}
 		}
 
