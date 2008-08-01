@@ -3,7 +3,7 @@
  * PukiWiki Plus! ログインプラグイン
  *
  * @copyright   Copyright &copy; 2004-2008, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: login.php,v 0.19 2008/07/08 02:20:00 upk Exp $
+ * @version     $Id: login.php,v 0.20 2008/08/02 02:47:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'auth.cls.php');
@@ -38,8 +38,18 @@ function plugin_login_convert()
 	$auth_key = auth::get_user_info();
 
 	if (!empty($auth_key['key'])) {
-		exist_plugin($auth_key['api']);
-		return do_plugin_convert($auth_key['api']);
+		if ($auth_key['api'] == 'plus') {
+			return <<<EOD
+<div>
+        <label>{$_login_msg['msg_username']}</label>:
+        {$auth_key['key']}
+</div>
+
+EOD;
+		} else {
+			exist_plugin($auth_key['api']);
+			return do_plugin_convert($auth_key['api']);
+		}
 	}
 
 	$select = '';
