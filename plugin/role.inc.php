@@ -2,8 +2,8 @@
 /**
  * PukiWiki Plus! role確認プラグイン
  *
- * @copyright	Copyright &copy; 2006-2007, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version	$Id: role.inc.php,v 0.2 2007/08/16 18:27:00 upk Exp $
+ * @copyright	Copyright &copy; 2006-2008, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * @version	$Id: role.inc.php,v 0.3 2008/08/05 00:40:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
@@ -30,11 +30,22 @@ function plugin_role_convert()
 	global $_role_msg;
 
 	$role = auth::get_role_level();
-
 	if ($role == 0) return '';
 
-	$usr_list = auth::get_user_list((int)$role);
+	$argv = func_get_args();
+	$i = count($argv);
+	if ($i < 2) {
+		return role_list($role);
+	}
 
+	$msg = $argv[$i-1];
+	if (! auth::is_check_role($argv[0])) return convert_html( str_replace("\r", "\n", $msg) );
+	return '';
+}
+
+function role_list($role)
+{
+	global $_role_msg;
 	$role_name = array(
 		$_role_msg['role_0'],
 		'',
@@ -44,16 +55,14 @@ function plugin_role_convert()
 		$_role_msg['role_5'],
 	);
 
-	$rc = <<<EOD
+	return <<<EOD
 <div>
-	<label>{$_role_msg['role']}</label>:
-	{$role_name[(int)$role]}($role)
+        <label>{$_role_msg['role']}</label>:
+        {$role_name[(int)$role]}($role)
 </div>
 
 EOD;
 
-	unset($role_name, $usr_list, $role, $_role_msg);
-	return $rc;
 }
 
 ?>

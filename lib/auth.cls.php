@@ -3,7 +3,7 @@
  * PukiWiki Plus! 認証処理
  *
  * @author	Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth.cls.php,v 0.56 2008/08/01 20:31:00 upk Exp $
+ * @version     $Id: auth.cls.php,v 0.57 2008/08/05 01:11:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'auth.def.php');
@@ -96,8 +96,8 @@ class auth
 
 	function get_auth_pw_info()
 	{
-		global $auth_users;
-		$retval = array('role'=>ROLE_GUEST,'nick'=>'','key'=>'','api'=>'','group'=>'','displayname'=>'');
+		global $auth_users, $defaultpage;
+		$retval = array('role'=>ROLE_GUEST,'nick'=>'','key'=>'','api'=>'','group'=>'','displayname'=>'','home'=>'');
 		$user = auth::check_auth_pw();
 		if (empty($user)) return $retval;
 
@@ -114,12 +114,13 @@ class auth
 
 		$retval['role']  = (empty($auth_users[$user][1])) ? ROLE_ENROLLEE : $auth_users[$user][1];
 		$retval['group'] = (empty($auth_users[$user][2])) ? '' : $auth_users[$user][2];
+		$retval['home']  = (empty($auth_users[$user][3])) ? $defaultpage : $auth_users[$user][3];
 		return $retval;
 	}
 
 	function get_auth_api_info()
 	{
-		global $auth_api, $auth_wkgrp_user;
+		global $auth_api, $auth_wkgrp_user, $defaultpage;
 
 		foreach($auth_api as $api=>$val) {
 			// どうしても必要な場合のみ開始
@@ -146,11 +147,13 @@ class auth
 						= (empty($val['group'])) ? '' : $val['group'];
 					$auth_key['displayname']
 						= (empty($val['displayname'])) ? $user : $val['displayname'];
+					$auth_key['home']
+						= (empty($val['home'])) ? $defaultpage : $val['home'];
 				}
 				return $auth_key;
                         }
                 }
-		return array('role'=>ROLE_GUEST,'nick'=>'','key'=>'','group'=>'','displayname'=>'','api'=>'');
+		return array('role'=>ROLE_GUEST,'nick'=>'','key'=>'','group'=>'','displayname'=>'','home'=>'','api'=>'');
 	}
 
 	function get_user_name()
@@ -597,17 +600,22 @@ class auth
 		// ページ名一覧を生成する際に、contents の場合は、
 		// 全ページのソースをフルスキャンするため、現実的ではないためロジックからは外す
 
+		$info = auth::get_user_info();
+
 		$target_str = $page;
 
 		$user_list = $group_list = array();
+		$role = '';
 		foreach($auth_pages as $key=>$val) {
 			if (preg_match($key, $target_str)) {
 				if (is_array($val)) {
 					$user  = (empty($val['user']))  ? '' : $val['user'];
 					$group = (empty($val['group'])) ? '' : $val['group'];
+					$role  = (empty($val['role']))  ? '' : $val['role'];
 				} else {
 					$user = $val;
 					$group = '';
+					$role = '';
 				}
 				$user_list  = array_merge($user_list, explode(',', $user));
 				$group_list = array_merge($group_list, explode(',', $group));
@@ -620,6 +628,8 @@ class auth
 		// 未認証者
 		if (empty($uname)) return false;
 
+		// role 検査
+		if ($role != '' && !auth::is_check_role($role)) return true;
 		// ユーザ名検査
 		if (in_array($uname, $user_list)) return true;
 		// グループ検査
@@ -729,13 +739,14 @@ class auth
 
 	function user_list()
 	{
-		global $auth_users, $auth_wkgrp_user;
+		global $auth_users, $auth_wkgrp_user, $defaultpage;
 		$rc = array();
 
 		foreach ($auth_users as $user=>$val) {
 			$role  = (empty($val[1])) ? ROLE_ENROLLEE : $val[1];
 			$group = (empty($val[2])) ? '' : $val[2];
-			$rc['plus'][$user] = array('role'=>$role,'displayname'=>$user,'group'=>$group);
+			$home  = (empty($val[3])) ? $defaultpage : $val[3];
+			$rc['plus'][$user] = array('role'=>$role,'displayname'=>$user,'group'=>$group,'home'=>$home);
 		}
 
 		foreach($auth_wkgrp_user as $api=>$val1) {
@@ -744,12 +755,14 @@ class auth
 					$role  = (empty($val['role'])) ? ROLE_ENROLLEE : $val['role'];
 					$group = (empty($val['group'])) ? '' : $val['group'];
 					$name  = (empty($val['displayname'])) ? $user : $val['displayname'];
+					$home  = (empty($val['home'])) ? $defaultpage : $val['home'];
 				} else {
 					$role = $val;
 					$group = '';
 					$name = $user;
+					$home = $defaultpage;
 				}
-				$rc[$api][$user] = array('role'=>$role, 'displayname'=>$name,'group'=>$group);
+				$rc[$api][$user] = array('role'=>$role, 'displayname'=>$name,'group'=>$group,'home'=>$home);
 			}
 		}
 		return $rc;

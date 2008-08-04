@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: pukiwiki.php,v 1.21.16 2008/06/25 01:42:00 upk Exp $
+// $Id: pukiwiki.php,v 1.21.17 2008/08/05 01:12:00 upk Exp $
 //
 // PukiWiki Plus! 1.4.*
 //  Copyright (C) 2002-2008 by PukiWiki Plus! Team
@@ -207,6 +207,13 @@ if ($is_protect) {
 // NOTE: if action plugin(command) use session, call pkwk_session_start()
 //       in plugin action-API function.
 pkwk_session_start();
+
+// Set Home
+$auth_key = auth::get_user_info();
+if (!empty($auth_key['home'])) {
+	if ($base == $defaultpage || $base == $auth_key['home'])
+		$base = $defaultpage = $auth_key['home'];
+}
 
 // Page output
 $title = htmlspecialchars(strip_bracket($base));

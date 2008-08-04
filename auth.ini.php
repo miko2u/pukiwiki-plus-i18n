@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: auth.ini.php,v 0.0.14 2008/07/08 00:43:00 upk Exp $
+// $Id: auth.ini.php,v 0.0.15 2008/08/05 01:09:00 upk Exp $
 // Copyright (C)
 //   2005-2008 PukiWiki Plus! Team
 // License: GPL v2 or (at your option) any later version
@@ -51,7 +51,7 @@ $auth_method_type = 'pagename'; // By Page name
 $read_auth = 0;
 
 $read_auth_pages = array(
-	// Regex                   Username or array('user'=>Username,'group'=>Groupname),
+	// Regex                   Username or array('user'=>Username,'group'=>Groupname,'role'=>Role),
 	'/:log/'		=> 'hoge',
 	'#ひきこもるほげ#'	=> 'hoge',
 	'#(ネタバレ|ねたばれ)#'	=> 'foo,bar,hoge',
@@ -62,7 +62,7 @@ $read_auth_pages = array(
 $edit_auth = 0;
 
 $edit_auth_pages = array(
-	// Regex                   Username or array('user'=>Username,'group'=>Groupname),
+	// Regex                   Username or array('user'=>Username,'group'=>Groupname,'role'=>Role),
 	'#Barの公開日記#'	=> 'bar',
 	'#ひきこもるほげ#'	=> 'hoge',
 	'#(ネタバレ|ねたばれ)#'	=> 'foo,bar,hoge',

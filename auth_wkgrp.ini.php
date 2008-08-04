@@ -6,7 +6,7 @@
 */
 
 $auth_wkgrp_user = array(
-	// ex. 'user_name' => array('role'=>ROLE_ADM, 'displayname'=>'ななし','group'=>''),
+	// ex. 'user_name' => array('role'=>ROLE_ADM, 'displayname'=>'ななし','group'=>'','home'=>''),
 	'typekey'	=> array(
 		// 'user_name1'	=> array('role'=>ROLE_ADM),
 		// 'user_name2'	=> array('role'=>ROLE_ADM_CONTENTS),
