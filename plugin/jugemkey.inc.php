@@ -4,7 +4,7 @@
  *
  * @copyright   Copyright &copy; 2006-2008, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: jugemkey.inc.php,v 0.13 2008/06/21 23:55:00 upk Exp $
+ * @version     $Id: jugemkey.inc.php,v 0.14 2008/08/04 04:25:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'hash.php');
@@ -37,7 +37,8 @@ class auth_jugemkey extends auth_api
 
 	function auth($frob)
 	{
-		$created = substr_replace(get_date('Y-m-d\TH:i:sO', UTIME), ':', -2, 0);
+		// $created = substr_replace(get_date('Y-m-d\TH:i:sO', UTIME), ':', -2, 0);
+		$created = str_replace('+0000', 'Z', gmdate('Y-m-d\TH:i:sO', time()));
 		$api_sig = hmac_sha1($this->sec_key,$this->api_key.$created.$frob);
 		$headers = array(
 			'X-JUGEMKEY-API-CREATED'=> $created,
@@ -59,7 +60,8 @@ class auth_jugemkey extends auth_api
 
 	function get_userinfo($token)
 	{
-		$created = substr_replace(get_date('Y-m-d\TH:i:sO', UTIME), ':', -2, 0);
+		//$created = substr_replace(get_date('Y-m-d\TH:i:sO', UTIME), ':', -2, 0);
+		$created = str_replace('+0000', 'Z', gmdate('Y-m-d\TH:i:sO', time()));
 		$api_sig = hmac_sha1($this->sec_key,$this->api_key.$created.$token);
 		$headers = array(
 			'X-JUGEMKEY-API-CREATED'=> $created,
