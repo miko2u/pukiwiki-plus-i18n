@@ -3,7 +3,7 @@
  * PukiWiki Plus! 認証処理
  *
  * @author	Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth.cls.php,v 0.60 2008/08/06 00:23:00 upk Exp $
+ * @version     $Id: auth.cls.php,v 0.61 2008/08/06 01:43:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'auth.def.php');
@@ -287,12 +287,11 @@ class auth
 
 	function is_check_role($chk_role)
 	{
-		static $now_role;
 		if ($chk_role == ROLE_GUEST) return FALSE;      // 機能無効
 		if ($chk_role == ROLE_FORCE) return TRUE;       // 強制
 
 		// 役割に応じた挙動の設定
-		if (!isset($now_role)) $now_role = (int)auth::get_role_level();
+		$now_role = (int)auth::get_role_level();
 		if ($now_role == ROLE_GUEST) return TRUE;
 		return ($now_role <= $chk_role) ? FALSE : TRUE;
 	}
@@ -579,36 +578,35 @@ class auth
 
 	function is_auth_digest() { return version_compare(phpversion(), '5.1', '>='); }
 
-	function is_page_readable($page)
+	function is_page_readable($page,$uname,$gname='')
 	{
 		global $read_auth, $read_auth_pages;
-		return auth::is_page_auth($page, $read_auth, $read_auth_pages);
+		return auth::is_page_auth($page, $read_auth, $read_auth_pages, $uname, $gname);
 	}
 
-	function is_page_editable($page)
+	function is_page_editable($page,$uname,$gname='')
 	{
 		global $edit_auth, $edit_auth_pages;
 		global $read_auth, $read_auth_pages;
-		if (! auth::is_page_auth($page, $read_auth, $read_auth_pages)) return false;
-                return auth::is_page_auth($page, $edit_auth, $edit_auth_pages);
+		if (! auth::is_page_auth($page, $read_auth, $read_auth_pages, $uname, $gname)) return false;
+                return auth::is_page_auth($page, $edit_auth, $edit_auth_pages, $uname, $gname);
 	}
 
-	function is_page_auth($page, $auth_flag, $auth_pages)
+	function is_page_auth($page, $auth_flag, $auth_pages, $uname, $gname='')
 	{
-		static $info;
-
 		if (! $auth_flag) return true;
-
-		if (! isset($info)) $info = auth::get_user_info();
 
 		// FIXME:
 		// ページ名一覧を生成する際に、contents の場合は、
 		// 全ページのソースをフルスキャンするため、現実的ではないためロジックからは外す
+
+		$info = auth::get_user_info();
+
 		$target_str = $page;
 		$user_list = $group_list = $role = '';
 		foreach($auth_pages as $key=>$val) {
 			if (preg_match($key, $target_str)) {
-				if (is_array($val)) {
+                                if (is_array($val)) {
 					$user_list  = (empty($val['user']))  ? '' : explode(',',$val['user']);
 					$group_list = (empty($val['group'])) ? '' : explode(',',$val['group']);
 					$role       = (empty($val['role']))  ? '' : $val['role'];
@@ -621,13 +619,13 @@ class auth
 
 		// No limit
 		if (empty($user_list) && empty($group_list) && empty($role)) return true;
-
 		// 未認証者
-		if (empty($info['api'])) return false;
+		if (empty($uname)) return false;
+
 		// ユーザ名検査
-		if (!empty($user_list) && in_array($info['nick'], $user_list)) return true;
+		if (!empty($user_list) && in_array($uname, $user_list)) return true;
 		// グループ検査
-		if (!empty($group_list) && !empty($info['group']) && in_array($info['group'], $group_list)) return true;
+		if (!empty($group_list) && !empty($gname) && in_array($gname, $group_list)) return true;
 		// role 検査
 		if (!empty($role) && !auth::is_check_role($role)) return true;
 		return false;
@@ -639,6 +637,8 @@ class auth
 
 		// ページ名の取得
 		$pages = get_existpages($dir, $ext);
+		// ユーザ名取得
+		$auth_key = auth::get_user_info();
 		// コンテンツ管理者以上は、: のページも閲覧可能
 		$is_colon = auth::check_role('role_adm_contents');
 
@@ -646,7 +646,7 @@ class auth
 		// $now_role = auth::get_role_level();
 
 		foreach($pages as $file=>$page) {
-			if (! auth::is_page_readable($page)) continue;
+			if (! auth::is_page_readable($page, $auth_key['key'], $auth_key['group'])) continue;
 			if (substr($page,0,1) != ':') {
 				$rc[$file] = $page;
 				continue;
