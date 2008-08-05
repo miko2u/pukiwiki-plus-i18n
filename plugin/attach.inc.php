@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: attach.inc.php,v 1.87.34 2008/03/23 14:46:00 upk Exp $
+// $Id: attach.inc.php,v 1.87.35 2008/08/06 02:21:00 upk Exp $
 // Copyright (C)
 //   2005-2008 PukiWiki Plus! Team
 //   2003-2007 PukiWiki Developers Team
@@ -1145,6 +1145,8 @@ class AttachPages
 				continue;
 
 			$_page = decode($matches[1]);
+			if (! check_readable($_page, FALSE, FALSE)) continue;
+
 			$_file = decode($matches[2]);
 			$_age  = isset($matches[3]) ? $matches[3] : 0;
 			if (! isset($this->pages[$_page])) {
