@@ -3,7 +3,7 @@
  * PukiWiki Plus! 認証処理
  *
  * @author	Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth.cls.php,v 0.59 2008/08/05 23:31:00 upk Exp $
+ * @version     $Id: auth.cls.php,v 0.60 2008/08/06 00:23:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'auth.def.php');
@@ -600,8 +600,6 @@ class auth
 		if (! $auth_flag) return true;
 
 		if (! isset($info)) $info = auth::get_user_info();
-		// 未認証者
-		if (empty($info['api'])) return false;
 
 		// FIXME:
 		// ページ名一覧を生成する際に、contents の場合は、
@@ -624,6 +622,8 @@ class auth
 		// No limit
 		if (empty($user_list) && empty($group_list) && empty($role)) return true;
 
+		// 未認証者
+		if (empty($info['api'])) return false;
 		// ユーザ名検査
 		if (!empty($user_list) && in_array($info['nick'], $user_list)) return true;
 		// グループ検査
