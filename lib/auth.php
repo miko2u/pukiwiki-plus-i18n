@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: auth.php,v 1.21.17 2008/07/08 00:07:00 upk Exp $
+// $Id: auth.php,v 1.21.18 2008/08/05 23:21:00 upk Exp $
 // Copyright (C)
 //   2005-2008 PukiWiki Plus! Team
 //   2003-2007 PukiWiki Developers Team
@@ -163,13 +163,12 @@ function edit_auth($page, $auth_flag = TRUE, $exit_flag = TRUE)
 
 	if (!$edit_auth) return true;
 
-	$info = auth::get_user_info();
+	$info = auth::get_user_info(); // 未認証(外部認証APIも含む)
 	if (empty($info['key'])) {
 		return $auth_flag ?  basic_auth($page, $auth_flag, $exit_flag, $edit_auth_pages, $_title['cannotedit']) : false;
 	}
 
-	if (auth::is_page_readable($page, $info['key'], $info['group']) &&
-	    auth::is_page_editable($page, $info['key'], $info['group'])) return true;
+	if (auth::is_page_readable($page) && auth::is_page_editable($page)) return true;
 
 	if ($exit_flag) {
 		$body = $title = str_replace('$1',htmlspecialchars(strip_bracket($page)), $_title['cannotedit']);
@@ -193,7 +192,7 @@ function read_auth($page, $auth_flag = TRUE, $exit_flag = TRUE)
 		return $auth_flag ? basic_auth($page, $auth_flag, $exit_flag, $read_auth_pages, $_title['cannotread']) : false;
 	}
 
-	if (auth::is_page_readable($page, $info['key'], $info['group'])) return true;
+	if (auth::is_page_readable($page)) return true;
 
 	if ($exit_flag) {
 		$body = $title = str_replace('$1',htmlspecialchars(strip_bracket($page)), $_title['cannotread']);
@@ -218,22 +217,20 @@ function basic_auth($page, $auth_flag, $exit_flag, $auth_pages, $title_cannot)
 		$target_str = get_source($page, TRUE, TRUE); // Its contents
 	}
 
-	$user_list = $group_list = array();
+	$user_list = array();
 	foreach($auth_pages as $key=>$val) {
 		if (preg_match($key, $target_str)) {
 			if (is_array($val)) {
 				$user  = (empty($val['user']))  ? '' : $val['user'];
-				$group = (empty($val['group'])) ? '' : $val['group'];
 			} else {
 				$user = $val;
-				$group = '';
 			}
+			if (empty($user)) continue;
 			$user_list  = array_merge($user_list, explode(',', $user));
-			$group_list = array_merge($group_list, explode(',', $group));
 		}
 	}
 
-	if (empty($user_list) && empty($group_list)) return TRUE; // No limit
+	if (empty($user_list)) return TRUE; // No limit
 
 	if (! auth::check_role('role_adm_contents')) return TRUE; // 既にコンテンツ管理者
 
