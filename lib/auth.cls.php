@@ -3,7 +3,7 @@
  * PukiWiki Plus! 認証処理
  *
  * @author	Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth.cls.php,v 0.58 2008/08/05 20:03:00 upk Exp $
+ * @version     $Id: auth.cls.php,v 0.59 2008/08/05 23:31:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'auth.def.php');
@@ -287,11 +287,12 @@ class auth
 
 	function is_check_role($chk_role)
 	{
+		static $now_role;
 		if ($chk_role == ROLE_GUEST) return FALSE;      // 機能無効
 		if ($chk_role == ROLE_FORCE) return TRUE;       // 強制
 
 		// 役割に応じた挙動の設定
-		$now_role = (int)auth::get_role_level();
+		if (!isset($now_role)) $now_role = (int)auth::get_role_level();
 		if ($now_role == ROLE_GUEST) return TRUE;
 		return ($now_role <= $chk_role) ? FALSE : TRUE;
 	}
