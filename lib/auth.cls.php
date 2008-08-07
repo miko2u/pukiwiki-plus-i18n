@@ -3,7 +3,7 @@
  * PukiWiki Plus! 認証処理
  *
  * @author	Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth.cls.php,v 0.61 2008/08/06 01:43:00 upk Exp $
+ * @version     $Id: auth.cls.php,v 0.62 2008/08/07 21:03:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'auth.def.php');
@@ -88,10 +88,16 @@ class auth
 
 	function get_user_info()
 	{
+		static $info;
+		if (isset($info)) return $info;
 		// Array ( [role] => 0 [nick] => [key] => [group] => [displayname] => [api] => )
 		$retval = auth::get_auth_pw_info();
-		if (!empty($retval['api'])) return $retval;
-		return auth::get_auth_api_info();
+		if (!empty($retval['api'])) {
+			$info = $retval;
+			return $info;
+		}
+		$info = auth::get_auth_api_info();
+		return $info;
 	}
 
 	function get_auth_pw_info()
