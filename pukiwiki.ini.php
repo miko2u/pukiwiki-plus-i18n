@@ -280,6 +280,10 @@ if ($spam) {
 	//$spam['exitmode'] = 'dump'; // Dump progress
 }
 
+// SPAM check for Posted Countory(Based on Apache+mod_geoip+GeoIP)
+$allow_countory = array();
+$deny_countory = array();
+
 /////////////////////////////////////////////////
 // TrackBack feature
 
