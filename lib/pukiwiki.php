@@ -116,12 +116,12 @@ if (SpamCheckBAN($_SERVER['REMOTE_ADDR'])) die();
 if ($spam && $method != 'GET') {
 	// Block SPAM countory
         if (isset($_SERVER['GEOIP_COUNTRY_CODE'])) {
-                if (isset($deny_countory) && !is_empty($deny_countory)) {
+                if (isset($deny_countory) && !empty($deny_countory)) {
                         if (in_array($_SERVER['GEOIP_COUNTRY_CODE'], $deny_countory)) {
                                 die('Sorry');
                         }
                 }
-                if (isset($allow_countory) && !is_empty($allow_countory)) {
+                if (isset($allow_countory) && !empty($allow_countory)) {
                         if (!in_array($_SERVER['GEOIP_COUNTRY_CODE'], $allow_countory)) {
                                 die('Sorry');
                         }
