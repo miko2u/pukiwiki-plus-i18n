@@ -4,7 +4,7 @@
  *
  * @copyright   Copyright &copy; 2006,2008, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: hatena.inc.php,v 0.13 2008/06/21 23:55:00 upk Exp $
+ * @version     $Id: hatena.inc.php,v 0.14 2008/08/07 21:29:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'auth_api.cls.php');
@@ -107,8 +107,9 @@ function plugin_hatena_convert()
 		// $name = array('name','ts','image_url','thumbnail_url');
 		$logout_url = $script.'?plugin=hatena';
 		if (! empty($vars['page'])) {
-			$logout_url .= '&amp;page='.rawurlencode($vars['page']).'&amp;logout';
+			$logout_url .= '&amp;page='.rawurlencode($vars['page']);
 		}
+		$logout_url .= '&amp;logout';
 
 		return <<<EOD
 <div>
@@ -161,8 +162,9 @@ function plugin_hatena_inline()
 		$link = $name['name'].'<img src="'.$name['thumbnail_url'].'" alt="id:'.$name['name'].'" />';
 		$logout_url = $script.'?plugin=hatena';
 		if (! empty($vars['page'])) {
-			$logout_url .= '&amp;page='.rawurlencode($vars['page']).'&amp;logout';
+			$logout_url .= '&amp;page='.rawurlencode($vars['page']);
 		}
+		$logout_url .= '&amp;logout';
 		return sprintf($_hatena_msg['msg_logined'],$link) .
 			'(<a href="'.$logout_url.'">'.$_hatena_msg['msg_logout'].'</a>)';
 	}
