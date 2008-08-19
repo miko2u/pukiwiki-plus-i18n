@@ -3,7 +3,7 @@
  * PukiWiki Plus! ログ閲覧プラグイン
  *
  * @copyright	Copyright &copy; 2004-2008, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version	$Id: logview.php,v 0.20 2008/07/09 01:22:00 upk Exp $
+ * @version	$Id: logview.php,v 0.21 2008/08/19 01:46:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 
@@ -235,7 +235,7 @@ EOD;
 	switch ($kind) {
 	case 'login':
 	case 'check':
-		$body .= logview_user_list($fld,$page);
+		$body .= logview_user_list($fld,$page,$kind);
 		break;
 	}
 
@@ -318,7 +318,7 @@ function logview_guess_user($data,$guess)
 	return $user;
 }
 
-function logview_user_list(& $fld, $page)
+function logview_user_list(& $fld, $page,$kind)
 {
 	global $_logview_msg;
 
@@ -331,7 +331,7 @@ function logview_user_list(& $fld, $page)
 	foreach ($all_user as $auth_api=>$val1) {
 	foreach ($val1 as $user=>$val) {
 		$group = empty($val['group']) ? '' : $val['group'];
-		if (!auth::is_page_readable($page,$user,$group)) {
+		if ($kind != 'login' && !auth::is_page_readable($page,$user,$group)) {
 			$excludes_user[$auth_api][$user] = '';
 			continue;
 		}
