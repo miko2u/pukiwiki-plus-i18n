@@ -2,32 +2,17 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: vote2.inc.php,v 0.12.6 2006/02/27 21:57:00 upk Exp $
+// $Id: vote2.inc.php,v 0.12.7 2008/09/14 23:47:00 upk Exp $
 // based on vote.inc.php v1.14
 //
 // v0.2はインラインのリンクにtitleを付けた。
 //
 require_once(LIB_DIR.'barchart.cls.php');
 
-// 連続投票禁止時間
-if (!defined('VOTE2_COOKIE_EXPIRED')) {
-	define('VOTE2_COOKIE_EXPIRED', 60*60*24*3);
-}
-
-// 棒グラフの背景色
-if (!defined('VOTE2_COLOR_BG')) {
-	define('VOTE2_COLOR_BG', '#d0d8e0');
-        // define('VOTE2_COLOR_BG', '#eef5ff');
-}
-// 棒グラフの枠色
-if (!defined('VOTE2_COLOR_BORDER')) {
-	define('VOTE2_COLOR_BORDER', '#ccd5dd');
-}
-
-// 棒の表示色 (青)
-if (!defined('VOTE2_COLOR_BAR')) {
-	define('VOTE2_COLOR_BAR', '#0000ff');
-}
+defined('VOTE2_COOKIE_EXPIRED') or define('VOTE2_COOKIE_EXPIRED', 60*60*24*3);	// 連続投票禁止時間
+defined('VOTE2_COLOR_BG')       or define('VOTE2_COLOR_BG',     '#d0d8e0');	// 棒グラフの背景色
+defined('VOTE2_COLOR_BORDER')   or define('VOTE2_COLOR_BORDER', '#ccd5dd');	// 棒グラフの枠色
+defined('VOTE2_COLOR_BAR')      or define('VOTE2_COLOR_BAR',    '#0000ff');	// 棒の表示色 (青)
 
 function plugin_vote2_init()
 {
@@ -140,21 +125,21 @@ function plugin_vote2_inline()
 
 	foreach ( $args as $opt ){
 		$opt = trim($opt);
-		if ( $opt == '' ) continue;
-		if ( $opt == $str_notimestamp ) continue;
-		if ( $opt == $str_nonumber ) {
+
+		switch ($opt) {
+		case '':
+		case $str_notimestamp:
+			continue;
+		case $str_nonumber:
 			$nonumber = TRUE;
 			continue;
-		}
-		if ( $opt == $str_nolabel ) {
+		case $str_nolabel:
 			$nolabel = TRUE;
 			continue;
-		}
-		if ( $opt == $str_notitle ) {
+		case $str_notitle:
 			$notitle = TRUE;
 			continue;
-		}
-		if ( $opt == $str_barchart ) {
+		case $str_barchart:
 			$barchart = TRUE;
 			continue;
 		}
@@ -476,10 +461,17 @@ $_msg_collided = _("It seems that someone has already updated this page while yo
 				if ( $arg == '' ) continue;
 				if ( $arg == $str_notimestamp ) {
 					$notimestamp = TRUE;
+					$vote[] = $arg;
 					continue;
 				}
-				if ( $arg == $str_nonumber || $arg == $str_nolabel || $arg == $str_notitle ) continue;
-				if (preg_match("/^.+(?==)=[+-]?\d+[bir]?$/",$arg,$match)) continue;
+				if ( $arg == $str_nonumber || $arg == $str_nolabel || $arg == $str_notitle ) {
+					$vote[] = $arg;
+					continue;
+				}
+				if (preg_match("/^.+(?==)=[+-]?\d+[bir]?$/",$arg,$match)) {
+					$vote[] = $arg;
+					continue;
+				}
 				if ( $name == '' and preg_match("/^(.*)\[(\d+)\]$/",$arg,$match)) {
 					$name = $match[1];
 					$cnt  = $match[2];
