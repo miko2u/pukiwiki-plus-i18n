@@ -3,7 +3,7 @@
  * Language judgment (言語判定)
  *
  * @copyright   Copyright &copy; 2005-2006,2008, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: lang.php,v 0.25 2008/01/11 01:09:00 upk Exp $
+ * @version     $Id: lang.php,v 0.26 2008/10/05 21:07:00 upk Exp $
  *
  */
 
@@ -512,6 +512,8 @@ class accept_language
 			}
 		}
 		if ($sort) {
+			uasort($rc,create_function('$a,$b','return ($a[1] == $b[1]) ? 0 : (($a[1] > $b[1]) ? -1 : 1);'));
+			// usort: 比較結果が等しい場合、 配列の順番は定義されない
 			usort($rc,create_function('$a,$b','return ($a[1] == $b[1]) ? 0 : (($a[1] > $b[1]) ? -1 : 1);'));
 		}
 		return $rc;
