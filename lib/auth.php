@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: auth.php,v 1.21.18 2008/08/06 01:44:00 upk Exp $
+// $Id: auth.php,v 1.21.19 2008/11/13 02:09:00 upk Exp $
 // Copyright (C)
 //   2005-2008 PukiWiki Plus! Team
 //   2003-2007 PukiWiki Developers Team
@@ -190,7 +190,13 @@ function read_auth($page, $auth_flag = TRUE, $exit_flag = TRUE)
 
 	$info = auth::get_user_info();
 	if (empty($info['key'])) {
-		return $auth_flag ? basic_auth($page, $auth_flag, $exit_flag, $read_auth_pages, $_title['cannotread']) : false;
+		// return $auth_flag ? basic_auth($page, $auth_flag, $exit_flag, $read_auth_pages, $_title['cannotread']) : false;
+		if ($auth_flag) {
+			return  basic_auth($page, $auth_flag, $exit_flag, $read_auth_pages, $_title['cannotread']);
+		} else {
+			// 未認証時で認証不要($auth_flag)であっても、制限付きページかの判定が必要
+			return auth::is_page_readable($page, '', '');
+		}
 	}
 
 	if (auth::is_page_readable($page, $info['key'], $info['group'])) return true;
