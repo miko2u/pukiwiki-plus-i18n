@@ -1,8 +1,8 @@
 <?php
-// $Id: skeylist.inc.php,v 0.10 2007/06/13 19:12:00 upk Exp $
+// $Id: skeylist.inc.php,v 0.11 2008/11/16 23:29:00 upk Exp $
 /*
  * PukiWiki 人気検索キープラグイン
- * (C) 2004-2007, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * (C) 2004-2008, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * License: GPL
 */
 
@@ -56,7 +56,7 @@ function plugin_skeylist_action()
 
 	$retval['body']  = '<div>';
 	$retval['body'] .= (empty($data)) ? $_skeylist_msg['no_data'] : $data;
-	$retval['body'] .= "<div>\n";
+	$retval['body'] .= "</div>\n";
 	return $retval;
 }
 
