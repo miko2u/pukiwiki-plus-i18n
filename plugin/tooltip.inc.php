@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: tooltip.inc.php,v 0.6.2 2008/01/05 18:53:00 upk Exp $
+// $Id: tooltip.inc.php,v 0.6.3 2008/11/18 01:50:00 upk Exp $
 //
 /* 
 *プラグイン tooltip
@@ -59,10 +59,10 @@ function plugin_tooltip_inline()
 
 	if ( $glossary == '' ){
 		$glossary = plugin_tooltip_get_glossary($term,$glossary_page,FALSE);
-		$debug .= "B=$glossary/";
+		// $debug .= "B=$glossary/";
 		if ( $glossary === FALSE ) {
 			$glossary = plugin_tooltip_get_page_title($term);
-			if ( $glossary === FALSE ) $glossary = "";
+			if ( $glossary === FALSE ) $glossary = '';
 		}
 	}
 	$s_glossary = htmlspecialchars($glossary);
@@ -103,12 +103,20 @@ function plugin_tooltip_get_page_title($term)
 // 用語集を変えた場合のキャッシュがうまく記述できない。
 function plugin_tooltip_get_glossary($term,$g_page,$plain)
 {
-	global $_tooltip_messages;
+	global $_tooltip_messages, $glossarypage;
 	static $aglossary = '';
 
 	if ( $aglossary == '' ) {
 		$aglossary = array();
-		$page = ( $g_page != '' )  ? $g_page : $_tooltip_messages['page_glossary'];
+		// $page = ( $g_page != '' )  ? $g_page : $_tooltip_messages['page_glossary'];
+		if (!empty($g_page)) {
+			$page = $g_page;
+		} else
+		if (!empty($glossarypage)) {
+			$page = $glossarypage;
+		} else {
+			$page = $_tooltip_messages['page_glossary'];
+		}
 		if ( ! is_page($page) ) return FALSE;
 		$src = get_source($page);
 		foreach ( $_tooltip_messages['defaults'] as $t=>$d ){
