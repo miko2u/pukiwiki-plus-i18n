@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: make_link.php,v 1.35.23 2008/02/24 18:46:00 upk Exp $
+// $Id: make_link.php,v 1.35.24 2008/11/22 20:26:00 upk Exp $
 // Copyright (C)
 //   2005-2008 PukiWiki Plus! Team
 //   2003-2006 PukiWiki Developers Team
@@ -873,7 +873,7 @@ function make_tooltips($term,$glossary_page='')
 	} elseif ($ajax) {
 		return '<span class="tooltip"' . 
 			' onmouseover="' . "javascript:this.style.backgroundColor='#ffe4e1';showGlossaryPopup('" . $script . "?plugin=tooltip&amp;q=" . $s_term . "',event,0.2);" . '"' .
-			' onmouseout="' . "javascript:this.style.backgroundColor='transparent';hideGlossaryPopup();" . '">' .
+			' onmouseout="' . "javascript:this.style.backgroundColor='transparent';" . '">' .
 			$term . '</span>';
 	} else {
 		return '<span class="tooltip" title="' . $s_glossary . '"' . 

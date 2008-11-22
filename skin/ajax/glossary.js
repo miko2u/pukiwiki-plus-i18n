@@ -1,8 +1,8 @@
 //
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: glossary.js,v 1.1 2005/05/26 02:43:27 miko Exp $
+// $Id: glossary.js,v 1.2 2008/11/22 20:25:00 upk Exp $
 // Copyright (C)
-//   2005      PukiWiki Plus! Team
+//   2005,2008 PukiWiki Plus! Team
 //
 // Glossary Popup function
 // Usage: onmouseover="showGlossaryPopup(url,event)" onmouseout="hideGlossaryPopup()"
@@ -52,6 +52,7 @@ function showGlossaryPopup(url,ev)
 					popupDiv.style.top = egY + y_adjust + "px";
 				}
 				popupDiv.innerHTML = htmldoc.responseText;
+				popupDiv.onclick = hideGlossaryPopup;
 				var popUpContainer = document.getElementById("popUpContainer");
 				if (popUpContainer) {
 					popUpContainer.appendChild(popupDiv);
