@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: backup.inc.php,v 1.27.19 2008/01/05 18:07:00 upk Exp $
+// $Id: backup.inc.php,v 1.27.20 2008/12/07 17:23:00 upk Exp $
 // Copyright (C)
 //   2005-2008 PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
@@ -352,6 +352,9 @@ function plugin_backup_convert()
 //	global $_msg_backuplist, $_msg_diff, $_msg_nowdiff, $_msg_source, $_msg_nobackup;
 //	global $_title_backup_delete;
 
+	$page   = isset($vars['page']) ? $vars['page']   : '';
+	check_readable($page, false);
+
 $_msg_backuplist       = _('List of Backups');
 $_msg_diff             = _('diff');
 $_msg_nowdiff          = _('diff current');
@@ -372,7 +375,6 @@ $_title_backup_delete  = _('Deleting backup of $1');
                 }
 	}
 
-	$page   = isset($vars['page'])   ? $vars['page']   : '';
 	$r_page = rawurlencode($page);
 	$s_page = htmlspecialchars($page);
 	$retval = array();

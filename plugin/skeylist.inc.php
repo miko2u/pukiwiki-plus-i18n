@@ -1,10 +1,12 @@
 <?php
-// $Id: skeylist.inc.php,v 0.11 2008/11/16 23:29:00 upk Exp $
-/*
+/**
  * PukiWiki 人気検索キープラグイン
- * (C) 2004-2008, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * License: GPL
-*/
+ *
+ * @copyright   Copyright &copy; 2004-2008, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * @version     $Id: skeylist.inc.php,v 0.12 2008/12/07 16:50:00 upk Exp $
+ * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
+ *
+ */
 
 // 検索エンジン
 // Google
@@ -32,6 +34,7 @@ function plugin_skeylist_action()
 	global $referer;
 
 	$page = (empty($vars['page'])) ? '' : htmlspecialchars($vars['page'], ENT_QUOTES);
+	check_readable($page, false);
 	$retval['msg']  = sprintf($_skeylist_msg['title'],$page);
 	if (! $referer) {
 		$retval['body'] = '<div>'.$_skeylist_msg['not_effective']."</div>\n";
@@ -70,6 +73,7 @@ function plugin_skeylist_convert()
 
 	list($page,$max) = func_get_args();
 	if (empty($page)) $page = htmlspecialchars($vars['page'], ENT_QUOTES);
+	check_readable($page, false);
 	$max = (empty($max)) ? 10 : htmlspecialchars($max, ENT_QUOTES);
 
 	// $data = tb_get(tb_get_filename($page,'.ref'));

@@ -1,9 +1,9 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: referer.inc.php,v 1.10.8 2007/06/13 19:12:00 upk Exp $
+// $Id: referer.inc.php,v 1.10.9 2008/12/07 16:55:00 upk Exp $
 // Copyright (C)
 //   2007           PukiWiki Plus! Team
-//   2003,2005-2007 Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+//   2003,2005-2008 Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
 // License: GPL
 //
 // Referer Plugin(Show Related-Link Plugin)
@@ -37,6 +37,7 @@ function plugin_referer_action()
 	if (! $referer) return array('msg'=>'','body'=>'');
 
 	if (isset($vars['page']) && is_page($vars['page'])) {
+		check_readable($page, false);
 		$sort = (empty($vars['sort'])) ? '0d' : $vars['sort'];
 		return array(
 			'msg'  => $_referer_msg['msg_H0_Refer'],
