@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: func.php,v 1.93.34 2008/08/31 00:09:00 upk Exp $
+// $Id: func.php,v 1.93.35 2008/12/22 00:12:00 upk Exp $
 // Copyright (C)
 //   2005-2008 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
@@ -547,7 +547,10 @@ function get_date($format, $timestamp = NULL)
 	for($i=0;$i<$l;$i++) {
 		$zone .= '\\'.substr(ZONE,$i,1);
 	}
+
+	$format = str_replace('\T','$$$',$format); // \T の置換は除く
 	$format = str_replace('T',$zone,$format);
+	$format = str_replace('$$$','\T',$format); // \T に戻す
 
 	$time = ZONETIME + (($timestamp !== NULL) ? $timestamp : UTIME);
 	$str = gmdate($format, $time);
