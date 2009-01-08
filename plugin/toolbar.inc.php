@@ -1,7 +1,7 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: toolbar.php,v 0.2.11 2008/01/07 03:00:00 upk Exp $
-// Copyright (C) 2005,2007-2008 PukiWiki Plus! Team
+// $Id: toolbar.php,v 0.2.12 2009/01/19 00:25:00 upk Exp $
+// Copyright (C) 2005,2007-2009 PukiWiki Plus! Team
 // License: GPL v2
 //
 
@@ -104,6 +104,7 @@ function plugin_toolbar_convert()
 			if ($is_readonly) break;
 		case 'reload':
 		case 'print':
+		case 'full':
 			if (!$is_read) break;
 		default:
 			if ($body != '') { $body .= "\n"; }
@@ -144,10 +145,11 @@ $_IMAGE['skin']['skeylist'] = 'plus/skeylist.png';
 $_IMAGE['skin']['linklist'] = 'plus/linklist.png';
 $_IMAGE['skin']['log']      = 'log.png';
 $_IMAGE['skin']['print']    = 'plus/print.png';
+$_IMAGE['skin']['full']     = 'plus/full.png';
 
 
-	$lang = $_LANG['skin'];
-	$link = $_LINK;
+	$lang  = $_LANG['skin'];
+	$link  = $_LINK;
 	$image = $_IMAGE['skin'];
 
 	if (!isset($lang[$key])) { return '<!--LANG NOT FOUND-->'; }

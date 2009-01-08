@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: resource.php,v 0.5 2008/06/25 01:43:00 upk Exp $
+// $Id: resource.php,v 0.6 2009/01/09 00:31:00 upk Exp $
 //
 // Resource of String
 // Warning: This file is PukiWiki "core" resource strings.
@@ -83,6 +83,7 @@ $_LANG['skin'] = array(
 	'reload'    => _('Reload'),
 	'rename'    => _('Rename'),
 	'print'     => _('Image of print'),
+	'full'      => _('Full screen'),
 	'rss'       => _('RSS of recent changes'),
 	'rss10'     => _('RSS of recent changes'),
 	'rss20'     => _('RSS of recent changes'),

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-06-26 02:14+0900\n"
+"POT-Creation-Date: 2009-01-09 00:37+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -52,7 +52,7 @@ msgstr ""
 msgid "Freeze"
 msgstr ""
 
-#: ../../lib/resource.php:19 ../../lib/resource.php:96
+#: ../../lib/resource.php:19 ../../lib/resource.php:97
 msgid "Unfreeze"
 msgstr ""
 
@@ -123,7 +123,7 @@ msgstr ""
 msgid "Add"
 msgstr ""
 
-#: ../../lib/resource.php:43 ../../lib/resource.php:91
+#: ../../lib/resource.php:43 ../../lib/resource.php:92
 msgid "Search"
 msgstr ""
 
@@ -235,64 +235,68 @@ msgstr ""
 msgid "Image of print"
 msgstr ""
 
-#: ../../lib/resource.php:86 ../../lib/resource.php:87
-#: ../../lib/resource.php:88 ../../lib/resource.php:89
-#: ../../lib/resource.php:90
+#: ../../lib/resource.php:86
+msgid "Full screen"
+msgstr ""
+
+#: ../../lib/resource.php:87 ../../lib/resource.php:88
+#: ../../lib/resource.php:89 ../../lib/resource.php:90
+#: ../../lib/resource.php:91
 msgid "RSS of recent changes"
 msgstr ""
 
-#: ../../lib/resource.php:92
+#: ../../lib/resource.php:93
 msgid "Source"
 msgstr ""
 
-#: ../../lib/resource.php:93
+#: ../../lib/resource.php:94
 msgid "Template"
 msgstr ""
 
-#: ../../lib/resource.php:94
+#: ../../lib/resource.php:95
 msgid "Front page"
 msgstr ""
 
-#: ../../lib/resource.php:95
+#: ../../lib/resource.php:96
 msgid "Trackback"
 msgstr ""
 
-#: ../../lib/resource.php:97
+#: ../../lib/resource.php:98
 msgid "Upload"
 msgstr ""
 
-#: ../../lib/resource.php:98
+#: ../../lib/resource.php:99
 msgid "Search Key List"
 msgstr ""
 
-#: ../../lib/resource.php:99
+#: ../../lib/resource.php:100
 msgid "Link List"
 msgstr ""
 
-#: ../../lib/resource.php:100
+#: ../../lib/resource.php:101
 msgid "Roll Book"
 msgstr ""
 
-#: ../../lib/resource.php:101
+#: ../../lib/resource.php:102
 msgid "Confirmation list"
 msgstr ""
 
-#: ../../lib/resource.php:102
+#: ../../lib/resource.php:103
 msgid "Browse Log"
 msgstr ""
 
-#: ../../lib/resource.php:103
+#: ../../lib/resource.php:104
 msgid "Update Log"
 msgstr ""
 
-#: ../../lib/resource.php:104
+#: ../../lib/resource.php:105
 msgid "Download Log"
 msgstr ""
 
-#: ../../lib/resource.php:105
+#: ../../lib/resource.php:106
 msgid "Log"
 msgstr ""
 
-#: ../../lib/resource.php:106
+#: ../../lib/resource.php:107
 msgid "Logo"
 msgstr ""
