@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: html.php,v 1.65.27 2009/01/09 00:32:00 upk Exp $
+// $Id: html.php,v 1.65.28 2009/01/09 00:55:00 upk Exp $
 // Copyright (C)
 //   2005-2009 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
@@ -68,7 +68,7 @@ function catbody($title, $page, $body)
 	$_LINK['new']        = get_cmd_uri('newpage','','','refer='.$r_page);
 	$_LINK['newsub']     = get_cmd_uri('newpage_subdir','','','directory='.$r_page);
 	$_LINK['print']      = get_cmd_uri('print',$_page);
-	$_LINK['full']       = get_cmd_uri('print',$_page,'','nohead&nofoot');
+	$_LINK['full']       = get_cmd_uri('print',$_page).'&amp;nohead&amp;nofoot';
 	$_LINK['read']       = get_page_uri($_page);
 	$_LINK['recent']     = get_page_uri($whatsnew);
 	$_LINK['refer']      = get_cmd_uri('referer',$_page);
