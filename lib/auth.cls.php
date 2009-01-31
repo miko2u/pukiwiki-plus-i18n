@@ -3,7 +3,7 @@
  * PukiWiki Plus! 認証処理
  *
  * @author	Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth.cls.php,v 0.63 2008/08/07 21:49:00 upk Exp $
+ * @version     $Id: auth.cls.php,v 0.64 2009/01/21 23:23:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'auth.def.php');
@@ -99,7 +99,7 @@ class auth
 	function get_auth_pw_info()
 	{
 		global $auth_users, $defaultpage;
-		$retval = array('role'=>ROLE_GUEST,'nick'=>'','key'=>'','api'=>'','group'=>'','displayname'=>'','home'=>'');
+		$retval = array('role'=>ROLE_GUEST,'nick'=>'','key'=>'','api'=>'','group'=>'','displayname'=>'','home'=>'','mypage'=>'');
 		$user = auth::check_auth_pw();
 		if (empty($user)) return $retval;
 
@@ -117,6 +117,7 @@ class auth
 		$retval['role']  = (empty($auth_users[$user][1])) ? ROLE_ENROLLEE : $auth_users[$user][1];
 		$retval['group'] = (empty($auth_users[$user][2])) ? '' : $auth_users[$user][2];
 		$retval['home']  = (empty($auth_users[$user][3])) ? $defaultpage : $auth_users[$user][3];
+		$retval['mypage']= (empty($auth_users[$user][4])) ? '' : $auth_users[$user][4];
 		return $retval;
 	}
 
@@ -139,8 +140,9 @@ class auth
 				$call_func = 'plugin_'.$msg['api'].'_get_user_name';
 				$auth_key = $call_func();
 				$auth_key['api'] = $msg['api'];
-				if (empty($auth_key['nick'])) array('role'=>ROLE_GUEST,'nick'=>'','key'=>'');
+				if (empty($auth_key['nick'])) return array('role'=>ROLE_GUEST,'nick'=>'','key'=>'','group'=>'','displayname'=>'','home'=>'','mypage'=>'','api'=>'');
 
+				// 上書き・追加する項目
 				if (! empty($auth_wkgrp_user[$auth_key['api']][$auth_key['key']])) {
 					$val = & $auth_wkgrp_user[$auth_key['api']][$auth_key['key']];
 					$auth_key['role']
@@ -151,11 +153,13 @@ class auth
 						= (empty($val['displayname'])) ? $user : $val['displayname'];
 					$auth_key['home']
 						= (empty($val['home'])) ? $defaultpage : $val['home'];
+					$auth_key['mypage']
+						= (empty($val['mypage'])) ? '' : $val['mypage'];
 				}
 				return $auth_key;
                         }
                 }
-		return array('role'=>ROLE_GUEST,'nick'=>'','key'=>'','group'=>'','displayname'=>'','home'=>'','api'=>'');
+		return array('role'=>ROLE_GUEST,'nick'=>'','key'=>'','group'=>'','displayname'=>'','home'=>'','mypage'=>'','api'=>'');
 	}
 
 	function get_user_name()
@@ -744,7 +748,8 @@ class auth
 			$role  = (empty($val[1])) ? ROLE_ENROLLEE : $val[1];
 			$group = (empty($val[2])) ? '' : $val[2];
 			$home  = (empty($val[3])) ? $defaultpage : $val[3];
-			$rc['plus'][$user] = array('role'=>$role,'displayname'=>$user,'group'=>$group,'home'=>$home);
+			$mypage= (empty($val[4])) ? '' : $val[4];
+			$rc['plus'][$user] = array('role'=>$role,'displayname'=>$user,'group'=>$group,'home'=>$home,'mypage'=>$mypage);
 		}
 
 		foreach($auth_wkgrp_user as $api=>$val1) {
@@ -754,13 +759,15 @@ class auth
 					$group = (empty($val['group'])) ? '' : $val['group'];
 					$name  = (empty($val['displayname'])) ? $user : $val['displayname'];
 					$home  = (empty($val['home'])) ? $defaultpage : $val['home'];
+					$mypage= (empty($val['mypage'])) ? '' : $val['mypage'];
 				} else {
 					$role = $val;
 					$group = '';
 					$name = $user;
 					$home = $defaultpage;
+					$mypage = '';
 				}
-				$rc[$api][$user] = array('role'=>$role, 'displayname'=>$name,'group'=>$group,'home'=>$home);
+				$rc[$api][$user] = array('role'=>$role, 'displayname'=>$name,'group'=>$group,'home'=>$home,'mypage'=>$mypage);
 			}
 		}
 		return $rc;
