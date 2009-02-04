@@ -477,6 +477,7 @@ $use_trans_sid_address = array(
 	'210.228.189.0/24',
 	'211.8.159.128/25',
 	// Willcom 2006/11/20 http://www.willcom-inc.com/ja/service/contents_service/club_air_edge/for_phone/ip/
+	//                    http://www.willcom-inc.com/ja/service/contents_service/create/center_info/index.html
 	'61.198.129.0/24',
 //	'61.198.130.0/24', //del 06/11/20
 	'61.198.132.0/24', //add 08/10/02
