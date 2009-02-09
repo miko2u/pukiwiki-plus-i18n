@@ -1,8 +1,8 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: auth.php,v 1.21.19 2008/11/13 02:09:00 upk Exp $
+// $Id: auth.php,v 1.21.20 2009/02/10 01:16:00 upk Exp $
 // Copyright (C)
-//   2005-2008 PukiWiki Plus! Team
+//   2005-2009 PukiWiki Plus! Team
 //   2003-2007 PukiWiki Developers Team
 // License: GPL v2 or (at your option) any later version
 //
@@ -164,12 +164,13 @@ function edit_auth($page, $auth_flag = TRUE, $exit_flag = TRUE)
 	if (!$edit_auth) return true;
 
 	$info = auth::get_user_info();
-	if (empty($info['key'])) {
-		return $auth_flag ?  basic_auth($page, $auth_flag, $exit_flag, $edit_auth_pages, $_title['cannotedit']) : false;
+	if (!empty($info['key']) &&
+	    auth::is_page_readable($page, $info['key'], $info['group']) &&
+	    auth::is_page_editable($page, $info['key'], $info['group'])) {
+		return true;
+	} else {
+		return $auth_flag ? basic_auth($page, $auth_flag, $exit_flag, $edit_auth_pages, $_title['cannotedit']) : false;
 	}
-
-	if (auth::is_page_readable($page, $info['key'], $info['group']) &&
-	    auth::is_page_editable($page, $info['key'], $info['group'])) return true;
 
 	if ($exit_flag) {
 		$body = $title = str_replace('$1',htmlspecialchars(strip_bracket($page)), $_title['cannotedit']);
@@ -189,17 +190,14 @@ function read_auth($page, $auth_flag = TRUE, $exit_flag = TRUE)
 	if (!$read_auth) return true;
 
 	$info = auth::get_user_info();
-	if (empty($info['key'])) {
-		// return $auth_flag ? basic_auth($page, $auth_flag, $exit_flag, $read_auth_pages, $_title['cannotread']) : false;
-		if ($auth_flag) {
-			return  basic_auth($page, $auth_flag, $exit_flag, $read_auth_pages, $_title['cannotread']);
-		} else {
-			// 未認証時で認証不要($auth_flag)であっても、制限付きページかの判定が必要
-			return auth::is_page_readable($page, '', '');
-		}
+	if (!empty($info['key']) &&
+	    auth::is_page_readable($page, $info['key'], $info['group'])) {
+		return true;
+	} else {
+		//return $auth_flag ? basic_auth($page, $auth_flag, $exit_flag, $read_auth_pages, $_title['cannotread']) : false;
+		// 未認証時で認証不要($auth_flag)であっても、制限付きページかの判定が必要
+		return $auth_flag ? basic_auth($page, $auth_flag, $exit_flag, $read_auth_pages, $_title['cannotread']) : auth::is_page_readable($page, '', '');
 	}
-
-	if (auth::is_page_readable($page, $info['key'], $info['group'])) return true;
 
 	if ($exit_flag) {
 		$body = $title = str_replace('$1',htmlspecialchars(strip_bracket($page)), $_title['cannotread']);

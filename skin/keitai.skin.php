@@ -1,8 +1,8 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: keitai.skin.php,v 1.16.16 2008/01/05 19:02:00 upk Exp $
+// $Id: keitai.skin.php,v 1.16.17 2009/02/10 01:54:00 upk Exp $
 // Copyright (C)
-//   2005-2006,2008 PukiWiki Plus! Team
+//   2005-2006,2008-2009 PukiWiki Plus! Team
 //   2003-2006 PukiWiki Developers Team
 // License: GPL v2 or (at your option) any later version
 //
@@ -115,12 +115,12 @@ if ($pagecount > 1) {
 	$prev = $pageno - 1;
 	$next = $pageno + 1;
 	if ($pageno > 0) {
-		$headnavi[] = '<a href="' . get_page_uri($_page, 'p=' . $prev) .
+		$headnavi[] = '<a href="' . get_page_uri($_page, 'rel', 'p=' . $prev) .
 			'" ' . $accesskey . '="7">7.Prev</a>';
 	}
 	$navi[] = $next . '/' . $pagecount . ' ';
 	if ($pageno < $pagecount - 1) {
-		$headnavi[] = '<a href="' . get_page_uri($_page, 'p=' . $next) .
+		$headnavi[] = '<a href="' . get_page_uri($_page, 'rel', 'p=' . $next) .
 			'" ' . $accesskey . '="8">8.Next</a>';
 	}
 }
