@@ -3,7 +3,7 @@
  * PukiWiki Plus! 認証処理
  *
  * @author	Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth.cls.php,v 0.64 2009/01/21 23:23:00 upk Exp $
+ * @version     $Id: auth.cls.php,v 0.65 2009/02/11 20:57:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'auth.def.php');
@@ -64,13 +64,21 @@ class auth
 
 	function check_auth_basic()
 	{
+		global $auth_users;
+
 		foreach (array('PHP_AUTH_USER', 'AUTH_USER', 'REMOTE_USER', 'LOGON_USER') as $x) {
 			if (isset($_SERVER[$x]) && ! empty($_SERVER[$x])) {
 				if (! empty($_SERVER['AUTH_TYPE']) && $_SERVER['AUTH_TYPE'] == 'Digest') return $_SERVER[$x];
 				$ms = explode('\\', $_SERVER[$x]);
 				if (count($ms) == 3) return $ms[2]; // DOMAIN\\USERID
 				foreach (array('PHP_AUTH_PW', 'AUTH_PASSWORD', 'HTTP_AUTHORIZATION') as $pw) {
-					if (! empty($_SERVER[$pw])) return $_SERVER[$x];
+					//if (! empty($_SERVER[$pw])) return $_SERVER[$x];
+					if (! empty($_SERVER[$pw])) {
+						// 未定義ユーザは、サーバ側で認証時または、ＯＳでの認証時のワークグループ接続的なイメージ
+						if (! empty($auth_users[$_SERVER[$x]][0])) return $_SERVER[$x]; // 未定義ユーザ
+						// 定義ユーザならパスワードまで調査
+						return (pkwk_hash_compute($_SERVER[$pw],$auth_users[$_SERVER[$x]][0]) == $auth_users[$_SERVER[$x]][0]) ? $_SERVER[$x] : '';
+					}
 				}
 			}
 		}
