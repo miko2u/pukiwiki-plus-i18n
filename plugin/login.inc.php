@@ -2,8 +2,8 @@
 /**
  * PukiWiki Plus! ログインプラグイン
  *
- * @copyright   Copyright &copy; 2004-2008, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: login.php,v 0.20 2008/08/02 02:47:00 upk Exp $
+ * @copyright   Copyright &copy; 2004-2009, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * @version     $Id: login.php,v 0.21 2009/02/14 22:13:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'auth.cls.php');
@@ -149,24 +149,28 @@ function plugin_login_action()
 		login_return_page();
 	}
 
-	if ($auth_type == 2) {
-		if (! auth::auth_digest($realm,$auth_users)) {
-			return;
+	switch($auth_type) {
+	case 1:
+		if (!auth::auth_pw($auth_users)) {
+			unset($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']);
+			header('HTTP/1.0 401 Unauthorized');
+			header('WWW-Authenticate: Basic realm="'.$realm.'"');
+		} else {
+			// FIXME
+			// 認証成功時は、もともとのページに戻れる
+			// 下に記述すると認証すら行えないなぁ
+			login_return_page();
+		}
+		break;
+	case 2:
+		if (! auth::auth_digest($auth_users)) {
+			header('HTTP/1.1 401 Unauthorized');
+			header('WWW-Authenticate: Digest realm="'.$realm.
+				'", qop="auth", nonce="'.uniqid().'", opaque="'.md5($realm).'"');
 		} else {
 			login_return_page();
 		}
-	}
-
-	if (!auth::auth_pw($auth_users))
-	{
-		unset($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']);
-		header( 'WWW-Authenticate: Basic realm="'.$realm.'"' );
-		header( 'HTTP/1.0 401 Unauthorized' );
-	} else {
-		// FIXME
-		// 認証成功時は、もともとのページに戻れる
-		// 下に記述すると認証すら行えないなぁ
-		login_return_page();
+		break;
 	}
 }
 

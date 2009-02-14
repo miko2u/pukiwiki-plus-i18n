@@ -3,7 +3,7 @@
  * PukiWiki Plus! 認証処理
  *
  * @author	Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth.cls.php,v 0.65 2009/02/11 20:57:00 upk Exp $
+ * @version     $Id: auth.cls.php,v 0.66 2009/02/14 22:20:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'auth.def.php');
@@ -66,31 +66,51 @@ class auth
 	{
 		global $auth_users;
 
+		$user = '';
 		foreach (array('PHP_AUTH_USER', 'AUTH_USER', 'REMOTE_USER', 'LOGON_USER') as $x) {
 			if (isset($_SERVER[$x]) && ! empty($_SERVER[$x])) {
-				if (! empty($_SERVER['AUTH_TYPE']) && $_SERVER['AUTH_TYPE'] == 'Digest') return $_SERVER[$x];
-				$ms = explode('\\', $_SERVER[$x]);
-				if (count($ms) == 3) return $ms[2]; // DOMAIN\\USERID
-				foreach (array('PHP_AUTH_PW', 'AUTH_PASSWORD', 'HTTP_AUTHORIZATION') as $pw) {
-					//if (! empty($_SERVER[$pw])) return $_SERVER[$x];
-					if (! empty($_SERVER[$pw])) {
-						// 未定義ユーザは、サーバ側で認証時または、ＯＳでの認証時のワークグループ接続的なイメージ
-						if (! empty($auth_users[$_SERVER[$x]][0])) return $_SERVER[$x]; // 未定義ユーザ
-						// 定義ユーザならパスワードまで調査
-						return (pkwk_hash_compute($_SERVER[$pw],$auth_users[$_SERVER[$x]][0]) == $auth_users[$_SERVER[$x]][0]) ? $_SERVER[$x] : '';
-					}
+				// Digest だったら確実
+				if (! empty($_SERVER['AUTH_TYPE']) && $_SERVER['AUTH_TYPE'] == 'Digest') {
+					$user = $_SERVER[$x];
+					break;
 				}
+				// ドメイン認証の確認
+				$ms = explode('\\', $_SERVER[$x]);
+				if (count($ms) == 3) {
+					$user = $ms[2]; // DOMAIN\\USERID
+					break;
+				}
+				// この変数の内容で確定する
+				$user = $_SERVER[$x];
+				break;
 			}
 		}
-		return '';
+		if (empty($user)) return '';
+
+		// 未定義ユーザは、サーバ側で認証時または、ＯＳでの認証時のワークグループ接続的なイメージ
+		if (!isset($auth_users[$user])) return $user;
+
+		// 定義ユーザならパスワードのチェックを行う
+		$pass = '';
+		foreach (array('PHP_AUTH_PW', 'AUTH_PASSWORD', 'HTTP_AUTHORIZATION') as $pw) {
+			//if (! empty($_SERVER[$pw])) return $_SERVER[$x];
+			if (isset($_SERVER[$pw]) && ! empty($_SERVER[$pw])) {
+				$pass = $_SERVER[$pw];
+				break;
+			}
+		}
+                if (empty($pass)) return '';
+		if (empty($auth_users[$user][0])) return ''; // パスワードが空は除く
+		return (pkwk_hash_compute($pass,$auth_users[$user][0]) == $auth_users[$user][0]) ? $user : '';
         }
 
 	function check_auth_digest()
 	{
-		// PHP Digest認証対応
-		if (isset($_SERVER['PHP_AUTH_DIGEST']) && ($data = auth::http_digest_parse($_SERVER['PHP_AUTH_DIGEST']))) {
-			if (! empty($data['username'])) return $data['username'];
-		}
+		global $auth_users;
+
+		if (! auth::auth_digest($auth_users)) return '';
+		$data = auth::http_digest_parse($_SERVER['PHP_AUTH_DIGEST']);
+		if (! empty($data['username'])) return $data['username'];
 		return '';
         }
 
@@ -439,63 +459,27 @@ class auth
 			}
 		}
 
-		if (empty($user) && empty($pass)) return 0;
-		if (empty($auth_users[$user][0])) return 0;
-		if ( pkwk_hash_compute($pass, $auth_users[$user][0]) !== $auth_users[$user][0]) return 0;
-		return 1;
+		if (empty($user) && empty($pass)) return false;
+		if (empty($auth_users[$user][0])) return false;
+		if ( pkwk_hash_compute($pass, $auth_users[$user][0]) !== $auth_users[$user][0]) return false;
+		return true;
 	}
 
-	/**
-	 * Digest認証本体
-	 * @static
-	 */
-	function auth_digest($realm,$auth_users)
+	function auth_digest($auth_users)
 	{
-		// FIXME: なんかかっこ悪いロジックだぁ
-
-		if (! isset($_SERVER['PHP_AUTH_DIGEST']) || empty($_SERVER['PHP_AUTH_DIGEST'])) {
-			header('HTTP/1.1 401 Unauthorized');
-			header('WWW-Authenticate: Digest realm="'.$realm.
-				'", qop="auth", nonce="'.uniqid().'", opaque="'.md5($realm).'"');
-			// キャンセルボタンを押下
-			unset($_SERVER['PHP_AUTH_DIGEST']);
-			return FALSE;
-		}
-
-		if (isset($_SERVER['PHP_AUTH_DIGEST']) && !($data = auth::http_digest_parse($_SERVER['PHP_AUTH_DIGEST']))) {
-			header('HTTP/1.1 401 Unauthorized');
-			header('WWW-Authenticate: Digest realm="'.$realm.
-				'", qop="auth", nonce="'.uniqid().'", opaque="'.md5($realm).'"');
-			// キャンセルボタンを押下
-			unset($_SERVER['PHP_AUTH_DIGEST']);
-			return FALSE;
-		}
+		if (! isset($_SERVER['PHP_AUTH_DIGEST']) || empty($_SERVER['PHP_AUTH_DIGEST'])) return false;
+		$data = auth::http_digest_parse($_SERVER['PHP_AUTH_DIGEST']);
+		if ($data === false) return false;
 
 		list($scheme, $salt, $role) = auth::get_data($data['username'], $auth_users);
-		if ($scheme != '{x-digest-md5}') {
-			header('HTTP/1.1 401 Unauthorized');
-			header('WWW-Authenticate: Digest realm="'.$realm.
-				'", qop="auth", nonce="'.uniqid().'", opaque="'.md5($realm).'"');
-                        // キャンセルボタンを押下
-			unset($_SERVER['PHP_AUTH_DIGEST']);
-			return FALSE;
-		}
+		if ($scheme != '{x-digest-md5}') return false;
 
 		// $A1 = md5($data['username'] . ':' . $realm . ':' . $auth_users[$data['username']]);
 		$A1 = $salt;
 		$A2 = md5($_SERVER['REQUEST_METHOD'].':'.$data['uri']);
 		$valid_response = md5($A1.':'.$data['nonce'].':'.$data['nc'].':'.$data['cnonce'].':'.$data['qop'].':'.$A2);
-
-		if ($data['response'] != $valid_response) {
-			header('HTTP/1.1 401 Unauthorized');
-			header('WWW-Authenticate: Digest realm="'.$realm.
-				'", qop="auth", nonce="'.uniqid().'", opaque="'.md5($realm).'"');
-                        // キャンセルボタンを押下
-			unset($_SERVER['PHP_AUTH_DIGEST']);
-			return FALSE;
-		}
-
-		return TRUE;
+		if ($data['response'] != $valid_response) return false;
+		return true;
 	}
 
 	/**
@@ -549,20 +533,6 @@ class auth
 			return array($regs[1], $regs[2]);
 		}
 		return array('',$passwd);
-	}
-
-	/**
-	 * ユーザ名の取得
-	 * @static
-	 */
-	function get_username_digest()
-	{
-		global $realm,$auth_users;
-
-		if (auth::auth_digest($realm,$auth_users)) {
-			return auth::get_username_digest();
-		}
-		return '';
 	}
 
 	/**
