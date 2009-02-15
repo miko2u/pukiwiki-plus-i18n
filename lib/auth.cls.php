@@ -3,7 +3,7 @@
  * PukiWiki Plus! 認証処理
  *
  * @author	Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth.cls.php,v 0.66 2009/02/14 22:20:00 upk Exp $
+ * @version     $Id: auth.cls.php,v 0.67 2009/02/15 20:55:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'auth.def.php');
@@ -579,16 +579,22 @@ class auth
 
 	function is_page_auth($page, $auth_flag, $auth_pages, $uname, $gname='')
 	{
+		global $auth_method_type;
 		static $info;
 		if (! $auth_flag) return true;
 
-		// FIXME:
-		// ページ名一覧を生成する際に、contents の場合は、
-		// 全ページのソースをフルスキャンするため、現実的ではないためロジックからは外す
-
 		if (!isset($info)) $info = auth::get_user_info();
 
-		$target_str = $page;
+		$target_str = '';
+		switch($auth_method_type) {
+		case 'pagename':
+			$target_str = $page;
+			break;
+		case 'contents':
+			$target_str = get_source($page, true, true);
+			break;
+		}
+
 		$user_list = $group_list = $role = '';
 		foreach($auth_pages as $key=>$val) {
 			if (preg_match($key, $target_str)) {

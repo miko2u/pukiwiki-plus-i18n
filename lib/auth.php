@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: auth.php,v 1.21.21 2009/02/14 22:19:00 upk Exp $
+// $Id: auth.php,v 1.21.22 2009/02/15 21:36:00 upk Exp $
 // Copyright (C)
 //   2005-2009 PukiWiki Plus! Team
 //   2003-2007 PukiWiki Developers Team
@@ -124,19 +124,14 @@ function pkwk_hash_compute($phrase = '', $scheme = '{php_md5}', $prefix = TRUE, 
 // Check edit-permission
 function check_editable($page, $auth_flag = TRUE, $exit_flag = TRUE)
 {
-	global $_title, $_string;
+	global $_title, $_string, $defaultpage;
 
 	if (edit_auth($page, $auth_flag, $exit_flag) && is_editable($page)) return true;
 
 	if ($exit_flag) {
-		// With exit
-		$body = $title = str_replace('$1',htmlspecialchars(strip_bracket($page)), $_title['cannotedit']);
-		if (! is_cantedit($page) && is_freeze($page)) {
-			$body .= '(<a href="' . get_cmd_uri('unfreeze',$page) . '">' . $_string['unfreeze'] . '</a>)';
-		}
-		$page = str_replace('$1', make_search($page), $_title['cannotedit']);
-		catbody($title, $page, $body);
-		exit;
+		// 無応答
+		header( 'Location: ' . get_page_location_uri($defaultpage));
+		die();
 	}
 	return false;
 }
@@ -144,16 +139,23 @@ function check_editable($page, $auth_flag = TRUE, $exit_flag = TRUE)
 // Check read-permission
 function check_readable($page, $auth_flag = TRUE, $exit_flag = TRUE)
 {
-	return read_auth($page, $auth_flag, $exit_flag);
+	global $_title, $defaultpage;
+
+	if (read_auth($page, $auth_flag, $exit_flag)) return true;
+
+	if ($exit_flag) {
+		// 無応答
+		header( 'Location: ' . get_page_location_uri($defaultpage));
+		die();
+	}
+	return false;
 }
 
 function edit_auth($page, $auth_flag = TRUE, $exit_flag = TRUE)
 {
-	global $edit_auth, $edit_auth_pages;
-	global $_title;
+	global $edit_auth, $edit_auth_pages, $auth_api, $defaultpage, $_title;
 
 	if (auth::check_role('readonly')) return false;
-	// return $edit_auth ? basic_auth($page, $auth_flag, $exit_flag, $edit_auth_pages, $_title['cannotedit']) : TRUE;
 
 	if (!$edit_auth) return true;
 
@@ -162,75 +164,48 @@ function edit_auth($page, $auth_flag = TRUE, $exit_flag = TRUE)
 	    auth::is_page_readable($page, $info['key'], $info['group']) &&
 	    auth::is_page_editable($page, $info['key'], $info['group'])) {
 		return true;
-	} else {
-		$auth_func_name = get_auth_func_name();
-		return $auth_flag ? $auth_func_name($page, $auth_flag, $exit_flag, $edit_auth_pages, $_title['cannotedit']) : false;
 	}
 
+	// Basic, Digest 認証を利用していない場合
+	if (!$auth_api['plus']['use']) return auth::is_page_readable($page, '', '');
+
+	$auth_func_name = get_auth_func_name();
+	if ($auth_flag && ! $auth_func_name($page, $auth_flag, $exit_flag, $edit_auth_pages, $_title['cannotedit'])) return false;
+	if (auth::is_page_readable($page, '', '') && auth::is_page_editable($page,'','')) return true;
+
 	if ($exit_flag) {
-		$body = $title = str_replace('$1',htmlspecialchars(strip_bracket($page)), $_title['cannotedit']);
-		$page = str_replace('$1', make_search($page), $_title['cannotedit']);
-		catbody($title, $page, $body);
-		exit;
+		// 無応答
+		header( 'Location: ' . get_page_location_uri($defaultpage));
+		die();
 	}
 	return false;
 }
 
 function read_auth($page, $auth_flag = TRUE, $exit_flag = TRUE)
 {
-	global $read_auth, $read_auth_pages;
-	global $_title;
+	global $read_auth, $read_auth_pages, $auth_api, $defaultpage, $_title;
 
-	// return $read_auth ? basic_auth($page, $auth_flag, $exit_flag, $read_auth_pages, $_title['cannotread']) : TRUE;
 	if (!$read_auth) return true;
 
 	$info = auth::get_user_info();
 	if (!empty($info['key']) &&
 	    auth::is_page_readable($page, $info['key'], $info['group'])) {
 		return true;
-	} else {
-		$auth_func_name = get_auth_func_name();
-		//return $auth_flag ? basic_auth($page, $auth_flag, $exit_flag, $read_auth_pages, $_title['cannotread']) : false;
-		// 未認証時で認証不要($auth_flag)であっても、制限付きページかの判定が必要
-		return $auth_flag ? $auth_func_name($page, $auth_flag, $exit_flag, $read_auth_pages, $_title['cannotread']) : auth::is_page_readable($page, '', '');
 	}
+
+	if (!$auth_api['plus']['use']) return auth::is_page_readable($page, '', '');
+
+	$auth_func_name = get_auth_func_name();
+	// 未認証時で認証不要($auth_flag)であっても、制限付きページかの判定が必要
+	if ($auth_flag && ! $auth_func_name($page, $auth_flag, $exit_flag, $read_auth_pages, $_title['cannotread'])) return false;
+	return auth::is_page_readable($page, '', '');
 
 	if ($exit_flag) {
-		$body = $title = str_replace('$1',htmlspecialchars(strip_bracket($page)), $_title['cannotread']);
-		$page = str_replace('$1', make_search($page), $_title['cannotread']);
-		catbody($title, $page, $body);
-		exit;
+		// 無応答
+		header( 'Location: ' . get_page_location_uri($defaultpage));
+		die();
 	}
 	return false;
-}
-
-function get_auth_page_users($page, $auth_pages)
-{
-        global $auth_method_type;
-
-	// Checked by:
-	$target_str = '';
-	if ($auth_method_type == 'pagename') {
-		$target_str = $page; // Page name
-	} else if ($auth_method_type == 'contents') {
-		$target_str = get_source($page, TRUE, TRUE); // Its contents
-	}
-
-	$user_list = array();
-	foreach($auth_pages as $key=>$val) {
-		if (preg_match($key, $target_str)) {
-			if (is_array($val)) {
-                                $user  = (empty($val['user']))  ? '' : $val['user'];
-			} else {
-				$user = $val;
-			}
-			if (empty($user)) continue;
-			$user_list  = array_merge($user_list, explode(',', $user));
-		}
-	}
-
-	return $user_list;
-
 }
 
 function get_auth_func_name()
@@ -249,8 +224,10 @@ function basic_auth($page, $auth_flag, $exit_flag, $auth_pages, $title_cannot)
 	global $auth_users, $auth_method_type;
 	global $realm;
 
-	$user_list = get_auth_page_users($page, $auth_pages);
-	if (empty($user_list)) return TRUE; // No limit
+        if (auth::is_page_auth($page, $auth_flag, $auth_pages, '','')) return true; // No limit
+	$user_list = $auth_users;
+	//$user_list = get_auth_page_users($page, $auth_pages);
+	// if (empty($user_list)) return TRUE; // No limit
 
 	if (! auth::check_role('role_adm_contents')) return TRUE; // 既にコンテンツ管理者
 
@@ -304,8 +281,9 @@ function digest_auth($page, $auth_flag, $exit_flag, $auth_pages, $title_cannot)
 	global $auth_users, $auth_method_type, $auth_type;
 	global $realm;
 
-	$user_list = get_auth_page_users($page, $auth_pages);
-	if (empty($user_list)) return true; // No limit
+	if (auth::is_page_auth($page, $auth_flag, $auth_pages, '','')) return true; // No limit
+	//$user_list = get_auth_page_users($page, $auth_pages);
+	//if (empty($user_list)) return true; // No limit
 
 	if (! auth::check_role('role_adm_contents')) return true; // 既にコンテンツ管理者
 	if (auth::auth_digest($auth_users)) return true;
