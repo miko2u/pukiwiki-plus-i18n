@@ -2,8 +2,8 @@
 /**
  * PukiWiki 人気検索キープラグイン
  *
- * @copyright   Copyright &copy; 2004-2008, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: skeylist.inc.php,v 0.12 2008/12/07 16:50:00 upk Exp $
+ * @copyright   Copyright &copy; 2004-2009, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * @version     $Id: skeylist.inc.php,v 0.13 2009/02/15 14:21:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  *
  */
@@ -13,6 +13,8 @@
 defined('SKEYLIST_SEARCH_URL') or define('SKEYLIST_SEARCH_URL', 'http://www.google.com/search?ie=utf8&amp;oe=utf8&amp;q=');
 // Yahoo!
 // defined('SKEYLIST_SEARCH_URL') or define('SKEYLIST_SEARCH_URL', 'http://search.yahoo.com/search?ei=UTF-8&p=');
+
+defined('SKEYLIST_MIN_COUNTER') or define('SKEYLIST_MIN_COUNTER', 0);
 
 function plugin_skeylist_init()
 {
@@ -210,6 +212,7 @@ function skeylist_print($data,$max)
 
 	foreach ($data as $x)
 	{
+		if (SKEYLIST_MIN_COUNTER > $x[1]) continue;
 		if ( !strcasecmp('utf-8',SOURCE_ENCODING) ) {
 			$key = $x[0];
 		} else {
