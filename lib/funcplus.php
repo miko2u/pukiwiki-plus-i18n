@@ -1,8 +1,8 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: funcplus.php,v 0.1.52 2008/05/14 18:33:00 upk Exp $
+// $Id: funcplus.php,v 0.1.53 2009/02/16 23:10:00 upk Exp $
 // Copyright (C)
-//   2005-2008 PukiWiki Plus! Team
+//   2005-2009 PukiWiki Plus! Team
 // License: GPL v2 or (at your option) any later version
 //
 // Plus! extension function(s)
@@ -700,4 +700,35 @@ if (! function_exists('http_build_query')) {
 		return $retval;
 	}
 }
+
+// インラインパラメータのデータを１行毎に分割する
+function line2array($x)
+{
+	$x = preg_replace(
+		array("[\\r\\n]","[\\r]"),
+		array("\n","\n"),
+		$x
+	); // 行末の統一
+	return explode("\n", $x);
+}
+
+function dat2html($x)
+{
+	return preg_replace(
+		array("'<p>'si","'</p>'si"),
+		array('',''),
+		trim(convert_html($x))
+	);
+}
+
+function tbl2dat($data)
+{
+	$x = explode('|',$data);
+	if (substr($data,0,1) == '|') array_shift($x);
+	if (substr($data,-1)  == '|') array_pop($x);
+	return $x;
+}
+
+function is_header($x) { return ( substr($x,-2) == '|h') ? true : false; }
+
 ?>
