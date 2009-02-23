@@ -1,8 +1,9 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: br.inc.php,v 1.5 2007/04/08 10:22:18 henoheno Exp $
-// Copyright (C) 2003-2005, 2007 PukiWiki Developers Team
-// License: GPL v2 or (at your option) any later version
+// $Id: br.inc.php,v 1.5.1 2009/02/23 23:25:00 upk Exp $
+// Copyright (C)
+//   2009 PukiWiki Plus! Team
+//   2003-2005, 2007 PukiWiki Developers Team
 //
 // "Forcing one line-break" plugin
 
@@ -15,11 +16,15 @@ define('PLUGIN_BR_TAG', '<br class="spacer" />');
 
 function plugin_br_convert()
 {
-	if (PLUGIN_BR_ESCAPE_BLOCKQUOTE) {
-		return '<div class="spacer">&nbsp;</div>';
+	$br = PLUGIN_BR_ESCAPE_BLOCKQUOTE ? '<div class="spacer">&nbsp;</div>' : PLUGIN_BR_TAG;
+	if (func_num_args() == 1) {
+		list($j) = func_get_args();
 	} else {
-		return PLUGIN_BR_TAG;
+		$j = 1;
 	}
+	$rc = '';
+	for($i=0;$i<$j;$i++) { $rc .= $br; }
+	return $rc;
 }
 
 function plugin_br_inline()

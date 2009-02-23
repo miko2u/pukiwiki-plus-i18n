@@ -6,7 +6,7 @@
  * 
  * GPL
  *
- * Ver. 0.5.0
+ * Ver. 0.5.0.1
  */
 
 define('PLUGIN_CODE_LANGUAGE', 'pre');  // 標準言語 全て小文字で指定
@@ -45,7 +45,7 @@ define('PLUGIN_CODE_USAGE',
 	   '<p class="error">Plugin code: Usage:<br />#code[(Lang)]{{<br />src<br />}}</p>');
 
 
-function pluing_code_init()
+function plugin_code_init()
 {
 	global $javascript; $javascript = true;
 }

@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: funcplus.php,v 0.1.53 2009/02/16 23:10:00 upk Exp $
+// $Id: funcplus.php,v 0.1.54 2009/02/23 23:43:00 upk Exp $
 // Copyright (C)
 //   2005-2009 PukiWiki Plus! Team
 // License: GPL v2 or (at your option) any later version
@@ -731,4 +731,10 @@ function tbl2dat($data)
 
 function is_header($x) { return ( substr($x,-2) == '|h') ? true : false; }
 
+function strip_a($x)
+{
+	$x = preg_replace('#<a href="(.*?)"[^>]*>(.*?)</a>#si', '$2', $x);
+	$x = preg_replace('#<a class="ext" href="(.*?)" .*?>(.*?)<img src="' . IMAGE_URI . 'plus/ext.png".*?</a>#si','$2',$x);
+	return $x;
+}
 ?>
