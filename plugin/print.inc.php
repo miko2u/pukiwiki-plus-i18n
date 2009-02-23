@@ -2,8 +2,8 @@
 /**
  * PukiWiki Plus! PRINT Plugin
  *
- * @copyright   Copyright &copy; 2007-2008, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: print.inc.php,v 0.8 2008/12/07 16:44:00 upk Exp $
+ * @copyright   Copyright &copy; 2007-2009, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * @version     $Id: print.inc.php,v 0.9 2009/02/23 23:56:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  *
  */
@@ -53,8 +53,8 @@ function plugin_print_action()
 	$notes = ! empty($foot_explain) ? $note_hr . join("\n", $foot_explain) : '';
 
 	if ($noa) {
-		$body = print_strip_a($body);
-		$notes = print_strip_a($notes);
+		$body = strip_a($body);
+		$notes = strip_a($notes);
 	}
 
 	// Tags will be inserted into <head></head>
@@ -203,13 +203,6 @@ EOD;
 EOD;
 
 	die();
-}
-
-function print_strip_a($x)
-{
-	$x = preg_replace('#<a href="(.*?)"[^>]*>(.*?)</a>#si', '$2', $x);
-	$x = preg_replace('#<a class="ext" href="(.*?)" .*?>(.*?)<img src="' . IMAGE_URI . 'plus/ext.png".*?</a>#si','$2',$x);
-	return $x;
 }
 
 function print_display()
