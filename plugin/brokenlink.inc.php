@@ -2,8 +2,8 @@
 /**
  * PukiWiki Plus! brokenlink Plugin
  *
- * @copyright   Copyright &copy; 2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: brokenlink.inc.php,v 0.1 2006/08/25 00:25:00 upk Exp $
+ * @copyright   Copyright &copy; 2006,2009, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * @version     $Id: brokenlink.inc.php,v 0.2 2009/03/01 04:34:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  *
  */
@@ -51,8 +51,9 @@ function plugin_brokenlink_action()
 	foreach($links as $href=>$aname) {
 		$rc = http_request($href, 'HEAD');
 		switch ($rc['rc']) {
-		case 200:
-		case 401:
+		case 200: // Ok
+		case 301: // Moved Permanently
+		case 401: // Unauthorized
 			continue;
 		default:
 			$data .= '-[['.$aname.'>'.$href.']] ('.$rc['rc'].")\n";
