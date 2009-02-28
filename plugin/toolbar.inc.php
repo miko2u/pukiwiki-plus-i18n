@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: toolbar.php,v 0.2.12 2009/01/19 00:25:00 upk Exp $
+// $Id: toolbar.php,v 0.2.13 2009/03/01 03:52:00 upk Exp $
 // Copyright (C) 2005,2007-2009 PukiWiki Plus! Team
 // License: GPL v2
 //
@@ -120,32 +120,33 @@ function _toolbar($key, $x = 20, $y = 20)
 {
 	global $_LANG, $_LINK, $_IMAGE;
 
-$_IMAGE['skin']['logo']     = 'pukiwiki.png';
-$_IMAGE['skin']['reload']   = 'reload.png';
-$_IMAGE['skin']['new']      = 'new.png';
-$_IMAGE['skin']['newsub']   = 'new_sub.png';
-$_IMAGE['skin']['edit']     = 'edit.png';
-$_IMAGE['skin']['freeze']   = 'freeze.png';
-$_IMAGE['skin']['unfreeze'] = 'unfreeze.png';
-$_IMAGE['skin']['diff']     = 'diff.png';
-$_IMAGE['skin']['upload']   = 'file.png';
-$_IMAGE['skin']['copy']     = 'copy.png';
-$_IMAGE['skin']['rename']   = 'rename.png';
-$_IMAGE['skin']['top']      = 'plus/home.png';
-$_IMAGE['skin']['list']     = 'list.png';
-$_IMAGE['skin']['search']   = 'search.png';
-$_IMAGE['skin']['recent']   = 'recentchanges.png';
-$_IMAGE['skin']['backup']   = 'backup.png';
-$_IMAGE['skin']['refer']    = 'plus/referer.png';
-$_IMAGE['skin']['help']     = 'help.png';
-$_IMAGE['skin']['rss']      = 'feed.png';
-$_IMAGE['skin']['rssplus']  = 'feed.png';
-$_IMAGE['skin']['mixirss']  = 'feed.png';
-$_IMAGE['skin']['skeylist'] = 'plus/skeylist.png';
-$_IMAGE['skin']['linklist'] = 'plus/linklist.png';
-$_IMAGE['skin']['log']      = 'log.png';
-$_IMAGE['skin']['print']    = 'plus/print.png';
-$_IMAGE['skin']['full']     = 'plus/full.png';
+$_IMAGE['skin']['logo']       = 'pukiwiki.png';
+$_IMAGE['skin']['reload']     = 'reload.png';
+$_IMAGE['skin']['new']        = 'new.png';
+$_IMAGE['skin']['newsub']     = 'new_sub.png';
+$_IMAGE['skin']['edit']       = 'edit.png';
+$_IMAGE['skin']['freeze']     = 'freeze.png';
+$_IMAGE['skin']['unfreeze']   = 'unfreeze.png';
+$_IMAGE['skin']['diff']       = 'diff.png';
+$_IMAGE['skin']['upload']     = 'file.png';
+$_IMAGE['skin']['copy']       = 'copy.png';
+$_IMAGE['skin']['rename']     = 'rename.png';
+$_IMAGE['skin']['top']        = 'plus/home.png';
+$_IMAGE['skin']['list']       = 'list.png';
+$_IMAGE['skin']['search']     = 'search.png';
+$_IMAGE['skin']['recent']     = 'recentchanges.png';
+$_IMAGE['skin']['backup']     = 'backup.png';
+$_IMAGE['skin']['refer']      = 'plus/referer.png';
+$_IMAGE['skin']['help']       = 'help.png';
+$_IMAGE['skin']['rss']        = 'feed.png';
+$_IMAGE['skin']['rssplus']    = 'feed.png';
+$_IMAGE['skin']['mixirss']    = 'feed.png';
+$_IMAGE['skin']['skeylist']   = 'plus/skeylist.png';
+$_IMAGE['skin']['linklist']   = 'plus/linklist.png';
+$_IMAGE['skin']['brokenlink'] = 'plus/brokenlink.png';
+$_IMAGE['skin']['log']        = 'log.png';
+$_IMAGE['skin']['print']      = 'plus/print.png';
+$_IMAGE['skin']['full']       = 'plus/full.png';
 
 
 	$lang  = $_LANG['skin'];

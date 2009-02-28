@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PukiWiki Plus! 1.4.7-u2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-09 00:37+0900\n"
+"POT-Creation-Date: 2009-03-01 03:49+0900\n"
 "PO-Revision-Date: 2007-05-03 21:30+0900\n"
 "Last-Translator: Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>\n"
 "Language-Team: Japanese <ja@li.org>\n"
@@ -47,11 +47,11 @@ msgstr "金"
 msgid "Sat"
 msgstr "土"
 
-#: ../../lib/resource.php:18 ../../lib/resource.php:75
+#: ../../lib/resource.php:18 ../../lib/resource.php:76
 msgid "Freeze"
 msgstr "凍結"
 
-#: ../../lib/resource.php:19 ../../lib/resource.php:97
+#: ../../lib/resource.php:19 ../../lib/resource.php:98
 msgid "Unfreeze"
 msgstr "凍結解除"
 
@@ -129,7 +129,7 @@ msgstr "キャンセル"
 msgid "Add"
 msgstr "追加"
 
-#: ../../lib/resource.php:43 ../../lib/resource.php:92
+#: ../../lib/resource.php:43 ../../lib/resource.php:93
 msgid "Search"
 msgstr "検索"
 
@@ -137,7 +137,7 @@ msgstr "検索"
 msgid "Load"
 msgstr "読込"
 
-#: ../../lib/resource.php:45 ../../lib/resource.php:73
+#: ../../lib/resource.php:45 ../../lib/resource.php:74
 msgid "Edit"
 msgstr "編集"
 
@@ -190,119 +190,123 @@ msgid "Backup"
 msgstr "バックアップ"
 
 #: ../../lib/resource.php:71
+msgid "Broken Link List"
+msgstr "リンク切れ一覧"
+
+#: ../../lib/resource.php:72
 msgid "Copy"
 msgstr "コピー"
 
-#: ../../lib/resource.php:72
+#: ../../lib/resource.php:73
 msgid "Diff"
 msgstr "差分"
 
-#: ../../lib/resource.php:74
+#: ../../lib/resource.php:75
 msgid "List of page files"
 msgstr "ファイル名一覧"
 
-#: ../../lib/resource.php:76
+#: ../../lib/resource.php:77
 msgid "Help"
 msgstr "ヘルプ"
 
-#: ../../lib/resource.php:77
+#: ../../lib/resource.php:78
 msgid "List of pages"
 msgstr "一覧"
 
-#: ../../lib/resource.php:78
+#: ../../lib/resource.php:79
 msgid "New"
 msgstr "新規"
 
-#: ../../lib/resource.php:79
+#: ../../lib/resource.php:80
 msgid "Lower page making"
 msgstr "下位ページ作成"
 
-#: ../../lib/resource.php:80
+#: ../../lib/resource.php:81
 msgid "RDF of recent changes"
 msgstr "最終更新のRDF"
 
-#: ../../lib/resource.php:81
+#: ../../lib/resource.php:82
 msgid "Recent changes"
 msgstr "最終更新"
 
-#: ../../lib/resource.php:82
+#: ../../lib/resource.php:83
 msgid "Referer"
 msgstr "リンク元"
 
-#: ../../lib/resource.php:83
+#: ../../lib/resource.php:84
 msgid "Reload"
 msgstr "リロード"
 
-#: ../../lib/resource.php:84
+#: ../../lib/resource.php:85
 msgid "Rename"
 msgstr "名前変更"
 
-#: ../../lib/resource.php:85
+#: ../../lib/resource.php:86
 msgid "Image of print"
 msgstr "印刷イメージ"
 
-#: ../../lib/resource.php:86
+#: ../../lib/resource.php:87
 msgid "Full screen"
 msgstr "全画面"
 
-#: ../../lib/resource.php:87 ../../lib/resource.php:88
-#: ../../lib/resource.php:89 ../../lib/resource.php:90
-#: ../../lib/resource.php:91
+#: ../../lib/resource.php:88 ../../lib/resource.php:89
+#: ../../lib/resource.php:90 ../../lib/resource.php:91
+#: ../../lib/resource.php:92
 msgid "RSS of recent changes"
 msgstr "最終更新のRSS"
 
-#: ../../lib/resource.php:93
+#: ../../lib/resource.php:94
 msgid "Source"
 msgstr "ソース"
 
-#: ../../lib/resource.php:94
+#: ../../lib/resource.php:95
 msgid "Template"
 msgstr "テンプレート"
 
-#: ../../lib/resource.php:95
+#: ../../lib/resource.php:96
 msgid "Front page"
 msgstr "ホーム"
 
-#: ../../lib/resource.php:96
+#: ../../lib/resource.php:97
 msgid "Trackback"
 msgstr "Trackback"
 
-#: ../../lib/resource.php:98
+#: ../../lib/resource.php:99
 msgid "Upload"
 msgstr "添付"
 
-#: ../../lib/resource.php:99
+#: ../../lib/resource.php:100
 msgid "Search Key List"
 msgstr "検索キー一覧"
 
-#: ../../lib/resource.php:100
+#: ../../lib/resource.php:101
 msgid "Link List"
 msgstr "自動相互リンク表"
 
-#: ../../lib/resource.php:101
+#: ../../lib/resource.php:102
 msgid "Roll Book"
 msgstr "出席簿"
 
-#: ../../lib/resource.php:102
+#: ../../lib/resource.php:103
 msgid "Confirmation list"
 msgstr "確認簿"
 
-#: ../../lib/resource.php:103
+#: ../../lib/resource.php:104
 msgid "Browse Log"
 msgstr "閲覧ログ"
 
-#: ../../lib/resource.php:104
+#: ../../lib/resource.php:105
 msgid "Update Log"
 msgstr "更新ログ"
 
-#: ../../lib/resource.php:105
+#: ../../lib/resource.php:106
 msgid "Download Log"
 msgstr "ダウンロードログ"
 
-#: ../../lib/resource.php:106
+#: ../../lib/resource.php:107
 msgid "Log"
 msgstr "ログ"
 
-#: ../../lib/resource.php:107
+#: ../../lib/resource.php:108
 msgid "Logo"
 msgstr "ロゴ"

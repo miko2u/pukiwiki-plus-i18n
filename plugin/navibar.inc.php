@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: navibar.php,v 0.1.12 2008/06/25 01:50:00 upk Exp $
+// $Id: navibar.php,v 0.1.13 2009/03/01 03:47:00 upk Exp $
 //
 function plugin_navibar_convert()
 {
@@ -63,6 +63,7 @@ function plugin_navibar_convert()
 				$body .= _navigator($name);
 			}
 			break;
+		case 'brokenlink':
 		case 'template':
 		case 'source':
 			if (!empty($_page)) {

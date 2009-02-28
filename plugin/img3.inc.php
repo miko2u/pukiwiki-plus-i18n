@@ -2,17 +2,15 @@
 /**
  * PukiWiki Plus! img3 プラグイン
  *
- * @copyright   Copyright &copy; 2004-2005, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version	$Id: img3.inc.php,v 0.5 2005/05/28 00:57:00 upk Exp $
+ * @copyright   Copyright &copy; 2004-2005,2009, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * @version	$Id: img3.inc.php,v 0.6 2009/02/27 23:19:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
 /*
  * The URI is permitted. ('1':OK '0':NG)
  */
-if (!defined('USE_IMAGE_URI')) {
-        define('USE_IMAGE_URI', '0');
-}
+defined('USE_IMAGE_URI')  or define('USE_IMAGE_URI','0');
 
 function plugin_img3_init()
 {
@@ -30,12 +28,14 @@ function plugin_img3_inline()
 {
 	global $script;
 	global $_img3_msg;
+	static $img_no = 0;
 
 	// パラメータ
-	@list($src,$title,$ratio) = func_get_args();
+	@list($src,$title,$ratio,$align) = func_get_args();
 	if (is_null($src) || empty($src)) return '';
 	if (is_null($title) || empty($title)) $title = 'image';
 	if (is_null($ratio) || empty($ratio)) $ratio = 1;
+	if (is_null($align) || empty($align)) $align = '';
 
 	// ファイルの存在チェック
 	// $url = rawurldecode($src);
@@ -53,6 +53,7 @@ function plugin_img3_inline()
 	$title = strip_htmltag($title);
 	$title = htmlspecialchars($title);
 	$ratio = htmlspecialchars($ratio);
+	$align = htmlspecialchars($align);
 
 	$size = img3_set_image_size($src,$ratio); // width, height の取得
 
@@ -61,8 +62,18 @@ function plugin_img3_inline()
 		return $_img3_msg['not_support'];
 	}
 
+	if (!empty($align)) {
+		$img_no++;
+		return <<<EOD
+<style type="text/css">
+img.img3$img_no { vertical-align: $align; }
+</style>
+<img src="$src" alt="$title" title="$title" ${size[6]} class="img3$img_no" />
+EOD;
+	}
+
 	return <<<EOD
-<img src="$src" alt="$title" title="$title" ${size[6]} />
+<img src="$src" alt="$title" title="$title" ${size[6]} "/>
 EOD;
 }
 

@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: html.php,v 1.65.28 2009/01/09 00:55:00 upk Exp $
+// $Id: html.php,v 1.65.29 2009/03/01 03:41:00 upk Exp $
 // Copyright (C)
 //   2005-2009 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
@@ -51,6 +51,7 @@ function catbody($title, $page, $body)
 	// Set $_LINK for skin
 	$_LINK['add']        = get_cmd_uri('add',$_page);
 	$_LINK['backup']     = get_cmd_uri('backup',$_page);
+	$_LINK['brokenlink'] = get_cmd_uri('brokenlink',$_page);
 	$_LINK['copy']       = get_cmd_uri('template','','', 'refer='.$r_page);
 	$_LINK['diff']       = get_cmd_uri('diff',$_page);
 	$_LINK['edit']       = get_cmd_uri('edit',$_page);
@@ -97,6 +98,7 @@ function catbody($title, $page, $body)
 	// Compat: Skins for 1.4.4 and before
 	$link_add        = & $_LINK['add'];
 	$link_backup     = & $_LINK['backup'];
+	$link_brokenlink = & $_LINK['brokenlink'];
 	$link_template   = & $_LINK['copy'];
 	$link_diff       = & $_LINK['diff'];
 	$link_edit       = & $_LINK['edit'];
