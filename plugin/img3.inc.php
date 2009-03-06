@@ -3,7 +3,7 @@
  * PukiWiki Plus! img3 プラグイン
  *
  * @copyright   Copyright &copy; 2004-2005,2009, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version	$Id: img3.inc.php,v 0.6 2009/02/27 23:19:00 upk Exp $
+ * @version	$Id: img3.inc.php,v 0.7 2009/03/07 01:55:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
@@ -73,7 +73,7 @@ EOD;
 	}
 
 	return <<<EOD
-<img src="$src" alt="$title" title="$title" ${size[6]} "/>
+<img src="$src" alt="$title" title="$title" ${size[6]} />
 EOD;
 }
 
