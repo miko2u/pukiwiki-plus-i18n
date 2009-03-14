@@ -2,8 +2,8 @@
 /**
  * PukiWiki Plus! 目次プラグイン
  *
- * @copyright	Copyright &copy; 2004-2006,2008, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version	$Id: toc.php,v 0.15 2008/07/06 12:22:00 upk Exp $
+ * @copyright	Copyright &copy; 2004-2006,2008-2009, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * @version	$Id: toc.php,v 0.16 2009/03/14 19:05:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License
  * @link	http://jo1upk.blogdns.net/saito/
  */
@@ -42,7 +42,7 @@ function plugin_toc_convert()
 		$idx = toc_make_index($src, $mode, $lvl);
 	}
 
-	$idx = toc_convert_index($idx);
+	$idx = toc_convert_index($idx,$lvl);
 
 	// 整形処理
 	if ($view == 'tree') {
@@ -210,7 +210,7 @@ function toc_get_top_level($idx)
 	return $top_lvl;
 }
 
-function toc_convert_index($idx)
+function toc_convert_index($idx,$lvl)
 {
 	global $plugin_num_proc;
 	global $fixed_heading_edited;
@@ -252,9 +252,12 @@ function toc_convert_index($idx)
 			continue;
 		}
 
+		$dat_lvl = $matches[1]-1;
+		if (! toc_from_to_check($lvl,$dat_lvl)) continue;
+
 		$rc[$i]['tag'] = empty($matches[2]) ? '' : '#'.$matches[2];
 		$rc[$i]['dat'] = strip_htmltag($matches[3]);
-		$rc[$i]['lvl'] = $matches[1]-1;
+		$rc[$i]['lvl'] = $dat_lvl;
 		$i++;
 	}
 	return $rc;
