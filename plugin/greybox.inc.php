@@ -2,15 +2,29 @@
 /**
  * GreyBox プラグイン
  *
- * @copyright   Copyright &copy; 2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: greybox.inc.php,v 0.6 2006/06/22 14:33:00 upk Exp $
+ * @copyright   Copyright &copy; 2006,2009, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * @version     $Id: greybox.inc.php,v 0.7 2009/03/22 02:11:00 upk Exp $
  * @link	http://amix.dk/projects/?page_id=5
  *              http://orangoo.com/labs/GreyBox/
  */
 
 function plugin_greybox_convert()
 {
-	global $script, $vars;
+	global $script, $vars, $head_tags;
+	static $set_greybox = true;
+
+	if ($set_greybox) {
+		$set_greybox = false;
+
+		$css_charset = 'utf-8';
+		switch(UI_LANG){
+		case 'ja_JP': $css_charset = 'Shift_JIS'; break;
+		}
+
+		$head_tags[] = ' <link rel="stylesheet" href="'.SKIN_URI.'greybox/greybox.css" type="text/css" media="all" charset="'.$css_charset.'" />';
+		$head_tags[] = ' <script type="text/javascript" src="'.SKIN_URI.'greybox/AmiJS.js"></script>';
+		$head_tags[] = ' <script type="text/javascript" src="'.SKIN_URI.'greybox/greybox.js"></script>';
+	}
 
 	$argv = func_get_args();
 	$argc = func_num_args();
@@ -26,13 +40,13 @@ function plugin_greybox_convert()
 	if (empty($caption)) $caption = 'no title';
 	if (empty($img)) $img = '';
 
-	$is_full = FALSE;
+	$is_full = false;
 	if (empty($height)) {
-		$is_full = TRUE;
+		$is_full = true;
 		$height = 470;
 	}
 	if (empty($width)) {
-		$is_full = TRUE;
+		$is_full = true;
 		$width = 600;
 	}
 
@@ -57,5 +71,4 @@ function plugin_greybox_inline()
 	array_pop($args);
 	return call_user_func_array('plugin_greybox_convert', $args);
 }
-
 ?>

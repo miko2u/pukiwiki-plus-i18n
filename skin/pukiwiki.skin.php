@@ -1,8 +1,8 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: pukiwiki.skin.php,v 1.52.4 2007/07/16 23:20:00 upk Exp $
+// $Id: pukiwiki.skin.php,v 1.52.5 2009/03/22 01:43:00 upk Exp $
 // Copyright (C)
-//   2005-2007 PukiWiki Plus! Team
+//   2005-2007,2009 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
 //   2001-2002 Originally written by yu-ji
 // License: GPL v2 or (at your option) any later version
@@ -157,11 +157,13 @@ function _navigator($key, $value = '', $javascript = ''){
 
 <?php echo $hr ?>
 
+<?php global $body_menu; ?>
+
 <?php if (arg_check('read') && exist_plugin_convert('menu')) { ?>
 <table border="0" style="width:100%">
  <tr>
   <td class="menubar">
-   <div id="menubar"><?php echo do_plugin_convert('menu') ?></div>
+   <div id="menubar"><?php echo $body_menu; ?></div>
   </td>
   <td valign="top">
    <div id="body"><?php echo $body ?></div>

@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: bluebox.skin.php,v 1.18.13 2008/01/20 13:26:00 upk Exp $
+// $Id: bluebox.skin.php,v 1.18.14 2009/03/22 01:33:00 upk Exp $
 // Original is ari-
 
 // Prohibit direct access
@@ -72,7 +72,6 @@ if (isset($pkwk_dtd)) {
  <title><?php echo $title.' - '.$page_title ?></title>
 <?php } ?>
  <link rel="stylesheet" href="<?php echo SKIN_URI ?>bluebox.css" type="text/css" media="screen,print" charset="<?php echo $css_charset ?>" />
- <link rel="stylesheet" href="<?php echo SKIN_URI ?>greybox/greybox.css" type="text/css" media="all" charset="<?php echo $css_charset ?>" />
  <link rel="alternate" type="application/rss+xml" title="RSS" href="<?php echo $link['rss'] ?>" />
  <script type="text/javascript">
  <!--
@@ -87,8 +86,6 @@ if (isset($pkwk_dtd)) {
 <?php if (! $use_local_time) { ?>
  <script type="text/javascript" src="<?php echo SKIN_URI ?>tzCalculation_LocalTimeZone.js"></script>
 <?php } ?>
- <script type="text/javascript" src="<?php echo SKIN_URI ?>greybox/AmiJS.js"></script>
- <script type="text/javascript" src="<?php echo SKIN_URI ?>greybox/greybox.js"></script>
 <?php echo $head_tag ?>
 </head>
 <body>
@@ -171,17 +168,17 @@ if (isset($pkwk_dtd)) {
 </ul>
 </div>
 
-<?php global $always_menu_displayed; if (arg_check('read')) $always_menu_displayed = 1; ?>
-<?php if ($always_menu_displayed && exist_plugin_convert('side') && do_plugin_convert('side') != '') { ?>
+<?php global $body_menu,$body_side; ?>
+<?php if (!empty($body_side)) { ?>
 <div id="rightbar3" class="side_bar">
-<?php echo do_plugin_convert('side') ?></div>
+<?php echo $body_side; ?></div>
 <?php } ?>
 </div>
 </div>
 
 <div id="left_bar">
-<?php if ($always_menu_displayed && exist_plugin_convert('menu') && do_plugin_convert('menu') != '') { ?>
-<div id="menubar" class="side_bar"><?php echo do_plugin_convert('menu') ?></div>
+<?php if (!empty($body_menu)) { ?>
+<div id="menubar" class="side_bar"><?php echo $body_menu; ?></div>
 <?php } ?>
 </div>
 

@@ -1,9 +1,9 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: pukiwiki.php,v 1.21.17 2008/08/05 01:12:00 upk Exp $
+// $Id: pukiwiki.php,v 1.21.18 2009/03/22 01:30:00 upk Exp $
 //
 // PukiWiki Plus! 1.4.*
-//  Copyright (C) 2002-2008 by PukiWiki Plus! Team
+//  Copyright (C) 2002-2009 by PukiWiki Plus! Team
 //  http://pukiwiki.cafelounge.net/plus/
 //
 // PukiWiki 1.4.*
@@ -273,6 +273,15 @@ if (isset($retvars['body']) && $retvars['body'] != '') {
 	if ($referer) ref_save($base);
 	log_write('check',$vars['page']);
 	log_write('browse',$vars['page']);
+}
+
+
+// global $always_menu_displayed;
+if (arg_check('read')) $always_menu_displayed = 1;
+$body_menu = $body_side = '';
+if ($always_menu_displayed) {
+	if (exist_plugin_convert('menu')) $body_menu = do_plugin_convert('menu');
+	if (exist_plugin_convert('side')) $body_side = do_plugin_convert('side');
 }
 
 // Output

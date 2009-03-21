@@ -44,7 +44,6 @@ if (isset($pkwk_dtd)) {
 <?php } ?>
  <link rel="stylesheet" href="<?php echo SKIN_URI ?>default.css" type="text/css" media="screen" charset="<?php echo $css_charset ?>" />
  <link rel="stylesheet" href="<?php echo SKIN_URI ?>print.css" type="text/css" media="print" charset="<?php echo $css_charset ?>" />
- <link rel="stylesheet" href="<?php echo SKIN_URI ?>greybox/greybox.css" type="text/css" media="all" charset="<?php echo $css_charset ?>" />
  <link rel="alternate" href="<?php echo $_LINK['mixirss'] ?>" type="application/rss+xml" title="RSS" />
  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
  <script type="text/javascript">
@@ -60,8 +59,6 @@ if (isset($pkwk_dtd)) {
 <?php if (! $use_local_time) { ?>
  <script type="text/javascript" src="<?php echo SKIN_URI ?>tzCalculation_LocalTimeZone.js"></script>
 <?php } ?>
- <script type="text/javascript" src="<?php echo SKIN_URI ?>greybox/AmiJS.js"></script>
- <script type="text/javascript" src="<?php echo SKIN_URI ?>greybox/greybox.js"></script>
 <?php echo $head_tag ?>
 </head>
 <body>
@@ -90,16 +87,16 @@ if (isset($pkwk_dtd)) {
 <div id="contents">
 <table class="contents" width="100%" border="0" cellspacing="0" cellpadding="0">
  <tr>
-<?php global $always_menu_displayed; if (arg_check('read')) $always_menu_displayed = 1; ?>
-<?php if ($always_menu_displayed && exist_plugin_convert('menu') && do_plugin_convert('menu') != '') { ?>
-  <td class="ltable" valign="top"><div id="menubar"><?php echo do_plugin_convert('menu') ?></div></td>
+<?php global $body_menu,$body_side; ?>
+<?php if (!empty($body_menu)) { ?>
+  <td class="ltable" valign="top"><div id="menubar"><?php echo $body_menu; ?></div></td>
 <?php } ?>
   <td class="ctable" valign="top">
    <?php if ($is_page and exist_plugin_convert('topicpath')) { echo do_plugin_convert('topicpath'); } ?>
    <div id="body"><?php echo $body ?></div>
   </td>
-<?php if ($always_menu_displayed && exist_plugin_convert('side') && do_plugin_convert('side') != '') { ?>
-  <td class="rtable" valign="top"><div id="sidebar"><?php echo do_plugin_convert('side') ?></div></td>
+<?php if (!empty($body_side)) { ?>
+  <td class="rtable" valign="top"><div id="sidebar"><?php echo $body_side; ?></div></td>
 <?php } ?>
  </tr>
 </table>
