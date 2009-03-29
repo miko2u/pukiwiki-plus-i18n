@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: html.php,v 1.65.29 2009/03/01 03:41:00 upk Exp $
+// $Id: html.php,v 1.65.30 2009/03/26 03:21:00 upk Exp $
 // Copyright (C)
 //   2005-2009 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
@@ -55,6 +55,7 @@ function catbody($title, $page, $body)
 	$_LINK['copy']       = get_cmd_uri('template','','', 'refer='.$r_page);
 	$_LINK['diff']       = get_cmd_uri('diff',$_page);
 	$_LINK['edit']       = get_cmd_uri('edit',$_page);
+	$_LINK['guiedit']    = get_cmd_uri('guiedit',$_page);
 	$_LINK['filelist']   = get_cmd_uri('filelist');
 	$_LINK['freeze']     = get_cmd_uri('freeze',$_page);
 	$_LINK['help']       = get_cmd_uri('help');
@@ -102,6 +103,7 @@ function catbody($title, $page, $body)
 	$link_template   = & $_LINK['copy'];
 	$link_diff       = & $_LINK['diff'];
 	$link_edit       = & $_LINK['edit'];
+	$link_guiedit    = & $_LINK['guiedit'];
 	$link_filelist   = & $_LINK['filelist'];
 	$link_freeze     = & $_LINK['freeze'];
 	$link_help       = & $_LINK['help'];

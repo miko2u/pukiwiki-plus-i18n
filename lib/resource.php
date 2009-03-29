@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: resource.php,v 0.7 2009/03/01 03:43:00 upk Exp $
+// $Id: resource.php,v 0.8 2009/03/26 03:43:00 upk Exp $
 //
 // Resource of String
 // Warning: This file is PukiWiki "core" resource strings.
@@ -43,6 +43,7 @@ $_button = array(
 	'search'    => _('Search'),
 	'load'      => _('Load'),
 	'edit'      => _('Edit'),
+	'guiedit'   => _('Edit(GUI)'),
 	'delete'    => _('Delete'),
 
 	// CheckBox labels
@@ -59,6 +60,7 @@ $_title = array(
 	'cannotread' => _('$1 is not readable'),
 	'collided' => _('On updating $1, a collision has occurred.'),
 	'updated' => _('$1 was updated'),
+	'preview' => _('Preview of  $1'),
 );
 
 
@@ -72,6 +74,7 @@ $_LANG['skin'] = array(
 	'copy'      => _('Copy'),
 	'diff'      => _('Diff'),
 	'edit'      => _('Edit'),
+	'guiedit'   => _('Edit(GUI)'),
 	'filelist'  => _('List of page files'),
 	'freeze'    => _('Freeze'),
 	'help'      => _('Help'),

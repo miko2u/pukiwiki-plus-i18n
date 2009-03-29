@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // PukiWiki - Yet another WikiWikiWeb clone.
 //
-// $Id: navibar.php,v 0.1.13 2009/03/01 03:47:00 upk Exp $
+// $Id: navibar.php,v 0.1.14 2009/03/30 01:55:00 upk Exp $
 //
 function plugin_navibar_convert()
 {
@@ -133,6 +133,7 @@ function plugin_navibar_convert()
 		// case 'new':
 		case 'newsub':
 		case 'edit':
+		case 'guiedit':
 		case 'diff':
 			if (!$is_read)
 				break;
