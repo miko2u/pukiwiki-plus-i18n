@@ -15,10 +15,14 @@ function plugin_skin_convert()
 
 
 	$skin_temp = array(
-		SKIN_URI . basepagename($skin_name) . '.skin.php',
-		DATA_HOME . SKIN_DIR . basepagename($skin_name) . '.skin.php',
-		// Back compat for Pukiwiki Plus!(1.4.4plus-u2)
-		DATA_HOME . SKIN_DIR . basepagename($skin_name) . '.skin.' . LANG . '.php',
+		SKIN_DIR . basepagename($skin_name) . '.skin.php',
+		SKIN_DIR . THEME_PLUS_NAME . basepagename($skin_name) . '.skin.php',
+		EXT_SKIN_DIR . THEME_PLUS_NAME . basepagename($skin_name) . '.skin.php',
+		// 
+                SKIN_URI . basepagename($skin_name) . '.skin.php',
+                DATA_HOME . SKIN_DIR . basepagename($skin_name) . '.skin.php',
+                // Back compat for Pukiwiki Plus!(1.4.4plus-u2)
+                DATA_HOME . SKIN_DIR . basepagename($skin_name) . '.skin.' . LANG . '.php',
 	);
 
 	foreach($skin_temp as $skin) {

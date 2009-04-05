@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: tdiary.skin.php,v 1.34.5 2009/03/22 02:35:00 upk Exp $
+// $Id: tdiary.skin.php,v 1.34.6 2009/04/04 05:20:00 upk Exp $
 // Copyright (C)
 //   2005-2007,2009 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
@@ -54,7 +54,7 @@ if (! defined('TDIARY_THEME') || TDIARY_THEME == '') {
 	die('Theme is not specified. Set "TDIARY_THEME" correctly');
 } else {
 	$theme = rawurlencode(TDIARY_THEME); // Supress all nasty letters
-	$theme_css = SKIN_DIR . 'theme/' . $theme . '/' . $theme . '.css';
+	$theme_css = SKIN_DIR . THEME_TDIARY_NAME . $theme . '/' . $theme . '.css';
 	if (! file_exists($theme_css)) {
 		echo 'tDiary theme wrapper: ';
 		echo 'Theme not found: ' . htmlspecialchars($theme_css) . '<br />';
@@ -580,8 +580,8 @@ if (isset($pkwk_dtd)) {
  <title><?php echo $title ?> - <?php echo $page_title ?></title>
 
  <link rel="SHORTCUT ICON" href="<?php echo $image['favicon'] ?>" />
- <link rel="stylesheet" type="text/css" media="all" href="<?php echo SKIN_URI ?>theme/base.css" />
- <link rel="stylesheet" type="text/css" media="all" href="<?php echo SKIN_URI ?>theme/<?php echo $theme ?>/<?php echo $theme ?>.css" />
+ <link rel="stylesheet" type="text/css" media="all" href="<?php echo SKIN_URI.THEME_TDIARY_NAME ?>base.css" />
+ <link rel="stylesheet" type="text/css" media="all" href="<?php echo SKIN_URI.THEME_TDIARY_NAME.$theme.'/'.$theme.'.css'; ?>" />
  <link rel="stylesheet" type="text/css" media="screen" href="<?php echo SKIN_URI ?>tdiary.css.php?charset=<?php echo $css_charset ?>&amp;color=<?php echo $css_theme ?>" charset="<?php echo $css_charset ?>" />
  <link rel="stylesheet" type="text/css" media="print"  href="<?php echo SKIN_URI ?>tdiary.css.php?charset=<?php echo $css_charset ?>&amp;color=<?php echo $css_theme ?>&amp;media=print" charset="<?php echo $css_charset ?>" />
  <link rel="alternate" href="<?php echo $_LINK['mixirss'] ?>" type="application/rss+xml" title="RSS" />

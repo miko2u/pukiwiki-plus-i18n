@@ -1,8 +1,8 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: pukiwiki.ini.php,v 1.148.32 2008/06/30 22:04:00 upk Exp $
+// $Id: pukiwiki.ini.php,v 1.148.33 2009/04/04 15:31:00 upk Exp $
 // Copyright (C)
-//   2005-2008 PukiWiki Plus! Team
+//   2005-2009 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
 //   2001-2002 Originally written by yu-ji
 // License: GPL v2 or (at your option) any later version
@@ -130,6 +130,7 @@ defined('SITE_INIT_DIR')  or define('SITE_INIT_DIR', SITE_HOME . 'init/'     ); 
 defined('EXTEND_DIR')     or define('EXTEND_DIR',    SITE_HOME . 'extend/'   ); // Extend directory
 defined('EXT_PLUGIN_DIR') or define('EXT_PLUGIN_DIR',EXTEND_DIR. 'plugin/'   ); // Extend Plugin directory
 defined('EXT_LANG_DIR')   or define('EXT_LANG_DIR',  EXTEND_DIR. 'locale/'   ); // Extend Language file
+defined('EXT_SKIN_DIR')   or define('EXT_SKIN_DIR',  EXTEND_DIR. 'skin/'     ); // Extend Skin directory
 
 /////////////////////////////////////////////////
 // Directory settings II (ended with '/')
@@ -144,6 +145,11 @@ defined('SKIN_URI')       or define('SKIN_URI',  ROOT_URI . 'skin/');	// CSSs(*.
 									// ./SKIN_URI from index.php.
 defined('IMAGE_URI')      or define('IMAGE_URI', ROOT_URI . 'image/');	// Keep this directory shown via web browsers like
 									// ./IMAGE_URI from index.php.
+
+// THEME
+// *.skin.php => SKIN_DIR or SKIN_DIR + THEME_PLUS_NAME or EXT_SKIN_DIR + THEME_PLUS_NAME
+defined('THEME_PLUS_NAME')   or define('THEME_PLUS_NAME',  'theme/');		// SKIN_URI + THEME_PLUS_NAME
+defined('THEME_TDIARY_NAME') or define('THEME_TDIARY_NAME','tdiary-theme/');	// SKIN_URI + THEME_TDIARY_NAME
 
 /////////////////////////////////////////////////
 // Title of your Wikisite (Name this)

@@ -15,13 +15,13 @@ if (defined('TDIARY_THEME')) {
 //	define('SKIN_FILE', DATA_HOME . SKIN_DIR . 'tdiary.skin.php');
 	define('SKIN_FILE_DEFAULT', SKIN_DIR . 'tdiary.skin.php'); 
 } else {
-	// define('SKIN_FILE', DATA_HOME . SKIN_DIR . 'pukiwiki.skin.php');
+	//define('SKIN_FILE', DATA_HOME.SKIN_DIR.THEME_PLUS_NAME. 'pukiwiki.skin.php');
 	define('SKIN_FILE_DEFAULT', SKIN_DIR . 'default.skin.php');
-	// define('SKIN_FILE_DEFAULT', SKIN_DIR . 'bluebox.skin.php');
-	// define('SKIN_FILE_DEFAULT', SKIN_DIR . 'cloudwalk.skin.php');
-	// define('SKIN_FILE_DEFAULT', SKIN_DIR . 'irid.skin.php');
-	// define('SKIN_FILE_DEFAULT', SKIN_DIR . 'iridorange.skin.php');
-	// define('SKIN_FILE_DEFAULT', SKIN_DIR . 'orangebox.skin.php');
+	//define('SKIN_FILE_DEFAULT', SKIN_DIR.THEME_PLUS_NAME.'bluebox.skin.php');
+	//define('SKIN_FILE_DEFAULT', SKIN_DIR.THEME_PLUS_NAME.'cloudwalk.skin.php');
+	//define('SKIN_FILE_DEFAULT', SKIN_DIR.THEME_PLUS_NAME.'iridwire.skin.php');
+	//define('SKIN_FILE_DEFAULT', SKIN_DIR.THEME_PLUS_NAME.'iridorange.skin.php');
+	//define('SKIN_FILE_DEFAULT', SKIN_DIR.THEME_PLUS_NAME.'orangebox.skin.php');
 }
 $skin_file = SKIN_FILE_DEFAULT;
 
