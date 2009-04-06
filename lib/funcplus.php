@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: funcplus.php,v 0.1.54 2009/02/23 23:43:00 upk Exp $
+// $Id: funcplus.php,v 0.1.55 2009/04/07 00:36:00 upk Exp $
 // Copyright (C)
 //   2005-2009 PukiWiki Plus! Team
 // License: GPL v2 or (at your option) any later version
@@ -240,6 +240,15 @@ function load_init_value($name,$must=0)
 function add_homedir($file)
 {
 	foreach(array(DATA_HOME,SITE_HOME) as $dir) {
+		if (file_exists($dir.$file) && is_readable($dir.$file)) return $dir.$file;
+	}
+	return $file;
+}
+
+function add_skindir($skin_name)
+{
+	$file = basepagename($skin_name).'.skin.php';
+	foreach(array(SKIN_DIR, SKIN_DIR.THEME_PLUS_NAME, EXT_SKIN_DIR, EXT_SKIN_DIR.THEME_PLUS_NAME, SKIN_URI, DATA_HOME.SKIN_DIR) as $dir) {
 		if (file_exists($dir.$file) && is_readable($dir.$file)) return $dir.$file;
 	}
 	return $file;

@@ -1,8 +1,8 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: default.ini.php,v 1.25.10 2006/06/22 19:13:00 miko Exp $
+// $Id: default.ini.php,v 1.25.11 2009/04/07 00:50:00 upk Exp $
 // Copyright (C)
-//   2005-2006 PukiWiki Plus! Team
+//   2005-2006,2009 PukiWiki Plus! Team
 //   2003-2005 PukiWiki Developers Team
 //   2001-2002 Originally written by yu-ji
 // License: GPL v2 or (at your option) any later version
@@ -12,16 +12,13 @@
 /////////////////////////////////////////////////
 // Skin file
 if (defined('TDIARY_THEME')) { 
-//	define('SKIN_FILE', DATA_HOME . SKIN_DIR . 'tdiary.skin.php');
-	define('SKIN_FILE_DEFAULT', SKIN_DIR . 'tdiary.skin.php'); 
+	defined('SKIN_FILE_DEFAULT') or define('SKIN_FILE_DEFAULT', add_skindir('tdiary'));
 } else {
-	//define('SKIN_FILE', DATA_HOME.SKIN_DIR.THEME_PLUS_NAME. 'pukiwiki.skin.php');
-	define('SKIN_FILE_DEFAULT', SKIN_DIR . 'default.skin.php');
-	//define('SKIN_FILE_DEFAULT', SKIN_DIR.THEME_PLUS_NAME.'bluebox.skin.php');
-	//define('SKIN_FILE_DEFAULT', SKIN_DIR.THEME_PLUS_NAME.'cloudwalk.skin.php');
-	//define('SKIN_FILE_DEFAULT', SKIN_DIR.THEME_PLUS_NAME.'iridwire.skin.php');
-	//define('SKIN_FILE_DEFAULT', SKIN_DIR.THEME_PLUS_NAME.'iridorange.skin.php');
-	//define('SKIN_FILE_DEFAULT', SKIN_DIR.THEME_PLUS_NAME.'orangebox.skin.php');
+	if (defined('PLUS_THEME')) {
+		defined('SKIN_FILE_DEFAULT') or define('SKIN_FILE_DEFAULT', add_skindir(PLUS_THEME));
+	} else {
+		defined('SKIN_FILE_DEFAULT') or define('SKIN_FILE_DEFAULT', add_skindir('default'));
+	}
 }
 $skin_file = SKIN_FILE_DEFAULT;
 
