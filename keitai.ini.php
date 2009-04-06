@@ -1,8 +1,8 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: keitai.ini.php,v 1.25.5 2008/12/13 23:20:00 upk Exp $
+// $Id: keitai.ini.php,v 1.25.6 2009/04/07 01:09:00 upk Exp $
 // Copyright (C)
-//   2005,2008 PukiWiki Plus! Team
+//   2005,2009 PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
 //   2001-2002 Originally written by yu-ji
 // License: GPL v2 or (at your option) any later version
@@ -16,7 +16,7 @@
 
 /////////////////////////////////////////////////
 // スキンファイルの場所
-define('SKIN_FILE', SKIN_DIR . 'keitai.skin.php');
+define('SKIN_FILE', add_skindir('keitai'));
 
 /////////////////////////////////////////////////
 // 雛形とするページの読み込みを可能にする
