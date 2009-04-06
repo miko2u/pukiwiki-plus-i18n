@@ -3,7 +3,7 @@
  * PukiWiki Plus! 目次プラグイン
  *
  * @copyright	Copyright &copy; 2004-2006,2008-2009, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version	$Id: toc.php,v 0.16 2009/03/14 19:05:00 upk Exp $
+ * @version	$Id: toc.php,v 0.17 2009/04/06 23:56:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License
  * @link	http://jo1upk.blogdns.net/saito/
  */
@@ -233,19 +233,17 @@ function toc_convert_index($idx,$lvl)
 	$bkup_fixed_heading_edited = $fixed_heading_edited;
 	$fixed_heading_edited = 0;
 	$html = convert_html($lines);
+	$html = ereg_replace("\r|\n",'',$html); // \r \n の除去
 	$fixed_heading_edited = $bkup_fixed_heading_edited;
 
-	$rc = array();
+	$rc = $matches = array();
 	$i = 0;
-	foreach (explode("\n", $html) as $line) {
-		$line = trim($line);
-		if (empty($line)) continue;
-		$matches = array();
-		preg_match("'<h(.?)(.*?)>(.*?)</h.?>'si", $line, $matches);
-		if (!empty($matches[2])) {
-			preg_match("'^id=\"(.*?)\"'si", trim($matches[2]), $mat);
-			$matches[2] = $mat[1];
-		}
+
+	while(preg_match("'<h(.?)(.*?)>(.*?)</h.?>'si", $html, $matches)) {
+                if (!empty($matches[2])) {
+                        preg_match("'^id=\"(.*?)\"'si", trim($matches[2]), $mat);
+                        $matches[2] = $mat[1];
+                }
 
 		if ($off > $i) {
 			$i++;
@@ -259,6 +257,9 @@ function toc_convert_index($idx,$lvl)
 		$rc[$i]['dat'] = strip_htmltag($matches[3]);
 		$rc[$i]['lvl'] = $dat_lvl;
 		$i++;
+
+		$html = str_replace($matches[0], '', $html); // 該当行の削除
+		$matches = array();
 	}
 	return $rc;
 }
