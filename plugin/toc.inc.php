@@ -3,7 +3,7 @@
  * PukiWiki Plus! 目次プラグイン
  *
  * @copyright	Copyright &copy; 2004-2006,2008-2009, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version	$Id: toc.php,v 0.17 2009/04/06 23:56:00 upk Exp $
+ * @version	$Id: toc.php,v 0.18 2009/04/08 02:05:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License
  * @link	http://jo1upk.blogdns.net/saito/
  */
@@ -214,6 +214,7 @@ function toc_convert_index($idx,$lvl)
 {
 	global $plugin_num_proc;
 	global $fixed_heading_edited;
+	global $fixed_heading_anchor;
 	static $num = 0;
 
 	// 不要な行のカウント
@@ -247,13 +248,31 @@ function toc_convert_index($idx,$lvl)
 
 		if ($off > $i) {
 			$i++;
+			$html = str_replace($matches[0], '', $html); // 該当行の削除
+			$matches = array();
 			continue;
 		}
 
 		$dat_lvl = $matches[1]-1;
 		if (! toc_from_to_check($lvl,$dat_lvl)) continue;
 
-		$rc[$i]['tag'] = empty($matches[2]) ? '' : '#'.$matches[2];
+		if (empty($matches[2])) {
+			$rc[$i]['tag'] = '';
+		} else {
+			$rc[$i]['tag'] = '#';
+			// convert_html すると、h2_content_X_1 の X の部分がカウントアップされてしまうので対処する
+			if ($fixed_heading_anchor) {
+				$rc[$i]['tag'] .= $matches[2];
+			} else {
+				$matches2 = array();
+				// h2_content_1_1
+				if (preg_match("'h(.+)_content_(.+)_(.+)'si", $matches[2], $matches2)) {
+					$rc[$i]['tag'] .= 'h'.$matches2[1].'_content_'.--$matches2[2].'_'.$matches2[3];
+				} else {
+					$rc[$i]['tag'] .= $matches[2];
+				}
+			}
+		}
 		$rc[$i]['dat'] = strip_htmltag($matches[3]);
 		$rc[$i]['lvl'] = $dat_lvl;
 		$i++;
