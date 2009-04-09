@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: pukiwiki.ini.php,v 1.148.33 2009/04/04 15:31:00 upk Exp $
+// $Id: pukiwiki.ini.php,v 1.148.34 2009/04/10 00:41:00 upk Exp $
 // Copyright (C)
 //   2005-2009 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
@@ -182,8 +182,8 @@ $absolute_uri = 1;
 $modifier = 'anonymous';
 
 // Site admin's Web page (CHANGE THIS)
-//$modifierlink = get_script_absuri();
-$modifierlink = dirname($_SCRIPT_NAME);
+$modifierlink = get_script_absuri();
+//$modifierlink = dirname($_SCRIPT_NAME);
 
 // Default page name
 $defaultpage  = 'FrontPage';     // Top / Default page

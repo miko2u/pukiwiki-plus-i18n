@@ -1,6 +1,8 @@
 <?php
-// $Id: spam.php,v 1.32.2 2007/10/10 20:47:32 miko Exp $
-// Copyright (C) 2006-2007 PukiWiki Developers Team
+// $Id: spam.php,v 1.32.3 2008/04/10 00:37:00 upk Exp $
+// Copyright (C)
+//   2007,2009 PukiWiki Plus! Team
+//   2006-2007 PukiWiki Developers Team
 // License: GPL v2 or (at your option) any later version
 //
 // Functions for Concept-work of spam-uri metrics
@@ -624,7 +626,9 @@ function check_uri_spam($target = '', $method = array())
 	// ----------------------------------------
 	// URI: Pickup
 
-	$pickups = uri_pickup_normalize(spam_uri_pickup($target, $method));
+	$tmp_pickups = spam_uri_pickup($target, $method);
+	$pickups = uri_pickup_normalize($tmp_pickups);
+	unset($tmp_pickups);
 	$hosts = array();
 	foreach ($pickups as $key => $pickup) {
 		$hosts[$key] = & $pickup['host'];
