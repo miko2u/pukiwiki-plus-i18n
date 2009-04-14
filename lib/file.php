@@ -1,8 +1,8 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: file.php,v 1.87.38 2008/06/17 00:48:00 upk Exp $
+// $Id: file.php,v 1.87.39 2009/04/15 02:54:00 upk Exp $
 // Copyright (C)
-//   2005-2008 PukiWiki Plus! Team
+//   2005-2009 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
 //   2001-2002 Originally written by yu-ji
 // License: GPL v2 or (at your option) any later version
@@ -76,7 +76,7 @@ function get_source($page = NULL, $lock = TRUE, $join = FALSE)
 // Get last-modified filetime of the page
 function get_filetime($page)
 {
-	return is_page($page) ? filemtime(get_filename($page)) : 0;
+	return is_page($page, TRUE) ? filemtime(get_filename($page)) : 0;
 }
 
 // Get physical file name of the page
