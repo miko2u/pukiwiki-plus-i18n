@@ -1,7 +1,7 @@
 <?php
-// $Id: dump.inc.php,v 1.40.7 2007/05/13 22:11:23 miko Exp $
+// $Id: dump.inc.php,v 1.40.8 2009/04/17 19:27:00 upk Exp $
 // Copyright (C)
-//   2005-2007 PukiWiki Plus! Team
+//   2005-2007,2009 PukiWiki Plus! Team
 //   2004-2007 PukiWiki Developers Team
 //   2004      teanan / Interfair Laboratory
 // License: GPL v2 or (at your option) any later version
@@ -209,7 +209,8 @@ function download_tarfile($tempnam, $arc_kind)
 	header('Content-Length: ' . $size);
 	header('Content-Type: application/octet-stream');
 	header('Pragma: no-cache');
-	@readfile($tempnam);
+	// @readfile($tempnam);
+	plus_readfile($tempnam);
 }
 
 /////////////////////////////////////////////////

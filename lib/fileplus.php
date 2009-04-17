@@ -1,8 +1,8 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: fileplus.php,v 1.2.1 2006/10/24 22:18:00 upk Exp $
+// $Id: fileplus.php,v 1.2.2 2009/04/17 20:29:00 upk Exp $
 // Copyright (C)
-//   2005-2006 PukiWiki Plus! Team
+//   2005-2006,2009 PukiWiki Plus! Team
 // License: GPL v2 or (at your option) any later version
 //
 // File related functions - extra functions
@@ -40,5 +40,17 @@ function get_exif_data($file)
 	if (!function_exists('exif_read_data')) { return FALSE; }
 	$exif_rawdata = @exif_read_data($file);
 	return $exif_rawdata;
+}
+
+function plus_readfile($filename)
+{
+	while (@ob_end_flush());
+	if (($fp = fopen($filename,'rb')) === FALSE) return FALSE;
+	while (!feof($fp))
+	{
+		echo fread($fp, 4096);
+		flush();
+	}
+	fclose($fp);
 }
 ?>

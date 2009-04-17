@@ -1,8 +1,8 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: attach.inc.php,v 1.87.35 2008/08/06 02:21:00 upk Exp $
+// $Id: attach.inc.php,v 1.87.36 2009/04/17 19:18:00 upk Exp $
 // Copyright (C)
-//   2005-2008 PukiWiki Plus! Team
+//   2005-2009 PukiWiki Plus! Team
 //   2003-2007 PukiWiki Developers Team
 //   2002-2003 PANDA <panda@arino.jp> http://home.arino.jp/
 //   2002      Y.MASUI <masui@hisec.co.jp> http://masui.net/pukiwiki/
@@ -1006,7 +1006,9 @@ EOD;
 			header('Content-Length: ' . $this->size);
 		}
 
-		@readfile($this->filename);
+		// For BugTrack2/102
+		// @readfile($this->filename);
+		plus_readfile($this->filename);
 		log_put_download($this->page,$this->file);
 		exit;
 	}

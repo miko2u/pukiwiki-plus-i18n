@@ -1,8 +1,8 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: ref.inc.php,v 1.50.10 2007/05/29 09:34:00 miko Exp $
+// $Id: ref.inc.php,v 1.50.11 2009/04/17 19:22:00 upk Exp $
 // Copyright (C)
-//   2005-2007 PukiWiki Plus! Team
+//   2005-2007,2009 PukiWiki Plus! Team
 //   2002-2006 PukiWiki Developers Team
 //   2001-2002 Originally written by yu-ji
 // License: GPL v2 or (at your option) any later version
@@ -459,8 +459,8 @@ function plugin_ref_action()
 		header('Content-Type: '   . $type);
 	}
 
-	@readfile($ref);
-
+	// @readfile($ref);
+	plus_readfile($ref);
 	exit;
 }
 ?>
