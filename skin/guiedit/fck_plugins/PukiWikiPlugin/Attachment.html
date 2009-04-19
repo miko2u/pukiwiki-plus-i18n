@@ -1,0 +1,226 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!--
+	guiedit - PukiWiki Plugin
+
+	License:
+	  GNU General Public License Version 2 or later (GPL)
+	  http://www.gnu.org/licenses/gpl.html
+
+	Copyright (C) 2006-2007 garand
+	PukiWiki : Copyright (C) 2001-2006 PukiWiki Developers Team
+	FCKeditor : Copyright (C) 2003-2007 Frederico Caldeira Knabben
+-->
+<html>
+	<head>
+		<title>Attachment Properties</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta content="noindex, nofollow" name="robots">
+		<script language="javascript">
+
+var oEditor = window.parent.InnerDialogLoaded() ;
+var FCKLang = oEditor.FCKLang ;
+var FCKSelection = oEditor.FCKSelection;
+var PukiWikiPlugin = oEditor.PukiWikiPlugin;
+
+window.onload = function ()
+{
+	oEditor.FCKLanguageManager.TranslatePage(document);
+	
+	LoadSelected();
+	
+	window.parent.SetOkButton(true);
+	window.parent.SetAutoSize(true);
+}
+
+var eSelected = oEditor.FCKSelection.GetSelectedElement2();
+
+function LoadSelected()
+{
+	document.getElementById('height').disabled = true;
+
+	if (!eSelected)
+		return ;
+
+	if (eSelected.className == 'ref') {
+		document.getElementById('name').value = eSelected.getAttribute('_filename');
+		document.getElementById('span').checked = (eSelected.tagName == 'SPAN') ? true : false;
+		document.getElementById('alt').value = eSelected.getAttribute('_alt');
+		document.getElementById('width').value = eSelected.getAttribute('_width');
+		document.getElementById('height').value = eSelected.getAttribute('_height');
+		document.getElementById('size').value = eSelected.getAttribute('_size');
+		document.getElementById('align').value = eSelected.getAttribute('_align');
+		document.getElementById('nolink').checked = (eSelected.getAttribute('_nolink') == 1);
+		document.getElementById('noicon').checked = (eSelected.getAttribute('_noicon') == 1);
+		document.getElementById('noimg').checked = (eSelected.getAttribute('_noimg') == 1);
+		document.getElementById('wrap').checked = (eSelected.getAttribute('_wrap') == 1);
+		document.getElementById('around').checked = (eSelected.getAttribute('_around') == 1);
+		document.getElementById('zoom').checked = (eSelected.getAttribute('_zoom') == 1);
+		
+		if (eSelected.tagName == 'SPAN') {
+			ChangeType('SPAN');
+		}
+		if (eSelected.getAttribute('_size') == 'px') {
+			document.getElementById('height').disabled = false;
+		}
+	}
+	else {
+		eSelected == null ;
+	}
+}
+
+function Ok()
+{
+	var sValue = new Array();
+	sValue['class'] = 'ref';
+	sValue['name'] = document.getElementById('name').value;
+	sValue['type'] = document.getElementById('div').checked ? 'DIV' : 'SPAN';
+	sValue['alt'] = document.getElementById('alt').value;
+	sValue['width'] = document.getElementById('width').value;
+	sValue['height'] = document.getElementById('height').value;
+	sValue['size'] = document.getElementById('size').value;
+	sValue['align'] = document.getElementById('align').value;
+	sValue['nolink'] = document.getElementById('nolink').checked;
+	sValue['noicon'] = document.getElementById('noicon').checked;
+	sValue['noimg'] = document.getElementById('noimg').checked;
+	sValue['wrap'] = document.getElementById('wrap').checked;
+	sValue['around'] = document.getElementById('around').checked;
+	sValue['zoom'] = document.getElementById('zoom').checked;
+
+	if ( sValue['name'].length == 0 )
+	{
+		alert( FCKLang.AttachmentErrNoName ) ;
+		return false ;
+	}
+
+	if (sValue['type'] == 'DIV') {
+		var aTags = ['H2', 'H3', 'H4'];
+		for (i = 0; i < aTags.length; i++) {
+			if (FCKSelection.HasAncestorNode(aTags[i])) {
+				alert(FCKLang.AttachmentErrInsert);
+				return false;
+			}
+		}
+	}
+	if (FCKSelection.HasAncestorNode('PRE')) {
+		alert(FCKLang.AttachmentErrInsert);
+		return false;
+	}
+
+	if (eSelected) {
+		PukiWikiPlugin.Change(eSelected, sValue);
+		return true;
+	}
+
+	PukiWikiPlugin.Add(sValue);
+	return true;
+}
+
+function ChangeType(type) {
+	if (type == 'DIV') {
+		document.getElementById('align').disabled = false;
+		document.getElementById('wrap').disabled = false;
+		document.getElementById('around').disabled = false;
+	}
+	else {
+		document.getElementById('align').disabled = true;
+		document.getElementById('wrap').disabled = true;
+		document.getElementById('around').disabled = true;
+	}
+}
+
+function ChangeSizeType() {
+	if (document.getElementById('size').value == '%') {
+		document.getElementById('height').disabled = true;
+	}
+	else {
+		document.getElementById('height').disabled = false;
+	}
+}
+
+		</script>
+	</head>
+	<body scroll="no" style="OVERFLOW: hidden">
+		<table height="100%" cellSpacing="0" cellPadding="0" width="100%" border="0">
+			<tr>
+				<td>
+					<table cellSpacing="0" cellPadding="2" align="center" border="0" width="100%">
+						<tr>
+							<td><span fckLang="AttachmentDlgType">Type</span>:</td>
+							<td colspan="2">
+								<input id="div" name="type" type="radio" onclick="ChangeType('DIV')" checked>
+								<label for="div" fckLang="AttachmentDlgDiv">Block</label>
+								<input id="span" name="type" type="radio" onclick="ChangeType('SPAN')">
+								<label for="span" fckLang="AttachmentDlgSpan">Inline</label>
+							</td>
+						</tr>
+						<tr>
+							<td><span fckLang="AttachmentDlgName">File Name</span>:</td>
+							<td colspan="2"><input id="name" type="text" style="width: 100%"></td>
+						</tr>
+						<tr>
+							<td><span fckLang="AttachmentDlgAlt">Alternative Text</span>:</td>
+							<td colspan="2"><input id="alt" type="text" style="width: 100%"></td>
+						</tr>
+						<tr>
+							<td><span fckLang="AttachmentDlgWidth">Width</span>:</td>
+							<td  colspan="2">
+								<input id="width" type="text" style="width: 40px">
+								<select id="size" style="width: 50px" onchange="ChangeSizeType()">
+									<option value="%">%</option>
+									<option value="px">px</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td><span fckLang="AttachmentDlgHeight">Height</span>:</td>
+							<td><input id="height" type="text" style="width: 40px; margin-right: 6px">px</td>
+							<td align="right">
+								<span fckLang="AttachmentDlgAlign">Align</span>:
+								<select id="align" style="width: 100px; margin-left: 10px">
+									<option value="" fckLang="AttachmentDlgAlignNo">No</option>
+									<option value="left" fckLang="AttachmentDlgAlignLeft">Left</option>
+									<option value="center" fckLang="AttachmentDlgAlignCenter">Center</option>
+									<option value="right" fckLang="AttachmentDlgAlignRight">Right</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="3" height="10"></td>
+						</tr>
+						<tr>
+							<td colspan="2">
+								<input id="nolink" type="checkbox">
+								<label for="nolink" fckLang="AttachmentDlgNoLink">nolink</label>
+							</td>
+							<td>
+								<input id="zoom" type="checkbox">
+								<label for="zoom" fckLang="AttachmentDlgZoom">zoom</label>
+							</td>
+
+						</tr>
+						<tr>
+							<td colspan="2">
+								<input id="noicon" type="checkbox">
+								<label for="noicon" fckLang="AttachmentDlgNoIcon">noicon</label>
+							</td>
+							<td>
+								<input id="wrap" type="checkbox">
+								<label for="wrap" fckLang="AttachmentDlgWrap">wrap</label>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2">
+								<input id="noimg" type="checkbox">
+								<label for="noimg" fckLang="AttachmentDlgNoImg">noimg</label>
+							</td>
+							<td>
+								<input id="around" type="checkbox">
+								<label for="around" fckLang="AttachmentDlgAround">around</label>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+	</body>
+</html>

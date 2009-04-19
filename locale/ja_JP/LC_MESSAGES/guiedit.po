@@ -1,0 +1,33 @@
+# PukiWiki Plus! - Yet Another WikiWikiWeb Clone
+# Copyright (C) 2009 PukiWiki Plus! Developer Team
+# License is GPL2
+# Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>, 2009.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PukiWiki Plus! 1.4.7-u2-i18n\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-04-20 02:02+0900\n"
+"PO-Revision-Date: 2009-03-30 01:30+0900\n"
+"Last-Translator: Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>\n"
+"Language-Team: Japanese <ja@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../plugin/guiedit.inc.php:34 ../../plugin/guiedit.inc.php:37
+msgid "PKWK_READONLY prohibits editing"
+msgstr "PKWK_READONLY 編集禁止"
+
+#: ../../plugin/guiedit.inc.php:45
+msgid "PKWK_CREATE_PAGE prohibits editing"
+msgstr "PKWK_CREATE_PAGE 編集禁止"
+
+#: ../../plugin/guiedit.inc.php:164
+msgid "To confirm the changes, click the button at the bottom of the page"
+msgstr ""
+"以下のプレビューを確認して、よければページ下部のボタンで更新してください。"
+
+#: ../../plugin/guiedit.inc.php:165
+msgid "(The contents of the page are empty. Updating deletes this page.)"
+msgstr "（ページの内容は空です。更新するとこのページは削除されます。）"

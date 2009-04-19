@@ -1,0 +1,145 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!--
+	guiedit - PukiWiki Plugin
+
+	License:
+	  GNU General Public License Version 2 or later (GPL)
+	  http://www.gnu.org/licenses/gpl.html
+
+	Copyright (C) 2006-2007 garand
+	PukiWiki : Copyright (C) 2001-2006 PukiWiki Developers Team
+	FCKeditor : Copyright (C) 2003-2007 Frederico Caldeira Knabben
+-->
+<html>
+	<head>
+		<title>PukiWikiPlugin Properties</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta content="noindex, nofollow" name="robots">
+		<script language="javascript">
+
+var oEditor = window.parent.InnerDialogLoaded();
+var oDOM = oEditor.FCK.EditorDocument;
+var FCKSelection = oEditor.FCKSelection;
+
+var oDList = FCKSelection.MoveToAncestorNode('DL');
+
+window.onload = function () {
+	oEditor.FCKLanguageManager.TranslatePage(document);
+	
+	if (!oDList) {
+		document.getElementById('point').disabled = true;
+	}
+
+	window.parent.SetOkButton(true);
+	window.parent.SetAutoSize(true);
+}
+
+function Ok() {
+	var oDT = null;
+	var oDD = null;
+	
+	if (document.getElementById('term').value) {
+		oDT = oDOM.createElement('DT');
+		oDT.innerHTML = document.getElementById('term').value;
+	}
+	if (document.getElementById('description').value) {
+		oDD = oDOM.createElement('DD');
+		oDD.innerHTML = document.getElementById('description').value;
+	}
+	
+	if (!oDT && !oDD) {
+		return false;
+	}
+	
+	if (!oDList) {
+		oDList = oEditor.FCK.CreateElement('DL');
+		oDList.style.paddingLeft = "16px";
+		oDList.style.marginLeft = "16px";
+		
+		oDList.appendChild(oDT);
+		oDList.appendChild(oDD);
+		
+		oEditor.FCKUndo.SaveUndoStep();
+		return true;
+	}
+	
+	oEditor.FCKUndo.SaveUndoStep();
+	
+	switch (document.getElementById('point').value) {
+		case 'prev':
+			var oNode = FCKSelection.MoveToAncestorNode('DT') || FCKSelection.MoveToAncestorNode('DD');
+			if (oNode.tagName == 'DD') {
+				var oPrevNode = oNode.previousSibling;
+				if (oPrevNode && oPrevNode.tagName == 'DT') {
+					oNode = oPrevNode;
+				}
+			}
+			oDList.insertBefore(oDT, oNode);
+			oDList.insertBefore(oDD, oNode);
+			break;
+		case 'next':
+			var oNode = FCKSelection.MoveToAncestorNode('DD') || FCKSelection.MoveToAncestorNode('DT');
+			if (oNode.tagName == 'DT') {
+				var oNextNode = oNode.nextSibling;
+				if (oNextNode && oNextNode.tagName == 'DD') {
+					oNode = oNextNode;
+				}
+			}
+			
+			if (!oNode.nextSibling) {
+				oDList.appendChild(oDT);
+				oDList.appendChild(oDD);
+			}
+			else {
+				oDList.insertBefore(oDD, oNode.nextSibling);
+				oDList.insertBefore(oDT, oNode.nextSibling);
+			}
+			break;
+		case 'head':
+			oDList.insertBefore(oDD, oDList.firstChild);
+			oDList.insertBefore(oDT, oDList.firstChild);
+			break;
+		case 'tail':
+			oDList.appendChild(oDT);
+			oDList.appendChild(oDD);
+			break;
+	}
+	
+	oEditor.FCKUndo.SaveUndoStep();
+
+	return true;
+}
+
+
+		</script>
+	</head>
+	<body scroll="no" style="OVERFLOW: hidden">
+		<table height="100%" cellSpacing="0" cellPadding="0" width="100%" border="0">
+			<tr>
+				<td>
+					<table cellSpacing="0" cellPadding="2" align="center" border="0" width="100%">
+						<tr>
+							<td><span fckLang="DListDlgPoint">Point</span>:</td>
+							<td>
+								<select id="point" style="width:140px">
+									<option value="prev" fckLang="DListDlgPointUpper">Previous</option>
+									<option value="next" fckLang="DListDlgPointLower">Next</option>
+									<option value="head" fckLang="DListDlgPointTop">Head</option>
+									<option value="tail" fckLang="DListDlgPointBottom">Tail</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td><span fckLang="DListDlgTerm">Term</span>:</td>
+							<td><input id="term" type="text" style="width: 100%"></td>
+						</tr>
+						<tr>
+							<td valign="top"><span fckLang="DListDlgDescription">Description</span>:</td>
+							<td><textarea id="description" rows="5" cols="20" style="width: 100%"></textarea></td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+	</body>
+</html>

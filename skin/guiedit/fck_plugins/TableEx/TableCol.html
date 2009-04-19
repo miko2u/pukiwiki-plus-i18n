@@ -1,0 +1,241 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" >
+<!--
+	guiedit - PukiWiki Plugin
+
+	License:
+	  GNU General Public License Version 2 or later (GPL)
+	  http://www.gnu.org/licenses/gpl.html
+
+	Copyright (C) 2006-2007 garand
+	PukiWiki : Copyright (C) 2001-2006 PukiWiki Developers Team
+	FCKeditor : Copyright (C) 2003-2007 Frederico Caldeira Knabben
+-->
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>Table Cell Properties</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="robots" content="noindex, nofollow" />
+	<script type="text/javascript">
+
+var oEditor = window.parent.InnerDialogLoaded();
+
+var oDOM = oEditor.FCK.EditorDocument;
+
+var oCell = oEditor.FCKTableHandler.GetSelectedCells()[0];
+var oTable = oEditor.FCKSelection.MoveToAncestorNode('TABLE');
+var aTableMap = oEditor.FCKTableHandler._CreateTableMap(oTable);
+var nColIndex = oEditor.FCKTableHandler._GetCellIndexSpan(aTableMap, oCell.parentNode.rowIndex, oCell);
+var oCol = null;
+
+//	ダイアログの共通スクリプトの読み込み
+var src = oEditor.FCKConfig.BasePath + 'dialog/common/fck_dialog_common.js';
+document.write('<script type="text/javascript" src="' + src + '"><\/script>');
+
+window.onload = function() {
+	oEditor.FCKLanguageManager.TranslatePage(document);
+
+	SetStartupValue() ;
+
+	window.parent.SetOkButton(true);
+	window.parent.SetAutoSize(true);
+}
+
+function SetStartupValue() {
+	if (oTable.firstChild.tagName == 'COLGROUP') {
+		var aCols = oTable.firstChild.getElementsByTagName('COL');
+		oCol = aCols[nColIndex];
+		
+		GetE('txtWidth').value = GetAttribute(oCol, 'width');
+		GetE('selHAlign').value = GetAttribute(oCol, 'align');
+		GetE('txtFontSize').value = oCol.style.fontSize.replace("px", '');
+		GetE('txtBackColor').value = oCol.style.backgroundColor;
+		GetE('txtFontColor').value = oCol.style.color;
+	}
+}
+
+function Ok() {
+	//	COLGROUP の取得
+	switch (GetE('selRange').value) {
+		 case 'ColAfter':
+		 	var oRow = oCell.parentNode;
+		 	if (oRow.previousSibling && oRow.previousSibling.tagName != 'COLGROUP') {
+		 		oRow.parentNode.insertBefore(CreateColGroup(), oRow);
+		 	}
+		 	else if (!oRow.parentNode.previousSibling || oRow.parentNode.previousSibling.tagName != 'COLGROUP') {
+		 		oRow.parentNode.parentNode.insertBefore(CreateColGroup(), oRow.parentNode);
+			}
+		 	oColGroup = oRow.previousSibling || oRow.parentNode.previousSibling;
+		 	break;
+		 default:
+		 	if (oTable.firstChild.tagName != 'COLGROUP') {
+		 		oTable.insertBefore(CreateColGroup(), oTable.firstChild);
+		 	}
+		 	oColGroup = oTable.firstChild;
+		 	break;
+	}
+	
+	//	COL の取得
+	var aCols = oColGroup.getElementsByTagName('COL');
+	oCol = aCols[nColIndex];
+	
+	//	セルの幅
+	if (GetE('txtWidth').value.length > 0) {
+		oCol.width = GetE('txtWidth').value;
+	}
+	else {
+		oCol.removeAttribute('width', 0);
+	}
+
+	//	整列
+	SetAttribute(oCol, 'align', GetE('selHAlign').value);
+
+	//	文字サイズ
+	if (GetE('txtFontSize').value.length) {
+		oCol.style.fontSize = GetE('txtFontSize').value + 'px';
+	}
+	else {
+		RemoveStyle(oCol, 'font-size');
+	}
+	
+	//	文字色
+	oCol.style.color = GetE('txtFontColor').value;
+	
+	//	背景色
+	oCol.style.backgroundColor = GetE('txtBackColor').value;
+
+	return true ;
+}
+
+function CreateColGroup() {
+	var element = oDOM.createElement('COLGROUP');
+	for (i = 0; i < aTableMap[0].length; i++) {
+		var col = oDOM.createElement('COL');
+		element.appendChild(col);
+	}
+	
+	return element;
+}
+
+//	スタイルを削除
+function RemoveStyle(oElement, property) {
+	if (oEditor.FCKBrowserInfo.IsIE) {
+		property = property.replace(/-([a-z])/g, function($0, $1){return $1.toUpperCase()});
+		oElement.style.removeAttribute(property);
+	}
+	else {
+		oElement.style.removeProperty(property);
+	}
+}
+
+function SelectBackColor(color) {
+	if (color && color.length > 0)
+		GetE('txtBackColor').value = color;
+}
+
+function SelectFontColor(color) {
+	if (color && color.length > 0)
+		GetE('txtFontColor').value = color;
+}
+
+function SelectColor(wich) {
+	oEditor.FCKDialog.OpenDialog('FCKDialog_Color', oEditor.FCKLang.DlgColorTitle,
+		'dialog/fck_colorselector.html', 400, 330, wich == 'Back' ? SelectBackColor : SelectFontColor, window
+	);
+}
+
+	</script>
+</head>
+<body scroll="no" style="overflow: hidden">
+	<table cellspacing="0" cellpadding="0" width="100%" border="0" height="100%">
+		<tr>
+			<td valign="top">
+				<table cellspacing="1" cellpadding="1" width="100%" border="0">
+					<tr>
+						<td colspan="3">
+							<table cellspacing="0" cellpadding="0" border="0">
+								<tr>
+									<td><span fcklang="TableColDlgRange">Range</span>:</td>
+									<td>
+										&nbsp;
+										<select id="selRange">
+											<option fcklang="TableColDlgRangeColAll" value="ColAll"></option>
+											<option fcklang="TableColDlgRangeColAfter"value="ColAfter"></option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<td>&nbsp;</td>
+									<td>&nbsp;</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+					<tr>
+						<td valign="top">
+							<table cellspacing="0" cellpadding="0" border="0">
+								<tr>
+									<td><span fcklang="DlgCellWidth">Width</span>:</td>
+									<td>&nbsp;<input id="txtWidth" type="text" maxlength="4" size="4" /></td>
+								</tr>
+								<tr>
+									<td>&nbsp;</td>
+									<td>&nbsp;</td>
+								</tr>
+								<tr>
+									<td><span fcklang="TableCellDlgAlign">Alignment</span>:</td>
+									<td colspan="2">
+										&nbsp;
+										<select id="selHAlign" name="selAlignment">
+											<option fcklang="DlgCellHorAlignNotSet" value="" selected>Not set</option>
+											<option fcklang="DlgCellHorAlignLeft" value="left">Left</option>
+											<option fcklang="DlgCellHorAlignCenter" value="center">Center</option>
+											<option fcklang="DlgCellHorAlignRight" value="right">Right</option>
+										</select>
+									</td>
+								</tr>
+							</table>
+						</td>
+						<td>&nbsp;&nbsp;&nbsp;</td>
+						<td valign="bottom">
+							<table cellspacing="0" cellpadding="0" border="0">
+								<tr>
+									<td>
+										<span fcklang="TableCellDlgFontSize">Font Size</span>:</td>
+									<td colspan="2">
+										&nbsp;
+										<input id="txtFontSize" type="text" maxlength="3" size="3" />
+										&nbsp;px
+									</td>
+								</tr>
+								<tr>
+									<td>&nbsp;</td>
+									<td>&nbsp;</td>
+									<td>&nbsp;</td>
+								</tr>
+								<tr>
+									<td><span fcklang="TableCellDlgFontColor">Font Color</span>:</td>
+									<td>&nbsp;<input id="txtFontColor" type="text" size="8" name="txtCellPadding" /></td>
+									<td>
+										&nbsp;
+										<input type="button" fcklang="DlgCellBtnSelect" value="Select..."
+											onclick="SelectColor('Font')" />
+									</td>
+								</tr>
+								<tr>
+									<td><span fcklang="DlgCellBackColor">Background Color</span>:</td>
+									<td>&nbsp;<input id="txtBackColor" type="text" size="8" name="txtCellSpacing"></td>
+									<td>
+										&nbsp;
+										<input type="button" fcklang="DlgCellBtnSelect" value="Select..."
+											onclick="SelectColor('Back')">
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+</body>
+</html>

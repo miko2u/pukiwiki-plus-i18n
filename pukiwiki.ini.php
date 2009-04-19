@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: pukiwiki.ini.php,v 1.148.34 2009/04/10 00:41:00 upk Exp $
+// $Id: pukiwiki.ini.php,v 1.148.35 2009/04/19 14:54:00 upk Exp $
 // Copyright (C)
 //   2005-2009 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
@@ -247,7 +247,7 @@ $use_spam_check = array(
 /////////////////////////////////////////////////
 // Spam URI insertion filtering
 
-$spam = 1;	// 1 = On
+$spam = 0;	// 1 = On
 
 if ($spam) {
 	$spam = array();
@@ -300,7 +300,7 @@ $deny_countory = array();
 //    Ping is not transmitted by the automatic operation.
 // 2: on
 //    Function in the past. Automatic ping transmission.
-$trackback = 2;
+$trackback = 1;
 
 /////////////////////////////////////////////////
 // Referer list feature
@@ -456,7 +456,7 @@ $time_format = 'H:i:s';
 // Max number of RSS feed
 $rss_max = 15;
 // Description
-$rss_description = 'PukiWiki RecentChanges';
+$rss_description = 'PukiWiki Plus! i18n RecentChanges';
 
 /////////////////////////////////////////////////
 // Backup related settings
@@ -598,6 +598,7 @@ $usedatetime = 1;
 //
 // 見出し行の固有のアンカ自動挿入されているとき
 // のみ有効です
+// 0:無効, 1:edit, 2:guiedit プラグインを利用
 $fixed_heading_edited = 0;
 
 /////////////////////////////////////////////////

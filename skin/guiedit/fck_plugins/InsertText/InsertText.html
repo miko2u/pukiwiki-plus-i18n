@@ -1,0 +1,98 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!--
+	guiedit - PukiWiki Plugin
+
+	License:
+	  GNU General Public License Version 2 or later (GPL)
+	  http://www.gnu.org/licenses/gpl.html
+
+	Copyright (C) 2006-2007 garand
+	PukiWiki : Copyright (C) 2001-2006 PukiWiki Developers Team
+	FCKeditor : Copyright (C) 2003-2007 Frederico Caldeira Knabben
+-->
+<html>
+	<head>
+		<title>PukiWikiPlugin Properties</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta content="noindex, nofollow" name="robots">
+		<script language="javascript">
+
+
+var oEditor = window.parent.InnerDialogLoaded();
+var FCKLang = oEditor.FCKLang;
+var FCKSelection = oEditor.FCKSelection;
+
+//	ダイアログの共通スクリプトの読み込み
+var src = oEditor.FCKConfig.BasePath + 'dialog/common/fck_dialog_common.js';
+document.write('<script type="text/javascript" src="' + src + '"><\/script>');
+
+window.onload = function ()
+{
+	// First of all, translate the dialog box texts
+	oEditor.FCKLanguageManager.TranslatePage(document);
+	
+	var aTags = ['H2', 'H3', 'H4', 'PRE', 'TABLE'];
+	for (i = 0; i < aTags.length; i++) {
+		if (FCKSelection.HasAncestorNode(aTags[i])) {
+			GetE('div').disabled = true;
+			GetE('pre').disabled = true;
+		}
+	}
+	SelectField('text');
+	
+	// Show the "Ok" button.
+	window.parent.SetOkButton(true);
+	window.parent.SetAutoSize(true);
+}
+
+function Ok() {
+	oEditor.FCKUndo.SaveUndoStep();
+
+	var html = GetE('text').value.replace(/(<BR\s?\/?>)?\n/gi, "<br />");
+	
+	if (GetE('inline').checked) {
+		oEditor.FCK.InsertHtml(html);
+	}
+	else if (GetE('div').checked) {
+		e = oEditor.FCK.InsertElement('DIV');
+		e.innerHTML = html;
+	}
+	else if (GetE('pre').checked) {
+		e = oEditor.FCK.InsertElement('PRE');
+		e.innerHTML = html;
+	}
+	
+	return true;
+}
+
+		</script>
+	</head>
+	<body scroll="no" style="OVERFLOW: hidden">
+		<table height="100%" cellSpacing="0" cellPadding="0" width="100%" border="0">
+			<tr>
+				<td>
+					<table cellSpacing="0" cellPadding="2" align="center" border="0" width="100%">
+						<tr>
+							<td valign="top">
+								<textarea id="text" rows="5" cols="20" style="width: 100%"></textarea>
+							</td>
+						</tr>
+						<tr>
+							<td valign="top">
+								<fieldset>
+									<legend><span fckLang="InsertTextDlgType">Type</span></legend>
+									<input id="inline" type="radio" name="type" checked>
+									<label for="inline" fckLang="InsertTextDlgInline">Inline</label><br>
+									<input id="div" type="radio" name="type">
+									<label for="div" fckLang="InsertTextDlgDiv">Div</label><br>
+									<input id="pre" type="radio" name="type">
+									<label for="pre" fckLang="InsertTextDlgPre">Pre</label>
+								</fieldset>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+	</body>
+</html>

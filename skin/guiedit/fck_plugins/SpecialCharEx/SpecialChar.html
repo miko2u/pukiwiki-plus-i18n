@@ -1,0 +1,174 @@
+<!--
+ * FCKeditor - The text editor for Internet - http://www.fckeditor.net
+ * Copyright (C) 2003-2007 Frederico Caldeira Knabben
+ * 
+ * == BEGIN LICENSE ==
+ * 
+ * Licensed under the terms of any of the following licenses at your
+ * choice:
+ * 
+ *  - GNU General Public License Version 2 or later (the "GPL")
+ *    http://www.gnu.org/licenses/gpl.html
+ * 
+ *  - GNU Lesser General Public License Version 2.1 or later (the "LGPL")
+ *    http://www.gnu.org/licenses/lgpl.html
+ * 
+ *  - Mozilla Public License Version 1.1 or later (the "MPL")
+ *    http://www.mozilla.org/MPL/MPL-1.1.html
+ * 
+ * == END LICENSE ==
+ * 
+ * File Name: fck_specialchar.html
+ * 	Special Chars Selector dialog window.
+ * 
+ * File Authors:
+ * 		Frederico Caldeira Knabben (www.fckeditor.net)
+-->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" >
+<html>
+	<head>
+		<meta name="robots" content="noindex, nofollow">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<style type="text/css">
+				.Hand 
+				{ 
+					cursor: pointer ;
+					cursor: hand ; 
+				}
+				.Sample { font-size: 24px; }
+		</style>
+		<script type="text/javascript">
+
+var oEditor = window.parent.InnerDialogLoaded();
+var FCKLang = oEditor.FCKLang;
+
+var oSample ;
+
+//	ダイアログの共通スクリプトの読み込み
+var src = oEditor.FCKConfig.BasePath + 'dialog/common/fck_dialog_common.js';
+document.write('<script type="text/javascript" src="' + src + '"><\/script>');
+
+window.parent.AddTab('Basic', FCKLang.SpecialCharDlgBasic);
+window.parent.AddTab('Latin', FCKLang.SpecialCharDlgLatin);
+window.parent.AddTab('Greek', FCKLang.SpecialCharDlgGreek);
+window.parent.AddTab('Symbol', FCKLang.SpecialCharDlgSymbol);
+
+function OnDialogTabChange(tabCode) {
+	ShowE('Basic', (tabCode == 'Basic'));
+	ShowE('Latin', (tabCode == 'Latin'));
+	ShowE('Greek', (tabCode == 'Greek'));
+	ShowE('Symbol', (tabCode == 'Symbol'));
+	
+	oSample = document.getElementById("SampleTD" + tabCode);
+}
+
+function insertChar(charValue) {
+	oEditor.FCK.InsertHtml(charValue || "");
+	window.parent.Cancel();
+}
+
+function over(td) {
+	oSample.innerHTML = td.innerHTML;
+	td.className = 'LightBackground SpecialCharsOver Hand';
+}
+
+function out(td) {
+	oSample.innerHTML = "&nbsp;";
+	td.className = 'DarkBackground SpecialCharsOut Hand';
+}
+
+function setDefaults() {
+	oSample = document.getElementById("SampleTDBasic");
+
+	oEditor.FCKLanguageManager.TranslatePage(document);
+	
+	OnDialogTabChange('Basic');
+	
+	window.parent.SetAutoSize(true);
+}
+
+function OutputHtml(aChars, sTab) {
+	document.write('<table cellpadding="0" cellspacing="0" width="100%" height="100%"><tr><td width="100%" valign="top">');
+	document.write('<table cellpadding="1" cellspacing="1" align="center" border="0">');
+
+	for (i = 0; i < 6; i++) {
+		document.write("<TR>");
+		for(var j = 0 ; j < 16 ; j++) {
+			if (aChars[i] && aChars[i][j]) {
+				document.write('<TD width="20" height="20" class="DarkBackground SpecialCharsOut Hand" align="center" onclick="insertChar(\'' + aChars[i][j].replace(/&/g, "&amp;") + '\')" onmouseover="over(this)" onmouseout="out(this)">');
+				document.write(aChars[i][j]);
+			}
+			else {
+				document.write("<TD width='20' height='20' class='DarkBackground SpecialCharsOut'>&nbsp;");
+			}
+			document.write("<\/TD>");
+			
+		}
+		document.write("<\/TR>");
+	}
+	
+	document.write('</table></td><td nowrap>&nbsp;&nbsp;&nbsp;&nbsp;</td><td valign="top">');
+	document.write('<table width="40" cellpadding="0" cellspacing="0" border="0"><tr>');
+	document.write('<td id="SampleTD' + sTab + '" width="40" height="40" align="center"');
+	document.write(' class="DarkBackground SpecialCharsOut Sample">&nbsp;</td>');
+	document.write('</tr></table></td></tr></table>');
+}
+
+		</script>
+	</HEAD>
+	<BODY onload="setDefaults()" scroll="no">
+		<div id="Basic">
+			<script type="text/javascript">
+var aChars = [
+	["","!","&quot;","#","$","%","&amp;","\\'","(",")","*","+","-",".","/"],
+	["0","1","2","3","4","5","6","7","8","9",":",";","&lt;","=","&gt;","?"],
+	["@","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O"],
+	["P","Q","R","S","T","U","V","W","X","Y","Z","[","]","^","_","`"],
+	["","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o"],
+	["p","q","r","s","t","u","v","w","x","y","z","{","|","}","~"] 
+];
+OutputHtml(aChars, "Basic");
+			</script>
+		</div>
+		<div id="Latin">
+			<script type="text/javascript">
+var aChars = [
+	["","&iexcl;","&cent;","&pound;","&curren;","&yen;","&brvbar;","&sect;","&uml;","&copy;","&ordf;","&laquo;","&not;","&reg;","&macr;"],
+	["&deg;","&plusmn;","&sup2;","&sup3;","&acute;","&micro;","&para;","&middot;","&cedil;","&sup1;","&ordm;","&raquo;","&frac14;","&frac12;","&frac34;","&iquest;"],
+	["&Agrave;","&Aacute;","&Acirc;","&Atilde;","&Auml;","&Aring;","&AElig;","&Ccedil;","&Egrave;","&Eacute;","&Ecirc;","&Euml;","&Igrave;","&Iacute;","&Icirc;","&Iuml;"],
+	["&ETH;","&Ntilde;","&Ograve;","&Oacute;","&Ocirc;","&Otilde;","&Ouml;","&times;","&Oslash;","&Ugrave;","&Uacute;","&Ucirc;","&Uuml;","&Yacute;","&THORN;","&szlig;"],
+	["&agrave;","&aacute;","&acirc;","&atilde;","&auml;","&aring;","&aelig;","&ccedil;","&egrave;","&eacute;","&ecirc;","&euml;","&igrave;","&iacute;","&icirc;","&iuml;"],
+	["&eth;","&ntilde;","&ograve;","&oacute;","&ocirc;","&otilde;","&ouml;","&divide;","&oslash;","&ugrave;","&uacute;","&ucirc;","&uuml;","&uuml;","&yacute;","&thorn;","&yuml;"]
+];
+
+OutputHtml(aChars, "Latin");
+			</script>
+		</div>
+		<div id="Greek">
+			<script type="text/javascript">
+var aChars = [
+	["","&Alpha;","&Beta;","&Gamma;","&Delta;","&Epsilon;","&Zeta;","&Eta;","&Theta;","&Iota;","&Kappa;","&Lambda;","&Mu;","&Nu;","&Xi;","&Omicron;"],
+	["&Pi;","&Rho;","&Sigma;","&Tau;","&Upsilon;","&Phi;","&Chi;","&Psi;","&Omega;"],
+	["","&alpha;","&beta;","&gamma;","&delta;","&epsilon;","&zeta;","&eta;","&theta;","&iota;","&kappa;","&lambda;","&mu;","&nu;","&xi;","&omicron;"],
+	["&pi;","&rho;","&sigma;","&tau;","&upsilon;","&phi;","&chi;","&psi;","&omega;"]
+];
+
+OutputHtml(aChars, "Greek");
+			</script>
+		</div>
+		<div id="Symbol">
+			<script type="text/javascript">
+var aChars = [
+	["&fnof;","","&bull;","&hellip;","&prime;","&Prime;","&oline;","&frasl;","","&weierp;","&image;","&real;","&trade;","&alefsym;"],
+	["&larr;","&uarr;","&rarr;","&darr;","&harr;","&crarr;","&lArr;","&uArr;","&rArr;","&dArr;","&hArr;"],
+	["&forall;","&part;","&exist;","&empty;","&nabla;","&isin;","&notin;","&ni;","&prod;","&sum;","&minus;","","&lowast;","&radic;","&prop;","&infin;"],
+	["&ang;","","&and;","&or;","&cap;","&cup;","&int;","","&there4;","","&sim;","","&cong;","&asymp;"],
+	["&ne;","&equiv;","&le;","&ge;","","&sub;","&sup;","&nsub;","&sube;","&supe;","","&oplus;","&otimes;","","&perp;"],
+	["&loz;","&spades;","&clubs;","&hearts;","&diams;"]
+];
+
+OutputHtml(aChars, "Symbol");
+			</script>
+		</div>
+	</BODY>
+</HTML>

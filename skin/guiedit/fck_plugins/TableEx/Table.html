@@ -1,0 +1,158 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" >
+<!--
+	guiedit - PukiWiki Plugin
+
+	License:
+	  GNU General Public License Version 2 or later (GPL)
+	  http://www.gnu.org/licenses/gpl.html
+
+	Copyright (C) 2006-2007 garand
+	PukiWiki : Copyright (C) 2001-2006 PukiWiki Developers Team
+	FCKeditor : Copyright (C) 2003-2007 Frederico Caldeira Knabben
+-->
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>Table Properties</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="robots" content="noindex, nofollow" />
+	<script type="text/javascript">
+
+var oEditor = window.parent.InnerDialogLoaded() ;
+
+var oDOM = oEditor.FCK.EditorDocument ;
+
+var table ;
+var e = oEditor.FCKSelection.MoveToAncestorNode('TABLE');
+
+if (e && e.tagName == "TABLE") {
+	table = e;
+}
+
+var bHead = false;
+var bFoot = false;
+
+//	ダイアログの共通スクリプトの読み込み
+var src = oEditor.FCKConfig.BasePath + 'dialog/common/fck_dialog_common.js';
+document.write('<script type="text/javascript" src="' + src + '"><\/script>');
+
+window.onload = function() {
+	oEditor.FCKLanguageManager.TranslatePage(document);
+
+	if (table) {
+		bHead = table.getElementsByTagName('THEAD').length ? true : false;
+		bFoot = table.getElementsByTagName('TFOOT').length ? true : false;
+		document.getElementById('txtRows').value = table.rows.length;
+		document.getElementById('txtRows').disabled = true;
+		document.getElementById('txtColumns').value = table.rows[0].cells.length;
+		document.getElementById('txtColumns').disabled = true;
+		document.getElementById('thead').checked = bHead;
+		document.getElementById('tfoot').checked = bFoot;
+	}
+	
+	window.parent.SetOkButton(true);
+	window.parent.SetAutoSize(true);
+}
+
+function Ok() {
+	var bExists = (table != null);
+	
+	if (!bExists) {
+		//	テーブルを作成
+		table = oDOM.createElement("TABLE");
+		table.className = 'style_table';
+		table.cellSpacing = 1;
+	}
+	
+	var iRows = document.getElementById('txtRows').value;
+	var iCols = document.getElementById('txtColumns').value;
+	var oRow;
+	
+	if (!bExists) {
+		//	セルの挿入
+		for (var r = 0 ; r < iRows ; r++) {
+			oRow = table.insertRow(-1);
+			InsertCells(oRow, iCols);
+		}
+		//	ヘッダ行の挿入
+		if (document.getElementById('thead').checked) {
+			var oHead = table.createTHead();
+			oRow = oHead.insertRow(-1);
+			InsertCells(oRow, iCols);
+		}
+		//	フッタ行の挿入
+		if (document.getElementById('tfoot').checked) {
+			var oFoot = table.createTFoot();
+			oRow = oFoot.insertRow(-1);
+			InsertCells(oRow, iCols);
+		}
+		
+		oEditor.FCK.InsertElement(table);
+	}
+	else {
+		if (bHead != document.getElementById('thead').checked) {
+			//	ヘッダ行
+			bHead = !bHead;
+			if (bHead) {
+				var oHead = table.createTHead();
+				oRow = oHead.insertRow(-1);
+				InsertCells(oRow, iCols);
+			}
+			else {
+				table.deleteTHead();
+			}
+		}
+		if (bFoot != document.getElementById('tfoot').checked) {
+			//	フッタ行
+			bFoot = !bFoot;
+			if (bFoot) {
+				var oFoot = table.createTFoot();
+				oRow = oFoot.insertRow(-1);
+				InsertCells(oRow, iCols);
+			}
+			else {
+				table.deleteTFoot();
+			}
+		}
+	}
+	
+	return true;
+}
+
+function InsertCells(oRow, iCols) {
+	for (var c = 0 ; c < iCols ; c++) {
+		var oCell = oRow.insertCell(-1);
+		oCell.className = 'style_td';
+		if (oEditor.FCKBrowserInfo.IsGeckoLike)
+			oEditor.FCKTools.AppendBogusBr(oCell);
+	}
+}
+
+	</script>
+</head>
+<body style="overflow: hidden">
+	<table id="otable" cellspacing="0" cellpadding="0" width="100%" border="0" style="height: 100%">
+		<tr>
+			<td>
+				<table cellspacing="1" cellpadding="1" width="100%" border="0">
+					<tr>
+						<td>
+							<span fcklang="DlgTableRows">Rows</span>:</td>
+						<td>
+							&nbsp;<input id="txtRows" type="text" maxlength="3" size="2" value="3" name="txtRows"
+								onkeypress="return IsDigit(event);" /></td>
+						<td><input id="thead" type="checkbox"><label for="thead" fcklang="TableDlgHead"></label></td>
+					</tr>
+					<tr>
+						<td>
+							<span fcklang="DlgTableColumns">Columns</span>:</td>
+						<td>
+							&nbsp;<input id="txtColumns" type="text" maxlength="2" size="2" value="2" name="txtColumns"
+								onkeypress="return IsDigit(event);" /></td>
+						<td><input id="tfoot" type="checkbox"><label for="tfoot" fcklang="TableDlgFoot"></label></td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+</body>
+</html>

@@ -1,8 +1,8 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: edit.inc.php,v 1.41.39 2008/03/30 23:19:00 upk Exp $
+// $Id: edit.inc.php,v 1.41.40 2009/04/20 01:47:00 upk Exp $
 // Copyright (C)
-//   2005-2008 PukiWiki Plus! Team
+//   2005-2009 PukiWiki Plus! Team
 //   2001-2007 PukiWiki Developers Team
 // License: GPL v2 or (at your option) any later version
 //
@@ -166,7 +166,8 @@ function plugin_edit_inline()
 		$id = '&amp;id='.rawurlencode($id);
 	}
 	$r_page = rawurlencode($page);
-	return '<a class="anchor_super" href="' . $script . '?cmd=edit&amp;page=' . $r_page . $id . '">' . $s_label . '</a>';
+	$use_edit_plugin = ($fixed_heading_edited == 2) ? 'guiedit' : 'edit';
+	return '<a class="anchor_super" href="' . $script . '?cmd='.$use_edit_plugin.'&amp;page=' . $r_page . $id . '">' . $s_label . '</a>';
 }
 
 // Write, add, or insert new comment
