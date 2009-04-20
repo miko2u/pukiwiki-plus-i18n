@@ -2,7 +2,7 @@
 //
 //	guiedit - PukiWiki Plugin
 //
-//	$Id: guiedit.inc.php,v 1.63.1 2009/03/27 21:23:00 upk Exp $
+//	$Id: guiedit.inc.php,v 1.63.2 2009/04/20 23:06:00 upk Exp $
 //
 //	License:
 //	  GNU General Public License Version 2 or later (GPL)
@@ -309,7 +309,8 @@ EOD;
 	$add_notimestamp = '';
 	if ($notimeupdate != 0) {
 		$checked_time = isset($vars['notimestamp']) ? ' checked="checked"' : '';
-		if ($notimeupdate == 2) {
+		// if ($notimeupdate == 2) {
+		if ($notimeupdate == 2 && auth::check_role('role_adm_contents')) {
 			$add_notimestamp = '   ' .
 				'<input type="password" name="pass" size="12" />' . "\n";
 		}
