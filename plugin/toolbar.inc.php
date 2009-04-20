@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: toolbar.php,v 0.2.13 2009/03/01 03:52:00 upk Exp $
+// $Id: toolbar.php,v 0.2.14 2009/04/20 21:57:00 upk Exp $
 // Copyright (C) 2005,2007-2009 PukiWiki Plus! Team
 // License: GPL v2
 //
@@ -90,6 +90,7 @@ function plugin_toolbar_convert()
 			$body .= _toolbar($name);
 			break;
 		case 'edit':
+		case 'guiedit':
 			if (!$is_read) break;
 			if ($is_readonly) break;
 			if ($function_freeze && is_freeze($vars['page'])) break;
@@ -125,6 +126,7 @@ $_IMAGE['skin']['reload']     = 'reload.png';
 $_IMAGE['skin']['new']        = 'new.png';
 $_IMAGE['skin']['newsub']     = 'new_sub.png';
 $_IMAGE['skin']['edit']       = 'edit.png';
+$_IMAGE['skin']['guiedit']    = 'plus/guiedit.png';
 $_IMAGE['skin']['freeze']     = 'freeze.png';
 $_IMAGE['skin']['unfreeze']   = 'unfreeze.png';
 $_IMAGE['skin']['diff']       = 'diff.png';
@@ -147,7 +149,6 @@ $_IMAGE['skin']['brokenlink'] = 'plus/brokenlink.png';
 $_IMAGE['skin']['log']        = 'log.png';
 $_IMAGE['skin']['print']      = 'plus/print.png';
 $_IMAGE['skin']['full']       = 'plus/full.png';
-
 
 	$lang  = $_LANG['skin'];
 	$link  = $_LINK;
