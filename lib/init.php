@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: init.php,v 1.54.32 2009/04/21 23:37:00 upk Exp $
+// $Id: init.php,v 1.54.33 2009/04/24 02:00:00 upk Exp $
 // Copyright (C)
 //   2005-2009 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
@@ -227,17 +227,16 @@ if (isset($_GET['encode_hint']) && $_GET['encode_hint'] != '')
 // QUERY_STRINGを取得
 
 $arg = '';
-//if (isset($_SERVER['QUERY_STRING']) && $_SERVER['QUERY_STRING']) {
-if (!empty($_SERVER['QUERY_STRING'])) {
-	$arg = & $_SERVER['QUERY_STRING'];
-} else if (!empty($_SERVER['argv'])) {
-	$arg = & $_SERVER['argv'][0];
+if (isset($_SERVER['QUERY_STRING']) && $_SERVER['QUERY_STRING'] != '') {
+        $arg = & $_SERVER['QUERY_STRING'];
+} else if (isset($_SERVER['argv']) && ! empty($_SERVER['argv'])) {
+        $arg = & $_SERVER['argv'][0];
 }
 if (PKWK_QUERY_STRING_MAX && strlen($arg) > PKWK_QUERY_STRING_MAX) {
-	// Something nasty attack?
-	pkwk_common_headers();
-	echo('Query string too long');
-	exit;
+        // Something nasty attack?
+        pkwk_common_headers();
+        echo( _('Query string too long') );
+        exit;
 }
 $arg = input_filter($arg); // \0 除去
 // for QA/250
