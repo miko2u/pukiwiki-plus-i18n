@@ -1,8 +1,8 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: func.php,v 1.93.35 2008/12/22 00:12:00 upk Exp $
+// $Id: func.php,v 1.93.36 2009/04/25 17:35:00 upk Exp $
 // Copyright (C)
-//   2005-2008 PukiWiki Plus! Team
+//   2005-2009 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
 //   2001-2002 Originally written by yu-ji
 // License: GPL v2 or (at your option) any later version
@@ -969,7 +969,7 @@ function get_cmd_uri($cmd='', $page='', $path_reference='rel', $query='', $fragm
 // function get_page_uri($page, $query='', $fragment='')
 function get_page_uri($page, $path_reference='rel', $query='', $fragment='')
 {
-	return get_resolve_uri('',$page,$path_reference,$query,0);
+	return get_resolve_uri('',$page,$path_reference,$query,$fragment,0);
 }
 
 // Obsolete (svn収容分のみ利用可)
