@@ -1,17 +1,16 @@
 PHP OpenID
 ==========
 
-PHP OpenID は、LGPL で配布されています。
+PHP OpenID Library は、Apache License で配布されています。
 このプログラムを利用して、OpenID認証を PukiWiki Plus! では実現しています。
 
 オリジナルファイルの取得先:
-http://www.openidenabled.com/resources/downloads/php-openid/PHP-openid-1.2.2.tar.gz
+http://openidenabled.com/files/php-openid/packages/php-openid-2.1.3.tar.bz2
 
-このアーカイブを展開して、Auth/ と Services/ のサブディレクトリにあるプログラムを
-利用しています。
+このアーカイブを展開して、Auth/ のサブディレクトリにあるプログラムを利用しています。
 
 また、OpenID の技術的な仕様に関しては、
-http://openid.net/specs/openid-authentication-1_1.txt
+http://openid.net/developers/specs/
 を参照下さい。
 
 by upk.

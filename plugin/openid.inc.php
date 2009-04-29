@@ -2,9 +2,9 @@
 /**
  * PukiWiki Plus! OpenID 認証処理
  *
- * @copyright   Copyright &copy; 2007-2008, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * @copyright   Copyright &copy; 2007-2009, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: openid.inc.php,v 0.10 2008/06/21 23:30:00 upk Exp $
+ * @version     $Id: openid.inc.php,v 0.11 2009/04/30 02:05:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'auth_api.cls.php');
@@ -18,7 +18,7 @@ class auth_openid_plus extends auth_api
 	{
 		$this->auth_name = 'openid';
 		// nickname,email,fullname,dob,gender,postcode,country,language,timezone
-		$this->field_name = array('nickname','email','openid_identity');
+		$this->field_name = array('nickname','email','openid_identity','fullname');
 		$this->response = array();
         }
 }
@@ -62,7 +62,8 @@ function plugin_openid_init()
 		'err_cancel'		=> _("Verification cancelled."),
 		'err_failure'		=> _("OpenID authentication failed: "),
 		'err_nickname'		=> _("nickname must be set."),
-		'err_authentication'	=> _("Authentication error."),
+		'err_authentication'	=> _("Authentication error; not a valid OpenID."),
+		'err_redirect'		=> _("Could not redirect to server: %s"),
           )
         );
 	set_plugin_messages($msg);
@@ -70,10 +71,26 @@ function plugin_openid_init()
 
 function plugin_openid_convert()
 {
-	global $script,$vars, $auth_api, $_openid_msg;
+	global $vars, $auth_api, $_openid_msg;
 
 	if (! isset($auth_api['openid']['use'])) return '';
 	if (! $auth_api['openid']['use']) return '<p>'.$_openid_msg['msg_invalid'].'</p>';
+
+	$label  = 'OpenID:';
+	$logout = $_openid_msg['msg_logout'];
+	$msg = plugin_openid_logoff_msg();
+	if (!empty($msg)) return $msg;
+
+	// 他でログイン
+	$auth_key = auth::get_user_name();
+	if (! empty($auth_key['nick'])) return '';
+
+	return plugin_openid_login_form();
+}
+
+function plugin_openid_logoff_msg($label='OpenID:',$logout_msg='logout')
+{
+	global $vars;
 
 	if (! function_exists('pkwk_session_start')) return '<p>'.$_openid_msg['msg_not_found'].'</p>';
 	if (pkwk_session_start() == 0) return '<p>'.$_openid_msg['msg_not_start'].'</p>';
@@ -83,70 +100,64 @@ function plugin_openid_convert()
 	$name = $obj->auth_session_get();
 
 	if (! empty($name['nickname'])) {
-		$logout_url = $script.'?plugin=openid&amp;logout';
-		if (! empty($vars['page'])) {
-			$logout_url .= '&amp;page='.rawurlencode($vars['page']);
-		}
-
+		$page = (empty($vars['page'])) ? '' : $vars['page'];
+		$logout_url = get_cmd_uri('openid',$page).'&amp;logout';
 		return <<<EOD
 <div>
-        <label>OpenID</label>:
-        {$name['nickname']}
-        (<a href="$logout_url">{$_openid_msg['msg_logout']}</a>)
+	<label>$label</label>
+	{$name['nickname']}
+	(<a href="$logout_url">$logout_msg</a>)
 </div>
 
 EOD;
 	}
-
-	// 他でログイン
-	$auth_key = auth::get_user_name();
-	if (! empty($auth_key['nick'])) return '';
-
-	return plugin_openid_login_form();
+	return '';
 }
 
 function plugin_openid_inline()
 {
-	global $script,$vars,$auth_api,$_openid_msg;
+	global $vars,$auth_api,$_openid_msg;
 
 	if (! isset($auth_api['openid']['use'])) return '';
 	if (! $auth_api['openid']['use']) return $_openid_msg['msg_invalid'];
 
-	if (! function_exists('pkwk_session_start')) return $_openid_msg['msg_not_found'];
-	if (pkwk_session_start() == 0) return $_openid_msg['msg_not_start'];
+        if (! function_exists('pkwk_session_start')) return $_openid_msg['msg_not_found'];
+        if (pkwk_session_start() == 0) return $_openid_msg['msg_not_start'];
 
-	$obj = new auth_openid_plus();
-	$name = $obj->auth_session_get();
+        $obj = new auth_openid_plus();
+        $name = $obj->auth_session_get();
 
-	if (!empty($name['api']) && $obj->auth_name !== $name['api']) return;
+        if (!empty($name['api']) && $obj->auth_name !== $name['api']) return;
 
-	$r_page = (empty($vars['page'])) ? '' : '&amp;page='.rawurlencode($vars['page']);
+        $page = (empty($vars['page'])) ? '' : $vars['page'];
+        $cmd = get_cmd_uri('openid', $page);
 
-	if (! empty($name['nickname'])) {
-		if (empty($name['openid_identity'])) {
-			$link = $name['nickname'];
-		} else {
-			$link = '<a href="'.$name['openid_identity'].'">'.$name['nickname'].'</a>';
-		}
-		$logout_url = $script.'?plugin=openid';
-		if (! empty($r_page)) {
-			$logout_url .= $r_page.'&amp;logout';
-		}
-		return sprintf($_openid_msg['msg_logined'],$link) .
-                        '(<a href="'.$logout_url.'">'.$_openid_msg['msg_logout'].'</a>)';
-	}
+        if (! empty($name['nickname'])) {
+                if (empty($name['openid_identity'])) {
+                        $link = $name['nickname'];
+                } else {
+                        $link = '<a href="'.$name['openid_identity'].'">'.$name['nickname'].'</a>';
+                }
+                return sprintf($_openid_msg['msg_logined'],$link) .
+                        '(<a href="'.$cmd.'&amp;logout'.'">'.$_openid_msg['msg_logout'].'</a>)';
+        }
 
-	 $auth_key = auth::get_user_name();
-	if (! empty($auth_key['nick'])) return $_openid_msg['msg_openid'];
+         $auth_key = auth::get_user_name();
+        if (! empty($auth_key['nick'])) return $_openid_msg['msg_openid'];
 
-	return '<a href="'.$script.'?plugin=openid'.$r_page.'">'.$_openid_msg['msg_openid'].'</a>';
+        return '<a href="'.$cmd.'">'.$_openid_msg['msg_openid'].'</a>';
 }
 
 function plugin_openid_action()
 {
-	global $vars,$_openid_msg;
+	global $vars,$_openid_msg,$auth_api;
 
 	$die_message = (PLUS_PROTECT_MODE) ? 'die_msg' : 'die_message';
+
+	// OpenID 関連プラグイン経由の認証がＯＫの場合のみ通過を許可
+	// if (!isset($auth_api['openid']['use']) && !isset($auth_api['auth_mixi']['use'])) return '';
+	if (!isset($auth_api['openid']['use'])) return '';
+	if (! $auth_api['openid']['use']) $die_message( $_openid_msg['msg_invalid'] );
 
 	if (! function_exists('pkwk_session_start')) $die_message($_openid_msg['msg_not_found']);
 	if (pkwk_session_start() == 0) $die_message($_openid_msg['msg_not_start']);
@@ -170,13 +181,22 @@ function plugin_openid_action()
 		$die_mesage( sprintf($_openid_msg['err_store_path'],PLUGIN_OPENID_STORE_PATH) );
 	}
 
-	// function_exists('Auth_OpenID_FileStore') 
-	// function_exists('Auth_OpenID_Consumer') 
 	ini_set('include_path', LIB_DIR . 'openid/');
 	require_once('Auth/OpenID/Consumer.php');
 	require_once('Auth/OpenID/FileStore.php');
+	require_once('Auth/OpenID/SReg.php');
+	require_once('Auth/OpenID/PAPE.php');
 	ini_restore('include_path');
 
+	global $pape_policy_uris;
+	$pape_policy_uris = array(
+		PAPE_AUTH_MULTI_FACTOR_PHYSICAL,
+		PAPE_AUTH_MULTI_FACTOR,
+		PAPE_AUTH_PHISHING_RESISTANT
+	);
+
+	//$openid = getOpenIDURL();
+	//$consumer = getConsumer();
 	$store = new Auth_OpenID_FileStore(PLUGIN_OPENID_STORE_PATH);
 	$consumer = new Auth_OpenID_Consumer($store);
 
@@ -224,35 +244,46 @@ function plugin_openid_verify($consumer)
 
 	$page = (empty($vars['page'])) ? '' : ''.$vars['page'];
 	$openid = $vars['openid_url'];
-	$process_url = get_location_uri('openid','','action=finish_auth');
+	$return_to = get_location_uri('openid','','action=finish_auth');
 	$trust_root = get_script_absuri();
 
-	// Begin the OpenID authentication process.
 	$auth_request = $consumer->begin($openid);
-
-	// Handle failure status return values.
 	if (!$auth_request) {
 		$die_message( $_openid_msg['err_authentication'] );
 	}
 
-	//nickname,email,fullname,dob,gender,postcode,country,language,timezone
-	$auth_request->addExtensionArg('sreg', 'optional', 'nickname,email');
+	$sreg_request = Auth_OpenID_SRegRequest::build(
+					// Required
+					array('nickname'),
+					// Optional
+					array('fullname', 'email'));
+	if ($sreg_request) {
+		$auth_request->addExtension($sreg_request);
+	}
 
-	// Redirect the user to the OpenID server for authentication.  Store
-	// the token for this authentication so we can verify the response.
-	$redirect_url = $auth_request->redirectURL($trust_root, $process_url);
+	/*
+	$policy_uris = $_GET['policies'];
+	$pape_request = new Auth_OpenID_PAPE_Request($policy_uris);
+	if ($pape_request) {
+		$auth_request->addExtension($pape_request);
+	}
+	*/
 
-	// redirectURL();
-	// openid.server	=> $auth_request->endpoint->server_url		ex. http://www.myopenid.com/server
-	// openid.delegate	=> $auth_request->endpoint->getServerID()	ex. http://youraccount.myopenid.com/
-	$obj = new auth_openid_plus_verify();
-	$obj->response = array(	'openid.server'   => $auth_request->endpoint->server_url,
-				'openid.delegate' => $auth_request->endpoint->getServerID(),
-				'page'            => $page
-			);
-	$obj->auth_session_put();
+	$redirect_url = $auth_request->redirectURL($trust_root, $return_to);
+	if (Auth_OpenID::isFailure($redirect_url)) {
+		$die_mesage( sprintf($_openid_msg['err_redirect'],$redirect_url->message) );
+	}
 
-	header('Location: '.$redirect_url);
+        // openid.server        => $auth_request->endpoint->server_url          ex. http://www.myopenid.com/server
+        // openid.delegate      => $auth_request->endpoint->local_id            ex. http://youraccount.myopenid.com/
+        $obj = new auth_openid_plus_verify();
+        $obj->response = array( 'openid.server'   => $auth_request->endpoint->server_url,
+                                'openid.delegate' => $auth_request->endpoint->local_id,
+                                'page'            => $page
+                        );
+        $obj->auth_session_put();
+
+        header('Location: '.$redirect_url);
 }
 
 function plugin_openid_finish_auth($consumer)
@@ -268,31 +299,42 @@ function plugin_openid_finish_auth($consumer)
 	$page = (empty($session_verify['page'])) ? '' : rawurldecode($session_verify['page']);
 	$obj_verify->auth_session_unset();
 
-	// Complete the authentication process using the server's response.
-	$response = $consumer->complete($vars);
+	$return_to = get_page_location_uri($page);
+	$response = $consumer->complete($return_to);
 
 	switch($response->status) {
 	case Auth_OpenID_CANCEL:
-		// This means the authentication was cancelled.
-		$die_message( $_openid_msg['err_cancel'] );
+                $die_message( $_openid_msg['err_cancel'] );
 	case Auth_OpenID_FAILURE:
-		$die_message( $_openid_msg['err_failure'] . $response->message );
+                $die_message( $_openid_msg['err_failure'] . $response->message );
 	case Auth_OpenID_SUCCESS:
-		// This means the authentication succeeded.
-		$openid = $response->identity_url;
-		$esc_identity = htmlspecialchars($openid, ENT_QUOTES);
-		$sreg = $response->extensionResponse('sreg');
+		$openid = $response->getDisplayIdentifier();
+                $esc_identity = htmlspecialchars($openid, ENT_QUOTES);
 
-		// FIXME: 認証状態を保持で戻ると、email しか戻ってこないなぁ。
-		if (! isset($sreg['nickname'])) $die_message( $_openid_msg['err_nickname'] );
+		/*
+		if ($response->endpoint->canonicalID) {
+                        $escaped_canonicalID = escape($response->endpoint->canonicalID);
+			$esc_escaped_canonicalID = htmlspecialchars($escaped_canonicalID, ENT_QUOTES); // XRI CanonicalID
+		}
+		*/
 
-		$obj = new auth_openid_plus();
-		$obj->response = $sreg;
-		// openid.delegate ?
-		$obj->response['openid_identity'] = (empty($vars['openid_identity'])) ? '' : $vars['openid_identity'];
-		$obj->auth_session_put();
-		break;
-	}
+		$sreg_resp = Auth_OpenID_SRegResponse::fromSuccessResponse($response);
+		$sreg = $sreg_resp->contents();
+
+		// $sreg['email'], $sreg['nickname'], $sreg['fullname']
+
+                // FIXME: 認証状態を保持で戻ると、email しか戻ってこないなぁ。
+                if (! isset($sreg['nickname'])) $die_message( $_openid_msg['err_nickname'] );
+
+		// $pape_resp = Auth_OpenID_PAPE_Response::fromSuccessResponse($response);
+
+                $obj = new auth_openid_plus();
+                $obj->response = $sreg; // その他の項目を引き渡す
+                // openid.delegate ?
+                $obj->response['openid_identity'] = (empty($vars['openid_identity'])) ? '' : $vars['openid_identity'];
+                $obj->auth_session_put();
+                break;
+        }
 
 	// オリジナルの画面に戻る
 	header('Location: '. get_page_location_uri($page));
