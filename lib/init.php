@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: init.php,v 1.54.33 2009/04/24 02:00:00 upk Exp $
+// $Id: init.php,v 1.54.34 2009/04/28 03:27:00 upk Exp $
 // Copyright (C)
 //   2005-2009 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
@@ -135,7 +135,7 @@ unset($user_agent);	// Unset after reading UA_INI_FILE
 $die = '';
 foreach(array('DATA_DIR', 'DIFF_DIR', 'BACKUP_DIR', 'CACHE_DIR') as $dir){
 	if (! is_writable(constant($dir)))
-		$die .= 'Directory is not found or not writable (' . $dir . ')' . "\n";
+		$die .= _( 'Directory is not found or not writable' ) . ' (' . $dir . ')' . "\n";
 }
 
 // 設定ファイルの変数チェック
@@ -146,7 +146,7 @@ foreach(array('rss_max', 'page_title', 'note_hr', 'related_link', 'show_passage'
 }
 if ($temp) {
 	if ($die) $die .= "\n";	// A breath
-	$die .= 'Variable(s) not found: (Maybe the old *.ini.php?)' . "\n" . $temp;
+	$die .= _( 'Variable(s) not found: (Maybe the old *.ini.php?)' ) . "\n" . $temp;
 }
 
 $temp = '';
@@ -155,7 +155,7 @@ foreach(array('LANG', 'PLUGIN_DIR') as $def){
 }
 if ($temp) {
 	if ($die) $die .= "\n";	// A breath
-	$die .= 'Define(s) not found: (Maybe the old *.ini.php?)' . "\n" . $temp;
+	$die .= _( 'Define(s) not found: (Maybe the old *.ini.php?)' ) . "\n" . $temp;
 }
 
 if($die) die_message(nl2br("\n\n" . $die));
@@ -243,7 +243,9 @@ $arg = input_filter($arg); // \0 除去
 $arg = str_replace('+','%20',$arg);
 
 // unset QUERY_STRINGs
-foreach (array('QUERY_STRING', 'argv', 'argc') as $key) {
+//foreach (array('QUERY_STRING', 'argv', 'argc') as $key) {
+// For OpenID Lib (use QUERY_STRING).
+foreach (array('argv', 'argc') as $key) {
 	unset(${$key}, $_SERVER[$key], $HTTP_SERVER_VARS[$key]);
 }
 // $_SERVER['REQUEST_URI'] is used at func.php NOW
@@ -288,7 +290,7 @@ if (empty($_POST)) {
 
 // 入力チェック: 'cmd=' prohibits nasty 'plugin='
 if (isset($vars['cmd']) && isset($vars['plugin']))
-	die('Using both cmd= and plugin= is not allowed');
+	die( _( 'Using both cmd= and plugin= is not allowed' ) );
 
 // 入力チェック: cmd, plugin の文字列は英数字以外ありえない
 foreach(array('cmd', 'plugin') as $var) {
