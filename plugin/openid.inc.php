@@ -4,7 +4,7 @@
  *
  * @copyright   Copyright &copy; 2007-2009, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: openid.inc.php,v 0.11 2009/04/30 02:05:00 upk Exp $
+ * @version     $Id: openid.inc.php,v 0.12 2009/05/01 03:45:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'auth_api.cls.php');
@@ -18,7 +18,7 @@ class auth_openid_plus extends auth_api
 	{
 		$this->auth_name = 'openid';
 		// nickname,email,fullname,dob,gender,postcode,country,language,timezone
-		$this->field_name = array('nickname','email','openid_identity','fullname');
+		$this->field_name = array('nickname','email','openid_identity','openid_url','fullname');
 		$this->response = array();
         }
 }
@@ -28,7 +28,7 @@ class auth_openid_plus_verify extends auth_openid_plus
 	function auth_openid_plus_verify()
 	{
 		$this->auth_name = 'openid_verify';
-		$this->field_name = array('openid.server','openid.delegate','ts','page');
+		$this->field_name = array('openid.server','openid.delegate','ts','page','openid_url');
 		$this->response = array();
 	}
 	function get_host()
@@ -279,7 +279,8 @@ function plugin_openid_verify($consumer)
         $obj = new auth_openid_plus_verify();
         $obj->response = array( 'openid.server'   => $auth_request->endpoint->server_url,
                                 'openid.delegate' => $auth_request->endpoint->local_id,
-                                'page'            => $page
+                                'page'            => $page,
+				'openid_url'      => $openid
                         );
         $obj->auth_session_put();
 
@@ -297,6 +298,7 @@ function plugin_openid_finish_auth($consumer)
 	//$session_verify['openid.server']
 	//$session_verify['openid.delegate']
 	$page = (empty($session_verify['page'])) ? '' : rawurldecode($session_verify['page']);
+	$openid = (empty($session_verify['openid_url'])) ? '' : rawurldecode($session_verify['openid_url']);
 	$obj_verify->auth_session_unset();
 
 	$return_to = get_page_location_uri($page);
@@ -332,6 +334,7 @@ function plugin_openid_finish_auth($consumer)
                 $obj->response = $sreg; // その他の項目を引き渡す
                 // openid.delegate ?
                 $obj->response['openid_identity'] = (empty($vars['openid_identity'])) ? '' : $vars['openid_identity'];
+		$obj->response['openid_url'] = $openid;
                 $obj->auth_session_put();
                 break;
         }
