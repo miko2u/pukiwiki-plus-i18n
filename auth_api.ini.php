@@ -38,10 +38,10 @@ $auth_api = array(
 	// OpenID
 	'openid'		=> array(
 		'use'		=> 0,
-	),
-	// mixi
-	'mixi'			=> array(
-		'use'		=> 0,
+		'mixi'  => array(
+			'my_id'		=> array(''), // 'userid1','userid2', ...
+			'community_id'	=> array(''), // 'community1', 'community2', ...
+		),
 	),
 	// QueryStringAuth
 	'querystringauth'	=> array(

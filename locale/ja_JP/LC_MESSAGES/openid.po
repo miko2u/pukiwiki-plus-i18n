@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PukiWiki Plus! 1.4.7-u2-i18n\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-07-16 20:14+0900\n"
+"POT-Creation-Date: 2009-05-04 18:16+0900\n"
 "PO-Revision-Date: 2007-07-15 03:34+0900\n"
 "Last-Translator: Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>\n"
 "Language-Team: Japanese <ja@li.org>\n"
@@ -15,44 +15,48 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../plugin/openid.inc.php:19
+#: ../../plugin/openid.inc.php:54
 msgid "logout"
 msgstr "logout"
 
-#: ../../plugin/openid.inc.php:20
+#: ../../plugin/openid.inc.php:55
 #, php-format
 msgid "%s has been approved by openid."
 msgstr "%s さんは、OpenID  により認証されています。"
 
-#: ../../plugin/openid.inc.php:21
+#: ../../plugin/openid.inc.php:56
 msgid "The function of opeind is invalid."
 msgstr "OpenID の機能は無効です。"
 
-#: ../../plugin/openid.inc.php:22
+#: ../../plugin/openid.inc.php:57
 msgid "pkwk_session_start() doesn't exist."
 msgstr "pkwk_session_start() が見つかりません。"
 
-#: ../../plugin/openid.inc.php:23
+#: ../../plugin/openid.inc.php:58
 msgid "The session is not start."
 msgstr "セッションが開始されていません。"
 
-#: ../../plugin/openid.inc.php:24
+#: ../../plugin/openid.inc.php:59
 msgid "OpenID"
 msgstr "OpenID"
 
-#: ../../plugin/openid.inc.php:25
+#: ../../plugin/openid.inc.php:60
 msgid "OpenID URL:"
 msgstr "OpenID URL:"
 
-#: ../../plugin/openid.inc.php:26
+#: ../../plugin/openid.inc.php:61
+msgid "anonymouse"
+msgstr "匿名"
+
+#: ../../plugin/openid.inc.php:62
 msgid "LOGIN"
 msgstr "ログイン"
 
-#: ../../plugin/openid.inc.php:27
+#: ../../plugin/openid.inc.php:63
 msgid "OpenID login form."
 msgstr "OpenID ログイン画面"
 
-#: ../../plugin/openid.inc.php:28
+#: ../../plugin/openid.inc.php:64
 #, php-format
 msgid ""
 "Could not create the FileStore directory %s. Please check the effective "
@@ -60,18 +64,23 @@ msgid ""
 msgstr ""
 "FileStore ディレクトリ(%s) の作成ができません。権限が有効か確認して下さい。"
 
-#: ../../plugin/openid.inc.php:29
+#: ../../plugin/openid.inc.php:65
 msgid "Verification cancelled."
 msgstr "認証拒否"
 
-#: ../../plugin/openid.inc.php:30
+#: ../../plugin/openid.inc.php:66
 msgid "OpenID authentication failed: "
 msgstr "OpenID 認証失敗: "
 
-#: ../../plugin/openid.inc.php:31
+#: ../../plugin/openid.inc.php:67
 msgid "nickname must be set."
 msgstr "nickname は必須です。"
 
-#: ../../plugin/openid.inc.php:32
-msgid "Authentication error."
-msgstr "Authentication error."
+#: ../../plugin/openid.inc.php:68
+msgid "Authentication error; not a valid OpenID."
+msgstr "認証エラー; 有効ではない OpenID です。"
+
+#: ../../plugin/openid.inc.php:69
+#, php-format
+msgid "Could not redirect to server: %s"
+msgstr "サーバにリダイレクトできませんでした: %s"

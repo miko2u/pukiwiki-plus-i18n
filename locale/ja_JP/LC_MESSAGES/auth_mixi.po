@@ -1,0 +1,28 @@
+# PukiWiki Plus! - Yet Another WikiWikiWeb Clone
+# Copyright (C) 2007 PukiWiki Plus! Developer Team
+# License is GPL2
+# Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>, 2007.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PukiWiki Plus! 1.4.7-u2-i18n\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-05-04 18:16+0900\n"
+"PO-Revision-Date: 2009-05-04 18:20+0900\n"
+"Last-Translator: Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>\n"
+"Language-Team: Japanese <ja@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../plugin/auth_mixi.inc.php:37
+msgid ""
+"It is necessary to agree to the guideline that mixi provides to use this "
+"plugin."
+msgstr ""
+"このプラグインを利用するためには、mixi が定めるガイドラインに"
+"同意する必要があります。"
+
+#: ../../plugin/auth_mixi.inc.php:38
+msgid "The function of opeind is invalid."
+msgstr "OpenID の機能は無効です。"

@@ -32,6 +32,7 @@ $auth_wkgrp_user = array(
 		// 'http://profile.livedoor.com/YOURNAME/' => array('role'=>ROLE_ADM),
 		// 'http://YOURNAME.openid.ne.jp'          => array('role'=>ROLE_ADM_CONTENTS),
 		// 'http://YOURNAME.myopenid.com/'         => array('role'=>ROLE_ADM_CONTENTS),
+		// 'https://id.mixi.jp/YOUR_ID'            => array('role'=>ROLE_ADM),
 	),
 );
 

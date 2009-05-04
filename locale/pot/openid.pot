@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-07-16 20:14+0900\n"
+"POT-Creation-Date: 2009-05-04 18:16+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,62 +16,71 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../plugin/openid.inc.php:19
+#: ../../plugin/openid.inc.php:54
 msgid "logout"
 msgstr ""
 
-#: ../../plugin/openid.inc.php:20
+#: ../../plugin/openid.inc.php:55
 #, php-format
 msgid "%s has been approved by openid."
 msgstr ""
 
-#: ../../plugin/openid.inc.php:21
+#: ../../plugin/openid.inc.php:56
 msgid "The function of opeind is invalid."
 msgstr ""
 
-#: ../../plugin/openid.inc.php:22
+#: ../../plugin/openid.inc.php:57
 msgid "pkwk_session_start() doesn't exist."
 msgstr ""
 
-#: ../../plugin/openid.inc.php:23
+#: ../../plugin/openid.inc.php:58
 msgid "The session is not start."
 msgstr ""
 
-#: ../../plugin/openid.inc.php:24
+#: ../../plugin/openid.inc.php:59
 msgid "OpenID"
 msgstr ""
 
-#: ../../plugin/openid.inc.php:25
+#: ../../plugin/openid.inc.php:60
 msgid "OpenID URL:"
 msgstr ""
 
-#: ../../plugin/openid.inc.php:26
+#: ../../plugin/openid.inc.php:61
+msgid "anonymouse"
+msgstr ""
+
+#: ../../plugin/openid.inc.php:62
 msgid "LOGIN"
 msgstr ""
 
-#: ../../plugin/openid.inc.php:27
+#: ../../plugin/openid.inc.php:63
 msgid "OpenID login form."
 msgstr ""
 
-#: ../../plugin/openid.inc.php:28
+#: ../../plugin/openid.inc.php:64
 #, php-format
 msgid ""
 "Could not create the FileStore directory %s. Please check the effective "
 "permissions."
 msgstr ""
 
-#: ../../plugin/openid.inc.php:29
+#: ../../plugin/openid.inc.php:65
 msgid "Verification cancelled."
 msgstr ""
 
-#: ../../plugin/openid.inc.php:30
+#: ../../plugin/openid.inc.php:66
 msgid "OpenID authentication failed: "
 msgstr ""
 
-#: ../../plugin/openid.inc.php:31
+#: ../../plugin/openid.inc.php:67
 msgid "nickname must be set."
 msgstr ""
 
-#: ../../plugin/openid.inc.php:32
-msgid "Authentication error."
+#: ../../plugin/openid.inc.php:68
+msgid "Authentication error; not a valid OpenID."
+msgstr ""
+
+#: ../../plugin/openid.inc.php:69
+#, php-format
+msgid "Could not redirect to server: %s"
 msgstr ""

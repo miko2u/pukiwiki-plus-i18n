@@ -3,7 +3,7 @@
  * PukiWiki Plus! 認証処理
  *
  * @author	Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: auth.cls.php,v 0.67 2009/02/15 20:55:00 upk Exp $
+ * @version     $Id: auth.cls.php,v 0.68 2009/05/03 18:01:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'auth.def.php');
@@ -101,7 +101,7 @@ class auth
 		}
                 if (empty($pass)) return '';
 		if (empty($auth_users[$user][0])) return ''; // パスワードが空は除く
-		return (pkwk_hash_compute($pass,$auth_users[$user][0]) == $auth_users[$user][0]) ? $user : '';
+		return (pkwk_hash_compute($pass,$auth_users[$user][0]) === $auth_users[$user][0]) ? $user : '';
         }
 
 	function check_auth_digest()
@@ -715,7 +715,10 @@ class auth
 		foreach($auth_api as $api=>$val) {
 			if ($api == $x) return true;
 		}
-		return false;
+
+		// auth_X plugin OK.
+		if (strpos($x,'auth_') === 0 && strlen($x) > 5) return true;
+        	return false;
 	}
 
 	function is_protect()

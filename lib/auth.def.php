@@ -21,7 +21,7 @@ defined('ROLE_AUTH_JUGEMKEY')        or define('ROLE_AUTH_JUGEMKEY', 5.4);
 defined('ROLE_AUTH_REMOTEIP')        or define('ROLE_AUTH_REMOTEIP', 5.5);
 defined('ROLE_AUTH_LIVEDOOR')        or define('ROLE_AUTH_LIVEDOOR', 5.6);
 defined('ROLE_AUTH_OPENID')          or define('ROLE_AUTH_OPENID', 5.7);
-defined('ROLE_AUTH_MIXI')            or define('ROLE_AUTH_MIXI', 5.8);
+defined('ROLE_AUTH_MIXI')            or define('ROLE_AUTH_MIXI', 5.8); // rev1776で廃止
 defined('UNAME_ADM_CONTENTS_TEMP')   or define('UNAME_ADM_CONTENTS_TEMP', 'admin');
 
 // role level => login plugin name

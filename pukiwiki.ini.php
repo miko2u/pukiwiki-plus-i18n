@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: pukiwiki.ini.php,v 1.148.36 2009/04/30 02:21:00 upk Exp $
+// $Id: pukiwiki.ini.php,v 1.148.37 2009/05/04 21:35:00 upk Exp $
 // Copyright (C)
 //   2005-2009 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
@@ -53,7 +53,7 @@ defined('PKWK_DISABLE_INLINE_IMAGE_FROM_URI') or define('PKWK_DISABLE_INLINE_IMA
 // PKWK_QUERY_STRING_MAX
 //   Max length of GET method, prohibits some worm attack ASAP
 //   NOTE: Keep (page-name + attach-file-name) <= PKWK_QUERY_STRING_MAX
-defined('PKWK_QUERY_STRING_MAX') or define('PKWK_QUERY_STRING_MAX', 1024); // Bytes, 0 = OFF
+defined('PKWK_QUERY_STRING_MAX') or define('PKWK_QUERY_STRING_MAX', 1280); // Bytes, 0 = OFF
 
 /////////////////////////////////////////////////
 // Experimental features
