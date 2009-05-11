@@ -4,7 +4,7 @@
  *
  * @copyright   Copyright &copy; 2009, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: openid.inc.php,v 0.1 2009/05/04 17:21:00 upk Exp $
+ * @version     $Id: openid.inc.php,v 0.2 2009/05/12 01:48:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  *
  * このプラグインを利用するためには、mixi が定めるガイドラインを遵守する必要があります。
@@ -66,12 +66,11 @@ function plugin_auth_mixi_inline()
 	exist_plugin('openid');
 
 	// 認証済みの扱い
-	$icon = '<img src="'.IMAGE_URI.'plus/mixi/icon.gif"'.
+	$icon = '<img src="'.IMAGE_URI.'plus/openid/mixi/icon.gif"'.
 		' width="16" height="16" alt="mixi" title="mixi" />';
-	$msg = plugin_openid_logoff_msg($icon);
-	if (!empty($msg)) {
-		return ($parm['btn']) ? $msg : '';
-	}
+	$msg = plugin_openid_logoff_msg('auth_mixi',$icon);
+	if ($msg === false) return ''; // 他認証
+	if (!empty($msg)) return $msg;
 
 	// 未認証時の扱い
 	$page = (empty($vars['page'])) ? '' : $vars['page'];
@@ -80,7 +79,7 @@ function plugin_auth_mixi_inline()
 	if ($parm['type'] == 'friends' && empty($parm['id'])) {
 		$redirect_url = get_cmd_uri('auth_mixi',$page);
 	} else {
-		$redirect_url = get_cmd_uri('openid',$page,'',array('action'=>'verify','openid_url'=>$openid_url));
+		$redirect_url = get_cmd_uri('openid',$page,'',array('action'=>'verify','openid_url'=>$openid_url,'author'=>'auth_mixi'));
 	}
 	return '<a href="'.$redirect_url.'">'.$icon_img.'</a>';
 }
@@ -97,6 +96,7 @@ function plugin_auth_mixi_action()
 	exist_plugin('openid');
 	$vars['action'] = 'verify';
 	$vars['openid_url'] = $openid_url;
+	$vars['author'] = 'auth_mixi';
 	return do_plugin_action('openid');
 }
 
@@ -105,16 +105,12 @@ function auth_mixi_set_parm($argv)
 	$parm = array();
         $parm['type'] = $parm['id'] = '';
 	$parm['icon'] = 1;
-	$parm['btn'] = true;
 	foreach($argv as $arg) {
 		$val = split('=', $arg);
 		if (empty($val[0])) continue;
 		$val[1] = (empty($val[1])) ? htmlspecialchars($val[0]) : htmlspecialchars($val[1]);
 
 		switch($val[0]) {
-		case 'nobtn':
-			$parm['btn'] = false;
-			break;
 		case 'icon':
 		case 'type':
 		case 'id':
@@ -163,7 +159,7 @@ function auth_mixi_set_loginuri($type='',$icon=1,$id='')
 	}
 
 	$icon_file = & $icon_type[$icon];
-	$icon_img = '<img src="'.IMAGE_URI.'plus/mixi/'.$icon_file[0].'"'.
+	$icon_img = '<img src="'.IMAGE_URI.'plus/openid/mixi/'.$icon_file[0].'"'.
 		' width="'.$icon_file[1].'" height="'.$icon_file[2].'"'.
 		' alt="mixi" title="mixi" />';
 	return array($openid_url, $icon_img);

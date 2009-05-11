@@ -4,7 +4,7 @@
  *
  * @copyright   Copyright &copy; 2007-2009, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: openid.inc.php,v 0.12 2009/05/01 03:45:00 upk Exp $
+ * @version     $Id: openid.inc.php,v 0.13 2009/05/10 21:59:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'auth_api.cls.php');
@@ -19,7 +19,7 @@ class auth_openid_plus extends auth_api
 	{
 		$this->auth_name = 'openid';
 		// nickname,email,fullname,dob,gender,postcode,country,language,timezone
-		$this->field_name = array('nickname','email','local_id','identity_url','fullname');
+		$this->field_name = array('author','nickname','email','local_id','identity_url','fullname');
 		$this->response = array();
         }
 }
@@ -30,7 +30,7 @@ class auth_openid_plus_verify extends auth_openid_plus
 	{
 		$this->auth_name = 'openid_verify';
 		// $this->field_name = array('openid.server','openid.delegate','ts','page');
-		$this->field_name = array('server_url','local_id','ts','page');
+		$this->field_name = array('author','server_url','local_id','ts','page');
 		$this->response = array();
 	}
 	function get_host()
@@ -82,16 +82,13 @@ function plugin_openid_convert()
 	$label  = 'OpenID:';
 	$logout = $_openid_msg['msg_logout'];
 	$msg = plugin_openid_logoff_msg();
-	if (!empty($msg)) return $msg;
-
-	// 他でログイン
-	$auth_key = auth::get_user_name();
-	if (! empty($auth_key['nick'])) return '';
+	if ($msg === false) return ''; // 他認証
+	if (!empty($msg)) return $msg; // ログオン済
 
 	return plugin_openid_login_form();
 }
 
-function plugin_openid_logoff_msg($label='OpenID:',$logout_msg='logout')
+function plugin_openid_logoff_msg($author='openid',$label='OpenID:',$logout_msg='logout')
 {
 	global $vars;
 
@@ -101,9 +98,23 @@ function plugin_openid_logoff_msg($label='OpenID:',$logout_msg='logout')
 	// 処理済みか？
 	$obj = new auth_openid_plus();
 	$name = $obj->auth_session_get();
-	$display_name = '<a href="'.$name['local_id'].'">'.$name['nickname'].'</a>';
 
+	if (! empty($name['api'])) {
+		switch ($name['api']) {
+		case 'openid':
+			break; // 認証
+		case 'openid_verify':
+			// ゴミセッションのため削除
+			$obj->auth_session_unset();
+			return ''; // 未認証
+		default:
+			return false; // 他で認証済
+		}
+	}
+
+	if (! empty($name['author']) && $name['author'] !== $author) return false;
 	if (! empty($name['nickname'])) {
+		$display_name = '<a href="'.$name['local_id'].'">'.$name['nickname'].'</a>';
 		$page = (empty($vars['page'])) ? '' : $vars['page'];
 		$logout_url = get_cmd_uri('openid',$page).'&amp;logout';
 		return <<<EOD
@@ -225,7 +236,7 @@ function plugin_openid_login_form()
 	$r_page = (empty($vars['page'])) ? '' : rawurlencode($vars['page']);
 	$size = PLUGIN_OPENID_SIZE_LOGIN;
 
-        return <<<EOD
+	$rc = <<<EOD
 <form method="get" action="$script">
   <div class="openid">
     {$_openid_msg['msg_openid_url']}
@@ -238,6 +249,7 @@ function plugin_openid_login_form()
 </form>
 
 EOD;
+	return $rc;
 }
 
 function plugin_openid_verify($consumer)
@@ -250,6 +262,8 @@ function plugin_openid_verify($consumer)
 	$openid = $vars['openid_url'];
 	$return_to = get_location_uri('openid','','action=finish_auth');
 	$trust_root = get_script_absuri();
+	// FIXME: 不正な文字列の場合は、logoff メッセージを設定できない
+	$author = (empty($vars['author'])) ? 'openid' : $vars['author'];
 
 	$auth_request = $consumer->begin($openid);
 	if (!$auth_request) {
@@ -265,14 +279,6 @@ function plugin_openid_verify($consumer)
 		$auth_request->addExtension($sreg_request);
 	}
 
-	/*
-	$policy_uris = $_GET['policies'];
-	$pape_request = new Auth_OpenID_PAPE_Request($policy_uris);
-	if ($pape_request) {
-		$auth_request->addExtension($pape_request);
-	}
-	*/
-
 	$redirect_url = $auth_request->redirectURL($trust_root, $return_to);
 	if (Auth_OpenID::isFailure($redirect_url)) {
 		$die_mesage( sprintf($_openid_msg['err_redirect'],$redirect_url->message) );
@@ -284,7 +290,8 @@ function plugin_openid_verify($consumer)
         $obj = new auth_openid_plus_verify();
         $obj->response = array( 'server_url' => $auth_request->endpoint->server_url,
                                 'local_id'   => $auth_request->endpoint->local_id,
-                                'page'       => $page
+                                'page'       => $page,
+				'author'     => $author
                         );
         $obj->auth_session_put();
 
@@ -302,6 +309,7 @@ function plugin_openid_finish_auth($consumer)
 	//$session_verify['server_url']
 	//$session_verify['local_id']
 	$page = (empty($session_verify['page'])) ? '' : rawurldecode($session_verify['page']);
+	$author = (empty($session_verify['author'])) ? '' : rawurldecode($session_verify['author']);
 	$obj_verify->auth_session_unset();
 
 	$return_to = get_page_location_uri($page);
@@ -333,10 +341,9 @@ die();
 			}
 		}
 
-		// $pape_resp = Auth_OpenID_PAPE_Response::fromSuccessResponse($response);
-
 		$obj = new auth_openid_plus();
 		$obj->response = $sreg; // その他の項目を引き渡す
+		$obj->response['author'] = $author;
 		$obj->response['local_id'] = (!empty($response->endpoint->local_id)) ? $response->endpoint->local_id : $response->endpoint->claimed_id;
 		$obj->response['identity_url'] = $response->getDisplayIdentifier();
 		$obj->auth_session_put();
