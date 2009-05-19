@@ -4,7 +4,7 @@
  *
  * @copyright   Copyright &copy; 2007-2009, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: openid.inc.php,v 0.13 2009/05/10 21:59:00 upk Exp $
+ * @version     $Id: openid.inc.php,v 0.14 2009/05/20 01:44:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'auth_api.cls.php');
@@ -335,7 +335,7 @@ die();
 		// if (! isset($sreg['nickname'])) $die_message( $_openid_msg['err_nickname'] );
 		if (! isset($sreg['nickname'])) {
 			if (PLUGIN_OPENID_NO_NICKNAME) {
-				$sreg['nickname'] = $_openid_msg['msg_anonymouse'];
+				$sreg['nickname'] = 'anonymouse';
 			} else {
 				$die_message( $_openid_msg['err_nickname'] );
 			}
@@ -393,9 +393,17 @@ function plugin_openid_jump_url()
 function plugin_openid_get_call_func($openid)
 {
 	// 今後、OpenID で色々な制限が可能となった場合に、固有判定が行えるような I/F をもっておく
-	$chk = strpos($openid, 'https://id.mixi.jp/');
-	if ($chk === false) return '';
-	return 'auth_mixi';
+	$sub_api = array(
+		'https://id.mixi.jp/'		=> 'auth_mixi',
+	);
+
+	foreach($sub_api as $uri=>$plugin) {
+		$chk = strpos($openid, $uri);
+		if ($chk === false) continue;
+		return $plugin;
+	}
+
+	return '';
 }
 
 ?>

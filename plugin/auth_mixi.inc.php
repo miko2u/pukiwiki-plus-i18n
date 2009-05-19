@@ -4,7 +4,7 @@
  *
  * @copyright   Copyright &copy; 2009, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: openid.inc.php,v 0.2 2009/05/12 01:48:00 upk Exp $
+ * @version     $Id: openid.inc.php,v 0.3 2009/05/20 01:42:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  *
  * このプラグインを利用するためには、mixi が定めるガイドラインを遵守する必要があります。
@@ -64,6 +64,7 @@ function plugin_auth_mixi_inline()
 	$parm = auth_mixi_set_parm($argv);
 
 	exist_plugin('openid');
+	list($idp,$icon_botton,$icon_mini) = auth_mixi_set_loginuri($parm['type'],$parm['icon'],$parm['id']);
 
 	// 認証済みの扱い
 	$icon = '<img src="'.IMAGE_URI.'plus/openid/mixi/icon.gif"'.
@@ -74,14 +75,12 @@ function plugin_auth_mixi_inline()
 
 	// 未認証時の扱い
 	$page = (empty($vars['page'])) ? '' : $vars['page'];
-	list($openid_url, $icon_img) = auth_mixi_set_loginuri($parm['type'],$parm['icon'],$parm['id']);
-
 	if ($parm['type'] == 'friends' && empty($parm['id'])) {
 		$redirect_url = get_cmd_uri('auth_mixi',$page);
 	} else {
-		$redirect_url = get_cmd_uri('openid',$page,'',array('action'=>'verify','openid_url'=>$openid_url,'author'=>'auth_mixi'));
+		$redirect_url = get_cmd_uri('openid',$page,'',array('action'=>'verify','openid_url'=>$idp,'author'=>'auth_mixi'));
 	}
-	return '<a href="'.$redirect_url.'">'.$icon_img.'</a>';
+	return '<a href="'.$redirect_url.'">'.$icon_botton.'</a>';
 }
 
 function plugin_auth_mixi_action()
@@ -132,11 +131,11 @@ function auth_mixi_set_parm($argv)
 function auth_mixi_set_loginuri($type='',$icon=1,$id='')
 {
 	static $icon_type = array(
+		0 => array('icon.gif' , 16,16), // mini
 		1 => array('a_130.gif',130,30), // Type A
 		2 => array('a_150.gif',150,30),
 		3 => array('b_130.gif',130,28), // Type B
 		4 => array('b_150.gif',150,28),
-		5 => array('icon.gif' , 16,16)
 	);
 
 	$die_message = (PLUS_PROTECT_MODE) ? 'die_msg' : 'die_message';
@@ -146,23 +145,29 @@ function auth_mixi_set_loginuri($type='',$icon=1,$id='')
 	// マイミク認証
 		if (empty($id)) $id = PLUGIN_AUTH_MIXI_MY_ID;
 		if (empty($id)) $die_message('マイミク認証時は、IDの設定が必須です。');
-		$openid_url = 'https://id.mixi.jp/'.$id.'/friends';
+		$idp = 'https://id.mixi.jp/'.$id.'/friends';
 		break;
 	case 'community':
 	// コミュニティ認証
 		if (empty($id)) $die_message('コミュニティ認証時は、コミュニティIDの設定が必須です。');
-		$openid_url = 'https://id.mixi.jp/community/'.$id;
+		$idp = 'https://id.mixi.jp/community/'.$id;
 		break;
 	default:
 	// ミクシィ認証
-		$openid_url = 'https://mixi.jp';
+		$idp = 'https://mixi.jp';
 	}
 
-	$icon_file = & $icon_type[$icon];
-	$icon_img = '<img src="'.IMAGE_URI.'plus/openid/mixi/'.$icon_file[0].'"'.
-		' width="'.$icon_file[1].'" height="'.$icon_file[2].'"'.
-		' alt="mixi" title="mixi" />';
-	return array($openid_url, $icon_img);
+	$icon_idx = array($icon, 0);
+        $icon_img = array();
+        $i = 0;
+        foreach($icon_idx as $idx) {
+		$icon_file = & $icon_type[$idx];
+                $icon_img[$i] = '<img src="'.IMAGE_URI.'plus/openid/mixi/'.$icon_file[0].'"'.
+                ' width="'.$icon_file[1].'" height="'.$icon_file[2].'"'.
+                ' alt="mixi" title="mixi" />';
+                $i++;
+        }
+	return array($idp, $icon_img[0], $icon_img[1]);
 }
 
 // openid_identity      https://id.mixi.jp/[ログインしたユーザーのID]
