@@ -1,8 +1,8 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: tracker.inc.php,v 1.35.12 2008/02/24 18:41:00 upk Exp $
+// $Id: tracker.inc.php,v 1.35.13 2009/05/20 01:35:00 upk Exp $
 // Copyright (C)
-//	 2004-2008 PukiWiki Plus! Team
+//	 2004-2009 PukiWiki Plus! Team
 //   2003-2005 PukiWiki Developers Team
 //
 // Issue tracker plugin (See Also bugtrack plugin)
@@ -709,6 +709,7 @@ class Tracker_list
 	var $pattern_fields;
 	var $rows;
 	var $order;
+	var $page_line;
 
 	function Tracker_list($page,$refer,&$config,$list)
 	{
@@ -740,6 +741,8 @@ class Tracker_list
 		$this->rows = array();
 		$pattern = "$page/";
 		$pattern_len = strlen($pattern);
+		$this->page_line = count(plugin_tracker_get_source($this->config->page.'/page'));
+
 		foreach (auth::get_existpages() as $_page)
 		{
 			if (strpos($_page,$pattern) === 0)
@@ -763,7 +766,7 @@ class Tracker_list
 			return;
 		}
 
-		$source = plugin_tracker_get_source($page);
+		$source = plugin_tracker_get_source($page,$this->page_line);
 		if (preg_match('/move\sto\s(.+)/',$source[0],$matches))
 		{
 			$page = strip_bracket(trim($matches[1]));
@@ -989,9 +992,12 @@ EOD;
 		return convert_html($source);
 	}
 }
-function plugin_tracker_get_source($page)
+function plugin_tracker_get_source($page,$line=0)
 {
 	$source = get_source($page);
+	if ($line>0)
+		$source = array_splice($source,0,$line);
+
 	// 見出しの固有ID部を削除
 	$source = preg_replace('/^(\*{1,3}.*)\[#[A-Za-z][\w-]+\](.*)$/m','$1$2',$source);
 	// #freezeを削除
