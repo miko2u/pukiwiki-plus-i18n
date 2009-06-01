@@ -4,7 +4,7 @@
  *
  * @copyright   Copyright &copy; 2007-2009, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: openid.inc.php,v 0.14 2009/05/20 01:44:00 upk Exp $
+ * @version     $Id: openid.inc.php,v 0.15 2009/05/31 04:32:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'auth_api.cls.php');
@@ -170,7 +170,6 @@ function plugin_openid_action()
 	$die_message = (PLUS_PROTECT_MODE) ? 'die_msg' : 'die_message';
 
 	// OpenID 関連プラグイン経由の認証がＯＫの場合のみ通過を許可
-	// if (!isset($auth_api['openid']['use']) && !isset($auth_api['auth_mixi']['use'])) return '';
 	if (!isset($auth_api['openid']['use'])) return '';
 	if (! $auth_api['openid']['use']) $die_message( $_openid_msg['msg_invalid'] );
 
@@ -210,8 +209,6 @@ function plugin_openid_action()
 		PAPE_AUTH_PHISHING_RESISTANT
 	);
 
-	//$openid = getOpenIDURL();
-	//$consumer = getConsumer();
 	$store = new Auth_OpenID_FileStore(PLUGIN_OPENID_STORE_PATH);
 	$consumer = new Auth_OpenID_Consumer($store);
 
@@ -262,6 +259,7 @@ function plugin_openid_verify($consumer)
 	$openid = $vars['openid_url'];
 	$return_to = get_location_uri('openid','','action=finish_auth');
 	$trust_root = get_script_absuri();
+
 	// FIXME: 不正な文字列の場合は、logoff メッセージを設定できない
 	$author = (empty($vars['author'])) ? 'openid' : $vars['author'];
 
@@ -279,9 +277,18 @@ function plugin_openid_verify($consumer)
 		$auth_request->addExtension($sreg_request);
 	}
 
-	$redirect_url = $auth_request->redirectURL($trust_root, $return_to);
-	if (Auth_OpenID::isFailure($redirect_url)) {
-		$die_mesage( sprintf($_openid_msg['err_redirect'],$redirect_url->message) );
+	$shouldSendRedirect = $auth_request->shouldSendRedirect();
+	if ($shouldSendRedirect) {
+		$redirect_url = $auth_request->redirectURL($trust_root, $return_to);
+		if (Auth_OpenID::isFailure($redirect_url)) {
+			$die_mesage( sprintf($_openid_msg['err_redirect'],$redirect_url->message) );
+		}
+	} else {
+		$form_id = 'openid_message';
+		$form_html = $auth_request->htmlMarkup($trust_root, $return_to, false, array('id' => $form_id));
+		if (Auth_OpenID::isFailure($form_html)) {
+			$die_mesage( sprintf($_openid_msg['err_redirect'],$form_html->message) );
+		}
 	}
 
 	// v1			v2
@@ -295,7 +302,12 @@ function plugin_openid_verify($consumer)
                         );
         $obj->auth_session_put();
 
-        header('Location: '.$redirect_url);
+	if ($shouldSendRedirect) {
+		header('Location: '.$redirect_url);
+	} else {
+		//print $form_html;
+		die($form_html);
+	}
 }
 
 function plugin_openid_finish_auth($consumer)
@@ -311,7 +323,6 @@ function plugin_openid_finish_auth($consumer)
 	$page = (empty($session_verify['page'])) ? '' : rawurldecode($session_verify['page']);
 	$author = (empty($session_verify['author'])) ? '' : rawurldecode($session_verify['author']);
 	$obj_verify->auth_session_unset();
-
 	$return_to = get_page_location_uri($page);
 	$response = $consumer->complete($return_to);
 
@@ -331,8 +342,6 @@ die();
 		$sreg = $sreg_resp->contents();
 		// $sreg['email'], $sreg['nickname'], $sreg['fullname']
 
-		// FIXME: 認証状態を保持で戻ると、email しか戻ってこないなぁ。
-		// if (! isset($sreg['nickname'])) $die_message( $_openid_msg['err_nickname'] );
 		if (! isset($sreg['nickname'])) {
 			if (PLUGIN_OPENID_NO_NICKNAME) {
 				$sreg['nickname'] = 'anonymouse';
@@ -395,6 +404,7 @@ function plugin_openid_get_call_func($openid)
 	// 今後、OpenID で色々な制限が可能となった場合に、固有判定が行えるような I/F をもっておく
 	$sub_api = array(
 		'https://id.mixi.jp/'		=> 'auth_mixi',
+		'https://openid.excite.co.jp/'	=> 'auth_openid_btn',
 	);
 
 	foreach($sub_api as $uri=>$plugin) {
