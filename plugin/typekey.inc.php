@@ -2,16 +2,18 @@
 /**
  * PukiWiki Plus! TypeKey 認証処理
  *
- * @copyright   Copyright &copy; 2006-2008, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * @copyright   Copyright &copy; 2006-2009, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: typekey.inc.php,v 0.15 2008/06/21 23:56:00 upk Exp $
+ * @version     $Id: typekey.inc.php,v 0.16 2009/06/11 01:34:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'auth_api.cls.php');
 
 defined('TYPEKEY_URL_LOGIN')	or define('TYPEKEY_URL_LOGIN',	 'https://www.typekey.com/t/typekey/login');
-defined('TYPEKEY_URL_LOGOUT')	or define('TYPEKEY_URL_LOGOUT',	 'https://www.typekey.com/t/typekey/logout');
-defined('TYPEKEY_URL_PROFILE')	or define('TYPEKEY_URL_PROFILE', 'http://profile.typekey.com/');
+//defined('TYPEKEY_URL_LOGOUT')	or define('TYPEKEY_URL_LOGOUT',	 'https://www.typekey.com/t/typekey/logout');
+//defined('TYPEKEY_URL_PROFILE')	or define('TYPEKEY_URL_PROFILE', 'http://profile.typekey.com/');
+defined('TYPEKEY_URL_LOGOUT')   or define('TYPEKEY_URL_LOGOUT',  'http://www.typepad.com/connect/services/signout');
+defined('TYPEKEY_URL_PROFILE')  or define('TYPEKEY_URL_PROFILE', 'http://profile.typepad.com/');
 defined('TYPEKEY_REGKEYS')	or define('TYPEKEY_REGKEYS',	 'http://www.typekey.com/extras/regkeys.txt');
 defined('TYPEKEY_VERSION')	or define('TYPEKEY_VERSION',	 '1.1');
 defined('TYPEKEY_CACHE_TIME')	or define('TYPEKEY_CACHE_TIME',	 60*60*24*2); // 2 day
@@ -132,7 +134,8 @@ class auth_typekey extends auth_api
 		if (empty($return)) {
 			$return = get_script_absuri();
 		}
-		return TYPEKEY_URL_LOGOUT.'?_return='.$return;
+		// return TYPEKEY_URL_LOGOUT.'?_return='.$return;
+		return TYPEKEY_URL_LOGOUT.'?to='.$return;
         }
 
 	function typekey_login($return)
