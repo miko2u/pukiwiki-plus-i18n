@@ -2,8 +2,8 @@
 /**
  * PukiWiki Plus! 更新ログ処理
  *
- * @copyright	Copyright &copy; 2004-2006,2008, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version	$Id: log.php,v 0.9 2008/06/25 01:42:00 upk Exp $
+ * @copyright	Copyright &copy; 2004-2006,2008-2009, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * @version	$Id: log.php,v 0.10 2009/06/24 01:17:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
@@ -202,6 +202,9 @@ function log_common_check($kind,$page,$parm)
 	$rc = array();
 	$field = log::set_fieldname($kind);
 
+	$obj = new auth_api();
+	$msg = $obj->auth_session_get();
+
 	foreach ($field as $key) {
 
 		switch ($key) {
@@ -217,9 +220,12 @@ function log_common_check($kind,$page,$parm)
 			break;
 
 		case 'auth_api': // 認証API名
-			$obj = new auth_api();
-			$msg = $obj->auth_session_get();
+			//$obj = new auth_api();
+			//$msg = $obj->auth_session_get();
 			$rc[$key] = (empty($msg['api']) && ! empty($username)) ? 'plus' : $msg['api'];
+			break;
+		case 'local_id':
+			$rc[$key] = (empty($msg['local_id'])) ? '' : $msg['local_id'];
 			break;
 
 		case 'user': // ユーザ名(認証済)
@@ -351,6 +357,12 @@ function log_update($kind,$filename,$key,$mustkey,$data)
 
 		$sw_update = true;
 		foreach($_key as $idx) {
+			if (isset($data[$idx]) && isset($fld[$idx]) && $data[$idx] != $fld[$idx]) {
+				$sw_update = false;
+				break;
+			}
+
+			/*
 			if (empty($data[$idx]) || empty($fld[$idx])) {
 				$sw_update = false;
 				break;
@@ -359,6 +371,7 @@ function log_update($kind,$filename,$key,$mustkey,$data)
 				$sw_update = false;
 				break;
 			}
+			*/
 		}
 
 		if ($sw_update) {
@@ -474,6 +487,7 @@ class log
 			'file'	      => array( 0, 0, 1, 0, 0, 0), // ファイル名
 			'cmd'	      => array( 0, 0, 0, 1, 0, 0), // コマンド名
 			'page'	      => array( 1, 1, 1, 0, 0, 0), // ページ名
+			'local_id'    => array( 0, 0, 0, 0, 1, 0), // OpenIDの場合のみ設定される
 		);
 
 		$rc = array();

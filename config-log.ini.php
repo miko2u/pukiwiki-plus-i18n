@@ -109,8 +109,8 @@ $log = array(
 	'login' => array(
 		// ts:ip:host:auth_api:user:ua
 		'use'      => 0,
-		'updtkey'  => 'auth_api:user',
-		'view'	   => 'ts:user:auth_api',
+		'updtkey'  => 'auth_api:user:local_id',
+		'view'	   => 'ts:user:auth_api:local_id',
 		'guest'	   => 'ts:user',
 		'file'     => ':log/login',
 	),
