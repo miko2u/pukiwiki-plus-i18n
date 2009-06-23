@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: edit.inc.php,v 1.41.40 2009/04/20 01:47:00 upk Exp $
+// $Id: edit.inc.php,v 1.41.41 2009/06/23 23:27:00 upk Exp $
 // Copyright (C)
 //   2005-2009 PukiWiki Plus! Team
 //   2001-2007 PukiWiki Developers Team
@@ -13,6 +13,7 @@
 define('PLUGIN_EDIT_FREEZE_REGEX', '/^(?:#freeze(?!\w)\s*)+/im');
 
 // Define part-edit area - 'compat':1.4.4compat, 'level':level
+//defined('PLUGIN_EDIT_PARTAREA') or define('PLUGIN_EDIT_PARTAREA', 'compat');
 defined('PLUGIN_EDIT_PARTAREA') or define('PLUGIN_EDIT_PARTAREA', 'compat');
 
 function plugin_edit_action()
@@ -317,55 +318,48 @@ function plugin_edit_honeypot()
 }
 
 // Replace/Pickup a part of source
+// BugTrack/110
 function plugin_edit_parts($id, &$source, $postdata='')
 {
 	$postdata = rtrim($postdata) . "\n";
-	$id = preg_quote($id);
-	if (PLUGIN_EDIT_PARTAREA == 'level') {
-		$start = -1;
-	        $final = count($source);
-	        $multiline = 0;
-	        $matches = array();
-	        foreach ($source as $i => $line) {
-			// multiline plugin. refer lib/convert_html
-			if(defined('PKWKEXP_DISABLE_MULTILINE_PLUGIN_HACK') && PKWKEXP_DISABLE_MULTILINE_PLUGIN_HACK === 0) {
-				if ($multiline < 2) {
-					if (preg_match('/^#([^\(\{]+)(?:\(([^\r]*)\))?(\{*)/', $line, $matches)) {
-						$multiline  = strlen($matches[3]);
-					}
-				} else {
-					if (preg_match('/^\}{' . $multiline . '}/', $line, $matches)) {
-						$multiline = 0;
-					}
-					continue;
-				}
-			}
-
-			if ($start === -1) {
-				if (preg_match('/^(\*{1,3})(.*?)\[#(' . $id . ')\](.*?)$/m', $line, $matches)) {
-					$start = $i;
-					$hlen = strlen($matches[1]);
+	$start = -1;
+	$final = count($source);
+	$multiline = 0;
+	$matches = array();
+	foreach ($source as $i => $line) {
+		// multiline plugin. refer lib/convert_html
+		if(defined('PKWKEXP_DISABLE_MULTILINE_PLUGIN_HACK') && PKWKEXP_DISABLE_MULTILINE_PLUGIN_HACK === 0) {
+			if ($multiline < 2) {
+				if (preg_match('/^#([^\(\{]+)(?:\(([^\r]*)\))?(\{*)/', $line, $matches)) {
+					$multiline  = strlen($matches[3]);
 				}
 			} else {
-				if (preg_match('/^(\*{1,3})/m', $line, $matches) && strlen($matches[1]) <= $hlen) {
+				if (preg_match('/^\}{' . $multiline . '}/', $line, $matches)) {
+					$multiline = 0;
+				}
+				continue;
+			}
+		}
+ 
+		if ($start === -1) {
+			if (preg_match('/^(\*{1,3})(.*?)\[#(' . preg_quote($id) . ')\](.*?)$/m', $line, $matches)) {
+				$start = $i;
+				$hlen = strlen($matches[1]);
+			}
+		} else {
+			if (preg_match('/^(\*{1,3})/m', $line, $matches)) {
+				if (PLUGIN_EDIT_PARTAREA !== 'level' or strlen($matches[1]) <= $hlen) {
 					$final = $i;
 					break;
 				}
 			}
 		}
-		if ($start !== -1) {
-			return join('', array_splice($source, $start, $final - $start, $postdata));
-		}
-	} else {
-		$heads = preg_grep('/^\*{1,3}.+$/', $source);
-		$heads[count($source)] = ''; // sentinel
-		while (list($start, $line) = each($heads)) {
-			if (preg_match("/\[#$id\]/", $line)) {
-				list($final, $line) = each($heads);
-				return join('', array_splice($source, $start, $final - $start, $postdata));
-			}
-		}
+	}
+
+	if ($start !== -1) {
+		return join('', array_splice($source, $start, $final - $start, $postdata));
 	}
 	return FALSE;
 }
+
 ?>
