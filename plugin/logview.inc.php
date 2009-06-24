@@ -2,8 +2,8 @@
 /**
  * PukiWiki Plus! ログ閲覧プラグイン
  *
- * @copyright	Copyright &copy; 2004-2008, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version	$Id: logview.php,v 0.21 2008/08/19 01:46:00 upk Exp $
+ * @copyright	Copyright &copy; 2004-2009, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * @version	$Id: logview.php,v 0.22 2009/06/25 00:11:00 upk Exp $
  * @license	http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 
@@ -35,6 +35,7 @@ function plugin_logview_init()
 		'file'		=> _('Faile Name'),
 		'page'		=> _('Page'),
 		'cmd'		=> _('CMD'),
+		'local_id'	=> _('local_id'),
 		'@diff'		=> _('Contents'),
 		'@guess'	=> _('Provisional User Name'),	// Guess
 		'@guess_diff'	=> _('Provisional Browse Contents'),  // Guess
@@ -96,8 +97,11 @@ function plugin_logview_action()
 
 EOD;
 	$cols = 0;
+	$is_role_adm = auth::check_role('role_adm');
+
 	// タイトルの処理
-	foreach ($view as $_view) { 
+	foreach ($view as $_view) {
+		if ($_view === 'local_id' && $is_role_adm) continue;
 		$body .= '<td class="style_td">'.$_logview_msg[$_view].'</td>'."\n";
 		$cols++;
 	}
@@ -208,6 +212,9 @@ EOD;
 				}
 				$body .= "</td>\n";
 				break;
+
+			case 'local_id':
+				if ($is_role_adm) continue;
 			default:
 				$body .= ' <td class="style_td">'.htmlspecialchars($data[$field], ENT_QUOTES)."</td>\n";
 			}
