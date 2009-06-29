@@ -89,7 +89,7 @@ function viewNaviMenuCommon(objEvent){
 	        objOpenedNaviMenu = document.getElementById(strThisID.replace(strNaviMenuID, strMenuBlockID));
 	        if (objOpenedNaviMenu != null) {
 			patchHeight = 0;
-			if (nSAF) { patchHeight = 11; }
+			if ((nSAF && document.documentMode < 4) || (nIE4 && document.documentMode == 7)) { patchHeight = 11; }
 		        objOpenedNaviMenu.style.top  = GetPositionTop(objItem) + objPosition.offsetHeight + patchHeight + "px";
 		        if ( GetPositionLeft(objItem) + objOpenedNaviMenu.offsetWidth >= GetPositionLeft(objPosition) + objPosition.offsetWidth)  {
 				objOpenedNaviMenu.style.left = GetPositionLeft(objPosition) + objPosition.offsetWidth - objOpenedNaviMenu.offsetWidth + "px";
