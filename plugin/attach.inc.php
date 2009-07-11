@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone
-// $Id: attach.inc.php,v 1.87.36 2009/04/17 19:18:00 upk Exp $
+// $Id: attach.inc.php,v 1.87.37 2009/07/11 22:54:00 upk Exp $
 // Copyright (C)
 //   2005-2009 PukiWiki Plus! Team
 //   2003-2007 PukiWiki Developers Team
@@ -89,7 +89,15 @@ function plugin_attach_init()
 			'err_delete'   => _('Cannot delete file in  $1'),
 			'err_rename'   => _('Cannot rename this file'),
 			'err_password' => _('Wrong password.'),
+			'err_upload'   => _('It failed in uploading.'),
 			'err_adminpass'=> _('Wrong administrator password'),
+			'err_ini_size' => _('The value of the upload_max_filesize directive of php.ini is exceeded.'),
+			'err_form_size'=> _('MAX_FILE_SIZE specified by the HTML form is exceeded.'),
+			'err_partial'  => _('Only part is uploaded.'),
+			'err_no_file'  => _('The file was not uploaded.'),
+			'err_no_tmp_dir'=> _('There is no temporary directory.'),
+			'err_cant_write'=> _('It failed in writing in the disk.'),
+			'err_extension'=> _('The uploading of the file was stopped by the enhancement module.'),
 			'btn_upload'   => _('Upload'),
 			'btn_info'     => _('Information'),
 			'btn_submit'   => _('Submit')
@@ -216,6 +224,13 @@ function attach_upload($file, $page, $pass = NULL)
 	$query = 'plugin=attach&amp;pcmd=info&amp;refer=' . rawurlencode($page) .
 		'&amp;file=' . rawurlencode($file['name']);
 
+	if ($file['error'] !== UPLOAD_ERR_OK) {
+		$err_msg = attach_set_error_message($file['error']);
+		return array(
+			'result'=>FALSE,
+			'msg'=>$err_msg);
+	}
+
 	if (PKWK_QUERY_STRING_MAX && strlen($query) > PKWK_QUERY_STRING_MAX) {
 		pkwk_common_headers();
 		echo(_("Query string (page name and/or file name) too long")); 
@@ -223,7 +238,9 @@ function attach_upload($file, $page, $pass = NULL)
 	} else if (! is_page($page)) {
 		die_message(_("No such page"));
 	} else if ($file['tmp_name'] == '' || ! is_uploaded_file($file['tmp_name'])) {
-		return array('result'=>FALSE);
+		return array(
+			'result'=>FALSE,
+			'msg'=>$_attach_messages['err_upload']);
 	} else if ($file['size'] > PLUGIN_ATTACH_MAX_FILESIZE) {
 		return array(
 			'result'=>FALSE,
@@ -242,6 +259,29 @@ function attach_upload($file, $page, $pass = NULL)
 	}
 
 	return attach_doupload($file, $page, $pass);
+}
+
+function attach_set_error_message($err_no)
+{
+	global $_attach_messages;
+
+	switch($err_no) {
+	case UPLOAD_ERR_INI_SIZE:
+		return $_attach_messages['err_ini_size'];
+	case UPLOAD_ERR_FORM_SIZE:
+		return $_attach_messages['err_form_size'];
+	case UPLOAD_ERR_PARTIAL:
+		return $_attach_messages['err_partial'];
+	case UPLOAD_ERR_NO_FILE:
+		return $_attach_messages['err_no_file'];
+	case UPLOAD_ERR_NO_TMP_DIR:
+		return $_attach_messages['err_no_tmp_dir'];
+	case UPLOAD_ERR_CANT_WRITE:
+		return $_attach_messages['err_cant_write'];
+	case UPLOAD_ERR_EXTENSION:
+		return $_attach_messages['err_extension'];
+	}
+	return $_attach_messages['err_upload'];
 }
 
 function attach_gettext($path, $lock=FALSE)
@@ -335,7 +375,7 @@ function attach_doupload(&$file, $page, $pass=NULL, $temp='', $copyright=FALSE, 
 			$zip->addFile($file['tmp_name'],$file['name']);
 			// if ($zip->status !== ZIPARCHIVE::ER_OK)
 			if ($zip->status !== 0)
-				die_message( _('The error occurred('.$zip->status.').') );
+				die_message( _('The error occurred').'('.$zip->status.').' );
 			$zip->close();
 			chmod($obj->filename, PLUGIN_ATTACH_FILE_MODE);
 			@unlink($file['tmp_name']);
