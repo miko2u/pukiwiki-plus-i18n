@@ -2,11 +2,13 @@
 /**
  * PukiWiki Plus! PROTECT Plugin
  *
- * @copyright   Copyright &copy; 2007-2008, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: protect.inc.php,v 0.2 2007/06/27 00:38:00 upk Exp $
+ * @copyright   Copyright &copy; 2007-2009, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * @version     $Id: protect.inc.php,v 0.3 2009/08/19 01:51:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  *
  */
+
+defined('PLUGIN_PROTECT_MUST_PAGE') or define('PLUGIN_PROTECT_MUST_PAGE', 1);
 
 function plugin_protect_convert()
 {
@@ -159,7 +161,10 @@ function protect_body($plugin)
 		if (exist_plugin_convert($plugin)) $body .= do_plugin_convert($plugin);
 	}
 
-	if (empty($body)) die('The attestation setting is not done.');
+	if (empty($body)) {
+ 		if (PLUGIN_PROTECT_MUST_PAGE) die( 'The attestation setting is not done.' );
+ 		die();
+	}
 	return $body;
 }
 

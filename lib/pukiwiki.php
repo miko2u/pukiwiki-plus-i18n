@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: pukiwiki.php,v 1.21.18 2009/03/22 01:30:00 upk Exp $
+// $Id: pukiwiki.php,v 1.21.19 2009/08/19 01:51:00 upk Exp $
 //
 // PukiWiki Plus! 1.4.*
 //  Copyright (C) 2002-2009 by PukiWiki Plus! Team
@@ -176,6 +176,16 @@ if ($spam && $method != 'GET') {
 	}
 }
 
+// If page output, enable session.
+// NOTE: if action plugin(command) use session, call pkwk_session_start()
+//       in plugin action-API function.
+pkwk_session_start();
+
+// auth remoteip
+if (isset($auth_api['remoteip']['use']) && $auth_api['remoteip']['use']) {
+        if (exist_plugin_inline('remoteip')) do_plugin_inline('remoteip');
+}
+
 $is_protect = auth::is_protect();
 
 // Plugin execution
@@ -215,11 +225,6 @@ if ($is_protect) {
  	if (exist_plugin_convert('protect')) do_plugin_convert('protect');
 	die('PLUS_PROTECT_MODE is set.');
 }
-
-// If page output, enable session.
-// NOTE: if action plugin(command) use session, call pkwk_session_start()
-//       in plugin action-API function.
-pkwk_session_start();
 
 // Set Home
 $auth_key = auth::get_user_info();
