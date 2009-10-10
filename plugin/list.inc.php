@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: list.inc.php,v 1.6.8 2006/11/04 02:47:00 upk Exp $
+// $Id: list.inc.php,v 1.6.9 2009/10/11 01:26:00 upk Exp $
 //
 // IndexPages plugin: Show a list of page names
 function plugin_list_action()
@@ -11,8 +11,7 @@ function plugin_list_action()
 	$_title_filelist = _('List of page files');
 
 	// Redirected from filelist plugin?
-	$filelist = (array_key_exists('cmd',$vars) and $vars['cmd']=='filelist');
-
+	$filelist = (isset($vars['cmd']) && $vars['cmd']=='filelist');
 	if ($filelist) {
 		if (! auth::check_role('role_adm_contents'))
 			$filelist = TRUE;
@@ -21,13 +20,15 @@ function plugin_list_action()
 			$filelist = FALSE;
 	}
 
+	$listcmd = (isset($vars['listcmd'])) ? $vars['listcmd'] : 'read';
+
 	return array(
 		'msg'=>$filelist ? $_title_filelist : $_title_list,
-		'body'=>plugin_list_getlist($filelist));
+		'body'=>plugin_list_getlist($filelist,$listcmd));
 }
 
 // Get a list
-function plugin_list_getlist($withfilename = FALSE)
+function plugin_list_getlist($withfilename = FALSE, $listcmd = 'read')
 {
 	global $non_list, $whatsnew;
 
@@ -35,7 +36,7 @@ function plugin_list_getlist($withfilename = FALSE)
 	if (!$withfilename)
 		$pages = array_diff($pages, preg_grep('/' . $non_list . '/S', $pages));
 	if (empty($pages)) return '';
-
-	return page_list($pages,'read',$withfilename);
+	$cmd = ($listcmd == 'read' || $listcmd == 'edit') ? $listcmd : 'read';
+	return page_list($pages,$cmd,$withfilename);
 }
 ?>
