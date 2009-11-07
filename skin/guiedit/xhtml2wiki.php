@@ -52,6 +52,10 @@ class XHTML2Wiki
 	// 変換メソッド
 	function Convert($source) {
 		$this->body = '';
+
+		// <br /> が行末にならない場合の対処
+		// -文字列~ のような場合の挙動に対応
+		$source = preg_replace("/<br\s\/>\</", "~\n<", $source);
 		
 		// １行ずつに分割
 		$source = explode("\n", $source);
