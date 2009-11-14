@@ -2,8 +2,8 @@
 /**
  * YouTube プラグイン
  *
- * @copyright   Copyright &copy; 2006, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: u2b.inc.php,v 0.1 2006/04/16 17:52:00 upk Exp $
+ * @copyright   Copyright &copy; 2006,2009, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * @version     $Id: u2b.inc.php,v 0.2 2009/11/14 00:21:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License
  *
  */
@@ -73,8 +73,18 @@ function plugin_u2b_convert()
 
 	$youtube_url = YOUTUBE_URL.$id;
 
+	switch($align) {
+	case 'right':
+	case 'left':
+		$style = 'float:'.$align;
+		break;
+	case 'center':
+	default:
+		$style = 'text-align:'.$align;
+	}
+
 	return <<<EOD
-<div class="u2b_img" style="float:$align">
+<div class="u2b_img" style="$style">
   <object data="$youtube_url" type="application/x-shockwave-flash" width="$width" height="$height">
     <param name="src" value="$youtube_url" />
   </object>
