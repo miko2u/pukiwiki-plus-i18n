@@ -3,7 +3,7 @@
  * PukiWiki Plus! PRINT Plugin
  *
  * @copyright   Copyright &copy; 2007-2009, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: print.inc.php,v 0.9 2009/02/23 23:56:00 upk Exp $
+ * @version     $Id: print.inc.php,v 0.10 2009/12/05 03:36:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  *
  */
@@ -28,7 +28,7 @@ function plugin_print_action()
 	global $use_local_time, $language;
 	global $head_tags, $foot_tags, $pkwk_dtd;
 	global $vars;
-	global $fixed_heading_edited, $autoglossary, $_symbol_paraedit;
+	global $fixed_heading_edited, $autoglossary, $_symbol_paraedit, $_symbol_paraguiedit;
 	global $_symbol_noexists;
 	global $foot_explain, $note_hr;
 
@@ -40,7 +40,7 @@ function plugin_print_action()
 	$foot = (isset($vars['nofoot'])) ? 0 : 1;
 	$noa  = (isset($vars['noa']))    ? 1 : 0;
 	$fixed_heading_edited = $autoglossary = 0;
-	$_symbol_paraedit = '&nbsp;';
+	$_symbol_paraedit = $_symbol_paraguiedit = '&nbsp;';
 
 	$body = convert_html(get_source($page));
 

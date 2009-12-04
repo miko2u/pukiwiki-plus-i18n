@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone
-// $Id: pukiwiki.ini.php,v 1.148.37 2009/05/04 21:35:00 upk Exp $
+// $Id: pukiwiki.ini.php,v 1.148.38 2009/12/05 03:32:00 upk Exp $
 // Copyright (C)
 //   2005-2009 PukiWiki Plus! Team
 //   2002-2007 PukiWiki Developers Team
@@ -598,7 +598,8 @@ $usedatetime = 1;
 //
 // 見出し行の固有のアンカ自動挿入されているとき
 // のみ有効です
-// 0:無効, 1:edit, 2:guiedit プラグインを利用
+// 0:無効
+// 1:edit, 2:guiedit, 3:edit+guiedit プラグインを利用
 $fixed_heading_edited = 0;
 
 /////////////////////////////////////////////////

@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: edit.inc.php,v 1.41.41 2009/06/23 23:27:00 upk Exp $
+// $Id: edit.inc.php,v 1.41.42 2009/12/05 03:37:00 upk Exp $
 // Copyright (C)
 //   2005-2009 PukiWiki Plus! Team
 //   2001-2007 PukiWiki Developers Team
@@ -144,7 +144,7 @@ function plugin_edit_inline()
 	static $usage = '&edit(pagename,anchor);';
 
 	global $script, $vars, $fixed_heading_edited;
-	global $_symbol_paraedit;
+	global $_symbol_paraedit, $_symbol_paraguiedit;
 
 	if (!$fixed_heading_edited || is_freeze($vars['page']) || auth::check_role('readonly')) {
 		return '';
@@ -157,6 +157,8 @@ function plugin_edit_inline()
 	$s_label = strip_htmltag(array_pop($args), FALSE);
 	if ($s_label == '')	{
 		$s_label = $_symbol_paraedit;
+		$s_label_edit = & $_symbol_paraedit;
+		$s_label_guiedit = & $_symbol_paraguiedit;
 	}
 
 	list($page,$id) = array_pad($args,2,'');
@@ -167,8 +169,21 @@ function plugin_edit_inline()
 		$id = '&amp;id='.rawurlencode($id);
 	}
 	$r_page = rawurlencode($page);
-	$use_edit_plugin = ($fixed_heading_edited == 2) ? 'guiedit' : 'edit';
-	return '<a class="anchor_super" href="' . $script . '?cmd='.$use_edit_plugin.'&amp;page=' . $r_page . $id . '">' . $s_label . '</a>';
+
+	//$use_edit_plugin = ($fixed_heading_edited == 2) ? 'guiedit' : 'edit';
+	// return '<a class="anchor_super" href="' . $script . '?cmd='.$use_edit_plugin.'&amp;page=' . $r_page . $id . '">' . $s_label . '</a>';
+
+	$tag_edit = '<a class="anchor_super" href="' . $script . '?cmd=edit&amp;page=' . $r_page . $id . '">' . $s_label_edit . '</a>';
+	$tag_guiedit = '<a class="anchor_super" href="' . $script . '?cmd=guiedit&amp;page=' . $r_page . $id . '">' . $s_label_guiedit . '</a>';
+
+	switch ($fixed_heading_edited) {
+	case 2:
+		return $tag_guiedit;
+	case 3:
+		return $tag_edit.$tag_guiedit;
+	default:
+		return $tag_edit;
+	}
 }
 
 // Write, add, or insert new comment

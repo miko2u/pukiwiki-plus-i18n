@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: default.ini.php,v 1.25.11 2009/04/07 00:50:00 upk Exp $
+// $Id: default.ini.php,v 1.25.12 2009/12/05 03:08:00 upk Exp $
 // Copyright (C)
 //   2005-2006,2009 PukiWiki Plus! Team
 //   2003-2005 PukiWiki Developers Team
@@ -45,6 +45,7 @@ $list_index = 1;
 /////////////////////////////////////////////////
 // 特殊シンボル
 $_symbol_paraedit = '<img src="'. IMAGE_URI.'plus/paraedit.png" width="9" height="9" alt="Edit" title="Edit" />';
+$_symbol_paraguiedit = '<img src="'. IMAGE_URI.'plus/paraguiedit.png" width="9" height="10" alt="Edit(GUI)" title="Edit(GUI)" />';
 $_symbol_extanchor = '<img src="'.IMAGE_URI.'plus/ext.png" alt="" title="" class="ext" onclick="return open_uri(\'$1\', \'$2\');" />';
 $_symbol_innanchor = '<img src="'.IMAGE_URI.'plus/inn.png" alt="" title="" class="inn" onclick="return open_uri(\'$1\', \'$2\');" />';
 
