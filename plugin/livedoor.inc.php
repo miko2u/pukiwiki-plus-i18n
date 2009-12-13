@@ -2,9 +2,9 @@
 /**
  * PukiWiki Plus! livedoor 認証処理
  *
- * @copyright   Copyright &copy; 2007-2008, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
+ * @copyright   Copyright &copy; 2007-2009, Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
  * @author      Katsumi Saito <katsumi@jo1upk.ymt.prug.or.jp>
- * @version     $Id: livedoor.inc.php,v 0.7 2008/06/21 23:56:00 upk Exp $
+ * @version     $Id: livedoor.inc.php,v 0.8 2009/12/13 15:36:00 upk Exp $
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License (GPL2)
  */
 require_once(LIB_DIR . 'hash.php');
@@ -60,7 +60,7 @@ class auth_livedoor extends auth_api
 		foreach($array as $key=>$val) {
 			$x .= $key.$val;
 		}
-		return hmac_sha1($this->sec_key, $x);
+		return hash_hmac('sha1',$x, $this->sec_key);
 	}
 
 	function auth($vars)
