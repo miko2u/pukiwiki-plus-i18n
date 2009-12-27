@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: default.ini.php,v 1.25.12 2009/12/05 03:08:00 upk Exp $
+// $Id: default.ini.php,v 1.25.13 2009/12/27 15:38:00 upk Exp $
 // Copyright (C)
 //   2005-2006,2009 PukiWiki Plus! Team
 //   2003-2005 PukiWiki Developers Team
@@ -8,10 +8,14 @@
 // License: GPL v2 or (at your option) any later version
 //
 // PukiWiki setting file (user agent:default)
-
+@include(add_homedir('default.usr.ini.php'));
 /////////////////////////////////////////////////
 // Skin file
-if (defined('TDIARY_THEME')) { 
+if (isset($_COOKIE['tdiary_theme'])) {
+	defined('TDIARY_THEME') or define('TDIARY_THEME', $_COOKIE['tdiary_theme']);
+}
+
+if (defined('TDIARY_THEME')) {
 	defined('SKIN_FILE_DEFAULT') or define('SKIN_FILE_DEFAULT', add_skindir('tdiary'));
 } else {
 	if (defined('PLUS_THEME')) {
@@ -20,7 +24,7 @@ if (defined('TDIARY_THEME')) {
 		defined('SKIN_FILE_DEFAULT') or define('SKIN_FILE_DEFAULT', add_skindir('default'));
 	}
 }
-$skin_file = SKIN_FILE_DEFAULT;
+$skin_file = (isset($_COOKIE['skin_file'])) ? $_COOKIE['skin_file'] : SKIN_FILE_DEFAULT;
 
 /////////////////////////////////////////////////
 // メニューバー/サイドバーを常に表示する(1:する 0:しない)
@@ -222,4 +226,7 @@ $facemark_rules = array(
 // (通常、デスクトップでは存在しない)
 $use_trans_sid_address = array(
 );
+
+/////////////////////////////////////////////////
+@include(add_homedir('default.usr.ini.php'));
 ?>
