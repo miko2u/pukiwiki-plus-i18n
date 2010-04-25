@@ -57,7 +57,7 @@ function print_form_string( $list )
 	if($list['directory']) {
 		$form_string .= '<select name="directory">'."\n";
 		foreach( $list['directory'] as $dir ) {
-			$form_string .= '<option>'.$dir.'/</option>'."\n";
+			$form_string .= '<option>'.htmlspecialchars($dir).'/</option>'."\n";
 		}
 		$form_string .= "</select>\n";
 	}
@@ -166,7 +166,7 @@ function plugin_newpage_subdir_action()
 			// $msg_prefix = $directory."..に";
 			$msg_prefix = _("To $dir.");
 		}
-		$retval['msg'] = $msg_prefix . _('New page');
+		$retval['msg'] = htmlspecialchars($msg_prefix) . _('New page');
 		$retval['body'] = print_form_string(build_directory_list($roots));
 		return $retval;
 	}
