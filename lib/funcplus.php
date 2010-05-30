@@ -1,6 +1,6 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: funcplus.php,v 0.1.57 2010/05/30 23:01:00 upk Exp $
+// $Id: funcplus.php,v 0.1.58 2010/05/31 00:21:00 upk Exp $
 // Copyright (C)
 //   2005-2010 PukiWiki Plus! Team
 // License: GPL v2 or (at your option) any later version
@@ -130,6 +130,15 @@ function get_fancy_uri()
 	$script .= $path; // path
 
 	return $script;
+}
+
+function get_remoteip()
+{
+	static $array_var = array('HTTP_X_REMOTE_ADDR','REMOTE_ADDR'); // HTTP_X_FORWARDED_FOR
+	foreach($array_var as $x){
+		if (isset($_SERVER[$x])) return $_SERVER[$x];
+	}
+	return '';
 }
 
 function mb_ereg_quote($str)
