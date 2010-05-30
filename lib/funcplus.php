@@ -1,8 +1,8 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: funcplus.php,v 0.1.56 2009/05/07 00:36:00 upk Exp $
+// $Id: funcplus.php,v 0.1.57 2010/05/30 23:01:00 upk Exp $
 // Copyright (C)
-//   2005-2009 PukiWiki Plus! Team
+//   2005-2010 PukiWiki Plus! Team
 // License: GPL v2 or (at your option) any later version
 //
 // Plus! extension function(s)
@@ -747,5 +747,49 @@ function strip_a($x)
 	$x = preg_replace('#<a href="(.*?)"[^>]*>(.*?)</a>#si', '$2', $x);
 	$x = preg_replace('#<a class="ext" href="(.*?)" .*?>(.*?)<img src="' . IMAGE_URI . 'plus/ext.png".*?</a>#si','$2',$x);
 	return $x;
+}
+
+function is_webdav()
+{
+	global $log_ua;
+	static $status = false;
+	if ($status) return true;
+
+	static $ua_dav = array(
+		'Microsoft-WebDAV-MiniRedir\/',
+		'Microsoft Data Access Internet Publishing Provider',
+		'MS FrontPage',
+		'^WebDrive',
+		'^WebDAVFS\/',
+		'^gnome-vfs\/',
+		'^XML Spy',
+		'^Dreamweaver-WebDAV-SCM1',
+	);
+
+	switch($_SERVER['REQUEST_METHOD']) {
+	case 'OPTIONS':
+	case 'PROPFIND':
+	case 'MOVE':
+	case 'COPY':
+	case 'DELETE':
+	case 'PROPPATCH':
+	case 'MKCOL':
+	case 'LOCK':
+	case 'UNLOCK':
+		$status = true;
+		return $status;
+	default:
+		continue;
+	}
+
+	$matches = array();
+	foreach($ua_dav as $pattern) {
+		if (preg_match('/'.$pattern.'/', $log_ua, $matches)) {
+			$status = true;
+			return true;
+		}
+	}
+
+	return false;
 }
 ?>

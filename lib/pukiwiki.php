@@ -1,9 +1,9 @@
 <?php
 // PukiWiki Plus! - Yet another WikiWikiWeb clone.
-// $Id: pukiwiki.php,v 1.21.19 2009/08/19 01:51:00 upk Exp $
+// $Id: pukiwiki.php,v 1.21.20 2010/05/30 23:01:00 upk Exp $
 //
 // PukiWiki Plus! 1.4.*
-//  Copyright (C) 2002-2009 by PukiWiki Plus! Team
+//  Copyright (C) 2002-2010 by PukiWiki Plus! Team
 //  http://pukiwiki.cafelounge.net/plus/
 //
 // PukiWiki 1.4.*
@@ -224,6 +224,12 @@ if ($plugin != '') {
 if ($is_protect) {
  	if (exist_plugin_convert('protect')) do_plugin_convert('protect');
 	die('PLUS_PROTECT_MODE is set.');
+}
+
+// WebDAV
+if (is_webdav() && exist_plugin('dav')) {
+	do_plugin_action('dav');
+	exit;
 }
 
 // Set Home
