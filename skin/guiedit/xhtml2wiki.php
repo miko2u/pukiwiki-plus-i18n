@@ -9,7 +9,7 @@
 //	Copyright (C) 2006-2008 garand
 //	PukiWiki : Copyright (C) 2001-2006 PukiWiki Developers Team
 //	FCKeditor : Copyright (C) 2003-2008 Frederico Caldeira Knabben
-//      PukiWiki Plus! : Copyright (C) 2009 Katsumi Saito
+//      PukiWiki Plus! : Copyright (C) 2009-2010 Katsumi Saito
 //
 //
 //	File:
@@ -187,7 +187,7 @@ class XHTML2Wiki
 			if ($matches[1]) {
 				$head = str_repeat("+", $this->GetLevel());
 			}
-			if (!$matches[1] && !$matches[3]) {
+			if (!$matches[1] && isset($matches[3]) && !$matches[3]) {
 				$this->Paragraph($line);
 			}
 			else if ($head || $matches[2]) {
@@ -212,7 +212,7 @@ class XHTML2Wiki
 			if ($matches[1]) {
 				$head = str_repeat("-", $this->GetLevel());
 			}
-			if (!$matches[1] && !$matches[3]) {
+			if (!$matches[1] && isset($matches[3]) && !$matches[3]) {
 				$this->Paragraph($line);
 			}
 			else if ($head || $matches[2]) {
@@ -513,7 +513,7 @@ class XHTML2Wiki
 			$line = preg_replace("/^\s+/m", '', $line);
 		}
 		
-
+		$line = $this->DecodeSpecialChars($line);
 		return $line;
 	}
 
@@ -668,8 +668,8 @@ class XHTML2Wiki
 
 	// 特殊な HTML エンティティを文字に戻す
 	function DecodeSpecialChars($line) {
-		static $pattern = array("/&amp;/", "/&lt;/", "/&gt;/", "/&quot;/", "/&nbsp;/");
-		static $replace = array('&', '<', '>', '"', ' ');
+		static $pattern = array("/&amp;/", "/&lt;/", "/&gt;/", "/&quot;/", "/&nbsp;/","/&#091;/","/&#093;/");
+		static $replace = array('&', '<', '>', '"', ' ','[',']');
 		
 		return preg_replace($pattern, $replace, $line);
 	}

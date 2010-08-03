@@ -9,7 +9,7 @@
 //	Copyright (C) 2006-2007 garand
 //	PukiWiki : Copyright (C) 2001-2006 PukiWiki Developers Team
 //	FCKeditor : Copyright (C) 2003-2007 Frederico Caldeira Knabben
-//      PukiWiki Plus! : Copyright (C) 2009 Katsumi Saito
+//      PukiWiki Plus! : Copyright (C) 2009-2010 Katsumi Saito
 //
 //
 //	File:
@@ -39,6 +39,7 @@ div.plugin, div.ref {
 	background-color: #ffffcc;
 	margin-top: 5px;
 	margin-bottom: 5px;
+	white-space: pre;
 }
 
 span.plugin, span.ref {
