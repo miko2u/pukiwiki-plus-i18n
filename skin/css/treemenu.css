@@ -1,0 +1,51 @@
+/**
+ * treemenu.inc.php
+ * treepagelist.inc.php
+ */
+
+/* treepagelist.inc.php -- begin */
+div.treepagelist {
+    margin: 0 0 0 1ex;
+    border-left: 1px dashed #aa7;
+    padding: 0 0 0 1ex;
+}
+    /* nopage */
+div.treepagelist_nopage {
+    margin: 0 0 0 1ex;
+    border-left: 1px dashed #aa7;
+    padding: 0 0 0 1ex;
+}
+    /* anchor */
+a.treepagelist {
+    text-decoration: none;
+    width: 1ex;
+}
+/* treepagelist.inc.php -- end */
+
+/* treemenu.inc.php -- begin */
+  /* block plugin */
+span.treemenu {
+    /* anchor */
+}
+div.treemenu{
+    /* TREEMENU_BAR */
+    margin: 0;
+    padding: 0;
+}
+div.treemenu_body {
+    /* closeable area */
+}
+  /* option */
+  /* inline plugin */
+a.treemenu {
+    /* anchor */
+    text-decoration: none;
+    width: 1ex;
+}
+
+  /* for MenuBar */
+div.treemenubar {
+    border: 5px double #ed7;
+    background: #f0ffdd;
+}
+/* treemenu.inc.php -- end */

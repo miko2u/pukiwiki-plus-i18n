@@ -1,0 +1,328 @@
+/*
+/////////////////////////////////////////////////
+// PukiWiki - Yet another WikiWikiWeb clone.
+//
+// $Id: plus.css,v 1.32.15 2004/07/31 03:09:20 miko Exp $
+//
+*/
+
+/* PukiWiki Plus! Skin */
+td.ltable
+{
+	width:160px;
+	vertical-align:top;
+	background-color: #FFFCEE;
+}
+
+td.rtable
+{
+	width:160px;
+	vertical-align:top;
+	background-color: #FFFCEE;
+}
+
+td.ctable
+{
+	vertical-align:top;
+	padding-left:28px;
+	padding-right:28px;
+}
+
+div#floattable
+{
+	min-width:620px;
+}
+
+div#ltable
+{
+	width:160px;
+	vertical-align:top;
+	float:left;
+}
+
+div#rtable
+{
+	width:160px;
+	vertical-align:top;
+	float:right;
+}
+
+div#ctablelr
+{
+	vertical-align:top;
+	padding-left:1%;
+	padding-right:1%;
+	margin-left:180px;
+	margin-right:180px;
+}
+
+div#ctablel
+{
+	vertical-align:top;
+	padding-left:1%;
+	padding-right:1%;
+	margin-left:180px;
+	margin-right:20px;
+}
+
+div#ctabler
+{
+	vertical-align:top;
+	padding-left:1%;
+	padding-right:1%;
+	margin-left:20px;
+	margin-right:180px;
+}
+
+div#ctable
+{
+	vertical-align:top;
+	padding-left:1%;
+	padding-right:1%;
+	margin-left:20px;
+	margin-right:20px;
+}
+
+div#cleartable
+{
+	clear:both;
+}
+
+div#topicpath
+{
+	color:black;
+/*	font-size:80%;	*/
+}
+
+div#footerltable
+{
+	float:left;
+}
+
+div#footerrtable
+{
+}
+
+blockquote
+{
+	border: 1px solid #FFCC99;
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+blockquote p
+{
+	margin: 0.5em 1em;
+}
+
+/* popup toc */
+#poptoc
+{
+	font-size:90%;
+	border:gray thin outset; padding:0.5em;
+	background:#fff8ee;
+	/*min-width:18em; max-width:25em;*/
+	/*width:22em;*/
+	margin-right:-10em;
+	z-index:1;
+	position:absolute;
+	display:none;
+}
+#poptoc a:hover
+{
+	background:#ccddee;
+}
+#poptoc a
+{
+	color:blue;
+}
+#poptoc h2
+{
+	color:navy;
+	background:#ffeecc;
+	font-size:small;
+	font-weight:normal;
+	padding:0.3em;
+	margin:0;
+	text-align:center;
+	border:silver solid 1px;
+}
+#poptoc h2 a
+{
+	font-size:90%;
+	color:navy;
+	text-decoration:none;
+}
+#poptoc h2 img
+{
+	margin-bottom:-3px;
+	margin-right: 2px;
+}
+#poptoc .nav
+{
+	border-top:1px gray solid;
+	padding-top:0.2em;
+	text-align:center;
+}
+#poptoc a.here
+{
+	color: #333333;
+	background: #fff8f8;
+	text-decoration: none;
+	border:1px dotted gray;
+/*	cursor:default;	*/
+}
+
+/* for BugTrack/1 */
+.dummyblock
+{
+	width:77%;
+	float:left;
+	display:block;
+}
+
+.center_form
+{
+	text-align:center;
+	padding:4px 0px 8px;
+	margin:0px;
+}
+
+span.add_word
+{
+        background-color:#FFFF66;
+}
+
+span.remove_word
+{
+        background-color:#A0FFFF;
+}
+
+div#validxhtml
+{
+        text-align:right;
+        white-space:nowrap;
+}
+
+div#sigunature
+{
+        margin: 0px 16px 0px 0px;
+        white-space:nowrap;
+        font-size: 12px;
+        line-height: 122%;
+}
+
+#footerctable
+{
+	width:98%;
+}
+
+/* pukiwiki extend anchor */
+img.ext
+{
+	margin-left: 2px;
+	vertical-align: baseline;
+}
+img.inn
+{
+	margin-left: 2px;
+	vertical-align: baseline;
+}
+
+/* headarea extend */
+#header .style_table
+{
+	background-color: transparent;
+}
+
+#header .style_table .style_th
+{
+	margin: 0px;
+	padding: 0px;
+	background-color: transparent;
+}
+
+#header .style_table .style_td
+{
+	margin: 0px;
+	padding: 0px;
+	background-color: transparent;
+}
+
+#header .style_table .style_td h1.title
+{
+	font-size: 30px;
+	font-weight:bold;
+	background-color:transparent;
+	padding: 0px;
+	border: 0px;
+	margin: 0px;
+}
+
+#footer .style_table
+{
+	background-color: transparent;
+}
+
+#footer .style_table .style_th
+{
+	margin: 0px;
+	padding: 0px;
+	background-color: transparent;
+}
+
+#footer .style_table .style_td
+{
+	margin: 0px;
+	padding: 0px;
+	background-color: transparent;
+}
+
+/* extra attach table */
+table.attach_table
+{
+	padding:0px;
+	border:0px;
+	margin:auto;
+	text-align:left;
+	color:inherit;
+	background-color: #CCCCCC;
+}
+th.attach_th
+{
+	padding:2px;
+	margin:1px;
+	text-align:center;
+	color:inherit;
+	background-color: #FFEECC;
+}
+td.attach_td1
+{
+	background-color: #FFFFFF;
+}
+td.attach_td2
+{
+	background-color: #CCFFCC;
+}
+
+/* for realedit.js */
+#realview_outer {
+	float:left;
+	z-index:10;
+	margin:1px;
+	padding:0px 20px;
+	height:200px;
+	width:550px;
+	overflow:scroll;
+	display:none;
+}
+
+/* for ajaxpopup */
+#ajaxpopup {
+        position: absolute;
+        z-index: 100;
+        border: solid 1px #000;
+        background-color: #ffc;
+        font-size: 84%;
+        margin: 0px;
+        padding: 0.15em;
+}

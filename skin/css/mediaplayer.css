@@ -1,0 +1,77 @@
+/*
+// PukiWiki Plus! - Yet another WikiWikiWeb clone.
+// $Id: mediaplayer.css,v 1.32.15 2004/07/31 03:09:20 miko Exp $
+//
+*/
+
+/* for MediaPlayer */
+.mediaplayerbutton
+{
+	margin:2px 2px;
+	width:24px;
+}
+
+.playercontainer
+{
+	border:solid 1px #333;
+	width:320px;
+	text-align:center;
+	vertical-align:middle;
+	position:relative;
+}
+
+.videosplash
+{
+	position:expression('absolute');
+	display:block;
+}
+
+.player
+{
+	display:none;
+	display:expression(PlayerSupported(this)?'block':'none');
+	background-color:Black;
+	font-size:0px;
+}
+
+.controlstable
+{
+	width:320px;
+	margin:0px;
+	background-image:url(../image/player/base.gif);
+/*	background-repeat:no-repeat;	*/
+}
+
+table.controlstable tr td
+{
+	background-color:transparent;
+}
+
+.controlstablenoscript
+{
+	display:expression(PlayerSupported(this)?'none':'block');
+	margin:0px;
+	background-image:url(../image/player/base.gif);
+	background-repeat:no-repeat;
+}
+
+.slider
+{
+	background-image:url(../image/player/playbar.gif);
+	background-repeat:no-repeat;
+	background-position:center center;
+}
+
+.indicator,.downloadindicator
+{
+	width:0px;
+	height:3px;
+	margin-left:1px;
+	margin-top:2px;
+}
+
+.indicatorhandle
+{
+	margin-top:2px;
+}
+

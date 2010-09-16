@@ -1,0 +1,200 @@
+
+/* aname.inc.php */
+.anchor {}
+.anchor_super {
+	font-size:xx-small;
+	vertical-align:super;
+}
+
+/* br.inc.php */
+br.spacer {}
+
+/* calendar*.inc.php */
+.style_calendar {
+	padding:0px;
+	border:0px;
+	margin:3px;
+	color:inherit;
+	background-color:#CCD5DD;
+	text-align:center;
+}
+.style_td_caltop {
+	padding:5px;
+	margin:1px;
+	color:inherit;
+	background-color:#EEF5FF;
+	font-size:80%;
+	text-align:center;
+}
+.style_td_today {
+	padding:5px;
+	margin:1px;
+	color:inherit;
+	background-color:#FFFFDD;
+	text-align:center;
+}
+.style_td_sat {
+	padding:5px;
+	margin:1px;
+	color:inherit;
+	background-color:#DDE5FF;
+	text-align:center;
+}
+.style_td_sun {
+	padding:5px;
+	margin:1px;
+	color:inherit;
+	background-color:#FFEEEE;
+	text-align:center;
+}
+.style_td_blank {
+	padding:5px;
+	margin:1px;
+	color:inherit;
+	background-color:#EEF5FF;
+	text-align:center;
+}
+.style_td_day {
+	padding:5px;
+	margin:1px;
+	color:inherit;
+	background-color:#EEF5FF;
+	text-align:center;
+}
+.style_td_week {
+	padding:5px;
+	margin:1px;
+	color:inherit;
+	background-color:#DDE5EE;
+	font-size:80%;
+	font-weight:bold;
+	text-align:center;
+}
+
+/* calendar_viewer.inc.php */
+div.calendar_viewer {
+	color:inherit;
+	background-color:inherit;
+	margin-top:20px;
+	margin-bottom:10px;
+	padding-bottom:10px;
+}
+span.calendar_viewer_left {
+	color:inherit;
+	background-color:inherit;
+	float:left;
+}
+span.calendar_viewer_right {
+	color:inherit;
+	background-color:inherit;
+	float:right;
+}
+
+/* clear.inc.php */
+.clear {
+	margin:0px;
+	clear:both;
+}
+
+/* counter.inc.php */
+div.counter { font-size:70%; }
+
+/* diff.inc.php */
+span.diff_added {
+	color:blue;
+	background-color:inherit;
+}
+
+span.diff_removed {
+	color:red;
+	background-color:inherit;
+}
+
+/* hr.inc.php */
+hr.short_line {
+	text-align:center;
+	width:80%;
+	border-style:solid;
+	border-color:#333333;
+	border-width:1px 0px;
+}
+
+/* include.inc.php */
+h5.side_label { text-align:center; }
+
+/* navi.inc.php */
+ul.navi {
+	margin:0px;
+	padding:0px;
+	text-align:center;
+}
+li.navi_none {
+	display:inline;
+	float:none;
+}
+li.navi_left {
+	display:inline;
+	float:left;
+	text-align:left;
+}
+li.navi_right {
+	display:inline;
+	float:right;
+	text-align:right;
+}
+
+/* new.inc.php */
+span.comment_date { font-size:x-small; }
+span.new1 {
+	color:red;
+	background-color:transparent;
+	font-size:x-small;
+}
+span.new5 {
+	color:green;
+	background-color:transparent;
+	font-size:xx-small;
+}
+
+/* popular.inc.php */
+span.counter { font-size:70%; }
+ul.popular_list {
+/*
+	padding:0px;
+	border:0px;
+	margin:0px 0px 0px 1em;
+	word-wrap:break-word;
+	word-break:break-all;
+*/
+}
+
+/* recent.inc.php,showrss.inc.php */
+ul.recent_list {
+/*
+	padding:0px;
+	border:0px;
+	margin:0px 0px 0px 1em;
+	word-wrap:break-word;
+	word-break:break-all;
+*/
+}
+
+/* ref.inc.php */
+div.img_margin {
+	margin-left:32px;
+	margin-right:32px;
+}
+
+/* vote.inc.php */
+td.vote_label {
+	color:inherit;
+	background-color:#FFCCCC;
+}
+td.vote_td1 {
+	color:inherit;
+	background-color:#DDE5FF;
+}
+td.vote_td2 {
+	color:inherit;
+	background-color:#EEF5FF;
+}

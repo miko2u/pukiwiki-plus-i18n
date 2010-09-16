@@ -1,0 +1,185 @@
+@import url("plugin.css");
+
+body{
+	text-align:center;
+}
+#wrapper{
+	width:98%;
+	margin:0 auto;
+	text-align:left;
+}
+#wrap_content{
+	float:right;
+	width:80%
+}
+#wrap_sidebar{
+	float:left;
+	width:18%;
+}
+#footer{
+	clear:both;
+}
+
+/* header
+----------------------------------------------------------------------------- */
+#header{
+	height:2em;
+	font-size:200%;
+}
+#header a{
+	color:#999;
+	text-decoration:none;
+}
+#logo{
+	margin:.5em;
+}
+
+/* navigator
+----------------------------------------------------------------------------- */
+#navigator p{
+	margin:0;
+	padding:0;
+}
+#navigator a{
+	margin:1px;
+	padding:.2em 1em;
+}
+
+/* content
+----------------------------------------------------------------------------- */
+#content{
+	margin-top:1em;
+}
+h1.title{
+	margin-bottom:40px;
+}
+#lastmodified{
+	font-size:90%;
+	margin:-40px 0 40px;
+}
+
+/* sidebar
+----------------------------------------------------------------------------- */
+#sidebar{
+	overflow:hidden;
+	word-break:break-all;
+}
+#sidebar *{
+	margin:0px;
+	padding:0px;
+}
+#sidebar h2,
+#sidebar h3,
+#sidebar h4,
+#sidebar h5{
+	font-size:100%;
+	margin:1em 0 .5em 0;
+	padding:.5em;
+}
+#sidebar li{
+	list-style-type:none;
+}
+#sidebar ul.list1 li{
+	margin-left:-32px;
+}
+#sidebar ul.list2 li{
+	margin-left:-25px;
+}
+#sidebar ul.list3 li{
+	margin-left:-25px;
+}
+#sidebar img{
+	margin:0px auto;
+	padding:0px;
+}
+div.side_bar div.jumpmenu{
+	display:none;
+}
+
+/* footer
+----------------------------------------------------------------------------- */
+#footer{
+	text-align:center;
+}
+
+
+/* Color & Border
+----------------------------------------------------------------------------- */
+#header,
+#footer{
+	border:solid 1px #999;
+	background-color:#eee;
+}
+#navigator{
+	border:solid 1px #999;
+	border-top:none;
+}
+#navigator a:hover{
+	background-color:#eee;
+}
+#sidebar h2,
+#sidebar h3,
+#sidebar h4,
+#sidebar h5{
+	border:solid 1px #999;
+	background-color:#eee;
+}
+
+/* Popup Toc
+----------------------------------------------------------------------------- */
+#poptoc
+{
+	font-size:90%;
+	border:gray thin outset; padding:0.5em;
+	background:#fff8ee;
+	/*min-width:18em; max-width:25em;*/
+	/*width:22em;*/
+	margin-right:-10em;
+	z-index:1;
+	position:absolute;
+	display:none;
+}
+#poptoc a:hover
+{
+	background:#ccddee;
+}
+#poptoc a
+{
+	color:blue;
+}
+#poptoc h2
+{
+	color:navy;
+	background:#ffeecc;
+	font-size:small;
+	font-weight:normal;
+	padding:0.3em;
+	margin:0;
+	text-align:center;
+	border:silver solid 1px;
+}
+#poptoc h2 a
+{
+	font-size:90%;
+	color:navy;
+	text-decoration:none;
+}
+#poptoc h2 img
+{
+	margin-bottom:-3px;
+	margin-right: 2px;
+}
+#poptoc .nav
+{
+	border-top:1px gray solid;
+	padding-top:0.2em;
+	text-align:center;
+}
+#poptoc a.here
+{
+	color: #333333;
+	background: #fff8f8;
+	text-decoration: none;
+	border:1px dotted gray;
+/*	cursor:default;	*/
+}

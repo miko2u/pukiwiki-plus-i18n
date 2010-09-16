@@ -1,0 +1,98 @@
+@charset "Shift_JIS";
+/*
+/////////////////////////////////////////////////
+// PukiWiki - Yet another WikiWikiWeb clone.
+//
+// $Id: print.css,v 1.4.3 2004/05/19 18:38:52 miko Exp $
+//
+*/
+@import url("default.css");
+
+a:link
+{
+	text-decoration: underline;
+}
+a:visited
+{
+	text-decoration: underline;
+}
+/*
+div#header
+{
+	display:none;
+}
+*/
+img#logo
+{
+	display:none;
+}
+td.ltable
+{
+	display:none;
+}
+td.rtable
+{
+	display:none;
+}
+div#navigator
+{
+	display:none;
+}
+/* for plus! navibar2 */
+div#navigator2
+{
+	display:none;
+}
+td.menubar
+{
+	display:none;
+}
+div#menubar
+{
+	display:none;
+}
+td.sidebar
+{
+	display:none;
+}
+div#sidebar
+{
+	display:none;
+}
+/*
+div#note
+{
+	display:none;
+}
+*/
+div#attach
+{
+	display:none;
+}
+div#toolbar
+{
+	display:none;
+}
+div#lastmodified
+{
+	display:none;
+}
+div#related
+{
+	display:none;
+}
+/*
+div#footer
+{
+	display:none;
+}
+*/
+.anchor_super
+{
+	display:none;
+}
+.jumpmenu
+{
+	display:none;
+}
+

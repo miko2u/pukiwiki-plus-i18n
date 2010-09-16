@@ -1,0 +1,75 @@
+/*
+// PukiWiki - Yet another WikiWikiWeb clone.
+// $Id: navibar2.css,v 1.32.15 2004/07/31 03:09:20 miko Exp $
+//
+*/
+
+/* navibar2.inc.php */
+div#navigator2 {
+	margin: 4px 0px;
+	padding: 0px 4px;
+	left: 0px;
+	width: 100%;
+	background-color: #ff7700;
+
+	clear:both;
+	white-space: nowrap;
+}
+
+td.navimenu {
+	margin: 2px 5px 2px 5px;
+	font-size:84%;
+	background-color: #ff7700;
+}
+td.navimenu a {
+	color: white;
+	padding: 0px 4px;
+	border: 1px #ff7700 solid;
+	font-weight: bold;
+	text-decoration: none;
+}
+td.navimenu a:active {
+	border: 1px #ffffff solid;
+	color: white;
+	background-color:transparent;
+	text-decoration:none;
+}
+td.navimenu a:visited {
+	color: white;
+	text-decoration: none;
+}
+td.navimenu a:hover {
+	border: 1px #ffffff solid;
+	color: white;
+	background-color:transparent;
+	text-decoration:none;
+}
+
+div.naviblock {
+	padding: 5px 5px 5px 8px;
+	border-top: white 1px solid;
+	font-size:84%;
+	background-color: #ff7700;
+	visibility: hidden;
+	position: absolute;
+}
+div.naviblock a {
+	font-weight:bold;
+	padding: 0px 4px;
+	color: white;
+	text-decoration: none;
+}
+div.naviblock a:active {
+	color: #000000;
+	background-color:transparent;
+	text-decoration: none;
+}
+div.naviblock a:visited {
+	color: #ffffff;
+	text-decoration: none;
+}
+div.naviblock a:hover {
+	color: #333333;
+	background-color:transparent;
+	text-decoration: none;
+}

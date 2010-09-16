@@ -1,0 +1,14 @@
+/*
+// PukiWiki - Yet another WikiWikiWeb clone.
+// $Id: tooltip.css,v 1.32.15 2004/07/31 03:09:20 miko Exp $
+//
+*/
+
+abbr, .tooltip {
+	border-style: none none dotted none;
+	border-width: medium medium 1px medium;
+	cursor: help
+}
+
+.linktip {
+}

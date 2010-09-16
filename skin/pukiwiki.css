@@ -1,0 +1,646 @@
+/*
+/////////////////////////////////////////////////
+// PukiWiki - Yet another WikiWikiWeb clone.
+//
+// $Id: pukiwiki.css,v 1.32.15 2004/07/31 03:09:20 miko Exp $
+//
+*/
+
+pre, dl, ol, p, blockquote
+{
+	line-height:140%;
+}
+
+blockquote
+{
+	margin-left:32px;
+}
+
+body
+{
+	color:#333322;
+	background-color:white;
+	margin-left:0%;
+	margin-right:0%;
+	font-family:"Trebuchet MS", arial, helvetica, Sans-Serif;
+}
+
+td
+{
+	margin-left:0%;
+	margin-right:0%;
+	font-size: 84%;
+}
+
+div#body a
+{
+        line-break:strict;
+        word-break:break-all;
+        word-wrap:break-word;
+}
+
+a:link
+{
+	color:#215dc6;
+	background-color:inherit;
+	text-decoration:none;
+}
+
+a:active
+{
+	color:#215dc6;
+	background-color:#CCDDEE;
+	text-decoration:none;
+}
+
+a:visited
+{
+	color:#a63d21;
+	background-color:inherit;
+	text-decoration:none;
+}
+
+a:hover
+{
+	color:#215dc6;
+	background-color:#CCDDEE;
+	text-decoration:underline;
+}
+/*
+h1, h2, h3, h4, h5, h6
+{
+	font-family:verdana, arial, helvetica, Sans-Serif;
+	color:inherit;
+	background-color:#DDEEFF;
+	padding:.3em;
+	border:0px;
+	margin:0px 0px .5em 0px;
+}
+*/
+h1
+{
+	font-family:"Trebuchet MS", arial, helvetica, Sans-Serif;
+/*	font-family: verdana, arial, helvetica, sans-serif; */
+	color:#cc0000;
+	font-size: 20px;
+	background-color:transparent;
+	border:0px;
+	margin:.2em 0px .2em .5em;
+}
+
+h2
+{
+	font-family:"Trebuchet MS", arial, helvetica, Sans-Serif;
+/*	font-family: verdana, arial, helvetica, sans-serif; */
+	font-size:133%;
+	color:#000000;
+	background-color:transparent;
+	margin:.2em -10px .2em -18px;
+	padding:.3em .3em .15em .5em;
+	border:0px;
+	border-left:8px solid;
+	border-bottom:1px solid;
+	border-color:#ffffff #ffffff #999999 #ff7711;
+}
+
+h3
+{
+	font-family:"Trebuchet MS", arial, helvetica, Sans-Serif;
+/*	font-family: verdana, arial, helvetica, sans-serif; */
+	font-size:124%;
+	color:#000000;
+	background-color:transparent;
+	margin:.2em -10px .5em -14px;
+	padding:.3em .3em .15em .5em;
+	border:0px;
+	border-left:8px solid;
+	border-bottom:1px solid;
+	border-color:#ffffff #ffffff #999999 #ff9933;
+}
+
+h4, h5, h6
+{
+	font-family:"Trebuchet MS", arial, helvetica, Sans-Serif;
+/*	font-family: verdana, arial, helvetica, sans-serif; */
+        font-size:112%;
+        color:#000000;
+        background-color:transparent;
+        margin:.2em -10px .5em -10px;
+        padding:.3em .3em .15em .5em;
+        border:0px;
+        border-left:8px solid;
+        border-bottom:1px solid;
+        border-color:#fff8f8 #fff8f8 #999999 #ffcc66;
+}
+
+h1.title
+{
+	font-size: 30px;
+	font-weight:bold;
+	background-color:transparent;
+	padding: 12px 0px 0px 0px;
+	border: 0px;
+	margin: 12px 0px 0px 0px;
+}
+
+dt
+{
+	color: #663333;
+	font-weight:bold;
+	margin-top:1em;
+}
+dd
+{
+	margin-left:1em;
+}
+
+pre
+{
+	border-top:#DDDDEE 1px solid;
+	border-bottom:#888899 1px solid;
+	border-left:#DDDDEE 1px solid;
+	border-right:#888899 1px solid;
+	padding:.5em;
+	margin-left:1em;
+	margin-right:2em;
+/*	white-space:pre;	*/
+	font-size:80%;
+	color:black;
+	background-color:#F0F8FF;
+/*	white-space:normal;	*/
+	line-break:strict;
+	word-break:break-all;
+	word-wrap:break-word;
+}
+
+img
+{
+	border:none;
+/*	vertical-align:middle;	*/
+}
+
+ul
+{
+	margin-top:.5em;
+	margin-bottom:.5em;
+	line-height:130%;
+}
+
+em
+{
+	font-style:italic;
+}
+
+strong
+{
+	font-weight:bold;
+}
+
+thead td.style_td,
+tfoot td.style_td
+{
+	color:inherit;
+	background-color:#D0D8E0;
+}
+thead th.style_th,
+tfoot th.style_th
+{
+	color:inherit;
+	background-color:#E0E8F0;
+}
+.style_table
+{
+	padding:0px;
+	border:0px;
+	margin:auto;
+	text-align:left;
+	color:inherit;
+	background-color:#ccd5dd;
+}
+.style_th
+{
+	padding:5px;
+	margin:1px;
+	text-align:center;
+	color:inherit;
+	background-color:#EEEEEE;
+}
+.style_td
+{
+	padding:5px;
+	margin:1px;
+	color:inherit;
+	background-color:#EEF5FF;
+}
+
+ul.list1
+{
+	list-style-type:disc;
+}
+ul.list2
+{
+	list-style-type:circle;
+}
+ul.list3
+{
+	list-style-type:square;
+}
+ol.list1
+{
+	list-style-type:decimal;
+}
+ol.list2
+{
+	list-style-type:lower-roman;
+}
+ol.list3
+{
+	list-style-type:lower-alpha;
+}
+
+div.ie5
+{
+	text-align:center;
+}
+
+span.noexists
+{
+	color:inherit;
+	background-color:#FFFACC;
+}
+
+.small
+{
+	font-size:80%;
+}
+
+.small1
+{
+	font-size:70%;
+}
+
+.super_index
+{
+	color:#DD3333;
+	background-color:inherit;
+	font-weight:bold;
+	font-size:60%;
+	vertical-align:super;
+}
+
+a.note_super
+{
+	color:#DD3333;
+	background-color:inherit;
+	font-weight:bold;
+	font-size:60%;
+	vertical-align:super;
+	margin: 0px 1%;
+}
+
+div.jumpmenu
+{
+	font-size:50%;
+	text-align:right;
+}
+
+hr.full_hr
+{
+	border-style:solid;
+	border-color:#333333 #FFFFFF #333333;
+	border-width:1px 0px;
+}
+hr.note_hr
+{
+	width:100%;
+	border-style:solid;
+	border-color:#FF8822 #FFFFFF #CCCCCC;
+	border-width:1px 0px 1px 0px;
+	text-align:center;
+	margin:1em 1% 0em 1%;
+}
+
+span.size1
+{
+	font-size:xx-small;
+	line-height:130%;
+	text-indent:0px;
+	display:inline;
+}
+span.size2
+{
+	font-size:x-small;
+	line-height:130%;
+	text-indent:0px;
+	display:inline;
+}
+span.size3
+{
+	font-size:small;
+	line-height:130%;
+	text-indent:0px;
+	display:inline;
+}
+span.size4
+{
+	font-size:medium;
+	line-height:130%;
+	text-indent:0px;
+	display:inline;
+}
+span.size5
+{
+	font-size:large;
+	line-height:130%;
+	text-indent:0px;
+	display:inline;
+}
+span.size6
+{
+	font-size:x-large;
+	line-height:130%;
+	text-indent:0px;
+	display:inline;
+}
+span.size7
+{
+	font-size:xx-large;
+	line-height:130%;
+	text-indent:0px;
+	display:inline;
+}
+
+/* html.php/catbody() */
+strong.word0
+{
+	background-color:#FFFF66;
+	color:black;
+}
+strong.word1
+{
+	background-color:#A0FFFF;
+	color:black;
+}
+strong.word2
+{
+	background-color:#99FF99;
+	color:black;
+}
+strong.word3
+{
+	background-color:#FF9999;
+	color:black;
+}
+strong.word4
+{
+	background-color:#FF66FF;
+	color:black;
+}
+strong.word5
+{
+	background-color:#880000;
+	color:white;
+}
+strong.word6
+{
+	background-color:#00AA00;
+	color:white;
+}
+strong.word7
+{
+	background-color:#886800;
+	color:white;
+}
+strong.word8
+{
+	background-color:#004699;
+	color:white;
+}
+strong.word9
+{
+	background-color:#990099;
+	color:white;
+}
+
+/* html.php/edit_form() */
+.edit_form
+{
+	clear:both;
+}
+
+/* pukiwiki.skin.*.php */
+div#header
+{
+	padding:0px;
+	margin:0px 1%;
+/*	white-space: nowrap;	*/
+}
+
+div#navigator
+{
+	clear:both;
+	padding:4px 0px 0px 0px;
+	margin:0px 1%;
+	white-space: nowrap;
+	font-size:84%;
+}
+
+td.menubar
+{
+	width:160px;
+	vertical-align:top;
+}
+
+td.sidebar
+{
+	width:160px;
+	vertical-align:top;
+}
+
+div#menubar
+{
+	width:160px;
+	padding:0px;
+	margin:0px 2px;
+	word-break:break-all;
+	font-size:90%;
+	overflow:hidden;
+}
+
+div#menubar ul.menu
+{
+	list-style-type: none;
+	list-style-position: outside;
+	margin: 0px;
+	padding: 0px;
+}
+
+div#menubar ul.menu li
+{
+	padding: 0px 0.3em;
+	margin: 0px;
+	border-bottom: 1px dotted #FFFCEE;
+}
+
+div#menubar ul.menu li a
+{
+	text-decoration: none;
+	display:block;
+	padding:0.1em 0.3em;
+	margin:0px -0.3em;
+}
+
+div#menubar h2
+{
+	margin:0px 0px 0px 0px;
+	padding:4px;
+	border: 1px #FFCC99 solid;
+	background-color: #FFF0DD;
+	text-align:center;
+}
+
+div#menubar h3
+{
+	margin:0px 0px 0px 0px;
+	padding:4px;
+	border: 1px #FFCC99 solid;
+	background-color: #FFF0DD;
+	text-align:center;
+}
+
+div#menubar h4
+{
+	margin:0px 0px 0px 0px;
+	padding:4px;
+	border: 1px #FFCC99 solid;
+	background-color: #FFF0DD;
+	text-align:center;
+}
+
+div#menubar h5
+{
+	margin:0px 0px 4px 0px;
+	padding:3px;
+	border: 1px #FFCC99 solid;
+	background-color: #FFF0DD;
+	text-align:center;
+}
+
+div#sidebar
+{
+	width:160px;
+	padding:0px;
+	margin:0px 2px;
+	word-break:break-all;
+	font-size:90%;
+	overflow:hidden;
+}
+
+div#sidebar ul
+{
+	margin:0px 0px 0px .5em;
+	padding:0px 0px 0px .5em;
+}
+
+div#sidebar ul li
+{
+	line-height:110%;
+}
+
+div#sidebar h2
+{
+margin:0px 0px 4px 0px;
+padding:4px;
+border: 1px #FFCC99 solid;
+background-color: #FFF0DD;
+text-align:center;
+	font-size:110%;
+}
+
+div#sidebar h3
+{
+margin:0px 0px 4px 0px;
+padding:4px;
+border: 1px #FFCC99 solid;
+background-color: #FFF0DD;
+text-align:center;
+	font-size:110%;
+}
+
+div#sidebar h4
+{
+margin:0px 0px 4px 0px;
+padding:4px;
+border: 1px #FFCC99 solid;
+background-color: #FFF0DD;
+text-align:center;
+	font-size:110%;
+}
+
+div#body
+{
+	padding:0px;
+	margin:0px 0px 0px 0px;
+}
+
+div#note
+{
+	clear:both;
+	padding:0px;
+	font-size: 78%;
+}
+
+div#attach
+{
+	clear:both;
+	padding:0px;
+	margin:0px 1%;
+	font-size: 78%;
+}
+div#attach img
+{
+	vertical-align: middle;
+}
+
+div#toolbar
+{
+	clear:both;
+	padding:0px;
+	margin:0px 1%;
+	text-align:right;
+	white-space: nowrap;
+}
+
+div#lastmodified
+{
+	font-size:80%;
+	padding:0px;
+	margin:0px 1%;
+	text-align:right;
+}
+
+div#related
+{
+	font-size:80%;
+	padding:0px;
+	margin:16px 1% 0px 1%;
+}
+
+div#footer
+{
+	font-size:70%;
+	padding:0px;
+	margin:0px 1% 0px 1%; 
+}
+
+div#preview
+{
+	color:inherit;
+	background-color:#F5F8FF;
+}
+
+img#logo
+{
+	float:left;
+	margin-right:20px;
+}
