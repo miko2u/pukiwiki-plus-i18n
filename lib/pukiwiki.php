@@ -66,7 +66,7 @@ require(LIB_DIR . 'netbios.cls.php');
 require(LIB_DIR . 'ua/user_agent.cls.php');
 
 if (! extension_loaded('mbstring')) {
-	require(LIB_DIR . 'mbstring.php');
+	die(_('PHP module "mbstring" is not found.'));
 }
 if (! extension_loaded('gettext')) {
 	require(LIB_DIR . 'gettext.php');
