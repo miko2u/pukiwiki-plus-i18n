@@ -183,7 +183,7 @@ function plugin_comment_convert()
 			$_btn_name . '</label>' .
 			'<input type="text" name="name" id="_p_comment_name_' .
 			$comment_all_no .  '" size="' . PLUGIN_COMMENT_SIZE_NAME .
-			'" value="'.$user.'"'.$disabled.' />' . "\n";
+			'" value="'.htmlspecialchars($user).'"'.$disabled.' />' . "\n";
 	}
 
 	$helptags = edit_form_assistant();
