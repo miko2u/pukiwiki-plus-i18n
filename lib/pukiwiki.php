@@ -68,6 +68,7 @@ require(LIB_DIR . 'ua/user_agent.cls.php');
 if (! extension_loaded('mbstring')) {
 	die(_('PHP module "mbstring" is not found.'));
 }
+
 if (! extension_loaded('gettext')) {
 	require(LIB_DIR . 'gettext.php');
 } else {
@@ -110,23 +111,24 @@ if (isset($vars['cmd'])) {
 }
 
 // SPAM
-if (SpamCheckBAN($_SERVER['REMOTE_ADDR'])) die();
+//if (SpamCheckBAN($_SERVER['REMOTE_ADDR'])) die();
 
 // Spam filtering
 if ($spam && $method != 'GET') {
 	// Block SPAM countory
-        if (isset($_SERVER['GEOIP_COUNTRY_CODE'])) {
-                if (isset($deny_countory) && !empty($deny_countory)) {
-                        if (in_array($_SERVER['GEOIP_COUNTRY_CODE'], $deny_countory)) {
-                                die('Sorry');
-                        }
-                }
-                if (isset($allow_countory) && !empty($allow_countory)) {
-                        if (!in_array($_SERVER['GEOIP_COUNTRY_CODE'], $allow_countory)) {
-                                die('Sorry');
-                        }
-                }
-        }
+	if (isset($_SERVER['GEOIP_COUNTRY_CODE'])) {
+		if (isset($deny_countory) && !empty($deny_countory)) {
+			if (in_array($_SERVER['GEOIP_COUNTRY_CODE'], $deny_countory)) {
+				die('Sorry');
+			}
+		}
+		if (isset($allow_countory) && !empty($allow_countory)) {
+			if (!in_array($_SERVER['GEOIP_COUNTRY_CODE'], $allow_countory)) {
+				die('Sorry');
+			}
+		}
+	}
+
 	// Adjustment
 	$_spam   = ! empty($spam);
 	$_plugin = strtolower($plugin);
@@ -147,33 +149,33 @@ if ($spam && $method != 'GET') {
 		default: $_page = & $refer; break;
 	}
 
-	if ($_spam) {
-		require(LIB_DIR . 'spam.php');
-		require(LIB_DIR . 'spam_pickup.php');
-
-		if (isset($spam['method'][$_plugin])) {
-			$_method = & $spam['method'][$_plugin];
-		} else if (isset($spam['method']['_default'])) {
-			$_method = & $spam['method']['_default'];
-		} else {
-			$_method = array();
-		}
-		$exitmode = isset($spam['exitmode']) ? $spam['exitmode'] : '';
-
-		// Hack: ignorance several keys
-		if ($_ignore) {
-			$_vars = array();
-			foreach($vars as $key => $value) {
-				$_vars[$key] = & $vars[$key];
-			}
-			foreach($_ignore as $key) {
-				unset($_vars[$key]);
-			}
-		} else {
-			$_vars = & $vars;
-		}
-		pkwk_spamfilter($method . ' to #' . $_plugin, $_page, $_vars, $_method, $exitmode);
-	}
+//	if ($_spam) {
+//		require(LIB_DIR . 'spam.php');
+//		require(LIB_DIR . 'spam_pickup.php');
+//
+//		if (isset($spam['method'][$_plugin])) {
+//			$_method = & $spam['method'][$_plugin];
+//		} else if (isset($spam['method']['_default'])) {
+//			$_method = & $spam['method']['_default'];
+//		} else {
+//			$_method = array();
+//		}
+//		$exitmode = isset($spam['exitmode']) ? $spam['exitmode'] : '';
+//
+//		// Hack: ignorance several keys
+//		if ($_ignore) {
+//			$_vars = array();
+//			foreach($vars as $key => $value) {
+//				$_vars[$key] = & $vars[$key];
+//			}
+//			foreach($_ignore as $key) {
+//				unset($_vars[$key]);
+//			}
+//		} else {
+//			$_vars = & $vars;
+//		}
+//		pkwk_spamfilter($method . ' to #' . $_plugin, $_page, $_vars, $_method, $exitmode);
+//	}
 }
 
 // If page output, enable session.
@@ -182,9 +184,10 @@ if ($spam && $method != 'GET') {
 pkwk_session_start();
 
 // auth remoteip
-if (isset($auth_api['remoteip']['use']) && $auth_api['remoteip']['use']) {
-        if (exist_plugin_inline('remoteip')) do_plugin_inline('remoteip');
-}
+//if (isset($auth_api['remoteip']['use']) && $auth_api['remoteip']['use'])
+//{
+//	if (exist_plugin_inline('remoteip')) do_plugin_inline('remoteip');
+//}
 
 $is_protect = auth::is_protect();
 
