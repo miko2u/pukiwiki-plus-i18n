@@ -452,6 +452,17 @@ color:#99f;
 color:red;
 }
 
+.new1{
+color:red;
+background-color:transparent;
+font-size:68%;
+}
+.new5{
+color:green;
+background-color:transparent;
+font-size:68%;
+}
+
 @media (max-width: 767px) {
   [class*="span"],
   .row-fluid [class*="span"] {
