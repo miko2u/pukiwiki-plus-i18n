@@ -75,7 +75,7 @@ function ref_save($page)
 	@flock($fp, LOCK_EX);
 	rewind($fp);
 	foreach ($data as $line) {
-		$str = trim(join(',', $line));
+		$str = trim(implode(',', $line));
 		if ($str != '') fwrite($fp, $str . "\n");
 	}
 	@flock($fp, LOCK_UN);

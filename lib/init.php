@@ -374,7 +374,7 @@ unset($facemark_rules);
 
 // 実体参照パターンおよびシステムで使用するパターンを$line_rulesに加える
 //$entity_pattern = '[a-zA-Z0-9]{2,8}';
-$entity_pattern = trim(join('', file(CACHE_DIR . PKWK_ENTITIES_REGEX_CACHE)));
+$entity_pattern = trim(implode('', file(CACHE_DIR . PKWK_ENTITIES_REGEX_CACHE)));
 
 $line_rules = array_merge(array(
 	'&amp;(#[0-9]+|#x[0-9a-f]+|' . $entity_pattern . ');' => '&$1;',

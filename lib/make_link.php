@@ -89,7 +89,7 @@ class InlineConverter
 			$start += $converter->get_count();
 			++$start;
 		}
-		$this->pattern = join('|', $patterns);
+		$this->pattern = implode('|', $patterns);
 	}
 
 	function convert($string, $page)
@@ -965,7 +965,7 @@ function get_fullname($name, $refer)
 	if (substr($name, 0, 2) == './') {
 		$arrn    = preg_split('#/#', $name, -1, PREG_SPLIT_NO_EMPTY);
 		$arrn[0] = $refer;
-		return join('/', $arrn);
+		return implode('/', $arrn);
 	}
 
 	// Relative path from dirname()
@@ -977,8 +977,8 @@ function get_fullname($name, $refer)
 			array_shift($arrn);
 			array_pop($arrp);
 		}
-		$name = ! empty($arrp) ? join('/', array_merge($arrp, $arrn)) :
-			(! empty($arrn) ? $defaultpage . '/' . join('/', $arrn) : $defaultpage);
+		$name = ! empty($arrp) ? implode('/', array_merge($arrp, $arrn)) :
+			(! empty($arrn) ? $defaultpage . '/' . implode('/', $arrn) : $defaultpage);
 	}
 
 	return $name;

@@ -77,7 +77,7 @@ class Element
 		$ret = array();
 		foreach (array_keys($this->elements) as $key)
 			$ret[] = $this->elements[$key]->toString();
-		return join("\n", $ret);
+		return implode("\n", $ret);
 	}
 
 	function dump($indent = 0)
@@ -187,7 +187,7 @@ class Inline extends Element
 	function toString()
 	{
 		global $line_break;
-		return join(($line_break ? '<br />' . "\n" : "\n"), $this->elements);
+		return implode(($line_break ? '<br />' . "\n" : "\n"), $this->elements);
 	}
 
 	function & toPara($class = '')
@@ -541,7 +541,7 @@ class TableCell extends Element
 			unset($this->style['width']);
 		}
 		if (! empty($this->style))
-			$param .= ' style="' . join(' ', $this->style) . '"';
+			$param .= ' style="' . implode(' ', $this->style) . '"';
 
 		return $this->wrap(parent::toString(), $this->tag, $param, FALSE);
 	}
@@ -739,7 +739,7 @@ class Pre extends Element
 
 	function toString()
 	{
-		return $this->wrap(join("\n", $this->elements), 'pre');
+		return $this->wrap(implode("\n", $this->elements), 'pre');
 	}
 }
 
@@ -773,7 +773,7 @@ class CPre extends Element
 		$saved_autolink=$autolink;
 		$glossary=FALSE;
 		$autolink=FALSE;
-		$made_link=make_link(join("\n",$this->elements));
+		$made_link=make_link(implode("\n",$this->elements));
 		$autolink=$saved_autolink;
 		$glossary=$saved_glossary;
 		return $this->wrap($made_link,'pre');

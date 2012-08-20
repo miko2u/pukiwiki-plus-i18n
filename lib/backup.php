@@ -60,7 +60,7 @@ function make_backup($page, $delete = FALSE)
 			// BugTrack/685 by UPK
 			//$strout .= PKWK_SPLITTER . ' ' . $data['time'] . "\n"; // Splitter format
 			$strout .= PKWK_SPLITTER . ' ' . $data['time'] . ' ' . $data['real'] . "\n"; // Splitter format
-			$strout .= join('', $data['data']);
+			$strout .= implode('', $data['data']);
 			unset($backups[$age]);
 		}
 		$strout = preg_replace("/([^\n])\n*$/", "$1\n", $strout);
@@ -68,8 +68,8 @@ function make_backup($page, $delete = FALSE)
 		// Escape 'lines equal to PKWK_SPLITTER', by inserting a space
 		$body = preg_replace('/^(' . preg_quote(PKWK_SPLITTER) . "\s\d+(\s(\d+)|))$/", '$1 ', get_source($page));
 		// BugTrack/685 by UPK
-		// $body = PKWK_SPLITTER . ' ' . get_filetime($page) . "\n" . join('', $body);
-		$body = PKWK_SPLITTER . ' ' . get_filetime($page) . ' ' . UTIME . "\n" . join('', $body);
+		// $body = PKWK_SPLITTER . ' ' . get_filetime($page) . "\n" . implode('', $body);
+		$body = PKWK_SPLITTER . ' ' . get_filetime($page) . ' ' . UTIME . "\n" . implode('', $body);
 		$body = preg_replace("/\n*$/", "\n", $body);
 
 		$fp = _backup_fopen($page, 'wb')

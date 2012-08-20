@@ -215,8 +215,8 @@ function get_link_list($diffdata)
 function get_diff_lines($diffdata)
 {
 	$_diff = explode("\n", $diffdata);
-	$plus  = join("\n", preg_replace('/^\+/', '', preg_grep('/^\+/', $_diff)));
-	$minus = join("\n", preg_replace('/^-/',  '', preg_grep('/^-/',  $_diff)));
+	$plus  = implode("\n", preg_replace('/^\+/', '', preg_grep('/^\+/', $_diff)));
+	$minus = implode("\n", preg_replace('/^-/',  '', preg_grep('/^-/',  $_diff)));
 	unset($_diff);
 	return array($plus, $minus);
 }
@@ -488,7 +488,7 @@ function add_recent($page, $recentpage, $subject = '', $limit = 0)
 	@flock($fp, LOCK_EX);
 	rewind($fp);
 	fputs($fp, '#norelated' . "\n"); // :)
-	fputs($fp, join('', $lines));
+	fputs($fp, implode('', $lines));
 	@flock($fp, LOCK_UN);
 	@fclose($fp);
 }
@@ -690,7 +690,7 @@ function autolink_pattern_write($filename, $autolink_pattern)
 	rewind($fp);
 	fputs($fp, $pattern   . "\n");
 	fputs($fp, $pattern_a . "\n");
-	fputs($fp, join("\t", $forceignorelist) . "\n");
+	fputs($fp, implode("\t", $forceignorelist) . "\n");
 	@flock($fp, LOCK_UN);
 	@fclose($fp);
 }

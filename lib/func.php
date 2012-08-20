@@ -214,10 +214,10 @@ function get_search_words($words, $do_escape = FALSE)
 				$or[] = preg_quote($mb_convert_kana($char, 'c'), $quote); // As Hiragana?
 				$or[] = preg_quote($mb_convert_kana($char, 'k'), $quote); // As Hankaku-Katakana?
 			}
-			$chars[] = '(?:' . join('|', array_unique($or)) . ')'; // Regex for the character
+			$chars[] = '(?:' . implode('|', array_unique($or)) . ')'; // Regex for the character
 		}
 
-		$regex[$word] = $pre . join('', $chars) . $post; // For the word
+		$regex[$word] = $pre . implode('', $chars) . $post; // For the word
 	}
 
 	return $regex; // For all words
@@ -339,7 +339,7 @@ function encode($str)
 {
 	$str = strval($str);
 	return ($str == '') ? '' : strtoupper(bin2hex($str));
-	// Equal to strtoupper(join('', unpack('H*0', $str)));
+	// Equal to strtoupper(implode('', unpack('H*0', $str)));
 	// But PHP 4.3.10 says 'Warning: unpack(): Type H: outside of string in ...'
 }
 
@@ -453,7 +453,7 @@ function page_list($pages, $cmd = 'read', $withfilename = FALSE)
 				'  <ul>' . "\n";
 		}
 		ksort($pages);
-		$retval .= join("\n", $pages);
+		$retval .= implode("\n", $pages);
 		if ($list_index)
 			$retval .= "\n  </ul>\n </li>\n";
 	}
@@ -461,10 +461,10 @@ function page_list($pages, $cmd = 'read', $withfilename = FALSE)
 	if ($list_index && $cnt > 0) {
 		$top = array();
 		while (! empty($arr_index))
-			$top[] = join(' | ' . "\n", array_splice($arr_index, 0, 16)) . "\n";
+			$top[] = implode(' | ' . "\n", array_splice($arr_index, 0, 16)) . "\n";
 
 		$retval = '<div id="top" style="text-align:center">' . "\n" .
-			join('<br />', $top) . '</div>' . "\n" . $retval;
+			implode('<br />', $top) . '</div>' . "\n" . $retval;
 	}
 	return $retval;
 }
@@ -1100,5 +1100,5 @@ function csv_implode($glue, $pieces)
 			$str = '"' . str_replace('"', '""', $str) . '"';
 		$arr[] = $str;
 	}
-	return join($glue, $arr);
+	return implode($glue, $arr);
 }

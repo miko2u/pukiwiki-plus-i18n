@@ -100,7 +100,7 @@ function http_request($url, $method = 'GET', $headers = array(), $post = array()
 		$POST = array();
 //		foreach ($post as $name=>$val) $POST[] = $name . '=' . urlencode($val);
 		foreach ($post as $name=>$val) $POST[] = urlencode($name) . '=' . urlencode($val);
-		$data = join('&', $POST);
+		$data = implode('&', $POST);
 
 		if (preg_match('/^[a-zA-Z0-9_-]+$/', $content_charset)) {
 			// Legacy but simple

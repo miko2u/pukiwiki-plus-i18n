@@ -164,11 +164,11 @@ function catbody($title, $page, $body)
 
 	// List of footnotes
 	ksort($foot_explain, SORT_NUMERIC);
-	$notes = ! empty($foot_explain) ? $note_hr . join("\n", $foot_explain) : '';
+	$notes = ! empty($foot_explain) ? $note_hr . implode("\n", $foot_explain) : '';
 
 	// Tags will be inserted into <head></head>
-	$head_tag = ! empty($head_tags) ? join("\n", $head_tags) ."\n" : '';
-	$foot_tag = ! empty($foot_tags) ? join("\n", $foot_tags) ."\n" : '';
+	$head_tag = ! empty($head_tags) ? implode("\n", $head_tags) ."\n" : '';
+	$foot_tag = ! empty($foot_tags) ? implode("\n", $foot_tags) ."\n" : '';
 
 	// 1.3.x compat
 	// Last modification date (UNIX timestamp) of the page
@@ -251,7 +251,7 @@ function edit_form($page, $postdata, $digest = FALSE, $b_template = TRUE)
 				$s_page . '</option>';
 		}
 		ksort($pages, SORT_STRING);
-		$s_pages  = join("\n", $pages);
+		$s_pages  = implode("\n", $pages);
 		$template = <<<EOD
   <select name="template_page">
    <option value="">-- {$_button['template']} --</option>
@@ -424,12 +424,12 @@ function make_related($page, $tag = '')
 	if ($tag == 'p') { // From the line-head
 		$style = ' class="list1"';
 		$retval =  "\n" . '<ul' . $style . '>' . "\n" .
-			'<li>' . join($rule_related_str, $_links) . '</li>' . "\n" .
+			'<li>' . implode($rule_related_str, $_links) . '</li>' . "\n" .
 			'</ul>' . "\n";
 	} else if ($tag) {
-		$retval = join($rule_related_str, $_links);
+		$retval = implode($rule_related_str, $_links);
 	} else {
-		$retval = join($related_str, $_links);
+		$retval = implode($related_str, $_links);
 	}
 
 	return $retval;

@@ -156,7 +156,7 @@ class ConfigTable
 
 	function toString()
 	{
-		return join('', $this->before) . join('', $this->after);
+		return implode('', $this->before) . implode('', $this->after);
 	}
 }
 
@@ -170,14 +170,14 @@ class ConfigTable_Sequential extends ConfigTable
 
 	function toString()
 	{
-		$retval = join('', $this->before);
+		$retval = implode('', $this->before);
 		if (is_array($this->values)) {
 			foreach ($this->values as $value) {
-				$value   = is_array($value) ? join('|', $value) : $value;
+				$value   = is_array($value) ? implode('|', $value) : $value;
 				$retval .= '|' . $value . '|' . "\n";
 			}
 		}
-		$retval .= join('', $this->after);
+		$retval .= implode('', $this->after);
 		return $retval;
 	}
 }
@@ -207,7 +207,7 @@ class ConfigTable_Direct extends ConfigTable
 		$retval = '';
 		$root   = ($values === NULL);
 		if ($root) {
-			$retval = join('', $this->before);
+			$retval = implode('', $this->before);
 			$values = & $this->values;
 		}
 		foreach ($values as $key=>$value) {
@@ -218,7 +218,7 @@ class ConfigTable_Direct extends ConfigTable
 				$retval .= str_repeat('-', $level - 1) . $value . "\n";
 			}
 		}
-		if ($root) $retval .= join('', $this->after);
+		if ($root) $retval .= implode('', $this->after);
 
 		return $retval;
 	}
