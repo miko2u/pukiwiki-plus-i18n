@@ -193,10 +193,11 @@ function do_plugin_convert($name, $args = '')
 {
 	global $digest;
 
-	if(do_plugin_init($name) === FALSE)
+	if (do_plugin_init($name) === FALSE)
 		return '[Plugin init failed: ' . $name . ']';
 
-	if (! PKWKEXP_DISABLE_MULTILINE_PLUGIN_HACK) {
+	if (! PKWKEXP_DISABLE_MULTILINE_PLUGIN_HACK)
+	{
 		// Multiline plugin?
 		$pos  = strpos($args, "\r"); // "\r" is just a delimiter
 		if ($pos !== FALSE) {
@@ -205,32 +206,34 @@ function do_plugin_convert($name, $args = '')
 		}
 	}
 
-	if ($args === '') {
-		$aryargs = array();                 // #plugin()
-	} else {
-		$aryargs = csv_explode(',', $args); // #plugin(A,B,C,D)
-	}
-	if (! PKWKEXP_DISABLE_MULTILINE_PLUGIN_HACK) {
-		if (isset($body)) $aryargs[] = & $body;     // #plugin(){{body}}
+	$aryargs = ($args !== '') ? csv_explode(',', $args) : array();
+
+	if (! PKWKEXP_DISABLE_MULTILINE_PLUGIN_HACK)
+	{
+		if (isset($body))
+		{
+			$aryargs[] = $body;				// #plugin(){{body}}
+		}
 	}
 
 	$_digest = $digest;
 	textdomain($name);
-	$retvar  = call_user_func_array('plugin_' . $name . '_convert', $aryargs);
+	$retvar  = call_user_func_array('plugin_'.$name.'_convert', $aryargs);
 	textdomain(DOMAIN);
 	$digest  = $_digest; // Revert
 
-	if ($retvar === FALSE) {
-		return htmlspecialchars('#' . $name .
-			($args != '' ? '(' . $args . ')' : ''));
-	} else if (PKWK_ENCODING_HINT != '') {
+	if ($retvar === FALSE)
+	{
+		return htmlspecialchars('#'.$name.($args != '' ? '('.$args.')' : ''));
+	}
+	else if (PKWK_ENCODING_HINT != '')
+	{
 		// Insert a hidden field, supports idenrtifying text enconding
 		return preg_replace('/(<form[^>]*>)(?!\n<div><input type="hidden" name="encode_hint")/', '$1' . "\n" .
 			'<div><input type="hidden" name="encode_hint" value="' .
 			PKWK_ENCODING_HINT . '" /></div>', $retvar);
-	} else {
-		return $retvar;
 	}
+	return $retvar;
 }
 
 // Call API 'inline' of the plugin
