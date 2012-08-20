@@ -59,16 +59,6 @@ $_msg_content_back_to_top = '';
 //$_msg_content_back_to_top = '<div class="jumpmenu"><a href="#header">▲</a>&nbsp;<a href="#footer">▼</a></div>';
 
 /////////////////////////////////////////////////
-// リスト構造の左マージン
-$_ul_left_margin = 0;   // リストと画面左端との間隔(px)
-$_ul_margin = 16;       // リストの階層間の間隔(px)
-$_ol_left_margin = 0;   // リストと画面左端との間隔(px)
-$_ol_margin = 16;       // リストの階層間の間隔(px)
-$_dl_left_margin = 0;   // リストと画面左端との間隔(px)
-$_dl_margin = 16;        // リストの階層間の間隔(px)
-$_list_pad_str = ' class="list%d" style="padding-left:%dpx;margin-left:%dpx"';
-
-/////////////////////////////////////////////////
 // テキストエリアのカラム数
 $cols = 80;
 

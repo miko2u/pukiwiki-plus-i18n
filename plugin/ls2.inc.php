@@ -166,8 +166,6 @@ function plugin_ls2_get_headings($page, & $params, $level, $include = FALSE)
 //リスト構造を構築する
 function plugin_ls2_list_push(& $params, $level)
 {
-	global $_ul_left_margin, $_ul_margin; //, $_list_pad_str;
-
 	$result = & $params['result'];
 	$saved  = & $params['saved'];
 	$cont   = TRUE;
@@ -186,14 +184,6 @@ function plugin_ls2_list_push(& $params, $level)
 		$cont = FALSE;
 		array_unshift($saved, $close);
 
-//		$left = ($level == $margin) ? $_ul_left_margin : 0;
-//		if ($params['compact']) {
-//			$left  += $_ul_margin;   // マージンを固定
-//			$level -= ($margin - 1); // レベルを修正
-//		} else {
-//			$left += $margin * $_ul_margin;
-//		}
-//		$str = sprintf($_list_pad_str, $level, $left, $left);
 		$str = sprintf(' class="list%d"', $level);
 		array_push($result, sprintf($open, $str));
 	}

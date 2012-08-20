@@ -398,7 +398,6 @@ EOD;
 function make_related($page, $tag = '')
 {
 	global $vars, $rule_related_str, $related_str;
-//	global $_ul_left_margin, $_ul_margin, $_list_pad_str;
 
 	$links = links_get_related($page);
 
@@ -423,9 +422,7 @@ function make_related($page, $tag = '')
 	if (empty($_links)) return ''; // Nothing
 
 	if ($tag == 'p') { // From the line-head
-//		$margin = $_ul_left_margin + $_ul_margin;
-//		$style  = sprintf($_list_pad_str, 1, $margin, $margin);
-		$style  = sprintf(' class="list%d"', 1);
+		$style = ' class="list1"';
 		$retval =  "\n" . '<ul' . $style . '>' . "\n" .
 			'<li>' . join($rule_related_str, $_links) . '</li>' . "\n" .
 			'</ul>' . "\n";

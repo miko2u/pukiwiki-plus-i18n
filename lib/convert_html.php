@@ -295,19 +295,10 @@ class ListContainer extends Element
 	var $tag2;
 	var $level;
 	var $style;
-//	var $margin;
-//	var $left_margin;
 
 	function ListContainer($tag, $tag2, $head, $text)
 	{
 		parent::Element();
-
-//		$var_margin      = '_' . $tag . '_margin';
-//		$var_left_margin = '_' . $tag . '_left_margin';
-//		global $$var_margin, $$var_left_margin;
-
-//		$this->margin      = $$var_margin;
-//		$this->left_margin = $$var_left_margin;
 
 		$this->tag   = $tag;
 		$this->tag2  = $tag2;
@@ -327,19 +318,8 @@ class ListContainer extends Element
 
 	function setParent(& $parent)
 	{
-//		global $_list_pad_str;
-
 		parent::setParent($parent);
 
-//		$step = $this->level;
-//		if (isset($parent->parent) && is_a($parent->parent, 'ListContainer'))
-//			$step -= $parent->parent->level;
-
-//		$margin = $this->margin * $step;
-//		if ($step == $this->level)
-//			$margin += $this->left_margin;
-
-//		$this->style = sprintf($_list_pad_str, $this->level, $margin, $margin);
 		if ($this->tag == 'dl') {
 			$this->style = sprintf(' class="list%d dl-horizontal"', $this->level);
 		} else {
@@ -1054,17 +1034,7 @@ class Contents_UList extends ListContainer
 
 	function setParent(& $parent)
 	{
-//		global $_list_pad_str;
-
 		parent::setParent($parent);
-//		$step   = $this->level;
-//		$margin = $this->left_margin;
-//		if (isset($parent->parent) && is_a($parent->parent, 'ListContainer')) {
-//			$step  -= $parent->parent->level;
-//			$margin = 0;
-//		}
-//		$margin += $this->margin * ($step == $this->level ? 1 : $step);
-//		$this->style = sprintf($_list_pad_str, $this->level, $margin, $margin);
 		$this->style = sprintf(' class="list%d"', $this->level);
 	}
 }
