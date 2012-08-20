@@ -39,10 +39,10 @@ function set_language()
 	// PUBLIC HOLIDAY
 	// Installation person's calendar is adopted.
 	if ( $public_holiday_guest_view ) {
-		$_c = split('_', $language);
+		$_c = explode('_', $language);
 	} else {
 		// 設置者のカレンダーを採用
-		$_c = split('_', DEFAULT_LANG);
+		$_c = explode('_', DEFAULT_LANG);
 	}
 	define('COUNTRY', $_c[1]);
 	unset($_c);
@@ -117,7 +117,7 @@ function get_language($level = 0)
 			// 完全一致の場合 (ex. ja_JP)
 			if (in_array($_lang[0], $language_prepared)) return $_lang[0];
 			// 言語のみの場合の対応
-			$_x1 = split('_', $_lang[0]);
+			$_x1 = explode('_', $_lang[0]);
 			if ( count($_x1) == 2) continue;
 			$c = $obj_l2c->get_lang2country($_x1[0]);
 			if (empty($c)) continue;
@@ -215,7 +215,7 @@ function get_mb_language($lang)
 function _lang_keyset($lang,$key)
 {
 	if ( array_key_exists($lang, $key) ) return $key[ $lang ];	// ja_JP 指定のキーは存在するか？
-	$x = split('_', $lang);						// ja か ja_JP かの判定
+	$x = explode('_', $lang);						// ja か ja_JP かの判定
 	if ( count($x) == 1) return $key['default'];			// ja のみなら処理を終了
 	if ( array_key_exists($x[0], $key) ) return $key[ $x[0] ];	// ja_JP を ja にして再検索
 	return $key['default'];
@@ -500,10 +500,10 @@ class accept_language
 	function split_str($env, $conv=TRUE, $sort=TRUE)
 	{
 		$rc = array();
-		foreach( split(',',$env) as $x ) {
-			$x1 = split(';', $x);
+		foreach (explode(',',$env) as $x) {
+			$x1 = explode(';', $x);
 			// '',1 の '' は、DUMMY
-			$q = (count($x1) == 1) ? array('',1) : split('=',$x1[1]);
+			$q = (count($x1) == 1) ? array('',1) : explode('=',$x1[1]);
 			if ($conv) {
 				$l = accept_language::split_locale_str($x1[0]);
 				$rc[] = array( $l[0], $q[1]);
@@ -529,7 +529,7 @@ class accept_language
 	 */
 	function split_locale_str($str)
 	{
-		$x = split('[-_]', $str);
+		$x = explode('[-_]', $str);
 		$lang    = strtolower( $x[0] );
 		if ( count($x) == 2) {
 			$country = strtoupper( $x[1] );
