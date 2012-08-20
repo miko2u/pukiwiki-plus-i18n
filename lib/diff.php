@@ -295,4 +295,4 @@ class DiffLine
 		return $this->text;
 	}
 }
-?>
+

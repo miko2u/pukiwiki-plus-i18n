@@ -239,4 +239,4 @@ function generateToken ($token_dir = null) {
 	return array($token_id, $token);
 }
 
-?>
+

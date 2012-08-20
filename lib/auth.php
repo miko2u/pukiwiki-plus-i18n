@@ -307,4 +307,4 @@ function digest_auth($page, $auth_flag, $exit_flag, $auth_pages, $title_cannot)
 	return false;
 }
 
-?>
+

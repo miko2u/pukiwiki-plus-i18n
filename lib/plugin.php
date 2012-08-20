@@ -285,4 +285,4 @@ function use_plugin($plugin, $lines)
 	}
 	return FALSE;
 }
-?>
+

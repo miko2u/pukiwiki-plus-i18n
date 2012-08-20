@@ -577,4 +577,4 @@ class lang2country
 	}
 
 }
-?>
+

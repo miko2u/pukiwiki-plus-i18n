@@ -801,4 +801,4 @@ function is_webdav()
 
 	return false;
 }
-?>
+

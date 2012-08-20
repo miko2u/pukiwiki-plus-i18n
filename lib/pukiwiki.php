@@ -301,4 +301,4 @@ if ($always_menu_displayed) {
 // Output
 catbody($title, $page, $body);
 exit;
-?>
+

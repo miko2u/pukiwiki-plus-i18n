@@ -677,4 +677,4 @@ function date2WeekDate($y,$m,$d)
 	return array($y,str_pad($week ,2, '0', STR_PAD_LEFT), $cz);
 }
 
-?>
+

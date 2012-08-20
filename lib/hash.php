@@ -42,4 +42,4 @@ if (!function_exists('hash_hmac')) {
         }
 }
 
-?>
+

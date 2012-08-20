@@ -111,4 +111,4 @@ $_LANG['skin'] = array(
 	'logo'      => _('Logo'),
 );
 
-?>
+

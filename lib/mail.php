@@ -165,4 +165,4 @@ function pop_before_smtp($pop_userid = '', $pop_passwd = '',
 		return TRUE;	// Success
 	}
 }
-?>
+

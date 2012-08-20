@@ -223,4 +223,4 @@ class ConfigTable_Direct extends ConfigTable
 		return $retval;
 	}
 }
-?>
+

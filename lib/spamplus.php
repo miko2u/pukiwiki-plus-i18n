@@ -317,4 +317,4 @@ class IPBL extends DNSBL
 	}
 }
 
-?>
+

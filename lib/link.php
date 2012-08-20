@@ -266,4 +266,4 @@ function & links_get_objects($page, $refresh = FALSE)
 	$result = $obj->get_objects(join('', preg_grep('/^(?!\/\/|\s)./', get_source($page))), $page);
 	return $result;
 }
-?>
+

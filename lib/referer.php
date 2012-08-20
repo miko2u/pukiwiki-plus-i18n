@@ -103,4 +103,4 @@ function ref_count($page)
 	unset($data);
 	return $i;
 }
-?>
+

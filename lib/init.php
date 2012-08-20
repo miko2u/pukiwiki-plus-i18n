@@ -381,4 +381,4 @@ $line_rules = array_merge(array(
 	"\r"          => '<br />' . "\n",	/* 行末にチルダは改行 */
 ), $line_rules);
 
-?>
+

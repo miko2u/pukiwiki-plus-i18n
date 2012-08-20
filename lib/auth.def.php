@@ -35,4 +35,4 @@ $login_api = array(
 	strval(ROLE_AUTH_MIXI)            => 'mixi',
 );
 
-?>
+
