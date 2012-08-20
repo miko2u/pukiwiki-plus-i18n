@@ -168,9 +168,7 @@ function toc_mode_toc($idx)
 	}
 
 	//      '<div style="text-align:left;margin-left:10px;width:80%;">'.
-	return  '<div style="text-align:left;margin-left:20px;width:90%;">'.
-		$rc.
-		'</div>';
+	return '<div style="text-align:left;margin-left:20px;width:90%;">'.$rc.'</div>';
 }
 
 /*
@@ -185,8 +183,8 @@ function toc_mode_contents($idx)
 	$rc = '';
 
 	$top_lvl = toc_get_top_level($idx);
-	$format = '<ul class="list%s" style="padding-left:%spx;margin-left:%spx">' .
-		  '<li><a href="%s">%s</a></li></ul>'."\n";
+	$format = '<a href="%s">%s</a>';
+	$beforei = 0;
 
 	foreach ($idx as $data) {
 		$text = $data['dat'];
@@ -194,8 +192,22 @@ function toc_mode_contents($idx)
 		$link = (empty($tag)) ? $hed.++$seq : $tag;
 
 		$i = $data['lvl'] - $top_lvl + 1;
-		$pad_px = $i * 16;
-		$rc .= sprintf($format, $i, $pad_px, $pad_px, $link, $text);
+//		$pad_px = $i * 16;
+//		$rc .= sprintf($format, $i, $pad_px, $pad_px, $link, $text);
+		if ($beforei < $i) {
+			$rc .= '<ul class="list'.$i.'">'."\n".'<li>';
+		}
+		if ($beforei > $i) {
+			$rc .= '</li></ul>'."\n";
+		}
+		if ($beforei == $i) {
+			$rc .= "</li>\n<li>";
+		}
+		$rc .= sprintf($format, $link, $text);
+		$beforei = $i;
+	}
+	for ($i=$beforei; $i>0; $i--) {
+		$rc .= '</li></ul>'."\n";
 	}
 
 	return $rc;

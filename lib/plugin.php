@@ -1,6 +1,6 @@
 <?php
 // PukiWiki - Yet another WikiWikiWeb clone.
-// $Id: plugin.php,v 1.15.17 2008/01/13 23:29:00 upk Exp $
+// $Id: plugin.php,v 1.15.17 2012/08/04 23:29:00 miko Exp $
 // Copyright (C)
 //   2005-2006,2008 PukiWiki Plus! Team
 //   2002-2005 PukiWiki Developers Team
@@ -95,9 +95,13 @@ function exist_plugin($name)
 	}
 
 	if (preg_match('/^\w{1,64}$/', $name)) {
-		foreach(array(EXT_PLUGIN_DIR,PLUGIN_DIR) as $p_dir) {
+		foreach(array(EXT_PLUGIN_DIR,COMPAT_DIR,PLUGIN_DIR) as $p_dir) {
 			if (file_exists($p_dir . $name . '.inc.php')) {
-				$plugin_lang_path[$name] = (PLUGIN_DIR == $p_dir) ? LANG_DIR : EXT_LANG_DIR;
+				if ($p_dir !== PLUGIN_DIR) {
+					$plugin_lang_path[$name] = (COMPAT_DIR == $p_dir) ? PP1_LANG_DIR : EXT_LANG_DIR;
+				} else {
+					$plugin_lang_path[$name] = LANG_DIR;
+				}
 				$exist[$name] = TRUE;
 				load_init_value($name);
 				require_once($p_dir . $name . '.inc.php');

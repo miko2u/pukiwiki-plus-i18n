@@ -7,7 +7,7 @@
 //
 // v0.2はインラインのリンクにtitleを付けた。
 //
-require_once(LIB_DIR.'barchart.cls.php');
+//require_once(LIB_DIR.'barchart.cls.php');
 
 defined('VOTE2_COOKIE_EXPIRED') or define('VOTE2_COOKIE_EXPIRED', 60*60*24*3);	// 連続投票禁止時間
 defined('VOTE2_COLOR_BG')       or define('VOTE2_COLOR_BG',     '#d0d8e0');	// 棒グラフの背景色
@@ -298,10 +298,10 @@ function plugin_vote2_convert()
 		}
 
 		if ($total > 0) {
-			$bar = new BARCHART(0, 0, 100);
-			$bar->setColorBg(VOTE2_COLOR_BG);
-			$bar->setColorBorder(VOTE2_COLOR_BORDER);
-			$bar->setColorCompound(VOTE2_COLOR_BAR);
+//			$bar = new BARCHART(0, 0, 100);
+//			$bar->setColorBg(VOTE2_COLOR_BG);
+//			$bar->setColorBorder(VOTE2_COLOR_BORDER);
+//			$bar->setColorCompound(VOTE2_COLOR_BAR);
 		} else {
 			$barchart = FALSE;
 		}
@@ -323,14 +323,19 @@ function plugin_vote2_convert()
 		$e_arg = encode($arg);
 		$f_cnf = '';
 		if ( $nonumber == FALSE ) {
-			$title = $notitle ? '' : "title=\"$o_vote_no\"";
+			$title = $notitle ? '' : 'title="'.$o_vote_no.'"';
 			$f_cnt = "<span $title>&nbsp;" . $cnt . '&nbsp;</span>';
 		}
 		if ($barchart) {
 			$Percentage = (int)(($cnt / $total) * 100);
-			$bar->setCurrPoint($Percentage);
-			$getBar = $bar->getBar();
-			$barchart_style = 'style="width:95%;"';
+//			$bar->setCurrPoint($Percentage);
+//			$getBar = $bar->getBar();
+			$getBar = <<<EOD
+<div class="progress">
+  <div class="bar" style="width: {$Percentage}%;"></div>
+</div>
+EOD;
+			$barchart_style = 'table';
 		} else {
 			$barchart_style = '';
 		}
@@ -345,18 +350,18 @@ function plugin_vote2_convert()
 
 		$body2 .= <<<EOD
   <tr>
-   <td align="left" class="$cls" style="padding-left:1em;padding-right:1em;">$link</td>
+   <td style="text-align:left" class="$cls nowrap">$link</td>
 
 EOD;
 
 		$body2 .= <<<EOD
-   <td align="right" class="$cls">$f_cnt
+   <td style="text-align:right" class="$cls nowrap">$f_cnt
 
 EOD;
 
 		if ( $nolabel == FALSE ) {
 			$body2 .= <<<EOD
-    <input type="submit" name="vote_$e_arg" value="$_vote_plugin_votes" class="submit" />
+    <input type="submit" class="btn btn-mini btn-success" name="vote_$e_arg" value="$_vote_plugin_votes" class="submit" />
 
 EOD;
 		}
@@ -365,8 +370,7 @@ EOD;
 
 		if ($barchart) {
 			$body2 .= <<<EOD
-  <td class="$cls" style="padding-left:1em;padding-right:1em;">$getBar</td>
-
+	<td class="$cls">$getBar</td>
 EOD;
 		}
 
@@ -378,28 +382,33 @@ EOD;
 	$title = $notitle ? '' : "title=\"$f_vote_no\"";
 	$body = <<<EOD
 <form action="$script" method="post">
- <table cellspacing="0" cellpadding="2" class="style_table" $barchart_style summary="vote" $title>
+<table class="table-striped table-bordered table-condensed tablesorter $barchart_style" summary="vote" $title>
+<col />
+<col />
+<col style="width:100%" />
+<thead>
   <tr>
-   <td align="left" class="vote_label" style="padding-left:1em;padding-right:1em"><strong>$_vote_plugin_choice</strong>
+   <th class="vote_label nowrap"><strong>$_vote_plugin_choice</strong>
     <input type="hidden" name="plugin" value="vote2" />
     <input type="hidden" name="refer" value="$s_page" />
     <input type="hidden" name="digest" value="$s_digest" />
     <input type="hidden" name="vote_no" value="$vote_no" />
-   </td>
-
+   </th>
+   <th class="vote_label nowrap"><strong>$_vote_plugin_votes</strong></th>
 EOD;
 	if ($barchart) {
 		$body .= <<<EOD
-   <td class="vote_label">&nbsp;</td>
-
+   <th class="vote_label">&nbsp;</th>
 EOD;
 	}
 
 	$body .= <<<EOD
-   <td align="center" class="vote_label"><strong>$_vote_plugin_votes</strong></td>
   </tr>
+</thead>
+<tbody>
 $body2
- </table>
+</tbody>
+</table>
 </form>
 
 EOD;
@@ -612,7 +621,8 @@ $_msg_collided = _("It seems that someone has already updated this page while yo
 		$title = $_title_updated;
 		page_write($vars['refer'],$postdata,$notimestamp);
 	}
-	else {
+	else
+	{
 		$title = $_vote2_messages['update_failed'];
 	}
 
@@ -625,4 +635,3 @@ $_msg_collided = _("It seems that someone has already updated this page while yo
 	unset($postdata_old,$postdata);
 	return $retvars;
 }
-?>

@@ -20,7 +20,7 @@ function convert_html($lines)
 
 	if (! is_array($lines)) $lines = explode("\n", $lines);
 
-	$body = & new Body(++$contents_id);
+	$body = new Body(++$contents_id);
 	$body->parse($lines);
 
 	return $body->toString();
@@ -192,7 +192,7 @@ class Inline extends Element
 
 	function & toPara($class = '')
 	{
-		$obj = & new Paragraph('', $class);
+		$obj = new Paragraph('', $class);
 		$obj->insert($this);
 		return $obj;
 	}
@@ -295,19 +295,19 @@ class ListContainer extends Element
 	var $tag2;
 	var $level;
 	var $style;
-	var $margin;
-	var $left_margin;
+//	var $margin;
+//	var $left_margin;
 
 	function ListContainer($tag, $tag2, $head, $text)
 	{
 		parent::Element();
 
-		$var_margin      = '_' . $tag . '_margin';
-		$var_left_margin = '_' . $tag . '_left_margin';
-		global $$var_margin, $$var_left_margin;
+//		$var_margin      = '_' . $tag . '_margin';
+//		$var_left_margin = '_' . $tag . '_left_margin';
+//		global $$var_margin, $$var_left_margin;
 
-		$this->margin      = $$var_margin;
-		$this->left_margin = $$var_left_margin;
+//		$this->margin      = $$var_margin;
+//		$this->left_margin = $$var_left_margin;
 
 		$this->tag   = $tag;
 		$this->tag2  = $tag2;
@@ -327,19 +327,24 @@ class ListContainer extends Element
 
 	function setParent(& $parent)
 	{
-		global $_list_pad_str;
+//		global $_list_pad_str;
 
 		parent::setParent($parent);
 
-		$step = $this->level;
-		if (isset($parent->parent) && is_a($parent->parent, 'ListContainer'))
-			$step -= $parent->parent->level;
+//		$step = $this->level;
+//		if (isset($parent->parent) && is_a($parent->parent, 'ListContainer'))
+//			$step -= $parent->parent->level;
 
-		$margin = $this->margin * $step;
-		if ($step == $this->level)
-			$margin += $this->left_margin;
+//		$margin = $this->margin * $step;
+//		if ($step == $this->level)
+//			$margin += $this->left_margin;
 
-		$this->style = sprintf($_list_pad_str, $this->level, $margin, $margin);
+//		$this->style = sprintf($_list_pad_str, $this->level, $margin, $margin);
+		if ($this->tag == 'dl') {
+			$this->style = sprintf(' class="list%d dl-horizontal"', $this->level);
+		} else {
+			$this->style = sprintf(' class="list%d"', $this->level);
+		}
 	}
 
 	function & insert(& $obj)
@@ -416,7 +421,9 @@ class DList extends ListContainer
 		parent::ListContainer('dl', 'dt', ':', $out[0]);
 		$this->last = & Element::insert(new ListElement($this->level, 'dd'));
 		if ($out[1] != '')
+		{
 			$this->last = & $this->last->insert(Factory_Inline($out[1]));
+		}
 	}
 }
 
@@ -580,7 +587,7 @@ class Table extends Element
 		$is_template = ($this->type == 'c');
 		$row = array();
 		foreach ($cells as $cell)
-			$row[] = & new TableCell($cell, $is_template);
+			$row[] = new TableCell($cell, $is_template);
 		$this->elements[] = $row;
 	}
 
@@ -656,7 +663,7 @@ class Table extends Element
 			}
 			$string .= $this->wrap($part_string, $part);
 		}
-		$string = $this->wrap($string, 'table', ' class="style_table" cellspacing="1" border="0"');
+		$string = $this->wrap($string, 'table', ' class="table tablesorter table-striped table-bordered table-condensed"');
 
 		return $this->wrap($string, 'div', ' class="ie5"');
 	}
@@ -698,7 +705,7 @@ class YTable extends Element
 				while ($i + $colspan[$i] < $count && $value[$i + $colspan[$i]] == '==')
 					$colspan[$i]++;
 				$colspan[$i] = ($colspan[$i] > 1) ? ' colspan="' . $colspan[$i] . '"' : '';
-				$str .= '<td class="style_td"' . $align[$i] . $colspan[$i] . '>' . make_link($value[$i]) . '</td>';
+				$str .= '<td' . $align[$i] . $colspan[$i] . '>' . make_link($value[$i]) . '</td>';
 			}
 		}
 		$this->elements[] = $str;
@@ -719,9 +726,9 @@ class YTable extends Element
 	{
 		$rows = '';
 		foreach ($this->elements as $str) {
-			$rows .= "\n" . '<tr class="style_tr">' . $str . '</tr>' . "\n";
+			$rows .= "\n" . '<tr>' . $str . '</tr>' . "\n";
 		}
-		$rows = $this->wrap($rows, 'table', ' class="style_table" cellspacing="1" border="0"');
+		$rows = $this->wrap($rows, 'table', ' class="table tablesorter table-striped table-bordered table-condensed"');
 		return $this->wrap($rows, 'div', ' class="ie5"');
 	}
 }
@@ -860,7 +867,7 @@ class Body extends Element
 	function Body($id)
 	{
 		$this->id            = $id;
-		$this->contents      = & new Element();
+		$this->contents      = new Element();
 		$this->contents_last = & $this->contents;
 		parent::Element();
 	}
@@ -1047,17 +1054,17 @@ class Contents_UList extends ListContainer
 
 	function setParent(& $parent)
 	{
-		global $_list_pad_str;
+//		global $_list_pad_str;
 
 		parent::setParent($parent);
-		$step   = $this->level;
-		$margin = $this->left_margin;
-		if (isset($parent->parent) && is_a($parent->parent, 'ListContainer')) {
-			$step  -= $parent->parent->level;
-			$margin = 0;
-		}
-		$margin += $this->margin * ($step == $this->level ? 1 : $step);
-		$this->style = sprintf($_list_pad_str, $this->level, $margin, $margin);
+//		$step   = $this->level;
+//		$margin = $this->left_margin;
+//		if (isset($parent->parent) && is_a($parent->parent, 'ListContainer')) {
+//			$step  -= $parent->parent->level;
+//			$margin = 0;
+//		}
+//		$margin += $this->margin * ($step == $this->level ? 1 : $step);
+//		$this->style = sprintf($_list_pad_str, $this->level, $margin, $margin);
+		$this->style = sprintf(' class="list%d"', $this->level);
 	}
 }
-?>

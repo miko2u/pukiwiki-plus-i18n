@@ -76,7 +76,7 @@ $_msg_article_mail_page = _('Page: ');
 	if (PLUGIN_ARTICLE_AUTO_BR) {
 		//改行の取り扱いはけっこう厄介。特にURLが絡んだときは…
 		//コメント行、整形済み行には~をつけないように arino
-		$msg = join("\n", preg_replace('/^(?!\/\/)(?!\s)(.*)$/', '$1~', explode("\n", $msg)));
+		$msg = implode("\n", preg_replace('/^(?!\/\/)(?!\s)(.*)$/', '$1~', explode("\n", $msg)));
 	}
 	$article .= $msg . "\n\n" . '//';
 
@@ -99,7 +99,7 @@ $_msg_article_mail_page = _('Page: ');
 	$postdata_input = $article . "\n";
 	$body = '';
 
-	if (md5(@join('', get_source($post['refer']))) != $post['digest']) {
+	if (md5(@implode('', get_source($post['refer']))) != $post['digest']) {
 		$title = $_title_collided;
 
 		$body = $_msg_collided . "\n";
@@ -108,7 +108,7 @@ $_msg_article_mail_page = _('Page: ');
 		$s_digest   = htmlspecialchars($post['digest']);
 		$s_postdata = htmlspecialchars($postdata_input);
 		$body .= <<<EOD
-<form action="$script?cmd=preview" method="post">
+<form action="$script?cmd=preview" method="post" class="form-stacked">
  <div>
   <input type="hidden" name="refer" value="$s_refer" />
   <input type="hidden" name="digest" value="$s_digest" />
@@ -176,20 +176,44 @@ function plugin_article_convert()
 	$article_rows = PLUGIN_ARTICLE_ROWS;
 	$article_cols = PLUGIN_ARTICLE_COLS;
 	$string = <<<EOD
-<form action="$script" method="post">
- <div class="articleform" onmouseup="pukiwiki_pos()" onkeyup="pukiwiki_pos()">
-  <input type="hidden" name="article_no" value="$article_no" />
-  <input type="hidden" name="plugin" value="article" />
-  <input type="hidden" name="digest" value="$s_digest" />
-  <input type="hidden" name="refer" value="$s_page" />
-  <label for="_p_article_name_$article_no">$_btn_name</label>
-  <input type="text" name="name" id="_p_article_name_$article_no" size="$name_cols" /><br />
-  <label for="_p_article_subject_$article_no">$_btn_subject</label>
-  <input type="text" name="subject" id="_p_article_subject_$article_no" size="$subject_cols" /><br />
-  <textarea name="msg" rows="$article_rows" cols="$article_cols">\n</textarea><br />
-  <input type="submit" name="article" value="$_btn_article" />
-  $helptags
- </div>
+<form action="$script" method="post" class="form-horizontal">
+	<fieldset>
+		<legend></legend>
+		<div class="articleform" onmouseup="pukiwiki_pos()" onkeyup="pukiwiki_pos()">
+			<input type="hidden" name="article_no" value="$article_no" />
+			<input type="hidden" name="plugin" value="article" />
+			<input type="hidden" name="digest" value="$s_digest" />
+			<input type="hidden" name="refer" value="$s_page" />
+			<div class="control-group">
+				<div class="control-label">
+					<label for="_p_article_name_$article_no">$_btn_name</label>
+				</div>
+				<div class="controls">
+					<input type="text" class="input-xlarge" name="name" id="_p_article_name_$article_no" maxlength="$name_cols" />
+				</div>
+			</div>
+			<div class="control-group">
+				<div class="control-label">
+					<label for="_p_article_subject_$article_no">$_btn_subject</label>
+				</div>
+				<div class="controls">
+					<input type="text" class="input-xlarge" name="subject" id="_p_article_subject_$article_no" maxlength="$subject_cols" />
+				</div>
+			</div>
+			<div class="control-group">
+				<div class="control-label">
+					内容
+				</div>
+				<div class="controls">
+					<textarea class="input-xlarge" name="msg" rows="$article_rows" cols="$article_cols">\n</textarea><br />
+				</div>
+			</div>
+			<div class="form-actions">
+				<input type="submit" class="btn btn-primary" name="article" value="$_btn_article" />
+			</div>
+			$helptags
+		</div>
+	</fieldset>
 </form>
 EOD;
 

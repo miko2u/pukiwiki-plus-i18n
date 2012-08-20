@@ -14,6 +14,7 @@ function plugin_minicalendar_convert()
 
 	$today_view = TRUE;
 	$today_args = 'viewex';
+	$editable = 1;
 
 	$date_str = get_date('Ym');
 	$base = strip_bracket($vars['page']);
@@ -23,6 +24,9 @@ function plugin_minicalendar_convert()
 		foreach ($args as $arg) {
 			if (is_numeric($arg) && strlen($arg) == 6) {
 				$date_str = $arg;
+			}
+			else if ($arg == 'locked') {
+				$editable = 0;
 			}
 			else if ($arg == 'off') {
 				$today_view = FALSE;
@@ -69,7 +73,7 @@ function plugin_minicalendar_convert()
 	$wday = $f_today['wday'];
 	$day = 1;
 	
-	$m_name = $year.'.'.$m_num;
+	$m_name = $year.'-'.sprintf("%02d", $m_num);
 	
 	$y = substr($date_str,0,4)+0;
 	$m = substr($date_str,4,2)+0;
@@ -88,35 +92,44 @@ function plugin_minicalendar_convert()
 if (!defined('UA_MOBILE') || UA_MOBILE == 0) {
 	if ($today_view) {
 		if (exist_plugin('topicpath')) {
-			$ret = "<div id=\"topicpath\"><a href=\"".$script."\">".PLUGIN_TOPICPATH_TOP_LABEL."</a>".PLUGIN_TOPICPATH_TOP_SEPARATOR."calendar - ".$s_base."</div>\n";
+			$ret = "<div class=\"breadcrumb\"><a href=\"".$script."\">".PLUGIN_TOPICPATH_TOP_LABEL."</a> &raquo; calendar - ".$s_base."</div>\n";
 		}
 		$ret .= "<h2>".sprintf(_('%04d/%02d %s'),$y,$m,$s_base)."</h2>\n";
-		$ret .= "<table style=\"width:92%\" border=\"0\" cellspacing=\"0\" cellpadding=\"8\" summary=\"calendar frame\">\n <tr>\n  <td valign=\"top\" width=\"160\">\n";
+		$ret .= '</div></div><div class="row-fluid"><div class="span3">'."\n";
 	}
 	$ret .= <<<EOD
-   <table class="ministyle_calendar" cellspacing="1" width="150" border="0" summary="calendar body">
-    <tr>
-     <td class="ministyle_td_caltop" colspan="7">
-      <a href="$script?plugin=minicalendar&amp;file=$r_base&amp;date=$prev_date_str&amp;mode=$today_args">&lt;&lt;</a>
-      <strong>$m_name</strong>
-      <a href="$script?plugin=minicalendar&amp;file=$r_base&amp;date=$next_date_str&amp;mode=$today_args">&gt;&gt;</a>
+<div class="ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all" style="display:block">
+<div class="ui-datepicker-header ui-widget-header ui-helper-clearfix ui-corner-all">
+	<a class="ui-datepicker-prev ui-corner-all" href="$script?plugin=minicalendar&amp;file=$r_base&amp;date=$prev_date_str&amp;mode=$today_args&amp;editable=$editable"><span class="ui-icon ui-icon-circle-triangle-w">&laquo;</span></a>
+	<a class="ui-datepicker-next ui-corner-all" href="$script?plugin=minicalendar&amp;file=$r_base&amp;date=$next_date_str&amp;mode=$today_args&amp;editable=$editable"><span class="ui-icon ui-icon-circle-triangle-e">&raquo;</span></a>
+	<div class="ui-datepicker-title">
 EOD;
-	
+
 	if ($prefix) {
-//		$ret .= "\n      <br />[<a href=\"" . get_page_uri($base) . "\">$s_base</a>]";
-		$ret .= "\n      <br />[<a href=\"$script?plugin=minicalendar&amp;file=$r_base&amp;date=$this_date_str&amp;mode=$today_args\">$s_base</a>]";
+		$ret .= "<a href=\"$script?plugin=minicalendar&amp;file=$r_base&amp;date=$this_date_str&amp;mode=$today_args\"><strong class=\"tooltips\" title=\"$s_base\">$m_name</strong></a>";
+	} else {
+		$ret .= "<strong>$m_name</strong>";
 	}
+
+	$ret .= <<<EOD
+	</div>
+</div>
+<table class="ui-datepicker-calendar" summary="calendar body">
+  <thead>
+    <tr>
+     <td class="ui-datepicker-title" colspan="7">
+EOD;
 	
 	$ret .= "\n     </td>\n    </tr>\n    <tr>\n";
 	
 	foreach($weeklabels as $label) {
-		$ret .= "     <td class=\"ministyle_td_week\">$label</td>\n";
+		$ret .= "     <th>$label</th>\n";
 	}
 	
-	$ret .= "    </tr>\n    <tr>\n";
+	$ret .= "    </tr>\n</thead>\n<tbody>    <tr>\n";
 	// Blank 
 	for ($i = 0; $i < $wday; $i++) {
-		$ret .= "     <td class=\"ministyle_td_blank\">&nbsp;</td>\n";
+		$ret .= "     <td class=\"ui-datepicker-other-month ui-datepicker-unselectable ui-state-disabled\">&nbsp;</td>\n";
 	}
 	
 	while (checkdate($m_num,$day,$year)) {
@@ -132,40 +145,40 @@ EOD;
 			$ret .= "    </tr>\n    <tr>\n";
 		}
 		
-		$style = 'ministyle_td_day'; // Weekday
+		$style = ''; // Weekday
 		if (!$other_month && ($day == $today['mday']) && ($m_num == $today['mon']) && ($year == $today['year'])) { // Today
-			$style = 'ministyle_td_today';
+			$style = 'ui-datepicker-days-cell-over ui-datepicker-current-day ui-datepicker-today';
 		}
 		else if ($hday != 0) { // Holiday
-			$style = 'ministyle_td_sun';
+			$style = 'ui-datepicker-week-end ui-datepicker-sunday';
 		}
 		else if ($wday == 0) { // Sunday 
-			$style = 'ministyle_td_sun';
+			$style = 'ui-datepicker-week-end ui-datepicker-sunday';
 		}
 		else if ($wday == 6) { //  Saturday 
-			$style = 'ministyle_td_sat';
+			$style = 'ui-datepicker-week-end ui-datepicker-saturday';
 		}
 		
-		if (is_page($page)) {
-			$link = "<a class=\"small\" href=\"" . get_page_uri($page) . "\" title=\"$s_page\"><strong>$day</strong></a>";
-		}
-		else {
-			$link = "<a class=\"small\" href=\"$script?cmd=edit&amp;page=$r_page&amp;refer=$r_base\" title=\"$s_page\">$day</a>";
+		if (is_page($page))
+		{
+			$link = "<a class=\"ui-state-default ui-state-active\" href=\"" . get_page_uri($page) . "\" title=\"$s_page\"><strong>$day</strong></a>";
+		} else if ($editable) {
+			$link = "<a class=\"ui-state-default ui-state-active\" href=\"$script?cmd=edit&amp;page=$r_page&amp;refer=$r_base\" title=\"$s_page\">$day</a>";
+		} else {
+			$link = '<span class="ui-state-default">'.$day.'</a>';
 		}
 		
-//		$ret .= "     <td class=\"$style\">\n      $link\n     </td>\n";
-		$ret .= "     <td class=\"$style\">$link</td>\n";
+		$ret .= '<td class="'.$style.'">'.$link.'</td>'."\n";
 		$day++;
 		$wday = ++$wday % 7;
 	}
 	if ($wday > 0) {
 		while ($wday++ < 7) { // Blank 
-//			$ret .= "     <td class=\"ministyle_td_blank\">&nbsp;</td>\n";
-			$ret .= "     <td class=\"ministyle_td_blank\"> </td>\n";
+			$ret .= '<td class="ui-datepicker-other-month ui-datepicker-unselectable ui-state-disabled">&nbsp;</td>'."\n";
 		}
 	}
 	
-	$ret .= "    </tr>\n   </table>\n";
+	$ret .= "    </tr>\n   </table>\n</div>\n";
 	
 	if ($today_view) {
 		if ($today_args == '') {
@@ -191,21 +204,20 @@ EOD;
 				textdomain('minicalendar');
 			}
 		}
-		$ret .= "  </td>\n  <td valign=\"top\">$str</td>\n </tr>\n</table>\n";
+		$ret .= "</div><div class=\"span9\">$str</div>\n</div>\n";
 	}
 } else {
 	//
 	// for non-default profile
 	//
 	$ret .= <<<EOD
-      <a href="$script?plugin=minicalendar&amp;file=$r_base&amp;date=$prev_date_str&amp;mode=$today_args">&lt;&lt;</a>
+      <a href="$script?plugin=minicalendar&amp;file=$r_base&amp;date=$prev_date_str&amp;mode=$today_args&amp;editable=$editable">&laquo;</a>
       <strong>$m_name</strong>
-      <a href="$script?plugin=minicalendar&amp;file=$r_base&amp;date=$next_date_str&amp;mode=$today_args">&gt;&gt;</a>
+      <a href="$script?plugin=minicalendar&amp;file=$r_base&amp;date=$next_date_str&amp;mode=$today_args&amp;editable=$editable">&raquo;</a>
 EOD;
 	
 	if ($prefix) {
-//		$ret .= "\n      <br />[<a href=\"" . get_page_uri($base) . "\">$s_base</a>]";
-		$ret .= "\n      <br />[<a href=\"$script?plugin=minicalendar&amp;file=$r_base&amp;date=$this_date_str&amp;mode=$today_args\">$s_base</a>]";
+		$ret .= "\n      <br />[<a href=\"$script?plugin=minicalendar&amp;file=$r_base&amp;date=$this_date_str&amp;mode=$today_args&amp;editable=$editable\">$s_base</a>]";
 	}
 	
 	$ret .= "<br />\n";
@@ -323,9 +335,17 @@ function plugin_minicalendar_action()
 		$mode = "viewex";
 	}
 	
+	$editable = $vars['editable'];
+	if ($editable == '')
+	{
+		$aryargs = array($vars['page'],$date,$mode);
+	}
+	else
+	{
+		$aryargs = array($vars['page'],$date,$mode,'locked');
+	}
+
 	$yy = sprintf("%04d.%02d",substr($date,0,4),substr($date,4,2));
-	
-	$aryargs = array($vars['page'],$date,$mode);
 	$s_page = htmlspecialchars($vars['page']);
 	
 	$ret['msg'] = 'calendar '.$s_page.'/'.$yy;
@@ -335,5 +355,3 @@ function plugin_minicalendar_action()
 	
 	return $ret;
 }
-
-?>

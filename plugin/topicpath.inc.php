@@ -11,9 +11,9 @@
 // Show a link to $defaultpage or not
 defined('PLUGIN_TOPICPATH_TOP_DISPLAY') or define('PLUGIN_TOPICPATH_TOP_DISPLAY', 1);
 // Label for $defaultpage
-defined('PLUGIN_TOPICPATH_TOP_LABEL') or define('PLUGIN_TOPICPATH_TOP_LABEL', 'Top');
+defined('PLUGIN_TOPICPATH_TOP_LABEL') or define('PLUGIN_TOPICPATH_TOP_LABEL', 'TOP');
 // Separetor / of / topic / path
-defined('PLUGIN_TOPICPATH_TOP_SEPARATOR') or define('PLUGIN_TOPICPATH_TOP_SEPARATOR', ' &gt; ');
+defined('PLUGIN_TOPICPATH_TOP_SEPARATOR') or define('PLUGIN_TOPICPATH_TOP_SEPARATOR', '');
 // Show the page itself or not
 defined('PLUGIN_TOPICPATH_THIS_PAGE_DISPLAY') or define('PLUGIN_TOPICPATH_THIS_PAGE_DISPLAY', 1);
 // If PLUGIN_TOPICPATH_THIS_PAGE_DISPLAY, add a link to itself
@@ -23,7 +23,9 @@ function plugin_topicpath_convert()
 {
 	global $topicpath;
 	if (isset($topicpath) && $topicpath == false) return '';
-	return '<div id ="topicpath">' . plugin_topicpath_inline() . '</div>';
+	$html = plugin_topicpath_inline();
+	if ($html == '') return '';
+	return '<div id="topicpath" class="breadcrumb">' . $html . '</div>';
 }
 
 function plugin_topicpath_inline()
@@ -51,20 +53,21 @@ function plugin_topicpath_inline()
 		if (! $b_link)  {
 			// This page ($_landing == $page)
 			$b_link = TRUE;
-			$topic_path[] = $element;
+			$topic_path[] = '<li class="active">' . $element . '</li>';
 		// } else if (PKWK_READONLY && ! is_page($_landing)) {
 		} else if (auth::check_role('readonly') && ! is_page($_landing)) {
 			// Page not exists
 			$topic_path[] = $element;
 		} else {
 			// Page exists or not exists
-			$topic_path[] = '<a href="' . get_page_uri($_landing) . '">' .
-				$element . '</a>';
+			$topic_path[] = '<li><a href="' . get_page_uri($_landing) . '">' .
+				$element . '</a><span class="divider">&raquo;</span></li>';
 		}
 	}
 
 	if (PLUGIN_TOPICPATH_TOP_DISPLAY)
-		$topic_path[] = make_pagelink($defaultpage, PLUGIN_TOPICPATH_TOP_LABEL);
+		$topic_path[] = '<li>' . make_pagelink($defaultpage, PLUGIN_TOPICPATH_TOP_LABEL) .
+						'<span class="divider">&raquo;</span></li>';
 
 	return join(PLUGIN_TOPICPATH_TOP_SEPARATOR, array_reverse($topic_path));
 }

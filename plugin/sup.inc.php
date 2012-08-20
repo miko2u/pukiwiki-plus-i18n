@@ -19,6 +19,5 @@ function plugin_sup_inline()
 		return FALSE;
 	}
 
-	return "<span style=\"font-size:60%;vertical-align:super;\">$body</span>";
+	return '<sup>'.$body.'</sup>';
 }
-?>

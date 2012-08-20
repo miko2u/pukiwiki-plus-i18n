@@ -19,6 +19,5 @@ function plugin_button_inline()
 		return FALSE;
 	}
 
-	return "<button type=\"button\" style=\"text-indent:0px;line-height:1em;vertical-align:middle\"> $body </button>";
+	return '<button type="button" class="btn">'.$body.'</button>';
 }
-?>

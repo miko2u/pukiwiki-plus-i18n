@@ -25,14 +25,16 @@ function plugin_newpage_convert()
 	++$id;
 
 	$ret = <<<EOD
-<form action="$script" method="post">
- <div>
-  <input type="hidden" name="plugin" value="newpage" />
-  <input type="hidden" name="refer"  value="$s_page" />
-  <label for="_p_newpage_$id">$_msg_newpage:</label>
-  <input type="text"   name="page" id="_p_newpage_$id" value="$s_newpage" size="30" />
-  <input type="submit" value="$_btn_edit" />
- </div>
+<form action="$script" method="post" class="form-inline">
+<div>
+	<div class="input-append">
+		<input type="hidden" name="plugin" value="newpage" />
+		<input type="hidden" name="refer"  value="$s_page" />
+		<label>$_msg_newpage:
+			<input type="text" class="input-xlarge" name="page" id="_p_newpage_$id" value="$s_newpage" maxlength="180" />
+		</label><button type="submit" class="btn btn-primary">{$_btn_edit}</button>
+	</div>
+</div>
 </form>
 EOD;
 
@@ -68,4 +70,3 @@ function plugin_newpage_action()
 		exit;
 	}
 }
-?>

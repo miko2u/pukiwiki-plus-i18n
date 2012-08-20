@@ -48,10 +48,10 @@ $list_index = 1;
 
 /////////////////////////////////////////////////
 // 特殊シンボル
-$_symbol_paraedit = '<img src="'. IMAGE_URI.'plus/paraedit.png" width="9" height="9" alt="Edit" title="Edit" />';
+$_symbol_paraedit = '<i class="icon-edit" style="margin-left:4px"></i>';
 $_symbol_paraguiedit = '<img src="'. IMAGE_URI.'plus/paraguiedit.png" width="9" height="10" alt="Edit(GUI)" title="Edit(GUI)" />';
 $_symbol_extanchor = '<img src="'.IMAGE_URI.'plus/ext.png" alt="" title="" class="ext" onclick="return open_uri(\'$1\', \'$2\');" />';
-$_symbol_innanchor = '<img src="'.IMAGE_URI.'plus/inn.png" alt="" title="" class="inn" onclick="return open_uri(\'$1\', \'$2\');" />';
+$_symbol_innanchor = '';
 
 /////////////////////////////////////////////////
 // 先頭・最後へジャンプ
@@ -149,6 +149,13 @@ $line_rules = array(
 	"'''(?!')((?:(?!''').)*)'''"	=> '<em>$1</em>',
 	"''(?!')((?:(?!'').)*)''"	=> '<strong>$1</strong>',
 );
+
+// PHP5.4対策
+//if (function_exists('hsc')) {
+//	foreach($line_rules as $src=>$dst) {
+//		$dst = str_replace("'", '#039;', $src);
+//	}
+//}
 
 /////////////////////////////////////////////////
 // フェイスマーク定義ルール(コンバート時に置換)

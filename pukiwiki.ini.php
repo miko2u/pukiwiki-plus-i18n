@@ -127,6 +127,10 @@ defined('PLUGIN_DIR')     or define('PLUGIN_DIR',    SITE_HOME . 'plugin/'   ); 
 defined('LANG_DIR')       or define('LANG_DIR',      SITE_HOME . 'locale/'   ); // Language file
 defined('SITE_INIT_DIR')  or define('SITE_INIT_DIR', SITE_HOME . 'init/'     ); // Initial value (Site)
 
+defined('COMPAT_DIR')     or define('COMPAT_DIR',    SITE_HOME . 'compat/'  );  // Compat directory
+defined('PP1_PLUGIN_DIR') or define('PP1_PLUGIN_DIR',COMPAT_DIR. 'plugin/'   ); // Compat Plugin directory
+defined('PP1_LANG_DIR')   or define('PP1_LANG_DIR',  COMPAT_DIR. 'locale/'   ); // Compat Language file
+
 defined('EXTEND_DIR')     or define('EXTEND_DIR',    SITE_HOME . 'extend/'   ); // Extend directory
 defined('EXT_PLUGIN_DIR') or define('EXT_PLUGIN_DIR',EXTEND_DIR. 'plugin/'   ); // Extend Plugin directory
 defined('EXT_LANG_DIR')   or define('EXT_LANG_DIR',  EXTEND_DIR. 'locale/'   ); // Extend Language file
@@ -402,7 +406,7 @@ $exclude_plugin = array(
 	'server',
 	'cvscheck',
 	'version',
-	'versionlist',
+//	'versionlist',
 );
 
 /////////////////////////////////////////////////

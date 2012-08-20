@@ -19,6 +19,5 @@ function plugin_sub_inline()
 		return FALSE;
 	}
 
-	return '<span style="font-size:60%;vertical-align:sub;">'.$body.'</span>';
+	return '<sub>'.$body.'</sub>';
 }
-?>

@@ -346,16 +346,19 @@ function encode($str)
 // Decode page name
 function decode($str)
 {
-	return hex2bin($str);
+	// Compatible.
+	return preg_match('/^[0-9a-f]+$/i', $str) ? pack('H*', (string)$str) : $str;
 }
 
 // Inversion of bin2hex()
-function hex2bin($hex_string)
-{
-	// preg_match : Avoid warning : pack(): Type H: illegal hex digit ...
-	// (string)   : Always treat as string (not int etc). See BugTrack2/31
-	return preg_match('/^[0-9a-f]+$/i', $hex_string) ?
-		pack('H*', (string)$hex_string) : $hex_string;
+if (!function_exists('hex2bin')) {
+	function hex2bin($hex_string)
+	{
+		// preg_match : Avoid warning : pack(): Type H: illegal hex digit ...
+		// (string)   : Always treat as string (not int etc). See BugTrack2/31
+		return preg_match('/^[0-9a-f]+$/i', $hex_string) ?
+			pack('H*', (string)$hex_string) : $hex_string;
+	}
 }
 
 // Remove [[ ]] (brackets)
@@ -617,7 +620,7 @@ function get_glossary_pattern(& $pages, $min_len = -1)
 {
 	global $WikiName, $autoglossary, $nowikiname;
 
-	$config = &new Config('Glossary');
+	$config = new Config('Glossary');
 	$config->read();
 	$ignorepages      = $config->get('IgnoreList');
 	$forceignorepages = $config->get('ForceIgnoreList');
@@ -653,7 +656,7 @@ function get_autolink_pattern(& $pages, $min_len = -1)
 {
 	global $WikiName, $autolink, $nowikiname;
 
-	$config = &new Config('AutoLink');
+	$config = new Config('AutoLink');
 	$config->read();
 	$ignorepages      = $config->get('IgnoreList');
 	$forceignorepages = $config->get('ForceIgnoreList');

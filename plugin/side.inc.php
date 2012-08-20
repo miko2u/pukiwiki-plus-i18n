@@ -20,7 +20,7 @@ function plugin_side_convert()
 //miko patched
 	// Cached MenuHTML
 	if ($sidehtml !== NULL)
-		return preg_replace('/<ul class="list[^>]*>/','<ul class="menu">', $sidehtml);
+		return preg_replace('/<ul class="list[^>]*>/','<ul class="nav nav-list">', $sidehtml);
 //miko patched
 
 	$num = func_num_args();
@@ -72,7 +72,7 @@ function plugin_side_convert()
 			$top = $tmptop;
 			$use_open_uri_in_new_window = $save_newwindow;
 			$sidehtml = str_replace("\n",'',$sidehtml);
-			return preg_replace('/<ul class="list[^>]*>/','<ul class="menu">',$sidehtml);
+			return preg_replace('/<ul class="list[^>]*>/','<ul class="nav nav-list">', $sidehtml);
 //miko patched
 		}
 	}

@@ -53,15 +53,19 @@ function plugin_freeze_action()
 		// Show a freeze form
 		$msg    = & $_title_freeze;
 		$s_page = htmlspecialchars($page);
-		$body   = ($pass === NULL) ? '' : "<p><strong>$_msg_invalidpass</strong></p>\n";
+		$body   = ($pass === NULL) ? '' : '<div class="alert alert-error">' .
+		'<button type="button" class="close" data-dismiss="alert">&times;</button>' .
+		'<strong class="alert-heading">Error!</strong><p>'.$_msg_invalidpass.'</p></div>'."\n";
 		$body  .= <<<EOD
 <p>$_msg_freezing</p>
 <form action="$script" method="post">
  <div>
-  <input type="hidden"   name="cmd"  value="freeze" />
-  <input type="hidden"   name="page" value="$s_page" />
-  <input type="password" name="pass" size="12" />
-  <input type="submit"   name="ok"   value="$_btn_freeze" />
+	<div class="input-append">
+		<input type="hidden"   name="cmd"  value="freeze" />
+		<input type="hidden"   name="page" value="$s_page" />
+		<input type="password" name="pass" size="12" /><input
+			   type="submit" class="btn btn-primary" name="ok" value="$_btn_freeze" />
+	</div>
  </div>
 </form>
 EOD;

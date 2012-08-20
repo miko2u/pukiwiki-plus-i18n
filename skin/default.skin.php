@@ -20,157 +20,194 @@ header('Pragma: no-cache');
 header('Content-Type: text/html; charset=' . CONTENT_CHARSET);
 header('ETag: ' . md5(MUTIME));
 
-// Output HTML DTD, <html>, and receive content-type
-if (isset($pkwk_dtd)) {
-	$meta_content_type = pkwk_output_dtd($pkwk_dtd);
-} else {
-	$meta_content_type = pkwk_output_dtd();
-}
-// Plus! not use $meta_content_type. because meta-content-type is most browser not used. umm...
-?>
+global $body_menu, $body_side;
+global $_LINK;
+$rw = ! PKWK_READONLY;
+
+?><!DOCTYPE html>
+<html lang="ja">
 <head>
- <meta http-equiv="content-type" content="application/xhtml+xml; charset=<?php echo(CONTENT_CHARSET); ?>" />
- <meta http-equiv="content-style-type" content="text/css" />
- <meta http-equiv="content-script-type" content="text/javascript" />
-<?php if (!$is_read) { ?>
- <meta name="robots" content="NOINDEX,NOFOLLOW" />
-<?php } ?>
-<?php if ($title == $defaultpage) { ?>
- <title><?php echo "$page_title" ?></title>
-<?php } elseif ($newtitle != '' && $is_read) { ?>
- <title><?php echo "$newtitle - $page_title" ?></title>
-<?php } else { ?>
- <title><?php echo "$title - $page_title" ?></title>
-<?php } ?>
- <link rel="stylesheet" href="<?php echo SKIN_URI ?>default.css" type="text/css" media="screen" charset="<?php echo $css_charset ?>" />
- <link rel="stylesheet" href="<?php echo SKIN_URI ?>print.css" type="text/css" media="print" charset="<?php echo $css_charset ?>" />
- <link rel="alternate" href="<?php echo $_LINK['mixirss'] ?>" type="application/rss+xml" title="RSS" />
- <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
- <script type="text/javascript">
- <!--
-<?php if (exist_plugin_convert('js_init')) echo do_plugin_convert('js_init'); ?>
- // -->
- </script>
- <script type="text/javascript" src="<?php echo SKIN_URI.'lang/'.$language ?>.js"></script>
- <script type="text/javascript" src="<?php echo SKIN_URI ?>default.js"></script>
- <script type="text/javascript" src="<?php echo SKIN_URI ?>kanzaki.js"></script>
- <script type="text/javascript" src="<?php echo SKIN_URI ?>ajax/textloader.js"></script>
- <script type="text/javascript" src="<?php echo SKIN_URI ?>ajax/glossary.js"></script>
-<?php if (! $use_local_time) { ?>
- <script type="text/javascript" src="<?php echo SKIN_URI ?>tzCalculation_LocalTimeZone.js"></script>
-<?php } ?>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<!--[if lt IE 9]>
+<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+<meta charset="<?php echo(CONTENT_CHARSET); ?>" />
+<?php if (!$is_read): ?>
+<meta name="robots" content="NOINDEX,NOFOLLOW" />
+<?php endif; ?>
+<?php if ($title == $defaultpage): ?>
+<title><?php echo $page_title ?></title>
+<?php elseif ($newtitle != '' && $is_read): ?>
+<title><?php echo $newtitle.' - '.$page_title ?></title>
+<?php else: ?>
+<title><?php echo $title.' - '.$page_title ?></title>
+<?php endif; ?>
+<link rel="stylesheet" href="assets/css/jquery-ui-1.8.21.custom.css" type="text/css" charset="<?php echo $css_charset ?>" />
+<link rel="stylesheet" href="assets/css/bootstrap.css" type="text/css" charset="<?php echo $css_charset ?>" />
+<link rel="stylesheet" href="assets/css/bootstrap-responsive.css" type="text/css" charset="<?php echo $css_charset ?>" />
+<link rel="stylesheet" href="assets/css/default.css" type="text/css" charset="<?php echo $css_charset ?>" />
+<link rel="stylesheet" href="assets/css/print.css" type="text/css" charset="<?php echo $css_charset ?>" />
+<link rel="alternate" href="<?php echo $_LINK['mixirss'] ?>" type="application/rss+xml" title="RSS" />
+<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/ico/apple-touch-icon-144-precomposed.png">
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/ico/apple-touch-icon-114-precomposed.png">
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="assets/ico/apple-touch-icon-72-precomposed.png">
+<link rel="apple-touch-icon-precomposed" href="assets/ico/apple-touch-icon-57-precomposed.png">
 <?php echo $head_tag ?>
 </head>
-<body>
-<div id="popUpContainer"></div>
-<?php if (exist_plugin_convert('headarea') && do_plugin_convert('headarea') != '') { ?>
-<div id="header">
-<h1 style="display:none;"><?php echo(($newtitle!='' && $is_read)?$newtitle:$page) ?></h1>
-<?php echo do_plugin_convert('headarea') ?>
-</div>
-<?php } else { ?>
-<div id="header">
- <a href="<?php echo $modifierlink ?>"><img id="logo" src="<?php echo IMAGE_URI; ?>pukiwiki.plus_logo.png" width="80" height="80" alt="[PukiWiki Plus!]" title="[PukiWiki Plus!]" /></a>
- <h1 class="title"><?php echo(($newtitle!='' && $is_read)?$newtitle:$page) ?></h1>
-</div>
-<?php
- if (exist_plugin('navibar2')) {
-  echo do_plugin_convert('navibar2');
- } else if (exist_plugin('navibar')) {
-  echo do_plugin_convert('navibar','top,list,search,recent,help,|,new,edit,upload,|,trackback');
-  echo $hr;
- }
-?>
-
+<body id="modern">
+<div id="header" class="navbar navbar-fixed-top">
+	<div class="navbar-inner">
+		<a class="hidden-phone" href="<?php echo $modifierlink ?>"><img class="brand" id="logo" src="<?php echo IMAGE_URI; ?>pukiwiki.plus_logo.png" width="120" height="40" alt="[PukiWiki Plus!]" title="[PukiWiki Plus!]" /></a>
+		<h1 class="brand" style="height:40px;line-height:40px;margin-left:0;color:white;"><?php echo(($newtitle!='' && $is_read)?$newtitle:$page) ?></h1>
+		<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+		</a>
+		<div class="nav-collapse">
+			<div class="row-fluid">
+				<div class="span5d">
+					<ul class="nav nav-list">
+						<li class="nav-header">サイト</li>
+						<li><a href="<?php echo $modifierlink ?>"><i class="icon-white icon-home"></i>ホーム</a></li>
+<?php if ($rw): ?>
+						<li><a href="<?php echo $_LINK['new'] ?>"><i class="icon-white icon-asterisk"></i>新規</a></li>
+<?php endif; ?>
+					</ul>
+				</div>
+				<div class="span5d">
+					<ul class="nav nav-list">
+						<li class="nav-header">ページ</li>
+						<li><a href="<?php echo $_LINK['edit'] ?>"><i class="icon-white icon-edit"></i>編集</a></li>
+<?php if ($is_read && $function_freeze){ ?>
+<?php if (! $is_freeze){ ?>
+						<li><a href="<?php echo $_LINK['freeze'] ?>"><i class="icon-white icon-lock"></i>凍結</a></li>
+<?php }else{ ?>
+						<li><a href="<?php echo $_LINK['unfreeze'] ?>"><i class="icon-white icon-wrench"></i>解凍</a></li>
 <?php } ?>
-
-<div id="contents">
-<table class="contents" width="100%" border="0" cellspacing="0" cellpadding="0">
- <tr>
-<?php global $body_menu,$body_side; ?>
-<?php if (!empty($body_menu)) { ?>
-  <td class="ltable" valign="top"><div id="menubar"><?php echo $body_menu; ?></div></td>
 <?php } ?>
-  <td class="ctable" valign="top">
-   <?php if ($is_page and exist_plugin_convert('topicpath')) { echo do_plugin_convert('topicpath'); } ?>
-   <div id="body"><?php echo $body ?></div>
-  </td>
-<?php if (!empty($body_side)) { ?>
-  <td class="rtable" valign="top"><div id="sidebar"><?php echo $body_side; ?></div></td>
+						<li><a href="<?php echo $_LINK['diff'] ?>"><i class="icon-white icon-th-list"></i>差分</a></li>
+						<li class="nav-header">ページ操作</li>
+						<li><a href="<?php echo $_LINK['copy'] ?>"><i class="icon-white icon-tags"></i>コピー</a></li>
+						<li><a href="<?php echo $_LINK['rename'] ?>"><i class="icon-white icon-tag"></i>名前変更</a></li>
+					</ul>
+				</div>
+				<div class="span5d">
+					<ul class="nav nav-list">
+						<li class="nav-header">一覧</li>
+						<li><a href="<?php echo $_LINK['list'] ?>"><i class="icon-white icon-list"></i>一覧</a></li>
+						<li><a href="<?php echo $_LINK['search'] ?>"><i class="icon-white icon-search"></i>検索</a></li>
+						<li><a href="<?php echo $_LINK['recent'] ?>"><i class="icon-white icon-time"></i>最終更新</a></li>
+					</ul>
+				</div>
+				<div class="span5d">
+					<ul class="nav nav-list">
+						<li class="nav-header">ツール</li>
+<?php if ($do_backup) { ?>
+						<li><a href="<?php echo $_LINK['backup'] ?>"><i class="icon-white icon-folder-open"></i>バックアップ</a></li>
 <?php } ?>
- </tr>
-</table>
+					</ul>
+				</div>
+				<div class="span5d">
+					<ul class="nav nav-list">
+						<li class="nav-header">ヘルプ</li>
+						<li><a href="<?php echo $_LINK['help'] ?>"><i class="icon-white icon-question-sign"></i>ヘルプ</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 
-<?php if ($notes) { ?>
-<div id="note">
-<?php echo $notes ?>
+<div class="container-fluid">
+	<div class="row-fluid">
+		<?php if (!empty($body_menu) && !empty($side_menu)): ?>
+			<div class="span2"><div id="menubar" class="hidden-phone"><?php echo $body_menu; ?></div></div>
+			<div class="span8">
+				<?php if ($is_page and exist_plugin_convert('topicpath')) { echo do_plugin_convert('topicpath'); } ?>
+				<div id="body"><?php echo $body ?></div>
+			</div>
+			<div class="span2"><div id="sidebar" class="hidden-phone"><?php echo $body_side; ?></div></div>
+		<?php elseif (!empty($body_menu)): ?>
+			<div class="span3"><div id="menubar" class="hidden-phone"><?php echo $body_menu; ?></div></div>
+			<div class="span9">
+				<?php if ($is_page and exist_plugin_convert('topicpath')) { echo do_plugin_convert('topicpath'); } ?>
+				<div id="body"><?php echo $body ?></div>
+			</div>
+		<?php elseif (!empty($body_side)): ?>
+			<div class="span9">
+				<?php if ($is_page and exist_plugin_convert('topicpath')) { echo do_plugin_convert('topicpath'); } ?>
+				<div id="body"><?php echo $body ?></div>
+			</div>
+			<div class="span3"><div id="sidebar" class="hidden-phone"><?php echo $body_side; ?></div></div>
+		<?php else: ?>
+			<div class="span12">
+				<?php if ($is_page and exist_plugin_convert('topicpath')) { echo do_plugin_convert('topicpath'); } ?>
+				<div id="body"><?php echo $body ?></div>
+			</div>
+		<?php endif; ?>
+	</div>
+
+	<div class="row-fluid">
+		<?php if ($notes): ?>
+		<div id="note">
+			<?php echo $notes ?>
+		</div>
+		<?php endif; ?>
+
+		<?php if ($attaches): ?>
+		<div id="attach">
+			<?php echo $hr ?>
+			<?php echo $attaches ?>
+		</div>
+		<?php endif; ?>
+
+		<?php echo $hr ?>
+		<?php if (exist_plugin('toolbar')): ?>
+			<?php echo do_plugin_convert('toolbar','reload,|,new,newsub,edit,freeze,diff,upload,copy,rename,|,top,list,search,recent,backup,refer,|,help,|,mixirss'); ?>
+		<?php endif; ?>
+
+		<?php if ($lastmodified): ?>
+		<div id="lastmodified" class="row-fluid">
+			<p class="pull-right">
+				Last-modified: <?php echo $lastmodified ?>
+			</p>
+		</div>
+		<?php endif; ?>
+
+		<?php if ($related): ?>
+		<div id="related" class="row-fluid">
+			Link: <?php echo $related ?>
+		</div>
+		<?php endif; ?>
+	</div>
 </div>
-<?php } ?>
 
-<?php if ($attaches) { ?>
-<div id="attach">
-<?php echo $hr ?>
-<?php echo $attaches ?>
+<div id="footer" class="footer">
+	<footer class="row-fluid">
+		<div class="span12">
+			<p class="pull-left" style="margin-right:20px;">
+				<?php if (exist_plugin_inline('qrcode')) {
+					echo plugin_qrcode_inline(1, get_script_absuri().'?'.$a_page);
+				} ?>
+			</p>
+			<div id="sigunature">
+				Founded by <a href="<?php echo $modifierlink ?>"><?php echo $modifier ?></a>.<br />
+				Powered by PukiWiki Plus! <?php echo S_VERSION ?>. <?php echo $taketime ?> sec.
+			</div>
+		</div>
+	</footer>
 </div>
-<?php } ?>
 
-
-<?php echo $hr ?>
-<?php if (exist_plugin_convert('footarea') && do_plugin_convert('footarea') != '') { ?>
-<div id="footer">
-<?php echo do_plugin_convert('footarea') ?>
-</div>
-<?php } else { ?>
-<?php if (exist_plugin('toolbar')) {
- echo do_plugin_convert('toolbar','reload,|,new,newsub,edit,freeze,diff,upload,copy,rename,|,top,list,search,recent,backup,refer,|,help,|,mixirss');
-} ?>
-
-<?php if ($lastmodified) { ?>
-<div id="lastmodified">
- Last-modified: <?php echo $lastmodified ?>
-</div>
-<?php } ?>
-
-
-<?php if ($related) { ?>
-<div id="related">
- Link: <?php echo $related ?>
-</div>
-<?php } ?>
-
-
-<div id="footer">
-<table id="footertable" border="0" cellspacing="0" cellpadding="0">
-<tr>
- <td id="footerltable">
-  <?php if (exist_plugin_inline('qrcode')) { ?>
-  <?php
-   $a_page = str_replace('%', '%25', $r_page);
-   echo plugin_qrcode_inline(1,get_script_absuri().'?'.$a_page);
-  ?>
-  <?php } ?>
- </td>
- <td id="footerctable"><div id="sigunature">
-  Founded by <a href="<?php echo $modifierlink ?>"><?php echo $modifier ?></a>.
-  <br />
-  Powered by PukiWiki Plus! <?php echo S_VERSION ?>.
-  HTML convert time to <?php echo $taketime ?> sec.
- </div></td>
- <td id="footerrtable"><div id="validxhtml">
-<?php if (! isset($pkwk_dtd) || $pkwk_dtd == PKWK_DTD_XHTML_1_1) { ?>
-  <a href="http://validator.w3.org/check/referer"><img src="<?php echo IMAGE_URI ?>valid-xhtml11.png" width="88" height="31" alt="Valid XHTML 1.1" title="Valid XHTML 1.1" /></a>
-<?php } else if ($pkwk_dtd >= PKWK_DTD_XHTML_1_0_FRAMESET) {  ?>
-  <a href="http://validator.w3.org/check/referer"><img src="<?php echo IMAGE_URI ?>valid-xhtml10.png" width="88" height="31" alt="Valid XHTML 1.0" title="Valid XHTML 1.0" /></a>
-<?php } else if ($pkwk_dtd >= PKWK_DTD_HTML_4_01_FRAMESET) {  ?>
-  <a href="http://validator.w3.org/check/referer"><img src="<?php echo IMAGE_URI ?>valid-html40.png" width="88" height="31" alt="Valid HTML 4.0" title="Valid HTML 4.0" /></a>
-<?php } ?>
- </div></td>
-</tr>
-</table>
-</div>
-<?php } ?>
-<?php if (exist_plugin_convert('tz')) echo do_plugin_convert('tz'); ?>
+<script type="text/javascript" src="assets/js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="assets/js/jquery-ui-1.8.21.custom.min.js"></script>
+<script type="text/javascript" src="assets/js/jquery-ui-i18n.js"></script>
+<script type="text/javascript" src="assets/js/jquery.tablesorter.min.js"></script>
+<script type="text/javascript" src="assets/js/jquery.inputcount.js"></script>
+<script type="text/javascript" src="assets/js/jquery.pjax.js"></script>
+<script type="text/javascript" src="assets/js/bootstrap.min.js"></script>
 <?php echo $foot_tag ?>
+<script type="text/javascript" src="assets/js/default.js"></script>
 </body>
 </html>

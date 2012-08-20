@@ -94,11 +94,11 @@ function plugin_qrcode_inline()
 	if ($v > 0 && $v <= QRCODE_MAX_VERSION) { $addparam .= "&amp;v=$v"; }
 	if ($e != '') { $addparam .= "&amp;e=$e"; }
 	if ($n < 2 || $n > 16) {
-		$d = rawurlencode($d);
+		$dx = rawurlencode($d);
 		if (defined('UA_MOBILE') && UA_MOBILE != 0) {
-			$result = "<a href=\"$script?plugin=qrcode&amp;d=$d&amp;s=4$addparam\"><img src=\"$script?plugin=qrcode&amp;d=$d$addsize$addparam\" alt=\"$d\" title=\"keitai\" /></a>";
+			$result = "<a href=\"$script?plugin=qrcode&amp;d=$dx&amp;s=4$addparam\"><img src=\"$script?plugin=qrcode&amp;d=$dx$addsize$addparam\" alt=\"$d\" title=\"keitai\" /></a>";
 		} else {
-			$result = "<a href=\"$script?plugin=qrcode&amp;d=$d&amp;s=4$addparam\"><img src=\"$script?plugin=qrcode&amp;d=$d$addsize$addparam\" alt=\"$d\" title=\"$d\" /></a>";
+			$result = "<a href=\"$script?plugin=qrcode&amp;d=$dx&amp;s=4$addparam\"><img src=\"$script?plugin=qrcode&amp;d=$dx$addsize$addparam\" alt=\"$d\" title=\"$d\" /></a>";
 		}
 	} else {
 		// パリティを計算

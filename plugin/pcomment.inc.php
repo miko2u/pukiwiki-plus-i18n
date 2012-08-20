@@ -151,28 +151,34 @@ function plugin_pcomment_convert()
 		}
 
 		$radio   = $params['reply'] ?
-			'<input type="radio" name="reply" value="0" tabindex="0" checked="checked" />' : '';
-		$comment = '<input type="text" name="msg" size="' . PLUGIN_PCOMMENT_SIZE_MSG . '" />';
+			'<input type="radio" class="radio" name="reply" value="0" tabindex="0" checked="checked" />' : '';
+		$comment = '<input type="text" name="msg" maxlength="' . PLUGIN_PCOMMENT_SIZE_MSG . '" />';
 
 		$s_page   = htmlspecialchars($page);
 		$s_refer  = htmlspecialchars($vars_page);
 		$s_nodate = htmlspecialchars($params['nodate']);
 		$helptags = edit_form_assistant();
 
-		$form_start = '<form action="' . $script . '" method="post">' . "\n";
+		$form_start = '<form action="' . $script . '" method="post" class="form-stacked">' . "\n";
 		$form = <<<EOD
-  <div class="pcommentform" onmouseup="pukiwiki_pos()" onkeyup="pukiwiki_pos()">
-  <input type="hidden" name="digest" value="$digest" />
-  <input type="hidden" name="plugin" value="pcomment" />
-  <input type="hidden" name="refer"  value="$s_refer" />
-  <input type="hidden" name="page"   value="$s_page" />
-  <input type="hidden" name="nodate" value="$s_nodate" />
-  <input type="hidden" name="dir"    value="$dir" />
-  <input type="hidden" name="count"  value="$count" />
-  $radio $title $name $comment
-  <input type="submit" value="{$_pcmt_messages['btn_comment']}" />
-  $helptags
-  </div>
+	<div class="well pcommentform" onmouseup="pukiwiki_pos()" onkeyup="pukiwiki_pos()">
+		<input type="hidden" name="digest" value="$digest" />
+		<input type="hidden" name="plugin" value="pcomment" />
+		<input type="hidden" name="refer"  value="$s_refer" />
+		<input type="hidden" name="page"   value="$s_page" />
+		<input type="hidden" name="nodate" value="$s_nodate" />
+		<input type="hidden" name="dir"    value="$dir" />
+		<input type="hidden" name="count"  value="$count" />
+		$radio
+		<div class="controls input-prepend">
+			$title $name
+		</div>
+		<div class="controls input-prepend">
+			<span class="add-on"><i class="icon-comment"></i></span>$comment
+		</div>
+		<input class="btn btn-primary" type="submit" value="{$_pcmt_messages['btn_comment']}" />
+		$helptags
+	</div>
 EOD;
 		$form_end = '</form>' . "\n";
 	}
@@ -415,4 +421,3 @@ function plugin_pcomment_get_nick()
 	$link = (empty($auth_key['profile'])) ? $auth_key['nick'] : $auth_key['nick'].'>'.$auth_key['profile'];
 	return array($auth_key['nick'], $link, "disabled=\"disabled\"");
 }
-?>

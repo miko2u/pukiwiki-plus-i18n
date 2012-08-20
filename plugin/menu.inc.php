@@ -72,7 +72,7 @@ function plugin_menu_convert()
 			$top = $tmptop;
 			$use_open_uri_in_new_window = $save_newwindow;
 			$menuhtml = str_replace("\n",'',$menuhtml);
-			return preg_replace('/<ul class="list[^>]*>/','<ul class="menu">',$menuhtml);
+			return preg_replace('/<ul class="list[^>]*>/','<ul class="menu nav nav-pills nav-stacked">',$menuhtml);
 //miko patched
 		}
 	}

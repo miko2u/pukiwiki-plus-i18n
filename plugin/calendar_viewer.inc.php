@@ -202,9 +202,9 @@ function plugin_calendar_viewer_convert()
 		} else {
 			$link   = get_cmd_uri('edit',$page);
 		}
-		$link   = '<a href="' . $link . '">' . $s_page . '</a>';
+		$link   = '<a href="' . $link . '">' . basename($s_page) . '</a>';
 
-		$head   = '<h1>' . $link . '</h1>' . "\n";
+		$head   = '<h3>' . $link . '</h3>' . "\n";
 		$return_body .= $head . $body;
 
 		++$tmp;

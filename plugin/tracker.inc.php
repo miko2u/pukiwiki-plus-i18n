@@ -131,7 +131,7 @@ function plugin_tracker_convert()
 	$template = str_replace($from, $to, convert_html($template));
 	$hidden   = implode('<br />' . "\n", $hidden);
 	return <<<EOD
-<form $enctype action="$script" method="post">
+<form class="well form-horizontal" $enctype action="$script" method="post">
 <div>
 $template
 $hidden
@@ -533,10 +533,10 @@ class Tracker_field_text extends Tracker_field
 		$s_size  = isset($this->options[0]) ? htmlspecialchars($this->options[0]) : '';
 		$s_value = htmlspecialchars($this->default_value);
 
-		return '<input type="text"' .
+		return '<div class="controls"><input type="text" class="input-xlarge"' .
 				' name="'  . $s_name  . '"' .
-				' size="'  . $s_size  . '"' .
-				' value="' . $s_value . '" />';
+//				' size="'  . $s_size  . '"' .
+				' value="' . $s_value . '" /></div>';
 	}
 }
 
@@ -607,12 +607,12 @@ class Tracker_field_textarea extends Tracker_field
 		$s_rows = isset($this->options[1]) ? htmlspecialchars($this->options[1]) : '';
 		$s_default = htmlspecialchars($this->default_value);
 
-		return '<textarea' .
+		return '<div class="controls"><textarea class="input-xlarge"' .
 				' name="' . $s_name . '"' .
 				' cols="' . $s_cols . '"' .
 				' rows="' . $s_rows . '">' .
 				$s_default .
-			'</textarea>';
+			'</textarea></div>';
 	}
 
 	function format_cell($value)
@@ -660,7 +660,7 @@ class Tracker_field_format extends Tracker_field
 		$s_name = htmlspecialchars($this->name);
 		$s_size = isset($this->options[0]) ? htmlspecialchars($this->options[0]) : '';
 
-		return '<input type="text" name="' . $s_name . '" size="' . $s_size . '" />';
+		return '<div class="controls"><input type="text" name="' . $s_name . '" size="' . $s_size . '" /></div>';
 	}
 
 	function format_value($value)
@@ -852,11 +852,13 @@ class Tracker_field_submit extends Tracker_field
 		$s_config = htmlspecialchars($form->config_name);
 
 		return <<<EOD
-<input type="submit" value="$s_title" />
-<input type="hidden" name="plugin"  value="tracker" />
-<input type="hidden" name="_refer"  value="$s_refer" />
-<input type="hidden" name="_base"   value="$s_base" />
-<input type="hidden" name="_config" value="$s_config" />
+<div class="form-actions">
+	<input type="submit" class="btn btn-primary" value="$s_title" />
+	<input type="hidden" name="plugin"  value="tracker" />
+	<input type="hidden" name="_refer"  value="$s_refer" />
+	<input type="hidden" name="_base"   value="$s_base" />
+	<input type="hidden" name="_config" value="$s_config" />
+</div>
 EOD;
 	}
 }
@@ -948,15 +950,6 @@ function plugin_tracker_list_action()
 
 function plugin_tracker_list_render($base, $refer, $rel = '', $config = '', $order = '', $list = '', $limit = NULL)
 {
-//miko
-	static $tracker_count = 0;
-	if ($tracker_count == 0) {
-		global $head_tags;
-		$head_tags[] = ' <script type="text/javascript" charset="utf-8" src="' . SKIN_URI . 'sortabletable.js"></script>';
-	}
-	$tracker_count++;
-//miko
-
 	$tracker_list = & new Tracker_list();
 
 	if (! $tracker_list->init($base, $refer, $config, $rel)  ||
@@ -974,22 +967,12 @@ function plugin_tracker_list_render($base, $refer, $rel = '', $config = '', $ord
 	}
 	unset($tracker_list);
 
-//miko
 	global $sortable_tracker;
 	if ($sortable_tracker) {
-		$trackerid = 'trackerlist' . $count;
-		$trackerso = join(',', array_fill(0, $cols, '"String"'));
 		$html = convert_html($result);
-		$html = preg_replace('/<table class="style_table"/', '<table id="' . $trackerid . '" class="style_table"', $html);
-		return $html . <<<EOD
-<script type="text/javascript">
-<!-- <![CDATA[
-var st = new SortableTable(document.getElementById('{$trackerid}'),[{$trackerso}]);
-//]]>-->
-</script>
-EOD;
+		$html = str_replace('<table class="table', '<table class="table tablesorter', $html);
+		return $html;
 	}
-//miko
 
 	return convert_html($result);
 }

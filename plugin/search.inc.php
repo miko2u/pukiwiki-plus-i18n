@@ -108,7 +108,7 @@ EOD;
 
 	if (! PLUGIN_SEARCH_DISABLE_GET_ACCESS) {
 	return <<<EOD
-<form action="$script" method="get">
+<form action="$script" method="get" class="well form-inline">
  <div>
   <input type="hidden" name="cmd" value="search" />
   <input type="text"  name="word" value="$s_word" size="20" />
@@ -116,21 +116,21 @@ EOD;
   <label for="_p_search_AND">$_btn_and</label>
   <input type="radio" name="type" id="_p_search_OR" value="OR"  $or_check />
   <label for="_p_search_OR">$_btn_or</label>
-  &nbsp;<input type="submit" value="$_btn_search" />
+  &nbsp;<input class="btn btn-primary" type="submit" value="$_btn_search" />
  </div>
 $base_option
 </form>
 EOD;
 	}
 	return <<<EOD
-<form action="$script?cmd=search" method="post">
+<form action="$script?cmd=search" method="post" class="form-inline">
  <div>
   <input type="text"  name="word" value="$s_word" size="20" />
   <input type="radio" name="type" id="_p_search_AND" value="AND" $and_check />
   <label for="_p_search_AND">$_btn_and</label>
   <input type="radio" name="type" id="_p_search_OR" value="OR"  $or_check />
   <label for="_p_search_OR">$_btn_or</label>
-  &nbsp;<input type="submit" value="$_btn_search" />
+  &nbsp;<input class="btn btn-primary" type="submit" value="$_btn_search" />
  </div>
 $base_option
 </form>

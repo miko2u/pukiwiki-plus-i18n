@@ -121,52 +121,51 @@ function plugin_bugtrack_print_form($base, $category)
 	$s_body     = htmlspecialchars($_plugin_bugtrack['body']);
 	$s_submit   = htmlspecialchars($_plugin_bugtrack['submit']);
 	$body = <<<EOD
-<form action="$script" method="post">
- <table border="0">
-  <tr>
-   <th><label for="_p_bugtrack_name_$id">$s_name</label></th>
-   <td><input  id="_p_bugtrack_name_$id" name="name" size="20" type="text" /></td>
-  </tr>
-  <tr>
-   <th><label for="_p_bugtrack_category_$id">$s_category</label></th>
-   <td>$encoded_category</td>
-  </tr>
-  <tr>
-   <th><label for="_p_bugtrack_priority_$id">$s_priority</label></th>
-   <td><select id="_p_bugtrack_priority_$id" name="priority">$select_priority   </select></td>
-  </tr>
-  <tr>
-   <th><label for="_p_bugtrack_state_$id">$s_state</label></th>
-   <td><select id="_p_bugtrack_state_$id" name="state">$select_state   </select></td>
-  </tr>
-  <tr>
-   <th><label for="_p_bugtrack_pagename_$id">$s_pname</label></th>
-   <td><input  id="_p_bugtrack_pagename_$id" name="pagename" size="20" type="text" />
-    <small>$s_pnamec</small></td>
-  </tr>
-  <tr>
-   <th><label for="_p_bugtrack_version_$id">$s_version</label></th>
-   <td><input  id="_p_bugtrack_version_$id" name="version" size="10" type="text" />
-    <small>$s_versionc</small></td>
-  </tr>
-  <tr>
-   <th><label for="_p_bugtrack_summary_$id">$s_summary</label></th>
-   <td><input  id="_p_bugtrack_summary_$id" name="summary" size="60" type="text" /></td>
-  </tr>
-  <tr>
-   <th><label   for="_p_bugtrack_body_$id">$s_body</label></th>
-   <td><textarea id="_p_bugtrack_body_$id" name="body" cols="60" rows="6"></textarea></td>
-  </tr>
-  <tr>
-   <td colspan="2" align="center">
-    <input type="submit" value="$s_submit" />
-    <input type="hidden" name="plugin" value="bugtrack" />
-    <input type="hidden" name="ticket" value="$ticket" />
-    <input type="hidden" name="mode"   value="submit" />
-    <input type="hidden" name="base"   value="$s_base" />
-   </td>
-  </tr>
- </table>
+<form action="$script" method="post" class="form-horizontal">
+<fieldset>
+<legend>BugTrack</legend>
+	<div class="control-group">
+		<div class="control-label"><label for="_p_bugtrack_name_$id">$s_name</label></div>
+		<div class="controls"><input  id="_p_bugtrack_name_$id" name="name" maxlength="32" type="text" /></div>
+	</div>
+	<div class="control-group">
+		<div class="control-label"><label for="_p_bugtrack_category_$id">$s_category</label></div>
+		<div class="controls">$encoded_category</div>
+	</div>
+	<div class="control-group">
+		<div class="control-label"><label for="_p_bugtrack_priority_$id">$s_priority</label></div>
+		<div class="controls"><select id="_p_bugtrack_priority_$id" name="priority">$select_priority</select></div>
+	</div>
+	<div class="control-group">
+		<div class="control-label"><label for="_p_bugtrack_state_$id">$s_state</label></div>
+		<div class="controls"><select id="_p_bugtrack_state_$id" name="state">$select_state</select></div>
+	</div>
+	<div class="control-group">
+		<div class="control-label"><label for="_p_bugtrack_pagename_$id">$s_pname</label></div>
+		<div class="controls"><input id="_p_bugtrack_pagename_$id" name="pagename" maxlength="20" type="text" />
+		<small>$s_pnamec</small></div>
+	</div>
+	<div class="control-group">
+		<div class="control-label"><label for="_p_bugtrack_version_$id">$s_version</label></div>
+		<div class="controls"><input id="_p_bugtrack_version_$id" name="version" maxlength="10" type="text" />
+		 <small>$s_versionc</small></div>
+	</div>
+	<div class="control-group">
+		<div class="control-label"><label for="_p_bugtrack_summary_$id">$s_summary</label></div>
+		<div class="controls"><input id="_p_bugtrack_summary_$id" class="input-xxlarge" name="summary" maxlength="60" type="text" /></div>
+	</div>
+	<div class="control-group">
+		<div class="control-label"><label for="_p_bugtrack_body_$id">$s_body</label></div>
+		<div class="controls"><textarea id="_p_bugtrack_body_$id" class="input-xxlarge" name="body" rows="6" maxlength="400"></textarea></div>
+	</div>
+	<div class="form-actions">
+		<input class="btn btn-primary" type="submit" value="$s_submit" />
+		<input type="hidden" name="plugin" value="bugtrack" />
+		<input type="hidden" name="ticket" value="$ticket" />
+		<input type="hidden" name="mode" value="submit" />
+		<input type="hidden" name="base" value="$s_base" />
+	</div>
+</fieldset>
 </form>
 EOD;
 
@@ -206,7 +205,7 @@ function plugin_bugtrack_action()
 		$post['version'], $post['body']);
 
 	pkwk_headers_sent();
-        header('Location: ' . get_page_location_uri($page));
+	header('Location: ' . get_page_location_uri($page));
 	exit;
 }
 
@@ -326,20 +325,19 @@ EOD;
 		$table[$state_no][$no] = $row;
 	}
 
-	$table_html = ' <tr>' . "\n";
-	$bgcolor = htmlspecialchars($_plugin_bugtrack['header_bgcolor']);
+	$table_html = "<thead>\n <tr>\n";
 	foreach (array('pagename', 'state', 'priority', 'category', 'name', 'summary') as $item)
-		$table_html .= '  <th style="background-color:' . $bgcolor . '">' .
+		$table_html .= '  <th>' .
 			htmlspecialchars($_plugin_bugtrack[$item]) . '</th>' . "\n";
-	$table_html .= ' </tr>' . "\n";
+	$table_html .= " </tr>\n</thead>\n<tbody>";
 
 	for ($i = 0; $i <= $count_list; ++$i) {
 		ksort($table[$i], SORT_NUMERIC);
-		$table_html .= join("\n", $table[$i]);
+		$table_html .= implode("\n", $table[$i]);
 	}
 
-	return '<table border="1" width="100%">' . "\n" .
-		$table_html . "\n" .
+	return '<table class="table table-striped table-bordered table-condensed tablesorter">' . "\n" .
+		$table_html . "</tbody>\n" .
 		'</table>';
 }
 

@@ -832,33 +832,38 @@ class AttachFile
 		$msg_rename  = '';
 		if ($this->age) {
 			$msg_freezed = '';
-			$msg_delete  = '<input type="radio" name="pcmd" id="_p_attach_delete" value="delete" />' .
-				'<label for="_p_attach_delete">' .  $_attach_messages['msg_delete'] .
-				$msg_require . '</label><br />';
+			$msg_delete  =
+				'<label class="radio" for="_p_attach_delete">' .  $_attach_messages['msg_delete'] .
+				'<input type="radio" name="pcmd" id="_p_attach_delete" value="delete" />' .
+				$msg_require . '</label>';
 			$msg_freeze  = '';
 		} else {
 			if ($this->status['freeze']) {
 				$msg_freezed = "<dd>{$_attach_messages['msg_isfreeze']}</dd>";
 				$msg_delete  = '';
-				$msg_freeze  = '<input type="radio" name="pcmd" id="_p_attach_unfreeze" value="unfreeze" />' .
-					'<label for="_p_attach_unfreeze">' .  $_attach_messages['msg_unfreeze'] .
-					$msg_require . '</label><br />';
+				$msg_freeze  =
+					'<label class="radio" for="_p_attach_unfreeze">' .  $_attach_messages['msg_unfreeze'] .
+					'<input type="radio" name="pcmd" id="_p_attach_unfreeze" value="unfreeze" />' .
+					$msg_require . '</label>';
 			} else {
 				$msg_freezed = '';
-				$msg_delete = '<input type="radio" name="pcmd" id="_p_attach_delete" value="delete" />' .
-					'<label for="_p_attach_delete">' . $_attach_messages['msg_delete'];
+				$msg_delete =
+					'<label class="radio" for="_p_attach_delete">' . $_attach_messages['msg_delete'] .
+					'<input type="radio" name="pcmd" id="_p_attach_delete" value="delete" />' ;
 				if (PLUGIN_ATTACH_DELETE_ADMIN_ONLY || $this->age)
 					$msg_delete .= $msg_require;
-				$msg_delete .= '</label><br />';
-				$msg_freeze  = '<input type="radio" name="pcmd" id="_p_attach_freeze" value="freeze" />' .
-					'<label for="_p_attach_freeze">' .  $_attach_messages['msg_freeze'] .
-					$msg_require . '</label><br />';
+				$msg_delete .= '</label>';
+				$msg_freeze  =
+					'<label class="radio" for="_p_attach_freeze">' .  $_attach_messages['msg_freeze'] .
+					'<input type="radio" name="pcmd" id="_p_attach_freeze" value="freeze" />' .
+					$msg_require . '</label>';
 				if (PLUGIN_ATTACH_RENAME_ENABLE) {
-					$msg_rename  = '<input type="radio" name="pcmd" id="_p_attach_rename" value="rename" />' .
-						'<label for="_p_attach_rename">' .  $_attach_messages['msg_rename'] .
-						$msg_require . '</label><br />&nbsp;&nbsp;&nbsp;&nbsp;' .
+					$msg_rename  =
+						'<label class="radio" for="_p_attach_rename">' .  $_attach_messages['msg_rename'] .
+						'<input type="radio" name="pcmd" id="_p_attach_rename" value="rename" />' .
+						$msg_require . '</label>' .
 						'<label for="_p_attach_newname">' . $_attach_messages['msg_newname'] .
-						':</label> ' .
+						': </label> ' .
 						'<input type="text" name="newname" id="_p_attach_newname" size="40" value="' .
 						$this->file . '" /><br />';
 				}
@@ -896,13 +901,13 @@ EOD;
  <dt>$info (<a href="#" title="{$this->filename}">{$_attach_messages['msg_filename']}</a>)</dt>
 </dl>
 {$_attach_setimage}
-<dl>
- <dd>{$_attach_messages['msg_page']}:$s_page</dd>
- <dd>{$_attach_messages['msg_filesize']}:{$this->size_str} ({$this->size} bytes)</dd>
- <dd>Content-type:{$this->type}</dd>
- <dd>{$_attach_messages['msg_date']}:{$this->time_str}</dd>
- <dd>{$_attach_messages['msg_dlcount']}:{$this->status['count'][$this->age]}</dd>
- <dd>{$_attach_messages['msg_md5hash']}:{$hash}</dd>
+<dl class="dl-horizontal">
+ <dt>{$_attach_messages['msg_page']}:</dt><dd>$s_page</dd>
+ <dt>{$_attach_messages['msg_filesize']}:</dt><dd>{$this->size_str} ({$this->size} bytes)</dd>
+ <dt>Content-type:</dt><dd>{$this->type}</dd>
+ <dt>{$_attach_messages['msg_date']}:</dt><dd>{$this->time_str}</dd>
+ <dt>{$_attach_messages['msg_dlcount']}:</dt><dd>{$this->status['count'][$this->age]}</dd>
+ <dt>{$_attach_messages['msg_md5hash']}:</dt><dd>{$hash}</dd>
  $msg_freezed
 </dl>
 <div style="clear:right"><hr /></div>
@@ -917,7 +922,7 @@ $s_err
   $msg_freeze
   $msg_rename
   $msg_auth
-  <input type="submit" value="{$_attach_messages['btn_submit']}" />
+  <input class="btn btn-primary" type="submit" value="{$_attach_messages['btn_submit']}" />
  </div>
 </form>
 EOD;

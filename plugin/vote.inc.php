@@ -130,17 +130,20 @@ function plugin_vote_convert()
 
 	$body = <<<EOD
 <form action="$_script" method="post">
- <table cellspacing="0" cellpadding="2" class="style_table_vote" summary="vote">
-  <tr>
-   <td align="left" class="vote_label" style="padding-left:1em;padding-right:1em"><strong>$s_choice</strong>
-    <input type="hidden" name="plugin"  value="vote" />
-    <input type="hidden" name="refer"   value="$s_page" />
-    <input type="hidden" name="vote_no" value="$vote_no" />
-    <input type="hidden" name="digest"  value="$s_digest" />
-   </td>
-   <td align="center" class="vote_label"><strong>$s_votes</strong></td>
-  </tr>
-
+<table class="table-striped table-bordered table-condensed tablesorter" summary="vote">
+<thead>
+	<tr>
+		<th class="vote_label"><strong>$s_choice</strong>
+			<input type="hidden" name="plugin"  value="vote" />
+			<input type="hidden" name="refer"   value="$s_page" />
+			<input type="hidden" name="vote_no" value="$vote_no" />
+			<input type="hidden" name="digest"  value="$s_digest" />
+		</th>
+		<th class="vote_label"><strong>$s_votes</strong></th>
+		<th></th>
+	</tr>
+</thead>
+<tbody>
 EOD;
 
 	$tdcnt = 0;
@@ -153,28 +156,24 @@ EOD;
 			$cnt = $matches[2];
 		}
 		$e_arg = encode($arg);
-
 		$link = make_link($arg);
-
 		$cls = ($tdcnt++ % 2)  ? 'vote_td1' : 'vote_td2';
 
 		$body .= <<<EOD
   <tr>
-   <td align="left"  class="$cls" style="padding-left:1em;padding-right:1em;">$link</td>
-   <td align="right" class="$cls">$cnt&nbsp;&nbsp;
-    <input type="$_submit" name="vote_$e_arg" value="$s_votes" class="submit" />
-   </td>
+   <td class="$cls">$link</td>
+   <td class="$cls">$cnt</td>
+   <td><input type="$_submit" name="vote_$e_arg" value="$s_votes" class="btn btn-mini btn-success submit" /></td>
   </tr>
 
 EOD;
 	}
 
 	$body .= <<<EOD
- </table>
+</tbody>
+</table>
 </form>
 
 EOD;
-
 	return $body;
 }
-?>

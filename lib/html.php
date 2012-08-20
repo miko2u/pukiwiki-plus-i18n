@@ -283,9 +283,9 @@ EOD;
 	}
 
 	if ($ajax && ! is_mobile()) {
-		$add_ajax = '<input type="button" name="add_ajax" value="' . $btn_preview . '" accesskey="p" onclick="pukiwiki_apx(this.form.page.value)" />';
+		$add_ajax = '<input type="button" class="btn" name="add_ajax" value="' . $btn_preview . '" accesskey="p" onclick="pukiwiki_apx(this.form.page.value)" />';
 	} else {
-		$add_ajax = '<input type="submit" name="preview" value="' . $btn_preview . '" accesskey="p" />';
+		$add_ajax = '<input type="submit" class="btn" name="preview" value="' . $btn_preview . '" accesskey="p" />';
 	}
 
 
@@ -293,13 +293,13 @@ EOD;
 	if ($notimeupdate != 0 && is_page($page)) {
 		// enable 'do not change timestamp'
 		$add_notimestamp = <<<EOD
-  <input type="checkbox" name="notimestamp" id="_edit_form_notimestamp" value="true"$checked_time />
-  <label for="_edit_form_notimestamp"><span class="small">{$_button['notchangetimestamp']}</span></label>
+  <label class="checkbox"><input type="checkbox" name="notimestamp" id="_edit_form_notimestamp" value="true"$checked_time />
+  <span class="small">{$_button['notchangetimestamp']}</span></label>
 EOD;
 		if ($notimeupdate == 2 && auth::check_role('role_adm_contents')) {
 			// enable only administrator
 			$add_notimestamp .= <<<EOD
-  <input type="password" name="pass" size="12" />
+  <input type="password" name="pass" maxlength="12" />
 EOD;
 		}
 		$add_notimestamp .= '&nbsp;';
@@ -310,7 +310,7 @@ EOD;
 	$body = <<<EOD
 <div id="realview_outer"><div id="realview"></div><br /></div>
 <form action="$script" method="post" id="form">
- <div class="edit_form" onmouseup="pukiwiki_pos()" onkeyup="pukiwiki_pos()">
+ <div class="edit_form">
 $template
   $addtag
   <input type="hidden" name="cmd"    value="edit" />
@@ -318,15 +318,15 @@ $template
   <input type="hidden" name="digest" value="$s_digest" />
   <input type="hidden" name="ticket" value="$s_ticket" />
   <input type="hidden" name="id"     value="$s_id" />
-  <textarea id="msg" name="msg" rows="$rows" cols="$cols" onselect="pukiwiki_apv(this.form.page.value,this)" onfocus="pukiwiki_apv(this.form.page.value,this)" onkeyup="pukiwiki_apv(this.form.page.value,this)" onmouseup="pukiwiki_apv(this.form.page.value,this)">$s_postdata</textarea>
+  <textarea class="span12 apv" id="msg" name="msg" rows="$rows" cols="$cols">{$s_postdata}</textarea>
   <br />
   $add_assistant
   <br />
-  <input type="submit" name="write"   value="{$_button['update']}" accesskey="s" />
+  <input type="submit" class="btn btn-primary" name="write" value="{$_button['update']}" accesskey="s" />
   $add_top
   $add_ajax
   $add_notimestamp
-  <input type="submit" id="cancel" name="cancel"  value="{$_button['cancel']}" accesskey="c" />
+  <a class="btn" href="$script?$r_page">{$_button['cancel']}</a>
   <textarea id="original" name="original" rows="1" cols="1" style="display:none">$s_original</textarea>
  </div>
 </form>
@@ -398,7 +398,7 @@ EOD;
 function make_related($page, $tag = '')
 {
 	global $vars, $rule_related_str, $related_str;
-	global $_ul_left_margin, $_ul_margin, $_list_pad_str;
+//	global $_ul_left_margin, $_ul_margin, $_list_pad_str;
 
 	$links = links_get_related($page);
 
@@ -423,8 +423,9 @@ function make_related($page, $tag = '')
 	if (empty($_links)) return ''; // Nothing
 
 	if ($tag == 'p') { // From the line-head
-		$margin = $_ul_left_margin + $_ul_margin;
-		$style  = sprintf($_list_pad_str, 1, $margin, $margin);
+//		$margin = $_ul_left_margin + $_ul_margin;
+//		$style  = sprintf($_list_pad_str, 1, $margin, $margin);
+		$style  = sprintf(' class="list%d"', 1);
 		$retval =  "\n" . '<ul' . $style . '>' . "\n" .
 			'<li>' . join($rule_related_str, $_links) . '</li>' . "\n" .
 			'</ul>' . "\n";

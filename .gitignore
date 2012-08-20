@@ -1,0 +1,13 @@
+.DS_Store
+*.1
+*.2
+backup/[0-9A-Z]*
+cache/[0-9A-Z]*
+cache/autolink.dat
+cache/pkwk_chown.lock
+cache/recent.dat
+cache/ticket.dat
+counter/[0-9A-Z]*
+counter/user.dat
+diff/[0-9A-Z]*
+trackback/[0-9A-Z]*

@@ -437,9 +437,9 @@ function attachref_form($page)
   <span class="small">
    $msg_maxsize
   </span><br />
-  {$_attachref_messages['msg_file']}: <input type="file" name="attach_file" />
+  {$_attachref_messages['msg_file']}: <input type="file" class="input-file" name="attach_file" />
   $pass
-  <input type="submit" value="{$_attachref_messages['btn_upload']}" />
+  <input class="btn btn-primary" type="submit" value="{$_attachref_messages['btn_upload']}" />
  </div>
 </form>
 EOD;

@@ -11,8 +11,8 @@
 
 // ----
 defined('PLUGIN_COMMENT_DIRECTION_DEFAULT') or define('PLUGIN_COMMENT_DIRECTION_DEFAULT', '1'); // 1: above 0: below
-defined('PLUGIN_COMMENT_SIZE_MSG') or define('PLUGIN_COMMENT_SIZE_MSG',  68);
-defined('PLUGIN_COMMENT_SIZE_NAME') or define('PLUGIN_COMMENT_SIZE_NAME', 15);
+defined('PLUGIN_COMMENT_SIZE_MSG') or define('PLUGIN_COMMENT_SIZE_MSG',  140);
+defined('PLUGIN_COMMENT_SIZE_NAME') or define('PLUGIN_COMMENT_SIZE_NAME', 32);
 
 // ----
 define('PLUGIN_COMMENT_FORMAT_MSG',  '$msg');
@@ -179,11 +179,12 @@ function plugin_comment_convert()
 		$nametags = '<label for="_p_comment_comment_' . $comment_all_no . '">' .
 			$_msg_comment . '</label>';
 	} else {
-		$nametags = '<label for="_p_comment_name_' . $comment_all_no . '">' .
-			$_btn_name . '</label>' .
-			'<input type="text" name="name" id="_p_comment_name_' .
-			$comment_all_no .  '" size="' . PLUGIN_COMMENT_SIZE_NAME .
-			'" value="'.htmlspecialchars($user).'"'.$disabled.' />' . "\n";
+//		$nametags = '<label for="_p_comment_name_' . $comment_all_no . '">' .
+//			$_btn_name . '</label>' .
+		$nametags = '<span class="add-on"><i class="icon-user"></i></span>' .
+			'<input type="text" name="name" class="input-medium" id="_p_comment_name_' .
+			$comment_all_no .  '" maxlength="' . PLUGIN_COMMENT_SIZE_NAME .
+			'" value="'.htmlspecialchars($user).'"'.$disabled.' />';
 	}
 
 	$helptags = edit_form_assistant();
@@ -203,24 +204,28 @@ function plugin_comment_convert()
 	$string = <<<EOD
 <br />
 $auth_guide
-<form action="$script" method="post">
- <div class="commentform" onmouseup="pukiwiki_pos()" onkeyup="pukiwiki_pos()">
-  <input type="hidden" name="refpage" value="$refpage" />
-  <input type="hidden" name="plugin" value="comment" />
-  <input type="hidden" name="refer"  value="$s_page" />
-  <input type="hidden" name="comment_no" value="$comment_no" />
-  <input type="hidden" name="nodate" value="$nodate" />
-  <input type="hidden" name="above"  value="$above" />
-  <input type="hidden" name="digest" value="$digest" />
-  <input type="hidden" name="ticket" value="$ticket" />
-  $nametags
-  <input type="text"   name="msg" id="_p_comment_comment_{$comment_all_no}" size="$comment_cols" />
-  <input type="submit" name="comment" value="$_btn_comment" />
-  $helptags
- </div>
+<form action="$script" method="post" class="well form-stacked">
+	<div class="commentform" onmouseup="pukiwiki_pos()" onkeyup="pukiwiki_pos()">
+		<input type="hidden" name="refpage" value="$refpage" />
+		<input type="hidden" name="plugin" value="comment" />
+		<input type="hidden" name="refer"  value="$s_page" />
+		<input type="hidden" name="comment_no" value="$comment_no" />
+		<input type="hidden" name="nodate" value="$nodate" />
+		<input type="hidden" name="above"  value="$above" />
+		<input type="hidden" name="digest" value="$digest" />
+		<input type="hidden" name="ticket" value="$ticket" />
+		<div class="controls input-prepend">
+			{$nametags}
+		</div>
+		<div class="controls input-prepend">
+			<span class="add-on"><i class="icon-comment"></i></span><input class="input-xxlarge"
+				type="text" name="msg" id="_p_comment_comment_{$comment_all_no}" maxlength="$comment_cols" />
+		</div>
+		$helptags
+		<input class="btn btn-primary" type="submit" name="comment" value="$_btn_comment" />
+	</div>
 </form>
 EOD;
 
 	return $string;
 }
-?>

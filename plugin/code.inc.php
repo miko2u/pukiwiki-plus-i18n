@@ -47,8 +47,10 @@ define('PLUGIN_CODE_USAGE',
 
 function plugin_code_init()
 {
-	global $javascript; $javascript = true;
+	global $javascript;
+	$javascript = true;
 }
+
 function plugin_code_action()
 {
 	global $vars;
@@ -70,12 +72,14 @@ function plugin_code_action()
 
 function plugin_code_convert()
 {
+	global $head_tags, $foot_tags;
+	static $plugin_code_jscript_flag = true;
+/*
 	if (file_exists(PLUGIN_DIR.'code/codehighlight.php'))
 		require_once(PLUGIN_DIR.'code/codehighlight.php');
 	else
 		die_message('file '.PLUGIN_DIR.'code/codehighlight.php not exist or not readable.');
-
-	static $plugin_code_jscript_flag = true;
+*/
 	
 	$lang = null;
 	$option = array(
@@ -133,23 +137,28 @@ function plugin_code_convert()
 	$lines = $data['data'];
 	$title = (isset($data['title'])) ? $data['title'] : '';
 	
-	$highlight = new CodeHighlight;
-	$lines = $highlight->highlight($lang, $lines, $option);
-	$lines = '<div class="'.$lang.'">'.$lines.'</div>';
-	
-	if ($plugin_code_jscript_flag && ($option['outline'] || $option['comment'])) {
+//	$highlight = new CodeHighlight;
+//	$lines = $highlight->highlight($lang, $lines, $option);
+//	$lines = '<div class="'.$lang.'">'.$lines.'</div>';
+	$lines = '<pre class="prettyprint linenums">'."\n".htmlspecialchars($lines).'</pre>';
+
+	if ($plugin_code_jscript_flag) { // && ($option['outline'] || $option['comment'])) {
 		$plugin_code_jscript_flag = false;
-		$title .= '<script type="text/javascript" src="'.SKIN_URI.'code.js"></script>'."\n";
+		$head_tags[] = '<link href="assets/js/google-code-prettify/prettify.css" rel="stylesheet">';
+		$foot_tags[] = '<script type="text/javascript" src="assets/js/google-code-prettify/prettify.js"></script>';
+//		$title .= '<script type="text/javascript" src="'.SKIN_URI.'code.js"></script>'."\n";
 	}
+
 	$html = $title.$lines;
 	if (PLUGIN_CODE_CACHE && ! $multiline) {
 		_plugin_code_write_cache($arg, $html);
 	}
+
 	return $html;
 }
 
 /**
- *  キャッシュに書き込む
+ * キャッシュに書き込む
  * 引数は添付ファイル名, HTML変換後のファイル
  */
 function _plugin_code_write_cache($fname, $html)
@@ -216,4 +225,160 @@ function _plugin_code_read_cache($fname)
 	
 	return $fdata;
 }
-?>
+
+/**
+ * オプション解析
+ * 引数に対応するキーをOnにする
+ * キーをセットしたら"true"を返す
+ */
+function _plugin_code_check_argment(& $arg, & $option) {
+    $arg = strtolower($arg);
+    if (isset($option[$arg])) {
+        $option[$arg] = true;
+        return true;
+    }
+    return false;
+}
+
+/**
+ * 範囲指定を解析
+ * 呼び出し側の変数を設定する
+ * 範囲を設定したら"true"を返す
+ */
+function _plugin_code_get_region(& $option, & $begin, & $end)
+{
+    if (false !== strpos($option, '-')) {
+        $array = explode('-', $option);
+    } else if (false !== strpos($option, '...')) {
+        $array = explode('...', $option);
+    } else {
+        return false;
+    }
+    if (is_numeric ($array[0]))
+        $begin = $array[0];
+    else
+        $begin = 1;
+    if (is_numeric ($array[1]))
+        $end = $array[1];
+    else
+        $end = null;
+
+    return true;
+}
+
+ /**
+ * 最終引数を解析する
+ * 引数はプラグインへの最後の引数の内容
+ * 複数行引数の場合に真を返す
+ */
+function _plugin_code_multiline_argment(& $arg, & $data, & $option, $begin = 0, $end = null)
+{
+    // 改行コード変換
+    $arg = str_replace("\r\n", "\n", $arg);
+    $arg = strtr($arg,"\r", "\n");
+
+    // 最後の文字が改行でない場合は外部ファイル
+    if ($arg[strlen($arg)-1] != "\n") {
+        $params = _plugin_code_read_file_data($arg, $begin, $end);
+        if (isset($params['_error']) && $params['_error'] != '') {
+            $data['_error'] = '<p class="error">'.$params['_error'].';</p>';
+            return false;
+        }
+        $data['data'] = $params['data'];
+        if ($data['data'] == "\n" || $data['data'] == '' || $data['data'] == null) {
+            $data['_error'] ='<p class="error">file '.htmlspecialchars($params['title']).' is empty.</p>';
+            return false;
+        }
+        if (PLUGIN_CODE_FILE_ICON && !$option['noicon'] || $option['icon']) $icon = FILE_ICON;
+        else                                                       $icon = '';
+
+        $data['title'] .= '<h5 class="'.PLUGIN_CODE_HEADER.'title">'.'<a href="'.$params['url'].'" title="'.$params['info'].'">'
+            .$icon.$params['title'].'</a></h5>'."\n";
+    }
+    else {
+        $data['data'] = $arg;
+        return true;
+    }
+    return false;
+}
+
+/**
+ * 引数に与えられたファイルの内容を文字列に変換して返す
+ * 文字コードは PukiWikiと同一, 改行は \n である
+ */
+function _plugin_code_read_file_data(& $name, $begin = 0, $end = null) {
+    global $vars;
+    // 添付ファイルのあるページ: defaultは現在のページ名
+    $page = isset($vars['page']) ? $vars['page'] : '';
+
+    // 添付ファイルまでのパスおよび(実際の)ファイル名
+    $file = '';
+    $fname = $name;
+
+    $is_url = is_url($fname);
+
+    /* Chech file location */
+    if ($is_url) { // URL
+        if (! PLUGIN_CODE_READ_URL) {
+            $params['_error'] = 'Cannot assign URL';
+            return $params;
+        }
+        $url = htmlspecialchars($fname);
+        $params['title'] = htmlspecialchars(preg_match('/([^\/]+)$/', $fname, $matches) ? $matches[1] : $url);
+    } else {  // 添付ファイル
+        if (! is_dir(UPLOAD_DIR)) {
+            $params['_error'] = 'No UPLOAD_DIR';
+            return $params;
+        }
+
+        $matches = array();
+        // ファイル名にページ名(ページ参照パス)が合成されているか
+        //   (Page_name/maybe-separated-with/slashes/ATTACHED_FILENAME)
+        if (preg_match('#^(.+)/([^/]+)$#', $fname, $matches)) {
+            if ($matches[1] == '.' || $matches[1] == '..')
+                $matches[1] .= '/'; // Restore relative paths
+            $fname = $matches[2];
+            $page = get_fullname(strip_bracket($matches[1]), $page); // strip is a compat
+            $file = UPLOAD_DIR . encode($page) . '_' . encode($fname);
+            $is_file = is_file($file);
+        } else {
+            // Simple single argument
+            $file = UPLOAD_DIR . encode($page) . '_' . encode($fname);
+            $is_file = is_file($file);
+        }
+
+        if (! $is_file) {
+            $params['_error'] = htmlspecialchars('File not found: "' .$fname . '" at page "' . $page . '"');
+            return $params;
+        }
+        $params['title'] = htmlspecialchars($fname);
+        $fname = $file;
+
+        $url = $script . '?plugin=attach' . '&amp;refer=' . rawurlencode($page) .
+            '&amp;openfile=' . rawurlencode($name); // Show its filename at the last
+    }
+
+	$params['url'] = $url;
+    $params['info'] = get_date('Y/m/d H:i:s', filemtime($file) - LOCALZONE)
+        . ' ' . sprintf('%01.1f', round(filesize($file)/1024, 1)) . 'KB';
+
+    /* Read file data */
+    $fdata = '';
+    $filelines = file($fname);
+    if ($end === null)
+        $end = count($filelines);
+
+    for ($i=$begin; $i<=$end; ++$i)
+        $fdata .= str_replace("\r\n", "\n", $filelines[$i]);
+
+    $fdata = strtr($fdata, "\r", "\n");
+    $fdata = mb_convert_encoding($fdata, SOURCE_ENCODING, "auto");
+
+    // ファイルの最後を改行にする
+    if($fdata[strlen($fdata)-1] != "\n")
+        $fdata .= "\n";
+
+    $params['data'] = $fdata;
+
+    return $params;
+}

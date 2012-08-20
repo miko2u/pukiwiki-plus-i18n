@@ -1,6 +1,0 @@
-#freeze
-#check_role(4)
-*IP
-
-|IP|UserID|Name|Note|h
-// |192.168.1.1|USERID|DisplayName|Remarks|

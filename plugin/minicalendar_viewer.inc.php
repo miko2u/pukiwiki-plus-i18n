@@ -25,7 +25,7 @@ define('PLUGIN_MINICALENDAR_MAX_VIEWS', 3);
 
 define('PLUGIN_MINICALENDAR_VIEWER_HOLIDAYVIEW',TRUE);
 define('PLUGIN_MINICALENDAR_VIEWER_COMMENT',FALSE);
-define('PLUGIN_MINICALENDAR_VIEWER_TRACKBACK',TRUE);
+define('PLUGIN_MINICALENDAR_VIEWER_TRACKBACK',FALSE);
 
 /*
  ** pagename
@@ -243,27 +243,27 @@ function plugin_minicalendar_viewer_convert()
 				else if ($h_today['w'] == 0) { $classname = 'date_holiday'; }
 				else if ($h_today['w'] == 6) { $classname = 'date_weekend'; }
 				else { $classname = 'date_weekday'; }
-				$head = '<h3 class="'. $classname . '"><span class="day">' . sprintf('%02d', $dd) . '</span> <br />'
-				      . '<b>' . $mmstr . '</b>, <b>' . $yy . '</b>' . $link . '</h3>' . "\n";
+				$head = '<h3 class="'. $classname . '"><span class="day">' . sprintf('%02d', $dd) . '</span> '
+				      . '<span class="month">' . $mmstr . '</span>, <span class="year">' . $yy . '</span>' . $link . '</h3>' . "\n";
 			}
 		}
 		if (PLUGIN_MINICALENDAR_VIEWER_COMMENT === TRUE) {
 			if (is_page(':config/plugin/addline/comment') && exist_plugin_inline('addline')) {
 				$comm = convert_html(array('&addline(comment,above){comment};'));
 				$comm = preg_replace(array("'<p>'si","'</p>'si"), array("",""), $comm );
-				$tail .= str_replace('>comment','><img src="'.IMAGE_URI.'plus/comment.png" width="15" height="15" alt="Comment" title="Comment" />Comment',$comm);
+				$tail .= str_replace('>comment','><i class="icon-comment"></i> Comment',$comm);
 			}
 		}
 		if (PLUGIN_MINICALENDAR_VIEWER_TRACKBACK === TRUE) {
 			if ($trackback) {
 		        $tb_id = tb_get_id($page);
 		        $tail .= '<a href="' . $script . '?plugin=tb&amp;__mode=view&amp;tb_id=' . $tb_id . '">'
-		               . '<img src="' . IMAGE_URI . 'plus/trackback.png" width="15" height="15" alt="" title="" />Trackback(' . tb_count($page) . ')'
+					   . '<i class="icon-share-alt"></i> Trackback[' . tb_count($page) . ']'
 		               . '</a>' . "\n";
 			}
 		}
 
-		if ($tail != '') { $tail = '<div class="trackback">'. $tail . '</div>'; };
+		if ($tail != '') { $tail = '<div class="row-fluid"><div class="pull-right">'. $tail . '</div></div>'; };
 		$return_body .= $head . '<div class="minicalendar_viewer">' . $body . '</div>' . $tail;
 
 		++$tmp;
@@ -309,10 +309,10 @@ function plugin_minicalendar_viewer_convert()
 //		} else {
 			$left_YM    = $prev_YM;
 			$left_YMX   = $prev_YMX;
-			$left_text  = '&lt;&lt;' . $prev_YM;
+			$left_text  = '<i class="icon-chevron-left"></i>' . $prev_YM;
 			$right_YM   = $next_YM;
 			$right_YMX  = $next_YMX;
-			$right_text = $next_YM . '&gt;&gt;';
+			$right_text = $next_YM . '<i class="icon-chevron-right"></i>';
 //		}
 	} else {
 		// n件表示時
@@ -356,10 +356,10 @@ function plugin_minicalendar_viewer_convert()
 	}
 
 	//past modeは<<新 旧>> 他は<<旧 新>>
-	$return_body .= '<div class="prevnext">';
-	$return_body .= '<div class="prevnext_r">' . $right_link . '</div>';
-	$return_body .= '<div class="prevnext_l">' . $left_link  . '</div>';
-	$return_body .= '</div><br style="display:block;clear:both" />';
+	$return_body .= '<div class="row-fluid"><hr />';
+	$return_body .= '<div class="pull-right">' . $right_link . '</div>';
+	$return_body .= '<div class="pull-left">' . $left_link  . '</div>';
+	$return_body .= '</div>';
 
 	$get['page'] = $post['page'] = $vars['page'] = $tmppage;
 

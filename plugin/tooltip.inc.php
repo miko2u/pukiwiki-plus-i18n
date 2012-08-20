@@ -77,7 +77,7 @@ EOD;
 	}
 	else {
 	return <<<EOD
-<span class="tooltip" title="$s_glossary" onmouseover="javascript:this.style.backgroundColor='#ffe4e1';" onmouseout="javascript:this.style.backgroundColor='transparent';">$term</span>
+<span class="tooltips" title="$s_glossary">$term</span>
 EOD;
 	}
 }
@@ -140,4 +140,3 @@ function plugin_tooltip_get_glossary($term,$g_page,$plain)
 	if ( $out == '' ) return FALSE;
 	return $out;
 }
-?>
