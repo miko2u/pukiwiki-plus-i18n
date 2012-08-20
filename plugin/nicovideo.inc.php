@@ -16,7 +16,7 @@ function plugin_nicovideo_convert()
 	$argc = func_num_args();
 
 	foreach($argv as $arg) {
-		$val = split('=', $arg);
+		$val = explode('=', $arg);
 		$val[1] = (empty($val[1])) ? htmlspecialchars($val[0]) : htmlspecialchars($val[1]);
 
 		switch ($val[0]) {

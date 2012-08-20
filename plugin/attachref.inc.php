@@ -306,7 +306,7 @@ function attachref_insert_ref($filename)
 
 	$ret['msg'] = $_attachref_messages['msg_title'];
 
-	$args = split(',', $vars['attachref_opt']);
+	$args = explode(',', $vars['attachref_opt']);
 	if (count($args)) {
 	    $args[0] = './' . $filename;
 	    $s_args = join(",", $args);

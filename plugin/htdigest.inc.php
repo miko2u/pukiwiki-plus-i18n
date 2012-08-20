@@ -276,7 +276,7 @@ function htdigest_get_hash($username,$p_realm='')
 	if (!($fd = fopen(HTDIGEST_FILE,'r'))) return '';
 
 	while ($data = @fgets($fd, 4096)) {
-		$field = split(':', trim($data));
+		$field = explode(':', trim($data));
 		if ($field[0] == $username && $field[1] == $p_realm) {
 			fclose($fd);
 			return $field[2];
@@ -324,7 +324,7 @@ function htdigest_save($username,$p_realm,$hash,$role)
 
 	$sw = FALSE;
 	foreach($lines as $no=>$line) {
-		$field = split(':', trim($line));
+		$field = explode(':', trim($line));
 		if ($field[0] == $username && $field[1] == $p_realm) {
 			if ($field[2] == $hash) {
 				return $_htdigest_msg['msg_not_update'];

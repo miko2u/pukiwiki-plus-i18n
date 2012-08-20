@@ -305,7 +305,7 @@ function amazon_getkey ($id, $key, $media) {
   $body = amazon_getfile($filename);
   $key = htmlspecialchars($key);
   //ページタイトル、空白で区切り数個並べる、単独使用
-  $keys = ($key == '')? get_keys($vars['page']): split(' ', $key);
+  $keys = ($key == '')? get_keys($vars['page']): explode(' ', $key);
   srand();
   $key = $key0 = $keys[rand(0, count($keys) - 1)];
   $search = "search=" . rawurlencode(mb_convert_encoding($key, 'UTF-8', SOURCE_ENCODING));

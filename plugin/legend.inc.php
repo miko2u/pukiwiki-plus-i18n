@@ -35,7 +35,7 @@ function legend_set_parm($argv)
 	$parm['align'] = $parm['title'] = '';
 
 	foreach($argv as $arg) {
-		$val = split('=', $arg);
+		$val = explode('=', $arg);
 		$val[1] = (empty($val[1])) ? htmlspecialchars($val[0]) : htmlspecialchars($val[1]);
 
 		switch($val[0]) {

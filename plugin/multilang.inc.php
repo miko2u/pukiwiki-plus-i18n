@@ -41,7 +41,7 @@ function plugin_multilang_inline()
 	
 	if (strpos($lang, 'link') === 0) {
 		array_pop($args); // drop {}
-		@list($link, $option) = split('=', $lang);
+		@list($link, $option) = explode('=', $lang);
 		return plugin_multilang_inline_link($option, $args);
 	} else {
 	
@@ -66,13 +66,13 @@ function plugin_multilang_inline_link($option, $args)
 	foreach( $args as $arg ) {
 		$arg = htmlspecialchars($arg);
 
-		@list($lang, $style) = split('\+', $arg);	 // en_US=English+flag=us
-		@list($lang, $title) = split('=', $lang);
-		@list($style, $country) = split('=', $style);
+		@list($lang, $style) = explode('\+', $arg);	 // en_US=English+flag=us
+		@list($lang, $title) = explode('=', $lang);
+		@list($style, $country) = explode('=', $style);
 		
 		if($style != 'text') { // flag or text : default is flag
 			if (empty($country)) {
-				@list($lng, $country) = split('_', $lang); // en_US -> en, US
+				@list($lng, $country) = explode('_', $lang); // en_US -> en, US
 				if(empty($country)) {
 					$country = $obj_l2c->get_lang2country( strtolower($lng) );
 				}
