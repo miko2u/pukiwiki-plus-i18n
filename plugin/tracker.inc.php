@@ -124,6 +124,11 @@ function plugin_tracker_convert()
 		unset($fields[$fieldname]);
 	}
 
+	// for Ticket
+	if (function_exists('pkwk_session_start') && pkwk_session_start() != 0) {
+		$_SESSION['tracker'] = md5(get_ticket() . $config_name);
+	}
+
 	// For QA/196, BugTrack/113
 	$enctype  = is_mobile() ? '' : 'enctype="multipart/form-data"';
 
@@ -155,14 +160,23 @@ function plugin_tracker_action()
 	// $page name to add will be decided here
 	$num  = 0;
 	$name = isset($post['_name']) ? $post['_name'] : '';
-	if (isset($post['_page'])) {
+	if (isset($post['_page']))
+	{
 		$real = $page = $post['_page'];
-	} else {
+	}
+	else
+	{
 		$real = is_pagename($name) ? $name : ++$num;
 		$page = get_fullname('./' . $real, $base);
 	}
-	if (! is_pagename($page)) $page = $base;
-	while (is_page($page)) {
+
+	if (! is_pagename($page))
+	{
+		$page = $base;
+	}
+
+	while (is_page($page))
+	{
 		$real = ++$num;
 		$page = $base . '/' . $real;
 	}
@@ -171,20 +185,36 @@ function plugin_tracker_action()
 
 	// Petit SPAM Check (Client(Browser)-Server Ticket Check)
 	$spam = FALSE;
-	if (function_exists('pkwk_session_start') && pkwk_session_start() != 0) {
+	if (function_exists('pkwk_session_start') && pkwk_session_start() != 0)
+	{
 		$s_tracker = md5(get_ticket() . $config_name);
-		if ($_SESSION['tracker'] != $s_tracker) {
+		if ($_SESSION['tracker'] != $s_tracker)
+		{
 			$spam = TRUE;
 		}
-	} else {
-		if (isset($post['encode_hint']) && $post['encode_hint'] != '') {
-			if (PKWK_ENCODING_HINT != $post['encode_hint']) $spam = TRUE;
-		} else {
-			if (PKWK_ENCODING_HINT != '') $spam = TRUE;
-		}
-		if (is_spampost(array('body'), PLUGIN_TRACKER_REJECT_SPAMCOUNT)) $spam = TRUE;
 	}
-	if ($spam) {
+	else
+	{
+		if (isset($post['encode_hint']) && $post['encode_hint'] != '')
+		{
+			if (PKWK_ENCODING_HINT != $post['encode_hint'])
+			{
+				$spam = TRUE;
+			}
+		} else {
+			if (PKWK_ENCODING_HINT != '')
+			{
+				$spam = TRUE;
+			}
+		}
+		if (is_spampost(array('body'), PLUGIN_TRACKER_REJECT_SPAMCOUNT))
+		{
+			$spam = TRUE;
+		}
+	}
+
+	if ($spam)
+	{
 		honeypot_write();
 		return array('msg'=>'cannot write', 'body'=>'<p>prohibits editing</p>');
 	}

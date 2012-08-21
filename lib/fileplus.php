@@ -7,29 +7,87 @@
 //
 // File related functions - extra functions
 
-// Get Ticket
-function get_ticket($newticket = FALSE)
+// Read Ticket DB
+function read_ticket($addr)
+{
+	$file = CACHE_DIR . 'ticket.dat';
+	if (! file_exists($file))
+	{
+		return FALSE;
+	}
+
+	$ticket = FALSE;
+	$fp = fopen($file, 'r') or die_message('Cannot open ticket.dat');
+	set_file_buffer($fp, 0);
+	@flock($fp, LOCK_EX);
+	rewind($fp);
+	while ($data = @fgets($fp, 8192))
+	{
+		$data = csv_explode("\t", $data);
+		if ($data[0] == $addr)
+		{
+			$ticket = $data[1];
+			break;
+		}
+	}
+	@flock($fp, LOCK_UN);
+	fclose($fp);
+
+	return $ticket;
+}
+
+// Write Ticket DB
+function write_ticket($addr, $ticket)
 {
 	$file = CACHE_DIR . 'ticket.dat';
 
-	if (file_exists($file) && $newticket !== TRUE) {
-		$fp = fopen($file, 'r') or die_message('Cannot open ' . 'CACHE_DIR/' . 'ticket.dat');
-		$ticket = trim(fread($fp, filesize($file)));
-		fclose($fp);
-	} else {
-		$ticket = md5(mt_rand());
-		pkwk_touch_file($file);
-		$fp = fopen($file, 'r+') or die_message('Cannot open ' . 'CACHE_DIR/' . 'ticket.dat');
-		set_file_buffer($fp, 0);
-		@flock($fp, LOCK_EX);
-		$last = ignore_user_abort(1);
-		ftruncate($fp, 0);
-		rewind($fp);
-		fputs($fp, $ticket . "\n");
-		ignore_user_abort($last);
-		@flock($fp, LOCK_UN);
-		fclose($fp);
+	pkwk_touch_file($file);
+	$fp = fopen($file, 'r+') or die_message('Cannot open ticket.dat');
+	set_file_buffer($fp, 0);
+	@flock($fp, LOCK_EX);
+	$last = ignore_user_abort(1);
+	rewind($fp);
+	$result = array();
+	while ($data = @fgets($fp, 8192))
+	{
+		$data = csv_explode("\t", $data);
+		$result[$data[0]] = $data;
 	}
+	if (isset($result[$addr]))
+	{
+		$result[$addr][1] = $ticket;
+	}
+	else
+	{
+		$result[$addr] = array($addr, $ticket);
+	}
+	rewind($fp);
+	foreach ($result as $line)
+	{
+       	$str = trim(implode("\t", $line));
+       	if ($str != '') fwrite($fp, $str . "\n");
+	}
+	ignore_user_abort($last);
+	@flock($fp, LOCK_UN);
+	fclose($fp);
+}
+
+// Get Ticket
+function get_ticket($newticket = FALSE)
+{
+	$addr = isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDED_FOR'].','.$_SERVER['REMOTE_ADDR'] : $_SERVER['REMOTE_ADDR'];
+
+	if ($newticket !== FALSE)
+	{
+		$ticket = rtrim(base64_encode(sha1(mt_rand(), TRUE)), '=');
+	}
+	else
+	{
+		$ticket = read_ticket($addr);
+	}
+
+	write_ticket($addr, $ticket);
+
 	return $ticket;
 }
 
@@ -53,4 +111,3 @@ function plus_readfile($filename)
 	}
 	fclose($fp);
 }
-?>
