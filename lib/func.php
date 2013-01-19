@@ -349,13 +349,17 @@ function decode($str)
 	return hex2bin($str);
 }
 
+// hex2bin -- Converts the hex representation of data to binary
+// (PHP 5.4.0)
 // Inversion of bin2hex()
-function hex2bin($hex_string)
-{
-	// preg_match : Avoid warning : pack(): Type H: illegal hex digit ...
-	// (string)   : Always treat as string (not int etc). See BugTrack2/31
-	return preg_match('/^[0-9a-f]+$/i', $hex_string) ?
-		pack('H*', (string)$hex_string) : $hex_string;
+if (! function_exists('hex2bin')) {
+	function hex2bin($hex_string)
+	{
+		// preg_match : Avoid warning : pack(): Type H: illegal hex digit ...
+		// (string)   : Always treat as string (not int etc). See BugTrack2/31
+		return preg_match('/^[0-9a-f]+$/i', $hex_string) ?
+			pack('H*', (string)$hex_string) : $hex_string;
+	}
 }
 
 // Remove [[ ]] (brackets)
