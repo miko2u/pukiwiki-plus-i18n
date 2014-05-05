@@ -60,8 +60,10 @@ function initvars()
 //	gEnv.stInfo = stinfo();
 	if ( document.location.href.lastIndexOf('?') == -1 ) {
 		gEnv.script = document.location.href;
-	} else {
+	} else if ( document.location.href.lastIndexOf('?') == -1 ) {
 		gEnv.script = document.location.href.substring(0,document.location.href.lastIndexOf('?'));
+	} else {
+		gEnv.script = document.location.href.substring(0,document.location.href.lastIndexOf('#'));
 	}
 	linkattrs(); 
 	window.document.onkeypress = procKey;
