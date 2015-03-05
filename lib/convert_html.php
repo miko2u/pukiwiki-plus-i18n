@@ -147,8 +147,10 @@ function & Factory_Div(& $root, $text)
 		}
 	} else {
 		// Hack code
-		if(preg_match('/^#([^\(\{]+)(?:\(([^\r]*)\))?(\{*)/', $text, $matches) &&
-		   exist_plugin_convert($matches[1])) {
+		if(preg_match('/^#([^\(\{]+)(?:\(([^\r]*)\))?(\{*)/', $text, $matches)) {
+			if (!exist_plugin_convert($matches[1])) {
+				return new Pre($root, $text);
+			}
 			$len  = strlen($matches[3]);
 			$body = array();
 			if ($len == 0) {
@@ -156,6 +158,8 @@ function & Factory_Div(& $root, $text)
 			} else if (preg_match('/\{{' . $len . '}\s*\r(.*)\r\}{' . $len . '}/', $text, $body)) { 
 				$matches[2] .= "\r" . $body[1] . "\r";
 				return new Div($matches); // Seems multiline-enabled block plugin
+			} else {
+				return new Pre($root, $text);
 			}
 		}
 	}
